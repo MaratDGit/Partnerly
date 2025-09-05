@@ -1,5 +1,4 @@
-﻿using Partnerly.Descriptors.Messages;
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
 
 namespace Partnerly.Models
 {
@@ -9,7 +8,7 @@ namespace Partnerly.Models
         [Required]
         public Guid Id { get; set; } = Guid.NewGuid();
         #endregion
-        #region 
+        #region Email
         [Required]
         [Display(Name = "Email")]
         public string Email { get; set; }
@@ -35,7 +34,7 @@ namespace Partnerly.Models
         public string LastName { get; set; }
         #endregion
         #region PhotoUrl
-        public string PhotoUrl { get; set; }
+        public string? PhotoUrl { get; set; }
         #endregion
         #region Balance
         [Display(Name = "Balance")]
@@ -64,7 +63,7 @@ namespace Partnerly.Models
         #endregion
 
         public Role Role { get; set; }
-        public User Referrer { get; set; }
+        public User? Referrer { get; set; }
         public ICollection<User> Referrals { get; set; }
         public ICollection<Transaction> Transactions { get; set; }
         public ICollection<Payment> Payments { get; set; }

@@ -17,18 +17,17 @@ namespace Partnerly.Controllers
 
         public IActionResult Index()
         {
-            var prop = typeof(Role).GetProperty(nameof(Role.Type));
-            var attr = prop?.GetCustomAttribute<RoleTypeAttribute>();
+            //var prop = typeof(Role).GetProperty(nameof(Role.Type));
+            //var attr = prop?.GetCustomAttribute<RoleTypeAttribute>();
 
-            if (attr != null)
-            {
-                Console.WriteLine("Dropdown values:");
-                foreach (var (value, label) in attr.Items)
-                {
-                    Console.WriteLine($"{value} - {label}");
-                }
-            }
-
+            //if (attr != null)
+            //{
+            //    Console.WriteLine("Dropdown values:");
+            //    foreach (var (value, label) in attr.Items)
+            //    {
+            //        Console.WriteLine($"{value} - {label}");
+            //    }
+            //}
             return View();
         }
 

@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Partnerly.Models;
 
@@ -11,9 +12,10 @@ using Partnerly.Models;
 namespace Partnerly.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250904154450_CreateFirstRecords")]
+    partial class CreateFirstRecords
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -59,19 +61,6 @@ namespace Partnerly.Migrations
                     b.HasIndex("UserId");
 
                     b.ToTable("Logs");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = new Guid("c0869b53-fb1d-41f2-9ba9-dafdaade1381"),
-                            Action = "UC",
-                            CreatedBy = new Guid("b8b2fe83-92ac-4214-ad53-606690348a65"),
-                            CreatedDate = new DateTime(2025, 9, 5, 9, 14, 12, 112, DateTimeKind.Utc).AddTicks(5488),
-                            IsDeleted = false,
-                            UpdatedBy = new Guid("b8b2fe83-92ac-4214-ad53-606690348a65"),
-                            UpdatedDate = new DateTime(2025, 9, 5, 9, 14, 12, 112, DateTimeKind.Utc).AddTicks(5490),
-                            UserId = new Guid("b8b2fe83-92ac-4214-ad53-606690348a65")
-                        });
                 });
 
             modelBuilder.Entity("Partnerly.Models.Payment", b =>
@@ -159,36 +148,14 @@ namespace Partnerly.Migrations
                     b.HasData(
                         new
                         {
-                            Id = new Guid("df80c70b-5b1d-43bb-b807-f8a37b83ccd9"),
-                            CreatedBy = new Guid("b8b2fe83-92ac-4214-ad53-606690348a65"),
-                            CreatedDate = new DateTime(2025, 9, 5, 9, 14, 12, 112, DateTimeKind.Utc).AddTicks(5309),
+                            Id = new Guid("4ce53a54-c1af-4a68-88af-7b6c543f7a58"),
+                            CreatedBy = new Guid("305d4b8c-2bed-4686-8564-78465fd4cbd3"),
+                            CreatedDate = new DateTime(2025, 9, 4, 15, 44, 50, 198, DateTimeKind.Utc).AddTicks(3239),
                             IsDeleted = false,
                             Name = "Administrator",
                             Type = "D",
-                            UpdatedBy = new Guid("b8b2fe83-92ac-4214-ad53-606690348a65"),
-                            UpdatedDate = new DateTime(2025, 9, 5, 9, 14, 12, 112, DateTimeKind.Utc).AddTicks(5310)
-                        },
-                        new
-                        {
-                            Id = new Guid("49ed5a66-83a2-4f42-a1db-e447e8a4b23f"),
-                            CreatedBy = new Guid("b8b2fe83-92ac-4214-ad53-606690348a65"),
-                            CreatedDate = new DateTime(2025, 9, 5, 9, 14, 12, 112, DateTimeKind.Utc).AddTicks(5316),
-                            IsDeleted = false,
-                            Name = "Employee",
-                            Type = "U",
-                            UpdatedBy = new Guid("b8b2fe83-92ac-4214-ad53-606690348a65"),
-                            UpdatedDate = new DateTime(2025, 9, 5, 9, 14, 12, 112, DateTimeKind.Utc).AddTicks(5316)
-                        },
-                        new
-                        {
-                            Id = new Guid("dfd999ec-f0d3-4337-865f-66d5437356a2"),
-                            CreatedBy = new Guid("b8b2fe83-92ac-4214-ad53-606690348a65"),
-                            CreatedDate = new DateTime(2025, 9, 5, 9, 14, 12, 112, DateTimeKind.Utc).AddTicks(5318),
-                            IsDeleted = false,
-                            Name = "User",
-                            Type = "V",
-                            UpdatedBy = new Guid("b8b2fe83-92ac-4214-ad53-606690348a65"),
-                            UpdatedDate = new DateTime(2025, 9, 5, 9, 14, 12, 112, DateTimeKind.Utc).AddTicks(5318)
+                            UpdatedBy = new Guid("305d4b8c-2bed-4686-8564-78465fd4cbd3"),
+                            UpdatedDate = new DateTime(2025, 9, 4, 15, 44, 50, 198, DateTimeKind.Utc).AddTicks(3240)
                         });
                 });
 
@@ -300,19 +267,19 @@ namespace Partnerly.Migrations
                     b.HasData(
                         new
                         {
-                            Id = new Guid("b8b2fe83-92ac-4214-ad53-606690348a65"),
+                            Id = new Guid("305d4b8c-2bed-4686-8564-78465fd4cbd3"),
                             Balance = 0m,
-                            CreatedBy = new Guid("b8b2fe83-92ac-4214-ad53-606690348a65"),
-                            CreatedDate = new DateTime(2025, 9, 5, 9, 14, 12, 112, DateTimeKind.Utc).AddTicks(4868),
+                            CreatedBy = new Guid("305d4b8c-2bed-4686-8564-78465fd4cbd3"),
+                            CreatedDate = new DateTime(2025, 9, 4, 15, 44, 50, 327, DateTimeKind.Utc).AddTicks(1422),
                             Email = "marat.iigservices@gmail.com",
                             FirstName = "Marat",
                             IsDeleted = false,
                             LastName = "Danielyan",
-                            PasswordHash = "$2a$11$7qHZAmH9jYIufxpUFCHvqOZfJh6Bmbl/tkggdJUYq/3dBIPh02Bcm",
+                            PasswordHash = "$2a$11$eLNv5tU76WPYs1BjLzMW8uUEpcpSZh36DOzCOy6oITTy3IscmxXdC",
                             Phone = "+37497111312",
-                            RoleId = new Guid("df80c70b-5b1d-43bb-b807-f8a37b83ccd9"),
-                            UpdatedBy = new Guid("b8b2fe83-92ac-4214-ad53-606690348a65"),
-                            UpdatedDate = new DateTime(2025, 9, 5, 9, 14, 12, 112, DateTimeKind.Utc).AddTicks(4872)
+                            RoleId = new Guid("4ce53a54-c1af-4a68-88af-7b6c543f7a58"),
+                            UpdatedBy = new Guid("305d4b8c-2bed-4686-8564-78465fd4cbd3"),
+                            UpdatedDate = new DateTime(2025, 9, 4, 15, 44, 50, 327, DateTimeKind.Utc).AddTicks(1427)
                         });
                 });
 
