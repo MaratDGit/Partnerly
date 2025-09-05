@@ -1,8 +1,9 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using Partnerly.Infrastructure.Interfaces;
+using System.ComponentModel.DataAnnotations;
 
 namespace Partnerly.Models
 {
-    public class User
+    public class User : IAuditableEntity
     {
         #region ID
         [Required]
@@ -49,6 +50,14 @@ namespace Partnerly.Models
         [Display(Name = "Referrer")]
         public Guid? ReferrerId { get; set; }
         #endregion
+        #region LastSignInDate
+        [Display(Name = "Last Sign In")]
+        public DateTime? LastSignInDate { get; set; }
+        #endregion
+        #region IsOnlayn
+        [Display(Name = "Is Onlayn")]
+        public bool? IsOnlayn { get; set; }
+        #endregion
 
         #region System Columns
         public bool IsDeleted { get; set; } = false;
@@ -62,11 +71,11 @@ namespace Partnerly.Models
         public DateTime? UpdatedDate { get; set; }
         #endregion
 
-        public Role Role { get; set; }
+        public Role? Role { get; set; }
         public User? Referrer { get; set; }
-        public ICollection<User> Referrals { get; set; }
-        public ICollection<Transaction> Transactions { get; set; }
-        public ICollection<Payment> Payments { get; set; }
-        public ICollection<Log> Logs { get; set; }
+        public ICollection<User>? Referrals { get; set; }
+        public ICollection<Transaction>? Transactions { get; set; }
+        public ICollection<Payment>? Payments { get; set; }
+        public ICollection<Log>? Logs { get; set; }
     }
 }

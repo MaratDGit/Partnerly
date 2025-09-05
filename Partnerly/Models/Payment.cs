@@ -1,9 +1,10 @@
 ﻿using Partnerly.Descriptors.Attributes;
+using Partnerly.Infrastructure.Interfaces;
 using System.ComponentModel.DataAnnotations;
 
 namespace Partnerly.Models
 {
-    public class Payment
+    public class Payment : IAuditableEntity
     {
         #region ID
         [Required]
@@ -42,7 +43,7 @@ namespace Partnerly.Models
         public bool IsDeleted { get; set; } = false;
         #endregion
 
-        public User User { get; set; }
+        public User? User { get; set; }
     }
 
 }

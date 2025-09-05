@@ -1,27 +1,38 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using Partnerly.Descriptors.Attributes;
+using Partnerly.Infrastructure.Interfaces;
+using System.ComponentModel.DataAnnotations;
 
 namespace Partnerly.Models
 {
-    public class Log
+    public class Log : IAuditableEntity
     {
         #region ID
         [Required]
-        public Guid Id { get; set; } = Guid.NewGuid();
+        public Guid? Id { get; set; } = Guid.NewGuid();
         #endregion
         #region UserID
         [Required]
-        [Display(Name = "User ID")]
-        public Guid? UserId { get; set; }
+        [Display(Name = "Creator User ID")]
+        public Guid? CreatorUserId { get; set; }
         #endregion
         #region Action
         [Required]
         [Display(Name = "Action")]
-        public string Action { get; set; }
+        public string? Action { get; set; }
         #endregion
-        #region IsDeleted
-        public bool IsDeleted { get; set; } = false;
+        #region Type
+        [Required]
+        [Display(Name = "Type")]
+        [LogType]
+        public string? Type { get; set; }
         #endregion
+        #region LogMessage
+        [Display(Name = "Message")]
+        public string? LogMessage { get; set; }
+        #endregion
+
         #region System Columns
+        public bool IsDeleted { get; set; } = false;
         [Required]
         public Guid? CreatedBy { get; set; }
         [Required]
@@ -32,6 +43,6 @@ namespace Partnerly.Models
         public DateTime? UpdatedDate { get; set; }
         #endregion
 
-        public User User { get; set; }
+        public User? LogCreator { get; set; }
     }
 }

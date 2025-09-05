@@ -93,8 +93,10 @@ namespace Partnerly.Models
             modelBuilder.Entity<Log>().HasData(new Log
             {
                 Id = logId,
-                UserId = adminUserId,
+                CreatorUserId = adminUserId,
                 Action = LogActionsAttribute.UserCreated,
+                Type = LogTypeAttribute.Information,
+                LogMessage = "Created the Admin user from OnModelCreating",
                 IsDeleted = false,
                 CreatedBy = adminUserId,
                 CreatedDate = DateTime.UtcNow,

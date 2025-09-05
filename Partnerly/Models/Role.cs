@@ -1,9 +1,10 @@
 ﻿using Partnerly.Descriptors.Attributes;
+using Partnerly.Infrastructure.Interfaces;
 using System.ComponentModel.DataAnnotations;
 
 namespace Partnerly.Models
 {
-    public class Role
+    public class Role : IAuditableEntity
     {
         #region Id
         [Required]
@@ -12,13 +13,13 @@ namespace Partnerly.Models
         #region Name
         [Required]
         [Display(Name = "Name")]
-        public string Name { get; set; }
+        public string? Name { get; set; }
         #endregion
         #region Type
         [Required]
         [Display(Name = "Type")]
         [RoleType]
-        public string Type { get; set; }
+        public string? Type { get; set; }
         #endregion
 
         #region System Columns
@@ -33,6 +34,6 @@ namespace Partnerly.Models
         public bool IsDeleted { get; set; } = false;
         #endregion
 
-        public ICollection<User> Users { get; set; }
+        public ICollection<User>? Users { get; set; }
     }
 }

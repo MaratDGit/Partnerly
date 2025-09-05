@@ -26,5 +26,10 @@ namespace Partnerly.Descriptors.Messages
         public const string PaymentCreated = "Payment Created";
         public const string PaymentDeleted = "Payment Deleted";
         public const string PaymentUpdated = "Payment Updated";
+
+        public const string Information = "Information";
+        public const string Warning = "Warning";
+        public const string Error = "Error";
+        public const string Critical = "Critical";
     }
 }

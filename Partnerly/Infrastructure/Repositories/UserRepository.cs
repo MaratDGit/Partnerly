@@ -10,7 +10,10 @@ namespace Partnerly.Infrastructure.Repositories
 
         public async Task<User?> GetByEmailAsync(string email)
         {
-            return await _dbSet.FirstOrDefaultAsync(u => u.Email == email);
+            return await _dbSet
+                .Include(u => u.Role)
+                .Include(u => u.Referrer)
+                .FirstOrDefaultAsync(u => u.Email == email);
         }
     }
 }
