@@ -1,4 +1,4 @@
-namespace Partnerly.Models
+namespace Partnerly.Models.ViewModels
 {
     public class ErrorViewModel
     {

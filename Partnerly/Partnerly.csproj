@@ -16,4 +16,23 @@
     </PackageReference>
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="wwwroot\assets\img\avatars\" />
+    <Folder Include="wwwroot\assets\img\elements\" />
+    <Folder Include="wwwroot\assets\img\favicon\" />
+    <Folder Include="wwwroot\assets\img\icons\brands\" />
+    <Folder Include="wwwroot\assets\img\icons\unicons\" />
+    <Folder Include="wwwroot\assets\img\illustrations\" />
+    <Folder Include="wwwroot\assets\img\layouts\" />
+    <Folder Include="wwwroot\assets\vendor\css\pages\" />
+    <Folder Include="wwwroot\assets\vendor\fonts\" />
+    <Folder Include="wwwroot\assets\vendor\js\" />
+    <Folder Include="wwwroot\assets\vendor\libs\apex-charts\" />
+    <Folder Include="wwwroot\assets\vendor\libs\highlight\" />
+    <Folder Include="wwwroot\assets\vendor\libs\jquery\" />
+    <Folder Include="wwwroot\assets\vendor\libs\masonry\" />
+    <Folder Include="wwwroot\assets\vendor\libs\perfect-scrollbar\" />
+    <Folder Include="wwwroot\assets\vendor\libs\popper\" />
+  </ItemGroup>
+
 </Project>

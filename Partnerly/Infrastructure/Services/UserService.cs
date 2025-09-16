@@ -32,7 +32,7 @@ namespace Partnerly.Infrastructure.Services
             newUser.PasswordHash = user.PasswordHash;
             newUser.ReferrerId = user.ReferrerId;
             newUser.RoleId = user.RoleId;
-
+            newUser.IsBlocked = user.IsBlocked;
             newUser.IsDeleted = false;
             newUser.CreatedDate = DateTime.UtcNow;
             newUser.UpdatedDate = DateTime.UtcNow;

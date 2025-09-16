@@ -1,8 +1,87 @@
 ﻿@{
     ViewData["Title"] = "Home Page";
+    Layout = "_LandingLayout";
 }
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
-</div>
+<section class="landing-container">
+    <div class="landing-left">
+        <h1 class="landing-title">Зарабатывай с нашей <span>реферальной программой</span> 🚀</h1>
+        <p class="landing-subtitle">
+            Делись ссылкой, приглашай друзей и получай бонусы за их активность на платформе.
+        </p>
+        <div class="landing-actions">
+            <a href="/Account/Register" class="btn btn-primary">Присоединиться</a>
+            <a asp-controller="Account" asp-action="Login" class="btn btn-outline">Уже есть аккаунт</a>
+        </div>
+    </div>
+
+    <div class="landing-right">
+        <div class="image-stack">
+            <img src="~/assets/img/backgrounds/background_branch.png" alt="Preview 1" class="stack-img img-1" />
+            <img src="~/assets/img/backgrounds/undraw_stripe-payments_jxnn.png" alt="Preview 2" class="stack-img img-2" />
+            <img src="~/assets/img/backgrounds/undraw_online-banking_l9sn.png" alt="Preview 3" class="stack-img img-3" />
+        </div>
+    </div>
+</section>
+
+<section class="pricing-section" id="pricing">
+    <div class="container section-no-flex">
+        <!-- Заголовок сверху -->
+        <div class="section-header">
+            <h2 class="section-title">Тарифы и уровни вознаграждений</h2>
+            <p class="section-subtitle">
+                Получайте доход с семи уровней партнёров по нашей реферальной программе.
+            </p>
+        </div>
+
+        <!-- Контент таблицы -->
+        <div class="section-content">
+            <table class="pricing-table">
+                <thead>
+                    <tr>
+                        <th>Уровень</th>
+                        <th>Вознаграждение</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr><td>1 уровень</td><td>20%</td></tr>
+                    <tr><td>2 уровень</td><td>10%</td></tr>
+                    <tr><td>3 уровень</td><td>5%</td></tr>
+                    <tr><td>4 уровень</td><td>4%</td></tr>
+                    <tr><td>5 уровень</td><td>3%</td></tr>
+                    <tr><td>6 уровень</td><td>2%</td></tr>
+                    <tr><td>7 уровень</td><td>1%</td></tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</section>
+
+<section class="videos-section section-no-flex" id="videos">
+    <div class="container section-no-flex">
+        <div class="section-header">
+            <h2 class="section-title">Обучающие видео</h2>
+            <p class="section-subtitle">Смотрите, как работает наша платформа и реферальная программа</p>
+        </div>
+
+        <div class="videos-grid">
+            <div class="video-card">
+                <iframe src="https://www.youtube.com/embed/dQw4w9WgXcQ" title="Video 1" frameborder="0" allowfullscreen></iframe>
+                <p class="video-title">Как зарегистрироваться и начать</p>
+            </div>
+            <div class="video-card">
+                <iframe src="https://www.youtube.com/embed/oHg5SJYRHA0" title="Video 2" frameborder="0" allowfullscreen></iframe>
+                <p class="video-title">Привлекаем друзей и зарабатываем</p>
+            </div>
+            <div class="video-card">
+                <iframe src="https://www.youtube.com/embed/3GwjfUFyY6M" title="Video 3" frameborder="0" allowfullscreen></iframe>
+                <p class="video-title">Тарифы и уровни бонусов</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+
+
+
+

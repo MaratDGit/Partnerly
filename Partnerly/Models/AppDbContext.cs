@@ -42,6 +42,7 @@ namespace Partnerly.Models
                 PhotoUrl = null,
                 ReferrerId = null,
                 RoleId = adminRoleId,
+                IsBlocked = false,
                 IsDeleted = false,
                 CreatedBy = adminUserId,
                 CreatedDate = DateTime.UtcNow,

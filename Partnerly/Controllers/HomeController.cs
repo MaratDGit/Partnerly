@@ -2,6 +2,7 @@
 using Partnerly.Descriptors.Attributes;
 using Partnerly.Infrastructure.Interfaces;
 using Partnerly.Models;
+using Partnerly.Models.ViewModels;
 using System.Diagnostics;
 using System.Reflection;
 
@@ -39,17 +40,25 @@ namespace Partnerly.Controllers
             //    }
             //}
 
-            var user = await _userService.GetUserByEmailAsync("marat.iigservices@gmail.com");
-            if (user != null)
+            //var user = await _userService.GetUserByEmailAsync("marat.iigservices@gmail.com");
+            //if (user != null)
+            //{
+            //    var curruser = _currentUser.UserId;
+            //    if (user.LastName != "Danielyan")
+            //    {
+            //        user.LastName = "Danielyan";
+            //        await _userService.UpdateUserAsync(user);
+            //    }
+            //}
+
+            if (User.Identity != null && User.Identity.IsAuthenticated)
             {
-                var curruser = _currentUser.UserId;
-                if (user.LastName != "Danielyan")
-                {
-                    user.LastName = "Danielyan";
-                    await _userService.UpdateUserAsync(user);
-                }
+                // Если вошёл → перенаправляем в Dashboard
+                return RedirectToAction("Index", "Dashboard");
             }
-            return View();
+
+            // Если не вошёл → лендинг
+            return View("Index");
         }
 
         public IActionResult Privacy()

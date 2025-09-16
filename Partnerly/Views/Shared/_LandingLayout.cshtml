@@ -3,8 +3,7 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>@ViewData["Title"] - Partnerly</title>
-
+    <title>@ViewData["Title"] - Branch</title>
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/Partnerly.styles.css" asp-append-version="true" />
@@ -17,8 +16,14 @@
                 <a href="/">Branch</a>
             </div>
             <nav class="nav-links">
-                <a asp-controller="Account" asp-action="Logout" class="btn-outline">Выход</a>
+                <a href="#pricing">Тарифы</a>
+                <a href="#videos">Обучающие видео</a>
+                <a asp-controller="Account" asp-action="Login" class="btn-outline">Войти</a>
             </nav>
+            <!-- Мобильная кнопка -->
+            <div class="menu-toggle" onclick="document.body.classList.toggle('menu-open')">
+                ☰
+            </div>
         </div>
     </header>
 
@@ -27,9 +32,25 @@
             @RenderBody()
         </main>
     </div>
+
+     <!-- Footer -->
+    <footer class="landing-footer">
+        <div class="container">
+            <p>&copy; 2025 Branch. Все права защищены.</p>
+            <nav>
+                <a asp-controller="Home" asp-action="Privacy">Политика</a>
+            </nav>
+        </div>
+    </footer>
+   
+    <script src="~/assets/vendor/js/scrollTuUpBtn.js"></script>
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
-    @await RenderSectionAsync("Scripts", required: false)
+   @await RenderSectionAsync("Scripts", required: false)
 </body>
 </html>
+
+
+
+

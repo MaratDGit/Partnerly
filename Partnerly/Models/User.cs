@@ -58,6 +58,10 @@ namespace Partnerly.Models
         [Display(Name = "Is Onlayn")]
         public bool? IsOnlayn { get; set; }
         #endregion
+        #region IsBlocked
+        [Display(Name = "Is Blocked")]
+        public bool? IsBlocked { get; set; }
+        #endregion
 
         #region System Columns
         public bool IsDeleted { get; set; } = false;
