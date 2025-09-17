@@ -10,11 +10,13 @@ namespace Partnerly.Infrastructure.Services
     {
         private readonly ILogRepository _logRepo;
         private readonly IPermissionService _permissionService;
+        private readonly ICurrentUserService _currentUser;
 
-        public LogService(ILogRepository logRepo, IPermissionService permissionService)
+        public LogService(ILogRepository logRepo, IPermissionService permissionService, ICurrentUserService currentUser)
         {
             _logRepo = logRepo;
             _permissionService = permissionService;
+            _currentUser = currentUser;
         }
 
         public async Task<Log?> CreateLogAsync(Log? log)
@@ -31,8 +33,8 @@ namespace Partnerly.Infrastructure.Services
             newLog.IsDeleted = false;
             newLog.CreatedDate = DateTime.UtcNow;
             newLog.UpdatedDate = DateTime.UtcNow;
-            newLog.CreatedBy = newLog.CreatorUserId;
-            newLog.UpdatedBy = newLog.CreatorUserId;
+            newLog.CreatedBy = _currentUser.UserId;
+            newLog.UpdatedBy = _currentUser.UserId;
 
             string? result = ValidationHelper.ValidateEntityRequiredFields(newLog, out bool isValid);
             if (!isValid)

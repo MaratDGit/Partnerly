@@ -1,7 +1,9 @@
 ﻿using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Mvc;
+using Partnerly.Descriptors.Messages;
 using Partnerly.Infrastructure.Interfaces;
+using Partnerly.Models;
 using Partnerly.Models.ViewModels;
 using System.Security.Claims;
 
@@ -33,24 +35,21 @@ namespace Partnerly.Controllers
             return View();
         }
 
+        [HttpGet]
+        public IActionResult Register(string? returnUrl = null)
+        {
+            ViewBag.ReturnUrl = returnUrl;
+            return View();
+        }
+
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Login(LoginViewModel model, string? returnUrl = null)
         {
             if (!ModelState.IsValid)
             {
-                //if (model?.Email == null)
-                //{
-                //    ModelState.AddModelError("EmailEmpty", "Обязательное поле");
-                //}
-                //if (model?.Password == null)
-                //{
-                //    ModelState.AddModelError("PasswordEmpty", "Обязательное поле");
-                //}
-
                 return View(model);
             }
-               
 
             //string testMail = "marat.iigservices@gmail.com";
             //string testPass = "MarDan123!";
@@ -58,13 +57,13 @@ namespace Partnerly.Controllers
             var user = await _userService.GetUserByEmailAsync(model.Email);
             if (user == null || !BCrypt.Net.BCrypt.Verify(model.Password, user.PasswordHash) || user.IsDeleted)
             {
-                ModelState.AddModelError("Password", "Неверный логин или пароль");
+                ModelState.AddModelError("Password", ErrorMessages.IncorectPasswordOrUsername);
                 return View(model);
             }
 
             if (user.Role == null || user.IsBlocked == true)
             {
-                ModelState.AddModelError("Password", "у пользователя нету доступа");
+                ModelState.AddModelError("Password", ErrorMessages.UserAccessDenied);
                 return View(model);
             }
 
@@ -91,6 +90,56 @@ namespace Partnerly.Controllers
 
             if (!string.IsNullOrEmpty(returnUrl) && Url.IsLocalUrl(returnUrl))
                 return Redirect(returnUrl);
+
+            return RedirectToAction("Index", "Home");
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Register(RegisterViewModel model)
+        {
+            if (!ModelState.IsValid || _userService == null)
+                return View(model);
+
+            User? referrer = null;
+            if (model.ReferrerCode != null)
+            {
+                referrer = await _userService.GetUserByRefCodeAsync((string)model.ReferrerCode);
+                if (referrer == null)
+                {
+                    ModelState.AddModelError("ReferrerCode", ErrorMessages.InvalidRefferalCode);
+                    return View(model);
+                }
+            }
+
+            //// Проверка, есть ли пользователь с таким Email
+            //if (await _db.Users.AnyAsync(u => u.Email == model.Email))
+            //{
+            //    ModelState.AddModelError("", "Пользователь с таким Email уже существует.");
+            //    return View(model);
+            //}
+
+            //// Создание нового пользователя
+            //var user = new User
+            //{
+            //    Email = model.Email,
+            //    PasswordHash = BCrypt.Net.BCrypt.HashPassword(model.Password),
+            //    Role = "User" // по умолчанию
+            //};
+
+            //_db.Users.Add(user);
+            //await _db.SaveChangesAsync();
+
+            //// Авто-логин после регистрации
+            //var claims = new List<Claim>
+            //{
+            //    new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
+            //    new Claim(ClaimTypes.Name, user.Email),
+            //    new Claim(ClaimTypes.Role, user.Role)
+            //};
+
+            //var claimsIdentity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
+            //await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, new ClaimsPrincipal(claimsIdentity));
 
             return RedirectToAction("Index", "Home");
         }

@@ -6,6 +6,7 @@ namespace Partnerly.Infrastructure.Interfaces
     {
         Task<User?> CreateUserAsync(User? user);
         Task<User?> GetUserByEmailAsync(string email);
+        Task<User?> GetUserByRefCodeAsync(string refCode);
         Task<User?> GetUserByIDAsync(Guid id);
         Task<IEnumerable<User?>> GetAllUsersAsync();
         Task UpdateUserAsync(User? user);

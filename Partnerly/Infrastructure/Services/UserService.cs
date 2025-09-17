@@ -25,19 +25,43 @@ namespace Partnerly.Infrastructure.Services
                 return null;
 
             var newUser = new User { Id = Guid.NewGuid() };
+
+            string refCode = null;
+            do
+            {
+                refCode = ReferralCodeGenerator.GenerateCode(user.FirstName ?? user.Email);
+            }
+            while (await GetUserByRefCodeAsync(refCode) == null);
+
+            Guid? referrerID = user.ReferrerId;
+            if (referrerID == null)
+            {
+                User? superUser = await GetUserByRefCodeAsync(Constants.SuperReferralCode);
+                referrerID = superUser?.Id;
+            }
+            else
+            {
+                User? referrerUser = await GetUserByIDAsync((Guid)referrerID);
+                if (referrerUser == null || referrerUser?.IsBlocked == true || referrerUser?.IsDeleted == true)
+                {
+                    throw new ValidationException(ErrorMessages.ReferrerUserCannotBeFoundOrInactive);
+                }
+            }
+
             newUser.Email = user.Email;
             newUser.Phone = user.Phone;
             newUser.FirstName = user.FirstName;
             newUser.LastName = user.LastName;
             newUser.PasswordHash = user.PasswordHash;
-            newUser.ReferrerId = user.ReferrerId;
+            newUser.MyReferralCode = refCode;
+            newUser.ReferrerId = referrerID;
             newUser.RoleId = user.RoleId;
             newUser.IsBlocked = user.IsBlocked;
             newUser.IsDeleted = false;
             newUser.CreatedDate = DateTime.UtcNow;
             newUser.UpdatedDate = DateTime.UtcNow;
-            newUser.CreatedBy = newUser.Id;
-            newUser.UpdatedBy = newUser.Id;
+            newUser.CreatedBy = _currentUser.UserId;
+            newUser.UpdatedBy = _currentUser.UserId;
 
             string? result = ValidationHelper.ValidateEntityRequiredFields(newUser, out bool isValid);
             if (!isValid)
@@ -52,6 +76,9 @@ namespace Partnerly.Infrastructure.Services
 
         public async Task<User?> GetUserByEmailAsync(string email) =>
             await _userRepo.GetByEmailAsync(email);
+
+        public async Task<User?> GetUserByRefCodeAsync(string refCode) =>
+            await _userRepo.GetByRefCodeAsync(refCode);
 
         public async Task<User?> GetUserByIDAsync(Guid id) =>
             await _userRepo.GetByIdAsync(id);
@@ -78,7 +105,7 @@ namespace Partnerly.Infrastructure.Services
 
         public async Task DeleteUserAsync(Guid? id)
         {
-            if (id == null || _currentUser.UserId == null)
+            if (id == null || _currentUser?.UserId == null)
                 return;
 
             var user = await _userRepo.GetByIdAsync((Guid)id);

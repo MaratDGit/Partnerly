@@ -1,0 +1,95 @@
+﻿@model Partnerly.Models.ViewModels.RegisterViewModel
+@{
+  Layout = "_BlankLayout";
+  ViewData["Title"] = "Зарегистрироваться";
+}
+
+@section PageStyles {
+    <link rel="stylesheet" href="~/assets/vendor/css/pages/page-auth.css">
+}
+
+<div class="container-xxl">
+  <div class="authentication-wrapper authentication-basic container-p-y">
+    <div class="authentication-inner">
+
+      <div class="card px-sm-6 px-0">
+        <div class="card-body">
+          <!-- Logo -->
+          <div class="app-brand justify-content-center mb-6">
+            <a href="/" class="app-brand-link gap-2">
+              <span class="app-brand-logo demo">@await Html.PartialAsync("../_Partials/_Macros")</span>
+              <span class="app-brand-text demo text-heading fw-bold">@TempData.Peek("appName")</span>
+            </a>
+          </div>
+          <!-- /Logo -->
+          <h4 class="mb-1">Приключение начинается здесь 🚀</h4>
+          <p class="mb-6">Сделайте управление вашими приложениями простым и увлекательным!</p>
+
+          <form id="formAuthentication" class="mb-6" asp-action="Register" method="POST">
+            <div class="mb-6">
+               <label asp-for="FirstName"></label>
+               <input asp-for="FirstName" class="form-control" id="firstName" name="firstName" placeholder=""/>
+               <span asp-validation-for="FirstName" class="text-danger"></span>
+            </div>
+            <div class="mb-6">
+               <label asp-for="LastName"></label>
+               <input asp-for="LastName" class="form-control" id="lastName" name="lastName" placeholder=""/>
+               <span asp-validation-for="LastName" class="text-danger"></span>
+            </div>
+            <div class="mb-6">
+               <label asp-for="ReferrerCode"></label>
+               <input asp-for="ReferrerCode" class="form-control" id="referrerCode" name="referrerCode" placeholder="Реферальный код пригласителя"/>
+               <span asp-validation-for="ReferrerCode" class="text-danger"></span>
+            </div>
+            <div class="mb-6">
+               <label asp-for="Email"></label>
+               <input asp-for="Email" class="form-control" id="email" name="email" placeholder="Введите свой адрес электронной почты" autofocus/>
+               <span asp-validation-for="Email" class="text-danger"></span>
+            </div>
+            <div class="mb-6">
+               <label asp-for="Phone"></label>
+               <input asp-for="Phone" class="form-control" id="phone" name="phone" placeholder="+37477123456"/>
+               <span asp-validation-for="Phone" class="text-danger"></span>
+            </div>
+            <div class="mb-6 form-password-toggle">
+              <label asp-for="Password"></label>
+              <div class="input-group input-group-merge">
+                <input asp-for="Password" type="password" id="password" class="form-control" name="password" placeholder="&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;" aria-describedby="password"/>
+                <span class="input-group-text cursor-pointer"><i class="bx bx-hide"></i></span>
+              </div>
+              <span asp-validation-for="Password" class="text-danger"></span>
+            </div>
+            <div class="mb-6 form-password-toggle">
+              <label asp-for="ConfirmPassword"></label>
+              <div class="input-group input-group-merge">
+                <input asp-for="ConfirmPassword" type="password" id="confirmpassword" class="form-control" name="confirmpassword" placeholder="&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;" aria-describedby="password"/>
+                <span class="input-group-text cursor-pointer"><i class="bx bx-hide"></i></span>
+              </div>
+              <span asp-validation-for="ConfirmPassword" class="text-danger"></span>
+            </div>
+
+            <div class="my-8">
+              <div class="form-check mb-0 ms-2">
+                <input class="form-check-input" type="checkbox" id="terms-conditions" name="terms">
+                <label class="form-check-label" for="terms-conditions">
+                  Я согласен с
+                  <a href="javascript:void(0);">политика конфиденциальности & условия</a>
+                </label>
+              </div>
+            </div>
+            <button class="btn btn-primary d-grid w-100">
+              Зарегистрироваться
+            </button>
+          </form>
+
+          <p class="text-center">
+            <span>У вас уже есть аккаунт?</span>
+            <a asp-action="Login">
+              <span>Войти</span>
+            </a>
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

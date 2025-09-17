@@ -53,11 +53,9 @@ namespace Partnerly.Controllers
 
             if (User.Identity != null && User.Identity.IsAuthenticated)
             {
-                // Если вошёл → перенаправляем в Dashboard
                 return RedirectToAction("Index", "Dashboard");
             }
 
-            // Если не вошёл → лендинг
             return View("Index");
         }
 

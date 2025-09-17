@@ -1,5 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Partnerly.Descriptors.Attributes;
+using Partnerly.Descriptors.Messages;
+using Partnerly.Helpers;
 
 namespace Partnerly.Models
 {
@@ -7,11 +9,11 @@ namespace Partnerly.Models
     {
         public AppDbContext(DbContextOptions<AppDbContext> options) : base(options) { }
 
-        public DbSet<User> Users { get; set; }
-        public DbSet<Role> Roles { get; set; }
-        public DbSet<Transaction> Transactions { get; set; }
-        public DbSet<Payment> Payments { get; set; }
-        public DbSet<Log> Logs { get; set; }
+        public DbSet<User>? Users { get; set; }
+        public DbSet<Role>? Roles { get; set; }
+        public DbSet<Transaction>? Transactions { get; set; }
+        public DbSet<Payment>? Payments { get; set; }
+        public DbSet<Log>? Logs { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -40,6 +42,7 @@ namespace Partnerly.Models
                 LastName = "Danielyan",
                 Phone = "+37497111312",
                 PhotoUrl = null,
+                MyReferralCode = Constants.SuperReferralCode,
                 ReferrerId = null,
                 RoleId = adminRoleId,
                 IsBlocked = false,

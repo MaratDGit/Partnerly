@@ -17,7 +17,7 @@ namespace Partnerly.Infrastructure.Services
         {
             bool retVal = false;
 
-            if (userID == null)
+            if (userID == null || _context?.Users == null)
                 return retVal;
             
             User? currUser = await _context.Users.FindAsync((Guid)userID);
@@ -37,7 +37,7 @@ namespace Partnerly.Infrastructure.Services
         {
             bool retVal = false;
 
-            if (userID == null)
+            if (userID == null || _context?.Users == null)
                 return retVal;
 
             User? currUser = await _context.Users.FindAsync((Guid)userID);
@@ -55,6 +55,11 @@ namespace Partnerly.Infrastructure.Services
 
         private async Task<bool> HasPermision(User user, string roleType)
         {
+            bool retval = false;
+
+            if (_context?.Roles == null)
+                return retval;
+
             var role = await _context.Roles.FindAsync(user.RoleId);
 
             if (role != null && roleType != null)
@@ -68,7 +73,7 @@ namespace Partnerly.Infrastructure.Services
                 }
             }
 
-            return false;
+            return retval;
         }
     }
 }

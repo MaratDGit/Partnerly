@@ -1,4 +1,6 @@
-﻿using Partnerly.Infrastructure.Interfaces;
+﻿using Partnerly.Descriptors.Attributes.BaseAttributes;
+using Partnerly.Descriptors.Messages;
+using Partnerly.Infrastructure.Interfaces;
 using System.ComponentModel.DataAnnotations;
 
 namespace Partnerly.Models
@@ -12,27 +14,28 @@ namespace Partnerly.Models
         #region Email
         [Required]
         [Display(Name = "Email")]
-        public string Email { get; set; }
+        public string? Email { get; set; }
         #endregion
         #region PasswordHash
         [Required]
         [Display(Name = "Password")]
-        public string PasswordHash { get; set; }
+        public string? PasswordHash { get; set; }
         #endregion
         #region Phone
         [Required]
+        [ArmenianPhone(ErrorMessage = ErrorMessages.TypeValidPhoneNumber)]
         [Display(Name = "Phone")]
-        public string Phone { get; set; }
+        public string? Phone { get; set; }
         #endregion
         #region FirstName
         [Required]
         [Display(Name = "First Name")]
-        public string FirstName { get; set; }
+        public string? FirstName { get; set; }
         #endregion
         #region LastName
         [Required]
         [Display(Name = "Last Name")]
-        public string LastName { get; set; }
+        public string? LastName { get; set; }
         #endregion
         #region PhotoUrl
         public string? PhotoUrl { get; set; }
@@ -45,6 +48,11 @@ namespace Partnerly.Models
         [Required]
         [Display(Name = "Role")]
         public Guid RoleId { get; set; }
+        #endregion
+        #region MyReferralCode
+        [Required]
+        [Display(Name = "My Referral Code")]
+        public string? MyReferralCode { get; set; }
         #endregion
         #region ReferrerId
         [Display(Name = "Referrer")]

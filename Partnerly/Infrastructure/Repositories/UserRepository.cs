@@ -13,7 +13,15 @@ namespace Partnerly.Infrastructure.Repositories
             return await _dbSet
                 .Include(u => u.Role)
                 .Include(u => u.Referrer)
-                .FirstOrDefaultAsync(u => u.Email == email);
+                .FirstOrDefaultAsync(u => u.Email == email && email != null);
+        }
+
+        public async Task<User?> GetByRefCodeAsync(string refCode)
+        {
+            return await _dbSet
+                .Include(u => u.Role)
+                .Include(u => u.Referrer)
+                .FirstOrDefaultAsync(u => u.MyReferralCode == refCode && refCode != null);
         }
     }
 }
