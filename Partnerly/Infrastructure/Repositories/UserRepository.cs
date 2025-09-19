@@ -8,7 +8,7 @@ namespace Partnerly.Infrastructure.Repositories
     {
         public UserRepository(AppDbContext context) : base(context) { }
 
-        public async Task<User?> GetByEmailAsync(string email)
+        public async Task<User?> GetByEmailAsync(string? email)
         {
             return await _dbSet
                 .Include(u => u.Role)
@@ -16,12 +16,20 @@ namespace Partnerly.Infrastructure.Repositories
                 .FirstOrDefaultAsync(u => u.Email == email && email != null);
         }
 
-        public async Task<User?> GetByRefCodeAsync(string refCode)
+        public async Task<User?> GetByRefCodeAsync(string? refCode)
         {
             return await _dbSet
                 .Include(u => u.Role)
                 .Include(u => u.Referrer)
                 .FirstOrDefaultAsync(u => u.MyReferralCode == refCode && refCode != null);
+        }
+
+        public async Task<User?> GetByPhoneAsync(string? phone)
+        {
+            return await _dbSet
+                .Include(u => u.Role)
+                .Include(u => u.Referrer)
+                .FirstOrDefaultAsync(u => u.Phone == phone && phone != null);
         }
     }
 }

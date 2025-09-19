@@ -5,6 +5,10 @@ namespace Partnerly.Descriptors.Attributes
 {
     public class RoleTypeAttribute : StringListAttribute
     {
+        public const string Admin = "Administrator";
+        public const string Employee = "Employee";
+        public const string User = "User";
+
         public const string View = "V";
         public const string Update = "U";
         public const string Delete = "D";

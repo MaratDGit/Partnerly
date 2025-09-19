@@ -12,8 +12,8 @@ using Partnerly.Models;
 namespace Partnerly.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20250905091412_createReuiredRecords")]
-    partial class createReuiredRecords
+    [Migration("20250919063733_InitialCreate")]
+    partial class InitialCreate
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -26,7 +26,7 @@ namespace Partnerly.Migrations
 
             modelBuilder.Entity("Partnerly.Models.Log", b =>
                 {
-                    b.Property<Guid>("Id")
+                    b.Property<Guid?>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
@@ -38,11 +38,19 @@ namespace Partnerly.Migrations
                         .IsRequired()
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<DateTime>("CreatedDate")
+                    b.Property<DateTime?>("CreatedDate")
+                        .IsRequired()
                         .HasColumnType("datetime2");
 
                     b.Property<bool>("IsDeleted")
                         .HasColumnType("bit");
+
+                    b.Property<string>("LogMessage")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Type")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<Guid?>("UpdatedBy")
                         .IsRequired()
@@ -52,27 +60,22 @@ namespace Partnerly.Migrations
                         .IsRequired()
                         .HasColumnType("datetime2");
 
-                    b.Property<Guid?>("UserId")
-                        .IsRequired()
-                        .HasColumnType("uniqueidentifier");
-
                     b.HasKey("Id");
-
-                    b.HasIndex("UserId");
 
                     b.ToTable("Logs");
 
                     b.HasData(
                         new
                         {
-                            Id = new Guid("c0869b53-fb1d-41f2-9ba9-dafdaade1381"),
+                            Id = new Guid("6cce714c-2e75-4fce-bb66-ea5dedec2bae"),
                             Action = "UC",
-                            CreatedBy = new Guid("b8b2fe83-92ac-4214-ad53-606690348a65"),
-                            CreatedDate = new DateTime(2025, 9, 5, 9, 14, 12, 112, DateTimeKind.Utc).AddTicks(5488),
+                            CreatedBy = new Guid("2070a77f-4b92-4c7a-8ccd-6b995c4da6e0"),
+                            CreatedDate = new DateTime(2025, 9, 19, 6, 37, 33, 16, DateTimeKind.Utc).AddTicks(9771),
                             IsDeleted = false,
-                            UpdatedBy = new Guid("b8b2fe83-92ac-4214-ad53-606690348a65"),
-                            UpdatedDate = new DateTime(2025, 9, 5, 9, 14, 12, 112, DateTimeKind.Utc).AddTicks(5490),
-                            UserId = new Guid("b8b2fe83-92ac-4214-ad53-606690348a65")
+                            LogMessage = "Created the Admin user from OnModelCreating",
+                            Type = "I",
+                            UpdatedBy = new Guid("2070a77f-4b92-4c7a-8ccd-6b995c4da6e0"),
+                            UpdatedDate = new DateTime(2025, 9, 19, 6, 37, 33, 16, DateTimeKind.Utc).AddTicks(9772)
                         });
                 });
 
@@ -90,10 +93,11 @@ namespace Partnerly.Migrations
                         .IsRequired()
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<DateTime>("CreatedDate")
+                    b.Property<DateTime?>("CreatedDate")
+                        .IsRequired()
                         .HasColumnType("datetime2");
 
-                    b.Property<bool>("IsDeleted")
+                    b.Property<bool?>("IsDeleted")
                         .HasColumnType("bit");
 
                     b.Property<string>("PaymentMethod")
@@ -112,7 +116,8 @@ namespace Partnerly.Migrations
                         .IsRequired()
                         .HasColumnType("datetime2");
 
-                    b.Property<Guid>("UserId")
+                    b.Property<Guid?>("UserId")
+                        .IsRequired()
                         .HasColumnType("uniqueidentifier");
 
                     b.HasKey("Id");
@@ -124,7 +129,7 @@ namespace Partnerly.Migrations
 
             modelBuilder.Entity("Partnerly.Models.Role", b =>
                 {
-                    b.Property<Guid>("Id")
+                    b.Property<Guid?>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
@@ -132,7 +137,8 @@ namespace Partnerly.Migrations
                         .IsRequired()
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<DateTime>("CreatedDate")
+                    b.Property<DateTime?>("CreatedDate")
+                        .IsRequired()
                         .HasColumnType("datetime2");
 
                     b.Property<bool>("IsDeleted")
@@ -161,42 +167,42 @@ namespace Partnerly.Migrations
                     b.HasData(
                         new
                         {
-                            Id = new Guid("df80c70b-5b1d-43bb-b807-f8a37b83ccd9"),
-                            CreatedBy = new Guid("b8b2fe83-92ac-4214-ad53-606690348a65"),
-                            CreatedDate = new DateTime(2025, 9, 5, 9, 14, 12, 112, DateTimeKind.Utc).AddTicks(5309),
+                            Id = new Guid("328b7408-573c-47e7-bb70-0a74118bb98c"),
+                            CreatedBy = new Guid("2070a77f-4b92-4c7a-8ccd-6b995c4da6e0"),
+                            CreatedDate = new DateTime(2025, 9, 19, 6, 37, 33, 16, DateTimeKind.Utc).AddTicks(9600),
                             IsDeleted = false,
                             Name = "Administrator",
                             Type = "D",
-                            UpdatedBy = new Guid("b8b2fe83-92ac-4214-ad53-606690348a65"),
-                            UpdatedDate = new DateTime(2025, 9, 5, 9, 14, 12, 112, DateTimeKind.Utc).AddTicks(5310)
+                            UpdatedBy = new Guid("2070a77f-4b92-4c7a-8ccd-6b995c4da6e0"),
+                            UpdatedDate = new DateTime(2025, 9, 19, 6, 37, 33, 16, DateTimeKind.Utc).AddTicks(9601)
                         },
                         new
                         {
-                            Id = new Guid("49ed5a66-83a2-4f42-a1db-e447e8a4b23f"),
-                            CreatedBy = new Guid("b8b2fe83-92ac-4214-ad53-606690348a65"),
-                            CreatedDate = new DateTime(2025, 9, 5, 9, 14, 12, 112, DateTimeKind.Utc).AddTicks(5316),
+                            Id = new Guid("11a7101a-5589-433f-9dbf-529aa02dd8da"),
+                            CreatedBy = new Guid("2070a77f-4b92-4c7a-8ccd-6b995c4da6e0"),
+                            CreatedDate = new DateTime(2025, 9, 19, 6, 37, 33, 16, DateTimeKind.Utc).AddTicks(9613),
                             IsDeleted = false,
                             Name = "Employee",
                             Type = "U",
-                            UpdatedBy = new Guid("b8b2fe83-92ac-4214-ad53-606690348a65"),
-                            UpdatedDate = new DateTime(2025, 9, 5, 9, 14, 12, 112, DateTimeKind.Utc).AddTicks(5316)
+                            UpdatedBy = new Guid("2070a77f-4b92-4c7a-8ccd-6b995c4da6e0"),
+                            UpdatedDate = new DateTime(2025, 9, 19, 6, 37, 33, 16, DateTimeKind.Utc).AddTicks(9614)
                         },
                         new
                         {
-                            Id = new Guid("dfd999ec-f0d3-4337-865f-66d5437356a2"),
-                            CreatedBy = new Guid("b8b2fe83-92ac-4214-ad53-606690348a65"),
-                            CreatedDate = new DateTime(2025, 9, 5, 9, 14, 12, 112, DateTimeKind.Utc).AddTicks(5318),
+                            Id = new Guid("1a7bd6b4-859e-487b-b325-7099d20a2444"),
+                            CreatedBy = new Guid("2070a77f-4b92-4c7a-8ccd-6b995c4da6e0"),
+                            CreatedDate = new DateTime(2025, 9, 19, 6, 37, 33, 16, DateTimeKind.Utc).AddTicks(9615),
                             IsDeleted = false,
                             Name = "User",
                             Type = "V",
-                            UpdatedBy = new Guid("b8b2fe83-92ac-4214-ad53-606690348a65"),
-                            UpdatedDate = new DateTime(2025, 9, 5, 9, 14, 12, 112, DateTimeKind.Utc).AddTicks(5318)
+                            UpdatedBy = new Guid("2070a77f-4b92-4c7a-8ccd-6b995c4da6e0"),
+                            UpdatedDate = new DateTime(2025, 9, 19, 6, 37, 33, 16, DateTimeKind.Utc).AddTicks(9616)
                         });
                 });
 
             modelBuilder.Entity("Partnerly.Models.Transaction", b =>
                 {
-                    b.Property<Guid>("Id")
+                    b.Property<Guid?>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
@@ -204,17 +210,17 @@ namespace Partnerly.Migrations
                         .IsRequired()
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<DateTime>("CreatedDate")
+                    b.Property<DateTime?>("CreatedDate")
+                        .IsRequired()
                         .HasColumnType("datetime2");
 
                     b.Property<string>("Description")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<bool>("IsDeleted")
                         .HasColumnType("bit");
 
-                    b.Property<decimal>("Points")
+                    b.Property<decimal?>("Points")
                         .HasColumnType("decimal(18,2)");
 
                     b.Property<Guid?>("UpdatedBy")
@@ -225,7 +231,8 @@ namespace Partnerly.Migrations
                         .IsRequired()
                         .HasColumnType("datetime2");
 
-                    b.Property<Guid>("UserId")
+                    b.Property<Guid?>("UserId")
+                        .IsRequired()
                         .HasColumnType("uniqueidentifier");
 
                     b.HasKey("Id");
@@ -241,14 +248,15 @@ namespace Partnerly.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<decimal>("Balance")
+                    b.Property<decimal?>("Balance")
                         .HasColumnType("decimal(18,2)");
 
                     b.Property<Guid?>("CreatedBy")
                         .IsRequired()
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<DateTime>("CreatedDate")
+                    b.Property<DateTime?>("CreatedDate")
+                        .IsRequired()
                         .HasColumnType("datetime2");
 
                     b.Property<string>("Email")
@@ -259,10 +267,23 @@ namespace Partnerly.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<bool?>("IsBlocked")
+                        .HasColumnType("bit");
+
                     b.Property<bool>("IsDeleted")
                         .HasColumnType("bit");
 
+                    b.Property<bool?>("IsOnlayn")
+                        .HasColumnType("bit");
+
                     b.Property<string>("LastName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime?>("LastSignInDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("MyReferralCode")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
@@ -280,7 +301,8 @@ namespace Partnerly.Migrations
                     b.Property<Guid?>("ReferrerId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<Guid>("RoleId")
+                    b.Property<Guid?>("RoleId")
+                        .IsRequired()
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<Guid?>("UpdatedBy")
@@ -302,31 +324,21 @@ namespace Partnerly.Migrations
                     b.HasData(
                         new
                         {
-                            Id = new Guid("b8b2fe83-92ac-4214-ad53-606690348a65"),
-                            Balance = 0m,
-                            CreatedBy = new Guid("b8b2fe83-92ac-4214-ad53-606690348a65"),
-                            CreatedDate = new DateTime(2025, 9, 5, 9, 14, 12, 112, DateTimeKind.Utc).AddTicks(4868),
+                            Id = new Guid("2070a77f-4b92-4c7a-8ccd-6b995c4da6e0"),
+                            CreatedBy = new Guid("2070a77f-4b92-4c7a-8ccd-6b995c4da6e0"),
+                            CreatedDate = new DateTime(2025, 9, 19, 6, 37, 33, 16, DateTimeKind.Utc).AddTicks(9311),
                             Email = "marat.iigservices@gmail.com",
                             FirstName = "Marat",
+                            IsBlocked = false,
                             IsDeleted = false,
                             LastName = "Danielyan",
-                            PasswordHash = "$2a$11$7qHZAmH9jYIufxpUFCHvqOZfJh6Bmbl/tkggdJUYq/3dBIPh02Bcm",
+                            MyReferralCode = "BRANCH111",
+                            PasswordHash = "$2a$11$5H0pAEJQCYHxrnMZcMNFY.R0vBj/f4CyQby7rZBCLQCXXJt.uroum",
                             Phone = "+37497111312",
-                            RoleId = new Guid("df80c70b-5b1d-43bb-b807-f8a37b83ccd9"),
-                            UpdatedBy = new Guid("b8b2fe83-92ac-4214-ad53-606690348a65"),
-                            UpdatedDate = new DateTime(2025, 9, 5, 9, 14, 12, 112, DateTimeKind.Utc).AddTicks(4872)
+                            RoleId = new Guid("328b7408-573c-47e7-bb70-0a74118bb98c"),
+                            UpdatedBy = new Guid("2070a77f-4b92-4c7a-8ccd-6b995c4da6e0"),
+                            UpdatedDate = new DateTime(2025, 9, 19, 6, 37, 33, 16, DateTimeKind.Utc).AddTicks(9320)
                         });
-                });
-
-            modelBuilder.Entity("Partnerly.Models.Log", b =>
-                {
-                    b.HasOne("Partnerly.Models.User", "User")
-                        .WithMany("Logs")
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("Partnerly.Models.Payment", b =>
@@ -376,8 +388,6 @@ namespace Partnerly.Migrations
 
             modelBuilder.Entity("Partnerly.Models.User", b =>
                 {
-                    b.Navigation("Logs");
-
                     b.Navigation("Payments");
 
                     b.Navigation("Referrals");

@@ -42,12 +42,12 @@ namespace Partnerly.Models
         #endregion
         #region Balance
         [Display(Name = "Balance")]
-        public decimal Balance { get; set; }
+        public decimal? Balance { get; set; }
         #endregion
         #region RoleId
         [Required]
         [Display(Name = "Role")]
-        public Guid RoleId { get; set; }
+        public Guid? RoleId { get; set; }
         #endregion
         #region MyReferralCode
         [Required]
@@ -76,7 +76,7 @@ namespace Partnerly.Models
         [Required]
         public Guid? CreatedBy { get; set; }
         [Required]
-        public DateTime CreatedDate { get; set; } = DateTime.UtcNow;
+        public DateTime? CreatedDate { get; set; }
         [Required]
         public Guid? UpdatedBy { get; set; }
         [Required]
@@ -88,6 +88,5 @@ namespace Partnerly.Models
         public ICollection<User>? Referrals { get; set; }
         public ICollection<Transaction>? Transactions { get; set; }
         public ICollection<Payment>? Payments { get; set; }
-        public ICollection<Log>? Logs { get; set; }
     }
 }

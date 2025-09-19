@@ -8,7 +8,7 @@ namespace Partnerly.Models
     {
         #region Id
         [Required]
-        public Guid Id { get; set; } = Guid.NewGuid();
+        public Guid? Id { get; set; }
         #endregion
         #region Name
         [Required]
@@ -26,7 +26,7 @@ namespace Partnerly.Models
         [Required]
         public Guid? CreatedBy { get; set; }
         [Required]
-        public DateTime CreatedDate { get; set; } = DateTime.UtcNow;
+        public DateTime? CreatedDate { get; set; }
         [Required]
         public Guid? UpdatedBy { get; set; }
         [Required]

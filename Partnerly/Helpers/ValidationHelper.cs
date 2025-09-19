@@ -13,14 +13,47 @@ namespace Partnerly.Helpers
             var context = new ValidationContext(entity, serviceProvider: null, items: null);
             var results = new List<ValidationResult>();
 
-            isValid = Validator.TryValidateObject(entity, context, results, validateAllProperties: true);
+            Validator.TryValidateObject(entity, context, results, validateAllProperties: true);
 
-            if (!isValid)
+            var props = typeof(T).GetProperties();
+            foreach (var prop in props)
             {
+                var isRequired = Attribute.IsDefined(prop, typeof(RequiredAttribute));
+                if (!isRequired) continue;
+
+                var value = prop.GetValue(entity);
+
+                if (value is string str && string.IsNullOrWhiteSpace(str))
+                {
+                    results.Add(new ValidationResult($"{prop.Name} is required."));
+                }
+
+                if (value is Guid guid && guid == Guid.Empty)
+                {
+                    results.Add(new ValidationResult($"{prop.Name} is required."));
+                }
+
+                if (value is Guid?)
+                {
+                    Guid? nullableGuid = (Guid?)value;
+
+                    if (!nullableGuid.HasValue || nullableGuid.Value == Guid.Empty)
+                        results.Add(new ValidationResult($"{prop.Name} is required."));
+                }
+            }
+
+            if (results.Any())
+            {
+                isValid = false;
                 errors = string.Join("; ", results.Select(r => r.ErrorMessage));
+            }
+            else
+            {
+                isValid = true;
             }
 
             return errors;
         }
+
     }
 }

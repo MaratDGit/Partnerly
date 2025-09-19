@@ -8,12 +8,7 @@ namespace Partnerly.Models
     {
         #region ID
         [Required]
-        public Guid? Id { get; set; } = Guid.NewGuid();
-        #endregion
-        #region UserID
-        [Required]
-        [Display(Name = "Creator User ID")]
-        public Guid? CreatorUserId { get; set; }
+        public Guid? Id { get; set; }
         #endregion
         #region Action
         [Required]
@@ -36,13 +31,11 @@ namespace Partnerly.Models
         [Required]
         public Guid? CreatedBy { get; set; }
         [Required]
-        public DateTime CreatedDate { get; set; } = DateTime.UtcNow;
+        public DateTime? CreatedDate { get; set; }
         [Required]
         public Guid? UpdatedBy { get; set; }
         [Required]
         public DateTime? UpdatedDate { get; set; }
         #endregion
-
-        public User? LogCreator { get; set; }
     }
 }

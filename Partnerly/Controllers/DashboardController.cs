@@ -8,6 +8,8 @@ namespace Partnerly.Controllers
     {
         public IActionResult Index()
         {
+
+
             return View();
         }
     }

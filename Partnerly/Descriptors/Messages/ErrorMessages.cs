@@ -9,6 +9,7 @@ namespace Partnerly.Descriptors.Messages
         public const string Itemsshouldbepassedaspairs = "Items should be passed as pairs: value, label";
         public const string NoPermissionForThisAction = "There is no permission for this action";
         public const string RequiredFieldsValidationFailed = "Validation Failed : {0}";
+        public const string DefaultLogErrorMessage = "Unknown validation error";
         #endregion
 
         #region Views errors
@@ -21,6 +22,8 @@ namespace Partnerly.Descriptors.Messages
         public const string CompareConfirmPassword = "Пароли не совпадают.";
         public const string TypeValidPhoneNumber = "Введите правильный номер в формате +374 XX XXXXXX";
         public const string InvalidRefferalCode = "Такого реферального кода не существует";
+        public const string UserWithEmailArleadyExist = "Пользователь с таким Email уже существует";
+        public const string UserWithPhoneArleadyExist = "Пользователь с таким телефоном уже существует";
         #endregion
     }
 }

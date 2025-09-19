@@ -61,35 +61,39 @@ namespace Partnerly.Controllers
                 return View(model);
             }
 
+            
             if (user.Role == null || user.IsBlocked == true)
             {
                 ModelState.AddModelError("Password", ErrorMessages.UserAccessDenied);
                 return View(model);
             }
 
-            var claims = new List<Claim>
+            if (user.Role.Name != null && user.Email != null)
             {
-                new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
-                new Claim(ClaimTypes.Name, user.Email),
-                new Claim(ClaimTypes.Role, user.Role.Name)
-            };
+                var claims = new List<Claim>
+                {
+                    new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
+                    new Claim(ClaimTypes.Name, user.Email),
+                    new Claim(ClaimTypes.Role, user.Role.Name)
+                };
 
-            var claimsIdentity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
+                var claimsIdentity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
 
-            var authProperties = new AuthenticationProperties
-            {
-                IsPersistent = model.RememberMe,
-                ExpiresUtc = DateTimeOffset.UtcNow.AddMinutes(60)
-            };
+                var authProperties = new AuthenticationProperties
+                {
+                    IsPersistent = model.RememberMe,
+                    ExpiresUtc = DateTimeOffset.UtcNow.AddMinutes(60)
+                };
 
-            await HttpContext.SignInAsync(
-                CookieAuthenticationDefaults.AuthenticationScheme,
-                new ClaimsPrincipal(claimsIdentity),
-                authProperties
-            );
+                await HttpContext.SignInAsync(
+                    CookieAuthenticationDefaults.AuthenticationScheme,
+                    new ClaimsPrincipal(claimsIdentity),
+                    authProperties
+                );
 
-            if (!string.IsNullOrEmpty(returnUrl) && Url.IsLocalUrl(returnUrl))
-                return Redirect(returnUrl);
+                if (!string.IsNullOrEmpty(returnUrl) && Url.IsLocalUrl(returnUrl))
+                    return Redirect(returnUrl);
+            }
 
             return RedirectToAction("Index", "Home");
         }
@@ -104,7 +108,7 @@ namespace Partnerly.Controllers
             User? referrer = null;
             if (model.ReferrerCode != null)
             {
-                referrer = await _userService.GetUserByRefCodeAsync((string)model.ReferrerCode);
+                referrer = await _userService.GetUserByRefCodeAsync(model?.ReferrerCode);
                 if (referrer == null)
                 {
                     ModelState.AddModelError("ReferrerCode", ErrorMessages.InvalidRefferalCode);
@@ -112,12 +116,31 @@ namespace Partnerly.Controllers
                 }
             }
 
-            //// Проверка, есть ли пользователь с таким Email
-            //if (await _db.Users.AnyAsync(u => u.Email == model.Email))
-            //{
-            //    ModelState.AddModelError("", "Пользователь с таким Email уже существует.");
-            //    return View(model);
-            //}
+            User? existingUser = null;
+            existingUser = await _userService.GetUserByEmailAsync(model?.Email);
+            if (existingUser != null)
+            {
+                ModelState.AddModelError("Email", ErrorMessages.UserWithEmailArleadyExist);
+                return View(model);
+            }
+
+            existingUser = await _userService.GetUserByPhoneAsync(model?.Phone);
+            if (existingUser != null)
+            {
+                ModelState.AddModelError("Phone", ErrorMessages.UserWithPhoneArleadyExist);
+                return View(model);
+            }
+
+            Partnerly.Models.User user1 = new Partnerly.Models.User();
+            var result = await _userService.CreateUserAsync(user1);
+            if (!result.Success)
+            {
+                foreach (var error in result.Errors)
+                {
+                    ModelState.AddModelError("", error);
+                }
+                return View(model); // вернём ту же страницу с ошибками
+            }
 
             //// Создание нового пользователя
             //var user = new User

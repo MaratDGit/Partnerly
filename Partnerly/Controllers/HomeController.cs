@@ -1,7 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Partnerly.Descriptors.Attributes;
 using Partnerly.Infrastructure.Interfaces;
-using Partnerly.Models;
 using Partnerly.Models.ViewModels;
 using System.Diagnostics;
 using System.Reflection;
@@ -40,7 +39,7 @@ namespace Partnerly.Controllers
             //    }
             //}
 
-            //var user = await _userService.GetUserByEmailAsync("marat.iigservices@gmail.com");
+            var user = await _userService.GetUserByEmailAsync("marat.iigservices@gmail.com");
             //if (user != null)
             //{
             //    var curruser = _currentUser.UserId;

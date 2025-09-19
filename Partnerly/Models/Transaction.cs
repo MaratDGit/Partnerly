@@ -7,27 +7,27 @@ namespace Partnerly.Models
     {
         #region Id
         [Required]
-        public Guid Id { get; set; } = Guid.NewGuid();
+        public Guid? Id { get; set; }
         #endregion
         #region UserId
         [Required]
         [Display(Name = "User Id")]
-        public Guid UserId { get; set; }
+        public Guid? UserId { get; set; }
         #endregion
         #region Points
         [Display(Name = "Points")]
-        public decimal Points { get; set; }
+        public decimal? Points { get; set; }
         #endregion
         #region Descriptions
         [Display(Name = "Description")]
-        public string Description { get; set; }
+        public string? Description { get; set; }
         #endregion
 
         #region System Columns
         [Required]
         public Guid? CreatedBy { get; set; }
         [Required]
-        public DateTime CreatedDate { get; set; } = DateTime.UtcNow;
+        public DateTime? CreatedDate { get; set; }
         [Required]
         public Guid? UpdatedBy { get; set; }
         [Required]

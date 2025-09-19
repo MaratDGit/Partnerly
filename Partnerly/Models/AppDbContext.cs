@@ -2,12 +2,22 @@
 using Partnerly.Descriptors.Attributes;
 using Partnerly.Descriptors.Messages;
 using Partnerly.Helpers;
+using Partnerly.Infrastructure.Interfaces;
+using System.ComponentModel.DataAnnotations;
 
 namespace Partnerly.Models
 {
     public class AppDbContext : DbContext
     {
-        public AppDbContext(DbContextOptions<AppDbContext> options) : base(options) { }
+        private readonly ICurrentUserService _currentUserService;
+
+        public AppDbContext(
+            DbContextOptions<AppDbContext> options,
+            ICurrentUserService currentUserService)
+            : base(options)
+        {
+            _currentUserService = currentUserService;
+        }
 
         public DbSet<User>? Users { get; set; }
         public DbSet<Role>? Roles { get; set; }
@@ -36,7 +46,7 @@ namespace Partnerly.Models
             modelBuilder.Entity<User>().HasData(new User
             {
                 Id = adminUserId,
-                Email = "marat.iigservices@gmail.com",
+                Email = Constants.SuperUserEmail,
                 PasswordHash = BCrypt.Net.BCrypt.HashPassword("MarDan123!"),
                 FirstName = "Marat",
                 LastName = "Danielyan",
@@ -60,7 +70,7 @@ namespace Partnerly.Models
             roles.Add(new Role
             {
                 Id = adminRoleId,
-                Name = "Administrator",
+                Name = RoleTypeAttribute.Admin,
                 Type = RoleTypeAttribute.Delete,
                 IsDeleted = false,
                 CreatedBy = adminUserId,
@@ -71,7 +81,7 @@ namespace Partnerly.Models
             roles.Add(new Role
             {
                 Id = employeeRoleId,
-                Name = "Employee",
+                Name = RoleTypeAttribute.Employee,
                 Type = RoleTypeAttribute.Update,
                 IsDeleted = false,
                 CreatedBy = adminUserId,
@@ -82,7 +92,7 @@ namespace Partnerly.Models
             roles.Add(new Role
             {
                 Id = userRoleId,
-                Name = "User",
+                Name = RoleTypeAttribute.User,
                 Type = RoleTypeAttribute.View,
                 IsDeleted = false,
                 CreatedBy = adminUserId,
@@ -97,7 +107,6 @@ namespace Partnerly.Models
             modelBuilder.Entity<Log>().HasData(new Log
             {
                 Id = logId,
-                CreatorUserId = adminUserId,
                 Action = LogActionsAttribute.UserCreated,
                 Type = LogTypeAttribute.Information,
                 LogMessage = "Created the Admin user from OnModelCreating",
@@ -108,6 +117,57 @@ namespace Partnerly.Models
                 UpdatedDate = DateTime.UtcNow,
             });
             #endregion
+        }
+
+        public override async Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
+        {
+            var entries = ChangeTracker.Entries()
+                .Where(e => e.Entity is IAuditableEntity &&
+                            (e.State == EntityState.Added || e.State == EntityState.Modified));
+
+            foreach (var entityEntry in entries)
+            {
+                var entity = (IAuditableEntity)entityEntry.Entity;
+
+                if (entityEntry.State == EntityState.Added)
+                {
+                    entity.UpdatedBy = _currentUserService.UserId;
+                    entity.CreatedBy = _currentUserService.UserId;
+                    entity.CreatedDate = DateTime.UtcNow;
+                    entity.UpdatedDate = DateTime.UtcNow;
+
+                    if (_currentUserService.UserId == null)
+                    {
+                        if (entity is User userEntity)
+                        {
+                            entity.UpdatedBy = entity.CreatedBy = userEntity.Id;
+                        }
+                        else if (entity is Log logEntity)
+                        {
+                            User? superUser = Users?.FirstOrDefault(_ => _.Email == Constants.SuperUserEmail);
+                            entity.UpdatedBy = entity.CreatedBy = superUser?.Id ?? new Guid();
+                        }
+                    }
+                }
+                else if (entityEntry.State == EntityState.Modified)
+                {
+                    entity.UpdatedBy = _currentUserService.UserId;
+                    entity.UpdatedDate = DateTime.UtcNow;
+                }
+                else if (entityEntry.State == EntityState.Deleted)
+                {
+                    
+                }
+
+                string? result = ValidationHelper.ValidateEntityRequiredFields(entityEntry.Entity, out bool isValid);
+
+                if (!isValid)
+                    throw new ValidationException(String.Format(ErrorMessages.RequiredFieldsValidationFailed, result));
+
+
+            }
+
+            return await base.SaveChangesAsync(cancellationToken);
         }
     }
 }

@@ -4,7 +4,7 @@ namespace Partnerly.Infrastructure.Interfaces
 {
     public interface ILogService
     {
-        Task<Log?> CreateLogAsync(Log? log);
+        Task<Log?> CreateLogAsync(string action, string type, string? message);
         Task<Log?> GetLogByIDAsync(Guid? id);
         Task<IEnumerable<Log?>> GetAllLogsAsync();
         Task UpdateLogAsync(Log? user);

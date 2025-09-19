@@ -1,79 +1,54 @@
-﻿using Partnerly.Descriptors.Messages;
-using Partnerly.Helpers;
+﻿using Microsoft.EntityFrameworkCore;
+using Partnerly.Descriptors.Messages;
 using Partnerly.Infrastructure.Interfaces;
 using Partnerly.Models;
-using System.ComponentModel.DataAnnotations;
 
 namespace Partnerly.Infrastructure.Services
 {
     public class LogService : ILogService
     {
+        private readonly DbContextOptions<AppDbContext> _options;
         private readonly ILogRepository _logRepo;
         private readonly IPermissionService _permissionService;
-        private readonly ICurrentUserService _currentUser;
+        private readonly ICurrentUserService _currentUserService;
 
-        public LogService(ILogRepository logRepo, IPermissionService permissionService, ICurrentUserService currentUser)
+        public LogService(DbContextOptions<AppDbContext> options, ILogRepository logRepo, IPermissionService permissionService, ICurrentUserService currentUser)
         {
+            _options = options;
             _logRepo = logRepo;
             _permissionService = permissionService;
-            _currentUser = currentUser;
+            _currentUserService = currentUser;
         }
 
-        public async Task<Log?> CreateLogAsync(Log? log)
-        {
-            if (log == null)
-                return null;
-
-            var newLog = new Log { Id = Guid.NewGuid() };
-            newLog.Type = log.Type;
-            newLog.Action = log.Action;
-            newLog.CreatorUserId = log.CreatorUserId;
-            newLog.LogMessage = log.LogMessage;
-
-            newLog.IsDeleted = false;
-            newLog.CreatedDate = DateTime.UtcNow;
-            newLog.UpdatedDate = DateTime.UtcNow;
-            newLog.CreatedBy = _currentUser.UserId;
-            newLog.UpdatedBy = _currentUser.UserId;
-
-            string? result = ValidationHelper.ValidateEntityRequiredFields(newLog, out bool isValid);
-            if (!isValid)
-            {
-                throw new ValidationException(String.Format(ErrorMessages.RequiredFieldsValidationFailed, result));
-            }
-
-            await _logRepo.AddAsync(newLog);
-            await _logRepo.SaveChangesAsync();
-            return newLog;
-        }
-
-        public async Task<Log?> GetLogByIDAsync(Guid? id)
-        {
-            Log? log = null;
-            if (id != null)
-            {
-                log = await _logRepo.GetByIdAsync((Guid)id);
-            }
-            return log;
-        }
+        public async Task<Log?> GetLogByIDAsync(Guid? id) =>
+             await _logRepo.GetByIdAsync(id);
 
         public async Task<IEnumerable<Log?>> GetAllLogsAsync() =>
             await _logRepo.GetAllAsync();
+
+        public async Task<Log?> CreateLogAsync(string action, string type, string? message)
+        {
+            using var context = new AppDbContext(_options, _currentUserService);
+
+            var newLog = new Log { Id = Guid.NewGuid() };
+            newLog.Type = type;
+            newLog.Action = action;
+            newLog.LogMessage = message ?? ErrorMessages.DefaultLogErrorMessage;
+            newLog.IsDeleted = false;
+
+            await context.AddAsync(newLog);
+            await context.SaveChangesAsync();
+            return newLog;
+        }
 
         public async Task UpdateLogAsync(Log? log)
         {
             if (log == null)
                 return;
 
-            string? result = ValidationHelper.ValidateEntityRequiredFields(log, out bool isValid);
-            if (!isValid)
-            {
-                throw new ValidationException(String.Format(ErrorMessages.RequiredFieldsValidationFailed, result));
-            }
-
             if (await GetLogByIDAsync(log.Id) != null)
             {
-                if (!await _permissionService.CanUpdateAsync(log.UpdatedBy, log))
+                if (!await _permissionService.CanUpdateAsync(_currentUserService.UserId, log))
                     throw new UnauthorizedAccessException(ErrorMessages.NoPermissionForThisAction);
 
                 _logRepo.Update(log);
@@ -88,6 +63,9 @@ namespace Partnerly.Infrastructure.Services
                 var log = await _logRepo.GetByIdAsync((Guid)id);
                 if (log != null)
                 {
+                    if (!await _permissionService.CanDeleteAsync(_currentUserService.UserId, log))
+                        throw new UnauthorizedAccessException(ErrorMessages.NoPermissionForThisAction);
+
                     _logRepo.Delete(log);
                     await _logRepo.SaveChangesAsync();
                 }
