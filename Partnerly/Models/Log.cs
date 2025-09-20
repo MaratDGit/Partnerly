@@ -8,7 +8,7 @@ namespace Partnerly.Models
     {
         #region ID
         [Required]
-        public Guid? Id { get; set; }
+        public Guid Id { get; set; }
         #endregion
         #region Action
         [Required]

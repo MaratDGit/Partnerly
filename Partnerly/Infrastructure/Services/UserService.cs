@@ -35,15 +35,25 @@ namespace Partnerly.Infrastructure.Services
         public async Task<User?> GetUserByIDAsync(Guid? id) =>
             await _userRepo.GetByIdAsync(id);
 
+        public async Task<User?> GetUserByIDAsync(string? id)
+        {
+            if (Guid.TryParse(id, out var guid))
+            {
+                return await GetUserByIDAsync(guid);
+            }
+
+            return null;
+        }
+            
         public async Task<IEnumerable<User?>> GetAllUsersAsync() =>
             await _userRepo.GetAllAsync();
 
-        public async Task<ServiceResult<User>> CreateUserAsync(User? user)
+        public async Task<ServiceResult<User?>> CreateUserAsync(User? user)
         {
             if (user == null)
             {
-                await _logService.CreateLogAsync(LogActionsAttribute.UserCreated, LogTypeAttribute.Error, "User is null from controller");
-                return ServiceResult<User>.Fail(new List<string> { });
+                await _logService.CreateLogAsync(LogActionsAttribute.UserCreated, LogTypeAttribute.Error, String.Format(ErrorMessages.RecordIsNullFromController, "User"));
+                return ServiceResult<User?>.Fail(new List<string> { });
             }
 
             var newUser = new User { Id = Guid.NewGuid() };
@@ -69,7 +79,7 @@ namespace Partnerly.Infrastructure.Services
                 if (referrerUser == null || referrerUser?.IsBlocked == true || referrerUser?.IsDeleted == true)
                 {
                     await _logService.CreateLogAsync(LogActionsAttribute.UserCreated, LogTypeAttribute.Error, ErrorMessages.ReferrerUserCannotBeFoundOrInactive);
-                    return ServiceResult<User>.Fail(new List<string> { });
+                    return ServiceResult<User?>.Fail(new List<string> { });
                 }
             }
 
@@ -88,9 +98,10 @@ namespace Partnerly.Infrastructure.Services
             newUser.MyReferralCode = refCode;
             newUser.ReferrerId = referrerID;
             newUser.RoleId = roleID;
-            newUser.IsBlocked = user.IsBlocked;
+            newUser.IsBlocked = user.IsBlocked ?? false;
             newUser.IsDeleted = false;
             newUser.Balance = user.Balance ?? 0m;
+            newUser.EmailConfirmed = false;
 
             try
             {
@@ -100,30 +111,30 @@ namespace Partnerly.Infrastructure.Services
             catch (Exception ex)
             {
                 await _logService.CreateLogAsync(LogActionsAttribute.UserCreated, LogTypeAttribute.Error, ex.Message);
-                return ServiceResult<User>.Fail(new List<string> { });
+                return ServiceResult<User?>.Fail(new List<string> { });
             }
 
-            return ServiceResult<User>.Ok(user);
+            return ServiceResult<User?>.Ok(user);
         }
 
-        public async Task<ServiceResult<User>> UpdateUserAsync(User? user)
+        public async Task<ServiceResult<User?>> UpdateUserAsync(User? user)
         {
             if (user == null)
             {
-                await _logService.CreateLogAsync(LogActionsAttribute.UserUpdated, LogTypeAttribute.Error, "User is null from controller");
-                return ServiceResult<User>.Fail(new List<string> {});
+                await _logService.CreateLogAsync(LogActionsAttribute.UserUpdated, LogTypeAttribute.Error, String.Format(ErrorMessages.RecordIsNullFromController, "User"));
+                return ServiceResult<User?>.Fail(new List<string> {});
             }
 
             if (await _userRepo.GetByIdAsync(user.Id) == null)
             {
-                await _logService.CreateLogAsync(LogActionsAttribute.UserUpdated, LogTypeAttribute.Error, "User Cannot be found");
-                return ServiceResult<User>.Fail(new List<string> { });
+                await _logService.CreateLogAsync(LogActionsAttribute.UserUpdated, LogTypeAttribute.Error, String.Format(ErrorMessages.Cannotbefound, "User"));
+                return ServiceResult<User?>.Fail(new List<string> { });
             }
 
             if (!await _permissionService.CanUpdateAsync(_currentUserService.UserId, user))
             {
-                await _logService.CreateLogAsync(LogActionsAttribute.UserUpdated, LogTypeAttribute.Error, ErrorMessages.NoPermissionForThisAction);
-                return ServiceResult<User>.Fail(new List<string> { ErrorMessages.NoPermissionForThisAction });
+                await _logService.CreateLogAsync(LogActionsAttribute.UserUpdated, LogTypeAttribute.Critical, ErrorMessages.NoPermissionForThisAction);
+                return ServiceResult<User?>.Fail(new List<string> { ErrorMessages.NoPermissionForThisAction });
             }
 
             try
@@ -134,38 +145,38 @@ namespace Partnerly.Infrastructure.Services
             catch(Exception ex)
             {
                 await _logService.CreateLogAsync(LogActionsAttribute.UserUpdated, LogTypeAttribute.Error, ex.Message);
-                return ServiceResult<User>.Fail(new List<string> { ErrorMessages.NoPermissionForThisAction });
+                return ServiceResult<User?>.Fail(new List<string> { ErrorMessages.NoPermissionForThisAction });
             }
   
-            return ServiceResult<User>.Ok(user);
+            return ServiceResult<User?>.Ok(user);
         }
 
-        public async Task<ServiceResult<User>> DeleteUserAsync(Guid? id)
+        public async Task<ServiceResult<User?>> DeleteUserAsync(Guid? id)
         {
             if (id == null)
             {
-                await _logService.CreateLogAsync(LogActionsAttribute.UserDeleted, LogTypeAttribute.Error, "User ID is null from controller");
-                return ServiceResult<User>.Fail(new List<string> { });
+                await _logService.CreateLogAsync(LogActionsAttribute.UserDeleted, LogTypeAttribute.Error, String.Format(ErrorMessages.RecordIsNullFromController, "User ID"));
+                return ServiceResult<User?>.Fail(new List<string> { });
             }
 
             var user = await _userRepo.GetByIdAsync((Guid)id);
 
             if (user == null)
             {
-                await _logService.CreateLogAsync(LogActionsAttribute.UserDeleted, LogTypeAttribute.Error, "User cannot be found");
-                return ServiceResult<User>.Fail(new List<string> { });
+                await _logService.CreateLogAsync(LogActionsAttribute.UserDeleted, LogTypeAttribute.Error, String.Format(ErrorMessages.Cannotbefound, "User"));
+                return ServiceResult<User?>.Fail(new List<string> { });
             }
 
             if (!await _permissionService.CanDeleteAsync(_currentUserService.UserId, user))
             {
-                await _logService.CreateLogAsync(LogActionsAttribute.UserDeleted, LogTypeAttribute.Error, ErrorMessages.NoPermissionForThisAction);
-                return ServiceResult<User>.Fail(new List<string> { ErrorMessages.NoPermissionForThisAction });
+                await _logService.CreateLogAsync(LogActionsAttribute.UserDeleted, LogTypeAttribute.Critical, ErrorMessages.NoPermissionForThisAction);
+                return ServiceResult<User?>.Fail(new List<string> { ErrorMessages.NoPermissionForThisAction });
             }
 
             _userRepo.Delete(user);
             await _userRepo.SaveChangesAsync();
 
-            return ServiceResult<User>.Ok(user);
+            return ServiceResult<User?>.Ok(user);
         }
     }
 }

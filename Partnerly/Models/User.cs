@@ -9,7 +9,7 @@ namespace Partnerly.Models
     {
         #region ID
         [Required]
-        public Guid Id { get; set; } = Guid.NewGuid();
+        public Guid Id { get; set; }
         #endregion
         #region Email
         [Required]
@@ -69,6 +69,10 @@ namespace Partnerly.Models
         #region IsBlocked
         [Display(Name = "Is Blocked")]
         public bool? IsBlocked { get; set; }
+        #endregion
+        #region EmailConfirmed
+        [Display(Name = "Email Confirmed")]
+        public bool? EmailConfirmed { get; set; }
         #endregion
 
         #region System Columns

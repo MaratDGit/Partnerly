@@ -24,6 +24,9 @@ namespace Partnerly.Models
         public DbSet<Transaction>? Transactions { get; set; }
         public DbSet<Payment>? Payments { get; set; }
         public DbSet<Log>? Logs { get; set; }
+        public DbSet<EmailConfirmationToken>? EmailConfirmationTokens { get; set; }
+        public DbSet<SystemSettings>? SystemSettings { get; set; }
+        public DbSet<EmailTemplate>? EmailTemplate { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -57,6 +60,7 @@ namespace Partnerly.Models
                 RoleId = adminRoleId,
                 IsBlocked = false,
                 IsDeleted = false,
+                EmailConfirmed = true,
                 CreatedBy = adminUserId,
                 CreatedDate = DateTime.UtcNow,
                 UpdatedBy = adminUserId,
@@ -110,6 +114,18 @@ namespace Partnerly.Models
                 Action = LogActionsAttribute.UserCreated,
                 Type = LogTypeAttribute.Information,
                 LogMessage = "Created the Admin user from OnModelCreating",
+                IsDeleted = false,
+                CreatedBy = adminUserId,
+                CreatedDate = DateTime.UtcNow,
+                UpdatedBy = adminUserId,
+                UpdatedDate = DateTime.UtcNow,
+            });
+            #endregion
+            #region Create System Settings
+            modelBuilder.Entity<SystemSettings>().HasData(new SystemSettings
+            {
+                Id = 1,
+                EmailConfirmationTokenExpiredAtHours = 24,
                 IsDeleted = false,
                 CreatedBy = adminUserId,
                 CreatedDate = DateTime.UtcNow,

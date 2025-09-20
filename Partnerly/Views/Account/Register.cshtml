@@ -70,12 +70,13 @@
 
             <div class="my-8">
               <div class="form-check mb-0 ms-2">
-                <input class="form-check-input" type="checkbox" id="terms-conditions" name="terms">
+                 <input asp-for="TermsConditions" class="form-check-input" type="checkbox" id="terms-conditions"/>
                 <label class="form-check-label" for="terms-conditions">
                   Я согласен с
                   <a href="javascript:void(0);">политика конфиденциальности & условия</a>
                 </label>
               </div>
+              <span asp-validation-for="TermsConditions" class="text-danger"></span>
             </div>
             <button class="btn btn-primary d-grid w-100">
               Зарегистрироваться

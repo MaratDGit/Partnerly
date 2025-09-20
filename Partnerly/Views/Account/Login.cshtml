@@ -8,6 +8,18 @@
     <link rel="stylesheet" href="~/assets/vendor/css/pages/page-auth.css">
 }
 
+@section PageScripts {
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            var emailError = '@Html.Raw(ViewBag.EmailConfirmationMessage ?? "")';
+            if (emailError.length > 0) {
+                var myModal = new bootstrap.Modal(document.getElementById('emailErrorModal'));
+                myModal.show();
+            }
+        });
+    </script>
+}
+
 <div class="container-xxl">
   <div class="authentication-wrapper authentication-basic container-p-y">
     <div class="authentication-inner">
@@ -64,5 +76,24 @@
       </div>
     </div>
   </div>
+
+  <div class="modal fade" id="emailErrorModal" tabindex="-1" aria-labelledby="emailErrorModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="emailErrorModalLabel">Ошибка</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Закрыть"></button>
+      </div>
+      <div class="modal-body">
+        @ViewBag.EmailConfirmationMessage
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Ок</button>
+      </div>
+    </div>
+  </div>
+  </div>
 </div>
+
+
 
