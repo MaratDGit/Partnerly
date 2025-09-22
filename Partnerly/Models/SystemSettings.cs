@@ -16,6 +16,12 @@ namespace Partnerly.Models
         public int? EmailConfirmationTokenExpiredAtHours { get; set; }
         #endregion
 
+        #region 
+        [Required]
+        [Display(Name = "Forgot Password Token ExpiredAt Hours")]
+        public int? ForgotPasswordTokenExpiredAtHours { get; set; }
+        #endregion
+
         #region System Columns
         public bool IsDeleted { get; set; } = false;
         [Required]

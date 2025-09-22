@@ -1,4 +1,5 @@
-﻿using Partnerly.Infrastructure.Interfaces;
+﻿using Partnerly.Descriptors.Attributes;
+using Partnerly.Infrastructure.Interfaces;
 using System.ComponentModel.DataAnnotations;
 
 namespace Partnerly.Models
@@ -7,8 +8,14 @@ namespace Partnerly.Models
     {
         [Key]
         public int Id { get; set; }
+        [Required]
         public Guid? UserId { get; set; }
+        [Required]
         public string? Token { get; set; }
+        [EmailTokenType]
+        [Required]
+        public string? TokenType { get; set; }
+        [Required]
         public DateTime? ExpiresAt { get; set; }
         public bool? Used { get; set; }
 

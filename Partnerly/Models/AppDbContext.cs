@@ -128,6 +128,7 @@ namespace Partnerly.Models
             {
                 Id = 1,
                 EmailConfirmationTokenExpiredAtHours = 24,
+                ForgotPasswordTokenExpiredAtHours = 1,
                 IsDeleted = false,
                 CreatedBy = adminUserId,
                 CreatedDate = DateTime.UtcNow,
@@ -136,7 +137,7 @@ namespace Partnerly.Models
             });
             #endregion
             #region Create Email Templates
-            string body = @"
+            string bodyEmailConfirmation = @"
                             <h2>Здравствуйте, {{UserName}}!</h2>
                             <p>
                                 Подтвердите ваш email, перейдя по ссылке:
@@ -148,7 +149,36 @@ namespace Partnerly.Models
                 Id = Guid.NewGuid(),
                 Name = EmailTemplateNameAttribute.EmailConfirmation,
                 Subject = "Подтверждение регистрации",
-                BodyHtml = body,
+                BodyHtml = bodyEmailConfirmation,
+                IsDeleted = false,
+                CreatedBy = adminUserId,
+                CreatedDate = DateTime.UtcNow,
+                UpdatedBy = adminUserId,
+                UpdatedDate = DateTime.UtcNow,
+            });
+            #endregion
+            #region Create Email Templates
+            string bodyForgotPassword = @"<h2>Здравствуйте, {{UserName}}!</h2>
+                                        <p>
+                                            Вы запросили сброс пароля для вашей учетной записи.  
+                                            Чтобы создать новый пароль, перейдите по ссылке ниже:
+                                        </p>
+                                        <p>
+                                            <a href=""{ { ConfirmationLink } }"" style=""display: inline - block; padding: 10px 20px;
+                                                    background-color:#0d6efd;color:#fff;text-decoration:none;border-radius:5px;"">
+                                               Сбросить пароль
+                                            </a>
+                                        </p>
+                                        <p>
+                                            Если вы не запрашивали сброс пароля, просто проигнорируйте это письмо.
+                                        </p>";
+
+            modelBuilder.Entity<EmailTemplate>().HasData(new EmailTemplate
+            {
+                Id = Guid.NewGuid(),
+                Name = EmailTemplateNameAttribute.ForgotPassword,
+                Subject = "Сброс пароля",
+                BodyHtml = bodyForgotPassword,
                 IsDeleted = false,
                 CreatedBy = adminUserId,
                 CreatedDate = DateTime.UtcNow,

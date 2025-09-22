@@ -1,0 +1,22 @@
+﻿@{
+  Layout = "_BlankLayout";
+  ViewData["Title"] = "Email подтвержден";
+}
+
+<div class="container-xxl">
+  <div class="authentication-wrapper authentication-basic container-p-y">
+    <div class="authentication-inner">
+      <div class="card px-sm-6 px-0">
+        <div class="card-body">
+          <h4 class="text-success mb-4">✅ Ваш email успешно подтвержден!</h4>
+            <p class="mb-4">
+                Теперь вы можете войти в систему, используя свои учетные данные.
+            </p>
+            <a asp-controller="Account" asp-action="Login" class="btn btn-primary btn-lg">
+                Вход
+            </a>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

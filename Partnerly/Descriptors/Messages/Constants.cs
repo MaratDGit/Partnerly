@@ -55,5 +55,10 @@ namespace Partnerly.Descriptors.Messages
 
         // Email Template Names
         public const string EmailConfirmation = "Email Confirmation";
+
+        // Email Token Types
+        public const string Registration = "Registration";
+        public const string ForgotPassword = "Forgot Password";
+
     }
 }

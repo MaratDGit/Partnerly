@@ -6,6 +6,7 @@ using Partnerly.Descriptors.Messages;
 using Partnerly.Infrastructure.Interfaces;
 using Partnerly.Models;
 using Partnerly.Models.ViewModels;
+using System.Diagnostics;
 using System.Security.Claims;
 using System.Security.Cryptography;
 
@@ -43,6 +44,13 @@ namespace Partnerly.Controllers
 
         [HttpGet]
         public IActionResult Register(string? returnUrl = null)
+        {
+            ViewBag.ReturnUrl = returnUrl;
+            return View();
+        }
+
+        [HttpGet]
+        public IActionResult ForgotPassword(string? returnUrl = null)
         {
             ViewBag.ReturnUrl = returnUrl;
             return View();
@@ -170,12 +178,12 @@ namespace Partnerly.Controllers
 
             if (result.Data?.Id != null && result.Data.Email != null)
             {
-                var emailToken = new EmailConfirmationToken { UserId = result.Data.Id };
+                var emailToken = new EmailConfirmationToken { UserId = result.Data.Id, TokenType = EmailTokenTypeAttribute.Registration };
             
                 var tokenResult = await _tokenService.CreateConfirmationTokenAsync(emailToken);
                 if (!tokenResult.Success)
                 {
-                    foreach (var error in result.Errors)
+                    foreach (var error in tokenResult.Errors)
                     {
                         ModelState.AddModelError("", error);
                     }
@@ -198,7 +206,7 @@ namespace Partnerly.Controllers
 
                     await _emailSender.SendEmailWithTemplateAsync(EmailTemplateNameAttribute.EmailConfirmation, result?.Data?.Email, emailModel);
 
-                    return RedirectToAction("RegistrationSuccessful");
+                    return View("RegistrationSuccessful");
                 }
             }
 
@@ -212,36 +220,177 @@ namespace Partnerly.Controllers
             return RedirectToAction("Index", "Home");
         }
 
-        [HttpGet]
-        public async Task<IActionResult> ConfirmEmail(string userId, string token)
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> ForgotPassword(ForgotPasswordViewModel model, string? returnUrl = null)
         {
-            if (string.IsNullOrEmpty(token) || string.IsNullOrEmpty(userId))
-                return View("Error");
-
-            var emailToken = await _tokenService.GetByUserIDAndTokenAsync(userId, token);
-
-            if (emailToken == null || emailToken.ExpiresAt < DateTime.UtcNow)
-                return View("Error");
-
-            var user = await _userService.GetUserByIDAsync(userId);
-            if (user == null || user.IsBlocked == true)
-                return View("Error");
-
-            user.EmailConfirmed = true;
-            var result = await _userService.UpdateUserAsync(user, user.Id);
-            
-            if (result.Success)
+            if (!ModelState.IsValid)
             {
-                emailToken.Used = true;
-                var tokenResult = await _tokenService.UpdateConfirmationTokenAsync(emailToken, user.Id);
+                return View(model);
+            }
 
-                if (tokenResult.Success)
+            var user = await _userService.GetUserByEmailAsync(model.Email);
+            if (user == null || user.IsDeleted)
+            {
+                ModelState.AddModelError("Email", ErrorMessages.IncorectEmail);
+                return View(model);
+            }
+
+            if (user.IsBlocked == true)
+            {
+                ModelState.AddModelError("Email", ErrorMessages.UserIsBlocked);
+                return View(model);
+            }
+
+            var emailToken = new EmailConfirmationToken { UserId = user.Id, TokenType = EmailTokenTypeAttribute.ForgotPassword };
+
+            var tokenResult = await _tokenService.CreateConfirmationTokenAsync(emailToken);
+            if (!tokenResult.Success)
+            {
+                foreach (var error in tokenResult.Errors)
                 {
-                    return View("ConfirmEmail");
+                    ModelState.AddModelError("", error);
+                }
+                return View(model);
+            }
+
+            if (tokenResult?.Data?.UserId != null && tokenResult.Data.Token != null)
+            {
+                var confirmationLink = Url.Action(
+                nameof(ConfirmForgotPassword),
+                "Account",
+                new { userId = tokenResult.Data.UserId, tokenResult.Data.Token },
+                Request.Scheme);
+
+                var emailModel = new
+                {
+                    UserName = $"{user.FirstName} {user.LastName}",
+                    ConfirmationLink = confirmationLink,
+                };
+
+                await _emailSender.SendEmailWithTemplateAsync(EmailTemplateNameAttribute.ForgotPassword, user.Email, emailModel);
+
+                return View("ForgotPasswordSuccessful");
+            }
+
+            return RedirectToAction("Index", "Home");
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> ConfirmForgotPassword(string userId, string token)
+        {
+            if (!string.IsNullOrEmpty(token) && !string.IsNullOrEmpty(userId))
+            {
+                var emailToken = await _tokenService.GetByUserIDAndTokenAsync(userId, token);
+
+                if (emailToken != null && emailToken.ExpiresAt >= DateTime.UtcNow)
+                {
+                    var user = await _userService.GetUserByIDAsync(userId);
+
+                    if (user == null || user.IsBlocked == true)
+                    {
+                        return View("Error", new ErrorViewModel
+                        {
+                            RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier,
+                            ErrorCode = ErrorMessages.UserIsBlocked,
+                        });
+                    }
+
+                    emailToken.Used = true;
+                    var tokenResult = await _tokenService.UpdateConfirmationTokenAsync(emailToken, user.Id);
+
+                    if (tokenResult.Success)
+                    {
+                        return View("ConfirmForgotPassword", new ChangePasswordViewModel { Email = user.Email });
+                    }
                 }
             }
 
-            return View("Error");
+            return View("Error", new ErrorViewModel
+            {
+                RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier,
+                ErrorCode = ErrorMessages.LinkIsExpired,
+                ErrorMessage = ErrorMessages.LinkExpiredDetail
+            });
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> ChangePassword(ChangePasswordViewModel model, string? returnUrl = null)
+        {
+            if (!ModelState.IsValid)
+            {
+                return View("ConfirmForgotPassword");
+            }
+
+            var user = await _userService.GetUserByEmailAsync(model.Email);
+            if (user == null || user.IsDeleted)
+            {
+                ModelState.AddModelError("Email", ErrorMessages.IncorectEmail);
+                return View("ConfirmForgotPassword");
+            }
+
+            if (user.IsBlocked == true)
+            {
+                ModelState.AddModelError("Email", ErrorMessages.UserIsBlocked);
+                return View("ConfirmForgotPassword");
+            }
+
+            user.PasswordHash = BCrypt.Net.BCrypt.HashPassword(model?.Password);
+
+            var result = await _userService.UpdateUserAsync(user, user.Id);
+            if (!result.Success)
+            {
+                foreach (var error in result.Errors)
+                {
+                    ModelState.AddModelError("", error);
+                }
+                return View(model);
+            }
+
+            return RedirectToAction("Index", "Home");
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> ConfirmEmail(string userId, string token)
+        {
+            if (!string.IsNullOrEmpty(token) && !string.IsNullOrEmpty(userId))
+            {
+                var emailToken = await _tokenService.GetByUserIDAndTokenAsync(userId, token);
+
+                if (emailToken != null && emailToken.ExpiresAt >= DateTime.UtcNow)
+                {
+                    var user = await _userService.GetUserByIDAsync(userId);
+
+                    if (user == null || user.IsBlocked == true)
+                        return View("Error", new ErrorViewModel
+                        {
+                            RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier,
+                            ErrorCode = ErrorMessages.UserIsBlocked,
+                        });
+
+                    user.EmailConfirmed = true;
+                    var result = await _userService.UpdateUserAsync(user, user.Id);
+
+                    if (result.Success)
+                    {
+                        emailToken.Used = true;
+                        var tokenResult = await _tokenService.UpdateConfirmationTokenAsync(emailToken, user.Id);
+
+                        if (tokenResult.Success)
+                        {
+                            return View("ConfirmEmailSuccess");
+                        }
+                    }
+                }
+            }
+
+            return View("Error", new ErrorViewModel
+            {
+                RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier,
+                ErrorCode = ErrorMessages.LinkIsExpired,
+                ErrorMessage = ErrorMessages.LinkExpiredDetail
+            });
         }
 
         [HttpGet]

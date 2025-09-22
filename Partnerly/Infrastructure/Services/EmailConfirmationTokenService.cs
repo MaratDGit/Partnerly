@@ -53,12 +53,22 @@ namespace Partnerly.Infrastructure.Services
 
             var tokenBytes = RandomNumberGenerator.GetBytes(32);
             var token = Convert.ToBase64String(tokenBytes);
-            int tokenExpiredHousr = setup?.EmailConfirmationTokenExpiredAtHours ?? 24;
+            
+            int tokenExpiredHousr = 24;
+            if (tokenRec.TokenType == EmailTokenTypeAttribute.Registration)
+            {
+                tokenExpiredHousr = setup?.EmailConfirmationTokenExpiredAtHours ?? 24;
+            }
+            else if (tokenRec.TokenType == EmailTokenTypeAttribute.ForgotPassword)
+            {
+                tokenExpiredHousr = setup?.ForgotPasswordTokenExpiredAtHours ?? 1;
+            }
 
             var newtoken = new EmailConfirmationToken();
 
             newtoken.UserId = tokenRec.UserId;
             newtoken.Token = token;
+            newtoken.TokenType = tokenRec.TokenType;
             newtoken.ExpiresAt = DateTime.UtcNow.AddHours(tokenExpiredHousr);
             newtoken.Used = false;
 

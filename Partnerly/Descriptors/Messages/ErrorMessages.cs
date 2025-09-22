@@ -18,6 +18,7 @@ namespace Partnerly.Descriptors.Messages
         #region Views errors
         public const string ReferrerUserCannotBeFoundOrInactive = "Реферер-пользователь не найден или неактивен";
         public const string IncorectPasswordOrUsername = "Неверный логин или пароль";
+        public const string IncorectEmail = "Неверный Email";
         public const string UserAccessDenied = "у пользователя нету доступа";
         public const string FieldRequired = "oбязательное поле";
         public const string TypeValidPhoneNumber = "Введите правильный номер в формате +374 XX XXXXXX";
@@ -35,6 +36,10 @@ namespace Partnerly.Descriptors.Messages
         public const string PasswordRequireUppercase = "Пароль должен содержать хотя бы одну заглавную букву";
         public const string PasswordRequireSpecial = "Пароль должен содержать хотя бы один спецсимвол";
         public const string LoginEmailConfirmationMessage = "Чтобы войти в систему, пожалуйста, подтвердите адрес вашей электронной почты. Мы отправили письмо с инструкциями на указанный вами адрес. Проверьте почту и перейдите по ссылке подтверждения.";
+        public const string UserIsBlocked = "Пользователь заблокирован";
+        public const string LinkIsExpired = "Ссылка больше недействительна";
+        public const string LinkExpiredDetail = "Похоже, что срок действия этой ссылки закончился. Чтобы завершить подтверждение email, получите новую ссылку.";
+
         #endregion
     }
 }

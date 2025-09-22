@@ -1,0 +1,22 @@
+﻿@{
+  Layout = "_BlankLayout";
+  ViewData["Title"] = "аккаунт создан";
+}
+
+<div class="container-xxl">
+  <div class="authentication-wrapper authentication-basic container-p-y">
+    <div class="authentication-inner">
+      <div class="card px-sm-6 px-0">
+        <div class="card-body">
+          <h4 class="text-success mb-4">✅ Регистрация прошла успешно</h4>
+            <p class="mb-4">
+                Ваш аккаунт был успешно создан. Чтобы войти в систему, пожалуйста, подтвердите свой адрес электронной почты. На вашу почту отправлено письмо с инструкциями.
+            </p>
+            <a asp-controller="Account" asp-action="Login" class="btn btn-primary btn-lg">
+                Ok
+            </a>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

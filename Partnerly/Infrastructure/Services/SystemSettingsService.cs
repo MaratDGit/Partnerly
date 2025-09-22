@@ -37,6 +37,7 @@ namespace Partnerly.Infrastructure.Services
             var newSetup = new SystemSettings();
 
             newSetup.EmailConfirmationTokenExpiredAtHours = rec.EmailConfirmationTokenExpiredAtHours;
+            newSetup.ForgotPasswordTokenExpiredAtHours = rec.ForgotPasswordTokenExpiredAtHours;
 
             await _setupRepo.AddAsync(newSetup);
             await _setupRepo.SaveChangesAsync();
