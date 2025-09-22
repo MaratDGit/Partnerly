@@ -10,7 +10,7 @@ namespace Partnerly.Infrastructure.Interfaces
         Task<IEnumerable<EmailConfirmationToken?>> GetAllTokensAsync();
 
         Task<ServiceResult<EmailConfirmationToken?>> CreateConfirmationTokenAsync(EmailConfirmationToken? token);
-        Task<ServiceResult<EmailConfirmationToken?>> UpdateConfirmationTokenAsync(EmailConfirmationToken? token);
+        Task<ServiceResult<EmailConfirmationToken?>> UpdateConfirmationTokenAsync(EmailConfirmationToken? token, Guid? userID = null);
         Task<ServiceResult<EmailConfirmationToken?>> DeleteConfirmationTokenAsync(Guid? userID, string? token);
     }
 }

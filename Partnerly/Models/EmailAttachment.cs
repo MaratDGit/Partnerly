@@ -3,18 +3,16 @@ using System.ComponentModel.DataAnnotations;
 
 namespace Partnerly.Models
 {
-    public class EmailTemplate : IAuditableEntity
+    public class EmailAttachment : IAuditableEntity
     {
+        [Key]
+        public int Id { get; set; }
         [Required]
-        public Guid Id { get; set; }
+        public string? FileName { get; set; }
         [Required]
-        public string? Name { get; set; }
+        public string? Path { get; set; }
         [Required]
-        public string? Subject { get; set; }
-        [Required]
-        public string? BodyHtml { get; set; }
-        public string? BodyPlain { get; set; }
-        public string? AttachmentsMeta { get; set; }
+        public string? ContentType { get; set; } = "application/octet-stream";
 
         #region System Columns
         public bool IsDeleted { get; set; } = false;

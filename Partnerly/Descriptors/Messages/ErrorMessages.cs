@@ -12,6 +12,7 @@ namespace Partnerly.Descriptors.Messages
         public const string DefaultLogErrorMessage = "Unknown validation error";
         public const string RecordIsNullFromController = "{0} is null from controller";
         public const string Cannotbefound = "{0} cannot be found";
+        public const string JsonDeserializeProblem = "Unable to deserialize JSON object into email attachment {0}, error message - {1}";
         #endregion
 
         #region Views errors

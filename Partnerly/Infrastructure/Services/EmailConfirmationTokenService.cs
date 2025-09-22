@@ -68,7 +68,7 @@ namespace Partnerly.Infrastructure.Services
             return ServiceResult<EmailConfirmationToken?>.Ok(newtoken);
         }
 
-        public async Task<ServiceResult<EmailConfirmationToken?>> UpdateConfirmationTokenAsync(EmailConfirmationToken? token)
+        public async Task<ServiceResult<EmailConfirmationToken?>> UpdateConfirmationTokenAsync(EmailConfirmationToken? token, Guid? userID = null)
         {
             if (token == null)
             {
@@ -82,7 +82,7 @@ namespace Partnerly.Infrastructure.Services
                 return ServiceResult<EmailConfirmationToken?>.Fail(new List<string> { });
             }
 
-            if (!await _permissionService.CanUpdateAsync(_currentUserService.UserId, token))
+            if (!await _permissionService.CanUpdateAsync(userID ?? _currentUserService.UserId, token))
             {
                 await _logService.CreateLogAsync(LogActionsAttribute.EmailConfirmationTokenUpdated, LogTypeAttribute.Critical, ErrorMessages.NoPermissionForThisAction);
                 return ServiceResult<EmailConfirmationToken?>.Fail(new List<string> { });

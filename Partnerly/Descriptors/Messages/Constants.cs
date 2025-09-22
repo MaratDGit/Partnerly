@@ -41,10 +41,19 @@ namespace Partnerly.Descriptors.Messages
         public const string EmailConfirmationTokenCreated = "Email Confirmation Token Creating";
         public const string EmailConfirmationTokenDeleted = "Email Confirmation Token Deleting";
         public const string EmailConfirmationTokenUpdated = "Email Confirmation Token Updating";
+
+        public const string EmailTemplateCreated = "Email Template Creating";
+        public const string EmailTemplateDeleted = "Email Template Deleting";
+        public const string EmailTemplateUpdated = "Email Template Updating";
+
+        public const string EmailSending = "Email Sending"; 
         // Log types
         public const string Information = "Information";
         public const string Warning = "Warning";
         public const string Error = "Error";
         public const string Critical = "Critical";
+
+        // Email Template Names
+        public const string EmailConfirmation = "Email Confirmation";
     }
 }

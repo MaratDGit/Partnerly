@@ -114,10 +114,10 @@ namespace Partnerly.Infrastructure.Services
                 return ServiceResult<User?>.Fail(new List<string> { });
             }
 
-            return ServiceResult<User?>.Ok(user);
+            return ServiceResult<User?>.Ok(newUser);
         }
 
-        public async Task<ServiceResult<User?>> UpdateUserAsync(User? user)
+        public async Task<ServiceResult<User?>> UpdateUserAsync(User? user, Guid? userId = null)
         {
             if (user == null)
             {
@@ -131,7 +131,7 @@ namespace Partnerly.Infrastructure.Services
                 return ServiceResult<User?>.Fail(new List<string> { });
             }
 
-            if (!await _permissionService.CanUpdateAsync(_currentUserService.UserId, user))
+            if (!await _permissionService.CanUpdateAsync(userId ?? _currentUserService.UserId, user))
             {
                 await _logService.CreateLogAsync(LogActionsAttribute.UserUpdated, LogTypeAttribute.Critical, ErrorMessages.NoPermissionForThisAction);
                 return ServiceResult<User?>.Fail(new List<string> { ErrorMessages.NoPermissionForThisAction });
@@ -145,7 +145,7 @@ namespace Partnerly.Infrastructure.Services
             catch(Exception ex)
             {
                 await _logService.CreateLogAsync(LogActionsAttribute.UserUpdated, LogTypeAttribute.Error, ex.Message);
-                return ServiceResult<User?>.Fail(new List<string> { ErrorMessages.NoPermissionForThisAction });
+                return ServiceResult<User?>.Fail(new List<string> { ex.Message });
             }
   
             return ServiceResult<User?>.Ok(user);

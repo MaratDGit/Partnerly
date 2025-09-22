@@ -26,7 +26,9 @@ namespace Partnerly.Models
         public DbSet<Log>? Logs { get; set; }
         public DbSet<EmailConfirmationToken>? EmailConfirmationTokens { get; set; }
         public DbSet<SystemSettings>? SystemSettings { get; set; }
-        public DbSet<EmailTemplate>? EmailTemplate { get; set; }
+        public DbSet<EmailTemplate>? EmailTemplates { get; set; }
+        public DbSet<EmailAttachment>? EmailAttachments { get; set; }
+        
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -133,6 +135,27 @@ namespace Partnerly.Models
                 UpdatedDate = DateTime.UtcNow,
             });
             #endregion
+            #region Create Email Templates
+            string body = @"
+                            <h2>Здравствуйте, {{UserName}}!</h2>
+                            <p>
+                                Подтвердите ваш email, перейдя по ссылке:
+                                <a href=""{{ConfirmationLink}}"">Подтвердить</a>
+                            </p>";
+
+            modelBuilder.Entity<EmailTemplate>().HasData(new EmailTemplate
+            {
+                Id = Guid.NewGuid(),
+                Name = EmailTemplateNameAttribute.EmailConfirmation,
+                Subject = "Подтверждение регистрации",
+                BodyHtml = body,
+                IsDeleted = false,
+                CreatedBy = adminUserId,
+                CreatedDate = DateTime.UtcNow,
+                UpdatedBy = adminUserId,
+                UpdatedDate = DateTime.UtcNow,
+            });
+            #endregion
         }
 
         public override async Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
@@ -158,6 +181,10 @@ namespace Partnerly.Models
                         {
                             entity.UpdatedBy = entity.CreatedBy = userEntity.Id;
                         }
+                        else if (entity is EmailConfirmationToken tokenEntity)
+                        {
+                            entity.UpdatedBy = entity.CreatedBy = tokenEntity.UserId;
+                        }
                         else if (entity is Log logEntity)
                         {
                             User? superUser = Users?.FirstOrDefault(_ => _.Email == Constants.SuperUserEmail);
@@ -169,6 +196,18 @@ namespace Partnerly.Models
                 {
                     entity.UpdatedBy = _currentUserService.UserId;
                     entity.UpdatedDate = DateTime.UtcNow;
+
+                    if (_currentUserService.UserId == null)
+                    {
+                        if (entity is User userEntity)
+                        {
+                            entity.UpdatedBy = userEntity.Id;
+                        }
+                        else if (entity is EmailConfirmationToken tokenEntity)
+                        {
+                            entity.UpdatedBy = tokenEntity.UserId;
+                        }
+                    }
                 }
                 else if (entityEntry.State == EntityState.Deleted)
                 {

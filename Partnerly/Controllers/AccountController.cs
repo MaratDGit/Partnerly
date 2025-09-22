@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Mvc;
+using Partnerly.Descriptors.Attributes;
 using Partnerly.Descriptors.Messages;
 using Partnerly.Infrastructure.Interfaces;
 using Partnerly.Models;
@@ -189,8 +190,13 @@ namespace Partnerly.Controllers
                     new { userId = tokenResult.Data.UserId, tokenResult.Data.Token },
                     Request.Scheme);
 
-                    await _emailSender.SendEmailAsync(result.Data.Email, "Подтверждение Email",
-                        $"Пожалуйста, подтвердите email: <a href='{confirmationLink}'>Подтвердить</a>");
+                    var emailModel = new
+                    {
+                        UserName = $"{result.Data?.FirstName} {result.Data?.LastName}",
+                        ConfirmationLink = confirmationLink,
+                    };
+
+                    await _emailSender.SendEmailWithTemplateAsync(EmailTemplateNameAttribute.EmailConfirmation, result?.Data?.Email, emailModel);
 
                     return RedirectToAction("RegistrationSuccessful");
                 }
@@ -222,16 +228,16 @@ namespace Partnerly.Controllers
                 return View("Error");
 
             user.EmailConfirmed = true;
-            var result = await _userService.UpdateUserAsync(user);
+            var result = await _userService.UpdateUserAsync(user, user.Id);
             
             if (result.Success)
             {
                 emailToken.Used = true;
-                var tokenResult = await _tokenService.UpdateConfirmationTokenAsync(emailToken);
+                var tokenResult = await _tokenService.UpdateConfirmationTokenAsync(emailToken, user.Id);
 
                 if (tokenResult.Success)
                 {
-                    return View("ConfirmEmailSuccess");
+                    return View("ConfirmEmail");
                 }
             }
 

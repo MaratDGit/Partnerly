@@ -28,6 +28,12 @@ namespace Partnerly.Descriptors.Attributes
         public const string EmailConfirmationTokenDeleted = "ED";
         public const string EmailConfirmationTokenUpdated = "EU";
 
+        public const string EmailTemplateCreated = "TC";
+        public const string EmailTemplateDeleted = "TD";
+        public const string EmailTemplateUpdated = "TU";
+
+        public const string EmailSending = "ES";
+
         public LogActionsAttribute()
             : base(
                 UserSignIn, Constants.UserSignIn,
@@ -51,7 +57,13 @@ namespace Partnerly.Descriptors.Attributes
 
                 EmailConfirmationTokenCreated, Constants.EmailConfirmationTokenCreated,
                 EmailConfirmationTokenDeleted, Constants.EmailConfirmationTokenDeleted,
-                EmailConfirmationTokenUpdated, Constants.EmailConfirmationTokenUpdated
+                EmailConfirmationTokenUpdated, Constants.EmailConfirmationTokenUpdated,
+
+                EmailTemplateCreated, Constants.EmailTemplateCreated,
+                EmailTemplateDeleted, Constants.EmailTemplateDeleted,
+                EmailTemplateUpdated, Constants.EmailTemplateUpdated,
+
+                EmailSending, Constants.EmailSending
                 )
         { }
     }
