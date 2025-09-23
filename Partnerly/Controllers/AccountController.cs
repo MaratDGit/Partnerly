@@ -16,6 +16,7 @@ namespace Partnerly.Controllers
     {
 
         #region Services
+        private readonly IConfiguration _config;
         private readonly ILogger<AccountController> _logger;
         private readonly IUserService _userService;
         private readonly ILogService _logService;
@@ -24,8 +25,9 @@ namespace Partnerly.Controllers
         private readonly IEmailConfirmationTokenService _tokenService;
         #endregion
         #region Constructor
-        public AccountController(ILogger<AccountController> logger, IUserService userService, ILogService logService, ICurrentUserService currentUser, IEmailSender emailSender, IEmailConfirmationTokenService tokenService)
+        public AccountController(IConfiguration config, ILogger<AccountController> logger, IUserService userService, ILogService logService, ICurrentUserService currentUser, IEmailSender emailSender, IEmailConfirmationTokenService tokenService)
         {
+            _config = config;
             _logger = logger;
             _userService = userService;
             _logService = logService;
@@ -38,6 +40,7 @@ namespace Partnerly.Controllers
         [HttpGet]
         public IActionResult Login(string? returnUrl = null)
         {
+            ViewData["AppName"] = _config["AppSettings:AppName"];
             ViewBag.ReturnUrl = returnUrl;
             return View();
         }
@@ -45,6 +48,7 @@ namespace Partnerly.Controllers
         [HttpGet]
         public IActionResult Register(string? returnUrl = null)
         {
+            ViewData["AppName"] = _config["AppSettings:AppName"];
             ViewBag.ReturnUrl = returnUrl;
             return View();
         }
@@ -52,6 +56,7 @@ namespace Partnerly.Controllers
         [HttpGet]
         public IActionResult ForgotPassword(string? returnUrl = null)
         {
+            ViewData["AppName"] = _config["AppSettings:AppName"];
             ViewBag.ReturnUrl = returnUrl;
             return View();
         }
@@ -391,12 +396,6 @@ namespace Partnerly.Controllers
                 ErrorCode = ErrorMessages.LinkIsExpired,
                 ErrorMessage = ErrorMessages.LinkExpiredDetail
             });
-        }
-
-        [HttpGet]
-        public IActionResult AccessDenied()
-        {
-            return View();
         }
     }
 }

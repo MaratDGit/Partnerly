@@ -163,32 +163,6 @@ namespace Partnerly.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("EmailTemplates");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = new Guid("8ed8de30-8917-4fde-b6fa-23d770172e1d"),
-                            BodyHtml = "\r\n                            <h2>Здравствуйте, {{UserName}}!</h2>\r\n                            <p>\r\n                                Подтвердите ваш email, перейдя по ссылке:\r\n                                <a href=\"{{ConfirmationLink}}\">Подтвердить</a>\r\n                            </p>",
-                            CreatedBy = new Guid("db925908-f3f1-4d0d-b326-8b2a8c97f106"),
-                            CreatedDate = new DateTime(2025, 9, 22, 13, 2, 0, 652, DateTimeKind.Utc).AddTicks(1873),
-                            IsDeleted = false,
-                            Name = "EC",
-                            Subject = "Подтверждение регистрации",
-                            UpdatedBy = new Guid("db925908-f3f1-4d0d-b326-8b2a8c97f106"),
-                            UpdatedDate = new DateTime(2025, 9, 22, 13, 2, 0, 652, DateTimeKind.Utc).AddTicks(1873)
-                        },
-                        new
-                        {
-                            Id = new Guid("1f397aa4-1f04-40d6-8b0d-74851bf29951"),
-                            BodyHtml = "<h2>Здравствуйте, {{UserName}}!</h2>\r\n                                        <p>\r\n                                            Вы запросили сброс пароля для вашей учетной записи.  \r\n                                            Чтобы создать новый пароль, перейдите по ссылке ниже:\r\n                                        </p>\r\n                                        <p>\r\n                                            <a href=\"{ { ResetPasswordLink} }\r\n                                                    \" style=\"display: inline - block; padding: 10px 20px;\r\n                                                    background - color:#0d6efd;color:#fff;text-decoration:none;border-radius:5px;\">\r\n                                               Сбросить пароль\r\n                                            </ a >\r\n                                        </ p >\r\n                                        < p >\r\n                                            Если вы не запрашивали сброс пароля, просто проигнорируйте это письмо.\r\n                                        </p>",
-                            CreatedBy = new Guid("db925908-f3f1-4d0d-b326-8b2a8c97f106"),
-                            CreatedDate = new DateTime(2025, 9, 22, 13, 2, 0, 652, DateTimeKind.Utc).AddTicks(1883),
-                            IsDeleted = false,
-                            Name = "FP",
-                            Subject = "Сброс пароля",
-                            UpdatedBy = new Guid("db925908-f3f1-4d0d-b326-8b2a8c97f106"),
-                            UpdatedDate = new DateTime(2025, 9, 22, 13, 2, 0, 652, DateTimeKind.Utc).AddTicks(1884)
-                        });
                 });
 
             modelBuilder.Entity("Partnerly.Models.Log", b =>
@@ -209,10 +183,19 @@ namespace Partnerly.Migrations
                         .IsRequired()
                         .HasColumnType("datetime2");
 
+                    b.Property<string>("FilePath")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<bool>("IsDeleted")
                         .HasColumnType("bit");
 
+                    b.Property<int?>("LineNumber")
+                        .HasColumnType("int");
+
                     b.Property<string>("LogMessage")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Method")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Type")
@@ -230,20 +213,6 @@ namespace Partnerly.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Logs");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = new Guid("77b166db-cd93-4e80-99dc-59ee5e04f3f5"),
-                            Action = "UC",
-                            CreatedBy = new Guid("db925908-f3f1-4d0d-b326-8b2a8c97f106"),
-                            CreatedDate = new DateTime(2025, 9, 22, 13, 2, 0, 652, DateTimeKind.Utc).AddTicks(1780),
-                            IsDeleted = false,
-                            LogMessage = "Created the Admin user from OnModelCreating",
-                            Type = "I",
-                            UpdatedBy = new Guid("db925908-f3f1-4d0d-b326-8b2a8c97f106"),
-                            UpdatedDate = new DateTime(2025, 9, 22, 13, 2, 0, 652, DateTimeKind.Utc).AddTicks(1781)
-                        });
                 });
 
             modelBuilder.Entity("Partnerly.Models.Payment", b =>
@@ -330,41 +299,6 @@ namespace Partnerly.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Roles");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = new Guid("690ed1c8-457e-4555-bca7-c9d2fe60a06f"),
-                            CreatedBy = new Guid("db925908-f3f1-4d0d-b326-8b2a8c97f106"),
-                            CreatedDate = new DateTime(2025, 9, 22, 13, 2, 0, 652, DateTimeKind.Utc).AddTicks(1582),
-                            IsDeleted = false,
-                            Name = "Administrator",
-                            Type = "D",
-                            UpdatedBy = new Guid("db925908-f3f1-4d0d-b326-8b2a8c97f106"),
-                            UpdatedDate = new DateTime(2025, 9, 22, 13, 2, 0, 652, DateTimeKind.Utc).AddTicks(1583)
-                        },
-                        new
-                        {
-                            Id = new Guid("5a407f76-41a6-425e-85cd-f17d8e3a31f5"),
-                            CreatedBy = new Guid("db925908-f3f1-4d0d-b326-8b2a8c97f106"),
-                            CreatedDate = new DateTime(2025, 9, 22, 13, 2, 0, 652, DateTimeKind.Utc).AddTicks(1593),
-                            IsDeleted = false,
-                            Name = "Employee",
-                            Type = "U",
-                            UpdatedBy = new Guid("db925908-f3f1-4d0d-b326-8b2a8c97f106"),
-                            UpdatedDate = new DateTime(2025, 9, 22, 13, 2, 0, 652, DateTimeKind.Utc).AddTicks(1593)
-                        },
-                        new
-                        {
-                            Id = new Guid("1737942c-cce1-4271-aa32-4704336edd6c"),
-                            CreatedBy = new Guid("db925908-f3f1-4d0d-b326-8b2a8c97f106"),
-                            CreatedDate = new DateTime(2025, 9, 22, 13, 2, 0, 652, DateTimeKind.Utc).AddTicks(1595),
-                            IsDeleted = false,
-                            Name = "User",
-                            Type = "V",
-                            UpdatedBy = new Guid("db925908-f3f1-4d0d-b326-8b2a8c97f106"),
-                            UpdatedDate = new DateTime(2025, 9, 22, 13, 2, 0, 652, DateTimeKind.Utc).AddTicks(1595)
-                        });
                 });
 
             modelBuilder.Entity("Partnerly.Models.SystemSettings", b =>
@@ -405,19 +339,6 @@ namespace Partnerly.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("SystemSettings");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 1,
-                            CreatedBy = new Guid("db925908-f3f1-4d0d-b326-8b2a8c97f106"),
-                            CreatedDate = new DateTime(2025, 9, 22, 13, 2, 0, 652, DateTimeKind.Utc).AddTicks(1797),
-                            EmailConfirmationTokenExpiredAtHours = 24,
-                            ForgotPasswordTokenExpiredAtHours = 1,
-                            IsDeleted = false,
-                            UpdatedBy = new Guid("db925908-f3f1-4d0d-b326-8b2a8c97f106"),
-                            UpdatedDate = new DateTime(2025, 9, 22, 13, 2, 0, 652, DateTimeKind.Utc).AddTicks(1798)
-                        });
                 });
 
             modelBuilder.Entity("Partnerly.Models.Transaction", b =>
@@ -543,26 +464,6 @@ namespace Partnerly.Migrations
                     b.HasIndex("RoleId");
 
                     b.ToTable("Users");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = new Guid("db925908-f3f1-4d0d-b326-8b2a8c97f106"),
-                            CreatedBy = new Guid("db925908-f3f1-4d0d-b326-8b2a8c97f106"),
-                            CreatedDate = new DateTime(2025, 9, 22, 13, 2, 0, 652, DateTimeKind.Utc).AddTicks(1354),
-                            Email = "marat.iigservices@gmail.com",
-                            EmailConfirmed = true,
-                            FirstName = "Marat",
-                            IsBlocked = false,
-                            IsDeleted = false,
-                            LastName = "Danielyan",
-                            MyReferralCode = "BRANCH111",
-                            PasswordHash = "$2a$11$CHagcWFBdOAqd051jphRF.NafXCb5CwoUmoD5O/bxhuu5XkgVdEUO",
-                            Phone = "+37497111312",
-                            RoleId = new Guid("690ed1c8-457e-4555-bca7-c9d2fe60a06f"),
-                            UpdatedBy = new Guid("db925908-f3f1-4d0d-b326-8b2a8c97f106"),
-                            UpdatedDate = new DateTime(2025, 9, 22, 13, 2, 0, 652, DateTimeKind.Utc).AddTicks(1359)
-                        });
                 });
 
             modelBuilder.Entity("Partnerly.Models.Payment", b =>

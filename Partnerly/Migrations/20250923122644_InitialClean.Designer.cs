@@ -12,8 +12,8 @@ using Partnerly.Models;
 namespace Partnerly.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20250919063733_InitialCreate")]
-    partial class InitialCreate
+    [Migration("20250923122644_InitialClean")]
+    partial class InitialClean
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -24,9 +24,152 @@ namespace Partnerly.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder, 1L, 1);
 
+            modelBuilder.Entity("Partnerly.Models.EmailAttachment", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+
+                    b.Property<string>("ContentType")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<Guid?>("CreatedBy")
+                        .IsRequired()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime?>("CreatedDate")
+                        .IsRequired()
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("FileName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("Path")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<Guid?>("UpdatedBy")
+                        .IsRequired()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime?>("UpdatedDate")
+                        .IsRequired()
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("EmailAttachments");
+                });
+
+            modelBuilder.Entity("Partnerly.Models.EmailConfirmationToken", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+
+                    b.Property<Guid?>("CreatedBy")
+                        .IsRequired()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime?>("CreatedDate")
+                        .IsRequired()
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime?>("ExpiresAt")
+                        .IsRequired()
+                        .HasColumnType("datetime2");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("Token")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("TokenType")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<Guid?>("UpdatedBy")
+                        .IsRequired()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime?>("UpdatedDate")
+                        .IsRequired()
+                        .HasColumnType("datetime2");
+
+                    b.Property<bool?>("Used")
+                        .HasColumnType("bit");
+
+                    b.Property<Guid?>("UserId")
+                        .IsRequired()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("EmailConfirmationTokens");
+                });
+
+            modelBuilder.Entity("Partnerly.Models.EmailTemplate", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("AttachmentsMeta")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("BodyHtml")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("BodyPlain")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<Guid?>("CreatedBy")
+                        .IsRequired()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime?>("CreatedDate")
+                        .IsRequired()
+                        .HasColumnType("datetime2");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Subject")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<Guid?>("UpdatedBy")
+                        .IsRequired()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime?>("UpdatedDate")
+                        .IsRequired()
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("EmailTemplates");
+                });
+
             modelBuilder.Entity("Partnerly.Models.Log", b =>
                 {
-                    b.Property<Guid?>("Id")
+                    b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
@@ -42,10 +185,19 @@ namespace Partnerly.Migrations
                         .IsRequired()
                         .HasColumnType("datetime2");
 
+                    b.Property<string>("FilePath")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<bool>("IsDeleted")
                         .HasColumnType("bit");
 
+                    b.Property<int?>("LineNumber")
+                        .HasColumnType("int");
+
                     b.Property<string>("LogMessage")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Method")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Type")
@@ -63,20 +215,6 @@ namespace Partnerly.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Logs");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = new Guid("6cce714c-2e75-4fce-bb66-ea5dedec2bae"),
-                            Action = "UC",
-                            CreatedBy = new Guid("2070a77f-4b92-4c7a-8ccd-6b995c4da6e0"),
-                            CreatedDate = new DateTime(2025, 9, 19, 6, 37, 33, 16, DateTimeKind.Utc).AddTicks(9771),
-                            IsDeleted = false,
-                            LogMessage = "Created the Admin user from OnModelCreating",
-                            Type = "I",
-                            UpdatedBy = new Guid("2070a77f-4b92-4c7a-8ccd-6b995c4da6e0"),
-                            UpdatedDate = new DateTime(2025, 9, 19, 6, 37, 33, 16, DateTimeKind.Utc).AddTicks(9772)
-                        });
                 });
 
             modelBuilder.Entity("Partnerly.Models.Payment", b =>
@@ -129,7 +267,7 @@ namespace Partnerly.Migrations
 
             modelBuilder.Entity("Partnerly.Models.Role", b =>
                 {
-                    b.Property<Guid?>("Id")
+                    b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
@@ -163,46 +301,51 @@ namespace Partnerly.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Roles");
+                });
 
-                    b.HasData(
-                        new
-                        {
-                            Id = new Guid("328b7408-573c-47e7-bb70-0a74118bb98c"),
-                            CreatedBy = new Guid("2070a77f-4b92-4c7a-8ccd-6b995c4da6e0"),
-                            CreatedDate = new DateTime(2025, 9, 19, 6, 37, 33, 16, DateTimeKind.Utc).AddTicks(9600),
-                            IsDeleted = false,
-                            Name = "Administrator",
-                            Type = "D",
-                            UpdatedBy = new Guid("2070a77f-4b92-4c7a-8ccd-6b995c4da6e0"),
-                            UpdatedDate = new DateTime(2025, 9, 19, 6, 37, 33, 16, DateTimeKind.Utc).AddTicks(9601)
-                        },
-                        new
-                        {
-                            Id = new Guid("11a7101a-5589-433f-9dbf-529aa02dd8da"),
-                            CreatedBy = new Guid("2070a77f-4b92-4c7a-8ccd-6b995c4da6e0"),
-                            CreatedDate = new DateTime(2025, 9, 19, 6, 37, 33, 16, DateTimeKind.Utc).AddTicks(9613),
-                            IsDeleted = false,
-                            Name = "Employee",
-                            Type = "U",
-                            UpdatedBy = new Guid("2070a77f-4b92-4c7a-8ccd-6b995c4da6e0"),
-                            UpdatedDate = new DateTime(2025, 9, 19, 6, 37, 33, 16, DateTimeKind.Utc).AddTicks(9614)
-                        },
-                        new
-                        {
-                            Id = new Guid("1a7bd6b4-859e-487b-b325-7099d20a2444"),
-                            CreatedBy = new Guid("2070a77f-4b92-4c7a-8ccd-6b995c4da6e0"),
-                            CreatedDate = new DateTime(2025, 9, 19, 6, 37, 33, 16, DateTimeKind.Utc).AddTicks(9615),
-                            IsDeleted = false,
-                            Name = "User",
-                            Type = "V",
-                            UpdatedBy = new Guid("2070a77f-4b92-4c7a-8ccd-6b995c4da6e0"),
-                            UpdatedDate = new DateTime(2025, 9, 19, 6, 37, 33, 16, DateTimeKind.Utc).AddTicks(9616)
-                        });
+            modelBuilder.Entity("Partnerly.Models.SystemSettings", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+
+                    b.Property<Guid?>("CreatedBy")
+                        .IsRequired()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime?>("CreatedDate")
+                        .IsRequired()
+                        .HasColumnType("datetime2");
+
+                    b.Property<int?>("EmailConfirmationTokenExpiredAtHours")
+                        .IsRequired()
+                        .HasColumnType("int");
+
+                    b.Property<int?>("ForgotPasswordTokenExpiredAtHours")
+                        .IsRequired()
+                        .HasColumnType("int");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<Guid?>("UpdatedBy")
+                        .IsRequired()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime?>("UpdatedDate")
+                        .IsRequired()
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("SystemSettings");
                 });
 
             modelBuilder.Entity("Partnerly.Models.Transaction", b =>
                 {
-                    b.Property<Guid?>("Id")
+                    b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
@@ -263,6 +406,9 @@ namespace Partnerly.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<bool?>("EmailConfirmed")
+                        .HasColumnType("bit");
+
                     b.Property<string>("FirstName")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -320,25 +466,6 @@ namespace Partnerly.Migrations
                     b.HasIndex("RoleId");
 
                     b.ToTable("Users");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = new Guid("2070a77f-4b92-4c7a-8ccd-6b995c4da6e0"),
-                            CreatedBy = new Guid("2070a77f-4b92-4c7a-8ccd-6b995c4da6e0"),
-                            CreatedDate = new DateTime(2025, 9, 19, 6, 37, 33, 16, DateTimeKind.Utc).AddTicks(9311),
-                            Email = "marat.iigservices@gmail.com",
-                            FirstName = "Marat",
-                            IsBlocked = false,
-                            IsDeleted = false,
-                            LastName = "Danielyan",
-                            MyReferralCode = "BRANCH111",
-                            PasswordHash = "$2a$11$5H0pAEJQCYHxrnMZcMNFY.R0vBj/f4CyQby7rZBCLQCXXJt.uroum",
-                            Phone = "+37497111312",
-                            RoleId = new Guid("328b7408-573c-47e7-bb70-0a74118bb98c"),
-                            UpdatedBy = new Guid("2070a77f-4b92-4c7a-8ccd-6b995c4da6e0"),
-                            UpdatedDate = new DateTime(2025, 9, 19, 6, 37, 33, 16, DateTimeKind.Utc).AddTicks(9320)
-                        });
                 });
 
             modelBuilder.Entity("Partnerly.Models.Payment", b =>

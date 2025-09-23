@@ -25,6 +25,18 @@ namespace Partnerly.Models
         [Display(Name = "Message")]
         public string? LogMessage { get; set; }
         #endregion
+        #region FilePath 
+        [Display(Name = "File Path")]
+        public string? FilePath { get; set; }
+        #endregion
+        #region Method
+        [Display(Name = "Method")]
+        public string? Method { get; set; }
+        #endregion
+        #region LineNumber 
+        [Display(Name = "Line Number")]
+        public int? LineNumber { get; set; }
+        #endregion
 
         #region System Columns
         public bool IsDeleted { get; set; } = false;

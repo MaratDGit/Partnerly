@@ -7,6 +7,10 @@ namespace Partnerly.Descriptors.Messages
     {
         public const string SuperReferralCode = "BRANCH111";
         public const string SuperUserEmail = "marat.iigservices@gmail.com";
+        public const string SuperUserPassword = "MarDan123!";
+        public const string SuperUserFirstName = "Marat";
+        public const string SuperUserLastName = "Danielyan";
+        public const string SuperUserPhone = "+37497111312";
 
         // Roles
         public const string View = "View";

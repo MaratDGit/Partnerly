@@ -1,5 +1,4 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using Partnerly.Descriptors.Attributes;
 using Partnerly.Descriptors.Messages;
 using Partnerly.Helpers;
 using Partnerly.Infrastructure.Interfaces;
@@ -29,7 +28,6 @@ namespace Partnerly.Models
         public DbSet<EmailTemplate>? EmailTemplates { get; set; }
         public DbSet<EmailAttachment>? EmailAttachments { get; set; }
         
-
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<User>()
@@ -44,148 +42,6 @@ namespace Partnerly.Models
                 .OnDelete(DeleteBehavior.Restrict);
 
             base.OnModelCreating(modelBuilder);
-
-            #region Create Admin user
-            var adminUserId = Guid.NewGuid();
-            var adminRoleId = Guid.NewGuid();
-            modelBuilder.Entity<User>().HasData(new User
-            {
-                Id = adminUserId,
-                Email = Constants.SuperUserEmail,
-                PasswordHash = BCrypt.Net.BCrypt.HashPassword("MarDan123!"),
-                FirstName = "Marat",
-                LastName = "Danielyan",
-                Phone = "+37497111312",
-                PhotoUrl = null,
-                MyReferralCode = Constants.SuperReferralCode,
-                ReferrerId = null,
-                RoleId = adminRoleId,
-                IsBlocked = false,
-                IsDeleted = false,
-                EmailConfirmed = true,
-                CreatedBy = adminUserId,
-                CreatedDate = DateTime.UtcNow,
-                UpdatedBy = adminUserId,
-                UpdatedDate = DateTime.UtcNow,
-            });
-            #endregion
-            #region Create Default Roles
-            var employeeRoleId = Guid.NewGuid();
-            var userRoleId = Guid.NewGuid();
-            List<Role> roles = new List<Role>();
-            roles.Add(new Role
-            {
-                Id = adminRoleId,
-                Name = RoleTypeAttribute.Admin,
-                Type = RoleTypeAttribute.Delete,
-                IsDeleted = false,
-                CreatedBy = adminUserId,
-                CreatedDate = DateTime.UtcNow,
-                UpdatedBy = adminUserId,
-                UpdatedDate = DateTime.UtcNow,
-            });
-            roles.Add(new Role
-            {
-                Id = employeeRoleId,
-                Name = RoleTypeAttribute.Employee,
-                Type = RoleTypeAttribute.Update,
-                IsDeleted = false,
-                CreatedBy = adminUserId,
-                CreatedDate = DateTime.UtcNow,
-                UpdatedBy = adminUserId,
-                UpdatedDate = DateTime.UtcNow,
-            });
-            roles.Add(new Role
-            {
-                Id = userRoleId,
-                Name = RoleTypeAttribute.User,
-                Type = RoleTypeAttribute.View,
-                IsDeleted = false,
-                CreatedBy = adminUserId,
-                CreatedDate = DateTime.UtcNow,
-                UpdatedBy = adminUserId,
-                UpdatedDate = DateTime.UtcNow,
-            });
-            modelBuilder.Entity<Role>().HasData(roles);
-            #endregion
-            #region Create Log
-            var logId = Guid.NewGuid();
-            modelBuilder.Entity<Log>().HasData(new Log
-            {
-                Id = logId,
-                Action = LogActionsAttribute.UserCreated,
-                Type = LogTypeAttribute.Information,
-                LogMessage = "Created the Admin user from OnModelCreating",
-                IsDeleted = false,
-                CreatedBy = adminUserId,
-                CreatedDate = DateTime.UtcNow,
-                UpdatedBy = adminUserId,
-                UpdatedDate = DateTime.UtcNow,
-            });
-            #endregion
-            #region Create System Settings
-            modelBuilder.Entity<SystemSettings>().HasData(new SystemSettings
-            {
-                Id = 1,
-                EmailConfirmationTokenExpiredAtHours = 24,
-                ForgotPasswordTokenExpiredAtHours = 1,
-                IsDeleted = false,
-                CreatedBy = adminUserId,
-                CreatedDate = DateTime.UtcNow,
-                UpdatedBy = adminUserId,
-                UpdatedDate = DateTime.UtcNow,
-            });
-            #endregion
-            #region Create Email Templates
-            string bodyEmailConfirmation = @"
-                            <h2>Здравствуйте, {{UserName}}!</h2>
-                            <p>
-                                Подтвердите ваш email, перейдя по ссылке:
-                                <a href=""{{ConfirmationLink}}"">Подтвердить</a>
-                            </p>";
-
-            modelBuilder.Entity<EmailTemplate>().HasData(new EmailTemplate
-            {
-                Id = Guid.NewGuid(),
-                Name = EmailTemplateNameAttribute.EmailConfirmation,
-                Subject = "Подтверждение регистрации",
-                BodyHtml = bodyEmailConfirmation,
-                IsDeleted = false,
-                CreatedBy = adminUserId,
-                CreatedDate = DateTime.UtcNow,
-                UpdatedBy = adminUserId,
-                UpdatedDate = DateTime.UtcNow,
-            });
-            #endregion
-            #region Create Email Templates
-            string bodyForgotPassword = @"<h2>Здравствуйте, {{UserName}}!</h2>
-                                        <p>
-                                            Вы запросили сброс пароля для вашей учетной записи.  
-                                            Чтобы создать новый пароль, перейдите по ссылке ниже:
-                                        </p>
-                                        <p>
-                                            <a href=""{ { ConfirmationLink } }"" style=""display: inline - block; padding: 10px 20px;
-                                                    background-color:#0d6efd;color:#fff;text-decoration:none;border-radius:5px;"">
-                                               Сбросить пароль
-                                            </a>
-                                        </p>
-                                        <p>
-                                            Если вы не запрашивали сброс пароля, просто проигнорируйте это письмо.
-                                        </p>";
-
-            modelBuilder.Entity<EmailTemplate>().HasData(new EmailTemplate
-            {
-                Id = Guid.NewGuid(),
-                Name = EmailTemplateNameAttribute.ForgotPassword,
-                Subject = "Сброс пароля",
-                BodyHtml = bodyForgotPassword,
-                IsDeleted = false,
-                CreatedBy = adminUserId,
-                CreatedDate = DateTime.UtcNow,
-                UpdatedBy = adminUserId,
-                UpdatedDate = DateTime.UtcNow,
-            });
-            #endregion
         }
 
         public override async Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
@@ -248,8 +104,6 @@ namespace Partnerly.Models
 
                 if (!isValid)
                     throw new ValidationException(String.Format(ErrorMessages.RequiredFieldsValidationFailed, result));
-
-
             }
 
             return await base.SaveChangesAsync(cancellationToken);

@@ -5,10 +5,73 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace Partnerly.Migrations
 {
-    public partial class InitialCreate : Migration
+    public partial class InitialClean : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
+            migrationBuilder.CreateTable(
+                name: "EmailAttachments",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    FileName = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Path = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    ContentType = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    IsDeleted = table.Column<bool>(type: "bit", nullable: false),
+                    CreatedBy = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    CreatedDate = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    UpdatedBy = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    UpdatedDate = table.Column<DateTime>(type: "datetime2", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_EmailAttachments", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "EmailConfirmationTokens",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    UserId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    Token = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    TokenType = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    ExpiresAt = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    Used = table.Column<bool>(type: "bit", nullable: true),
+                    IsDeleted = table.Column<bool>(type: "bit", nullable: false),
+                    CreatedBy = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    CreatedDate = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    UpdatedBy = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    UpdatedDate = table.Column<DateTime>(type: "datetime2", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_EmailConfirmationTokens", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "EmailTemplates",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Subject = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    BodyHtml = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    BodyPlain = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    AttachmentsMeta = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    IsDeleted = table.Column<bool>(type: "bit", nullable: false),
+                    CreatedBy = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    CreatedDate = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    UpdatedBy = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    UpdatedDate = table.Column<DateTime>(type: "datetime2", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_EmailTemplates", x => x.Id);
+                });
+
             migrationBuilder.CreateTable(
                 name: "Logs",
                 columns: table => new
@@ -17,6 +80,9 @@ namespace Partnerly.Migrations
                     Action = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Type = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     LogMessage = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    FilePath = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Method = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    LineNumber = table.Column<int>(type: "int", nullable: true),
                     IsDeleted = table.Column<bool>(type: "bit", nullable: false),
                     CreatedBy = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     CreatedDate = table.Column<DateTime>(type: "datetime2", nullable: false),
@@ -47,6 +113,25 @@ namespace Partnerly.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "SystemSettings",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    EmailConfirmationTokenExpiredAtHours = table.Column<int>(type: "int", nullable: false),
+                    ForgotPasswordTokenExpiredAtHours = table.Column<int>(type: "int", nullable: false),
+                    IsDeleted = table.Column<bool>(type: "bit", nullable: false),
+                    CreatedBy = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    CreatedDate = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    UpdatedBy = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    UpdatedDate = table.Column<DateTime>(type: "datetime2", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_SystemSettings", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Users",
                 columns: table => new
                 {
@@ -64,6 +149,7 @@ namespace Partnerly.Migrations
                     LastSignInDate = table.Column<DateTime>(type: "datetime2", nullable: true),
                     IsOnlayn = table.Column<bool>(type: "bit", nullable: true),
                     IsBlocked = table.Column<bool>(type: "bit", nullable: true),
+                    EmailConfirmed = table.Column<bool>(type: "bit", nullable: true),
                     IsDeleted = table.Column<bool>(type: "bit", nullable: false),
                     CreatedBy = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     CreatedDate = table.Column<DateTime>(type: "datetime2", nullable: false),
@@ -138,26 +224,6 @@ namespace Partnerly.Migrations
                         onDelete: ReferentialAction.Cascade);
                 });
 
-            migrationBuilder.InsertData(
-                table: "Logs",
-                columns: new[] { "Id", "Action", "CreatedBy", "CreatedDate", "IsDeleted", "LogMessage", "Type", "UpdatedBy", "UpdatedDate" },
-                values: new object[] { new Guid("6cce714c-2e75-4fce-bb66-ea5dedec2bae"), "UC", new Guid("2070a77f-4b92-4c7a-8ccd-6b995c4da6e0"), new DateTime(2025, 9, 19, 6, 37, 33, 16, DateTimeKind.Utc).AddTicks(9771), false, "Created the Admin user from OnModelCreating", "I", new Guid("2070a77f-4b92-4c7a-8ccd-6b995c4da6e0"), new DateTime(2025, 9, 19, 6, 37, 33, 16, DateTimeKind.Utc).AddTicks(9772) });
-
-            migrationBuilder.InsertData(
-                table: "Roles",
-                columns: new[] { "Id", "CreatedBy", "CreatedDate", "IsDeleted", "Name", "Type", "UpdatedBy", "UpdatedDate" },
-                values: new object[,]
-                {
-                    { new Guid("11a7101a-5589-433f-9dbf-529aa02dd8da"), new Guid("2070a77f-4b92-4c7a-8ccd-6b995c4da6e0"), new DateTime(2025, 9, 19, 6, 37, 33, 16, DateTimeKind.Utc).AddTicks(9613), false, "Employee", "U", new Guid("2070a77f-4b92-4c7a-8ccd-6b995c4da6e0"), new DateTime(2025, 9, 19, 6, 37, 33, 16, DateTimeKind.Utc).AddTicks(9614) },
-                    { new Guid("1a7bd6b4-859e-487b-b325-7099d20a2444"), new Guid("2070a77f-4b92-4c7a-8ccd-6b995c4da6e0"), new DateTime(2025, 9, 19, 6, 37, 33, 16, DateTimeKind.Utc).AddTicks(9615), false, "User", "V", new Guid("2070a77f-4b92-4c7a-8ccd-6b995c4da6e0"), new DateTime(2025, 9, 19, 6, 37, 33, 16, DateTimeKind.Utc).AddTicks(9616) },
-                    { new Guid("328b7408-573c-47e7-bb70-0a74118bb98c"), new Guid("2070a77f-4b92-4c7a-8ccd-6b995c4da6e0"), new DateTime(2025, 9, 19, 6, 37, 33, 16, DateTimeKind.Utc).AddTicks(9600), false, "Administrator", "D", new Guid("2070a77f-4b92-4c7a-8ccd-6b995c4da6e0"), new DateTime(2025, 9, 19, 6, 37, 33, 16, DateTimeKind.Utc).AddTicks(9601) }
-                });
-
-            migrationBuilder.InsertData(
-                table: "Users",
-                columns: new[] { "Id", "Balance", "CreatedBy", "CreatedDate", "Email", "FirstName", "IsBlocked", "IsDeleted", "IsOnlayn", "LastName", "LastSignInDate", "MyReferralCode", "PasswordHash", "Phone", "PhotoUrl", "ReferrerId", "RoleId", "UpdatedBy", "UpdatedDate" },
-                values: new object[] { new Guid("2070a77f-4b92-4c7a-8ccd-6b995c4da6e0"), null, new Guid("2070a77f-4b92-4c7a-8ccd-6b995c4da6e0"), new DateTime(2025, 9, 19, 6, 37, 33, 16, DateTimeKind.Utc).AddTicks(9311), "marat.iigservices@gmail.com", "Marat", false, false, null, "Danielyan", null, "BRANCH111", "$2a$11$5H0pAEJQCYHxrnMZcMNFY.R0vBj/f4CyQby7rZBCLQCXXJt.uroum", "+37497111312", null, null, new Guid("328b7408-573c-47e7-bb70-0a74118bb98c"), new Guid("2070a77f-4b92-4c7a-8ccd-6b995c4da6e0"), new DateTime(2025, 9, 19, 6, 37, 33, 16, DateTimeKind.Utc).AddTicks(9320) });
-
             migrationBuilder.CreateIndex(
                 name: "IX_Payments_UserId",
                 table: "Payments",
@@ -182,10 +248,22 @@ namespace Partnerly.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
+                name: "EmailAttachments");
+
+            migrationBuilder.DropTable(
+                name: "EmailConfirmationTokens");
+
+            migrationBuilder.DropTable(
+                name: "EmailTemplates");
+
+            migrationBuilder.DropTable(
                 name: "Logs");
 
             migrationBuilder.DropTable(
                 name: "Payments");
+
+            migrationBuilder.DropTable(
+                name: "SystemSettings");
 
             migrationBuilder.DropTable(
                 name: "Transactions");

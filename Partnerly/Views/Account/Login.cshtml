@@ -29,11 +29,11 @@
           <div class="app-brand justify-content-center">
             <a href="/" class="app-brand-link gap-2">
               <span class="app-brand-logo demo">@await Html.PartialAsync("../_Partials/_Macros")</span>
-              <span class="app-brand-text demo text-heading fw-bold">@TempData.Peek("appName")</span>
+              <span class="app-brand-text demo text-heading fw-bold">@ViewData["AppName"]</span>
             </a>
           </div>
           <!-- /Logo -->
-          <h4 class="mb-1">Добро пожаловать в @TempData.Peek("appName")! 👋</h4>
+          <h4 class="mb-1">Добро пожаловать в @ViewData["AppName"]!</h4>
           <p class="mb-6">Пожалуйста, войдите в свою учетную запись и начните приключение.</p>
 
           <form id="formAuthentication" class="mb-6" asp-action="Login" method="POST">

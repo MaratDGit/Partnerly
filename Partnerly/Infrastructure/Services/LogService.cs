@@ -2,6 +2,7 @@
 using Partnerly.Descriptors.Messages;
 using Partnerly.Infrastructure.Interfaces;
 using Partnerly.Models;
+using System.Runtime.CompilerServices;
 
 namespace Partnerly.Infrastructure.Services
 {
@@ -26,7 +27,7 @@ namespace Partnerly.Infrastructure.Services
         public async Task<IEnumerable<Log?>> GetAllLogsAsync() =>
             await _logRepo.GetAllAsync();
 
-        public async Task<Log?> CreateLogAsync(string action, string type, string? message)
+        public async Task<Log?> CreateLogAsync(string action, string type, string? message, [CallerMemberName] string member = "", [CallerFilePath] string file = "", [CallerLineNumber] int line = 0)
         {
             using var context = new AppDbContext(_options, _currentUserService);
 
@@ -34,6 +35,9 @@ namespace Partnerly.Infrastructure.Services
             newLog.Type = type;
             newLog.Action = action;
             newLog.LogMessage = message ?? ErrorMessages.DefaultLogErrorMessage;
+            newLog.FilePath = file;
+            newLog.Method = member;
+            newLog.LineNumber = line;
             newLog.IsDeleted = false;
 
             await context.AddAsync(newLog);

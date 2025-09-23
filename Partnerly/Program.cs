@@ -38,6 +38,8 @@ builder.Services.AddAuthentication("Cookies")
         options.AccessDeniedPath = "/Account/AccessDenied";
     });
 
+
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -59,5 +61,11 @@ app.UseAuthorization();
 app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Home}/{action=Index}/{id?}");
+
+using (var scope = app.Services.CreateScope())
+{
+    var context = scope.ServiceProvider.GetRequiredService<AppDbContext>();
+    DbInitializer.Initialize(context);
+}
 
 app.Run();
