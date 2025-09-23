@@ -58,9 +58,9 @@ namespace Partnerly.Models
         [Display(Name = "Referrer")]
         public Guid? ReferrerId { get; set; }
         #endregion
-        #region LastSignInDate
-        [Display(Name = "Last Sign In")]
-        public DateTime? LastSignInDate { get; set; }
+        #region LastActivity
+        [Display(Name = "Last Activity")]
+        public DateTime? LastActivity { get; set; }
         #endregion
         #region IsOnlayn
         [Display(Name = "Is Onlayn")]

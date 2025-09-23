@@ -108,7 +108,9 @@ namespace Partnerly.Controllers
                 var authProperties = new AuthenticationProperties
                 {
                     IsPersistent = model.RememberMe,
-                    ExpiresUtc = DateTimeOffset.UtcNow.AddMinutes(60)
+                    ExpiresUtc = model.RememberMe
+                    ? DateTimeOffset.UtcNow.AddDays(14)
+                    : DateTimeOffset.UtcNow.AddMinutes(60)
                 };
 
                 await HttpContext.SignInAsync(

@@ -2,6 +2,7 @@
 using Partnerly.Infrastructure.Interfaces;
 using Partnerly.Infrastructure.Repositories;
 using Partnerly.Infrastructure.Services;
+using Partnerly.Infrastructure.Services.HostedServices;
 using Partnerly.Models;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -24,6 +25,7 @@ builder.Services.AddScoped<IEmailTemplateService, EmailTemplateService>();
 builder.Services.AddScoped<IEmailTemplateRepository, EmailTemplateRepository>();
 
 builder.Services.AddTransient<IEmailSender, EmailSender>();
+builder.Services.AddHostedService<OnlineStatusService>();
 
 builder.Services.AddHttpContextAccessor();
 builder.Services.AddScoped<ICurrentUserService, CurrentUserService>();
@@ -67,5 +69,7 @@ using (var scope = app.Services.CreateScope())
     var context = scope.ServiceProvider.GetRequiredService<AppDbContext>();
     DbInitializer.Initialize(context);
 }
+
+app.UseMiddleware<UpdateLastActivityMiddleware>();
 
 app.Run();

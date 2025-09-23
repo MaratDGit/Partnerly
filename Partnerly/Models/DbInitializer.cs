@@ -34,85 +34,96 @@ namespace Partnerly.Models
                     UpdatedDate = DateTime.UtcNow,
                 });
 
-                context.Roles.Add(new Role
+                if (context.Roles != null)
                 {
-                    Id = adminRoleId,
-                    Name = RoleTypeAttribute.Admin,
-                    Type = RoleTypeAttribute.Delete,
-                    IsDeleted = false,
-                    CreatedBy = adminUserId,
-                    CreatedDate = DateTime.UtcNow,
-                    UpdatedBy = adminUserId,
-                    UpdatedDate = DateTime.UtcNow,
-                });
-                context.Roles.Add(new Role
-                {
-                    Id = Guid.NewGuid(),
-                    Name = RoleTypeAttribute.Employee,
-                    Type = RoleTypeAttribute.Update,
-                    IsDeleted = false,
-                    CreatedBy = adminUserId,
-                    CreatedDate = DateTime.UtcNow,
-                    UpdatedBy = adminUserId,
-                    UpdatedDate = DateTime.UtcNow,
-                });
-                context.Roles.Add(new Role
-                {
-                    Id = Guid.NewGuid(),
-                    Name = RoleTypeAttribute.User,
-                    Type = RoleTypeAttribute.View,
-                    IsDeleted = false,
-                    CreatedBy = adminUserId,
-                    CreatedDate = DateTime.UtcNow,
-                    UpdatedBy = adminUserId,
-                    UpdatedDate = DateTime.UtcNow,
-                });
+                    context.Roles.Add(new Role
+                    {
+                        Id = adminRoleId,
+                        Name = RoleTypeAttribute.Admin,
+                        Type = RoleTypeAttribute.Delete,
+                        IsDeleted = false,
+                        CreatedBy = adminUserId,
+                        CreatedDate = DateTime.UtcNow,
+                        UpdatedBy = adminUserId,
+                        UpdatedDate = DateTime.UtcNow,
+                    });
+                    context.Roles.Add(new Role
+                    {
+                        Id = Guid.NewGuid(),
+                        Name = RoleTypeAttribute.Employee,
+                        Type = RoleTypeAttribute.Update,
+                        IsDeleted = false,
+                        CreatedBy = adminUserId,
+                        CreatedDate = DateTime.UtcNow,
+                        UpdatedBy = adminUserId,
+                        UpdatedDate = DateTime.UtcNow,
+                    });
+                    context.Roles.Add(new Role
+                    {
+                        Id = Guid.NewGuid(),
+                        Name = RoleTypeAttribute.User,
+                        Type = RoleTypeAttribute.View,
+                        IsDeleted = false,
+                        CreatedBy = adminUserId,
+                        CreatedDate = DateTime.UtcNow,
+                        UpdatedBy = adminUserId,
+                        UpdatedDate = DateTime.UtcNow,
+                    });
+                }
 
-                context.Logs.Add(new Log
+                if (context.Logs != null)
                 {
-                    Id = Guid.NewGuid(),
-                    Action = LogActionsAttribute.UserCreated,
-                    Type = LogTypeAttribute.Information,
-                    LogMessage = "Created the Admin user from OnModelCreating",
-                    IsDeleted = false,
-                    CreatedBy = adminUserId,
-                    CreatedDate = DateTime.UtcNow,
-                    UpdatedBy = adminUserId,
-                    UpdatedDate = DateTime.UtcNow,
-                });
+                    context.Logs.Add(new Log
+                    {
+                        Id = Guid.NewGuid(),
+                        Action = LogActionsAttribute.UserCreated,
+                        Type = LogTypeAttribute.Information,
+                        LogMessage = "Created the Admin user from OnModelCreating",
+                        IsDeleted = false,
+                        CreatedBy = adminUserId,
+                        CreatedDate = DateTime.UtcNow,
+                        UpdatedBy = adminUserId,
+                        UpdatedDate = DateTime.UtcNow,
+                    });
+                }
 
-                context.SystemSettings.Add(new SystemSettings
+                if (context.SystemSettings != null)
                 {
-                    EmailConfirmationTokenExpiredAtHours = 24,
-                    ForgotPasswordTokenExpiredAtHours = 1,
-                    IsDeleted = false,
-                    CreatedBy = adminUserId,
-                    CreatedDate = DateTime.UtcNow,
-                    UpdatedBy = adminUserId,
-                    UpdatedDate = DateTime.UtcNow,
-                });
+                    context.SystemSettings.Add(new SystemSettings
+                    {
+                        EmailConfirmationTokenExpiredAtHours = 24,
+                        ForgotPasswordTokenExpiredAtHours = 1,
+                        IsDeleted = false,
+                        CreatedBy = adminUserId,
+                        CreatedDate = DateTime.UtcNow,
+                        UpdatedBy = adminUserId,
+                        UpdatedDate = DateTime.UtcNow,
+                    });
+                }
 
-                string bodyEmailConfirmation = @"
+                if (context.EmailTemplates != null)
+                {
+                    string bodyEmailConfirmation = @"
                             <h2>Здравствуйте, {{UserName}}!</h2>
                             <p>
                                 Подтвердите ваш email, перейдя по ссылке:
                                 <a href=""{{ConfirmationLink}}"">Подтвердить</a>
                             </p>";
 
-                context.EmailTemplates.Add(new EmailTemplate
-                {
-                    Id = Guid.NewGuid(),
-                    Name = EmailTemplateNameAttribute.EmailConfirmation,
-                    Subject = "Подтверждение регистрации",
-                    BodyHtml = bodyEmailConfirmation,
-                    IsDeleted = false,
-                    CreatedBy = adminUserId,
-                    CreatedDate = DateTime.UtcNow,
-                    UpdatedBy = adminUserId,
-                    UpdatedDate = DateTime.UtcNow,
-                });
+                    context.EmailTemplates.Add(new EmailTemplate
+                    {
+                        Id = Guid.NewGuid(),
+                        Name = EmailTemplateNameAttribute.EmailConfirmation,
+                        Subject = "Подтверждение регистрации",
+                        BodyHtml = bodyEmailConfirmation,
+                        IsDeleted = false,
+                        CreatedBy = adminUserId,
+                        CreatedDate = DateTime.UtcNow,
+                        UpdatedBy = adminUserId,
+                        UpdatedDate = DateTime.UtcNow,
+                    });
 
-                string bodyForgotPassword = @"<h2>Здравствуйте, {{UserName}}!</h2>
+                    string bodyForgotPassword = @"<h2>Здравствуйте, {{UserName}}!</h2>
                                         <p>
                                             Вы запросили сброс пароля для вашей учетной записи.  
                                             Чтобы создать новый пароль, перейдите по ссылке ниже:
@@ -126,18 +137,19 @@ namespace Partnerly.Models
                                         <p>
                                             Если вы не запрашивали сброс пароля, просто проигнорируйте это письмо.
                                         </p>";
-                context.EmailTemplates.Add(new EmailTemplate
-                {
-                    Id = Guid.NewGuid(),
-                    Name = EmailTemplateNameAttribute.ForgotPassword,
-                    Subject = "Сброс пароля",
-                    BodyHtml = bodyForgotPassword,
-                    IsDeleted = false,
-                    CreatedBy = adminUserId,
-                    CreatedDate = DateTime.UtcNow,
-                    UpdatedBy = adminUserId,
-                    UpdatedDate = DateTime.UtcNow,
-                });
+                    context.EmailTemplates.Add(new EmailTemplate
+                    {
+                        Id = Guid.NewGuid(),
+                        Name = EmailTemplateNameAttribute.ForgotPassword,
+                        Subject = "Сброс пароля",
+                        BodyHtml = bodyForgotPassword,
+                        IsDeleted = false,
+                        CreatedBy = adminUserId,
+                        CreatedDate = DateTime.UtcNow,
+                        UpdatedBy = adminUserId,
+                        UpdatedDate = DateTime.UtcNow,
+                    });
+                }
 
                 context.SaveChanges();
             }

@@ -25,7 +25,7 @@ namespace Partnerly.Controllers
         }
         #endregion
 
-        public async Task<IActionResult> Index()
+        public IActionResult Index()
         {
             //var prop = typeof(Role).GetProperty(nameof(Role.Type));
             //var attr = prop?.GetCustomAttribute<RoleTypeAttribute>();
