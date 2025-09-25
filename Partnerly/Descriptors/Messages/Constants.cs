@@ -11,6 +11,7 @@ namespace Partnerly.Descriptors.Messages
         public const string SuperUserFirstName = "Marat";
         public const string SuperUserLastName = "Danielyan";
         public const string SuperUserPhone = "+37497111312";
+        public const string DefaultUserProfilePhotoPath = "~/assets/img/profiles/default-user.png";
 
         // Roles
         public const string View = "View";

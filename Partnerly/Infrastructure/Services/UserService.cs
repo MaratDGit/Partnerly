@@ -98,10 +98,11 @@ namespace Partnerly.Infrastructure.Services
             newUser.MyReferralCode = refCode;
             newUser.ReferrerId = referrerID;
             newUser.RoleId = roleID;
-            newUser.IsBlocked = user.IsBlocked ?? false;
-            newUser.IsDeleted = false;
             newUser.Balance = user.Balance ?? 0m;
             newUser.EmailConfirmed = false;
+            newUser.IsBlocked = user.IsBlocked ?? false;
+            newUser.IsDeleted = false;
+            newUser.PhotoUrl = Constants.DefaultUserProfilePhotoPath;
 
             try
             {

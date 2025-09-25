@@ -18,7 +18,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="wwwroot\assets\img\avatars\" />
     <Folder Include="wwwroot\assets\img\elements\" />
     <Folder Include="wwwroot\assets\img\favicon\" />
     <Folder Include="wwwroot\assets\img\icons\brands\" />

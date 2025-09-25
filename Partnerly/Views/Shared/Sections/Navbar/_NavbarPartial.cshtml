@@ -11,7 +11,13 @@
 </div>
 }
 
-@* ! Not required for layout-without-menu *@
+@{
+    var photoUrl = ViewData["ProfilePhoto"];
+    var userFirstName = ViewData["UserFirstName"];
+    var userLastName = ViewData["UserLastName"];
+    var userRefCode = ViewData["UserRefCode"];
+}
+
 @if (ViewData["navbarHideToggle"] == null)
 {
   <div class="layout-menu-toggle navbar-nav align-items-xl-center me-4 me-xl-0 d-xl-none">
@@ -33,16 +39,13 @@
   <!-- /Search -->*@
 
   <ul class="navbar-nav flex-row align-items-center ms-auto">
-    <!-- Place this tag where you want the button to render. -->
-    <li class="nav-item lh-1 me-4">
+    @*<li class="nav-item lh-1 me-4">
       <a class="github-button" href="" data-icon="octicon-star" data-size="large" data-show-count="true" aria-label="">Star</a>
-    </li>
-
-    <!-- User -->
+    </li>*@
     <li class="nav-item navbar-dropdown dropdown-user dropdown">
       <a class="nav-link dropdown-toggle hide-arrow p-0" href="javascript:void(0);" data-bs-toggle="dropdown">
         <div class="avatar avatar-online">
-          <img src="~/img/avatars/1.png" alt="Avatar" class="w-px-40 h-auto rounded-circle">
+          <img src="@Url.Content(photoUrl?.ToString())" alt="Avatar" class="w-px-40 h-auto rounded-circle">
         </div>
       </a>
       <ul class="dropdown-menu dropdown-menu-end">
@@ -51,12 +54,12 @@
             <div class="d-flex">
               <div class="flex-shrink-0 me-3">
                 <div class="avatar avatar-online">
-                  <img src="~/img/avatars/1.png" alt="Avatar" class="w-px-40 h-auto rounded-circle">
+                  <img src="@Url.Content(photoUrl?.ToString())" alt="Avatar" class="w-px-40 h-auto rounded-circle">
                 </div>
               </div>
               <div class="flex-grow-1">
-                <h6 class="mb-0">John Doe</h6>
-                <small class="text-muted">Администратор</small>
+                <h6 class="mb-0">@($"{userFirstName} {userLastName}")</h6>
+                <small class="text-muted">@userRefCode</small>
               </div>
             </div>
           </a>
@@ -96,7 +99,5 @@
         </li>
       </ul>
     </li>
-    <!--/ User -->
-
   </ul>
 </div>

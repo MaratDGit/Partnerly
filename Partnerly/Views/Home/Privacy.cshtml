@@ -1,12 +1,33 @@
 ﻿@{
     ViewData["Title"] = "Политика конфиденциальности и условия";
-    Layout = "_Layout";
+    Layout = "";
 }
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - Branch</title>
 
-<div class="referral-program" style="max-width: 800px; margin: 0 auto; padding: 20px;">
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/assets/css/landing.css" />
+</head>
+<body>
+    <header class="landing-header">
+        <div class="container">
+            <div class="logo">
+                <a asp-controller="Home" asp-action="Index" class="app-brand-link gap-2">
+                    <span>@await Html.PartialAsync("../_Partials/_Macros")</span>
+                    <span>Branch</span>
+                </a>
+            </div>
+        </div>
+    </header>
+
+    <div class="referral-program" style="max-width: 800px; margin: 0 auto; padding: 20px;">
   <h2 style="text-align: center; margin-bottom: 20px;">@ViewData["Title"]</h2>
 
-  <!-- Friendly part -->
   <section class="friendly" style="margin-bottom: 30px;">
     <p style="text-align: center;">
       Мы ценим наших пользователей и рады, когда вы делитесь сервисом с друзьями!
@@ -27,7 +48,6 @@
     </blockquote>
   </section>
 
-  <!-- Official part -->
   <section class="official">
     <h4 style="margin-bottom: 15px; text-align: center;">Официальные условия участия</h4>
     <ol style="padding-left: 20px;">
@@ -40,5 +60,6 @@
     </ol>
   </section>
 </div>
-
+</body>
+</html>
 
