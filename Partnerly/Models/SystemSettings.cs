@@ -10,16 +10,27 @@ namespace Partnerly.Models
         public int Id { get; set; }
         #endregion
 
-        #region 
+        #region IsMaintenanceMode
+        [Display(Name = "Is Maintenance Mode")]
+        public bool? IsMaintenanceMode { get; set; }
+        #endregion
+
+        #region EmailConfirmationTokenExpiredAtHours
         [Required]
         [Display(Name = "Email Confirmation Token ExpiredAt Hours")]
         public int? EmailConfirmationTokenExpiredAtHours { get; set; }
         #endregion
 
-        #region 
+        #region ForgotPasswordTokenExpiredAtHours
         [Required]
         [Display(Name = "Forgot Password Token ExpiredAt Hours")]
         public int? ForgotPasswordTokenExpiredAtHours { get; set; }
+        #endregion
+
+        #region OnlineStatusAutoRefreshMinute
+        [Required]
+        [Display(Name = "Online Status Auto Refresh (Minute)")]
+        public int? OnlineStatusAutoRefreshMinute { get; set; }
         #endregion
 
         #region System Columns

@@ -38,6 +38,8 @@ namespace Partnerly.Infrastructure.Services
 
             newSetup.EmailConfirmationTokenExpiredAtHours = rec.EmailConfirmationTokenExpiredAtHours;
             newSetup.ForgotPasswordTokenExpiredAtHours = rec.ForgotPasswordTokenExpiredAtHours;
+            newSetup.IsMaintenanceMode = rec.IsMaintenanceMode;
+            newSetup.OnlineStatusAutoRefreshMinute = rec.OnlineStatusAutoRefreshMinute;
 
             await _setupRepo.AddAsync(newSetup);
             await _setupRepo.SaveChangesAsync();

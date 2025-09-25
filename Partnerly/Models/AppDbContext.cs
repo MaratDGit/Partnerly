@@ -8,6 +8,7 @@ namespace Partnerly.Models
 {
     public class AppDbContext : DbContext
     {
+        public bool SkipValidations { get; set; } = false;
         private readonly ICurrentUserService _currentUserService;
 
         public AppDbContext(
@@ -46,64 +47,67 @@ namespace Partnerly.Models
 
         public override async Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
         {
-            var entries = ChangeTracker.Entries()
+            if (!SkipValidations)
+            {
+                var entries = ChangeTracker.Entries()
                 .Where(e => e.Entity is IAuditableEntity &&
                             (e.State == EntityState.Added || e.State == EntityState.Modified));
 
-            foreach (var entityEntry in entries)
-            {
-                var entity = (IAuditableEntity)entityEntry.Entity;
-
-                if (entityEntry.State == EntityState.Added)
+                foreach (var entityEntry in entries)
                 {
-                    entity.UpdatedBy = _currentUserService.UserId;
-                    entity.CreatedBy = _currentUserService.UserId;
-                    entity.CreatedDate = DateTime.UtcNow;
-                    entity.UpdatedDate = DateTime.UtcNow;
+                    var entity = (IAuditableEntity)entityEntry.Entity;
 
-                    if (_currentUserService.UserId == null)
+                    if (entityEntry.State == EntityState.Added)
                     {
-                        if (entity is User userEntity)
+                        entity.UpdatedBy = _currentUserService.UserId;
+                        entity.CreatedBy = _currentUserService.UserId;
+                        entity.CreatedDate = DateTime.UtcNow;
+                        entity.UpdatedDate = DateTime.UtcNow;
+
+                        if (_currentUserService.UserId == null)
                         {
-                            entity.UpdatedBy = entity.CreatedBy = userEntity.Id;
-                        }
-                        else if (entity is EmailConfirmationToken tokenEntity)
-                        {
-                            entity.UpdatedBy = entity.CreatedBy = tokenEntity.UserId;
-                        }
-                        else if (entity is Log logEntity)
-                        {
-                            User? superUser = Users?.FirstOrDefault(_ => _.Email == Constants.SuperUserEmail);
-                            entity.UpdatedBy = entity.CreatedBy = superUser?.Id ?? new Guid();
+                            if (entity is User userEntity)
+                            {
+                                entity.UpdatedBy = entity.CreatedBy = userEntity.Id;
+                            }
+                            else if (entity is EmailConfirmationToken tokenEntity)
+                            {
+                                entity.UpdatedBy = entity.CreatedBy = tokenEntity.UserId;
+                            }
+                            else if (entity is Log logEntity)
+                            {
+                                User? superUser = Users?.FirstOrDefault(_ => _.Email == Constants.SuperUserEmail);
+                                entity.UpdatedBy = entity.CreatedBy = superUser?.Id ?? new Guid();
+                            }
                         }
                     }
-                }
-                else if (entityEntry.State == EntityState.Modified)
-                {
-                    entity.UpdatedBy = _currentUserService.UserId;
-                    entity.UpdatedDate = DateTime.UtcNow;
-
-                    if (_currentUserService.UserId == null)
+                    else if (entityEntry.State == EntityState.Modified)
                     {
-                        if (entity is User userEntity)
+                        entity.UpdatedBy = _currentUserService.UserId;
+                        entity.UpdatedDate = DateTime.UtcNow;
+
+                        if (_currentUserService.UserId == null)
                         {
-                            entity.UpdatedBy = userEntity.Id;
-                        }
-                        else if (entity is EmailConfirmationToken tokenEntity)
-                        {
-                            entity.UpdatedBy = tokenEntity.UserId;
+                            if (entity is User userEntity)
+                            {
+                                entity.UpdatedBy = userEntity.Id;
+                            }
+                            else if (entity is EmailConfirmationToken tokenEntity)
+                            {
+                                entity.UpdatedBy = tokenEntity.UserId;
+                            }
                         }
                     }
-                }
-                else if (entityEntry.State == EntityState.Deleted)
-                {
-                    
-                }
+                    else if (entityEntry.State == EntityState.Deleted)
+                    {
 
-                string? result = ValidationHelper.ValidateEntityRequiredFields(entityEntry.Entity, out bool isValid);
+                    }
 
-                if (!isValid)
-                    throw new ValidationException(String.Format(ErrorMessages.RequiredFieldsValidationFailed, result));
+                    string? result = ValidationHelper.ValidateEntityRequiredFields(entityEntry.Entity, out bool isValid);
+
+                    if (!isValid)
+                        throw new ValidationException(String.Format(ErrorMessages.RequiredFieldsValidationFailed, result));
+                }
             }
 
             return await base.SaveChangesAsync(cancellationToken);

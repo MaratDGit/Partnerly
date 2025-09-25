@@ -93,6 +93,7 @@ namespace Partnerly.Models
                     {
                         EmailConfirmationTokenExpiredAtHours = 24,
                         ForgotPasswordTokenExpiredAtHours = 1,
+                        OnlineStatusAutoRefreshMinute = 10,
                         IsDeleted = false,
                         CreatedBy = adminUserId,
                         CreatedDate = DateTime.UtcNow,

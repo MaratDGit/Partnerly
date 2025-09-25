@@ -5,7 +5,7 @@ namespace Partnerly.Infrastructure.Services.HostedServices
 {
     public class OnlineStatusService : IHostedService, IDisposable
     {
-        private Timer _timer;
+        private Timer? _timer;
         private readonly IServiceProvider _serviceProvider;
 
         public OnlineStatusService(IServiceProvider serviceProvider)
@@ -15,27 +15,35 @@ namespace Partnerly.Infrastructure.Services.HostedServices
 
         public Task StartAsync(CancellationToken cancellationToken)
         {
-            _timer = new Timer(UpdateOnlineStatus, null, TimeSpan.Zero, TimeSpan.FromMinutes(5));
+            _timer = new Timer(UpdateOnlineStatus, null, TimeSpan.Zero, TimeSpan.FromMinutes(10));
             return Task.CompletedTask;
         }
 
-        private void UpdateOnlineStatus(object state)
+        private async void UpdateOnlineStatus(object? state)
         {
-            using (var scope = _serviceProvider.CreateScope())
+            using var scope = _serviceProvider.CreateScope();
+            var dbContext = scope.ServiceProvider.GetRequiredService<AppDbContext>();
+            if (dbContext != null)
             {
-                var dbContext = scope.ServiceProvider.GetRequiredService<AppDbContext>();
+                var onlineStatusAutoRefreshMinute = dbContext.SystemSettings?.FirstOrDefault()?.OnlineStatusAutoRefreshMinute ?? 10;
 
-                var inactiveUsers = dbContext.Users
-                    .Where(u => EF.Functions.DateDiffMinute(u.LastActivity, DateTime.UtcNow) >= 5 && u.IsOnlayn == true)
+                var inactiveUsers = dbContext.Users?
+                    .Where(u => EF.Functions.DateDiffMinute(u.LastActivity, DateTime.UtcNow) >= onlineStatusAutoRefreshMinute && u.IsOnlayn == true)
                     .ToList();
-
-                foreach (var user in inactiveUsers)
+                if (inactiveUsers != null)
                 {
-                    user.IsOnlayn = false;
-                }
+                    foreach (var user in inactiveUsers)
+                    {
+                        user.IsOnlayn = false;
+                    }
 
-                if (inactiveUsers.Any())
-                    dbContext.SaveChanges();
+                    if (inactiveUsers.Any())
+                    {
+                        dbContext.SkipValidations = true;
+                        await dbContext.SaveChangesAsync();
+                        dbContext.SkipValidations = false;
+                    }
+                }
             }
         }
 
@@ -45,9 +53,6 @@ namespace Partnerly.Infrastructure.Services.HostedServices
             return Task.CompletedTask;
         }
 
-        public void Dispose()
-        {
-            _timer?.Dispose();
-        }
+        public void Dispose() => _timer?.Dispose();
     }
 }

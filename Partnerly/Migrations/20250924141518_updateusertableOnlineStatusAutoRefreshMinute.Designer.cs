@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Partnerly.Models;
 
@@ -11,9 +12,10 @@ using Partnerly.Models;
 namespace Partnerly.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250924141518_updateusertableOnlineStatusAutoRefreshMinute")]
+    partial class updateusertableOnlineStatusAutoRefreshMinute
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -326,9 +328,6 @@ namespace Partnerly.Migrations
                         .HasColumnType("int");
 
                     b.Property<bool>("IsDeleted")
-                        .HasColumnType("bit");
-
-                    b.Property<bool?>("IsMaintenanceMode")
                         .HasColumnType("bit");
 
                     b.Property<int?>("OnlineStatusAutoRefreshMinute")

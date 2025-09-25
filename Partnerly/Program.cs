@@ -3,6 +3,7 @@ using Partnerly.Infrastructure.Interfaces;
 using Partnerly.Infrastructure.Repositories;
 using Partnerly.Infrastructure.Services;
 using Partnerly.Infrastructure.Services.HostedServices;
+using Partnerly.Infrastructure.Services.MiddlewareServices;
 using Partnerly.Models;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -71,5 +72,6 @@ using (var scope = app.Services.CreateScope())
 }
 
 app.UseMiddleware<UpdateLastActivityMiddleware>();
+app.UseMiddleware<MaintenanceMiddleware>();
 
 app.Run();
