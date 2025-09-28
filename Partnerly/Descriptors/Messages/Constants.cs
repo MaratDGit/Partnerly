@@ -5,7 +5,7 @@ namespace Partnerly.Descriptors.Messages
     [Localizable(true)]
     public class Constants
     {
-        public const string SuperReferralCode = "BRANCH111";
+        public const string SuperReferralCode = "BRANCH01";
         public const string SuperUserEmail = "marat.iigservices@gmail.com";
         public const string SuperUserPassword = "MarDan123!";
         public const string SuperUserFirstName = "Marat";

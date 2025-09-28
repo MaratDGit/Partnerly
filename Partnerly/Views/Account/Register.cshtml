@@ -18,50 +18,45 @@
           <div class="app-brand justify-content-center mb-6">
             <a href="/" class="app-brand-link gap-2">
               <span class="app-brand-logo demo">@await Html.PartialAsync("../_Partials/_Macros")</span>
-              <span class="app-brand-text demo text-heading fw-bold">@ViewData["AppName"]</span>
+              <span class="app-brand-text demo text-heading fw-bold">@TempData.Peek("appName")</span>
             </a>
           </div>
           <!-- /Logo -->
-          <h4 class="mb-1">Приключение начинается здесь!</h4>
+          <h5 class="mb-1">Приключение начинается здесь!</h5>
 
           <form id="formAuthentication" class="mb-6" asp-action="Register" method="POST">
-            <div class="mb-6">
-               <label asp-for="FirstName"></label>
-               <input asp-for="FirstName" class="form-control" id="firstName" name="firstName" placeholder=""/>
-               <span asp-validation-for="FirstName" class="text-danger"></span>
+            <div class="form-floating mb-6">
+               <input asp-for="FullName" class="form-control" id="fullName" name="fullName" placeholder="" autofocus/>
+               <label asp-for="FullName"></label>
+               <span asp-validation-for="FullName" class="text-danger"></span>
             </div>
-            <div class="mb-6">
-               <label asp-for="LastName"></label>
-               <input asp-for="LastName" class="form-control" id="lastName" name="lastName" placeholder=""/>
-               <span asp-validation-for="LastName" class="text-danger"></span>
-            </div>
-            <div class="mb-6">
-               <label asp-for="ReferrerCode"></label>
+            <div class="form-floating mb-6">
                <input asp-for="ReferrerCode" class="form-control" id="referrerCode" name="referrerCode" placeholder="Реферальный код пригласителя"/>
+                <label asp-for="ReferrerCode"></label>
                <span asp-validation-for="ReferrerCode" class="text-danger"></span>
             </div>
-            <div class="mb-6">
+            <div class="form-floating mb-6">
+               <input asp-for="Email" class="form-control" id="email" name="email" placeholder="Введите свой адрес электронной почты"/>
                <label asp-for="Email"></label>
-               <input asp-for="Email" class="form-control" id="email" name="email" placeholder="Введите свой адрес электронной почты" autofocus/>
                <span asp-validation-for="Email" class="text-danger"></span>
             </div>
-            <div class="mb-6">
-               <label asp-for="Phone"></label>
+            <div class="form-floating mb-6">
                <input asp-for="Phone" class="form-control" id="phone" name="phone" placeholder="+37477123456"/>
+               <label asp-for="Phone"></label>
                <span asp-validation-for="Phone" class="text-danger"></span>
             </div>
             <div class="mb-6 form-password-toggle">
-              <label asp-for="Password"></label>
-              <div class="input-group input-group-merge">
+              <div class="form-floating input-group input-group-merge">
                 <input asp-for="Password" type="password" id="password" class="form-control" name="password" placeholder="&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;" aria-describedby="password"/>
+                <label asp-for="Password"></label>
                 <span class="input-group-text cursor-pointer"><i class="bx bx-hide"></i></span>
               </div>
               <span asp-validation-for="Password" class="text-danger"></span>
             </div>
             <div class="mb-6 form-password-toggle">
-              <label asp-for="ConfirmPassword"></label>
-              <div class="input-group input-group-merge">
+              <div class="form-floating input-group input-group-merge">
                 <input asp-for="ConfirmPassword" type="password" id="confirmpassword" class="form-control" name="confirmpassword" placeholder="&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;" aria-describedby="password"/>
+                <label asp-for="ConfirmPassword"></label>
                 <span class="input-group-text cursor-pointer"><i class="bx bx-hide"></i></span>
               </div>
               <span asp-validation-for="ConfirmPassword" class="text-danger"></span>

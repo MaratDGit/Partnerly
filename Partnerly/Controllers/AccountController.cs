@@ -40,7 +40,7 @@ namespace Partnerly.Controllers
         [HttpGet]
         public IActionResult Login(string? returnUrl = null)
         {
-            ViewData["AppName"] = _config["AppSettings:AppName"];
+            //ViewData["AppName"] = _config["AppSettings:AppName"];
             ViewBag.ReturnUrl = returnUrl;
             return View();
         }
@@ -48,7 +48,7 @@ namespace Partnerly.Controllers
         [HttpGet]
         public IActionResult Register(string? returnUrl = null)
         {
-            ViewData["AppName"] = _config["AppSettings:AppName"];
+            //ViewData["AppName"] = _config["AppSettings:AppName"];
             ViewBag.ReturnUrl = returnUrl;
             return View();
         }
@@ -56,7 +56,7 @@ namespace Partnerly.Controllers
         [HttpGet]
         public IActionResult ForgotPassword(string? returnUrl = null)
         {
-            ViewData["AppName"] = _config["AppSettings:AppName"];
+            //ViewData["AppName"] = _config["AppSettings:AppName"];
             ViewBag.ReturnUrl = returnUrl;
             return View();
         }
@@ -69,9 +69,6 @@ namespace Partnerly.Controllers
             {
                 return View(model);
             }
-
-            //string testMail = "marat.iigservices@gmail.com";
-            //string testPass = "MarDan123!";
 
             var user = await _userService.GetUserByEmailAsync(model.Email);
             if (user == null || !BCrypt.Net.BCrypt.Verify(model.Password, user.PasswordHash) || user.IsDeleted)
@@ -90,7 +87,6 @@ namespace Partnerly.Controllers
             if (user.EmailConfirmed != true)
             {
                 ViewBag.EmailConfirmationMessage = ErrorMessages.LoginEmailConfirmationMessage;
-                //ModelState.AddModelError("", ErrorMessages.LoginEmailConfirmationMessage);
                 return View(model);
             }
 
@@ -165,11 +161,31 @@ namespace Partnerly.Controllers
                 return View(model);
             }
 
+            string? fullName = model?.FullName?.Trim();
+            string? firstName = null;
+            string? lastName = null;
+            if (fullName != null)
+            {
+                string[] parts = fullName.Split(' ');
+                firstName = parts.Length > 0 ? parts[0] : "";
+                lastName = parts.Length > 1 ? parts[1] : "";
+            }
+            if (string.IsNullOrEmpty(firstName))
+            {
+                ModelState.AddModelError("FullName", $"{FieldsDisplayNames.FirstName} {ErrorMessages.FieldRequired}");
+                return View(model);
+            }
+            if (string.IsNullOrEmpty(lastName))
+            {
+                ModelState.AddModelError("FullName", $"{FieldsDisplayNames.LastName} {ErrorMessages.FieldRequired}");
+                return View(model);
+            }
+
             Partnerly.Models.User newUser = new Partnerly.Models.User();
             newUser.Email = model?.Email;
             newUser.Phone = model?.Phone;
-            newUser.FirstName = model?.FirstName;
-            newUser.LastName = model?.LastName;
+            newUser.FirstName = firstName;
+            newUser.LastName = lastName;
             newUser.PasswordHash = BCrypt.Net.BCrypt.HashPassword(model?.Password);
             newUser.ReferrerId = referrer?.Id;
 

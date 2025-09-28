@@ -20,8 +20,6 @@
   <ItemGroup>
     <Folder Include="wwwroot\assets\img\elements\" />
     <Folder Include="wwwroot\assets\img\favicon\" />
-    <Folder Include="wwwroot\assets\img\icons\brands\" />
-    <Folder Include="wwwroot\assets\img\icons\unicons\" />
     <Folder Include="wwwroot\assets\img\layouts\" />
     <Folder Include="wwwroot\assets\vendor\css\pages\" />
     <Folder Include="wwwroot\assets\vendor\fonts\" />

@@ -1,0 +1,51 @@
+﻿@model Partnerly.Models.ViewModels.EmailTemplateViewModel
+
+<h2>Редактировать шаблон</h2>
+
+<form asp-action="Edit">
+    <input type="hidden" asp-for="Id" />
+    
+    <div class="form-floating mb-6">
+        <input asp-for="Subject" id="subject" class="form-control" autofocus/>
+        <label asp-for="Subject"></label>
+        <span asp-validation-for="Subject" class="text-danger"></span>       
+    </div>
+    <div class="form-floating mb-6">
+        <textarea asp-for="BodyHtml"  id="bodyHtml" class="form-control" style="height: 400px" rows="10"></textarea>
+        <label asp-for="BodyHtml"></label>
+        <span asp-validation-for="BodyHtml" class="text-danger"></span>    
+    </div>
+    <button type="submit" class="btn btn-success">Сохранить</button>
+    <button type="button" class="btn btn-info" data-bs-toggle="modal" data-bs-target="#previewModal" onclick="showPreview()">Preview</button>
+    <a asp-action="Index" class="btn btn-secondary">Назад</a>
+</form>
+
+<!-- Modal -->
+<div class="modal fade" id="previewModal" tabindex="-1" aria-labelledby="previewModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="previewModalLabel">Предпросмотр письма</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Закрыть"></button>
+      </div>
+      <div class="modal-body">
+        <h4 id="previewSubject"></h4>
+        <hr />
+        <div id="previewBody"></div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Закрыть</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+function showPreview() {
+    const subject = document.getElementById("subject").value;
+    const bodyHtml = document.getElementById("bodyHtml").value;
+
+    document.getElementById("previewSubject").innerText = subject;
+    document.getElementById("previewBody").innerHTML = bodyHtml; // т.к. это HTML письма
+}
+</script>

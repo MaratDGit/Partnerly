@@ -29,23 +29,28 @@
           <div class="app-brand justify-content-center">
             <a href="/" class="app-brand-link gap-2">
               <span class="app-brand-logo demo">@await Html.PartialAsync("../_Partials/_Macros")</span>
-              <span class="app-brand-text demo text-heading fw-bold">@ViewData["AppName"]</span>
+              <span class="app-brand-text demo text-heading fw-bold">@TempData.Peek("appName")</span>
             </a>
           </div>
           <!-- /Logo -->
-          <h4 class="mb-1">Добро пожаловать в @ViewData["AppName"]!</h4>
+          <h5 class="mb-1">Добро пожаловать в @TempData.Peek("appName")!</h5>
           <p class="mb-6">Пожалуйста, войдите в свою учетную запись и начните приключение.</p>
 
           <form id="formAuthentication" class="mb-6" asp-action="Login" method="POST">
-            <div class="mb-6">
+            @*<div class="mb-6">
                <label asp-for="Email"></label>
                <input asp-for="Email" class="form-control" id="email" name="email" placeholder="Введите свой адрес электронной почты" autofocus/>
                <span asp-validation-for="Email" class="text-danger"></span>
+            </div>*@
+            <div class="form-floating mb-6">
+                <input asp-for="Email" class="form-control" id="email" placeholder="Введите свой адрес электронной почты" autofocus/>
+                <label asp-for="Email"></label>
+                <span asp-validation-for="Email" class="text-danger"></span>
             </div>
             <div class="mb-6 form-password-toggle">
-              <label asp-for="Password"></label>
-              <div class="input-group input-group-merge">
+              <div class="form-floating input-group input-group-merge">
                 <input asp-for="Password" type="password" id="password" class="form-control" name="password" placeholder="&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;" aria-describedby="password"/>
+                <label asp-for="Password"></label>
                 <span class="input-group-text cursor-pointer"><i class="bx bx-hide"></i></span>
               </div>
               <span asp-validation-for="Password" class="text-danger"></span>

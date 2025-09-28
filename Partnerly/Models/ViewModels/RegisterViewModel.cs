@@ -6,15 +6,21 @@ namespace Partnerly.Models.ViewModels
 {
     public class RegisterViewModel
     {
+        #region FullName
+        [StringLenght(min: 4, max: 50)]
+        [Required(ErrorMessage = $"{FieldsDisplayNames.FirstName} {FieldsDisplayNames.LastName} {ErrorMessages.FieldRequired}")]
+        [Display(Name = $"{FieldsDisplayNames.FirstName} {FieldsDisplayNames.LastName}")]
+        public string? FullName { get; set; }
+        #endregion
         #region FirstName
         [StringLenght(min:4, max: 20)]
-        [Required(ErrorMessage = $"{FieldsDisplayNames.FirstName} {ErrorMessages.FieldRequired}")]
+        //[Required(ErrorMessage = $"{FieldsDisplayNames.FirstName} {ErrorMessages.FieldRequired}")]
         [Display(Name = FieldsDisplayNames.FirstName)]
         public string? FirstName { get; set; }
         #endregion
         #region LastName
         [StringLenght(min: 4, max: 20)]
-        [Required(ErrorMessage = $"{FieldsDisplayNames.LastName} {ErrorMessages.FieldRequired}")]
+        //[Required(ErrorMessage = $"{FieldsDisplayNames.LastName} {ErrorMessages.FieldRequired}")]
         [Display(Name = FieldsDisplayNames.LastName)]
         public string? LastName { get; set; }
         #endregion

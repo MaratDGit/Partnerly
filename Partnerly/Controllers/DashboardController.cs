@@ -21,8 +21,8 @@ namespace Partnerly.Controllers
 
         public async Task<IActionResult> Index()
         {
-            var user = await _userService.GetUserByIDAsync(_currentUser.UserId);
-            if (user == null || user.IsBlocked == true)
+            var model = await GetUserProfileAsync();
+            if (model == null)
             {
                 return View("Error", new ErrorViewModel
                 {
@@ -31,12 +31,47 @@ namespace Partnerly.Controllers
                 });
             }
 
-            ViewData["ProfilePhoto"] = !string.IsNullOrEmpty(user.PhotoUrl) ? user.PhotoUrl : Constants.DefaultUserProfilePhotoPath;
-            ViewData["UserFirstName"] = user.FirstName;
-            ViewData["UserLastName"] = user.LastName;
-            ViewData["UserRefCode"] = user.MyReferralCode;
+            ViewData["DashboardsViewModel"] = model;
 
             return View();
+        }
+
+        public async Task<IActionResult> MyProfile()
+        {
+            var model = await GetUserProfileAsync();
+            ViewData["DashboardsViewModel"] = model;
+            return View();
+        }
+
+        public async Task<IActionResult> Settings()
+        {
+            var model = await GetUserProfileAsync();
+            ViewData["DashboardsViewModel"] = model;
+            return View();
+        }
+
+        public async Task<IActionResult> Payments()
+        {
+            var model = await GetUserProfileAsync();
+            ViewData["DashboardsViewModel"] = model;
+            return View();
+        }
+
+        private async Task<DashboardsViewModel?> GetUserProfileAsync()
+        {
+            var user = await _userService.GetUserByIDAsync(_currentUser.UserId);
+            if (user == null || user.IsBlocked == true)
+                return null;
+
+            return new DashboardsViewModel
+            {
+                UserPhotoUrl = string.IsNullOrEmpty(user.PhotoUrl)
+                    ? Constants.DefaultUserProfilePhotoPath
+                    : user.PhotoUrl,
+                UserFirstName = user.FirstName,
+                UserLastName = user.LastName,
+                UserRefCode = user.MyReferralCode,
+            };
         }
     }
 }

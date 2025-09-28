@@ -14,5 +14,7 @@ namespace Partnerly.Descriptors.Messages
         public const string LastName  = "Фамилия";
         public const string ReferrerCode = "Реферальный код";
         public const string TermsConditions = "политика конфиденциальности & условия";
+        public const string Subject = "Заголовок";
+        public const string BodyHTML = "Тело HTML";
     }
 }

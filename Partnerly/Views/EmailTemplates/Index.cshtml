@@ -1,0 +1,36 @@
+﻿@model IEnumerable<Partnerly.Models.ViewModels.EmailTemplateViewModel>
+
+<div class="card">
+  <h5 class="card-header">Шаблоны электронной почты</h5>
+  <div class="table-responsive text-nowrap">
+    <table class="table">
+      <thead>
+        <tr>
+         <th>Тема</th>
+         <th>Создано</th>
+         <th>Дата создания</th>
+         <th>Действия</th>
+        </tr>
+      </thead>
+      <tbody class="table-border-bottom-0">
+       @foreach (var item in Model)
+        {
+        <tr>
+            <td><a asp-action="Edit" asp-route-id="@item.Id">@item.Subject</a></td>
+            <td>@($"{item.CreatedByUser?.FirstName} {item.CreatedByUser?.LastName}")</td>
+            <td>@(((DateTime)item.CreatedDate).ToString("yyyy-MM-dd"))</td>
+            <td>
+            <div class="dropdown">
+              <button type="button" class="btn p-0 dropdown-toggle hide-arrow" data-bs-toggle="dropdown"><i class="bx bx-dots-vertical-rounded"></i></button>
+              <div class="dropdown-menu">
+                <a class="dropdown-item" asp-action="Edit" asp-route-id="@item.Id"><i class="bx bx-edit-alt me-1"></i> Редактировать</a>
+                <a class="dropdown-item" asp-action="Delete" asp-route-id="@item.Id"><i class="bx bx-trash me-1"></i> Удалить</a>
+              </div>
+            </div>
+          </td>
+        </tr>
+        }
+      </tbody>
+    </table>
+  </div>
+</div>
