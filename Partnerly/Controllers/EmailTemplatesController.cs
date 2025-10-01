@@ -4,55 +4,26 @@
     using Microsoft.EntityFrameworkCore;
     using Partnerly.Helpers;
     using Partnerly.Infrastructure.Interfaces;
+    using Partnerly.Infrastructure.Services;
     using Partnerly.Models;
     using Partnerly.Models.ViewModels;
 
-    public class EmailTemplatesController : Controller
+    public class EmailTemplatesController : _BaseController, IDataTableController
     {
-        private readonly IUserService _userService;
-        private readonly ICurrentUserService _currentUser;
         private readonly IEmailTemplateService _emailTemplateService;
 
         public EmailTemplatesController(IUserService userService, ICurrentUserService currentUser, IEmailTemplateService emailTemplateService)
+        : base(userService, currentUser)
         {
-            _userService = userService;
-            _currentUser = currentUser;
             _emailTemplateService = emailTemplateService;
         }
 
         public async Task<IActionResult> Index()
         {
-            var templatesAsView = new List<EmailTemplateViewModel>();
-            var templates = await _emailTemplateService.GetAllTemplatesAsync();
-
-            if (templates != null && templates.Count() > 0)
-            {
-                templatesAsView = await PropertyActionsHelper.CopyPropertiesListAsync<EmailTemplate, EmailTemplateViewModel>(templates.ToList(), templatesAsView);
-
-                if (templatesAsView != null)
-                {
-                    foreach (EmailTemplateViewModel model in templatesAsView.ToList())
-                    {
-                        model.CreatedByUser = await _userService.GetUserByIDAsync(model.CreatedBy);
-                    }
-                }
-            }
-            
-            return View(templatesAsView);
+            TempData["SaveMessage"] = null;
+            return View();
         }
 
-        public async Task<IActionResult> Details(Guid id)
-        {
-            var template = await _emailTemplateService.GetTemplateByIDAsync(id);
-            if (template == null) return NotFound();
-
-            var templatesAsView = await PropertyActionsHelper.CopyPropertiesAsync(template, new EmailTemplateViewModel());
-            if (templatesAsView == null) return NotFound();
-
-            return View(templatesAsView);
-        }
-
-        // Создать
         public IActionResult Create()
         {
             return View();
@@ -71,7 +42,6 @@
             return View(model);
         }
 
-        // Редактировать
         public async Task<IActionResult> Edit(Guid id)
         {
             var template = await _emailTemplateService.GetTemplateByIDAsync(id);
@@ -91,14 +61,28 @@
 
             if (ModelState.IsValid)
             {
-                //_context.Update(template);
-                //await _context.SaveChangesAsync();
-                //return RedirectToAction(nameof(Index));
+                EmailTemplate? template = await _emailTemplateService.GetTemplateByIDAsync(model.Id);
+                if (template != null)
+                {
+                    template.Subject = model.Subject;
+                    template.BodyHtml = model.BodyHtml;
+                    ServiceResult<EmailTemplate?> result = await _emailTemplateService.UpdateTemplateAsync(template);
+                    
+                    if (!result.Success)
+                    {
+                        foreach (var error in result.Errors)
+                        {
+                            ModelState.AddModelError("", error);
+                        }
+                    }
+
+                    TempData["SaveMessage"] = "Запись успешно сохранена!";
+                    return RedirectToAction("Edit", new { id = model.Id });
+                }
             }
             return View(model);
         }
 
-        // Удалить
         public async Task<IActionResult> Delete(Guid id)
         {
             var template = await _emailTemplateService.GetTemplateByIDAsync(id);
@@ -117,11 +101,30 @@
             var template = await _emailTemplateService.GetTemplateByIDAsync(id);
             if (template != null)
             {
-                //_context.EmailTemplates.Remove(template);
-                //await _context.SaveChangesAsync();
             }
             return RedirectToAction(nameof(Index));
         }
-    }
 
+        [HttpGet]
+        public async Task<JsonResult> GetData()
+        {
+            var templatesAsView = new List<EmailTemplateViewModel>();
+            var templates = await _emailTemplateService.GetAllTemplatesAsync();
+
+            if (templates != null && templates.Count() > 0)
+            {
+                templatesAsView = await PropertyActionsHelper.CopyPropertiesListAsync<EmailTemplate, EmailTemplateViewModel>(templates.ToList(), templatesAsView);
+
+                if (templatesAsView != null)
+                {
+                    var tasks = templatesAsView.Select(async model =>
+                    {
+                        model.CreatedByUser = await _userService.GetUserByIDAsync(model.CreatedBy);
+                    });
+                    await Task.WhenAll(tasks);
+                }
+            }
+            return Json(new { data = templatesAsView });
+        }
+    }
 }

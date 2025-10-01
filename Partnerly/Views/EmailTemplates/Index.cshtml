@@ -1,9 +1,87 @@
 ﻿@model IEnumerable<Partnerly.Models.ViewModels.EmailTemplateViewModel>
 
+@{
+    ViewData["Title"] = "Test DataTables";
+    Layout = "_ContentNavbarLayout";
+}
+
 <div class="card">
   <h5 class="card-header">Шаблоны электронной почты</h5>
+  <div class="table-responsive table-custom-a text-nowrap">
+    <table class="table is-striped" id="emailTemplatesTable">
+      <thead>
+        <tr>
+         <th>Тема</th>
+         <th>Создано</th>
+         <th>Дата создания</th>
+         <th>Действия</th>
+        </tr>
+      </thead>
+    </table>
+  </div>
+</div>
+
+@section PageScripts {
+<script>
+   $(document).ready(function () {
+    $("#emailTemplatesTable").DataTable({
+        ajax: '@Url.Action("GetData", "EmailTemplates")',
+        columns: [
+            { 
+                data: "subject",
+                render: function (data, type, row) {
+                    return `<a href="/EmailTemplates/Edit/${row.id}">${data}</a>`;
+                }
+            },
+            { 
+                data: null, 
+                render: function (data, type, row) {
+                    let firstName = row.createdByUser?.firstName ?? '';
+                    let lastName = row.createdByUser?.lastName ?? '';
+                    return `${firstName} ${lastName}`;
+                }
+            },
+            { 
+                data: "createdDate",
+                render: function (data, type, row) {
+                    let date = new Date(data);
+                    let yyyy = date.getFullYear();
+                    let mm = String(date.getMonth() + 1).padStart(2, '0');
+                    let dd = String(date.getDate()).padStart(2, '0');
+                    return `${yyyy}-${mm}-${dd}`;
+                }
+            },
+            {
+                data: "id",
+                orderable: false,
+                searchable: false,
+                render: function (data, type, row) {
+                    return `
+                    <div class="dropdown">
+                        <button type="button" class="btn p-0 dropdown-toggle hide-arrow" data-bs-toggle="dropdown">
+                            <i class="bx bx-dots-vertical-rounded"></i>
+                        </button>
+                        <div class="dropdown-menu">
+                            <a class="dropdown-item" href="/EmailTemplates/Edit/${data}">
+                                <i class="bx bx-edit-alt me-1"></i> Редактировать
+                            </a>
+                            <a class="dropdown-item" href="/EmailTemplates/Delete/${data}">
+                                <i class="bx bx-trash me-1"></i> Удалить
+                            </a>
+                        </div>
+                    </div>`;
+                }
+            }
+        ]
+    });
+});
+</script>
+}
+
+@*<div class="card">
+  <h5 class="card-header">Шаблоны электронной почты</h5>
   <div class="table-responsive text-nowrap">
-    <table class="table">
+    <table class="table" id="myTable">
       <thead>
         <tr>
          <th>Тема</th>
@@ -33,4 +111,5 @@
       </tbody>
     </table>
   </div>
-</div>
+</div>*@
+

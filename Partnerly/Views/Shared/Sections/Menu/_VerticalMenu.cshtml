@@ -3,10 +3,8 @@
   string? currentPage = ViewContext.HttpContext.Request.Path;
 }
 
-<!-- Menu -->
 <aside id="layout-menu" class="layout-menu menu-vertical menu bg-menu-theme">
 
-  @* ! Hide app brand if navbar-full *@
   <div
     class='app-brand demo @((@ViewData["navbarFull"] != null && Convert.ToBoolean(@ViewData["navbarFull"])) ? "d-xl-none" : "")'>
     <a asp-controller="Home" asp-action="Index" class="app-brand-link">
@@ -47,7 +45,6 @@
       </a>
     </li>
 
-    <!-- Forms & Tables -->
     <li class="menu-header small text-uppercase"><span class="menu-header-text">операции</span></li>
 
     <li class='menu-item@(currentPage.StartsWith("/Forms") ? " active open" : "")'>
@@ -87,4 +84,3 @@
   </ul>
 
 </aside>
-<!-- / Menu -->

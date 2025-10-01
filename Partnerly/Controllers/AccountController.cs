@@ -8,7 +8,6 @@ using Partnerly.Models;
 using Partnerly.Models.ViewModels;
 using System.Diagnostics;
 using System.Security.Claims;
-using System.Security.Cryptography;
 
 namespace Partnerly.Controllers
 {
@@ -40,7 +39,6 @@ namespace Partnerly.Controllers
         [HttpGet]
         public IActionResult Login(string? returnUrl = null)
         {
-            //ViewData["AppName"] = _config["AppSettings:AppName"];
             ViewBag.ReturnUrl = returnUrl;
             return View();
         }
@@ -48,7 +46,6 @@ namespace Partnerly.Controllers
         [HttpGet]
         public IActionResult Register(string? returnUrl = null)
         {
-            //ViewData["AppName"] = _config["AppSettings:AppName"];
             ViewBag.ReturnUrl = returnUrl;
             return View();
         }
@@ -56,7 +53,6 @@ namespace Partnerly.Controllers
         [HttpGet]
         public IActionResult ForgotPassword(string? returnUrl = null)
         {
-            //ViewData["AppName"] = _config["AppSettings:AppName"];
             ViewBag.ReturnUrl = returnUrl;
             return View();
         }

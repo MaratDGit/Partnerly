@@ -15,10 +15,23 @@
         <label asp-for="BodyHtml"></label>
         <span asp-validation-for="BodyHtml" class="text-danger"></span>    
     </div>
-    <button type="submit" class="btn btn-success">Сохранить</button>
-    <button type="button" class="btn btn-info" data-bs-toggle="modal" data-bs-target="#previewModal" onclick="showPreview()">Preview</button>
-    <a asp-action="Index" class="btn btn-secondary">Назад</a>
+    <a asp-action="Index" class="btn btn-sm btn-outline-secondary">
+        <i class="bx bx-arrow-back me-1"></i> Назад
+    </a>
+    <button type="submit" class="btn btn-sm btn-outline-primary">
+        <i class="bx bx-save me-1"></i> Сохранить
+    </button>
+
+    <button type="button" class="btn btn-sm btn-outline-info" data-bs-toggle="modal" data-bs-target="#previewModal" onclick="showPreview()">
+        <i class="bx bx-show me-1"></i> Предпросмотр
+    </button>
 </form>
+
+<div id="saveAlert" class="alert alert-success alert-dismissible fade show d-none" role="alert">
+    <i class="bx bx-check-circle me-1"></i>
+    Запись успешно сохранена!
+    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Закрыть"></button>
+</div>
 
 <!-- Modal -->
 <div class="modal fade" id="previewModal" tabindex="-1" aria-labelledby="previewModalLabel" aria-hidden="true">
@@ -40,12 +53,49 @@
   </div>
 </div>
 
+
+@if (TempData["SaveMessage"] != null)
+{
+    <div class="toast-container position-fixed bottom-0 end-0 p-3">
+        <div id="saveToast" class="toast align-items-center text-bg-primary border-0" role="alert" aria-live="assertive" aria-atomic="true">
+            <div class="d-flex">
+                <div class="toast-body">
+                    <i class="bx bx-check-circle me-1"></i> @TempData["SaveMessage"]
+                </div>
+                <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Закрыть"></button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            const toastEl = document.getElementById('saveToast');
+            if (toastEl) {
+                const toast = new bootstrap.Toast(toastEl, { delay: 3000 });
+                toast.show();
+            }
+        });
+    </script>
+}
+
+<div class="toast-container position-fixed bottom-0 end-0 p-3">
+    <div id="saveToast" class="toast align-items-center text-bg-success border-0" role="alert" aria-live="assertive" aria-atomic="true">
+        <div class="d-flex">
+            <div class="toast-body">
+                <i class="bx bx-check-circle me-1"></i> 
+                @TempData["SaveMessage"]
+            </div>
+            <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Закрыть"></button>
+        </div>
+    </div>
+</div>
+
 <script>
 function showPreview() {
     const subject = document.getElementById("subject").value;
     const bodyHtml = document.getElementById("bodyHtml").value;
 
     document.getElementById("previewSubject").innerText = subject;
-    document.getElementById("previewBody").innerHTML = bodyHtml; // т.к. это HTML письма
+    document.getElementById("previewBody").innerHTML = bodyHtml; 
 }
 </script>

@@ -7,7 +7,12 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="Views\Shared\_CommonMasterLayout.cshtml~RF65ba5cc9.TMP" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="BCrypt.Net-Next" Version="4.0.3" />
+    <PackageReference Include="datatables.net-dt" Version="2.3.4" />
     <PackageReference Include="Handlebars.Net" Version="2.1.6" />
     <PackageReference Include="Microsoft.EntityFrameworkCore" Version="6.0.0" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="6.0.0" />
