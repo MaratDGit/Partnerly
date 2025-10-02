@@ -16,5 +16,11 @@ namespace Partnerly.Descriptors.Messages
         public const string TermsConditions = "политика конфиденциальности & условия";
         public const string Subject = "Заголовок";
         public const string BodyHTML = "Тело HTML";
+
+        public const string Edit = "Редактировать";
+        public const string Delete = "Удалить";
+
+        public const string CreatedDate = "Дата создания";
+        public const string CreatorName = "Создано";
     }
 }

@@ -2,18 +2,6 @@
   <h5 class="card-header">@ViewData["TableName"]</h5>
   <div class="table-responsive table-custom-a text-nowrap">
     <table class="table is-striped" id="@ViewData["TableId"]">
-      <thead>
-         <tr>
-            @foreach (var col in (List<string>)ViewData["Columns"])
-            {
-                <th>@col</th>
-            }
-            @if(ViewData["WithActions"] != null && Convert.ToBoolean(ViewData["WithActions"]) == true)
-            {
-               <th>Действия</th>
-            }
-         </tr>
-      </thead>
     </table>
   </div>
 </div>

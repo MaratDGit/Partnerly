@@ -1,6 +1,7 @@
 ﻿namespace Partnerly.Controllers
 {
     using Microsoft.AspNetCore.Mvc;
+    using Partnerly.Descriptors.Messages;
     using Partnerly.Helpers;
     using Partnerly.Infrastructure.Interfaces;
     using Partnerly.Infrastructure.Services;
@@ -20,7 +21,6 @@
 
         public async Task<IActionResult> Index()
         {
-            TempData["SaveMessage"] = null;
             return View();
         }
 
@@ -73,7 +73,7 @@
                         }
                     }
 
-                    TempData["SaveMessage"] = "Запись успешно сохранена!";
+                    TempData["ToastMessage"] = Messages.RecordSaved;
                     return RedirectToAction("Edit", new { id = model.Id });
                 }
             }
@@ -85,10 +85,7 @@
             var template = await _emailTemplateService.GetTemplateByIDAsync(id);
             if (template == null) return NotFound();
 
-            var templatesAsView = await PropertyActionsHelper.CopyPropertiesAsync(template, new EmailTemplateViewModel());
-            if (templatesAsView == null) return NotFound();
-
-            return View(templatesAsView);
+            return View();
         }
 
         [HttpPost, ActionName("Delete")]
@@ -105,40 +102,34 @@
         [HttpGet]
         public async Task<JsonResult> GetData()
         {
-            var templatesAsView = new List<EmailTemplateGridView>();
-            var templates = await _emailTemplateService.GetAllTemplatesAsync();
+            return await GetGridDataAsync<EmailTemplateGridView, EmailTemplate>("EmailTemplates");
+        }
 
-            if (templates != null && templates.Count() > 0)
+        protected override async Task<IEnumerable<TEntity>> GetEntitiesAsync<TEntity>()
+        {
+            if (typeof(TEntity) == typeof(EmailTemplate))
+                return (IEnumerable<TEntity>)await _emailTemplateService.GetAllTemplatesAsync();
+
+            return Enumerable.Empty<TEntity>();
+        }
+
+        protected override List<GridField> GetFields()
+        {
+            return new List<GridField>
             {
-                templatesAsView = await PropertyActionsHelper.CopyPropertiesListAsync<EmailTemplate, EmailTemplateGridView>(templates.ToList(), templatesAsView);
+                new GridField { FieldName = "subject", DisplayName = FieldsDisplayNames.Subject, LinkTemplate = "/EmailTemplates/Edit/{id}" },
+                new GridField { FieldName = "createdByUserFullName", DisplayName = FieldsDisplayNames.CreatorName, IsVisible = true },
+                new GridField { FieldName = "createdDate", DisplayName = FieldsDisplayNames.CreatedDate, IsSortable = true, Format="date:MM/dd/yyyy" }
+            };
+        }
 
-                if (templatesAsView != null)
-                {
-                    var tasks = templatesAsView.Select(async model =>
-                    {
-                        model.CreatedByUser = await _userService.GetUserByIDAsync(model.CreatedBy);
-                    });
-                    await Task.WhenAll(tasks);
-                }
+        protected override async Task CustomizeRowAsync(object row)
+        {
+            if (row is EmailTemplateGridView templateRow)
+            {
+                var user = await _userService.GetUserByIDAsync(templateRow.CreatedBy);
+                templateRow.CreatedByUserFullName = $"{user?.FirstName} {user?.LastName}";
             }
-            return Json(new { data = templatesAsView });
-
-            //var templatesAsView = new List<EmailTemplateGridView>();
-            //var templates = await _emailTemplateService.GetAllTemplatesAsync();
-
-            //if (templates == null || templates.Count() == 0)
-            //{
-            //    return Json(new { data = templatesAsView });
-            //}
-            //templatesAsView = (List<EmailTemplateGridView>)templates;
-
-            //var tasks = templatesAsView.Select(async model =>
-            //{
-            //    model.CreatedByUser = await _userService.GetUserByIDAsync(model.CreatedBy);
-            //});
-            //await Task.WhenAll(tasks);
-
-            //return Json(new { data = templatesAsView });
         }
     }
 }

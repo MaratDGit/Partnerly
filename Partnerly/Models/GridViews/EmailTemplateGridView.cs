@@ -2,6 +2,7 @@
 {
     public class EmailTemplateGridView : EmailTemplate
     {
-        public User? CreatedByUser { get; set; }
+        public string? CreatedByUserFullName { get; set; }
+        public List<GridAction>? Actions { get; set; }
     }
 }

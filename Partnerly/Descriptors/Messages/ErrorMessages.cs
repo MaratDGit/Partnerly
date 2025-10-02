@@ -39,7 +39,6 @@ namespace Partnerly.Descriptors.Messages
         public const string UserIsBlocked = "Пользователь заблокирован";
         public const string LinkIsExpired = "Ссылка больше недействительна";
         public const string LinkExpiredDetail = "Похоже, что срок действия этой ссылки закончился. Чтобы завершить подтверждение email, получите новую ссылку.";
-
         #endregion
     }
 }
