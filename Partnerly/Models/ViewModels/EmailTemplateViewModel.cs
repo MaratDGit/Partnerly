@@ -20,7 +20,5 @@ namespace Partnerly.Models.ViewModels
         public DateTime? CreatedDate { get; set; }
         public Guid? UpdatedBy { get; set; }
         public DateTime? UpdatedDate { get; set; }
-
-        public User? CreatedByUser { get; set; }
     }
 }

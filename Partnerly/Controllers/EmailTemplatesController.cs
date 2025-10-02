@@ -1,11 +1,11 @@
 ﻿namespace Partnerly.Controllers
 {
     using Microsoft.AspNetCore.Mvc;
-    using Microsoft.EntityFrameworkCore;
     using Partnerly.Helpers;
     using Partnerly.Infrastructure.Interfaces;
     using Partnerly.Infrastructure.Services;
     using Partnerly.Models;
+    using Partnerly.Models.GridViews;
     using Partnerly.Models.ViewModels;
 
     public class EmailTemplatesController : _BaseController, IDataTableController
@@ -35,9 +35,6 @@
         {
             if (ModelState.IsValid)
             {
-                //_context.Add(template);
-                //await _context.SaveChangesAsync();
-                //return RedirectToAction(nameof(Index));
             }
             return View(model);
         }
@@ -108,12 +105,12 @@
         [HttpGet]
         public async Task<JsonResult> GetData()
         {
-            var templatesAsView = new List<EmailTemplateViewModel>();
+            var templatesAsView = new List<EmailTemplateGridView>();
             var templates = await _emailTemplateService.GetAllTemplatesAsync();
 
             if (templates != null && templates.Count() > 0)
             {
-                templatesAsView = await PropertyActionsHelper.CopyPropertiesListAsync<EmailTemplate, EmailTemplateViewModel>(templates.ToList(), templatesAsView);
+                templatesAsView = await PropertyActionsHelper.CopyPropertiesListAsync<EmailTemplate, EmailTemplateGridView>(templates.ToList(), templatesAsView);
 
                 if (templatesAsView != null)
                 {
@@ -125,6 +122,23 @@
                 }
             }
             return Json(new { data = templatesAsView });
+
+            //var templatesAsView = new List<EmailTemplateGridView>();
+            //var templates = await _emailTemplateService.GetAllTemplatesAsync();
+
+            //if (templates == null || templates.Count() == 0)
+            //{
+            //    return Json(new { data = templatesAsView });
+            //}
+            //templatesAsView = (List<EmailTemplateGridView>)templates;
+
+            //var tasks = templatesAsView.Select(async model =>
+            //{
+            //    model.CreatedByUser = await _userService.GetUserByIDAsync(model.CreatedBy);
+            //});
+            //await Task.WhenAll(tasks);
+
+            //return Json(new { data = templatesAsView });
         }
     }
 }
