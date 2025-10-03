@@ -17,12 +17,14 @@ namespace Partnerly.Descriptors.Messages
         public const string View = "View";
         public const string Update = "Update";
         public const string Delete = "Delete";
+
         // Payments
         public const string Open = "Open";
         public const string Pending = "Pending";
         public const string Closed = "Closed";
         public const string Canceled = "Canceled";
         public const string Rejected = "Rejected";
+
         // Log 
         public const string UserSignIn = "User Sign In";
         public const string UserSignOut = "User Sign Out";
@@ -52,6 +54,7 @@ namespace Partnerly.Descriptors.Messages
         public const string EmailTemplateUpdated = "Email Template Updating";
 
         public const string EmailSending = "Email Sending"; 
+
         // Log types
         public const string Information = "Information";
         public const string Warning = "Warning";
@@ -64,6 +67,16 @@ namespace Partnerly.Descriptors.Messages
         // Email Token Types
         public const string Registration = "Registration";
         public const string ForgotPassword = "Forgot Password";
+
+        // ClaimTypes
+        public const string ClaimTypeRoleType = "RoleType";
+        public const string ClaimTypeFirstName = "FirstName";
+        public const string ClaimTypeLastName = "LastName";
+        public const string ClaimTypeReffCode = "ReffCode";
+        public const string ClaimTypeUserPhotoUrl = "UserPhotoUrl";
+
+        // Others
+        public const string Edit = "Edit";
 
     }
 }

@@ -1,6 +1,8 @@
 ﻿namespace Partnerly.Controllers
 {
     using Microsoft.AspNetCore.Mvc;
+    using Partnerly.Descriptors.Attributes;
+    using Partnerly.Descriptors.Attributes.BaseAttributes;
     using Partnerly.Descriptors.Messages;
     using Partnerly.Helpers;
     using Partnerly.Infrastructure.Interfaces;
@@ -8,7 +10,9 @@
     using Partnerly.Models;
     using Partnerly.Models.GridViews;
     using Partnerly.Models.ViewModels;
+    using System.Security.Claims;
 
+    [ClaimAuthorize(ClaimTypes.Role, RoleTypeAttribute.Admin, RoleTypeAttribute.Employee)]
     public class EmailTemplatesController : _BaseController, IDataTableController
     {
         private readonly IEmailTemplateService _emailTemplateService;

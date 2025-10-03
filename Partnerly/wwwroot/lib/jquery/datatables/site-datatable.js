@@ -1,4 +1,5 @@
-﻿function initUniqueDataTable(tableId, ajaxUrl) {
+﻿
+function initUniqueDataTable(tableId, ajaxUrl) {
     $.getJSON(ajaxUrl, function (response) {
         let fields = response.fields;
         let data = response.data;
@@ -13,7 +14,16 @@
                 visible: f.isVisible,
                 orderable: f.isSortable,
                 render: function (data, type, row) {
-                    if (!data) return "";
+                    // Если значение null, ставим defaultValue
+                    if (data == null && f.defaultValue !== undefined && f.defaultValue !== null) {
+                        data = f.defaultValue;
+                    }
+
+                    // Если тип boolean, рисуем checkbox
+                    if (f.type === "checkbox") {
+                        let checked = data ? "checked" : "";
+                        return `<input type="checkbox" disabled ${checked} />`;
+                    }
 
                     // Ссылка
                     if (f.linkTemplate) {
@@ -52,10 +62,12 @@
                         }
                     }
 
+                    // Обычный текст
                     return `<span ${f.attr || ""}>${data}</span>`;
                 }
             };
         });
+
 
         // Добавляем колонку действий только если есть хотя бы одна видимая action
         if (hasVisibleActions) {

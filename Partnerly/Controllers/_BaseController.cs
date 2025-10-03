@@ -25,43 +25,58 @@ namespace Partnerly.Controllers
         {
             if (User.Identity?.IsAuthenticated == true)
             {
-                var dashboardModel = await GetUserProfileAsync();
-                if (dashboardModel != null)
+                ViewData["DashboardsViewModel"] = new DashboardsViewModel
                 {
-                    ViewData["DashboardsViewModel"] = dashboardModel;
+                    UserPhotoUrl = _currentUser.UserPhotoUrl,
+                    UserFirstName = _currentUser.FirstName,
+                    UserLastName = _currentUser.LastName,
+                    UserRefCode = _currentUser.ReffCode,
+                };
+            }
+
+            var controllerName = context.RouteData.Values["controller"]?.ToString();
+            var actionName = context.RouteData.Values["action"]?.ToString();
+
+            string? roleType = null;
+            bool unknownAction = false;
+            if (!string.IsNullOrEmpty(actionName))
+            {
+                if (actionName.ToLower() == Constants.Edit.ToLower()) roleType = RoleTypeAttribute.Update;
+                else if (actionName.ToLower() == Constants.Delete.ToLower()) roleType = RoleTypeAttribute.Delete;
+                else unknownAction = true;
+            }
+
+            if (!unknownAction && !HasPermision(roleType))
+            {
+                var referer = context.HttpContext.Request.Headers["Referer"].ToString();
+
+                if (!string.IsNullOrEmpty(referer))
+                {
+                    context.Result = new RedirectResult(referer);
+                    return;
+                }
+                else
+                {
+                    context.Result = new RedirectToActionResult("Index", "Home", null);
+                    return;
                 }
             }
 
             await next();
         }
 
-        #region User Profile info
-        private async Task<DashboardsViewModel?> GetUserProfileAsync()
+        protected bool HasPermision(string? roleType)
         {
-            var user = await _userService.GetUserByIDAsync(_currentUser.UserId);
-            if (user == null || user.IsBlocked == true)
-                return null;
+            bool retval = false;
+            if (string.IsNullOrEmpty(roleType))
+                return retval;
 
-            return new DashboardsViewModel
-            {
-                UserPhotoUrl = string.IsNullOrEmpty(user.PhotoUrl)
-                    ? Constants.DefaultUserProfilePhotoPath
-                    : user.PhotoUrl,
-                UserFirstName = user.FirstName,
-                UserLastName = user.LastName,
-                UserRefCode = user.MyReferralCode,
-            };
-        }
-
-        protected bool HasPermision(string roleType)
-        {
-            if (roleType == RoleTypeAttribute.View) return _currentUser?.Role == RoleTypeAttribute.Admin || _currentUser?.Role == RoleTypeAttribute.Employee || _currentUser?.Role == RoleTypeAttribute.User;
-            if (roleType == RoleTypeAttribute.Update) return _currentUser?.Role == RoleTypeAttribute.Admin || _currentUser?.Role == RoleTypeAttribute.Employee;
-            if (roleType == RoleTypeAttribute.Delete) return _currentUser?.Role == RoleTypeAttribute.Admin;
+            if (roleType == RoleTypeAttribute.View) return _currentUser?.RoleName == RoleTypeAttribute.Admin || _currentUser?.RoleName == RoleTypeAttribute.Employee || _currentUser?.RoleName == RoleTypeAttribute.User;
+            if (roleType == RoleTypeAttribute.Update) return _currentUser?.RoleName == RoleTypeAttribute.Admin || _currentUser?.RoleName == RoleTypeAttribute.Employee;
+            if (roleType == RoleTypeAttribute.Delete) return _currentUser?.RoleName == RoleTypeAttribute.Admin;
 
             return false;
         }
-        #endregion
 
         #region Data Grid Related Functions
         #region Default Actions

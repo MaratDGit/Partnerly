@@ -7,6 +7,7 @@ namespace Partnerly.Infrastructure.Interfaces
     {
         Task<Role?> GetRoleByNameAsync(string? name);
         Task<IEnumerable<Role?>> GetAllRolesAsync();
+        Task<Role?> GetRoleByIDAsync(Guid? id);
 
         Task<ServiceResult<Role?>> CreateRoleAsync(Role? role);
         Task<ServiceResult<Role?>> UpdateRoleAsync(Role? role);

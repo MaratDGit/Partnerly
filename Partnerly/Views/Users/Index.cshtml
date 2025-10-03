@@ -1,0 +1,18 @@
+﻿@{
+    ViewData["Title"] = "Пользователи";
+    Layout = "_ContentNavbarLayout";
+}
+
+@await Html.PartialAsync("_DataTablePartial", null, new ViewDataDictionary(ViewData)
+{
+    { "TableName", "Пользователи" },
+    { "TableId", "usersTable" },
+})
+
+@section PageScripts {
+    <script>
+         $(document).ready(function () {
+            initUniqueDataTable("usersTable", '@Url.Action("GetData", "Users")');
+        });
+    </script>
+}

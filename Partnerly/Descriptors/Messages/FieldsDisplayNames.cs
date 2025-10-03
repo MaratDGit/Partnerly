@@ -13,9 +13,16 @@ namespace Partnerly.Descriptors.Messages
         public const string FirstName = "Имя";
         public const string LastName  = "Фамилия";
         public const string ReferrerCode = "Реферальный код";
+        public const string ReffererName = "Имя реферера";
         public const string TermsConditions = "политика конфиденциальности & условия";
         public const string Subject = "Заголовок";
         public const string BodyHTML = "Тело HTML";
+        public const string Balance = "Баланс";
+        public const string LastActivity = "Последняя активность";
+        public const string IsOnlayn = "Онлайн";
+        public const string IsBlocked = "Заблокировано";
+        public const string EmailConfirmed = "почта подтверждена";
+        public const string Role = "Роль";
 
         public const string Edit = "Редактировать";
         public const string Delete = "Удалить";
