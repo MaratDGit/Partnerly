@@ -21,7 +21,7 @@ namespace Partnerly.Descriptors.Messages
         public const string LastActivity = "Последняя активность";
         public const string IsOnlayn = "Онлайн";
         public const string IsBlocked = "Заблокировано";
-        public const string EmailConfirmed = "почта подтверждена";
+        public const string EmailConfirmed = "Почта подтверждена";
         public const string Role = "Роль";
 
         public const string Edit = "Редактировать";

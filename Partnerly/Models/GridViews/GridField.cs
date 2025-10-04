@@ -9,7 +9,7 @@
         public string? Attr { get; set; }
         public string? LinkTemplate { get; set; }
         public string? Format { get; set; }
-        public string? DefaultValue { get; set; }
+        public object? DefaultValue { get; set; }
         public string? Type { get; set; }
     }
 }

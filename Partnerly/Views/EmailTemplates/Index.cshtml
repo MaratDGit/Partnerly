@@ -7,12 +7,19 @@
 {
     { "TableName", "Шаблоны электронной почты" },
     { "TableId", "emailTemplatesTable" },
+    { "NewRecordControler", "EmailTemplates" }
 })
 
 @section PageScripts {
     <script>
-         $(document).ready(function () {
-            initUniqueDataTable("emailTemplatesTable", '@Url.Action("GetData", "EmailTemplates")');
+        $(document).ready(function () {
+            initUniqueDataTable("emailTemplatesTable", '@Url.Action("GetData", "EmailTemplates")', {
+                getDataParams: { tableModel: "EmailTemplate" },
+                exportAllUrl: '@Url.Action("ExportAllToExcel", "EmailTemplates")',
+                exportSelectedUrl: '@Url.Action("ExportToExcel", "EmailTemplates")'
+            });
         });
     </script>
 }
+
+

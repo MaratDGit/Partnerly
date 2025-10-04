@@ -11,9 +11,10 @@
     using Partnerly.Models.GridViews;
     using Partnerly.Models.ViewModels;
     using System.Security.Claims;
+    using System.Text.Json;
 
     [ClaimAuthorize(ClaimTypes.Role, RoleTypeAttribute.Admin, RoleTypeAttribute.Employee)]
-    public class EmailTemplatesController : _BaseController, IDataTableController
+    public class EmailTemplatesController : _BaseController
     {
         private readonly IEmailTemplateService _emailTemplateService;
 
@@ -104,9 +105,14 @@
         }
 
         [HttpGet]
-        public async Task<JsonResult> GetData()
+        public async Task<JsonResult> GetData(string tableModel)
         {
-            return await GetGridDataAsync<EmailTemplateGridView, EmailTemplate>("EmailTemplates");
+            if (tableModel == nameof(Partnerly.Models.EmailTemplate))
+            {
+                return await GetGridDataAsync<EmailTemplateGridView, EmailTemplate>("EmailTemplates");
+            }
+
+            return Json(new { fields = new object[0], data = new object[0] });
         }
 
         protected override async Task<IEnumerable<TEntity>> GetEntitiesAsync<TEntity>()
@@ -117,14 +123,20 @@
             return Enumerable.Empty<TEntity>();
         }
 
-        protected override List<GridField> GetFields()
+        protected override List<GridField> GetFields(object row)
         {
-            return new List<GridField>
+            var fields = new List<GridField>();
+            if (row is EmailTemplateGridView templateRow)
             {
-                new GridField { FieldName = "subject", DisplayName = FieldsDisplayNames.Subject, LinkTemplate = "/EmailTemplates/Edit/{id}" },
-                new GridField { FieldName = "createdByUserFullName", DisplayName = FieldsDisplayNames.CreatorName, IsVisible = true },
-                new GridField { FieldName = "createdDate", DisplayName = FieldsDisplayNames.CreatedDate, IsSortable = true, Format="date:MM/dd/yyyy" }
-            };
+                return new List<GridField>
+                {
+                    new GridField { FieldName = "select", DisplayName = $"", DefaultValue = false, Type = "checkbox"},
+                    new GridField { FieldName = "subject", DisplayName = FieldsDisplayNames.Subject, LinkTemplate = "/EmailTemplates/Edit/{id}" },
+                    new GridField { FieldName = "createdByUserFullName", DisplayName = FieldsDisplayNames.CreatorName, IsVisible = true },
+                    new GridField { FieldName = "createdDate", DisplayName = FieldsDisplayNames.CreatedDate, IsSortable = true, Format="date:MM/dd/yyyy" }
+                };
+            }
+            return fields;
         }
 
         protected override async Task CustomizeRowAsync(object row)
@@ -134,6 +146,25 @@
                 var user = await _userService.GetUserByIDAsync(templateRow.CreatedBy);
                 templateRow.CreatedByUserFullName = $"{user?.FirstName} {user?.LastName}";
             }
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> ExportToExcel([FromForm] string selectedIds)
+        {
+            var ids = JsonSerializer.Deserialize<List<Guid>>(selectedIds);
+
+            var users = await _emailTemplateService.GetAllTemplatesAsync();
+            var data = users.Where(x => ids.Contains(x.Id)).ToList();
+
+            return await ExportToExcel(data, "Templates.xlsx");
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> ExportAllToExcel([FromForm] string data)
+        {
+            //var allData = JsonSerializer.Deserialize<List<UserViewModel>>(data);
+            var users = await _emailTemplateService.GetAllTemplatesAsync();
+            return await ExportToExcel(users, "Templates.xlsx");
         }
     }
 }

@@ -1,7 +1,39 @@
-﻿<div class="card">
+﻿@*<div class="card">
   <h5 class="card-header">@ViewData["TableName"]</h5>
-  <div class="table-responsive table-custom-a text-nowrap">
-    <table class="table is-striped" id="@ViewData["TableId"]">
-    </table>
-  </div>
+    @if (ViewData["NewRecordControler"] != null)
+    { 
+        <a id="btnAddNew" class="btn btn-sm btn-outline-primary" asp-action="Create" asp-controller="@ViewData["NewRecordControler"]">
+            <i class="bx bx-plus me-1"></i> Создать новый
+        </a>
+    }
+    
+    <div class="table-custom-a custom-datatable-wrapper"> 
+        <table id="@ViewData["TableId"]"></table>
+    </div>
+
+    <div class="custom-datatable-pagination"></div> 
+</div>
+
+
+
+*@
+
+<div class="card">
+    <div class="card-header d-flex justify-content-between align-items-center">
+        <h5>@ViewData["TableName"]</h5>
+
+        @if (ViewData["NewRecordControler"] != null)
+        { 
+            <a id="btnAddNew" class="btn btn-sm btn-outline-primary" 
+               asp-action="Create" asp-controller="@ViewData["NewRecordControler"]">
+                <i class="bx bx-plus me-1"></i> Создать
+            </a>
+        }
+    </div>
+
+    <div class="table-custom-a custom-datatable-wrapper"> 
+        <table id="@ViewData["TableId"]"></table>
+    </div>
+
+    <div class="custom-datatable-pagination"></div> 
 </div>

@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
+using OfficeOpenXml;
 using Partnerly.Descriptors.Attributes;
 using Partnerly.Descriptors.Messages;
 using Partnerly.Helpers;
@@ -91,7 +92,7 @@ namespace Partnerly.Controllers
         #endregion
 
         #region Fields
-        protected virtual List<GridField> GetFields()
+        protected virtual List<GridField> GetFields(object row)
         {
             return new List<GridField>();
         }
@@ -143,7 +144,7 @@ namespace Partnerly.Controllers
 
             return Json(new
             {
-                fields = GetFields(),
+                fields = GetFields(list.FirstOrDefault()),
                 data = list
             });
         }
@@ -152,6 +153,40 @@ namespace Partnerly.Controllers
             return Task.CompletedTask;
         }
         #endregion
+
+        public async Task<IActionResult> ExportToExcel<T>(IEnumerable<T> data, string excelFileName)
+        {
+            ExcelPackage.License.SetNonCommercialOrganization("Branch Armenia");
+
+            using (var package = new ExcelPackage())
+            {
+                var ws = package.Workbook.Worksheets.Add("Export");
+
+                var properties = typeof(T).GetProperties();
+                for (int i = 0; i < properties.Length; i++)
+                {
+                    ws.Cells[1, i + 1].Value = properties[i].Name;
+                    ws.Cells[1, i + 1].Style.Font.Bold = true;
+                }
+
+                int row = 2;
+                foreach (var item in data)
+                {
+                    for (int col = 0; col < properties.Length; col++)
+                    {
+                        ws.Cells[row, col + 1].Value = properties[col].GetValue(item);
+                    }
+                    row++;
+                }
+
+                ws.Cells[ws.Dimension.Address].AutoFitColumns();
+
+                var fileContent = package.GetAsByteArray();
+                return File(fileContent,
+                            "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+                            excelFileName);
+            }
+        }
         #endregion
     }
 }

@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using OfficeOpenXml;
 using Partnerly.Descriptors.Attributes;
 using Partnerly.Descriptors.Attributes.BaseAttributes;
 using Partnerly.Descriptors.Messages;
@@ -9,11 +10,12 @@ using Partnerly.Models;
 using Partnerly.Models.GridViews;
 using Partnerly.Models.ViewModels;
 using System.Security.Claims;
+using System.Text.Json;
 
 namespace Partnerly.Controllers
 {
     [ClaimAuthorize(ClaimTypes.Role, RoleTypeAttribute.Admin, RoleTypeAttribute.Employee)]
-    public class UsersController : _BaseController, IDataTableController
+    public class UsersController : _BaseController
     {
         protected readonly IRoleService _roleService;
         public UsersController(IRoleService roleService, IUserService userService, ICurrentUserService currentUser)
@@ -103,9 +105,14 @@ namespace Partnerly.Controllers
         }
 
         [HttpGet]
-        public async Task<JsonResult> GetData()
+        public async Task<JsonResult> GetData(string tableModel)
         {
-            return await GetGridDataAsync<UserGridViewModel, User>("Users");
+            if (tableModel == nameof(Partnerly.Models.User))
+            {
+                return await GetGridDataAsync<UserGridViewModel, User>("Users");
+            }
+
+            return Json(new { fields = new object[0], data = new object[0] });
         }
 
         protected override async Task<IEnumerable<TEntity>> GetEntitiesAsync<TEntity>()
@@ -114,25 +121,54 @@ namespace Partnerly.Controllers
                 return (IEnumerable<TEntity>)await _userService.GetAllUsersAsync();
 
             return Enumerable.Empty<TEntity>();
+
+            //var users = new List<User>();
+            //var random = new Random();
+
+            //for (int i = 1; i <= 100; i++)
+            //{
+            //    users.Add(new User
+            //    {
+            //        Id = Guid.NewGuid(),
+            //        FirstName = $"User{i}",
+            //        Email = $"user{i}@example.com",
+            //        MyReferralCode = $"REF{i:000}",
+            //        Phone = $"+1234567{random.Next(100, 999)}",
+            //        Balance = Math.Round((decimal)(random.NextDouble() * 1000), 2),
+            //        LastActivity = DateTime.Now.AddDays(-random.Next(0, 365)),
+            //        IsOnlayn = random.Next(0, 2) == 1,
+            //        IsBlocked = random.Next(0, 10) == 1, // 10% заблокированных
+            //        EmailConfirmed = random.Next(0, 2) == 1,
+            //        CreatedDate = DateTime.Now.AddDays(-random.Next(0, 1000))
+            //    });
+            //}
+            //return (IEnumerable<TEntity>)users;
         }
 
-        protected override List<GridField> GetFields()
+        protected override List<GridField> GetFields(object row)
         {
-            return new List<GridField>
+            var fields = new List<GridField>();
+            if (row is UserGridViewModel userRow)
             {
-                new GridField { FieldName = "userName", DisplayName = $"{FieldsDisplayNames.FirstName} {FieldsDisplayNames.LastName}", LinkTemplate = "/Users/Edit/{id}" },
-                new GridField { FieldName = "email", DisplayName = FieldsDisplayNames.Email, LinkTemplate = "/Users/Edit/{id}" },
-                new GridField { FieldName = "myReferralCode", DisplayName = FieldsDisplayNames.ReferrerCode, LinkTemplate = "/Users/Edit/{id}" },
-                new GridField { FieldName = "referrerName", DisplayName = FieldsDisplayNames.ReffererName, DefaultValue = "" },
-                new GridField { FieldName = "phone", DisplayName = FieldsDisplayNames.Phone},
-                new GridField { FieldName = "balance", DisplayName = FieldsDisplayNames.Balance, DefaultValue = "0"},
-                new GridField { FieldName = "lastActivity", DisplayName = FieldsDisplayNames.LastActivity, Format="date:MM/dd/yyyy" },
-                new GridField { FieldName = "isOnlayn", DisplayName = FieldsDisplayNames.IsOnlayn, Type = "checkbox"},
-                new GridField { FieldName = "isBlocked", DisplayName = FieldsDisplayNames.IsBlocked, Type = "checkbox"},
-                new GridField { FieldName = "emailConfirmed", DisplayName = FieldsDisplayNames.EmailConfirmed, Type = "checkbox"},
-                new GridField { FieldName = "roleName", DisplayName = FieldsDisplayNames.Role},
-                new GridField { FieldName = "createdDate", DisplayName = FieldsDisplayNames.CreatedDate, IsSortable = true, Format="date:MM/dd/yyyy" }
-            };
+                return new List<GridField>
+                {
+                    new GridField { FieldName = "select", DisplayName = $"", DefaultValue = false, Type = "checkbox"},
+                    new GridField { FieldName = "userName", DisplayName = $"{FieldsDisplayNames.FirstName} {FieldsDisplayNames.LastName}", LinkTemplate = "/Users/Edit/{id}" },
+                    new GridField { FieldName = "email", DisplayName = FieldsDisplayNames.Email, LinkTemplate = "/Users/Edit/{id}" },
+                    new GridField { FieldName = "myReferralCode", DisplayName = FieldsDisplayNames.ReferrerCode, LinkTemplate = "/Users/Edit/{id}" },
+                    new GridField { FieldName = "referrerName", DisplayName = FieldsDisplayNames.ReffererName, DefaultValue = "" },
+                    new GridField { FieldName = "phone", DisplayName = FieldsDisplayNames.Phone},
+                    new GridField { FieldName = "balance", DisplayName = FieldsDisplayNames.Balance, DefaultValue = "0"},
+                    new GridField { FieldName = "lastActivity", DisplayName = FieldsDisplayNames.LastActivity, Format="date:dd/MM/yyyy HH:mm" },
+                    new GridField { FieldName = "isOnlayn", DisplayName = FieldsDisplayNames.IsOnlayn, Type = "checkbox"},
+                    new GridField { FieldName = "isBlocked", DisplayName = FieldsDisplayNames.IsBlocked, Type = "checkbox"},
+                    new GridField { FieldName = "emailConfirmed", DisplayName = FieldsDisplayNames.EmailConfirmed, Type = "checkbox"},
+                    new GridField { FieldName = "roleName", DisplayName = FieldsDisplayNames.Role},
+                    new GridField { FieldName = "createdDate", DisplayName = FieldsDisplayNames.CreatedDate, IsSortable = true, Format="date:MM/dd/yyyy" }
+                };
+            }
+
+            return fields;
         }
 
         protected override async Task CustomizeRowAsync(object row)
@@ -150,6 +186,27 @@ namespace Partnerly.Controllers
                 Role? role = await _roleService.GetRoleByIDAsync(userRow.RoleId);
                 userRow.RoleName = role?.Name;
             }
+        }
+
+       
+
+        [HttpPost]
+        public async Task<IActionResult> ExportToExcel([FromForm] string selectedIds)
+        {
+            var ids = JsonSerializer.Deserialize<List<Guid>>(selectedIds);
+
+            var users = await _userService.GetAllUsersAsync();
+            var data = users.Where(x => ids.Contains(x.Id)).ToList();
+
+            return await ExportToExcel(data, "users.xlsx");
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> ExportAllToExcel([FromForm] string data)
+        {
+            var allData = JsonSerializer.Deserialize<List<UserViewModel>>(data);
+            var users = await _userService.GetAllUsersAsync();
+            return await ExportToExcel(users, "users.xlsx");
         }
     }
 }
