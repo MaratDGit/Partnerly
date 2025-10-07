@@ -1,4 +1,5 @@
-﻿using Partnerly.Descriptors.Messages;
+﻿using Partnerly.Descriptors.Attributes;
+using Partnerly.Descriptors.Messages;
 using System.ComponentModel.DataAnnotations;
 
 namespace Partnerly.Models.ViewModels
@@ -7,6 +8,9 @@ namespace Partnerly.Models.ViewModels
     {
         [Required]
         public Guid Id { get; set; }
+        [EmailTemplateName]
+        [Required(ErrorMessage = $"{FieldsDisplayNames.TemplateType} {ErrorMessages.FieldRequired}")]
+        [Display(Name = FieldsDisplayNames.TemplateType)]
         public string? Name { get; set; }
         [Required(ErrorMessage = $"{FieldsDisplayNames.Subject} {ErrorMessages.FieldRequired}")]
         [Display(Name = FieldsDisplayNames.Subject)]

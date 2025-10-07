@@ -1,6 +1,6 @@
-﻿@{
+﻿@*@{
     Partnerly.Models.ViewModels.DashboardsViewModel? dashboardModel = (Partnerly.Models.ViewModels.DashboardsViewModel?)ViewData["DashboardsViewModel"];
-}
+}*@
 
 @{
   ViewData["Title"] = "Панель управления - Аналитика";
@@ -22,8 +22,8 @@
       <div class="d-flex align-items-start row">
         <div class="col-sm-7">
           <div class="card-body">
-            <h5 class="card-title text-primary mb-3">Поздравляю, @(dashboardModel?.UserFirstName)! 🎉</h5>
-            <p class="mb-6">У вас уже есть @(dashboardModel?.UserRefCount ?? 0) рефералов.<br>@*Check your new badge in your profile.*@</p>
+            <h5 class="card-title text-primary mb-3">Поздравляю, @(ViewBag?.UserFirstName)! 🎉</h5>
+            <p class="mb-6">У вас уже есть @(ViewBag?.UserRefCount ?? 0) рефералов.<br>@*Check your new badge in your profile.*@</p>
 
             <a href="javascript:;" class="btn btn-sm btn-outline-primary">Мои рефералы</a>
           </div>

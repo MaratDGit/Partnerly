@@ -26,13 +26,12 @@ namespace Partnerly.Controllers
         {
             if (User.Identity?.IsAuthenticated == true)
             {
-                ViewData["DashboardsViewModel"] = new DashboardsViewModel
-                {
-                    UserPhotoUrl = _currentUser.UserPhotoUrl,
-                    UserFirstName = _currentUser.FirstName,
-                    UserLastName = _currentUser.LastName,
-                    UserRefCode = _currentUser.ReffCode,
-                };
+                ViewBag.UserPhotoUrl = _currentUser.UserPhotoUrl;
+                ViewBag.UserFirstName = _currentUser.FirstName;
+                ViewBag.UserLastName = _currentUser.LastName;
+                ViewBag.UserRefCode = _currentUser.ReffCode;
+                ViewBag.UserFullName = $"{_currentUser.FirstName} {_currentUser.LastName}";
+                ViewBag.RoleType = _currentUser.RoleType;
             }
 
             var controllerName = context.RouteData.Values["controller"]?.ToString();

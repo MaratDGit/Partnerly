@@ -1,32 +1,52 @@
 ﻿@model Partnerly.Models.ViewModels.EmailTemplateViewModel;
 @await Html.PartialAsync("_Toast")
 
-<h2>Редактировать шаблон</h2>
+@{
+    ViewData["Title"] = "Редактировать шаблон";
+    Layout = "_ContentNavbarLayout";
+}
 
-<form id="emailTemplateForm" asp-action="Edit">
-    <input type="hidden" asp-for="Id" />
-    
-    <div class="form-floating mb-6">
-        <input asp-for="Subject" id="subject" class="form-control" autofocus/>
-        <label asp-for="Subject"></label>
-        <span asp-validation-for="Subject" class="text-danger"></span>       
+<div class="card">
+    <div class="card-header justify-content-between">
+        <h5>@ViewData["Title"]</h5>
     </div>
-    <div class="form-floating mb-6">
-        <textarea asp-for="BodyHtml"  id="bodyHtml" class="form-control" style="height: 400px" rows="10"></textarea>
-        <label asp-for="BodyHtml"></label>
-        <span asp-validation-for="BodyHtml" class="text-danger"></span>    
-    </div>
-    <a asp-action="Index" class="btn btn-sm btn-outline-secondary">
-        <i class="bx bx-arrow-back me-1"></i> Назад
-    </a>
-    <button type="submit" id="btnSave" class="btn btn-sm btn-outline-primary">
-        <i class="bx bx-save me-1"></i> Сохранить
-    </button>
 
-    <button type="button" class="btn btn-sm btn-outline-info" data-bs-toggle="modal" data-bs-target="#previewModal" onclick="showPreview()">
-        <i class="bx bx-show me-1"></i> Предпросмотр
-    </button>
-</form>
+    <div class="card-body">
+        <form id="emailTemplateForm" asp-action="Edit">
+         <div class="justify-content-between mb-6">
+             <a asp-action="Index" class="btn btn-sm btn-outline-primary">
+                <i class="bx bx-arrow-back me-1"></i> 
+            </a>
+            <button type="submit" id="btnSave" class="btn btn-sm btn-outline-primary">
+                <i class="bx bx-save me-1"></i> 
+            </button>
+            <a class="btn btn-sm btn-outline-primary" asp-action="Create">
+                <i class="bx bx-plus me-1"></i> 
+            </a>
+            <a class="btn btn-sm btn-outline-primary" asp-action="Delete" asp-route-id="@Model.Id">
+                    <i class="bx bx-trash me-1"></i> 
+            </a>
+            <button type="button" class="btn btn-sm btn-outline-primary" data-bs-toggle="modal" data-bs-target="#previewModal" onclick="showPreview()">
+                <i class="bx bx-show me-1"></i> 
+            </button>
+        </div>
+
+        <input type="hidden" asp-for="Id" />
+        <input type="hidden" asp-for="Name" />
+
+        <div class="form-floating mb-6">
+            <input asp-for="Subject" id="subject" class="form-control" autofocus/>
+            <label asp-for="Subject"></label>
+            <span asp-validation-for="Subject" class="text-danger"></span>       
+        </div>
+        <div class="form-floating mb-6">
+            <textarea asp-for="BodyHtml"  id="bodyHtml" class="form-control" style="height: 400px" rows="10"></textarea>
+            <label asp-for="BodyHtml"></label>
+            <span asp-validation-for="BodyHtml" class="text-danger"></span>    
+        </div>
+        </form>
+    </div>
+</div>
 
 <!-- Modal -->
 <div class="modal fade" id="previewModal" tabindex="-1" aria-labelledby="previewModalLabel" aria-hidden="true">

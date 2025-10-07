@@ -150,7 +150,27 @@
                     .prop('disabled', currentPage === 1)
                     .click(() => { currentPage = Math.max(1, currentPage - 1); renderTable(); renderPagination(); });
 
-                const $current = $(`<button class="active">${currentPage}</button>`).prop('disabled', true);
+                $pagination.append($first, $prev);
+
+                // --- Добавляем кнопки с номерами страниц ---
+                const maxVisible = 5; // сколько кнопок показывать максимум
+                let startPage = Math.max(1, currentPage - Math.floor(maxVisible / 2));
+                let endPage = Math.min(totalPages, startPage + maxVisible - 1);
+
+                if (endPage - startPage < maxVisible - 1) {
+                    startPage = Math.max(1, endPage - maxVisible + 1);
+                }
+
+                for (let i = startPage; i <= endPage; i++) {
+                    const $btn = $(`<button>${i}</button>`)
+                        .addClass(i === currentPage ? 'active' : '')
+                        .click(() => {
+                            currentPage = i;
+                            renderTable();
+                            renderPagination();
+                        });
+                    $pagination.append($btn);
+                }
 
                 const $next = $('<button><i class="bx bx-chevron-right"></i></button>')
                     .prop('disabled', currentPage === totalPages)
@@ -160,9 +180,18 @@
                     .prop('disabled', currentPage === totalPages)
                     .click(() => { currentPage = totalPages; renderTable(); renderPagination(); });
 
-                $pagination.append($first, $prev, $current, $next, $last);
+                $pagination.append($next, $last);
+
+                // --- Добавляем внизу таблицы ---
                 $cardWrapper.append($pagination);
+
+                // --- Добавляем текст "Показано X–Y из Z записей" ---
+                const start = (currentPage - 1) * pageSize + 1;
+                const end = Math.min(currentPage * pageSize, filteredData.length);
+                const infoText = `Показано ${start}–${end} из ${filteredData.length} записей`;
+                $info.text(infoText);
             }
+
 
             // Поиск
             $searchInput.on('input', function () {

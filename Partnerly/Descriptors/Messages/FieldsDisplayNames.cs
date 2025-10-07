@@ -23,6 +23,7 @@ namespace Partnerly.Descriptors.Messages
         public const string IsBlocked = "Заблокировано";
         public const string EmailConfirmed = "Почта подтверждена";
         public const string Role = "Роль";
+        public const string TemplateType = "Тип шаблона";
 
         public const string Edit = "Редактировать";
         public const string Delete = "Удалить";

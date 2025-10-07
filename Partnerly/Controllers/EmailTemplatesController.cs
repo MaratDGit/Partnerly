@@ -31,7 +31,9 @@
 
         public IActionResult Create()
         {
-            return View();
+            EmailTemplateViewModel model = new EmailTemplateViewModel { Id = Guid.NewGuid() };
+            ViewBag.EmailTemplateList = AttributeDropdownHelper.FromAttribute<EmailTemplateNameAttribute>();
+            return View(model);
         }
 
         [HttpPost]
@@ -40,7 +42,10 @@
         {
             if (ModelState.IsValid)
             {
+                return RedirectToAction(nameof(Index));
             }
+
+            ViewBag.EmailTemplateList = AttributeDropdownHelper.FromAttribute<EmailTemplateNameAttribute>();
             return View(model);
         }
 
@@ -93,7 +98,7 @@
             return View();
         }
 
-        [HttpPost, ActionName("Delete")]
+        [HttpPost, ActionName("DeleteConfirmed")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(Guid id)
         {
