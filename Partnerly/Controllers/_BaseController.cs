@@ -42,7 +42,9 @@ namespace Partnerly.Controllers
             if (!string.IsNullOrEmpty(actionName))
             {
                 if (actionName.ToLower() == Constants.Edit.ToLower()) roleType = RoleTypeAttribute.Update;
-                else if (actionName.ToLower() == Constants.Delete.ToLower()) roleType = RoleTypeAttribute.Delete;
+                else if (actionName.ToLower() == Constants.Delete.ToLower()
+                    || actionName.ToLower() == Constants.DeleteConfirmed.ToLower()
+                    || actionName.ToLower() == Constants.Create.ToLower()) roleType = RoleTypeAttribute.Delete;
                 else unknownAction = true;
             }
 

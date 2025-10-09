@@ -73,7 +73,7 @@
         <div>Документация</div>
       </a>
     </li>
-    @if (ViewBag.RoleType == Partnerly.Descriptors.Attributes.RoleTypeAttribute.Delete)
+    @if (ViewBag?.RoleType == Partnerly.Descriptors.Attributes.RoleTypeAttribute.Delete)
     {
         <li class="menu-header small text-uppercase"><span class="menu-header-text">Настройки системы</span></li>
         <li class='menu-item@(currentPage.StartsWith("/SystemPreferences") ? " active" : "")'>

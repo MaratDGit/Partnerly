@@ -70,7 +70,7 @@ namespace Partnerly.Infrastructure.Services
                     if (!await _permissionService.CanDeleteAsync(_currentUserService.UserId, log))
                         throw new UnauthorizedAccessException(ErrorMessages.NoPermissionForThisAction);
 
-                    _logRepo.Delete(log);
+                    //_logRepo.Delete(log);
                     await _logRepo.SaveChangesAsync();
                 }
             }

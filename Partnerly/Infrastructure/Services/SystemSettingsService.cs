@@ -88,7 +88,7 @@ namespace Partnerly.Infrastructure.Services
                 return ServiceResult<SystemSettings?>.Fail(new List<string> { });
             }
 
-            _setupRepo.Delete(setup);
+            //_setupRepo.Delete(setup);
             await _setupRepo.SaveChangesAsync();
 
             return ServiceResult<SystemSettings?>.Ok(setup);

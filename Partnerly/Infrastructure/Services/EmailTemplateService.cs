@@ -98,7 +98,7 @@ namespace Partnerly.Infrastructure.Services
                 return ServiceResult<EmailTemplate?>.Fail(new List<string> { });
             }
 
-            _templateRepo.Delete(rec);
+            //_templateRepo.Delete(rec);
             await _templateRepo.SaveChangesAsync();
 
             return ServiceResult<EmailTemplate?>.Ok(rec);

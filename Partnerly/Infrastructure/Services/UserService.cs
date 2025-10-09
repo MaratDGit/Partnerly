@@ -174,7 +174,7 @@ namespace Partnerly.Infrastructure.Services
                 return ServiceResult<User?>.Fail(new List<string> { ErrorMessages.NoPermissionForThisAction });
             }
 
-            _userRepo.Delete(user);
+            //_userRepo.Delete(user);
             await _userRepo.SaveChangesAsync();
 
             return ServiceResult<User?>.Ok(user);

@@ -35,9 +35,11 @@
   <!-- /Search -->*@
 
   <ul class="navbar-nav flex-row align-items-center ms-auto">
-    @*<li class="nav-item lh-1 me-4">
-      <a class="github-button" href="" data-icon="octicon-star" data-size="large" data-show-count="true" aria-label="">Star</a>
-    </li>*@
+    <li class="nav-item lh-1 me-4">
+       <a asp-action="" class="btn btn-xs">
+               <i class="bx bxs-bell-ring" ></i> 
+            </a>
+    </li>
     <li class="nav-item navbar-dropdown dropdown-user dropdown">
       <a class="nav-link dropdown-toggle hide-arrow p-0" href="javascript:void(0);" data-bs-toggle="dropdown">
         <div class="avatar avatar-online">
@@ -80,7 +82,7 @@
             <span class="d-flex align-items-center align-middle">
               <i class="flex-shrink-0 bx bx-credit-card bx-md me-3"></i>
               <span class="flex-grow-1 align-middle">Платежи</span>
-              <span class="flex-shrink-0 badge rounded-pill bg-danger">4</span>
+              @*<span class="flex-shrink-0 badge rounded-pill bg-danger">4</span>*@
             </span>
           </a>
         </li>

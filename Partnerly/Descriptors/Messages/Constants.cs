@@ -17,6 +17,9 @@ namespace Partnerly.Descriptors.Messages
         public const string View = "View";
         public const string Update = "Update";
         public const string Delete = "Delete";
+        //
+        public const string DeleteConfirmed = "DeleteConfirmed";
+        public const string Create = "Create";
 
         // Payments
         public const string Open = "Open";

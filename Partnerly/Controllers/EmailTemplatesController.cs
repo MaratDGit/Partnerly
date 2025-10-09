@@ -94,7 +94,6 @@
         {
             var template = await _emailTemplateService.GetTemplateByIDAsync(id);
             if (template == null) return NotFound();
-
             return View();
         }
 
@@ -105,10 +104,20 @@
             var template = await _emailTemplateService.GetTemplateByIDAsync(id);
             if (template != null)
             {
+                ServiceResult<EmailTemplate?> result = await _emailTemplateService.DeleteTemplateAsync(id);
+                if (!result.Success)
+                {
+                    foreach (var error in result.Errors)
+                    {
+                        ModelState.AddModelError("", error);
+                    }
+                    return View();
+                }
             }
             return RedirectToAction(nameof(Index));
         }
 
+        #region Grids 
         [HttpGet]
         public async Task<JsonResult> GetData(string tableModel)
         {
@@ -171,5 +180,6 @@
             var users = await _emailTemplateService.GetAllTemplatesAsync();
             return await ExportToExcel(users, "Templates.xlsx");
         }
+        #endregion
     }
 }

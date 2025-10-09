@@ -117,32 +117,32 @@ namespace Partnerly.Controllers
 
         protected override async Task<IEnumerable<TEntity>> GetEntitiesAsync<TEntity>()
         {
-            if (typeof(TEntity) == typeof(User))
-                return (IEnumerable<TEntity>)await _userService.GetAllUsersAsync();
+            //if (typeof(TEntity) == typeof(User))
+            //    return (IEnumerable<TEntity>)await _userService.GetAllUsersAsync();
 
-            return Enumerable.Empty<TEntity>();
+            //return Enumerable.Empty<TEntity>();
 
-            //var users = new List<User>();
-            //var random = new Random();
+            var users = new List<User>();
+            var random = new Random();
 
-            //for (int i = 1; i <= 100; i++)
-            //{
-            //    users.Add(new User
-            //    {
-            //        Id = Guid.NewGuid(),
-            //        FirstName = $"User{i}",
-            //        Email = $"user{i}@example.com",
-            //        MyReferralCode = $"REF{i:000}",
-            //        Phone = $"+1234567{random.Next(100, 999)}",
-            //        Balance = Math.Round((decimal)(random.NextDouble() * 1000), 2),
-            //        LastActivity = DateTime.Now.AddDays(-random.Next(0, 365)),
-            //        IsOnlayn = random.Next(0, 2) == 1,
-            //        IsBlocked = random.Next(0, 10) == 1, // 10% заблокированных
-            //        EmailConfirmed = random.Next(0, 2) == 1,
-            //        CreatedDate = DateTime.Now.AddDays(-random.Next(0, 1000))
-            //    });
-            //}
-            //return (IEnumerable<TEntity>)users;
+            for (int i = 1; i <= 100; i++)
+            {
+                users.Add(new User
+                {
+                    Id = Guid.NewGuid(),
+                    FirstName = $"User{i}",
+                    Email = $"user{i}@example.com",
+                    MyReferralCode = $"REF{i:000}",
+                    Phone = $"+1234567{random.Next(100, 999)}",
+                    Balance = Math.Round((decimal)(random.NextDouble() * 1000), 2),
+                    LastActivity = DateTime.Now.AddDays(-random.Next(0, 365)),
+                    IsOnlayn = random.Next(0, 2) == 1,
+                    IsBlocked = random.Next(0, 10) == 1, // 10% заблокированных
+                    EmailConfirmed = random.Next(0, 2) == 1,
+                    CreatedDate = DateTime.Now.AddDays(-random.Next(0, 1000))
+                });
+            }
+            return (IEnumerable<TEntity>)users;
         }
 
         protected override List<GridField> GetFields(object row)

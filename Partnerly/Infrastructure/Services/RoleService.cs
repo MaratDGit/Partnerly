@@ -96,7 +96,7 @@ namespace Partnerly.Infrastructure.Services
                 return ServiceResult<Role?>.Fail(new List<string> { });
             }
                 
-            _roleRepo.Delete(role);
+            //_roleRepo.Delete(role);
             await _roleRepo.SaveChangesAsync();
 
             return ServiceResult<Role?>.Ok(role);
