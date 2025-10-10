@@ -1,0 +1,74 @@
+﻿@model Partnerly.Models.ViewModels.SystemPreferencesViewModel;
+@await Html.PartialAsync("_Toast")
+
+@{
+    ViewData["Title"] = "Системные настройки";
+    Layout = "_ContentNavbarLayout";
+}
+
+<style>
+    .max-w-300 {
+        max-width: 300px;
+    }
+
+    .max-w-400 {
+        max-width: 400px;
+    }
+
+    .max-w-500 {
+        max-width: 500px;
+    }
+
+    .max-w-600 {
+        max-width: 600px;
+    }
+</style>
+
+<div class="card">
+    <div class="card-header justify-content-between">
+        <h5>@ViewData["Title"]</h5>
+    </div>
+
+    <div class="card-body">
+        <form id="systemPreferencesForm" asp-action="Edit">
+            <div class="justify-content-between mb-6">
+                <a asp-action="Index" class="btn btn-sm btn-outline-primary">
+                    <i class="bx bx-undo me-1"></i>
+                </a>
+                <button type="submit" id="btnSave" class="btn btn-sm btn-outline-primary">
+                    <i class="bx bx-save me-1"></i> 
+                </button>
+            </div>
+
+            <input type="hidden" asp-for="Id" />
+
+            <div class="form-check form-switch mb-2">
+                <input asp-for="IsMaintenanceModeBool" class="form-check-input" type="checkbox" id="isMaintenanceMode" />
+                <label class="form-check-label" asp-for="IsMaintenanceMode" for="isMaintenanceMode"></label>
+            </div>
+
+            <div class="form-floating mb-1 max-w-600">
+                   <input asp-for="EmailConfirmationTokenExpiredAtHours" class="form-control" id="emailConfirmationTokenExpiredAtHours" name="emailConfirmationTokenExpiredAtHours" placeholder="Срок действия токена подтверждения электронной почты истек"/>
+                   <label asp-for="EmailConfirmationTokenExpiredAtHours"></label>
+                   <span asp-validation-for="EmailConfirmationTokenExpiredAtHours" class="text-danger"></span>
+            </div>
+            <div class="form-floating mb-1 max-w-600">
+               <input asp-for="ForgotPasswordTokenExpiredAtHours" class="form-control" id="forgotPasswordTokenExpiredAtHours" name="forgotPasswordTokenExpiredAtHours" placeholder="Срок действия токена Забыли пароль истек"/>
+               <label asp-for="ForgotPasswordTokenExpiredAtHours"></label>
+               <span asp-validation-for="ForgotPasswordTokenExpiredAtHours" class="text-danger"></span>
+            </div>
+            <div class="form-floating mb-1 max-w-600">
+               <input asp-for="OnlineStatusAutoRefreshMinute" class="form-control" id="onlineStatusAutoRefreshMinute" name="onlineStatusAutoRefreshMinute" placeholder="Минута автоматического обновления онлайн-статуса"/>
+               <label asp-for="OnlineStatusAutoRefreshMinute"></label>
+               <span asp-validation-for="OnlineStatusAutoRefreshMinute" class="text-danger"></span>
+            </div>
+        </form>
+    </div>
+</div>
+
+<script src="~/js/form-change-tracker.js"></script>
+<script>
+    enableSaveOnChange("#systemPreferencesForm", "#btnSave");
+</script>
+
+

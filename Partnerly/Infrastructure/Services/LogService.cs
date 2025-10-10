@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Partnerly.Descriptors.Attributes;
 using Partnerly.Descriptors.Messages;
 using Partnerly.Infrastructure.Interfaces;
 using Partnerly.Models;
@@ -34,7 +35,7 @@ namespace Partnerly.Infrastructure.Services
             var newLog = new Log { Id = Guid.NewGuid() };
             newLog.Type = type;
             newLog.Action = action;
-            newLog.LogMessage = message ?? ErrorMessages.DefaultLogErrorMessage;
+            newLog.LogMessage = message ?? (type == LogTypeAttribute.Information ? ErrorMessages.DefaultLogMessage : ErrorMessages.DefaultLogErrorMessage);
             newLog.FilePath = file;
             newLog.Method = member;
             newLog.LineNumber = line;
@@ -42,6 +43,7 @@ namespace Partnerly.Infrastructure.Services
 
             await context.AddAsync(newLog);
             await context.SaveChangesAsync();
+
             return newLog;
         }
 
@@ -59,7 +61,6 @@ namespace Partnerly.Infrastructure.Services
                 await _logRepo.SaveChangesAsync();
             }
         }
-
         public async Task DeleteLogAsync(Guid? id)
         {
             if (id != null)

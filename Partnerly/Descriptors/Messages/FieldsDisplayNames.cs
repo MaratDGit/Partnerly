@@ -30,5 +30,10 @@ namespace Partnerly.Descriptors.Messages
 
         public const string CreatedDate = "Дата создания";
         public const string CreatorName = "Создано";
+
+        public const string MaintenanceMode = "Режим обслуживания";
+        public const string EmailConfirmationTokenHours = "токен Подтвержд. Email (часы)";
+        public const string ForgotPasswordTokenExpiredAtHours = "токен Забыли пароль (часы)";
+        public const string Automaticonlinestatusupdate = "онлайн-статус (минута)";
     }
 }

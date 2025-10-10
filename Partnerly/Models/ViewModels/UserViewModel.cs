@@ -10,73 +10,91 @@ namespace Partnerly.Models.ViewModels
         [Required]
         public Guid Id { get; set; }
         #endregion
-        #region Email
-        [Required]
-        public string? Email { get; set; }
-        #endregion
-        #region Phone
-        [Required]
-        [ArmenianPhone(ErrorMessage = ErrorMessages.TypeValidPhoneNumber)]
-        [Display(Name = "Phone")]
-        public string? Phone { get; set; }
-        #endregion
+
         #region FirstName
-        [Required]
-        [Display(Name = "First Name")]
+        [StringLenght(min: 4, max: 20)]
+        [Required(ErrorMessage = $"{FieldsDisplayNames.FirstName} {ErrorMessages.FieldRequired}")]
+        [Display(Name = FieldsDisplayNames.FirstName)]
         public string? FirstName { get; set; }
         #endregion
+
         #region LastName
-        [Required]
-        [Display(Name = "Last Name")]
+        [StringLenght(min: 4, max: 20)]
+        [Required(ErrorMessage = $"{FieldsDisplayNames.LastName} {ErrorMessages.FieldRequired}")]
+        [Display(Name = FieldsDisplayNames.LastName)]
         public string? LastName { get; set; }
         #endregion
+        #region Email
+        [Required(ErrorMessage = ErrorMessages.EmailRequired)]
+        [EmailAddress]
+        [Display(Name = FieldsDisplayNames.Email)]
+        public string? Email { get; set; }
+        #endregion
+
+        #region Phone
+        [Required(ErrorMessage = $"{FieldsDisplayNames.Phone} {ErrorMessages.FieldRequired}")]
+        [ArmenianPhone(ErrorMessage = ErrorMessages.TypeValidPhoneNumber)]
+        [Display(Name = FieldsDisplayNames.Phone)]
+        public string? Phone { get; set; }
+        #endregion
+
         #region PhotoUrl
         public string? PhotoUrl { get; set; }
         #endregion
+
         #region Balance
-        [Display(Name = "Balance")]
+        [Display(Name = FieldsDisplayNames.Balance)]
         public decimal? Balance { get; set; }
         #endregion
+
         #region RoleId
-        [Required]
-        [Display(Name = "Role")]
+        //[Required]
+        [Display(Name = FieldsDisplayNames.Role)]
         public Guid? RoleId { get; set; }
         #endregion
+
         #region MyReferralCode
         [Required]
-        [Display(Name = "My Referral Code")]
+        [Display(Name = FieldsDisplayNames.ReferrerCode)]
         public string? MyReferralCode { get; set; }
         #endregion
+
         #region ReferrerId
         [Display(Name = "Referrer")]
         public Guid? ReferrerId { get; set; }
         #endregion
+
         #region LastActivity
         [Display(Name = "Last Activity")]
         public DateTime? LastActivity { get; set; }
         #endregion
+
         #region IsOnlayn
         [Display(Name = "Is Onlayn")]
-        public bool? IsOnlayn { get; set; }
+        public bool? IsOnlayn { get; set; } 
         #endregion
+
         #region IsBlocked
-        [Display(Name = "Is Blocked")]
+        [Display(Name = FieldsDisplayNames.IsBlocked)]
         public bool? IsBlocked { get; set; }
+        public bool IsBlockedBool { get => IsBlocked ?? false; set => IsBlocked = value; }
         #endregion
+
         #region EmailConfirmed
-        [Display(Name = "Email Confirmed")]
+        [Display(Name = FieldsDisplayNames.EmailConfirmed)]
         public bool? EmailConfirmed { get; set; }
+        public bool EmailConfirmedBool { get => EmailConfirmed ?? false; set => EmailConfirmed = value; }
         #endregion
 
         #region System Columns
         public bool IsDeleted { get; set; } = false;
-        [Required]
+        //[Required]
         public Guid? CreatedBy { get; set; }
-        [Required]
+        //[Required]
         public DateTime? CreatedDate { get; set; }
-        [Required]
+        //[Required]
         public Guid? UpdatedBy { get; set; }
-        [Required]
+        //[Required]
         public DateTime? UpdatedDate { get; set; }
         #endregion
     }

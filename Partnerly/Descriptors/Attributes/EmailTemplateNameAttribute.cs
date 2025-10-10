@@ -7,11 +7,13 @@ namespace Partnerly.Descriptors.Attributes
     {
         public const string EmailConfirmation = "EC";
         public const string ForgotPassword = "FP";
+        public const string CriticalError = "CE";
 
         public EmailTemplateNameAttribute()
             : base(
                 EmailConfirmation, Constants.EmailConfirmation,
-                ForgotPassword, Constants.ForgotPassword
+                ForgotPassword, Constants.ForgotPassword,
+                CriticalError, Constants.CriticalError
               )
         { }
     }

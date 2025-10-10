@@ -70,6 +70,7 @@ namespace Partnerly.Descriptors.Messages
         // Email Token Types
         public const string Registration = "Registration";
         public const string ForgotPassword = "Forgot Password";
+        public const string CriticalError = "Critical Error";
 
         // ClaimTypes
         public const string ClaimTypeRoleType = "RoleType";

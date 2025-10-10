@@ -1,1 +1,91 @@
-﻿
+﻿@model Partnerly.Models.ViewModels.RegisterViewModel;
+@await Html.PartialAsync("_Toast")
+
+@{
+    ViewData["Title"] = "Создать пользователя";
+    Layout = "_ContentNavbarLayout";
+}
+
+<style>
+    .max-w-300 {
+        max-width: 300px;
+    }
+
+    .max-w-400 {
+        max-width: 400px;
+    }
+
+    .max-w-500 {
+        max-width: 500px;
+    }
+
+    .max-w-600 {
+        max-width: 600px;
+    }
+</style>
+
+<div class="card">
+    <div class="card-header d-flex justify-content-between align-items-center">
+        <h5>@ViewData["Title"]</h5>
+    </div>
+
+    <div class="card-body">
+        <form id="userCreateForm" asp-action="Create">
+            <div class="justify-content-between mb-6">
+                <a asp-action="Index" class="btn btn-sm btn-outline-primary">
+                    <i class="bx bx-arrow-back me-1"></i> 
+                </a>
+                <a asp-action="Create" asp-route-id="" class="btn btn-sm btn-outline-primary">
+                    <i class="bx bx-undo me-1"></i>
+                </a>
+                <button type="submit" id="btnSave" class="btn btn-sm btn-outline-primary">
+                    <i class="bx bx-save me-1"></i> 
+                </button>
+            </div>
+
+            <div class="form-floating mb-1 max-w-600">
+               <input asp-for="FullName" class="form-control" id="fullName" name="fullName" placeholder="" autofocus/>
+               <label asp-for="FullName"></label>
+               <span asp-validation-for="FullName" class="text-danger"></span>
+            </div>
+            <div class="form-floating mb-1 max-w-600">
+               <input asp-for="ReferrerCode" class="form-control" id="referrerCode" name="referrerCode" placeholder="Реферальный код пригласителя"/>
+                <label asp-for="ReferrerCode"></label>
+               <span asp-validation-for="ReferrerCode" class="text-danger"></span>
+            </div>
+            <div class="form-floating mb-1 max-w-600">
+               <input asp-for="Email" class="form-control" id="email" name="email" placeholder="Введите свой адрес электронной почты"/>
+               <label asp-for="Email"></label>
+               <span asp-validation-for="Email" class="text-danger"></span>
+            </div>
+            <div class="form-floating mb-1 max-w-600">
+               <input asp-for="Phone" class="form-control" id="phone" name="phone" placeholder="+37477123456"/>
+               <label asp-for="Phone"></label>
+               <span asp-validation-for="Phone" class="text-danger"></span>
+            </div>
+            <div class="mb-1 form-password-toggle max-w-600">
+              <div class="form-floating input-group input-group-merge">
+                <input asp-for="Password" type="password" id="password" class="form-control" name="password" placeholder="&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;" aria-describedby="password"/>
+                <label asp-for="Password"></label>
+                <span class="input-group-text cursor-pointer"><i class="bx bx-hide"></i></span>
+              </div>
+              <span asp-validation-for="Password" class="text-danger"></span>
+            </div>
+            <div class="mb-1 form-password-toggle max-w-600">
+              <div class="form-floating input-group input-group-merge">
+                <input asp-for="ConfirmPassword" type="password" id="confirmpassword" class="form-control" name="confirmpassword" placeholder="&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;" aria-describedby="password"/>
+                <label asp-for="ConfirmPassword"></label>
+                <span class="input-group-text cursor-pointer"><i class="bx bx-hide"></i></span>
+              </div>
+              <span asp-validation-for="ConfirmPassword" class="text-danger"></span>
+            </div>
+
+
+        </form>
+    </div>
+</div>
+
+<script src="~/js/form-change-tracker.js"></script>
+<script>
+    enableSaveOnChange("#userCreateForm", "#btnSave");
+</script>

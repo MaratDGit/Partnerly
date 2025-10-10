@@ -153,7 +153,7 @@
                 $pagination.append($first, $prev);
 
                 // --- Добавляем кнопки с номерами страниц ---
-                const maxVisible = 5; // сколько кнопок показывать максимум
+                const maxVisible = 3; // сколько кнопок показывать максимум
                 let startPage = Math.max(1, currentPage - Math.floor(maxVisible / 2));
                 let endPage = Math.min(totalPages, startPage + maxVisible - 1);
 

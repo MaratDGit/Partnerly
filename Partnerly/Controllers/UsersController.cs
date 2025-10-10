@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Mvc;
 using OfficeOpenXml;
 using Partnerly.Descriptors.Attributes;
 using Partnerly.Descriptors.Attributes.BaseAttributes;
@@ -29,7 +30,7 @@ namespace Partnerly.Controllers
             return View();
         }
 
-        public IActionResult Create()
+        public async Task<IActionResult> Create()
         {
             return View();
         }
@@ -40,19 +41,85 @@ namespace Partnerly.Controllers
         {
             if (ModelState.IsValid)
             {
+                User? referrer = null;
+                if (model.ReferrerCode != null)
+                {
+                    referrer = await _userService.GetUserByRefCodeAsync(model?.ReferrerCode);
+                    if (referrer == null)
+                    {
+                        ModelState.AddModelError("ReferrerCode", ErrorMessages.InvalidRefferalCode);
+                        return View(model);
+                    }
+                }
+
+                User? existingUser = null;
+                existingUser = await _userService.GetUserByEmailAsync(model?.Email);
+                if (existingUser != null)
+                {
+                    ModelState.AddModelError("Email", ErrorMessages.UserWithEmailArleadyExist);
+                    return View(model);
+                }
+
+                existingUser = await _userService.GetUserByPhoneAsync(model?.Phone);
+                if (existingUser != null)
+                {
+                    ModelState.AddModelError("Phone", ErrorMessages.UserWithPhoneArleadyExist);
+                    return View(model);
+                }
+
+                string? fullName = model?.FullName?.Trim();
+                string? firstName = null;
+                string? lastName = null;
+                if (fullName != null)
+                {
+                    string[] parts = fullName.Split(' ');
+                    firstName = parts.Length > 0 ? parts[0] : "";
+                    lastName = parts.Length > 1 ? parts[1] : "";
+                }
+                if (string.IsNullOrEmpty(firstName))
+                {
+                    ModelState.AddModelError("FullName", $"{FieldsDisplayNames.FirstName} {ErrorMessages.FieldRequired}");
+                    return View(model);
+                }
+                if (string.IsNullOrEmpty(lastName))
+                {
+                    ModelState.AddModelError("FullName", $"{FieldsDisplayNames.LastName} {ErrorMessages.FieldRequired}");
+                    return View(model);
+                }
+
+                Partnerly.Models.User newUser = new Partnerly.Models.User();
+                newUser.Email = model?.Email;
+                newUser.Phone = model?.Phone;
+                newUser.FirstName = firstName;
+                newUser.LastName = lastName;
+                newUser.PasswordHash = BCrypt.Net.BCrypt.HashPassword(model?.Password);
+                newUser.ReferrerId = referrer?.Id;
+                newUser.EmailConfirmed = true;
+
+                var result = await _userService.CreateUserAsync(newUser);
+                if (!result.Success)
+                {
+                    foreach (var error in result.Errors)
+                    {
+                        ModelState.AddModelError("", error);
+                    }
+                    return View(model);
+                }
+                TempData["ToastMessage"] = Messages.RecordSaved;
+                return RedirectToAction("Edit", new { id = result?.Data?.Id });
             }
             return View(model);
         }
 
         public async Task<IActionResult> Edit(Guid id)
         {
-            var template = await _userService.GetUserByIDAsync(id);
-            if (template == null) return NotFound();
+            var user = await _userService.GetUserByIDAsync(id);
+            if (user == null) return NotFound();
 
-            var templatesAsView = await PropertyActionsHelper.CopyPropertiesAsync(template, new UserViewModel());
-            if (templatesAsView == null) return NotFound();
+            var userAsView = await PropertyActionsHelper.CopyPropertiesAsync(user, new UserViewModel());
+            if (userAsView == null) return NotFound();
 
-            return View(templatesAsView);
+            return View(userAsView);
         }
 
         [HttpPost]
@@ -66,8 +133,30 @@ namespace Partnerly.Controllers
                 User? user = await _userService.GetUserByIDAsync(model.Id);
                 if (user != null)
                 {
-                    //template.Subject = model.Subject;
-                    //template.BodyHtml = model.BodyHtml;
+                    User? userSameEmail = await _userService.GetUserByEmailAsync(model.Email);
+                    if (userSameEmail != null && userSameEmail.Id != user.Id)
+                    {
+                        ModelState.AddModelError("Email", ErrorMessages.UserWithEmailArleadyExist);
+                        return View(model);
+                    }
+                    else
+                    {
+                        User? userSamePhone = await _userService.GetUserByPhoneAsync(model?.Phone);
+                        if (userSamePhone != null && userSamePhone.Id != user.Id)
+                        {
+                            ModelState.AddModelError("Phone", ErrorMessages.UserWithPhoneArleadyExist);
+                            return View(model);
+                        }
+                    }
+
+                    user.FirstName = model.FirstName;
+                    user.LastName = model.LastName;
+                    user.Email = model.Email;
+                    user.Phone = model.Phone;
+                    user.EmailConfirmed = model.EmailConfirmed;
+                    user.IsBlocked = model.IsBlocked;
+                    user.Balance = model.Balance;
+
                     ServiceResult<User?> result = await _userService.UpdateUserAsync(user);
 
                     if (!result.Success)
@@ -76,6 +165,7 @@ namespace Partnerly.Controllers
                         {
                             ModelState.AddModelError("", error);
                         }
+                        return View(model);
                     }
 
                     TempData["ToastMessage"] = Messages.RecordSaved;
@@ -93,13 +183,22 @@ namespace Partnerly.Controllers
             return View();
         }
 
-        [HttpPost, ActionName("Delete")]
+        [HttpPost, ActionName("DeleteConfirmed")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(Guid id)
         {
-            var template = await _userService.GetUserByIDAsync(id);
-            if (template != null)
+            var user = await _userService.GetUserByIDAsync(id);
+            if (user != null)
             {
+                ServiceResult<User?> result = await _userService.DeleteUserAsync(id);
+                if (!result.Success)
+                {
+                    foreach (var error in result.Errors)
+                    {
+                        ModelState.AddModelError("", error);
+                    }
+                    return View();
+                }
             }
             return RedirectToAction(nameof(Index));
         }
@@ -117,32 +216,32 @@ namespace Partnerly.Controllers
 
         protected override async Task<IEnumerable<TEntity>> GetEntitiesAsync<TEntity>()
         {
-            //if (typeof(TEntity) == typeof(User))
-            //    return (IEnumerable<TEntity>)await _userService.GetAllUsersAsync();
+            if (typeof(TEntity) == typeof(User))
+                return (IEnumerable<TEntity>)await _userService.GetAllUsersAsync();
 
-            //return Enumerable.Empty<TEntity>();
+            return Enumerable.Empty<TEntity>();
 
-            var users = new List<User>();
-            var random = new Random();
+            //var users = new List<User>();
+            //var random = new Random();
 
-            for (int i = 1; i <= 100; i++)
-            {
-                users.Add(new User
-                {
-                    Id = Guid.NewGuid(),
-                    FirstName = $"User{i}",
-                    Email = $"user{i}@example.com",
-                    MyReferralCode = $"REF{i:000}",
-                    Phone = $"+1234567{random.Next(100, 999)}",
-                    Balance = Math.Round((decimal)(random.NextDouble() * 1000), 2),
-                    LastActivity = DateTime.Now.AddDays(-random.Next(0, 365)),
-                    IsOnlayn = random.Next(0, 2) == 1,
-                    IsBlocked = random.Next(0, 10) == 1, // 10% заблокированных
-                    EmailConfirmed = random.Next(0, 2) == 1,
-                    CreatedDate = DateTime.Now.AddDays(-random.Next(0, 1000))
-                });
-            }
-            return (IEnumerable<TEntity>)users;
+            //for (int i = 1; i <= 100; i++)
+            //{
+            //    users.Add(new User
+            //    {
+            //        Id = Guid.NewGuid(),
+            //        FirstName = $"User{i}",
+            //        Email = $"user{i}@example.com",
+            //        MyReferralCode = $"REF{i:000}",
+            //        Phone = $"+1234567{random.Next(100, 999)}",
+            //        Balance = Math.Round((decimal)(random.NextDouble() * 1000), 2),
+            //        LastActivity = DateTime.Now.AddDays(-random.Next(0, 365)),
+            //        IsOnlayn = random.Next(0, 2) == 1,
+            //        IsBlocked = random.Next(0, 10) == 1, // 10% заблокированных
+            //        EmailConfirmed = random.Next(0, 2) == 1,
+            //        CreatedDate = DateTime.Now.AddDays(-random.Next(0, 1000))
+            //    });
+            //}
+            //return (IEnumerable<TEntity>)users;
         }
 
         protected override List<GridField> GetFields(object row)

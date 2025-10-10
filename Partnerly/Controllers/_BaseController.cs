@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
 using OfficeOpenXml;
@@ -6,8 +7,10 @@ using Partnerly.Descriptors.Attributes;
 using Partnerly.Descriptors.Messages;
 using Partnerly.Helpers;
 using Partnerly.Infrastructure.Interfaces;
+using Partnerly.Models;
 using Partnerly.Models.GridViews;
 using Partnerly.Models.ViewModels;
+using System.Security.Claims;
 
 namespace Partnerly.Controllers
 {
@@ -32,6 +35,11 @@ namespace Partnerly.Controllers
                 ViewBag.UserRefCode = _currentUser.ReffCode;
                 ViewBag.UserFullName = $"{_currentUser.FirstName} {_currentUser.LastName}";
                 ViewBag.RoleType = _currentUser.RoleType;
+                //var user = await _userService.GetUserByIDAsync(_currentUser.UserId);
+                //if (user != null)
+                //{
+                    
+                //}
             }
 
             var controllerName = context.RouteData.Values["controller"]?.ToString();

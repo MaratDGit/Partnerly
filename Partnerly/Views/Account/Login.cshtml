@@ -36,13 +36,13 @@
           <h5 class="mb-1">Добро пожаловать в @TempData.Peek("appName")!</h5>
           <p class="mb-6">Пожалуйста, войдите в свою учетную запись и начните приключение.</p>
 
-          <form id="formAuthentication" class="mb-6" asp-action="Login" method="POST">
-            <div class="form-floating mb-6">
+          <form id="formAuthentication" class="mb-2" asp-action="Login" method="POST">
+            <div class="form-floating mb-2">
                 <input asp-for="Email" class="form-control" id="email" placeholder="Введите свой адрес электронной почты" autofocus/>
                 <label asp-for="Email"></label>
                 <span asp-validation-for="Email" class="text-danger"></span>
             </div>
-            <div class="mb-6 form-password-toggle">
+            <div class="mb-2 form-password-toggle">
               <div class="form-floating input-group input-group-merge">
                 <input asp-for="Password" type="password" id="password" class="form-control" name="password" placeholder="&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;" aria-describedby="password"/>
                 <label asp-for="Password"></label>

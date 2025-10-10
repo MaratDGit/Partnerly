@@ -9,6 +9,7 @@ namespace Partnerly.Descriptors.Messages
         public const string Itemsshouldbepassedaspairs = "Items should be passed as pairs: value, label";
         public const string NoPermissionForThisAction = "There is no permission for this action";
         public const string RequiredFieldsValidationFailed = "Validation Failed : {0}";
+        public const string DefaultLogMessage = "Unknown Information";
         public const string DefaultLogErrorMessage = "Unknown validation error";
         public const string RecordIsNullFromController = "{0} is null from controller";
         public const string Cannotbefound = "{0} cannot be found";

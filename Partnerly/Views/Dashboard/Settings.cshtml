@@ -1,5 +1,6 @@
 ﻿@{
   ViewData["Title"] = "Настройки";
+  Layout = "_ContentNavbarLayout";
 }
 
 <div class="card">
@@ -44,10 +45,15 @@
             </div>
         </div>
         <div class="card-footer">
-              <a asp-action="Index" class="btn btn-sm btn-outline-primary">
-                    <i class="bx bx-save me-1"></i> Сохранить
-               </a>
+                <button type="submit" id="btnSave" class="btn btn-sm btn-outline-primary">
+                <i class="bx bx-save me-1"></i> Сохранить
+                </button>
             </div>
         </div>
     </form>
 </div>
+
+<script src="~/js/form-change-tracker.js"></script>
+<script>
+    enableSaveOnChange("#settingsForm", "#btnSave");
+</script>

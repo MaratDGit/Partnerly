@@ -1,1 +1,101 @@
-﻿
+﻿@model Partnerly.Models.ViewModels.UserViewModel;
+@await Html.PartialAsync("_Toast")
+
+@{
+    ViewData["Title"] = "Редактировать пользователя";
+    Layout = "_ContentNavbarLayout";
+}
+
+<style>
+    .max-w-300 {
+        max-width: 300px;
+    }
+
+    .max-w-400 {
+        max-width: 400px;
+    }
+
+    .max-w-500 {
+        max-width: 500px;
+    }
+
+    .max-w-600 {
+        max-width: 600px;
+    }
+</style>
+
+<div class="card">
+    <div class="card-header justify-content-between">
+        <h5>@ViewData["Title"]</h5>
+    </div>
+
+    <div class="card-body">
+        <form id="userEditForm" asp-action="Edit">
+            <div class="justify-content-between mb-6">
+                 <a asp-action="Index" class="btn btn-sm btn-outline-primary">
+                    <i class="bx bx-arrow-back me-1"></i> 
+                </a>
+                <a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-sm btn-outline-primary">
+                    <i class="bx bx-undo me-1"></i>
+                </a>
+                <button type="submit" id="btnSave" class="btn btn-sm btn-outline-primary">
+                    <i class="bx bx-save me-1"></i> 
+                </button>
+                <a class="btn btn-sm btn-outline-primary" asp-action="Create">
+                    <i class="bx bx-plus me-1"></i> 
+                </a>
+                <a class="btn btn-sm btn-outline-primary" asp-action="Delete" asp-route-id="@Model.Id">
+                        <i class="bx bx-trash me-1"></i> 
+                </a>
+            </div>
+
+            <input type="hidden" asp-for="Id" />
+
+            <div class="form-floating mb-1 max-w-600">
+                   <input asp-for="FirstName" class="form-control" id="firstName" name="firstName" placeholder="" autofocus/>
+                   <label asp-for="FirstName"></label>
+                   <span asp-validation-for="FirstName" class="text-danger"></span>
+            </div>
+            <div class="form-floating mb-1 max-w-600">
+               <input asp-for="LastName" class="form-control" id="lastName" name="lastName" placeholder=""/>
+               <label asp-for="LastName"></label>
+               <span asp-validation-for="LastName" class="text-danger"></span>
+            </div>
+            <div class="form-floating mb-1 max-w-600">
+               <input asp-for="Email" class="form-control" id="email" name="email" placeholder="Введите свой адрес электронной почты"/>
+               <label asp-for="Email"></label>
+               <span asp-validation-for="Email" class="text-danger"></span>
+            </div>
+            <div class="form-floating mb-1 max-w-600">
+               <input asp-for="Phone" class="form-control" id="phone" name="phone" placeholder="+37477123456"/>
+               <label asp-for="Phone"></label>
+               <span asp-validation-for="Phone" class="text-danger"></span>
+            </div>
+            <div class="form-floating mb-1 max-w-600">
+               <input asp-for="Balance" class="form-control" id="balance" name="balance" placeholder=""/>
+               <label asp-for="Balance"></label>
+               <span asp-validation-for="Balance" class="text-danger"></span>
+            </div>
+            <div class="form-floating mb-2 max-w-600">
+               <input asp-for="MyReferralCode" class="form-control" id="myReferralCode" name="myReferralCode" readonly placeholder=""/>
+               <label asp-for="MyReferralCode"></label>
+               <span asp-validation-for="MyReferralCode" class="text-danger"></span>
+            </div>
+            <div class="form-check form-switch mb-2">
+                <input asp-for="EmailConfirmedBool" class="form-check-input" type="checkbox" id="emailConfirmed" />
+                <label class="form-check-label" asp-for="EmailConfirmed" for="emailConfirmed"></label>
+            </div>
+            <div class="form-check form-switch mb-2">
+                <input asp-for="IsBlockedBool" class="form-check-input" type="checkbox" id="isBlocked" />
+                <label class="form-check-label" asp-for="IsBlocked" for="isBlocked"></label>
+            </div>
+        </form>
+    </div>
+</div>
+
+<script src="~/js/form-change-tracker.js"></script>
+<script>
+    enableSaveOnChange("#userEditForm", "#btnSave");
+</script>
+
+

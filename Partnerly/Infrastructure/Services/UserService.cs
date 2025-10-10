@@ -3,6 +3,7 @@ using Partnerly.Descriptors.Messages;
 using Partnerly.Helpers;
 using Partnerly.Infrastructure.Interfaces;
 using Partnerly.Models;
+using System.Security.Claims;
 
 namespace Partnerly.Infrastructure.Services
 {
@@ -99,13 +100,14 @@ namespace Partnerly.Infrastructure.Services
             newUser.ReferrerId = referrerID;
             newUser.RoleId = roleID;
             newUser.Balance = user.Balance ?? 0m;
-            newUser.EmailConfirmed = false;
+            newUser.EmailConfirmed = user.EmailConfirmed ?? false;
             newUser.IsBlocked = user.IsBlocked ?? false;
             newUser.IsDeleted = false;
             newUser.PhotoUrl = Constants.DefaultUserProfilePhotoPath;
 
             try
             {
+                await _logService.CreateLogAsync(LogActionsAttribute.UserCreated, LogTypeAttribute.Information, null);
                 await _userRepo.AddAsync(newUser);
                 await _userRepo.SaveChangesAsync();
             }
@@ -118,8 +120,8 @@ namespace Partnerly.Infrastructure.Services
             return ServiceResult<User?>.Ok(newUser);
         }
 
-        public async Task<ServiceResult<User?>> UpdateUserAsync(User? user, Guid? userId = null)
-        {
+        public async Task<ServiceResult<User?>> UpdateUserAsync(User? user, Guid? currentUserId = null)
+        {           
             if (user == null)
             {
                 await _logService.CreateLogAsync(LogActionsAttribute.UserUpdated, LogTypeAttribute.Error, String.Format(ErrorMessages.RecordIsNullFromController, "User"));
@@ -129,10 +131,10 @@ namespace Partnerly.Infrastructure.Services
             if (await _userRepo.GetByIdAsync(user.Id) == null)
             {
                 await _logService.CreateLogAsync(LogActionsAttribute.UserUpdated, LogTypeAttribute.Error, String.Format(ErrorMessages.Cannotbefound, "User"));
-                return ServiceResult<User?>.Fail(new List<string> { });
+                return ServiceResult<User?>.Fail(new List<string> { String.Format(ErrorMessages.Cannotbefound, "User") });
             }
 
-            if (!await _permissionService.CanUpdateAsync(userId ?? _currentUserService.UserId, user))
+            if (!await _permissionService.CanUpdateAsync(currentUserId ?? _currentUserService.UserId, user))
             {
                 await _logService.CreateLogAsync(LogActionsAttribute.UserUpdated, LogTypeAttribute.Critical, ErrorMessages.NoPermissionForThisAction);
                 return ServiceResult<User?>.Fail(new List<string> { ErrorMessages.NoPermissionForThisAction });

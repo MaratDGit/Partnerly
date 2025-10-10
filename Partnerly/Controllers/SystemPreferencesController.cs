@@ -1,7 +1,12 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Partnerly.Descriptors.Attributes;
 using Partnerly.Descriptors.Attributes.BaseAttributes;
+using Partnerly.Descriptors.Messages;
+using Partnerly.Helpers;
 using Partnerly.Infrastructure.Interfaces;
+using Partnerly.Infrastructure.Services;
+using Partnerly.Models;
+using Partnerly.Models.ViewModels;
 using System.Security.Claims;
 
 namespace Partnerly.Controllers
@@ -9,14 +14,57 @@ namespace Partnerly.Controllers
     [ClaimAuthorize(ClaimTypes.Role, RoleTypeAttribute.Admin)]
     public class SystemPreferencesController : _BaseController
     {
-        public SystemPreferencesController(IUserService userService, ICurrentUserService currentUser)
+        protected readonly ISystemSettingsService _systemSettingsService;
+        public SystemPreferencesController(ISystemSettingsService systemSettingsService, IUserService userService, ICurrentUserService currentUser)
         : base(userService, currentUser)
         {
+            _systemSettingsService = systemSettingsService;
         }
 
         public async Task<IActionResult> Index()
         {
-            return View();
+            SystemSettings? setting = await _systemSettingsService.GetSetupByIDAsync(1);
+            if (setting == null) return NotFound();
+
+            var settingAsView = await PropertyActionsHelper.CopyPropertiesAsync(setting, new SystemPreferencesViewModel());
+            if (settingAsView == null) return NotFound();
+
+            return View(settingAsView);
+        }
+
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Edit(int id, SystemPreferencesViewModel model)
+        {
+            if (id != model.Id) return NotFound();
+
+            if (ModelState.IsValid)
+            {
+                SystemSettings? setting = await _systemSettingsService.GetSetupByIDAsync(id);
+                if (setting != null)
+                {
+                    setting.OnlineStatusAutoRefreshMinute = model.OnlineStatusAutoRefreshMinute;
+                    setting.EmailConfirmationTokenExpiredAtHours = model.EmailConfirmationTokenExpiredAtHours;
+                    setting.ForgotPasswordTokenExpiredAtHours = model.ForgotPasswordTokenExpiredAtHours;
+                    setting.IsMaintenanceMode = model.IsMaintenanceMode;
+
+                    ServiceResult<SystemSettings?> result = await _systemSettingsService.UpdateSystemSettingsAsync(setting);
+
+                    if (!result.Success)
+                    {
+                        foreach (var error in result.Errors)
+                        {
+                            ModelState.AddModelError("", error);
+                        }
+                        return View(model);
+                    }
+
+                    TempData["ToastMessage"] = Messages.RecordSaved;
+                    return RedirectToAction("Index", new { id = model.Id });
+                }
+            }
+            return View(model);
         }
     }
 }
