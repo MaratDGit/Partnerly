@@ -105,6 +105,16 @@ namespace Partnerly.Infrastructure.Services
             newUser.IsDeleted = false;
             newUser.PhotoUrl = Constants.DefaultUserProfilePhotoPath;
 
+            if (!string.IsNullOrEmpty(newUser.FirstName) && !string.IsNullOrEmpty(newUser.LastName))
+            {
+                var avatarBytes = AvatarGenerator.GenerateAvatar(newUser.FirstName, newUser.LastName);
+                string filePath = Path.Combine("wwwroot", "assets/img/profiles", $"{newUser.Id.ToString()}.png");
+                File.WriteAllBytes(filePath, avatarBytes);
+                Directory.CreateDirectory(Path.GetDirectoryName(filePath)!);
+                File.WriteAllBytes(filePath, avatarBytes);
+                newUser.PhotoUrl = filePath.Replace("wwwroot", "~").Replace("\\", "/");
+            }
+
             try
             {
                 await _logService.CreateLogAsync(LogActionsAttribute.UserCreated, LogTypeAttribute.Information, null);

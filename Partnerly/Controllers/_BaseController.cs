@@ -90,7 +90,7 @@ namespace Partnerly.Controllers
 
         #region Data Grid Related Functions
         #region Default Actions
-        protected virtual List<GridAction> GetDefaultActions()
+        protected virtual List<GridAction> GetDefaultActions(object row)
         {
             return new List<GridAction>
             {
@@ -118,7 +118,7 @@ namespace Partnerly.Controllers
         #region Row Actions
         protected virtual List<GridAction> GetRowActions<TViewModel>(TViewModel row, string controllerName)
         {
-            return GetDefaultActions().Select(a => new GridAction
+            return GetDefaultActions(row).Select(a => new GridAction
             {
                 Name = a.Name,
                 DisplayName = a.DisplayName,

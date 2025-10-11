@@ -17,7 +17,7 @@
 @if (ViewData["navbarHideToggle"] == null)
 {
   <div class="layout-menu-toggle navbar-nav align-items-xl-center me-4 me-xl-0 d-xl-none">
-    <a class="nav-item nav-link px-0 me-xl-6" asp-controller="Home" asp-action="Index">
+    <a class="nav-item nav-link px-0 me-xl-6" data-no-loader="true" asp-controller="Home" asp-action="Index">
       <i class="bx bx-menu bx-md"></i>
     </a>
   </div>
@@ -48,7 +48,7 @@
       </a>
       <ul class="dropdown-menu dropdown-menu-end">
         <li>
-          <a class="dropdown-item" href="javascript:void(0);">
+          <a class="dropdown-item" asp-controller="Home" asp-action="Index">
             <div class="d-flex">
               <div class="flex-shrink-0 me-3">
                 <div class="avatar avatar-online">

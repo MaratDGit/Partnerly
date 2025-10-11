@@ -167,11 +167,14 @@ namespace Partnerly.Controllers
             string? fullName = model?.FullName?.Trim();
             string? firstName = null;
             string? lastName = null;
-            if (fullName != null)
+
+            if (!string.IsNullOrWhiteSpace(fullName))
             {
-                string[] parts = fullName.Split(' ');
-                firstName = parts.Length > 0 ? parts[0] : "";
-                lastName = parts.Length > 1 ? parts[1] : "";
+                string[] parts = fullName.Split(' ', StringSplitOptions.RemoveEmptyEntries);
+                if (parts.Length > 0)
+                    firstName = char.ToUpper(parts[0][0]) + parts[0][1..].ToLower();
+                if (parts.Length > 1)
+                    lastName = char.ToUpper(parts[1][0]) + parts[1][1..].ToLower();
             }
             if (string.IsNullOrEmpty(firstName))
             {

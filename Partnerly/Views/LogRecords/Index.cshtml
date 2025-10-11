@@ -1,1 +1,22 @@
-﻿
+﻿@{
+    ViewData["Title"] = "Журналы";
+    Layout = "_ContentNavbarLayout";
+}
+
+@await Html.PartialAsync("_DataTablePartial", null, new ViewDataDictionary(ViewData)
+{
+    { "TableName", "Журналы" },
+    { "TableId", "logsTable" },
+})
+
+@section PageScripts {
+    <script>
+        $(document).ready(function () {
+            initUniqueDataTable("logsTable", '@Url.Action("GetData", "LogRecords")', {
+                getDataParams: { tableModel: "Log" },
+                exportAllUrl: '@Url.Action("ExportAllToExcel", "LogRecords")',
+                exportSelectedUrl: '@Url.Action("ExportToExcel", "LogRecords")'
+            });
+        });
+    </script>
+}

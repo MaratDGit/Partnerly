@@ -1,0 +1,23 @@
+﻿@{
+    ViewData["Title"] = "Роли пользователей";
+    Layout = "_ContentNavbarLayout";
+}
+
+@await Html.PartialAsync("_DataTablePartial", null, new ViewDataDictionary(ViewData)
+{
+    { "TableName", "Роли пользователей" },
+    { "TableId", "userRolesTable" },
+    { "NewRecordControler", "Roles" }
+})
+
+@section PageScripts {
+    <script>
+        $(document).ready(function () {
+            initUniqueDataTable("userRolesTable", '@Url.Action("GetData", "Roles")', {
+                getDataParams: { tableModel: "UserRoles" },
+                exportAllUrl: '@Url.Action("ExportAllToExcel", "Roles")',
+                exportSelectedUrl: '@Url.Action("ExportToExcel", "Roles")'
+            });
+        });
+    </script>
+}

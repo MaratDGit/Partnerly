@@ -6,24 +6,6 @@
     Layout = "_ContentNavbarLayout";
 }
 
-<style>
-    .max-w-300 {
-        max-width: 300px;
-    }
-
-    .max-w-400 {
-        max-width: 400px;
-    }
-
-    .max-w-500 {
-        max-width: 500px;
-    }
-
-    .max-w-600 {
-        max-width: 600px;
-    }
-</style>
-
 <div class="card">
     <div class="card-header justify-content-between">
         <h5>@ViewData["Title"]</h5>
@@ -31,7 +13,7 @@
 
     <div class="card-body">
         <form id="systemPreferencesForm" asp-action="Edit">
-            <div class="justify-content-between mb-6">
+            <div class="sticky-buttons justify-content-between mb-6">
                 <a asp-action="Index" class="btn btn-sm btn-outline-primary">
                     <i class="bx bx-undo me-1"></i>
                 </a>

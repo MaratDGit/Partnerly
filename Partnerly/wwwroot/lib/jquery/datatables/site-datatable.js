@@ -18,6 +18,12 @@
                 orderable: f.isSortable,
                 render: function (data, type, row) {
                     if (data == null && f.defaultValue !== undefined && f.defaultValue !== null) data = f.defaultValue;
+
+                    const title = data;
+                    if (typeof data === "string" && data.length > 40) {
+                        data = data.substring(0, 40) + "...";
+                    }
+
                     if (f.type === "checkbox") {
                         if (isSelectColumn) {
                             const checked = selectedIds.has(row.id) ? "checked" : "";
@@ -25,10 +31,33 @@
                         }
                         return `<input type="checkbox" disabled ${data ? "checked" : ""} />`;
                     }
-                    if (f.linkTemplate) return `<a href="${f.linkTemplate.replace("{id}", row.id)}">${data}</a>`;
+                    if (f.linkTemplate) return `<a title="${title}" href="${f.linkTemplate.replace("{id}", row.id)}">${data}</a>`;
                     if (f.format) {
                         const [typeFormat, formatString] = f.format.split(":");
+
                         if (typeFormat === "date") {
+                            if (formatString === "lastActivity") {
+                                const d = new Date(data); // дата с сервера (UTC)
+                                const now = new Date();   // текущее локальное время
+
+                                // Разница в миллисекундах
+                                const diffMs = now.getTime() - d.getTime();
+
+                                const diffSec = Math.floor(diffMs / 1000);
+                                const diffMin = Math.floor(diffSec / 60);
+                                const diffHour = Math.floor(diffMin / 60);
+                                const diffDay = Math.floor(diffHour / 24);
+
+                                if (diffMin < 1) return "только что";
+                                if (diffMin < 60) return diffMin + " минут назад";
+                                if (diffHour < 24) return diffHour + " часов назад";
+
+                                // Больше одного дня — выводим дату
+                                return d.getDate().toString().padStart(2, "0") + "/" +
+                                    (d.getMonth() + 1).toString().padStart(2, "0") + "/" +
+                                    d.getFullYear();
+                            }
+
                             const d = new Date(data);
                             if (isNaN(d)) return data;
                             switch (formatString) {
@@ -45,7 +74,7 @@
                         if (typeFormat === "number") return parseFloat(data).toLocaleString(undefined, { minimumFractionDigits: parseInt(formatString) || 0 });
                         if (typeFormat === "currency") return new Intl.NumberFormat("en-US", { style: "currency", currency: formatString || "USD" }).format(data);
                     }
-                    return `<span ${f.attr || ""}>${data}</span>`;
+                    return `<span title="${title}" ${f.attr || ""}>${data}</span>`;
                 }
             };
         });

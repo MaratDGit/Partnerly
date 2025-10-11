@@ -1,5 +1,30 @@
-/* Custom styles goes here */
+﻿/* Custom styles goes here */
 
 .table-custom-a {
     padding : 15px;
+}
+
+.max-w-300 {
+    max-width: 300px;
+}
+
+.max-w-400 {
+    max-width: 400px;
+}
+
+.max-w-500 {
+    max-width: 500px;
+}
+
+.max-w-600 {
+    max-width: 600px;
+}
+
+.sticky-buttons {
+    position: sticky;
+    top: 0; /* Приклеивается к верху экрана */
+    background: #fff; /* Чтобы кнопки не "просвечивали" при прокрутке */
+    z-index: 100; /* Чтобы оставались поверх формы */
+    padding: 10px 0;
+    border-bottom: 1px solid #dee2e6;
 }

@@ -1,9 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc.Rendering;
 using Partnerly.Descriptors.Attributes.BaseAttributes;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Reflection;
 
 namespace Partnerly.Helpers
 {
@@ -24,6 +20,21 @@ namespace Partnerly.Helpers
             }
 
             return items;
+        }
+
+        public static string? GetValue<TAttribute>(string text) where TAttribute : StringListAttribute, new()
+        {
+            string? retVal = null;
+            var attribute = new TAttribute();
+
+            if (text != null && attribute.Items.Count > 0)
+            {
+                foreach (var (value, label) in attribute.Items)
+                {
+                    if (value == text) return label;
+                }
+            }
+            return retVal;
         }
     }
 

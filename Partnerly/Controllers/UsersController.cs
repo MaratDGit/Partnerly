@@ -70,12 +70,16 @@ namespace Partnerly.Controllers
                 string? fullName = model?.FullName?.Trim();
                 string? firstName = null;
                 string? lastName = null;
-                if (fullName != null)
+
+                if (!string.IsNullOrWhiteSpace(fullName))
                 {
-                    string[] parts = fullName.Split(' ');
-                    firstName = parts.Length > 0 ? parts[0] : "";
-                    lastName = parts.Length > 1 ? parts[1] : "";
+                    string[] parts = fullName.Split(' ', StringSplitOptions.RemoveEmptyEntries);
+                    if (parts.Length > 0)
+                        firstName = char.ToUpper(parts[0][0]) + parts[0][1..].ToLower();
+                    if (parts.Length > 1)
+                        lastName = char.ToUpper(parts[1][0]) + parts[1][1..].ToLower();
                 }
+
                 if (string.IsNullOrEmpty(firstName))
                 {
                     ModelState.AddModelError("FullName", $"{FieldsDisplayNames.FirstName} {ErrorMessages.FieldRequired}");
@@ -258,7 +262,7 @@ namespace Partnerly.Controllers
                     new GridField { FieldName = "referrerName", DisplayName = FieldsDisplayNames.ReffererName, DefaultValue = "" },
                     new GridField { FieldName = "phone", DisplayName = FieldsDisplayNames.Phone},
                     new GridField { FieldName = "balance", DisplayName = FieldsDisplayNames.Balance, DefaultValue = "0"},
-                    new GridField { FieldName = "lastActivity", DisplayName = FieldsDisplayNames.LastActivity, Format="date:dd/MM/yyyy HH:mm" },
+                    new GridField { FieldName = "lastActivity", DisplayName = FieldsDisplayNames.LastActivity, Format="date:lastActivity" },
                     new GridField { FieldName = "isOnlayn", DisplayName = FieldsDisplayNames.IsOnlayn, Type = "checkbox"},
                     new GridField { FieldName = "isBlocked", DisplayName = FieldsDisplayNames.IsBlocked, Type = "checkbox"},
                     new GridField { FieldName = "emailConfirmed", DisplayName = FieldsDisplayNames.EmailConfirmed, Type = "checkbox"},
@@ -284,10 +288,12 @@ namespace Partnerly.Controllers
 
                 Role? role = await _roleService.GetRoleByIDAsync(userRow.RoleId);
                 userRow.RoleName = role?.Name;
+
+                if (userRow.LastActivity != null)
+                    userRow.LastActivity = userRow.LastActivity.Value.ToLocalTime();
             }
         }
 
-       
 
         [HttpPost]
         public async Task<IActionResult> ExportToExcel([FromForm] string selectedIds)
