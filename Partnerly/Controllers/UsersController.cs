@@ -263,11 +263,11 @@ namespace Partnerly.Controllers
                     new GridField { FieldName = "phone", DisplayName = FieldsDisplayNames.Phone},
                     new GridField { FieldName = "balance", DisplayName = FieldsDisplayNames.Balance, DefaultValue = "0"},
                     new GridField { FieldName = "lastActivity", DisplayName = FieldsDisplayNames.LastActivity, Format="date:lastActivity" },
-                    new GridField { FieldName = "isOnlayn", DisplayName = FieldsDisplayNames.IsOnlayn, Type = "checkbox"},
-                    new GridField { FieldName = "isBlocked", DisplayName = FieldsDisplayNames.IsBlocked, Type = "checkbox"},
-                    new GridField { FieldName = "emailConfirmed", DisplayName = FieldsDisplayNames.EmailConfirmed, Type = "checkbox"},
-                    new GridField { FieldName = "roleName", DisplayName = FieldsDisplayNames.Role},
-                    new GridField { FieldName = "createdDate", DisplayName = FieldsDisplayNames.CreatedDate, IsSortable = true, Format="date:MM/dd/yyyy" }
+                    new GridField { FieldName = "isOnlayn", DisplayName = FieldsDisplayNames.IsOnlayn, IsFilterable = true, Type = "checkbox"},
+                    new GridField { FieldName = "isBlocked", DisplayName = FieldsDisplayNames.IsBlocked, IsFilterable = true, Type = "checkbox"},
+                    new GridField { FieldName = "emailConfirmed", DisplayName = FieldsDisplayNames.EmailConfirmed, IsFilterable = true, Type = "checkbox"},
+                    new GridField { FieldName = "roleName", DisplayName = FieldsDisplayNames.Role, IsFilterable = true},
+                    new GridField { FieldName = "createdDate", DisplayName = FieldsDisplayNames.CreatedDate, IsSortable = true, IsFilterable = true, Format="date:MM/dd/yyyy" }
                 };
             }
 

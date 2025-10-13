@@ -8,11 +8,37 @@
 
         return this.each(function () {
             const $table = $(this);
+            let activeFilters = {}; // хранит последние применённые фильтры
             $table.empty();
 
             const $card = $('<div class="custom-datatable-card"></div>');
             $table.wrap($card);
             const $cardWrapper = $table.parent();
+
+            // --- Создаём модальное окно фильтров, если его ещё нет ---
+            const modalId = `${$table.attr("id")}-filter-modal`;
+            if (!$(`#${modalId}`).length) {
+                                const modalHtml = `
+                    <div class="modal fade" id="${modalId}" tabindex="-1" aria-hidden="true">
+                        <div class="modal-dialog modal-lg modal-dialog-scrollable">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title">Фильтры</h5>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Закрыть"></button>
+                                </div>
+                                <div class="modal-body">
+                                    <form id="${modalId}-form" class="row g-3"></form>
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Отмена</button>
+                                    <button type="button" class="btn btn-primary btn-apply-filters">Применить</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>`;
+                $("body").append(modalHtml);
+            }
+
 
             // --- Панель кнопок ---
             const $buttonsDiv = $(`
@@ -30,6 +56,9 @@
                             <li><a class="dropdown-item btn-export-selected" href="#">Экспорт выбранные</a></li>
                         </ul>
                     </div>
+                    <button class="btn btn-sm btn-filter" title="Фильтры">
+                        <i class="bx bx-filter"></i>
+                    </button>
                 </div>
             `);
             
@@ -144,11 +173,11 @@
 
                 const $first = $('<button><i class="bx bx-chevrons-left"></i></button>')
                     .prop('disabled', currentPage === 1)
-                    .click(() => { currentPage = 1; renderTable(); renderPagination(); });
+                    .click(() => { currentPage = 1; renderTable(); renderPagination(); updateFilterIcons(); });
 
                 const $prev = $('<button><i class="bx bx-chevron-left"></i></button>')
                     .prop('disabled', currentPage === 1)
-                    .click(() => { currentPage = Math.max(1, currentPage - 1); renderTable(); renderPagination(); });
+                    .click(() => { currentPage = Math.max(1, currentPage - 1); renderTable(); renderPagination(); updateFilterIcons(); });
 
                 $pagination.append($first, $prev);
 
@@ -174,11 +203,11 @@
 
                 const $next = $('<button><i class="bx bx-chevron-right"></i></button>')
                     .prop('disabled', currentPage === totalPages)
-                    .click(() => { currentPage = Math.min(totalPages, currentPage + 1); renderTable(); renderPagination(); });
+                    .click(() => { currentPage = Math.min(totalPages, currentPage + 1); renderTable(); renderPagination(); updateFilterIcons(); });
 
                 const $last = $('<button><i class="bx bx-chevrons-right"></i></button>')
                     .prop('disabled', currentPage === totalPages)
-                    .click(() => { currentPage = totalPages; renderTable(); renderPagination(); });
+                    .click(() => { currentPage = totalPages; renderTable(); renderPagination(); updateFilterIcons(); });
 
                 $pagination.append($next, $last);
 
@@ -192,6 +221,23 @@
                 $info.text(infoText);
             }
 
+            function updateFilterIcons() {
+                $table.find("th").each(function () {
+                    const field = $(this).data("column");
+                    const $icon = $(this).find(".filter-indicator");
+
+                    if (activeFilters[field]) {
+                        if ($icon.length === 0) {
+                            $(this).find(".th-content").append(
+                                ` <i class="bx bx-filter-alt filter-indicator" style="color:#4e73df;" title="Фильтр активен"></i>`
+                            );
+                        }
+                    } else {
+                        $icon.remove();
+                    }
+                });
+            }
+
 
             // Поиск
             $searchInput.on('input', function () {
@@ -200,6 +246,7 @@
                 currentPage = 1;
                 renderTable();
                 renderPagination();
+                updateFilterIcons();
             });
 
             $clearBtn.on('click', function () {
@@ -208,6 +255,7 @@
                 currentPage = 1;
                 renderTable();
                 renderPagination();
+                updateFilterIcons();
             });
 
             // Сортировка
@@ -221,10 +269,151 @@
 
                 renderTable();
                 renderPagination();
+                updateFilterIcons();
+            });
+
+            // --- Кнопка фильтров ---
+            $buttonsDiv.find(".btn-filter").on("click", function () {
+                const modal = $(`#${modalId}`);
+                const $form = modal.find("form");
+                $form.empty();
+
+                settings.columns.forEach(col => {
+                    if (!col.data || col.data === "select" || col.title === "Действия" || !col.isFilterable) return;
+
+                    const uniqueValues = [...new Set(settings.data.map(r => r[col.data]))].filter(v => v != null && v !== "");
+
+                    let inputHtml = "";
+
+                    if (col.dataType === "date" || col.title.toLowerCase().includes("дата")) {
+                                    inputHtml = `
+                            <div class="col-md-6">
+                                <label>${col.title}</label>
+                                <div class="input-group">
+                                    <input type="date" class="form-control filter-input" placeholder="От" data-field="${col.data}" data-type="date-from">
+                                    <span class="input-group-text">–</span>
+                                    <input type="date" class="form-control filter-input" placeholder="До" data-field="${col.data}" data-type="date-to">
+                                </div>
+                            </div>
+                        `;
+                    } else if (typeof uniqueValues[0] === "boolean" || col.type === "checkbox") {
+                                    inputHtml = `
+                            <div class="col-md-6">
+                                <label>${col.title}</label>
+                                <select class="form-select filter-input" data-field="${col.data}">
+                                    <option value="">Все</option>
+                                    <option value="true">Да</option>
+                                    <option value="false">Нет</option>
+                                </select>
+                            </div>
+                        `;
+                    } else {
+                        inputHtml = `
+                <div class="col-md-6">
+                    <label>${col.title}</label>
+                    <select class="form-select filter-input" data-field="${col.data}">
+                        <option value="">Все</option>
+                        ${uniqueValues.map(v => `<option value="${v}">${v}</option>`).join("")}
+                    </select>
+                </div>
+            `;
+                    }
+
+                    $form.append(inputHtml);
+                });
+
+                // --- Восстанавливаем сохранённые фильтры ---
+                Object.entries(activeFilters).forEach(([field, f]) => {
+                    if (f.value !== undefined) {
+                        $form.find(`[data-field="${field}"]`).val(f.value);
+                    }
+                    if (f.from) {
+                        $form.find(`[data-field="${field}"][data-type="date-from"]`).val(f.from);
+                    }
+                    if (f.to) {
+                        $form.find(`[data-field="${field}"][data-type="date-to"]`).val(f.to);
+                    }
+                });
+
+                // --- Ограничение для date полей ---
+                modal.find('.filter-input[data-type="date-from"]').on('input', function () {
+                    const fromDate = $(this).val();
+                    const field = $(this).data('field');
+                    const $to = modal.find(`.filter-input[data-field="${field}"][data-type="date-to"]`);
+                    if (fromDate) {
+                        $to.attr('min', fromDate);
+                    } else {
+                        $to.removeAttr('min');
+                    }
+                });
+
+                modal.find('.filter-input[data-type="date-to"]').on('input', function () {
+                    const toDate = $(this).val();
+                    const field = $(this).data('field');
+                    const $from = modal.find(`.filter-input[data-field="${field}"][data-type="date-from"]`);
+                    if (toDate) {
+                        $from.attr('max', toDate);
+                    } else {
+                        $from.removeAttr('max');
+                    }
+                });
+
+                modal.modal("show");
+            });
+
+            // --- Применить фильтры ---
+            $(document).on("click", `#${modalId} .btn-apply-filters`, function () {
+                const modal = $(`#${modalId}`);
+                activeFilters = {}; // очищаем старые
+
+                modal.find(".filter-input").each(function () {
+                    const field = $(this).data("field");
+                    const type = $(this).data("type");
+                    const value = $(this).val();
+
+                    if (value) {
+                        if (!activeFilters[field]) activeFilters[field] = {};
+                        if (type === "date-from") activeFilters[field].from = value;
+                        else if (type === "date-to") activeFilters[field].to = value;
+                        else activeFilters[field].value = value;
+                    }
+                });
+
+                // фильтрация данных
+                filteredData = settings.data.filter(row => {
+                    return Object.keys(activeFilters).every(field => {
+                        const f = activeFilters[field];
+                        const val = row[field];
+
+                        if (f.value !== undefined && f.value !== "") {
+                            return String(val) === f.value;
+                        }
+
+                        if (f.from || f.to) {
+                            const d = new Date(val);
+                            if (f.from && d < new Date(f.from)) return false;
+                            if (f.to && d > new Date(f.to)) return false;
+                        }
+
+                        return true;
+                    });
+                });
+
+                currentPage = 1;
+                renderTable();
+                renderPagination();
+                updateFilterIcons();
+                modal.modal("hide");
             });
 
             // --- Кнопки ---
             $buttonsDiv.find('.btn-cancel').on('click', function () {
+                activeFilters = {}; // очищаем все фильтры
+                filteredData = [...settings.data];
+                currentPage = 1;
+                renderTable();
+                renderPagination();
+                updateFilterIcons();
                 $(document).trigger("datatable:reset", { tableId: $table.attr("id") });
             });
 
@@ -246,10 +435,12 @@
                 sortOrder = "asc";
                 renderTable();
                 renderPagination();
+                updateFilterIcons();
             });
 
             renderTable();
             renderPagination();
+            updateFilterIcons();
         });
     };
 })(jQuery);

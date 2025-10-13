@@ -79,13 +79,13 @@ namespace Partnerly.Controllers
                 {
                     new GridField { FieldName = "select", DisplayName = $"", DefaultValue = false, Type = "checkbox"},
                     new GridField { FieldName = "actionView", DisplayName = FieldsDisplayNames.Action },
-                    new GridField { FieldName = "typeView", DisplayName = FieldsDisplayNames.Type },
+                    new GridField { FieldName = "typeView", DisplayName = FieldsDisplayNames.Type, IsFilterable = true },
                     new GridField { FieldName = "logMessage", DisplayName = FieldsDisplayNames.Message, LinkTemplate = "/LogRecords/View/{id}" },
                     new GridField { FieldName = "filePath", DisplayName = FieldsDisplayNames.FilePath, DefaultValue = "" },
                     new GridField { FieldName = "method", DisplayName = FieldsDisplayNames.Method},
                     new GridField { FieldName = "lineNumber", DisplayName = FieldsDisplayNames.LineNumber},
                     new GridField { FieldName = "creatorUserName", DisplayName = FieldsDisplayNames.CreatorName },
-                    new GridField { FieldName = "createdDate", DisplayName = FieldsDisplayNames.CreatedDate, Format="date:lastActivity"},
+                    new GridField { FieldName = "createdDate", DisplayName = FieldsDisplayNames.CreatedDate, IsFilterable = true, Format="date:lastActivity"},
                 };
             }
 

@@ -5,6 +5,7 @@
         public string? FieldName { get; set; }
         public string? DisplayName { get; set; }
         public bool IsSortable { get; set; } = true;
+        public bool IsFilterable { get; set; } = false;
         public bool IsVisible { get; set; } = true;
         public string? Attr { get; set; }
         public string? LinkTemplate { get; set; }

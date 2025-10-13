@@ -137,7 +137,7 @@ namespace Partnerly.Controllers
                 {
                     new GridField { FieldName = "select", DisplayName = $"", DefaultValue = false, Type = "checkbox"},
                     new GridField { FieldName = "userName", DisplayName = FieldsDisplayNames.User },
-                    new GridField { FieldName = "oldRoleName", DisplayName = FieldsDisplayNames.Role, LinkTemplate = "/Roles/Edit/{id}"},
+                    new GridField { FieldName = "oldRoleName", DisplayName = FieldsDisplayNames.Role, IsFilterable = true, LinkTemplate = "/Roles/Edit/{id}"},
                     new GridField { FieldName = "email", DisplayName = FieldsDisplayNames.Email },
                     new GridField { FieldName = "phone", DisplayName = FieldsDisplayNames.Phone},
                     

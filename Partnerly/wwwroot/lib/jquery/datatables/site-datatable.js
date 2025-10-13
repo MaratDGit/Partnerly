@@ -16,6 +16,7 @@
                 title: f.displayName,
                 visible: f.isVisible,
                 orderable: f.isSortable,
+                isFilterable: f.isFilterable,
                 render: function (data, type, row) {
                     if (data == null && f.defaultValue !== undefined && f.defaultValue !== null) data = f.defaultValue;
 
