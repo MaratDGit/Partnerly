@@ -94,13 +94,13 @@ namespace Partnerly.Controllers
                     new Claim(ClaimTypes.Name, $"{user.FirstName} {user.LastName}"),
                     new Claim(ClaimTypes.Email, user.Email),
                     new Claim(ClaimTypes.Role, user.Role.Name),
-
+                    new Claim(Constants.ClaimTypeLoginTime, DateTime.UtcNow.ToString("o")),
                     new Claim(Constants.ClaimTypeFirstName, user.FirstName ?? ""),
                     new Claim(Constants.ClaimTypeLastName, user.LastName ?? ""),
                     new Claim(Constants.ClaimTypeRoleType, user.Role.Type ?? RoleTypeAttribute.View),
                     new Claim(Constants.ClaimTypeReffCode, user.MyReferralCode ?? ""),
                     new Claim(Constants.ClaimTypeUserPhotoUrl, user.PhotoUrl ?? Constants.DefaultUserProfilePhotoPath),
-                };
+            };
 
                 var claimsIdentity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
 

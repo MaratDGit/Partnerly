@@ -1,5 +1,4 @@
-﻿using Microsoft.AspNetCore.Authentication;
-using Microsoft.AspNetCore.Authorization;
+﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
 using OfficeOpenXml;
@@ -7,10 +6,7 @@ using Partnerly.Descriptors.Attributes;
 using Partnerly.Descriptors.Messages;
 using Partnerly.Helpers;
 using Partnerly.Infrastructure.Interfaces;
-using Partnerly.Models;
 using Partnerly.Models.GridViews;
-using Partnerly.Models.ViewModels;
-using System.Security.Claims;
 
 namespace Partnerly.Controllers
 {
@@ -19,11 +15,13 @@ namespace Partnerly.Controllers
     {
         protected readonly IUserService _userService;
         protected readonly ICurrentUserService _currentUser;
+        protected readonly ILogService _logService;   
 
-        public _BaseController(IUserService userService, ICurrentUserService currentUser)
+        public _BaseController(IUserService userService, ICurrentUserService currentUser, ILogService logService)
         {
             _userService = userService;
             _currentUser = currentUser;
+            _logService = logService;
         }
         public override async Task OnActionExecutionAsync(ActionExecutingContext context, ActionExecutionDelegate next)
         {

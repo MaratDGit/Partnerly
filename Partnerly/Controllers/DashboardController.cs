@@ -9,8 +9,8 @@ namespace Partnerly.Controllers
 {
     public class DashboardController : _BaseController
     {
-        public DashboardController(IUserService userService, ICurrentUserService currentUser)
-        : base(userService, currentUser)
+        public DashboardController(IUserService userService, ICurrentUserService currentUser, ILogService logService)
+        : base(userService, currentUser, logService)
         {
         }
 

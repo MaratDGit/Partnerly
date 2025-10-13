@@ -1,1 +1,57 @@
-﻿
+﻿@model Partnerly.Models.ViewModels.UserRolesViewModel;
+@await Html.PartialAsync("_Toast")
+
+@{
+    ViewData["Title"] = "Изменить роль";
+    Layout = "_ContentNavbarLayout";
+}
+
+<div class="card">
+    <div class="card-header justify-content-between">
+        <h5>@ViewData["Title"]</h5>
+    </div>
+
+    <div class="card-body">
+        <form id="emailTemplateForm" asp-action="Edit">
+         <div class="sticky-buttons justify-content-between mb-6">
+             <a asp-action="Index" class="btn btn-sm btn-outline-primary">
+                <i class="bx bx-arrow-back me-1"></i> 
+            </a>
+            <a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-sm btn-outline-primary">
+                <i class="bx bx-undo me-1"></i>
+            </a>
+            <button type="submit" id="btnSave" class="btn btn-sm btn-outline-primary">
+                <i class="bx bx-save me-1"></i> 
+            </button>
+        </div>
+
+        <input type="hidden" asp-for="Id" />
+
+        <div class="form-floating mb-1 max-w-600">
+            <input asp-for="UserName" id="userName" class="form-control" readonly/>
+            <label asp-for="UserName"></label>
+        </div>
+        <div class="form-floating mb-1 max-w-600">
+            <input asp-for="OldRoleName" id="oldRoleName" class="form-control" readonly/>
+            <label asp-for="OldRoleName"></label>
+        </div>
+        <div class="form-floating mb-1 max-w-600">
+           <select asp-for="NewRoleName"
+                        asp-items="ViewBag.RoleNamesList"
+                        class="form-select"
+                        id="newRoleName" autofocus>
+                    <option value="">-- Выберите роль --</option>
+                </select>
+                <label asp-for="NewRoleName"></label>
+                <span asp-validation-for="NewRoleName" class="text-danger"></span>
+        </div>
+        </form>
+    </div>
+</div>
+
+<script src="~/js/form-change-tracker.js"></script>
+<script>
+    enableSaveOnChange("#emailTemplateForm", "#btnSave");
+</script>
+
+

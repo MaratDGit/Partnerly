@@ -8,6 +8,7 @@ namespace Partnerly.Descriptors.Attributes
         public const string Admin = "Administrator";
         public const string Employee = "Employee";
         public const string User = "User";
+        public static List<string> RoleNames = new List<string> { Admin, Employee, User };
 
         public const string View = "V";
         public const string Update = "U";

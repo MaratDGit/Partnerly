@@ -15,8 +15,8 @@ namespace Partnerly.Controllers
     public class SystemPreferencesController : _BaseController
     {
         protected readonly ISystemSettingsService _systemSettingsService;
-        public SystemPreferencesController(ISystemSettingsService systemSettingsService, IUserService userService, ICurrentUserService currentUser)
-        : base(userService, currentUser)
+        public SystemPreferencesController(ISystemSettingsService systemSettingsService, IUserService userService, ICurrentUserService currentUser, ILogService logService)
+        : base(userService, currentUser, logService)
         {
             _systemSettingsService = systemSettingsService;
         }

@@ -18,8 +18,8 @@
     {
         private readonly IEmailTemplateService _emailTemplateService;
 
-        public EmailTemplatesController(IUserService userService, ICurrentUserService currentUser, IEmailTemplateService emailTemplateService)
-        : base(userService, currentUser)
+        public EmailTemplatesController(IUserService userService, ICurrentUserService currentUser, IEmailTemplateService emailTemplateService, ILogService logService)
+        : base(userService, currentUser, logService)
         {
             _emailTemplateService = emailTemplateService;
         }

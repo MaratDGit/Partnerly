@@ -78,6 +78,7 @@ namespace Partnerly.Descriptors.Messages
         public const string ClaimTypeLastName = "LastName";
         public const string ClaimTypeReffCode = "ReffCode";
         public const string ClaimTypeUserPhotoUrl = "UserPhotoUrl";
+        public const string ClaimTypeLoginTime = "LoginTime";
 
         // Others
         public const string Edit = "Edit";

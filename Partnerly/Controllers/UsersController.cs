@@ -19,8 +19,8 @@ namespace Partnerly.Controllers
     public class UsersController : _BaseController
     {
         protected readonly IRoleService _roleService;
-        public UsersController(IRoleService roleService, IUserService userService, ICurrentUserService currentUser)
-        : base(userService, currentUser)
+        public UsersController(IRoleService roleService, IUserService userService, ICurrentUserService currentUser, ILogService logService)
+        : base(userService, currentUser, logService)
         {
             _roleService = roleService;
         }

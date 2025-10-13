@@ -22,6 +22,22 @@ namespace Partnerly.Helpers
             return items;
         }
 
+        public static List<SelectListItem> ToSelectedList(List<string> list)
+        {
+            var items = new List<SelectListItem>();
+
+            foreach (var line in list)
+            {
+                items.Add(new SelectListItem
+                {
+                    Value = line,
+                    Text = line
+                });
+            }
+
+            return items;
+        }
+
         public static string? GetValue<TAttribute>(string text) where TAttribute : StringListAttribute, new()
         {
             string? retVal = null;

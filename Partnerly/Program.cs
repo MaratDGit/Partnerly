@@ -73,5 +73,6 @@ using (var scope = app.Services.CreateScope())
 
 app.UseMiddleware<UpdateLastActivityMiddleware>();
 app.UseMiddleware<MaintenanceMiddleware>();
+app.UseMiddleware<RoleChangeMiddleware>();
 
 app.Run();

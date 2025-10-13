@@ -15,11 +15,9 @@ namespace Partnerly.Controllers
     [ClaimAuthorize(ClaimTypes.Role, RoleTypeAttribute.Admin, RoleTypeAttribute.Employee)]
     public class LogRecordsController : _BaseController
     {
-        protected readonly ILogService _logService;
         public LogRecordsController(IUserService userService, ICurrentUserService currentUser, ILogService logService)
-        : base(userService, currentUser)
+        : base(userService, currentUser, logService)
         {
-            _logService = logService;
         }
 
         public async Task<IActionResult> Index()

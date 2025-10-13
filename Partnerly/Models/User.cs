@@ -49,6 +49,9 @@ namespace Partnerly.Models
         [Display(Name = "Role")]
         public Guid? RoleId { get; set; }
         #endregion
+        #region LastRoleUpdateTime
+        public DateTime? LastRoleUpdateTime { get; set; }
+        #endregion
         #region MyReferralCode
         [Required]
         [Display(Name = "My Referral Code")]
