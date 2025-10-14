@@ -67,6 +67,10 @@ namespace Partnerly.Descriptors.Attributes
                 EmailTemplateDeleted, Constants.EmailTemplateDeleted,
                 EmailTemplateUpdated, Constants.EmailTemplateUpdated,
 
+                NotificationCreated, Constants.NotificationCreated,
+                NotificationDeleted, Constants.NotificationDeleted,
+                NotificationUpdated, Constants.NotificationUpdated,
+
                 EmailSending, Constants.EmailSending
                 )
         { }

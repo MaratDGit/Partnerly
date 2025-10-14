@@ -8,8 +8,16 @@ namespace Partnerly.Infrastructure.Repositories
     {
         public NotificationRepository(AppDbContext context) : base(context) { }
 
-        public async Task<List<Notification>> GetUserNotificationsAsync(Guid userID)
+        public async Task<List<Notification>> GetUserNotificationsAsync(Guid userID, bool onlyUnread = false)
         {
+            if (onlyUnread)
+            {
+                return await _dbSet
+                .Where(n => n.UserId == userID && n.IsRead == false)
+                .OrderByDescending(n => n.CreatedDate)
+                .ToListAsync();
+            }
+
             return await _dbSet
             .Where(n => n.UserId == userID)
             .OrderByDescending(n => n.CreatedDate)

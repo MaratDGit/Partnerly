@@ -27,8 +27,8 @@ namespace Partnerly.Infrastructure.Services
         public async Task<Notification?> GetNotificationByIDAsync(Guid? id) =>
             await _notificationRepository.GetByIdAsync(id);
 
-        public async Task<List<Notification>> GetUserNotificationsAsync(Guid userID) =>
-            await _notificationRepository.GetUserNotificationsAsync(userID);
+        public async Task<List<Notification>> GetUserNotificationsAsync(Guid userID, bool onlyUnread = false) =>
+            await _notificationRepository.GetUserNotificationsAsync(userID, onlyUnread);
 
         public async Task<IEnumerable<Notification?>> GetAllNotificationsAsync() =>
             await _notificationRepository.GetAllAsync();
@@ -45,10 +45,31 @@ namespace Partnerly.Infrastructure.Services
             if (notif != null)
             {
                 notif.IsRead = true;
-                return await UpdateNotificationAsync(notif);
+                return await UpdateNotificationAsync(notif, fromMarkAsRead: true);
             }
 
             return ServiceResult<Notification?>.Ok(notif);
+        }
+
+        public async Task<ServiceResult<Notification?>> MarkAllReadAsync(Guid? userID)
+        {
+            if (userID == null)
+            {
+                await _logService.CreateLogAsync(LogActionsAttribute.NotificationUpdated, LogTypeAttribute.Error, String.Format(ErrorMessages.RecordIsNullFromController, "user id"));
+                return ServiceResult<Notification?>.Fail(new List<string> { });
+            }
+
+            var userNotifications = await GetUserNotificationsAsync((Guid)userID, onlyUnread: true);
+            if (userNotifications != null && userNotifications.Count() > 0)
+            {
+                foreach (var notification in userNotifications)
+                {
+                    notification.IsRead = true;
+                    await UpdateNotificationAsync(notification, fromMarkAsRead: true);
+                }
+            }
+
+            return ServiceResult<Notification?>.Ok( new Notification());
         }
 
         public async Task<ServiceResult<Notification?>> CreateNotificationAsync(Notification? notification)
@@ -84,7 +105,7 @@ namespace Partnerly.Infrastructure.Services
             return ServiceResult<Notification?>.Ok(newnotification);
         }
 
-        public async Task<ServiceResult<Notification?>> UpdateNotificationAsync(Notification? notification)
+        public async Task<ServiceResult<Notification?>> UpdateNotificationAsync(Notification? notification, bool fromMarkAsRead = false)
         {
             if (notification == null)
             {
@@ -98,7 +119,7 @@ namespace Partnerly.Infrastructure.Services
                 return ServiceResult<Notification?>.Fail(new List<string> { });
             }
 
-            if (!await _permissionService.CanUpdateAsync(_currentUserService.UserId, notification))
+            if ((!fromMarkAsRead || _currentUserService.UserId != notification.UserId) && !await _permissionService.CanUpdateAsync(_currentUserService.UserId, notification))
             {
                 await _logService.CreateLogAsync(LogActionsAttribute.NotificationUpdated, LogTypeAttribute.Critical, ErrorMessages.NoPermissionForThisAction);
                 return ServiceResult<Notification?>.Fail(new List<string> { });

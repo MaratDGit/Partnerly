@@ -56,6 +56,10 @@ namespace Partnerly.Descriptors.Messages
         public const string EmailTemplateDeleted = "Email Template Deleting";
         public const string EmailTemplateUpdated = "Email Template Updating";
 
+        public const string NotificationCreated = "Notification Creating";
+        public const string NotificationDeleted = "Notification Deleting";
+        public const string NotificationUpdated = "Notification Updating";
+
         public const string EmailSending = "Email Sending"; 
 
         // Log types

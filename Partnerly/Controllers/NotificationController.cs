@@ -34,5 +34,31 @@ namespace Partnerly.Controllers
             
             return Ok();
         }
+
+        [HttpPost]
+        public async Task<IActionResult> MarkAllAsRead()
+        {
+            var userId = _currentUser.UserId;
+            if (userId == null) return Unauthorized();
+
+            await _notificationService.MarkAllReadAsync(userId.Value);
+            return Ok();
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> GetUnread()
+        {
+            var userId = _currentUser.UserId;
+            if (userId == null) return Unauthorized();
+
+            var notifications = await _notificationService.GetUserNotificationsAsync(userId.Value, onlyUnread: true);
+
+            return Json(notifications.Select(n => new
+            {
+                n.Id,
+                n.Message,
+                CreatedAt = ((DateTime)n.CreatedDate).ToString("dd.MM.yyyy HH:mm")
+            }));
+        }
     }
 }
