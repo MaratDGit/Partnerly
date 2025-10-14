@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Partnerly.Descriptors.Messages;
+using Partnerly.Events.BaseEvents;
 using Partnerly.Infrastructure.Interfaces;
 using Partnerly.Models.ViewModels;
 using System.Diagnostics;
@@ -9,8 +10,8 @@ namespace Partnerly.Controllers
 {
     public class DashboardController : _BaseController
     {
-        public DashboardController(IUserService userService, ICurrentUserService currentUser, ILogService logService)
-        : base(userService, currentUser, logService)
+        public DashboardController(IEventBus eventBus, IUserService userService, ICurrentUserService currentUser, ILogService logService)
+        : base(eventBus, userService, currentUser, logService)
         {
         }
 

@@ -4,6 +4,8 @@ using OfficeOpenXml;
 using Partnerly.Descriptors.Attributes;
 using Partnerly.Descriptors.Attributes.BaseAttributes;
 using Partnerly.Descriptors.Messages;
+using Partnerly.Events;
+using Partnerly.Events.BaseEvents;
 using Partnerly.Helpers;
 using Partnerly.Infrastructure.Interfaces;
 using Partnerly.Infrastructure.Services;
@@ -19,8 +21,8 @@ namespace Partnerly.Controllers
     public class UsersController : _BaseController
     {
         protected readonly IRoleService _roleService;
-        public UsersController(IRoleService roleService, IUserService userService, ICurrentUserService currentUser, ILogService logService)
-        : base(userService, currentUser, logService)
+        public UsersController(IEventBus eventBus, IRoleService roleService, IUserService userService, ICurrentUserService currentUser, ILogService logService)
+        : base(eventBus, userService, currentUser, logService)
         {
             _roleService = roleService;
         }
@@ -109,6 +111,8 @@ namespace Partnerly.Controllers
                     }
                     return View(model);
                 }
+                await _eventBus.PublishAsync(new UserRegisteredEvent(result.Data.Id, result.Data.FirstName));
+
                 TempData["ToastMessage"] = Messages.RecordSaved;
                 return RedirectToAction("Edit", new { id = result?.Data?.Id });
             }

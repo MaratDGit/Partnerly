@@ -2,6 +2,7 @@
 using Partnerly.Descriptors.Attributes;
 using Partnerly.Descriptors.Attributes.BaseAttributes;
 using Partnerly.Descriptors.Messages;
+using Partnerly.Events.BaseEvents;
 using Partnerly.Helpers;
 using Partnerly.Infrastructure.Interfaces;
 using Partnerly.Infrastructure.Services;
@@ -15,8 +16,8 @@ namespace Partnerly.Controllers
     public class SystemPreferencesController : _BaseController
     {
         protected readonly ISystemSettingsService _systemSettingsService;
-        public SystemPreferencesController(ISystemSettingsService systemSettingsService, IUserService userService, ICurrentUserService currentUser, ILogService logService)
-        : base(userService, currentUser, logService)
+        public SystemPreferencesController(IEventBus eventBus, ISystemSettingsService systemSettingsService, IUserService userService, ICurrentUserService currentUser, ILogService logService)
+        : base(eventBus, userService, currentUser, logService)
         {
             _systemSettingsService = systemSettingsService;
         }

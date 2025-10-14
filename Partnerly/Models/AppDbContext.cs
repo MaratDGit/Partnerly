@@ -28,7 +28,8 @@ namespace Partnerly.Models
         public DbSet<SystemSettings>? SystemSettings { get; set; }
         public DbSet<EmailTemplate>? EmailTemplates { get; set; }
         public DbSet<EmailAttachment>? EmailAttachments { get; set; }
-        
+        public DbSet<Notification>? Notifications { get; set; }
+
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<User>()

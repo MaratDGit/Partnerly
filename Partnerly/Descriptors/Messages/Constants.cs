@@ -64,6 +64,9 @@ namespace Partnerly.Descriptors.Messages
         public const string Error = "Error";
         public const string Critical = "Critical";
 
+        // Notofocation
+        public const string Success = "Success";
+
         // Email Template Names
         public const string EmailConfirmation = "Email Confirmation";
 

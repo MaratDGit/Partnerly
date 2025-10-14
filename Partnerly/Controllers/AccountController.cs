@@ -3,6 +3,8 @@ using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Mvc;
 using Partnerly.Descriptors.Attributes;
 using Partnerly.Descriptors.Messages;
+using Partnerly.Events;
+using Partnerly.Events.BaseEvents;
 using Partnerly.Infrastructure.Interfaces;
 using Partnerly.Models;
 using Partnerly.Models.ViewModels;
@@ -22,9 +24,10 @@ namespace Partnerly.Controllers
         private readonly ICurrentUserService _currentUser;
         private readonly IEmailSender _emailSender;
         private readonly IEmailConfirmationTokenService _tokenService;
+        private readonly IEventBus _eventBus;
         #endregion
         #region Constructor
-        public AccountController(IConfiguration config, ILogger<AccountController> logger, IUserService userService, ILogService logService, ICurrentUserService currentUser, IEmailSender emailSender, IEmailConfirmationTokenService tokenService)
+        public AccountController(IConfiguration config, ILogger<AccountController> logger, IUserService userService, ILogService logService, ICurrentUserService currentUser, IEmailSender emailSender, IEmailConfirmationTokenService tokenService, IEventBus eventBus)
         {
             _config = config;
             _logger = logger;
@@ -33,6 +36,7 @@ namespace Partnerly.Controllers
             _currentUser = currentUser;
             _emailSender = emailSender;
             _tokenService = tokenService;
+            _eventBus = eventBus;
         }
         #endregion
 
@@ -234,6 +238,8 @@ namespace Partnerly.Controllers
                     };
 
                     await _emailSender.SendEmailWithTemplateAsync(EmailTemplateNameAttribute.EmailConfirmation, result?.Data?.Email, emailModel);
+
+                    await _eventBus.PublishAsync(new UserRegisteredEvent(result.Data.Id, result.Data.FirstName));
 
                     return View("RegistrationSuccessful");
                 }

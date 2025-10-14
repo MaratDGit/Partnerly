@@ -4,6 +4,7 @@
     using Partnerly.Descriptors.Attributes;
     using Partnerly.Descriptors.Attributes.BaseAttributes;
     using Partnerly.Descriptors.Messages;
+    using Partnerly.Events.BaseEvents;
     using Partnerly.Helpers;
     using Partnerly.Infrastructure.Interfaces;
     using Partnerly.Infrastructure.Services;
@@ -18,8 +19,8 @@
     {
         private readonly IEmailTemplateService _emailTemplateService;
 
-        public EmailTemplatesController(IUserService userService, ICurrentUserService currentUser, IEmailTemplateService emailTemplateService, ILogService logService)
-        : base(userService, currentUser, logService)
+        public EmailTemplatesController(IEventBus eventBus, IUserService userService, ICurrentUserService currentUser, IEmailTemplateService emailTemplateService, ILogService logService)
+        : base(eventBus, userService, currentUser, logService)
         {
             _emailTemplateService = emailTemplateService;
         }

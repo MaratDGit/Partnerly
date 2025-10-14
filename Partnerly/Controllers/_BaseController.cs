@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc.Filters;
 using OfficeOpenXml;
 using Partnerly.Descriptors.Attributes;
 using Partnerly.Descriptors.Messages;
+using Partnerly.Events.BaseEvents;
 using Partnerly.Helpers;
 using Partnerly.Infrastructure.Interfaces;
 using Partnerly.Models.GridViews;
@@ -13,12 +14,14 @@ namespace Partnerly.Controllers
     [Authorize] // только для авторизованных
     public class _BaseController : Controller
     {
+        protected readonly IEventBus _eventBus;
         protected readonly IUserService _userService;
         protected readonly ICurrentUserService _currentUser;
         protected readonly ILogService _logService;   
 
-        public _BaseController(IUserService userService, ICurrentUserService currentUser, ILogService logService)
+        public _BaseController(IEventBus eventBus, IUserService userService, ICurrentUserService currentUser, ILogService logService)
         {
+            _eventBus = eventBus;
             _userService = userService;
             _currentUser = currentUser;
             _logService = logService;

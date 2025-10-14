@@ -2,6 +2,7 @@
 using Partnerly.Descriptors.Attributes;
 using Partnerly.Descriptors.Attributes.BaseAttributes;
 using Partnerly.Descriptors.Messages;
+using Partnerly.Events.BaseEvents;
 using Partnerly.Helpers;
 using Partnerly.Infrastructure.Interfaces;
 using Partnerly.Models;
@@ -15,8 +16,8 @@ namespace Partnerly.Controllers
     [ClaimAuthorize(ClaimTypes.Role, RoleTypeAttribute.Admin, RoleTypeAttribute.Employee)]
     public class LogRecordsController : _BaseController
     {
-        public LogRecordsController(IUserService userService, ICurrentUserService currentUser, ILogService logService)
-        : base(userService, currentUser, logService)
+        public LogRecordsController(IEventBus eventBus, IUserService userService, ICurrentUserService currentUser, ILogService logService)
+        : base(eventBus, userService, currentUser, logService)
         {
         }
 

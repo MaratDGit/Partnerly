@@ -2,6 +2,7 @@
 using Partnerly.Descriptors.Attributes;
 using Partnerly.Descriptors.Attributes.BaseAttributes;
 using Partnerly.Descriptors.Messages;
+using Partnerly.Events.BaseEvents;
 using Partnerly.Helpers;
 using Partnerly.Infrastructure.Interfaces;
 using Partnerly.Infrastructure.Services;
@@ -16,8 +17,8 @@ namespace Partnerly.Controllers
     public class RolesController : _BaseController
     {
         protected readonly IRoleService _roleService;
-        public RolesController(IUserService userService, ICurrentUserService currentUser, ILogService logService, IRoleService roleService)
-        : base(userService, currentUser, logService)
+        public RolesController(IEventBus eventBus, IUserService userService, ICurrentUserService currentUser, ILogService logService, IRoleService roleService)
+        : base(eventBus, userService, currentUser, logService)
         {
             _roleService = roleService;
         }

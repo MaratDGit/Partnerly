@@ -96,11 +96,12 @@ namespace Partnerly.Infrastructure.Services
             var smtpPort = int.Parse(_config["EmailSettings:Port"]);
             var smtpUser = _config["EmailSettings:Username"];
             var smtpPass = _config["EmailSettings:Password"];
+            var companyName = _config["EmailSettings:CompanyName"]; // добавьте сюда название компании
 
             if (smtpHost == null || smtpUser == null || smtpPass == null)
             {
                 await _logService.CreateLogAsync(LogActionsAttribute.EmailSending, LogTypeAttribute.Error,
-                                    $"Application Json required fields is empty SmtpServer - {smtpHost}, Username - {smtpUser}, Password - {smtpPass }");
+                                        $"Application Json required fields is empty SmtpServer - {smtpHost}, Username - {smtpUser}, Password - {smtpPass}");
                 return;
             }
 
@@ -109,10 +110,15 @@ namespace Partnerly.Infrastructure.Services
                 client.Credentials = new NetworkCredential(smtpUser, smtpPass);
                 client.EnableSsl = true;
 
-                using (var mailMessage = new MailMessage(smtpUser, email, subject, message))
-                {
-                    mailMessage.IsBodyHtml = true;
+                var fromAddress = new MailAddress(smtpUser, companyName);
 
+                using (var mailMessage = new MailMessage(fromAddress, new MailAddress(email))
+                {
+                    Subject = subject,
+                    Body = message,
+                    IsBodyHtml = true
+                })
+                {
                     if (attachments != null && attachments.Any())
                     {
                         foreach (var att in attachments)

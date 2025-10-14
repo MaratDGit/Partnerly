@@ -32,6 +32,10 @@ namespace Partnerly.Descriptors.Attributes
         public const string EmailTemplateDeleted = "TD";
         public const string EmailTemplateUpdated = "TU";
 
+        public const string NotificationCreated = "NC";
+        public const string NotificationDeleted = "ND";
+        public const string NotificationUpdated = "NU";
+
         public const string EmailSending = "ES";
 
         public LogActionsAttribute()
