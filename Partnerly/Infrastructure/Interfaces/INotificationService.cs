@@ -11,5 +11,7 @@ namespace Partnerly.Infrastructure.Interfaces
         Task<List<Notification>> GetUserNotificationsAsync(Guid userId, bool onlyUnread = false);
         Task<ServiceResult<Notification?>> MarkAsReadAsync(Guid? notificationId);
         Task<ServiceResult<Notification?>> MarkAllReadAsync(Guid? userID);
+        Task SendNotification(string userId, Notification notification);
+        Task UpdateUnreadCount(string userId, int count);
     }
 }

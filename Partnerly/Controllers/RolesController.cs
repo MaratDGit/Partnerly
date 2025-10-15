@@ -101,9 +101,9 @@ namespace Partnerly.Controllers
                 var roles = await _roleService.GetAllRolesAsync();
                 var users = await _userService.GetAllUsersAsync();
                 
-                foreach (User user in users)
+                foreach (User? user in users)
                 {
-                    string? roleName = user.Role?.Name;
+                    string? roleName = user?.Role?.Name;
                     if (roleName == null)
                     {
                         var role = roles.FirstOrDefault(_ => _.Id == user.RoleId);
@@ -126,13 +126,18 @@ namespace Partnerly.Controllers
                 }
             }
 
-            return Json(new { fields = GetFields(userRolesList.FirstOrDefault()), data = userRolesList });
+            if (userRolesList.Any())
+            {
+                return Json(new { fields = GetFields(userRolesList.First()), data = userRolesList });
+            }
+
+            return Json(new {});
         }
 
         protected override List<GridField> GetFields(object row)
         {
             var fields = new List<GridField>();
-            if (row is UserRolesGridViewModel userRow)
+            if (row is UserRolesGridViewModel)
             {
                 return new List<GridField>
                 {

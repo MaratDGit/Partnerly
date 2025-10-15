@@ -91,16 +91,7 @@ namespace Partnerly.Infrastructure.Services
             await _notificationRepository.AddAsync(newnotification);
             await _notificationRepository.SaveChangesAsync();
 
-            // Отправка уведомления онлайн через SignalR
-            await _hub.Clients.User(newnotification.UserId.ToString())
-                .SendAsync("ReceiveNotification", new
-                {
-                    newnotification.Id,
-                    newnotification.Message,
-                    newnotification.Type,
-                    newnotification.Link,
-                    newnotification.CreatedDate
-                });
+            await SendNotification(newnotification.UserId.ToString(), newnotification);
 
             return ServiceResult<Notification?>.Ok(newnotification);
         }
@@ -127,6 +118,12 @@ namespace Partnerly.Infrastructure.Services
 
             _notificationRepository.Update(notification);
             await _notificationRepository.SaveChangesAsync();
+
+            if (fromMarkAsRead)
+            {
+                var unread = await GetUserNotificationsAsync(notification.UserId, onlyUnread: true);
+                await UpdateUnreadCount(notification.UserId.ToString(), unread == null ? 0 : unread.Count());
+            }
 
             return ServiceResult<Notification?>.Ok(notification);
         }
@@ -157,5 +154,17 @@ namespace Partnerly.Infrastructure.Services
 
             return ServiceResult<Notification?>.Ok(Notification);
         }
+
+        #region Hub
+        public async Task SendNotification(string userId, Notification notification)
+        {
+            await _hub.Clients.User(userId).SendAsync("ReceiveNotification", notification);
+        }
+
+        public async Task UpdateUnreadCount(string userId, int count)
+        {
+            await _hub.Clients.User(userId).SendAsync("UpdateUnreadCount", count);
+        }
+        #endregion
     }
 }

@@ -1,18 +1,16 @@
-﻿using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Mvc;
-using Partnerly.Descriptors.Messages;
+﻿using Microsoft.AspNetCore.Mvc;
 using Partnerly.Events.BaseEvents;
 using Partnerly.Infrastructure.Interfaces;
-using Partnerly.Models.ViewModels;
-using System.Diagnostics;
 
 namespace Partnerly.Controllers
 {
     public class DashboardController : _BaseController
     {
-        public DashboardController(IEventBus eventBus, IUserService userService, ICurrentUserService currentUser, ILogService logService)
+        private readonly INotificationService _notificationService;
+        public DashboardController(IEventBus eventBus, IUserService userService, ICurrentUserService currentUser, ILogService logService, INotificationService notificationService)
         : base(eventBus, userService, currentUser, logService)
         {
+            _notificationService = notificationService;
         }
 
         public async Task<IActionResult> Index()

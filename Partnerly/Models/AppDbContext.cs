@@ -80,6 +80,10 @@ namespace Partnerly.Models
                                 User? superUser = Users?.FirstOrDefault(_ => _.Email == Constants.SuperUserEmail);
                                 entity.UpdatedBy = entity.CreatedBy = superUser?.Id ?? new Guid();
                             }
+                            else if (entity is Notification noteEntity)
+                            {
+                                entity.UpdatedBy = entity.CreatedBy = noteEntity.UserId;
+                            }
                         }
                     }
                     else if (entityEntry.State == EntityState.Modified)

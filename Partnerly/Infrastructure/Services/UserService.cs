@@ -1,9 +1,10 @@
 ﻿using Partnerly.Descriptors.Attributes;
 using Partnerly.Descriptors.Messages;
+using Partnerly.Events;
+using Partnerly.Events.BaseEvents;
 using Partnerly.Helpers;
 using Partnerly.Infrastructure.Interfaces;
 using Partnerly.Models;
-using System.Security.Claims;
 
 namespace Partnerly.Infrastructure.Services
 {
@@ -14,14 +15,16 @@ namespace Partnerly.Infrastructure.Services
         private readonly IPermissionService _permissionService;
         private readonly ICurrentUserService _currentUserService;
         private readonly ILogService _logService;
+        private readonly IEventBus _eventBus;
 
-        public UserService(IUserRepository userRepo, IRoleService roleService, IPermissionService permissionService, ICurrentUserService currentUserService, ILogService logService)
+        public UserService(IUserRepository userRepo, IRoleService roleService, IPermissionService permissionService, ICurrentUserService currentUserService, ILogService logService, IEventBus eventBus)
         {
             _userRepo = userRepo;
             _roleService = roleService;
             _permissionService = permissionService;
             _currentUserService = currentUserService;
             _logService = logService;
+            _eventBus = eventBus;
         }
 
         public async Task<User?> GetUserByEmailAsync(string? email) =>
@@ -117,14 +120,16 @@ namespace Partnerly.Infrastructure.Services
 
             try
             {
-                await _logService.CreateLogAsync(LogActionsAttribute.UserCreated, LogTypeAttribute.Information, null);
                 await _userRepo.AddAsync(newUser);
                 await _userRepo.SaveChangesAsync();
+
+                bool sendEmailTo = newUser?.Id == newUser.CreatedBy;
+                await _eventBus.PublishAsync(new UserRegisteredEvent(newUser: newUser, sendEmail: sendEmailTo, sendNote: true));
             }
             catch (Exception ex)
             {
                 await _logService.CreateLogAsync(LogActionsAttribute.UserCreated, LogTypeAttribute.Error, ex.Message);
-                return ServiceResult<User?>.Fail(new List<string> { });
+                return ServiceResult<User?>.Fail(new List<string> { ex.Message });
             }
 
             return ServiceResult<User?>.Ok(newUser);

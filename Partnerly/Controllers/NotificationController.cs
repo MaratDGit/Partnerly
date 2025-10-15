@@ -8,6 +8,7 @@ namespace Partnerly.Controllers
     public class NotificationController : _BaseController
     {
         private readonly INotificationService _notificationService;
+
         public NotificationController(IEventBus eventBus, IUserService userService, ICurrentUserService currentUser, ILogService logService, INotificationService notificationService)
         : base(eventBus, userService, currentUser, logService)
         {
@@ -16,12 +17,13 @@ namespace Partnerly.Controllers
 
         public async Task<IActionResult> Index()
         {
-            var notifications = new List<Notification>();
+            //var notifications = new List<Notification>();
 
-            if (_currentUser?.UserId != null)
-             notifications = await _notificationService.GetUserNotificationsAsync(_currentUser.UserId.Value);
+            //if (_currentUser?.UserId != null)
+            //    notifications = await _notificationService.GetUserNotificationsAsync(_currentUser.UserId.Value);
 
-            return View(notifications);
+            //return View(notifications);
+            return View();
         }
 
         [HttpPost]
@@ -31,7 +33,6 @@ namespace Partnerly.Controllers
             {
                 await _notificationService.MarkAsReadAsync(id);
             }
-            
             return Ok();
         }
 
@@ -45,20 +46,20 @@ namespace Partnerly.Controllers
             return Ok();
         }
 
-        [HttpGet]
-        public async Task<IActionResult> GetUnread()
-        {
-            var userId = _currentUser.UserId;
-            if (userId == null) return Unauthorized();
+        //[HttpGet]
+        //public async Task<IActionResult> GetUnread()
+        //{
+        //    var userId = _currentUser.UserId;
+        //    if (userId == null) return Unauthorized();
 
-            var notifications = await _notificationService.GetUserNotificationsAsync(userId.Value, onlyUnread: true);
+        //    var notifications = await _notificationService.GetUserNotificationsAsync(userId.Value, onlyUnread: true);
 
-            return Json(notifications.Select(n => new
-            {
-                n.Id,
-                n.Message,
-                CreatedAt = ((DateTime)n.CreatedDate).ToString("dd.MM.yyyy HH:mm")
-            }));
-        }
+        //    return Json(notifications.Select(n => new
+        //    {
+        //        n.Id,
+        //        n.Message,
+        //        CreatedAt = ((DateTime)n.CreatedDate).ToString("dd.MM.yyyy HH:mm")
+        //    }));
+        //}
     }
 }

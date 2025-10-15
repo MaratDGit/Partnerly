@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.SignalR;
+using Microsoft.EntityFrameworkCore;
 using Partnerly.Events;
 using Partnerly.Events.BaseEvents;
 using Partnerly.Hubs;
@@ -55,6 +56,7 @@ builder.Services.AddAuthentication("Cookies")
 
 // EventBus (Singleton)
 builder.Services.AddSingleton<IEventBus, EventBus>();
+builder.Services.AddSingleton<IUserIdProvider, CustomUserIdProvider>();
 
 var app = builder.Build();
 
@@ -71,13 +73,6 @@ using (var scope = app.Services.CreateScope())
     var eventBus = services.GetRequiredService<IEventBus>();
     eventBus.Subscribe<UserRegisteredEvent, UserRegisteredEventHandler>();
 }
-
-// -------------------- MIDDLEWARE --------------------
-
-// Use middlewares до маршрутизации
-app.UseMiddleware<UpdateLastActivityMiddleware>();
-app.UseMiddleware<MaintenanceMiddleware>();
-app.UseMiddleware<RoleChangeMiddleware>();
 
 if (!app.Environment.IsDevelopment())
 {
@@ -97,6 +92,12 @@ app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Home}/{action=Index}/{id?}");
 
+// -------------------- MIDDLEWARE --------------------
+app.UseMiddleware<UpdateLastActivityMiddleware>();
+app.UseMiddleware<MaintenanceMiddleware>();
+app.UseMiddleware<RoleChangeMiddleware>();
+
+// -------------------- HUBS --------------------
 app.MapHub<NotificationHub>("/notificationHub");
 
 app.Run();

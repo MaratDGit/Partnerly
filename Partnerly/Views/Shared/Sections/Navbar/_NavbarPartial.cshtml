@@ -2,12 +2,12 @@
 <style>
 .notification-item {
     position: relative;
-    padding-right: 30px; /* чтобы текст не налезал на X */
+    padding-right: 30px;
 }
 
 .delete-notification {
     position: absolute;
-    top: 8px;
+    top: 1px;
     right: 1px; 
     background-color: rgba(0, 0, 0, 0.05);
     border: none;
@@ -32,7 +32,7 @@
 }
 
 .notification-message {
-    margin-top: 8px; /* 🔹 отодвигаем текст вниз */
+    margin-top: 8px; 
     display: -webkit-box;
     -webkit-line-clamp: 2;
     -webkit-box-orient: vertical;
@@ -92,10 +92,10 @@
              style="width: 320px; overflow: hidden;">
           <div id="notificationListWrapper" style="max-height: 380px; overflow-y: auto; overflow-x: hidden;" class="p-2">
             <ul id="notificationList" class="list-unstyled mb-0">
-              <li class="text-center text-muted small py-2">Загрузка...</li>
+                <li class="text-center text-muted small py-2 no-notifications">Нет новых уведомлений</li>
             </ul>
           </div>
-          <div class="p-2 border-top bg-light text-center">
+          <div class="p-2 border-top bg-light text-center" style="display:none;">
             <button id="markAllReadBtn" class="btn btn-sm btn-outline-primary w-100">
               Отметить все как прочитанные
             </button>
@@ -145,7 +145,6 @@
             <span class="d-flex align-items-center align-middle">
               <i class="flex-shrink-0 bx bx-credit-card bx-md me-3"></i>
               <span class="flex-grow-1 align-middle">Платежи</span>
-              @*<span class="flex-shrink-0 badge rounded-pill bg-danger">4</span>*@
             </span>
           </a>
         </li>
@@ -163,65 +162,69 @@
   </ul>
 </div>
 
+<script src="https://cdnjs.cloudflare.com/ajax/libs/microsoft-signalr/8.0.0/signalr.min.js"></script>
 <script>
 document.addEventListener('DOMContentLoaded', function() {
-    const dropdown = document.getElementById('notificationDropdown');
     const list = document.getElementById('notificationList');
     const badge = document.getElementById('unreadCountBadge');
     const markAllBtn = document.getElementById('markAllReadBtn');
 
-    // 🔹 Функция обновления счётчика бейджа
-    function updateBadgeCount() {
-        const count = list.querySelectorAll('li.dropdown-item').length;
+    const connection = new signalR.HubConnectionBuilder()
+        .withUrl("/notificationHub")
+        .withAutomaticReconnect()
+        .build();
+
+    // 🔹 Обработка новых уведомлений
+    connection.on("ReceiveNotification", function (notification) {
+
+        const emptyItem = list.querySelector('.no-notifications');
+        if (emptyItem) emptyItem.remove();
+
+        const li = document.createElement('li');
+        li.classList.add('dropdown-item', 'py-2', 'border-bottom', 'notification-item');
+        li.innerHTML = `
+            <div style="position: relative;">
+                <small class="text-muted">${new Date(notification.createdDate).toLocaleString()}</small>
+                <div class="notification-message" id="msg-${notification.id}">${notification.message}</div>
+                <button class="btn btn-link btn-sm p-0 text-primary toggle-details" data-id="${notification.id}">Подробнее</button>
+                <button class="delete-notification mark-read" data-id="${notification.id}">
+                    <i class="bx bx-x"></i>
+                </button>
+            </div>
+        `;
+        list.prepend(li);
+
+        // Показываем кнопку "Отметить все как прочитанные"
+        markAllBtn.closest('div').style.display = 'block';
+
+        // Обновляем бейдж
+        badge.textContent = list.querySelectorAll('li.dropdown-item').length;
+        badge.style.display = 'inline-block';
+    });
+
+    // 🔹 Обновление счётчика уведомлений
+    connection.on("UpdateUnreadCount", function (count) {
         if (count > 0) {
             badge.textContent = count;
             badge.style.display = 'inline-block';
+            markAllBtn.closest('div').style.display = 'block';
         } else {
             badge.style.display = 'none';
-            const footer = document.querySelector('#markAllReadBtn').closest('div');
-            footer.style.display = 'none';
-            list.innerHTML = '<li class="text-center text-muted small py-2">Нет новых уведомлений</li>';
+            markAllBtn.closest('div').style.display = 'none';
+
+            // Если уведомлений нет, показываем заглушку "Нет новых уведомлений"
+            list.innerHTML = '<li class="text-center text-muted small py-2 no-notifications">Нет новых уведомлений</li>';
         }
-    }
-
-    // 🔹 Загрузка уведомлений при открытии dropdown
-    dropdown.addEventListener('click', function() {
-        fetch('/Notification/GetUnread')
-            .then(res => res.json())
-            .then(data => {
-                const footer = document.querySelector('#markAllReadBtn').closest('div');
-                list.innerHTML = '';
-
-                if (data.length === 0) {
-                    list.innerHTML = '<li class="text-center text-muted small py-2">Нет новых уведомлений</li>';
-                    badge.style.display = 'none';
-                    footer.style.display = 'none';
-                    return;
-                }
-
-                badge.textContent = data.length;
-                badge.style.display = 'inline-block';
-                footer.style.display = 'block';
-
-                data.forEach(n => {
-                    const li = document.createElement('li');
-                    li.classList.add('dropdown-item', 'py-2', 'border-bottom', 'notification-item');
-                    li.innerHTML = `
-                        <div style="position: relative;">
-                            <small class="text-muted">${n.createdAt}</small>
-                            <div class="notification-message" id="msg-${n.id}">${n.message}</div>
-                            <button class="btn btn-link btn-sm p-0 text-primary toggle-details" data-id="${n.id}">Подробнее</button>
-                            <button class="delete-notification mark-read" data-id="${n.id}">
-                                <i class="bx bx-x"></i>
-                            </button>
-                        </div>
-                    `;
-                    list.appendChild(li);
-                });
-            });
     });
 
-    // 🔹 Обработка кликов внутри списка
+    // 🔹 Запуск подключения
+    connection.start()
+        .then(() => console.log("✅ Подключено к SignalR NotificationHub"))
+        .catch(err => console.error("❌ Ошибка подключения SignalR:", err));
+
+    // =============================
+    // 🔹 Обработчики кликов по списку
+    // =============================
     list.addEventListener('click', function (e) {
         const btn = e.target.closest('button');
         if (!btn) return;
@@ -236,7 +239,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 .then(res => {
                     if (res.ok) {
                         li.remove();
-                        updateBadgeCount(); // 🔹 обновляем счётчик
+                        updateBadge();
                     }
                 });
         }
@@ -253,21 +256,23 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     });
 
-    // 🔹 Обработка кнопки "Отметить все как прочитанные"
+    // 🔹 Кнопка "Отметить все как прочитанные"
     markAllBtn.addEventListener('click', function() {
         fetch('/Notification/MarkAllAsRead', { method: 'POST' })
-            .then(res => {
-                if (res.ok) {
-                    list.innerHTML = '<li class="text-center text-muted small py-2">Нет новых уведомлений</li>';
-                    badge.style.display = 'none';
-                    const footer = document.querySelector('#markAllReadBtn').closest('div');
-                    footer.style.display = 'none';
-                }
-            });
+            .then(res => {});
     });
+
+    function updateBadge() {
+        const count = list.querySelectorAll('li.dropdown-item').length;
+        badge.textContent = count;
+        badge.style.display = count > 0 ? 'inline-block' : 'none';
+        markAllBtn.style.display = count > 0 ? 'block' : 'none';
+        markAllBtn.closest('div').style.display = count > 0 ? 'block' : 'none';
+
+        if (count === 0) {
+            list.innerHTML = '<li class="text-center text-muted small py-2 no-notifications">Нет новых уведомлений</li>';
+        }
+    }
 });
+
 </script>
-
-
-
-

@@ -204,48 +204,12 @@ namespace Partnerly.Controllers
             {
                 foreach (var error in result.Errors)
                 {
-                    ModelState.AddModelError("", error);
+                    ModelState.AddModelError("TermsConditions", error);
                 }
                 return View(model);
             }
 
-            if (result.Data?.Id != null && result.Data.Email != null)
-            {
-                var emailToken = new EmailConfirmationToken { UserId = result.Data.Id, TokenType = EmailTokenTypeAttribute.Registration };
-            
-                var tokenResult = await _tokenService.CreateConfirmationTokenAsync(emailToken);
-                if (!tokenResult.Success)
-                {
-                    foreach (var error in tokenResult.Errors)
-                    {
-                        ModelState.AddModelError("", error);
-                    }
-                    return View(model);
-                }
-
-                if (tokenResult?.Data?.UserId != null && tokenResult.Data.Token != null)
-                {
-                    var confirmationLink = Url.Action(
-                    nameof(ConfirmEmail),
-                    "Account",
-                    new { userId = tokenResult.Data.UserId, tokenResult.Data.Token },
-                    Request.Scheme);
-
-                    var emailModel = new
-                    {
-                        UserName = $"{result.Data?.FirstName} {result.Data?.LastName}",
-                        ConfirmationLink = confirmationLink,
-                    };
-
-                    await _emailSender.SendEmailWithTemplateAsync(EmailTemplateNameAttribute.EmailConfirmation, result?.Data?.Email, emailModel);
-
-                    await _eventBus.PublishAsync(new UserRegisteredEvent(result.Data.Id, result.Data.FirstName));
-
-                    return View("RegistrationSuccessful");
-                }
-            }
-
-            return RedirectToAction("Index", "Home");
+            return View("RegistrationSuccessful");
         }
 
         [HttpGet]
