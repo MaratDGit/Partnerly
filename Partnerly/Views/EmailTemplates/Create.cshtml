@@ -1,5 +1,5 @@
 ﻿@model Partnerly.Models.ViewModels.EmailTemplateViewModel;
-@await Html.PartialAsync("_Toast")
+@await Html.PartialAsync("_Toast");
 
 @{
     ViewData["Title"] = "Создать шаблон";
@@ -13,18 +13,23 @@
 
     <div class="card-body">
         <form id="emailTemplateForm" asp-action="Create">
-            <div class="sticky-buttons justify-content-between mb-6">
-                 <a asp-action="Index" class="btn btn-link p-0">
-                    <i class="bx bx-arrow-back me-1 fs-3"></i> 
-                </a>
-                <button type="submit" id="btnSave" class="btn btn-link p-0">
-                    <i class="bx bx-save me-1 fs-3"></i> 
-                </button>
-                <button type="button" class="btn btn-link p-0" data-bs-toggle="modal" data-bs-target="#previewModal" onclick="showPreview()">
-                    <i class="bx bx-show me-1 fs-3"></i> 
-                </button>
-            </div>
-            
+            @await Html.PartialAsync("_StickyButtons", new Partnerly.Models.ViewModels.FormActionsViewModel {
+                Id = null,
+                ShowBack = true,
+                ShowUndo = true,
+                ShowSave = true,
+                ShowMenu = true,
+                MenuActions = new List<Partnerly.Models.ViewModels.MenuAction> {
+                    new Partnerly.Models.ViewModels.MenuAction {
+                        Icon = "bx bx-show",
+                        Name = "Предпросмотр",
+                        IsModal = true,
+                        ModalTarget = "#previewModal",
+                        OnClick = "showPreview()",
+                    },
+                }
+            })    
+
             <div class="form-floating mb-1 max-w-600 position-relative">
                 <input asp-for="Name"
                     id="name"
@@ -44,17 +49,6 @@
                 <i class='bx bx-search lookup-icon'></i>
                 <span asp-validation-for="Name" class="text-danger"></span>      
              </div>
-
-            @*<div class="form-floating mb-1 max-w-600">
-                <select  asp-for="Name"
-                        asp-items="ViewBag.EmailTemplateList"
-                        class="form-select"
-                        id="templateName">
-                    <option value="">-- Выберите тип шаблона --</option>
-                </select>
-                <label asp-for="Name"></label>
-                <span asp-validation-for="Name" class="text-danger"></span>
-            </div>*@
 
             <div class="form-floating mb-1 max-w-600">
                 <input asp-for="Subject" id="subject" class="form-control"/>

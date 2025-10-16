@@ -1,0 +1,80 @@
+﻿@model  Partnerly.Models.ViewModels.FormActionsViewModel
+
+<div class="sticky-buttons justify-content-between mb-6">
+    @if (Model.ShowBack)
+    {
+        @if (Model.Id != null)
+        {
+            <a asp-action="Index" class="btn btn-link p-0" title="Назад">
+                <i class="bx bx-arrow-back me-1 fs-3"></i>
+            </a>
+        }
+        else
+        {
+            <a asp-action="Index" asp-controller="Home" class="btn btn-link p-0" title="Назад">
+                <i class="bx bx-arrow-back me-1 fs-3"></i>
+            </a>
+        }
+    }
+
+    @if (Model.ShowUndo)
+    {
+        var actionName = Model.Id != null ? "Edit" : "Create";
+        <a asp-action="@actionName" asp-route-id="@(Model.Id ?? Guid.Empty)" class="btn btn-link p-0" title="Редактировать">
+            <i class="bx bx-undo me-1 fs-3"></i>
+        </a>
+    }
+
+    @if (Model.ShowSave)
+    {
+        <button type="submit" id="btnSave" class="btn btn-link p-0" title="Сохранить">
+            <i class="bx bx-save me-1 fs-3"></i>
+        </button>
+    }
+
+    @if (Model.ShowCreate)
+    {
+        <a asp-action="Create" class="btn btn-link p-0" title="Создать">
+            <i class="bx bx-plus me-1 fs-3"></i>
+        </a>
+    }
+
+    @if (Model.ShowDelete && Model.Id != null)
+    {
+        <a asp-action="Delete" asp-route-id="@Model.Id" class="btn btn-link p-0" title="Удалить">
+            <i class="bx bx-trash me-1 fs-3"></i>
+        </a>
+    }
+
+    @if (Model.ShowMenu && Model.MenuActions.Any())
+    {
+        <div class="btn-group">
+            <button type="button" class="btn btn-link p-0" data-bs-toggle="dropdown" title="Дополнительно">
+                <i class="bx bx-dots-horizontal-rounded fs-3"></i>
+            </button>
+            <ul class="dropdown-menu dropdown-menu-end">
+                @foreach (var action in Model.MenuActions)
+                {
+                    <li>
+                        @if (action.IsModal)
+                        {
+                            <a class="dropdown-item" href="#" data-bs-toggle="modal" data-bs-target="@action.ModalTarget" onclick="@action.OnClick">
+                                <i class="@action.Icon me-1"></i> @action.Name
+                            </a>
+                        }
+                        else
+                        {
+                            <a class="dropdown-item"
+                               asp-action="@action.Action"
+                               asp-controller="@action.Controller"
+                               asp-route-id="@action.RouteID">
+                                <i class="@action.Icon me-1"></i> @action.Name
+                            </a>
+                        }
+                    </li>
+                }
+            </ul>
+        </div>
+    }
+
+</div>
