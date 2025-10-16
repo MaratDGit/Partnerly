@@ -42,6 +42,7 @@ namespace Partnerly.Infrastructure.Services
             newRec.Name = rec.Name;
             newRec.Subject = rec.Subject;
             newRec.BodyHtml = rec.BodyHtml;
+            newRec.BodyPlain = rec.BodyPlain;
 
             newRec.IsDeleted = false;
 
@@ -98,7 +99,7 @@ namespace Partnerly.Infrastructure.Services
                 return ServiceResult<EmailTemplate?>.Fail(new List<string> { });
             }
 
-            //_templateRepo.Delete(rec);
+            _templateRepo.Delete(rec);
             await _templateRepo.SaveChangesAsync();
 
             return ServiceResult<EmailTemplate?>.Ok(rec);

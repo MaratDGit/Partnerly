@@ -32,7 +32,7 @@
                 <!-- Dropdown -->
                 <div class="btn-group">
                     <button type="button" class="btn btn-link p-0" data-bs-toggle="dropdown" title="Дополнительно">
-                        <i class="bx bx-dots-vertical-rounded fs-3"></i>
+                        <i class="bx bx-dots-horizontal-rounded fs-3"></i>
                     </button>
                     <ul class="dropdown-menu dropdown-menu-end">
                         <li>
@@ -46,11 +46,26 @@
 
             <input type="hidden" asp-for="Id" />
 
-            <div class="form-floating mb-1 max-w-600">
-                   <input asp-for="FirstName" class="form-control" id="firstName" name="firstName" placeholder="" autofocus/>
-                   <label asp-for="FirstName"></label>
-                   <span asp-validation-for="FirstName" class="text-danger"></span>
+            <div class="form-floating mb-1 max-w-600 position-relative">
+                <input asp-for="FirstName"
+                       id="firstName"
+                       name="firstName"
+                       type="text"
+                       class="form-control lookup-input pe-5"
+                       placeholder=" "
+                       data-lookup="true"
+                       data-lookup-source="/Users/GetLookupList"
+                       data-lookup-title="Пользователи"
+                       data-edit-url-base="/Users/Edit/"
+                       data-lookup-column-names="name:Название,email:Электронная почта"
+                       data-lookup-display-field="FirstName"
+                       data-lookup-param="fieldName"
+                       data-lookup-param-value="Name" autofocus/>
+                <label asp-for="FirstName"></label>
+                <i class='bx bx-search lookup-icon'></i>
+                <span asp-validation-for="FirstName" class="text-danger"></span>
             </div>
+            
             <div class="form-floating mb-1 max-w-600">
                <input asp-for="LastName" class="form-control" id="lastName" name="lastName" placeholder=""/>
                <label asp-for="LastName"></label>

@@ -23,14 +23,42 @@
             <button type="submit" id="btnSave" class="btn btn-link p-0">
                 <i class="bx bx-save me-1 fs-3"></i> 
             </button>
+            <!-- Dropdown -->
+            <div class="btn-group">
+                <button type="button" class="btn btn-link p-0" data-bs-toggle="dropdown" title="Дополнительно">
+                    <i class="bx bx-dots-horizontal-rounded fs-3"></i>
+                </button>
+                <ul class="dropdown-menu dropdown-menu-end">
+                    <li>
+                        <a class="dropdown-item" asp-action="Edit" asp-controller="Users" asp-route-id="@Model.Id">
+                            <i class="bx bx-show me-1"></i> Просмотреть
+                        </a>
+                    </li>
+                </ul>
+            </div>
         </div>
 
         <input type="hidden" asp-for="Id" />
 
-        <div class="form-floating mb-1 max-w-600">
-            <input asp-for="UserName" id="userName" class="form-control" readonly/>
+        <div class="form-floating mb-1 max-w-600 position-relative">
+            <input asp-for="UserName"
+                    id="userName"
+                    name="userName"
+                    type="text"
+                    class="form-control lookup-input pe-5"
+                    placeholder=" "
+                    data-lookup="true"
+                    data-lookup-source="/Roles/GetLookupList"
+                    data-lookup-title="Пользователи"
+                    data-edit-url-base="/Roles/Edit/"
+                    data-lookup-column-names="name:Пользователь,role:Роль"
+                    data-lookup-display-field="UserName"
+                    data-lookup-param="fieldName"
+                    data-lookup-param-value="Name" readonly/>
             <label asp-for="UserName"></label>
+            <i class='bx bx-search lookup-icon'></i>
         </div>
+        
         <div class="form-floating mb-1 max-w-600">
             <input asp-for="OldRoleName" id="oldRoleName" class="form-control" readonly/>
             <label asp-for="OldRoleName"></label>

@@ -22,6 +22,8 @@ namespace Partnerly.Descriptors.Messages
         public const string IncorectEmail = "Неверный Email";
         public const string UserAccessDenied = "у пользователя нету доступа";
         public const string FieldRequired = "oбязательное поле";
+        public const string UniqueValue = "с таким именем уже существует";
+        public const string CannotDeleteSystemRecords = "Вы не можете удалить системное рекорды";
         public const string TypeValidPhoneNumber = "Введите правильный номер в формате +374 XX XXXXXX";
         public const string InvalidRefferalCode = "Такого реферального кода не существует";
         public const string UserWithEmailArleadyExist = "Пользователь с таким Email уже существует";

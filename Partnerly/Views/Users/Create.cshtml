@@ -25,11 +25,26 @@
                 </button>
             </div>
 
-            <div class="form-floating mb-1 max-w-600">
-               <input asp-for="FullName" class="form-control" id="fullName" name="fullName" placeholder="" autofocus/>
-               <label asp-for="FullName"></label>
-               <span asp-validation-for="FullName" class="text-danger"></span>
+            <div class="form-floating mb-1 max-w-600 position-relative">
+                <input asp-for="FullName"
+                       id="fullName"
+                       name="fullName"
+                       type="text"
+                       class="form-control lookup-input pe-5"
+                       placeholder=" "
+                       data-lookup="true"
+                       data-lookup-source="/Users/GetLookupList"
+                       data-lookup-title="Пользователи"
+                       data-edit-url-base="/Users/Edit/"
+                       data-lookup-column-names="name:Название,email:Электронная почта"
+                       data-lookup-display-field="FullName"
+                       data-lookup-param="fieldName"
+                       data-lookup-param-value="Name" autofocus/>
+                <label asp-for="FullName"></label>
+                <i class='bx bx-search lookup-icon'></i>
+                <span asp-validation-for="FullName" class="text-danger"></span>
             </div>
+
             <div class="form-floating mb-1 max-w-600">
                <input asp-for="ReferrerCode" class="form-control" id="referrerCode" name="referrerCode" placeholder="Реферальный код пригласителя"/>
                 <label asp-for="ReferrerCode"></label>

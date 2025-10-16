@@ -10,7 +10,7 @@ namespace Partnerly.Infrastructure.Repositories
 
         public async Task<EmailTemplate?> GetByNameAsync(string? name)
         {
-            return await _dbSet.FirstOrDefaultAsync(u => name != null && u.Name == name);
+            return await _dbSet.FirstOrDefaultAsync(u => name != null && u.Name.ToUpper() == name.ToUpper());
         }
     }
 }

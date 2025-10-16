@@ -33,7 +33,6 @@
         public IActionResult Create()
         {
             EmailTemplateViewModel model = new EmailTemplateViewModel { Id = Guid.NewGuid() };
-            ViewBag.EmailTemplateList = AttributeDropdownHelper.FromAttribute<EmailTemplateNameAttribute>();
             return View(model);
         }
 
@@ -43,10 +42,33 @@
         {
             if (ModelState.IsValid)
             {
-                return RedirectToAction(nameof(Index));
+                var template = await _emailTemplateService.GetTemplateByNameAsync(model.Name);
+                if (template != null)
+                {
+                    ModelState.AddModelError("Name", $"{FieldsDisplayNames.TemplateType} {ErrorMessages.UniqueValue}");
+                    return View(model);
+                }
+
+                EmailTemplate newTemp = new EmailTemplate();
+                newTemp.Name = model.Name;
+                newTemp.Subject = model.Subject;
+                newTemp.BodyHtml = model.BodyHtml;
+                newTemp.BodyPlain = model.BodyPlain;
+                var result = await _emailTemplateService.CreateTemplateAsync(newTemp);
+
+                if (!result.Success)
+                {
+                    foreach (var error in result.Errors)
+                    {
+                        ModelState.AddModelError("Name", error);
+                    }
+                    return View(model);
+                }
+
+                TempData["ToastMessage"] = Messages.RecordSaved;
+                return RedirectToAction("Edit", new { id = result?.Data?.Id });
             }
 
-            ViewBag.EmailTemplateList = AttributeDropdownHelper.FromAttribute<EmailTemplateNameAttribute>();
             return View(model);
         }
 
@@ -95,6 +117,16 @@
         {
             var template = await _emailTemplateService.GetTemplateByIDAsync(id);
             if (template == null) return NotFound();
+
+
+            if (AttributeDropdownHelper.GetValue<EmailTemplateNameAttribute>(template.Name) != null)
+            {
+                var model = new { id = id };
+                TempData["ToastType"] = "error";
+                TempData["ToastMessage"] = ErrorMessages.CannotDeleteSystemRecords;
+                return RedirectToAction("Edit", model);
+            }
+
             return View();
         }
 
@@ -116,6 +148,29 @@
                 }
             }
             return RedirectToAction(nameof(Index));
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> GetLookupList(string fieldName)
+        {
+            if (fieldName == "Name")
+            {
+                var query = await _emailTemplateService.GetAllTemplatesAsync();
+
+                var result = query
+                    .Select(u => new
+                    {
+                        id = u.Id,
+                        name = AttributeDropdownHelper.GetValue<EmailTemplateNameAttribute>(u.Name) ?? u.Name,
+                        subject = u.Subject
+                    })
+                    .OrderBy(u => u.name)
+                    .ToList();
+
+                return Json(result);
+            }
+
+            return Json(new { });
         }
 
         #region Grids 

@@ -1,5 +1,6 @@
 ﻿using Partnerly.Descriptors.Attributes;
 using Partnerly.Descriptors.Messages;
+using Partnerly.Helpers;
 using System.ComponentModel.DataAnnotations;
 
 namespace Partnerly.Models.ViewModels
@@ -8,16 +9,21 @@ namespace Partnerly.Models.ViewModels
     {
         [Required]
         public Guid Id { get; set; }
+
         [EmailTemplateName]
         [Required(ErrorMessage = $"{FieldsDisplayNames.TemplateType} {ErrorMessages.FieldRequired}")]
         [Display(Name = FieldsDisplayNames.TemplateType)]
         public string? Name { get; set; }
+        public string? NameView { get => AttributeDropdownHelper.GetValue<EmailTemplateNameAttribute>(Name) ?? Name; }
+
         [Required(ErrorMessage = $"{FieldsDisplayNames.Subject} {ErrorMessages.FieldRequired}")]
         [Display(Name = FieldsDisplayNames.Subject)]
         public string? Subject { get; set; }
+
         [Required(ErrorMessage = $"{FieldsDisplayNames.BodyHTML} {ErrorMessages.FieldRequired}")]
         [Display(Name = FieldsDisplayNames.BodyHTML)]
         public string? BodyHtml { get; set; }
+
         public string? BodyPlain { get; set; }
         public string? AttachmentsMeta { get; set; }
         public Guid? CreatedBy { get; set; }

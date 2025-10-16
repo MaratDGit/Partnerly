@@ -92,6 +92,55 @@ namespace Partnerly.Controllers
         }
 
         [HttpGet]
+        public async Task<IActionResult> GetLookupList(string fieldName)
+        {
+            if (fieldName == "Name")
+            {
+                List<UserRolesGridViewModel> userRolesList = new List<UserRolesGridViewModel>();
+                var roles = await _roleService.GetAllRolesAsync();
+                var users = await _userService.GetAllUsersAsync();
+
+                foreach (User? user in users)
+                {
+                    string? roleName = user?.Role?.Name;
+                    if (roleName == null)
+                    {
+                        var role = roles.FirstOrDefault(_ => _.Id == user.RoleId);
+                        roleName = role?.Name;
+                    }
+                    if (roleName != null)
+                    {
+                        UserRolesGridViewModel row = new UserRolesGridViewModel
+                        {
+                            Id = user.Id,
+                            UserName = $"{user.FirstName} {user.LastName}",
+                            Email = user.Email,
+                            Phone = user.Phone,
+                            OldRoleId = user.RoleId,
+                            OldRoleName = roleName,
+                        };
+                        row.Actions = GetRowActions(row, "Roles");
+                        userRolesList.Add(row);
+                    }
+                }
+
+                var result = userRolesList
+                    .Select(u => new
+                    {
+                        id = u.Id,
+                        name = u.UserName,
+                        role = u.OldRoleName
+                    })
+                    .OrderBy(u => u.name)
+                    .ToList();
+
+                return Json(result);
+            }
+
+            return Json(new { });
+        }
+
+        [HttpGet]
         public async Task<JsonResult> GetData(string tableModel)
         {
             List<UserRolesGridViewModel> userRolesList = new List<UserRolesGridViewModel>();

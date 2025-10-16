@@ -94,6 +94,12 @@
             <div>Роли</div>
           </a>
         </li>
+        <li class='menu-item@(currentPage.StartsWith("/UserGroups") ? " active" : "")'>
+          <a asp-controller="UserGroups" asp-action="Index" class="menu-link">
+            <i class="menu-icon tf-icons bx bx-group"></i>
+            <div>Группы</div>
+          </a>
+        </li>
         <li class='menu-item@(currentPage.StartsWith("/EmailTemplates") ? " active" : "")'>
           <a asp-controller="EmailTemplates" asp-action="Index" class="menu-link">
             <i class="menu-icon tf-icons bx bx-sitemap"></i>

@@ -60,6 +60,10 @@ namespace Partnerly.Descriptors.Messages
         public const string NotificationDeleted = "Notification Deleting";
         public const string NotificationUpdated = "Notification Updating";
 
+        public const string UserGroupCreated = "UserGroup Creating";
+        public const string UserGroupDeleted = "UserGroup Deleting";
+        public const string UserGroupUpdated = "UserGroup Updating";
+
         public const string EmailSending = "Email Sending"; 
 
         // Log types

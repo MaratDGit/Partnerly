@@ -48,5 +48,9 @@ namespace Partnerly.Descriptors.Messages
         public const string LineNumber = "Номер строки";
 
         public const string User = "Пользователь";
+
+        public const string Name = "Названия";
+        public const string Description = "Описание";
+        public const string Group = "Группа";
     }
 }

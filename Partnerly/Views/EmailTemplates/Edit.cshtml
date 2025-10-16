@@ -32,7 +32,7 @@
             <!-- Dropdown -->
             <div class="btn-group">
                 <button type="button" class="btn btn-link p-0" data-bs-toggle="dropdown" title="Дополнительно">
-                    <i class="bx bx-dots-vertical-rounded fs-3"></i>
+                    <i class="bx bx-dots-horizontal-rounded fs-3"></i>
                 </button>
                 <ul class="dropdown-menu dropdown-menu-end">
                     <li>
@@ -47,6 +47,25 @@
 
         <input type="hidden" asp-for="Id" />
         <input type="hidden" asp-for="Name" />
+
+        <div class="form-floating mb-1 max-w-600 position-relative">
+            <input asp-for="NameView"
+                    id="name"
+                    name="name"
+                    type="text"
+                    class="form-control lookup-input pe-5"
+                    placeholder=" "
+                    data-lookup="true"
+                    data-lookup-source="/EmailTemplates/GetLookupList"
+                    data-lookup-title="Шаблоны"
+                    data-edit-url-base="/EmailTemplates/Edit/"
+                    data-lookup-column-names="name:Название,subject:Тема"
+                    data-lookup-display-field="Name"
+                    data-lookup-param="fieldName"
+                    data-lookup-param-value="Name" readonly/>
+            <label asp-for="Name"></label>
+            <i class='bx bx-search lookup-icon'></i>
+        </div>
 
         <div class="form-floating mb-1 max-w-600">
             <input asp-for="Subject" id="subject" class="form-control" autofocus/>

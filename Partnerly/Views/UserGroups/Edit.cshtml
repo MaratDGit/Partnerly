@@ -1,0 +1,76 @@
+﻿@model Partnerly.Models.ViewModels.UserGroupViewModel;
+@await Html.PartialAsync("_Toast")
+
+@{
+    ViewData["Title"] = "Редактировать группу";
+    Layout = "_ContentNavbarLayout";
+}
+
+<div class="card">
+    <div class="card-header d-flex justify-content-between align-items-center">
+        <h5>@ViewData["Title"]</h5>
+    </div>
+
+    <div class="card-body">
+        <form id="userGroupEditForm" asp-action="Edit">
+            <div class="sticky-buttons justify-content-between mb-6">
+                 <a asp-action="Index" class="btn btn-link p-0">
+                    <i class="bx bx-arrow-back me-1 fs-3"></i> 
+                </a>
+                <a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-link p-0">
+                    <i class="bx bx-undo me-1 fs-3"></i>
+                </a>
+                <button type="submit" id="btnSave" class="btn btn-link p-0">
+                    <i class="bx bx-save me-1 fs-3"></i> 
+                </button>
+                <a class="btn btn-link p-0" asp-action="Create">
+                    <i class="bx bx-plus me-1 fs-3"></i> 
+                </a>
+                <a class="btn btn-link p-0" asp-action="Delete" asp-route-id="@Model.Id">
+                        <i class="bx bx-trash me-1 fs-3"></i> 
+                </a>
+                <!-- Dropdown -->
+                <div class="btn-group">
+                    <button type="button" class="btn btn-link p-0" data-bs-toggle="dropdown" title="Дополнительно">
+                        <i class="bx bx-dots-horizontal-rounded fs-3"></i>
+                    </button>
+                    <ul class="dropdown-menu dropdown-menu-end">
+                        <li>
+                           
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="form-floating mb-1 max-w-600 position-relative">
+                <input asp-for="Name"
+                       id="name"
+                       name="name"
+                       type="text"
+                       class="form-control lookup-input pe-5"
+                       placeholder=" "
+                       data-lookup="true"
+                       data-lookup-source="/UserGroups/GetLookupList"
+                       data-lookup-title="Список групп"
+                       data-edit-url-base="/UserGroups/Edit/"
+                       data-lookup-column-names="name:Название,description:Описание"
+                       data-lookup-display-field="Name"
+                       data-lookup-param="fieldName"
+                       data-lookup-param-value="Name" autofocus/>
+                <label asp-for="Name"></label>
+                <i class='bx bx-search lookup-icon'></i>
+                <span asp-validation-for="Name" class="text-danger"></span>
+            </div>
+            <div class="form-floating mb-1 max-w-600">
+               <input asp-for="Description" class="form-control" id="description" name="description" placeholder=""/>
+                <label asp-for="Description"></label>
+               <span asp-validation-for="Description" class="text-danger"></span>
+            </div>
+        </form>
+    </div>
+</div>
+
+<script src="~/js/form-change-tracker.js"></script>
+<script>
+    enableSaveOnChange("#userGroupEditForm", "#btnSave");
+</script>

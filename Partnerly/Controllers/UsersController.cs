@@ -208,6 +208,29 @@ namespace Partnerly.Controllers
         }
 
         [HttpGet]
+        public async Task<IActionResult> GetLookupList(string fieldName)
+        {
+            if (fieldName == "Name")
+            {
+                var query = await _userService.GetAllUsersAsync();
+
+                var result = query
+                    .Select(u => new
+                    {
+                        id = u.Id,
+                        name = u.FirstName + " " + u.LastName,
+                        email = u.Email
+                    })
+                    .OrderBy(u => u.name)
+                    .ToList();
+
+                return Json(result);
+            }
+
+            return Json(new { });
+        }
+
+        [HttpGet]
         public async Task<JsonResult> GetData(string tableModel)
         {
             if (tableModel == nameof(Partnerly.Models.User))

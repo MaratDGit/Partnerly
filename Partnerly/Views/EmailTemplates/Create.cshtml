@@ -25,7 +25,27 @@
                 </button>
             </div>
             
-            <div class="form-floating mb-1 max-w-600">
+            <div class="form-floating mb-1 max-w-600 position-relative">
+                <input asp-for="Name"
+                    id="name"
+                    name="name"
+                    type="text"
+                    class="form-control lookup-input pe-5"
+                    placeholder=" "
+                    data-lookup="true"
+                    data-lookup-source="/EmailTemplates/GetLookupList"
+                    data-lookup-title="Шаблоны"
+                    data-edit-url-base="/EmailTemplates/Edit/"
+                    data-lookup-column-names="name:Название,subject:Тема"
+                    data-lookup-display-field="Name"
+                    data-lookup-param="fieldName"
+                    data-lookup-param-value="Name" autofocus/>
+                <label asp-for="Name"></label>
+                <i class='bx bx-search lookup-icon'></i>
+                <span asp-validation-for="Name" class="text-danger"></span>      
+             </div>
+
+            @*<div class="form-floating mb-1 max-w-600">
                 <select  asp-for="Name"
                         asp-items="ViewBag.EmailTemplateList"
                         class="form-select"
@@ -34,7 +54,7 @@
                 </select>
                 <label asp-for="Name"></label>
                 <span asp-validation-for="Name" class="text-danger"></span>
-            </div>
+            </div>*@
 
             <div class="form-floating mb-1 max-w-600">
                 <input asp-for="Subject" id="subject" class="form-control"/>
@@ -50,7 +70,7 @@
     </div>
 </div>
 
-            <!-- Modal -->
+<!-- Modal -->
 <div class="modal fade" id="previewModal" tabindex="-1" aria-labelledby="previewModalLabel" aria-hidden="true">
   <div class="modal-dialog modal-lg">
     <div class="modal-content">

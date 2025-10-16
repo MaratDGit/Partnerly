@@ -1,0 +1,23 @@
+﻿@{
+    ViewData["Title"] = "Группы пользователей";
+    Layout = "_ContentNavbarLayout";
+}
+
+@await Html.PartialAsync("_DataTablePartial", null, new ViewDataDictionary(ViewData)
+{
+    { "TableName", "Группы" },
+    { "TableId", "userGroupsTable" },
+    { "NewRecordControler", "UserGroups" }
+})
+
+@section PageScripts {
+    <script>
+        $(document).ready(function () {
+            initUniqueDataTable("userGroupsTable", '@Url.Action("GetData", "UserGroups")', {
+                getDataParams: { tableModel: "UserGroup" },
+                exportAllUrl: '@Url.Action("ExportAllToExcel", "UserGroups")',
+                exportSelectedUrl: '@Url.Action("ExportToExcel", "UserGroups")'
+            });
+        });
+    </script>
+}
