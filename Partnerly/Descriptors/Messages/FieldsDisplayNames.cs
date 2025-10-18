@@ -7,6 +7,7 @@ namespace Partnerly.Descriptors.Messages
     {
         public const string Email = "Электронная почта";
         public const string Password = "Пароль";
+        public const string NewPassword = "Новый пароль";
         public const string ConfirmPassword = "Подтверждение пароля";
         public const string RememberMe = "Запомнить меня";
         public const string Phone = "Телефон";
@@ -25,6 +26,8 @@ namespace Partnerly.Descriptors.Messages
         public const string Role = "Роль";
         public const string NewRole = "Новая роль";
         public const string TemplateType = "Тип шаблона";
+        public const string AllowSendNotifications = "Включить уведомления";
+        public const string AllowSendEmails = "Включить емейл рассылки";
 
         public const string Edit = "Редактировать";
         public const string Delete = "Удалить";

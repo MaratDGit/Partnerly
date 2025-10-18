@@ -31,6 +31,7 @@ namespace Partnerly.Models
         public DbSet<Notification>? Notifications { get; set; }
         public DbSet<UserGroup>? UserGroups { get; set; }
         public DbSet<UserGroupMember>? UserGroupMembers { get; set; }
+        public DbSet<SupportTicket>? SupportTickets { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

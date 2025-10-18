@@ -40,6 +40,10 @@ namespace Partnerly.Descriptors.Attributes
         public const string UserGroupDeleted = "GD";
         public const string UserGroupUpdated = "GU";
 
+        public const string SupportTicketCreated = "FC";
+        public const string SupportTicketDeleted = "FD";
+        public const string SupportTicketUpdated = "FU";
+
         public const string EmailSending = "ES";
 
         public LogActionsAttribute()
@@ -78,6 +82,10 @@ namespace Partnerly.Descriptors.Attributes
                 UserGroupCreated, Constants.NotificationCreated,
                 UserGroupDeleted, Constants.NotificationDeleted,
                 UserGroupUpdated, Constants.NotificationUpdated,
+
+                SupportTicketCreated, Constants.SupportTicketCreated,
+                SupportTicketDeleted, Constants.SupportTicketDeleted,
+                SupportTicketUpdated, Constants.SupportTicketUpdated,
 
                 EmailSending, Constants.EmailSending
                 )

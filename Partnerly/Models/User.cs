@@ -77,15 +77,14 @@ namespace Partnerly.Models
         [Display(Name = "Email Confirmed")]
         public bool? EmailConfirmed { get; set; }
         #endregion
-        //#region AllowSendNotifications
-        //[Display(Name = "Allow Send Notifications")]
-        //public bool? AllowSendNotifications { get; set; }
-        //#endregion
-        //#region AllowSendEmails
-        //[Display(Name = "Allow Send Emails")]
-        //public bool? AllowSendEmails { get; set; }
-        //#endregion
-
+        #region AllowSendNotifications
+        [Display(Name = "Allow Send Notifications")]
+        public bool? AllowSendNotifications { get; set; }
+        #endregion
+        #region AllowSendEmails
+        [Display(Name = "Allow Send Emails")]
+        public bool? AllowSendEmails { get; set; }
+        #endregion
 
         #region System Columns
         public bool IsDeleted { get; set; } = false;

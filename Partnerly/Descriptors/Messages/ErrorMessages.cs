@@ -19,6 +19,7 @@ namespace Partnerly.Descriptors.Messages
         #region Views errors
         public const string ReferrerUserCannotBeFoundOrInactive = "Реферер-пользователь не найден или неактивен";
         public const string IncorectPasswordOrUsername = "Неверный логин или пароль";
+        public const string IncorectPassword = "Неверный пароль";
         public const string IncorectEmail = "Неверный Email";
         public const string UserAccessDenied = "у пользователя нету доступа";
         public const string FieldRequired = "oбязательное поле";

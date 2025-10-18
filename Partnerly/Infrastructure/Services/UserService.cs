@@ -106,6 +106,8 @@ namespace Partnerly.Infrastructure.Services
             newUser.EmailConfirmed = user.EmailConfirmed ?? false;
             newUser.IsBlocked = user.IsBlocked ?? false;
             newUser.IsDeleted = false;
+            newUser.AllowSendEmails = true;
+            newUser.AllowSendNotifications = true;
             newUser.PhotoUrl = Constants.DefaultUserProfilePhotoPath;
 
             if (!string.IsNullOrEmpty(newUser.FirstName) && !string.IsNullOrEmpty(newUser.LastName))

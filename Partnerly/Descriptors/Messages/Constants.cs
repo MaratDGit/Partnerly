@@ -64,6 +64,10 @@ namespace Partnerly.Descriptors.Messages
         public const string UserGroupDeleted = "UserGroup Deleting";
         public const string UserGroupUpdated = "UserGroup Updating";
 
+        public const string SupportTicketCreated = "SupportTicket Creating";
+        public const string SupportTicketDeleted = "SupportTicket Deleting";
+        public const string SupportTicketUpdated = "SupportTicket Updating";
+
         public const string EmailSending = "Email Sending"; 
 
         // Log types
@@ -94,5 +98,8 @@ namespace Partnerly.Descriptors.Messages
         // Others
         public const string Edit = "Edit";
 
+        // Support Ticket statuses
+        public const string New = "New";
+        public const string InProgress = "In Progress";
     }
 }
