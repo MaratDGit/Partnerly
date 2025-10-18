@@ -48,7 +48,7 @@ namespace Partnerly.Infrastructure.Services
 
             return null;
         }
-            
+
         public async Task<IEnumerable<User?>> GetAllUsersAsync() =>
             await _userRepo.GetAllAsync();
 

@@ -1,10 +1,17 @@
 ﻿(function ($) {
     $.fn.CustomDataTable = function (options) {
+        //const settings = $.extend({
+        //    data: [],
+        //    columns: [],
+        //    pageSize: 10
+        //}, options);
         const settings = $.extend({
             data: [],
             columns: [],
-            pageSize: 10
-        }, options);
+            pageSize: 10,
+            exportAllUrl: null,
+            exportSelectedUrl: null
+        }, options)
 
         return this.each(function () {
             const $table = $(this);
@@ -39,27 +46,37 @@
                 $("body").append(modalHtml);
             }
 
-
             // --- Панель кнопок ---
-            const $buttonsDiv = $(`
-                <div class="custom-datatable-buttons mb-2 d-flex align-items-center">
-                    <button class="btn-cancel btn btn-sm me-2" title="Сбросить всё">
-                        <i class="bx bx-undo"></i>
-                    </button>
+            const $buttonsDiv = $('<div class="custom-datatable-buttons mb-2 d-flex align-items-center"></div>');
 
+            // Кнопка сброса
+            $buttonsDiv.append(`
+                    <a class="btn-cancel btn btn-sm me-2" title="Сбросить всё">
+                        <i class="bx bx-undo"></i>
+                    </a>
+                `);
+
+            // Кнопка экспорта — добавляем только если есть URL
+            if (settings.exportAllUrl || settings.exportSelectedUrl) {
+                const $exportDropdown = $(`
                     <div class="dropdown">
-                        <button class="btn btn-sm dropdown-toggle btn-excel" type="button" data-bs-toggle="dropdown" aria-expanded="false" title="Экспорт в Excel">
+                        <a class="btn btn-sm dropdown-toggle btn-excel" type="button" data-bs-toggle="dropdown" aria-expanded="false" title="Экспорт в Excel">
                             <i class="bx bxs-file-export"></i>
-                        </button>
+                        </a>
                         <ul class="dropdown-menu">
-                            <li><a class="dropdown-item btn-export-all" href="#">Экспорт всё</a></li>
-                            <li><a class="dropdown-item btn-export-selected" href="#">Экспорт выбранные</a></li>
+                            ${settings.exportAllUrl ? '<li><a class="dropdown-item btn-export-all" href="#">Экспорт всё</a></li>' : ''}
+                            ${settings.exportSelectedUrl ? '<li><a class="dropdown-item btn-export-selected" href="#">Экспорт выбранные</a></li>' : ''}
                         </ul>
                     </div>
-                    <button class="btn btn-sm btn-filter" title="Фильтры">
-                        <i class="bx bx-filter"></i>
-                    </button>
-                </div>
+                `);
+                $buttonsDiv.append($exportDropdown);
+            }
+
+            // Кнопка фильтров
+            $buttonsDiv.append(`
+                <a class="btn btn-sm btn-filter" title="Фильтры">
+                    <i class="bx bx-filter"></i>
+                </a>
             `);
             
             $cardWrapper.prepend($buttonsDiv);
@@ -259,7 +276,10 @@
             });
 
             // Сортировка
-            $table.on('click', 'th', function () {
+            $table.on('click', 'th', function (e) {
+                // если клик был по input (checkbox), выходим
+                if ($(e.target).is('input')) return;
+
                 const col = $(this).data('column');
                 const orderable = $(this).data('orderable');
                 if (!col || !orderable) return;

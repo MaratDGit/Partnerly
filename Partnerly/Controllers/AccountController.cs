@@ -48,10 +48,18 @@ namespace Partnerly.Controllers
         }
 
         [HttpGet]
-        public IActionResult Register(string? returnUrl = null)
+        public IActionResult Register(string? reff = null, string? returnUrl = null)
         {
             ViewBag.ReturnUrl = returnUrl;
-            return View();
+
+            var model = new RegisterViewModel();
+            if (reff != null)
+            { 
+                model.ReferrerCode = reff;
+                model.FromReferrerLink = true;
+            }
+            
+            return View(model);
         }
 
         [HttpGet]

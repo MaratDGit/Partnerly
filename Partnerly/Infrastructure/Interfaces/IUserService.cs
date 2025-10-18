@@ -11,7 +11,6 @@ namespace Partnerly.Infrastructure.Interfaces
         Task<User?> GetUserByIDAsync(Guid? id);
         Task<User?> GetUserByIDAsync(string? id);
         Task<IEnumerable<User?>> GetAllUsersAsync();
-
         Task<ServiceResult<User?>> CreateUserAsync(User? user);
         Task<ServiceResult<User?>> UpdateUserAsync(User? user, Guid? userId = null);
         Task<ServiceResult<User?>> DeleteUserAsync(Guid? id);

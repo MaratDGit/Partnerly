@@ -13,7 +13,7 @@
             const isSelectColumn = f.fieldName === "select";
             return {
                 data: f.fieldName,
-                title: f.displayName,
+                title: isSelectColumn ? `<input type="checkbox" id="select-all-checkbox" />` : f.displayName,
                 visible: f.isVisible,
                 orderable: f.isSortable,
                 isFilterable: f.isFilterable,
@@ -100,7 +100,14 @@
             });
         }
 
-        $(`#${tableId}`).CustomDataTable({ data: data, columns: columns });
+        /*$(`#${tableId}`).CustomDataTable({ data: data, columns: columns });*/
+        $(`#${tableId}`).CustomDataTable({
+            data: data,
+            columns: columns,
+            pageSize: options.pageSize || 10,
+            exportAllUrl: exportAllUrl,
+            exportSelectedUrl: exportSelectedUrl
+        });
 
         $(document).on('change', `#${tableId} .row-select-checkbox`, function () {
             const id = $(this).data('id');
@@ -126,6 +133,34 @@
             if (args.tableId !== tableId || !exportSelectedUrl) return;
             postToController(exportSelectedUrl, [...selectedIds]);
         });
+
+        // Выбор всех строк
+        $(document).on('change', '#select-all-checkbox', function () {
+            if (this.checked) {
+                // добавить все id в selectedIds
+                response.data.forEach(row => selectedIds.add(row.id));
+                $(`#${tableId} .row-select-checkbox`).prop('checked', true);
+            } else {
+                // снять все
+                selectedIds.clear();
+                $(`#${tableId} .row-select-checkbox`).prop('checked', false);
+            }
+        });
+
+        // Синхронизация header при выборке отдельных чекбоксов
+        $(document).on('change', `#${tableId} .row-select-checkbox`, function () {
+            const id = $(this).data('id');
+            if (this.checked) selectedIds.add(id);
+            else selectedIds.delete(id);
+
+            // обновляем состояние header checkbox
+            const allChecked = response.data.every(row => selectedIds.has(row.id));
+            $('#select-all-checkbox').prop('checked', allChecked);
+        });
+
+        // --- Делаем selectedIds доступным снаружи (по ID таблицы) ---
+        window[`selectedIds_${tableId}`] = selectedIds;
+
     });
 }
 

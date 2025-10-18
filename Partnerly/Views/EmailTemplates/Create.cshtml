@@ -1,5 +1,5 @@
 ﻿@model Partnerly.Models.ViewModels.EmailTemplateViewModel;
-@await Html.PartialAsync("_Toast");
+@await Html.PartialAsync("_Toast")
 
 @{
     ViewData["Title"] = "Создать шаблон";
@@ -13,22 +13,16 @@
 
     <div class="card-body">
         <form id="emailTemplateForm" asp-action="Create">
+            
             @await Html.PartialAsync("_StickyButtons", new Partnerly.Models.ViewModels.FormActionsViewModel {
-                Id = null,
-                ShowBack = true,
-                ShowUndo = true,
-                ShowSave = true,
-                ShowMenu = true,
-                MenuActions = new List<Partnerly.Models.ViewModels.MenuAction> {
-                    new Partnerly.Models.ViewModels.MenuAction {
-                        Icon = "bx bx-show",
-                        Name = "Предпросмотр",
-                        IsModal = true,
-                        ModalTarget = "#previewModal",
-                        OnClick = "showPreview()",
-                    },
+                Back = new Partnerly.Models.ViewModels.ActionBack(id: Model.Id, visible: true, fromController: "EmailTemplates", toController: "EmailTemplates", fromAction: "Create", toAction: "Index"),
+                Undo = new Partnerly.Models.ViewModels.ActionUndo(id: Model.Id, visible: true, fromController: "EmailTemplates", toController: "EmailTemplates", fromAction: "Create", toAction: "Create"),
+                Save = new Partnerly.Models.ViewModels.ActionSave(id: Model.Id, visible: true, fromController: "EmailTemplates", toController: "EmailTemplates", fromAction: "Edit", toAction: "Edit"),
+                Menu = new Partnerly.Models.ViewModels.ActionMenu(visible: true),
+                MenuActions = new List<Partnerly.Models.ViewModels.MenuItemAction> {
+                    new Partnerly.Models.ViewModels.MenuItemAction(icon: "bx bx-show", displayName: "Предпросмотр", toController: "EmailTemplates", toAction: "Edit", isModal: true, modalTarget: "#previewModal", onClick: "showPreview()"),
                 }
-            })    
+            })
 
             <div class="form-floating mb-1 max-w-600 position-relative">
                 <input asp-for="Name"

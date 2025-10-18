@@ -13,7 +13,7 @@ namespace Partnerly.Infrastructure.Interfaces
         Task<UserGroup?> GetByGroupNameAsync(string groupName);
 
         Task<ServiceResult<UserGroup?>> CreateUserGroupAsync(UserGroup? group);
-        Task<ServiceResult<UserGroup?>> UpdateUserGroupAsync(UserGroup? group);
+        Task<ServiceResult<UserGroup?>> UpdateUserGroupAsync(UserGroup? group, List<UserGroupMember> members);
         Task<ServiceResult<UserGroup?>> DeleteUserGroupAsync(Guid? id);
     }
 }

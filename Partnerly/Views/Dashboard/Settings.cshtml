@@ -9,18 +9,12 @@
     </div>
     <form id="settingsForm" asp-action="">
         <div class="card-body">
-            
-             <div class="sticky-buttons justify-content-between mb-6">
-                <a asp-action="Index" class="btn btn-link p-0">
-                    <i class="bx bx-arrow-back me-1 fs-4"></i> 
-                </a>
-                <a asp-action="Settings" class="btn btn-link p-0">
-                    <i class="bx bx-undo me-1 fs-3"></i>
-                </a>
-                <button type="submit" id="btnSave" class="btn btn-link p-0">
-                    <i class="bx bx-save me-1 fs-3"></i> 
-                </button>
-            </div>    
+
+            @await Html.PartialAsync("_StickyButtons", new Partnerly.Models.ViewModels.FormActionsViewModel {
+                Back = new Partnerly.Models.ViewModels.ActionBack(visible: true, fromController: "Dashboard", toController: "Home", fromAction: "Settings", toAction: "Index"),
+                Undo = new Partnerly.Models.ViewModels.ActionUndo(visible: true, fromController: "Dashboard", toController: "Dashboard", fromAction: "Settings", toAction: "Settings"),
+                Save = new Partnerly.Models.ViewModels.ActionSave(visible: true, fromController: "Dashboard", toController: "Dashboard", fromAction: "Settings", toAction: "Settings"),
+            })
         </div>
         <div class="card-content ">
            <div class="nav-align-top nav-tabs mb-6">

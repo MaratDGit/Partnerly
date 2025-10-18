@@ -14,21 +14,14 @@
     <div class="card-body">
         <form id="userEditForm" asp-action="Edit">
             @await Html.PartialAsync("_StickyButtons", new Partnerly.Models.ViewModels.FormActionsViewModel {
-                Id = Model.Id,
-                ShowBack = true,
-                ShowUndo = true,
-                ShowSave = true,
-                ShowCreate = true,
-                ShowDelete = true,
-                ShowMenu = true,
-                MenuActions = new List<Partnerly.Models.ViewModels.MenuAction> {
-                    new Partnerly.Models.ViewModels.MenuAction {
-                        Icon = "bx bx-key",
-                        Name = "Изменить роль",
-                        Controller = "Roles",
-                        Action = "Edit",
-                        RouteID = Model.Id
-                    },
+                Back = new Partnerly.Models.ViewModels.ActionBack(id: Model.Id,visible: true, fromController: "Users", toController: "Users", fromAction: "Edit", toAction: "Index"),
+                Undo = new Partnerly.Models.ViewModels.ActionUndo(id: Model.Id, visible: true, fromController: "Users", toController: "Users", fromAction: "Edit", toAction: "Edit"),
+                Save = new Partnerly.Models.ViewModels.ActionSave(id: Model.Id, visible: true, fromController: "Users", toController: "Users", fromAction: "Edit", toAction: "Edit"),
+                Create = new Partnerly.Models.ViewModels.ActionCreate(id: Model.Id, visible: true, fromController: "Users", toController: "Users", fromAction: "Edit", toAction: "Create"),
+                Delete = new Partnerly.Models.ViewModels.ActionDelete(id: Model.Id, visible: true, fromController: "Users", toController: "Users", fromAction: "Edit", toAction: "Delete"),
+                Menu = new Partnerly.Models.ViewModels.ActionMenu(visible: true),
+                MenuActions = new List<Partnerly.Models.ViewModels.MenuItemAction> {
+                    new Partnerly.Models.ViewModels.MenuItemAction(icon: "bx bx-key", displayName: "Изменить роль", toController: "Roles", toAction: "Edit", routID: Model.Id),
                 }
             })
 

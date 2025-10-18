@@ -30,10 +30,20 @@
                <label asp-for="FullName"></label>
                <span asp-validation-for="FullName" class="text-danger"></span>
             </div>
+
             <div class="form-floating mb-2">
-               <input asp-for="ReferrerCode" class="form-control" id="referrerCode" name="referrerCode" placeholder="Реферальный код пригласителя"/>
+                <input type="hidden" asp-for="FromReferrerLink" />
+                @if (Model.FromReferrerLink)
+                {
+                    <input type="text" class="form-control" value="@Model.ReferrerCode" readonly />
+                    <input type="hidden" asp-for="ReferrerCode" />
+                }
+                else
+                {
+                    <input asp-for="ReferrerCode" class="form-control" id="referrerCode" name="referrerCode" placeholder="Реферальный код пригласителя"/>
+                }
                 <label asp-for="ReferrerCode"></label>
-               <span asp-validation-for="ReferrerCode" class="text-danger"></span>
+                <span asp-validation-for="ReferrerCode" class="text-danger"></span>
             </div>
             <div class="form-floating mb-2">
                <input asp-for="Email" class="form-control" id="email" name="email" placeholder="Введите свой адрес электронной почты"/>

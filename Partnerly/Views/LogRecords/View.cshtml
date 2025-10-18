@@ -12,12 +12,10 @@
 
     <div class="card-body">
         <form id="logViewForm" asp-action="">
+            
             @await Html.PartialAsync("_StickyButtons", new Partnerly.Models.ViewModels.FormActionsViewModel {
-                Id = Model.Id,
-                ShowBack = true,
-                ShowUndo = false,
+                Back = new Partnerly.Models.ViewModels.ActionBack(id:Model.Id, visible: true, fromController: "LogRecords", toController: "LogRecords", fromAction: "View", toAction: "Index"),
             })
-
             <input type="hidden" asp-for="Id" />
 
             <div class="form-floating mb-1 max-w-600">

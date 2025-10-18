@@ -51,6 +51,17 @@ namespace Partnerly.Controllers
                 UserGroup group = new UserGroup();
                 group.Name = model.Name;
                 group.Description = model.Description;
+                if (model.MembersGuids.Any())
+                {
+                    foreach (var member in model.MembersGuids)
+                    {
+                        var user = await _userService.GetUserByIDAsync(member);
+                        if (user != null)
+                        {
+                            group.Members.Add(new UserGroupMember { UserId = user.Id });
+                        }
+                    }
+                }
                 var result = await _userGroupService.CreateUserGroupAsync(group);
 
                 if (!result.Success)
@@ -74,6 +85,11 @@ namespace Partnerly.Controllers
             if (group == null) return NotFound();
 
             var groupAsView = await PropertyActionsHelper.CopyPropertiesAsync(group, new UserGroupViewModel());
+            var groupMembers = await _userGroupService.GetAllUsersByGroupIDAsync(group.Id);
+            foreach (var member in groupMembers)
+            {
+                groupAsView.MembersGuids.Add(member.UserId.ToString());
+            }
             if (groupAsView == null) return NotFound();
 
             return View(groupAsView);
@@ -100,7 +116,19 @@ namespace Partnerly.Controllers
                     group.Name = model.Name;
                     group.Description = model.Description;
 
-                    ServiceResult<UserGroup?> result = await _userGroupService.UpdateUserGroupAsync(group);
+                    List<UserGroupMember> members = new List<UserGroupMember>();
+                    if (model.MembersGuids.Any())
+                    {
+                        foreach (var member in model.MembersGuids)
+                        {
+                            var user = await _userService.GetUserByIDAsync(member);
+                            if (user != null)
+                            {
+                                members.Add(new UserGroupMember { UserId = user.Id, GroupId = id });
+                            }
+                        }
+                    }
+                    ServiceResult<UserGroup?> result = await _userGroupService.UpdateUserGroupAsync(group, members);
                     if (!result.Success)
                     {
                         foreach (var error in result.Errors)
@@ -169,11 +197,46 @@ namespace Partnerly.Controllers
         }
 
         [HttpGet]
+        public async Task<JsonResult> GetAllUsers()
+        {
+            var users = await _userService.GetAllUsersAsync();
+
+            var result = users.Select(u => new { id = u.Id, name = u.FirstName })
+                .ToList();
+
+            return Json(users);
+        }
+
+
+        [HttpGet]
         public async Task<JsonResult> GetData(string tableModel)
         {
             if (tableModel == nameof(Partnerly.Models.UserGroup))
             {
                 return await GetGridDataAsync<UserGroupGridViewModel, UserGroup>("UserGroups");
+            }
+            else if (tableModel == nameof(Partnerly.Models.User))
+            {
+                List<UserGridViewModel> userList = new List<UserGridViewModel>();
+
+                var users = await _userService.GetAllUsersAsync();
+
+                foreach (User? user in users)
+                {
+                    UserGridViewModel row = new UserGridViewModel
+                    {
+                        Id = user.Id,
+                        UserName = $"{user.FirstName} {user.LastName}",
+                        Email = user.Email,
+                        CreatedDate = user.CreatedDate,
+                    };
+                    userList.Add(row);
+                }
+
+                if (userList.Any())
+                {
+                    return Json(new { fields = GetFields(userList.First()), data = userList });
+                }
             }
 
             return Json(new { fields = new object[0], data = new object[0] });
@@ -182,9 +245,29 @@ namespace Partnerly.Controllers
         protected override async Task<IEnumerable<TEntity>> GetEntitiesAsync<TEntity>()
         {
             if (typeof(TEntity) == typeof(UserGroup))
+            {
                 return (IEnumerable<TEntity>)await _userGroupService.GetAllUserGroupsAsync();
+            }
+            else if (typeof(TEntity) == typeof(Partnerly.Models.User))
+            {
+
+            }
 
             return Enumerable.Empty<TEntity>();
+        }
+
+        protected override List<GridAction> GetDefaultActions(object row)
+        {
+            if (row is UserGridViewModel)
+            {
+                return new List<GridAction>
+                {
+                };
+            }
+            else
+            {
+                return base.GetDefaultActions(row);
+            }
         }
 
         protected override List<GridField> GetFields(object row)
@@ -200,13 +283,26 @@ namespace Partnerly.Controllers
                     new GridField { FieldName = "createdDate", DisplayName = FieldsDisplayNames.CreatedDate, IsSortable = true, IsFilterable = true, Format="date:MM/dd/yyyy" }
                 };
             }
+            else if(row is UserGridViewModel)
+            {
+                return new List<GridField>
+                {
+                    new GridField { FieldName = "select", DisplayName = $"", DefaultValue = false, Type = "checkbox"},
+                    new GridField { FieldName = "userName", DisplayName = FieldsDisplayNames.User, LinkTemplate = "/Users/Edit/{id}" },
+                    new GridField { FieldName = "email", DisplayName = FieldsDisplayNames.Description },
+                    new GridField { FieldName = "createdDate", DisplayName = FieldsDisplayNames.CreatedDate, IsSortable = true, IsFilterable = true, Format="date:MM/dd/yyyy" }
+                };
+            }
 
             return fields;
         }
 
         protected override async Task CustomizeRowAsync(object row)
         {
-            if (row is UserGroupGridViewModel userRow)
+            if (row is UserGroupGridViewModel userGroupRow)
+            {
+            }
+            if (row is UserGridViewModel userRow)
             {
             }
         }

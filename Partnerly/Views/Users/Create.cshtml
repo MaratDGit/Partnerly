@@ -14,10 +14,9 @@
     <div class="card-body">
         <form id="userCreateForm" asp-action="Create">
             @await Html.PartialAsync("_StickyButtons", new Partnerly.Models.ViewModels.FormActionsViewModel {
-                Id = null,
-                ShowBack = true,
-                ShowUndo = true,
-                ShowSave = true,
+                Back = new Partnerly.Models.ViewModels.ActionBack(visible: true, fromController: "Users", toController: "Users", fromAction: "Edit", toAction: "Index"),
+                Undo = new Partnerly.Models.ViewModels.ActionUndo(visible: true, fromController: "Users", toController: "Users", fromAction: "Edit", toAction: "Create"),
+                Save = new Partnerly.Models.ViewModels.ActionSave(visible: true, fromController: "Users", toController: "Users", fromAction: "Edit", toAction: "Create"),
             })
 
             <div class="form-floating mb-1 max-w-600 position-relative">

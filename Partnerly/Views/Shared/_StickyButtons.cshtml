@@ -1,74 +1,59 @@
 ﻿@model  Partnerly.Models.ViewModels.FormActionsViewModel
 
 <div class="sticky-buttons justify-content-between mb-6">
-    @if (Model.ShowBack)
-    {
-        @if (Model.Id != null)
-        {
-            <a asp-action="Index" class="btn btn-link p-0" title="Назад">
-                <i class="bx bx-arrow-back me-1 fs-3"></i>
-            </a>
-        }
-        else
-        {
-            <a asp-action="Index" asp-controller="Home" class="btn btn-link p-0" title="Назад">
-                <i class="bx bx-arrow-back me-1 fs-3"></i>
-            </a>
-        }
+    @if (Model?.Back?.Visible == true)
+    {   
+         <a asp-action="@Model.Back.ToAction" asp-controller="@Model.Back.ToController" class="btn btn-link p-0" title="@Model.Back.Title">
+            <i class="@Model.Back.Icon me-1 fs-3"></i>
+         </a>
     }
-
-    @if (Model.ShowUndo)
-    {
-        var actionName = Model.Id != null ? "Edit" : "Create";
-        <a asp-action="@actionName" asp-route-id="@(Model.Id ?? Guid.Empty)" class="btn btn-link p-0" title="Редактировать">
-            <i class="bx bx-undo me-1 fs-3"></i>
-        </a>
+    @if (Model?.Undo?.Visible == true)
+    {   
+         <a asp-action="@Model.Undo.ToAction" asp-controller="@Model.Undo.ToController" class="btn btn-link p-0" title="@Model.Undo.Title">
+            <i class="@Model.Undo.Icon me-1 fs-3"></i>
+         </a>
     }
-
-    @if (Model.ShowSave)
-    {
-        <button type="submit" id="btnSave" class="btn btn-link p-0" title="Сохранить">
-            <i class="bx bx-save me-1 fs-3"></i>
+    @if (Model?.Save?.Visible == true)
+    {   
+        <button type="submit" id="btnSave" class="btn btn-link p-0" title="@Model.Save.Title">
+            <i class="@Model.Save.Icon me-1 fs-3"></i>
         </button>
     }
-
-    @if (Model.ShowCreate)
-    {
-        <a asp-action="Create" class="btn btn-link p-0" title="Создать">
-            <i class="bx bx-plus me-1 fs-3"></i>
-        </a>
+    @if (Model?.Create?.Visible == true)
+    {   
+         <a asp-action="@Model.Create.ToAction" asp-controller="@Model.Create.ToController" class="btn btn-link p-0" title="@Model.Create.Title">
+            <i class="@Model.Create.Icon me-1 fs-3"></i>
+         </a>
     }
-
-    @if (Model.ShowDelete && Model.Id != null)
-    {
-        <a asp-action="Delete" asp-route-id="@Model.Id" class="btn btn-link p-0" title="Удалить">
-            <i class="bx bx-trash me-1 fs-3"></i>
-        </a>
+    @if (Model?.Delete?.Visible == true)
+    {   
+         <a asp-action="@Model.Delete.ToAction" asp-controller="@Model.Delete.ToController" asp-route-id="@Model.Delete.Id" class="btn btn-link p-0" title="@Model.Delete.Title">
+            <i class="@Model.Delete.Icon me-1 fs-3"></i>
+         </a>
     }
-
-    @if (Model.ShowMenu && Model.MenuActions.Any())
-    {
-        <div class="btn-group">
-            <button type="button" class="btn btn-link p-0" data-bs-toggle="dropdown" title="Дополнительно">
-                <i class="bx bx-dots-horizontal-rounded fs-3"></i>
+    @if (Model?.Menu?.Visible == true)
+    {   
+         <div class="btn-group">
+            <button type="button" class="btn btn-link p-0" data-bs-toggle="dropdown" title="@Model.Menu.Title">
+                <i class="@Model.Menu.Icon fs-3"></i>
             </button>
             <ul class="dropdown-menu dropdown-menu-end">
                 @foreach (var action in Model.MenuActions)
                 {
                     <li>
-                        @if (action.IsModal)
+                        @if (action.IsModal == true)
                         {
                             <a class="dropdown-item" href="#" data-bs-toggle="modal" data-bs-target="@action.ModalTarget" onclick="@action.OnClick">
-                                <i class="@action.Icon me-1"></i> @action.Name
+                                <i class="@action.Icon me-1"></i> @action.DisplayName
                             </a>
                         }
                         else
                         {
                             <a class="dropdown-item"
-                               asp-action="@action.Action"
-                               asp-controller="@action.Controller"
+                               asp-action="@action.ToAction"
+                               asp-controller="@action.ToController"
                                asp-route-id="@action.RouteID">
-                                <i class="@action.Icon me-1"></i> @action.Name
+                                <i class="@action.Icon me-1"></i> @action.DisplayName
                             </a>
                         }
                     </li>
@@ -76,5 +61,4 @@
             </ul>
         </div>
     }
-
 </div>

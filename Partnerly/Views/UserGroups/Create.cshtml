@@ -13,11 +13,12 @@
 
     <div class="card-body">
         <form id="userGroupCreateForm" asp-action="Create">
+            <input type="hidden" id="MembersGuids" name="MembersGuids" />
+
              @await Html.PartialAsync("_StickyButtons", new Partnerly.Models.ViewModels.FormActionsViewModel {
-                Id = null,
-                ShowBack = true,
-                ShowUndo = true,
-                ShowSave = true,
+                Back = new Partnerly.Models.ViewModels.ActionBack(visible: true, fromController: "UserGroups", toController: "UserGroups", fromAction: "Create", toAction: "Index"),
+                Undo = new Partnerly.Models.ViewModels.ActionUndo(visible: true, fromController: "UserGroups", toController: "UserGroups", fromAction: "Create", toAction: "Create"),
+                Save = new Partnerly.Models.ViewModels.ActionSave(visible: true, fromController: "UserGroups", toController: "UserGroups", fromAction: "Create", toAction: "Create"),
             })
 
             <div class="form-floating mb-1 max-w-600 position-relative">
@@ -46,7 +47,7 @@
                <span asp-validation-for="Description" class="text-danger"></span>
             </div>
 
-            <div class="card-content ">
+            <div class="card-content">
                 <div class="nav-align-top nav-tabs mb-6">
                     <ul class="nav nav-tabs nav-fill" role="tablist">
                         <li class="nav-item">
@@ -60,14 +61,13 @@
                         <button type="button" class="nav-link" role="tab" data-bs-toggle="tab" data-bs-target="#navs-justified-messages" aria-controls="navs-justified-messages" aria-selected="false"><span class="d-none d-sm-block"><i class="tf-icons bx bx-bell bx-sm me-1_5 align-text-bottom"></i> Уведомления</span><i class="bx bx-bell bx-sm d-sm-none"></i></button>
                     </li>
                     </ul>
-                    <div class="tab-content">
+                    <div class="tab-content p-0">
                     <div class="tab-pane fade show active" id="navs-justified-profile" role="tabpanel">
                         @*Пользователи*@
                         @await Html.PartialAsync("_DataTablePartial", null, new ViewDataDictionary(ViewData)
                         {
-                            { "TableName", "Пользователи" },
-                            { "TableId", "usersTable" },
-                            { "WithoutCard", true },
+                            { "TableId", "userGroupsMembersTable" },
+                            { "WithoutCard", true }
                         })
                     </div>
                     <div class="tab-pane fade" id="navs-justified-home" role="tabpanel">
@@ -90,8 +90,6 @@
              </div>
         </form>
     </div>
-
-    
 </div>
 
 <script src="~/js/form-change-tracker.js"></script>
@@ -101,12 +99,26 @@
 
 @section PageScripts {
     <script>
+        const tableId = "userGroupsMembersTable";
+
         $(document).ready(function () {
-            initUniqueDataTable("usersTable", '@Url.Action("GetData", "Users")', {
+            initUniqueDataTable(tableId, '@Url.Action("GetData", "UserGroups")', {
                 getDataParams: { tableModel: "User" },
-                //exportAllUrl: '@Url.Action("ExportAllToExcel", "Users")',
-                //exportSelectedUrl: '@Url.Action("ExportToExcel", "Users")'
             });
+        });
+
+       $("#userGroupCreateForm").on("submit", function () {
+            const selectedIds = Array.from(window[`selectedIds_userGroupsMembersTable`] || []);
+    
+            // Удаляем старые, если есть
+            $("input[name='MembersGuids']").remove();
+    
+            // Добавляем по одному на каждый ID
+            for (const id of selectedIds) {
+                $(this).append(`<input type="hidden" name="MembersGuids" value="${id}" />`);
+            }
         });
     </script>
 }
+
+

@@ -1,5 +1,6 @@
 ﻿using Partnerly.Descriptors.Attributes.BaseAttributes;
 using Partnerly.Descriptors.Messages;
+using Partnerly.Models.GridViews;
 using System.ComponentModel.DataAnnotations;
 
 namespace Partnerly.Models.ViewModels
@@ -18,7 +19,7 @@ namespace Partnerly.Models.ViewModels
         [Display(Name = FieldsDisplayNames.Description)]
         public string? Description { get; set; }
 
-        public ICollection<UserGroupMember> Members { get; set; } = new List<UserGroupMember>();
+        public List<string> MembersGuids { get; set; } = new List<string>();
 
         #region System Columns
         public Guid? CreatedBy { get; set; }

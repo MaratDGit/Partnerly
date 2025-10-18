@@ -13,24 +13,18 @@
 
     <div class="card-body">
         <form id="emailTemplateForm" asp-action="Edit">
+            
             @await Html.PartialAsync("_StickyButtons", new Partnerly.Models.ViewModels.FormActionsViewModel {
-                Id = Model.Id,
-                ShowBack = true,
-                ShowUndo = true,
-                ShowSave = true,
-                ShowCreate = true,
-                ShowDelete = true,
-                ShowMenu = true,
-                MenuActions = new List<Partnerly.Models.ViewModels.MenuAction> {
-                    new Partnerly.Models.ViewModels.MenuAction {
-                        Icon = "bx bx-show",
-                        Name = "Предпросмотр",
-                        IsModal = true,
-                        ModalTarget = "#previewModal",
-                        OnClick = "showPreview()",
-                    },
+                Back = new Partnerly.Models.ViewModels.ActionBack(id: Model.Id, visible: true, fromController: "EmailTemplates", toController: "EmailTemplates", fromAction: "Edit", toAction: "Index"),
+                Undo = new Partnerly.Models.ViewModels.ActionUndo(id: Model.Id, visible: true, fromController: "EmailTemplates", toController: "EmailTemplates", fromAction: "Edit", toAction: "Edit"),
+                Save = new Partnerly.Models.ViewModels.ActionSave(id: Model.Id, visible: true, fromController: "EmailTemplates", toController: "EmailTemplates", fromAction: "Edit", toAction: "Edit"),
+                Create = new Partnerly.Models.ViewModels.ActionCreate(id: Model.Id, visible: true, fromController: "EmailTemplates", toController: "EmailTemplates", fromAction: "Edit", toAction: "Create"),
+                Delete = new Partnerly.Models.ViewModels.ActionDelete(id: Model.Id, visible: true, fromController: "EmailTemplates", toController: "EmailTemplates", fromAction: "Edit", toAction: "Delete"),
+                Menu = new Partnerly.Models.ViewModels.ActionMenu(visible: true),
+                MenuActions = new List<Partnerly.Models.ViewModels.MenuItemAction> {
+                    new Partnerly.Models.ViewModels.MenuItemAction(icon: "bx bx-show", displayName: "Предпросмотр", toController: "EmailTemplates", toAction: "Edit", isModal: true, modalTarget: "#previewModal", onClick: "showPreview()"),
                 }
-            })    
+            })
          
         <input type="hidden" asp-for="Id" />
         <input type="hidden" asp-for="Name" />

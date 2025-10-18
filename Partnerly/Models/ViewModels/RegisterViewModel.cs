@@ -29,6 +29,7 @@ namespace Partnerly.Models.ViewModels
         [StringLenght(max: 8)]
         [Display(Name = FieldsDisplayNames.ReferrerCode)]
         public string? ReferrerCode { get; set; }
+        public bool FromReferrerLink { get; set; } = false; 
         #endregion
 
         #region Email
