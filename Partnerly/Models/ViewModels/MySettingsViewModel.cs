@@ -12,14 +12,14 @@ namespace Partnerly.Models.ViewModels
         #endregion
 
         #region FirstName
-        [StringLenght(min: 4, max: 20)]
+        [CusromStringLenght(min: 4, max: 20)]
         [Required(ErrorMessage = $"{FieldsDisplayNames.FirstName} {ErrorMessages.FieldRequired}")]
         [Display(Name = FieldsDisplayNames.FirstName)]
         public string? FirstName { get; set; }
         #endregion
 
         #region LastName
-        [StringLenght(min: 4, max: 20)]
+        [CusromStringLenght(min: 4, max: 20)]
         [Required(ErrorMessage = $"{FieldsDisplayNames.LastName} {ErrorMessages.FieldRequired}")]
         [Display(Name = FieldsDisplayNames.LastName)]
         public string? LastName { get; set; }

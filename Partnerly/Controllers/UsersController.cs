@@ -179,6 +179,7 @@ namespace Partnerly.Controllers
             return View(model);
         }
 
+        [ClaimAuthorize(ClaimTypes.Role, RoleTypeAttribute.Admin)]
         public async Task<IActionResult> Delete(Guid id)
         {
             var template = await _userService.GetUserByIDAsync(id);
@@ -189,6 +190,7 @@ namespace Partnerly.Controllers
 
         [HttpPost, ActionName("DeleteConfirmed")]
         [ValidateAntiForgeryToken]
+        [ClaimAuthorize(ClaimTypes.Role, RoleTypeAttribute.Admin)]
         public async Task<IActionResult> DeleteConfirmed(Guid id)
         {
             var user = await _userService.GetUserByIDAsync(id);

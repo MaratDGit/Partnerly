@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Partnerly.Descriptors.Attributes;
 using Partnerly.Events.BaseEvents;
 using Partnerly.Infrastructure.Interfaces;
 using Partnerly.Models;
@@ -17,12 +18,6 @@ namespace Partnerly.Controllers
 
         public async Task<IActionResult> Index()
         {
-            //var notifications = new List<Notification>();
-
-            //if (_currentUser?.UserId != null)
-            //    notifications = await _notificationService.GetUserNotificationsAsync(_currentUser.UserId.Value);
-
-            //return View(notifications);
             return View();
         }
 
@@ -31,7 +26,10 @@ namespace Partnerly.Controllers
         {
             if (id != null)
             {
-                await _notificationService.MarkAsReadAsync(id);
+                var note = await _notificationService.GetNotificationByIDAsync(id);
+
+                if (note?.Type == NotificationTypeAttribute.Information)
+                    await _notificationService.MarkAsReadAsync(id);
             }
             return Ok();
         }
@@ -45,21 +43,5 @@ namespace Partnerly.Controllers
             await _notificationService.MarkAllReadAsync(userId.Value);
             return Ok();
         }
-
-        //[HttpGet]
-        //public async Task<IActionResult> GetUnread()
-        //{
-        //    var userId = _currentUser.UserId;
-        //    if (userId == null) return Unauthorized();
-
-        //    var notifications = await _notificationService.GetUserNotificationsAsync(userId.Value, onlyUnread: true);
-
-        //    return Json(notifications.Select(n => new
-        //    {
-        //        n.Id,
-        //        n.Message,
-        //        CreatedAt = ((DateTime)n.CreatedDate).ToString("dd.MM.yyyy HH:mm")
-        //    }));
-        //}
     }
 }

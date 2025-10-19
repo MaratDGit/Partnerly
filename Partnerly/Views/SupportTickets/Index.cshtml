@@ -1,0 +1,23 @@
+﻿@{
+    ViewData["Title"] = "Случаи поддержки и задачи";
+    Layout = "_ContentNavbarLayout";
+}
+
+@await Html.PartialAsync("_DataTablePartial", null, new ViewDataDictionary(ViewData)
+{
+    { "TableName", "Случаи поддержки и задачи" },
+    { "TableId", "supportTicketTable" },
+    { "NewRecordControler", "SupportTickets" }
+})
+
+@section PageScripts {
+    <script>
+        $(document).ready(function () {
+            initUniqueDataTable("supportTicketTable", '@Url.Action("GetData", "SupportTickets")', {
+                getDataParams: { tableModel: "SupportTicket" },
+                exportAllUrl: '@Url.Action("ExportAllToExcel", "SupportTickets")',
+                exportSelectedUrl: '@Url.Action("ExportToExcel", "SupportTickets")'
+            });
+        });
+    </script>
+}

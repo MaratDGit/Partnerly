@@ -27,6 +27,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Folder Include="Descriptors\Enums\" />
     <Folder Include="wwwroot\assets\img\elements\" />
     <Folder Include="wwwroot\assets\img\favicon\" />
     <Folder Include="wwwroot\assets\img\layouts\" />

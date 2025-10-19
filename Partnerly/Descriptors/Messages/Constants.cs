@@ -22,62 +22,62 @@ namespace Partnerly.Descriptors.Messages
         public const string Create = "Create";
 
         // Payments
-        public const string Open = "Open";
-        public const string Pending = "Pending";
-        public const string Closed = "Closed";
-        public const string Canceled = "Canceled";
-        public const string Rejected = "Rejected";
+        public const string Open = "Открыто";
+        public const string Pending = "В ожидании";
+        public const string Closed = "Закрыто";
+        public const string Canceled = "Отменено";
+        public const string Rejected = "Отклоненный";
 
         // Log 
-        public const string UserSignIn = "User Sign In";
-        public const string UserSignOut = "User Sign Out";
+        public const string UserSignIn = "Вход пользователя";
+        public const string UserSignOut = "Выход пользователя";
 
-        public const string UserCreated = "User Creating";
-        public const string UserDeleted = "User Deleting";
-        public const string UserUpdated = "User Updating";
+        public const string UserCreated = "Создание пользователя";
+        public const string UserDeleted = "Удаление пользователя";
+        public const string UserUpdated = "Обновление пользователя";
 
-        public const string RoleCreated = "Role Creating";
-        public const string RoleDeleted = "Role Deleting";
-        public const string RoleUpdated = "Role Updating";
+        public const string RoleCreated = "Создание роли";
+        public const string RoleDeleted = "Удаление роли";
+        public const string RoleUpdated = "Обновление роли";
 
-        public const string PaymentCreated = "Payment Creating";
-        public const string PaymentDeleted = "Payment Deleting";
-        public const string PaymentUpdated = "Payment Updating";
+        public const string PaymentCreated = "Создание платежа";
+        public const string PaymentDeleted = "Удаление платежа";
+        public const string PaymentUpdated = "Обновление платежа";
 
         public const string SystemSettingsCreated = "System Settings Creating";
         public const string SystemSettingsDeleted = "System Settings Deleting";
         public const string SystemSettingsUpdated = "System Settings Updating";
 
-        public const string EmailConfirmationTokenCreated = "Email Confirmation Token Creating";
-        public const string EmailConfirmationTokenDeleted = "Email Confirmation Token Deleting";
-        public const string EmailConfirmationTokenUpdated = "Email Confirmation Token Updating";
+        public const string EmailConfirmationTokenCreated = "Создание токена подтверждения электронной почты";
+        public const string EmailConfirmationTokenDeleted = "Удаление токена подтверждения электронной почты";
+        public const string EmailConfirmationTokenUpdated = "Обновление токена подтверждения электронной почты";
 
-        public const string EmailTemplateCreated = "Email Template Creating";
-        public const string EmailTemplateDeleted = "Email Template Deleting";
-        public const string EmailTemplateUpdated = "Email Template Updating";
+        public const string EmailTemplateCreated = "Создание шаблона электронной почты";
+        public const string EmailTemplateDeleted = "Удаление шаблона электронной почты";
+        public const string EmailTemplateUpdated = "Обновление шаблона электронной почты";
 
-        public const string NotificationCreated = "Notification Creating";
-        public const string NotificationDeleted = "Notification Deleting";
-        public const string NotificationUpdated = "Notification Updating";
+        public const string NotificationCreated = "Создание уведомлений";
+        public const string NotificationDeleted = "Удаление уведомлений";
+        public const string NotificationUpdated = "Обновление уведомлений";
 
-        public const string UserGroupCreated = "UserGroup Creating";
-        public const string UserGroupDeleted = "UserGroup Deleting";
-        public const string UserGroupUpdated = "UserGroup Updating";
+        public const string UserGroupCreated = "Создание группы пользователей";
+        public const string UserGroupDeleted = "Удаление группы пользователей";
+        public const string UserGroupUpdated = "Обновление группы пользователей";
 
-        public const string SupportTicketCreated = "SupportTicket Creating";
-        public const string SupportTicketDeleted = "SupportTicket Deleting";
-        public const string SupportTicketUpdated = "SupportTicket Updating";
+        public const string SupportTicketCreated = "Создание тикета поддержки";
+        public const string SupportTicketDeleted = "Удаление тикета поддержки";
+        public const string SupportTicketUpdated = "Обновление тикета поддержки";
 
-        public const string EmailSending = "Email Sending"; 
+        public const string EmailSending = "Отправка электронной почты"; 
 
         // Log types
-        public const string Information = "Information";
-        public const string Warning = "Warning";
-        public const string Error = "Error";
-        public const string Critical = "Critical";
+        public const string Information = "Информация";
+        public const string Warning = "Предупреждение";
+        public const string Error = "Ошибка";
+        public const string Critical = "Критический";
 
         // Notofocation
-        public const string Success = "Success";
+        public const string Success = "Успешно";
 
         // Email Template Names
         public const string EmailConfirmation = "Email Confirmation";
@@ -99,7 +99,7 @@ namespace Partnerly.Descriptors.Messages
         public const string Edit = "Edit";
 
         // Support Ticket statuses
-        public const string New = "New";
-        public const string InProgress = "In Progress";
+        public const string New = "Новый";
+        public const string InProgress = "В ходе выполнения";
     }
 }

@@ -34,10 +34,13 @@ builder.Services.AddScoped<INotificationService, NotificationService>();
 builder.Services.AddScoped<INotificationRepository, NotificationRepository>();
 builder.Services.AddScoped<IUserGroupService, UserGroupService>();
 builder.Services.AddScoped<IUserGroupRepository, UserGroupRepository>();
+builder.Services.AddScoped<ISupportTicketService, SupportTicketService>();
+builder.Services.AddScoped<ISupportTicketRepository, SupportTicketRepository>();
 
 // Transient services
 builder.Services.AddTransient<IEmailSender, EmailSender>();
 builder.Services.AddTransient<UserRegisteredEventHandler>();
+builder.Services.AddTransient<SupportTickedCreatedEventHandler>();
 
 // Hosted & middleware-related
 builder.Services.AddHostedService<OnlineStatusService>();
@@ -74,6 +77,7 @@ using (var scope = app.Services.CreateScope())
     // 2. Подписка на события
     var eventBus = services.GetRequiredService<IEventBus>();
     eventBus.Subscribe<UserRegisteredEvent, UserRegisteredEventHandler>();
+    eventBus.Subscribe<SupportTickedCreatedEvent, SupportTickedCreatedEventHandler>();
 }
 
 if (!app.Environment.IsDevelopment())

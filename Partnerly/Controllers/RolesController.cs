@@ -3,7 +3,6 @@ using Partnerly.Descriptors.Attributes;
 using Partnerly.Descriptors.Attributes.BaseAttributes;
 using Partnerly.Descriptors.Messages;
 using Partnerly.Events.BaseEvents;
-using Partnerly.Helpers;
 using Partnerly.Infrastructure.Interfaces;
 using Partnerly.Infrastructure.Services;
 using Partnerly.Models;
@@ -51,7 +50,6 @@ namespace Partnerly.Controllers
                 modelAsView.OldRoleId = user.RoleId;
                 modelAsView.OldRoleName = roleName;
             }
-            ViewBag.RoleNamesList = AttributeDropdownHelper.ToSelectedList(RoleTypeAttribute.RoleNames);
 
             if (modelAsView == null) return NotFound();
 
@@ -83,7 +81,6 @@ namespace Partnerly.Controllers
                         return View(model);
                     }
 
-                    ViewBag.RoleNamesList = AttributeDropdownHelper.ToSelectedList(RoleTypeAttribute.RoleNames);
                     TempData["ToastMessage"] = Messages.RecordSaved;
                     return RedirectToAction("Edit", new { id = model.Id });
                 }
@@ -195,7 +192,6 @@ namespace Partnerly.Controllers
                     new GridField { FieldName = "oldRoleName", DisplayName = FieldsDisplayNames.Role, IsFilterable = true, LinkTemplate = "/Roles/Edit/{id}"},
                     new GridField { FieldName = "email", DisplayName = FieldsDisplayNames.Email },
                     new GridField { FieldName = "phone", DisplayName = FieldsDisplayNames.Phone},
-                    
                 };
             }
 

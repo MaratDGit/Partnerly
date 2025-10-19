@@ -98,6 +98,9 @@
                     <div class="form-check form-switch mb-2">
                         <input asp-for="AllowSendNotificationsBool" class="form-check-input" type="checkbox" id="allowSendNotifications" />
                         <label class="form-check-label" asp-for="AllowSendNotifications" for="allowSendNotifications"></label>
+                        <span id="warningSpan" class="text-warning ms-2 @(!Model.AllowSendNotificationsBool ? "" : "d-none")">
+                            ⚠️ Важные уведомления будут приходить
+                        </span>
                     </div>
                 </div>
             </div>
@@ -130,5 +133,12 @@
                 tab.show();
             }
         }
+
+        const checkbox = document.getElementById("allowSendNotifications");
+        const warningSpan = document.getElementById("warningSpan");
+
+        checkbox.addEventListener("change", function () {
+            warningSpan.classList.toggle("d-none", checkbox.checked);
+        });
     });
 </script>

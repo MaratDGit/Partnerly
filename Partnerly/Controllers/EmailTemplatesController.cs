@@ -14,7 +14,7 @@
     using System.Security.Claims;
     using System.Text.Json;
 
-    [ClaimAuthorize(ClaimTypes.Role, RoleTypeAttribute.Admin, RoleTypeAttribute.Employee)]
+    [ClaimAuthorize(ClaimTypes.Role, RoleTypeAttribute.Admin)]
     public class EmailTemplatesController : _BaseController
     {
         private readonly IEmailTemplateService _emailTemplateService;

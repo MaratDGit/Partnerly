@@ -55,5 +55,11 @@ namespace Partnerly.Descriptors.Messages
         public const string Name = "Названия";
         public const string Description = "Описание";
         public const string Group = "Группа";
+        public const string IsRead = "Прочитано";
+        public const string Status = "Статус";
+        public const string AssignedTo = "Назначено";
+        public const string TaskNumber = "Номер задачи";
+        public const string Viewcase = "Посмотреть дело";
+
     }
 }

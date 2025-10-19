@@ -1,0 +1,69 @@
+﻿@model Partnerly.Models.ViewModels.SupportTicketViewModel;
+@await Html.PartialAsync("_Toast")
+
+@{
+    ViewData["Title"] = "Просмотреть задачу";
+    Layout = "_ContentNavbarLayout";
+}
+
+<div class="card">
+    <div class="card-header justify-content-between">
+        <h5>@ViewData["Title"]</h5>
+    </div>
+
+    <div class="card-body">
+        <form id="supportTicketViewForm" asp-action="ViewCase">
+            @await Html.PartialAsync("_StickyButtons", new Partnerly.Models.ViewModels.FormActionsViewModel {
+                Back = new Partnerly.Models.ViewModels.ActionBack(id: Model.Id,visible: true, fromController: "SupportTickets", toController: "SupportTickets", fromAction: "ViewCase", toAction: "Index"),
+                Menu = new Partnerly.Models.ViewModels.ActionMenu(visible: true),
+                MenuActions = new List<Partnerly.Models.ViewModels.MenuItemAction> {
+                    new Partnerly.Models.ViewModels.MenuItemAction(icon: "bx bx-fast-forward", displayName: "Начинать"),
+                    new Partnerly.Models.ViewModels.MenuItemAction(icon: "bx bx-x", displayName: "Закрыть задачу"),
+                    new Partnerly.Models.ViewModels.MenuItemAction(icon: "bx bx-reply", displayName: "Отвечать"),
+                }
+            })
+
+            @if (TempData.Peek("FormToast") != null)
+            {
+                <div class="alert alert-danger">@TempData["FormToast"]</div>
+                TempData.Remove("FormToast");
+            }
+
+            <input type="hidden" asp-for="Id" />
+            <input type="hidden" asp-for="UserId" />
+            <input type="hidden" asp-for="AssignedTo" id="assignedTo" />
+
+            <div class="form-floating mb-1 max-w-600">
+                <input asp-for="TicketID"  id="ticketID" class="form-control" readonly/>
+                <label asp-for="TicketID"></label>
+            </div>
+            <div class="form-floating mb-1 max-w-600">
+                <input asp-for="Subject"  id="subject" class="form-control" readonly/>
+                <label asp-for="Subject"></label>
+            </div>
+            <div class="form-floating mb-1 max-w-600">
+                <input asp-for="CreatorName"  id="creatorName" class="form-control" readonly/>
+                <label asp-for="CreatorName"></label>
+            </div>
+             <div class="form-floating mb-1 max-w-600">
+                <input asp-for="StatusAsView"  id="status" class="form-control" readonly/>
+                <label asp-for="Status"></label>
+            </div>
+            <div class="form-floating mb-1 max-w-600">
+                <input asp-for="AssignedToName"  id="assignedToName" class="form-control" readonly/>
+                <label asp-for="AssignedToName"></label>
+            </div>
+            <div class="form-floating mb-1 max-w-600">
+                <textarea asp-for="Message"  id="message" class="form-control" style="height: 300px" rows="10" readonly></textarea>
+                <label asp-for="Message"></label> 
+            </div>
+        </form>
+    </div>
+</div>
+
+<script src="~/js/form-change-tracker.js"></script>
+<script>
+    
+</script>
+
+

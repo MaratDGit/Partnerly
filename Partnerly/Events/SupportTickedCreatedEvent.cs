@@ -47,15 +47,15 @@ namespace Partnerly.Events
                 if (@event.SendNotification == true)
                 {
                     var appUrl = _config["AppSettings:BaseUrl"];
-                    var confirmationLink = $"{appUrl}/SupportTickets/View/{@event.NewTicket.Id}";
+                    var confirmationLink = $"{appUrl}/SupportTickets/ViewCase/{@event.NewTicket.Id}";
 
-                    var message = string.Format(Messages.NewTickedToEmployeeNotification);
+                    var message = string.Format(Messages.NewTickedToEmployeeNotification, @event.NewTicket.TicketID);
                     Notification notification = new Notification { UserId = (Guid)@event.NewTicket.AssignedTo, Type = NotificationTypeAttribute.Warning, Message = message, Link = confirmationLink };
 
                     await _notificationService.CreateNotificationAsync(notification);
                 }
 
-                await _logService.CreateLogAsync(LogActionsAttribute.SupportTicketCreated, LogTypeAttribute.Information, "Ticked ID - " + @event.NewTicket.Id.ToString());
+                await _logService.CreateLogAsync(LogActionsAttribute.SupportTicketCreated, LogTypeAttribute.Information, "Ticked ID - " + @event.NewTicket.TicketID);
             }
         }
     }

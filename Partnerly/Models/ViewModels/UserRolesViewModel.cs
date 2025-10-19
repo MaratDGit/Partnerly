@@ -1,5 +1,7 @@
-﻿using Partnerly.Descriptors.Attributes.BaseAttributes;
+﻿using Microsoft.AspNetCore.Mvc.Rendering;
+using Partnerly.Descriptors.Attributes;
 using Partnerly.Descriptors.Messages;
+using Partnerly.Helpers;
 using System.ComponentModel.DataAnnotations;
 
 namespace Partnerly.Models.ViewModels
@@ -41,5 +43,7 @@ namespace Partnerly.Models.ViewModels
         [Display(Name = FieldsDisplayNames.NewRole)]
         public string? NewRoleName { get; set; }
         #endregion
+
+        public List<SelectListItem> RoleNamesList { get => AttributeDropdownHelper.ToSelectedList(RoleTypeAttribute.RoleNames); }
     }
 }

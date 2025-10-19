@@ -9,13 +9,13 @@ namespace Partnerly.Models.ViewModels
     {
         public Guid Id { get; set; }
 
-        [StringLenght(min: 2, max: 15)]
+        [CusromStringLenght(min: 2, max: 15)]
         [Required(ErrorMessage = $"{FieldsDisplayNames.Name} {ErrorMessages.FieldRequired}")]
         //[Unique(typeof(UserGroup), nameof(UserGroup.Name), ErrorMessage = $"{FieldsDisplayNames.Group} {ErrorMessages.UniqueValue}")]
         [Display(Name = FieldsDisplayNames.Name)]
         public string? Name { get; set; }
 
-        [StringLenght(max: 100)]
+        [CusromStringLenght(max: 100)]
         [Display(Name = FieldsDisplayNames.Description)]
         public string? Description { get; set; }
 

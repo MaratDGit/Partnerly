@@ -62,7 +62,7 @@ namespace Partnerly.Infrastructure.Services
             var userNotifications = await GetUserNotificationsAsync((Guid)userID, onlyUnread: true);
             if (userNotifications != null && userNotifications.Count() > 0)
             {
-                foreach (var notification in userNotifications)
+                foreach (var notification in userNotifications.Where(_ => _.Type == NotificationTypeAttribute.Information))
                 {
                     notification.IsRead = true;
                     await UpdateNotificationAsync(notification, fromMarkAsRead: true);

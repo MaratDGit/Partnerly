@@ -16,11 +16,13 @@ namespace Partnerly.Infrastructure.Services
         private readonly ICurrentUserService _currentUserService;
         private readonly ILogService _logService;
         private readonly IEventBus _eventBus;
+        private readonly ISystemSettingsRepository _systemSettingsRepository;   
 
-        public SupportTicketService(ISupportTicketRepository supportTicketRepository, IUserRepository userRepo, IRoleService roleService, IPermissionService permissionService, ICurrentUserService currentUserService, ILogService logService, IEventBus eventBus)
+        public SupportTicketService(ISupportTicketRepository supportTicketRepository, IUserRepository userRepo, ISystemSettingsRepository systemSettingsRepository, IRoleService roleService, IPermissionService permissionService, ICurrentUserService currentUserService, ILogService logService, IEventBus eventBus)
         {
             _supportTicketRepository = supportTicketRepository;
             _userRepo = userRepo;
+            _systemSettingsRepository = systemSettingsRepository;
             _roleService = roleService;
             _permissionService = permissionService;
             _currentUserService = currentUserService;
@@ -30,6 +32,9 @@ namespace Partnerly.Infrastructure.Services
 
         public async Task<SupportTicket?> GetSupportTicketByIDAsync(Guid? id) =>
             await _supportTicketRepository.GetByIdAsync(id);
+
+        public async Task<IEnumerable<SupportTicket?>> GetUserSupportTicketsAsync(Guid? userID) =>
+            await _supportTicketRepository.GetUserSupportTicketsAsync(userID);
 
         public async Task<IEnumerable<SupportTicket?>> GetAllSupportTicketAsync() =>
             await _supportTicketRepository.GetAllAsync();
@@ -44,26 +49,26 @@ namespace Partnerly.Infrastructure.Services
 
             var newTicket = new SupportTicket { Id = Guid.NewGuid() };
 
+            newTicket.TicketID = await _systemSettingsRepository.GenerateNextCodeAsync("T-");
+
             newTicket.Subject = ticket.Subject;
             newTicket.Message = ticket.Message;
             newTicket.AssignedTo = ticket.AssignedTo;
             newTicket.Status = SupportTicketStatusAttribute.New;
             newTicket.IsRead = false;
             newTicket.UserId = ticket.UserId;
+            if (ticket.AssignedTo == null)
+            {
+                var superAdmin = await _userRepo.GetByEmailAsync(Constants.SuperUserEmail);
+                newTicket.AssignedTo = superAdmin?.Id;
+            }
 
             try
             {
                 await _supportTicketRepository.AddAsync(newTicket);
                 await _supportTicketRepository.SaveChangesAsync();
 
-                if (newTicket.AssignedTo != null)
-                {
-                    var employee = await _userRepo.GetByIdAsync(newTicket.AssignedTo);
-                    if (employee != null)
-                    {
-                        await _eventBus.PublishAsync(new SupportTickedCreatedEvent(newTicket: newTicket, sendEmail: true, sendNote: true));
-                    }
-                }
+                await _eventBus.PublishAsync(new SupportTickedCreatedEvent(newTicket: newTicket, sendEmail: true, sendNote: true));
             }
             catch (Exception ex)
             {
@@ -82,7 +87,7 @@ namespace Partnerly.Infrastructure.Services
                 return ServiceResult<SupportTicket?>.Fail(new List<string> { String.Format(ErrorMessages.RecordIsNullFromController, "SupportTicket") });
             }
 
-            if (await _userRepo.GetByIdAsync(ticket.Id) == null)
+            if (await _supportTicketRepository.GetByIdAsync(ticket.Id) == null)
             {
                 await _logService.CreateLogAsync(LogActionsAttribute.SupportTicketUpdated, LogTypeAttribute.Error, String.Format(ErrorMessages.Cannotbefound, "SupportTicket Id"));
                 return ServiceResult<SupportTicket?>.Fail(new List<string> { String.Format(ErrorMessages.Cannotbefound, "SupportTicket Id") });

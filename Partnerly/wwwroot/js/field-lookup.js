@@ -98,7 +98,29 @@ function openLookupModal(input) {
             tbody.innerHTML = "";
             data.forEach(item => {
                 const tr = document.createElement("tr");
-                tr.innerHTML = columns.map(col => `<td>${item[col] ?? ""}</td>`).join("");
+                /*tr.innerHTML = columns.map(col => `<td>${item[col] ?? ""}</td>`).join("");*/
+
+                tr.innerHTML = columns.map(col => {
+                    const value = item[col];
+
+                    // если значение булево — отрисовать checkbox
+                    if (typeof value === "boolean") {
+                        return `<td class="text-center">
+                    <input type="checkbox" disabled ${value ? "checked" : ""}>
+                </td>`;
+                    }
+
+                    // если это "true"/"false" в виде строки — тоже checkbox
+                    if (value === "true" || value === "false") {
+                        return `<td class="text-center">
+                    <input type="checkbox" disabled ${value === "true" ? "checked" : ""}>
+                </td>`;
+                    }
+
+                    // обычное значение
+                    return `<td>${value ?? ""}</td>`;
+                }).join("");
+
                 tr.dataset.itemId = item.id;
                 tr.addEventListener("click", () => handleLookupSelection(item, input));
                 tbody.appendChild(tr);
@@ -116,15 +138,31 @@ function handleLookupSelection(item, input) {
 
     const editUrlBase = input.dataset.editUrlBase;
 
-    if (editUrlBase) {
-        // Переход на страницу редактирования
+    if (editUrlBase && editUrlBase.trim() !== "") {
         window.location.href = editUrlBase + item.id;
-    } else {
-        // Вставляем значение в поле
-        const displayField = input.dataset.lookupDisplayField || "name";
-        input.value = item[displayField] ?? Object.values(item)[0];
-        input.dataset.selectedId = item.id ?? "";
+        return;
     }
+
+    // 1️⃣ Определяем поле отображения
+    const displayField = input.dataset.lookupDisplayField || "name";
+    const displayValue = item[displayField] ?? item.name ?? Object.values(item)[0];
+    input.value = displayValue ?? "";
+
+    // 2️⃣ Обновляем скрытое поле (если есть)
+    const targetIdFieldId = input.dataset.lookupTargetId;
+    if (targetIdFieldId) {
+        const hiddenInput = document.getElementById(targetIdFieldId);
+        if (hiddenInput) {
+            hiddenInput.value = item.id ?? "";
+            hiddenInput.dispatchEvent(new Event("change", { bubbles: true })); // 🔥 ключевая строка
+        }
+    }
+
+    // 3️⃣ Сохраняем ID в dataset
+    input.dataset.selectedId = item.id ?? "";
+
+    // 4️⃣ Триггерим событие для самого lookup-поля
+    input.dispatchEvent(new Event("change", { bubbles: true }));
 }
 
 function closeLookupModal() {

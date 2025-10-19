@@ -1,0 +1,45 @@
+﻿@model Partnerly.Models.ViewModels.SupportTicketViewModel;
+@{
+    ViewData["Title"] = "Поддержка";
+}
+
+<div class="card">
+  <div class="card-body">
+    <h5>Связаться с поддержкой</h5>
+
+    @if (TempData.Peek("SupportSuccess") != null)
+    {
+        <div class="alert alert-success">@TempData["SupportSuccess"]</div>
+        TempData.Remove("SupportSuccess");
+    }
+    @if (TempData.Peek("CaseCreationLimit") != null)
+    {
+        <div class="alert alert-danger">@TempData["CaseCreationLimit"]</div>
+        TempData.Remove("CaseCreationLimit");
+    }
+
+    <form asp-action="OpenNewCase" method="post">
+      <input asp-for="UserId" class="form-control" hidden/>
+      <input asp-for="Status" class="form-control" hidden/>
+
+      <div class="mb-3 max-w-600">
+        <label asp-for="CreatorName" class="form-label"></label>
+        <input asp-for="CreatorName" class="form-control" readonly/>
+      </div>
+      <div class="mb-3 max-w-600">
+        <label asp-for="Subject" class="form-label"></label>
+        <input asp-for="Subject" class="form-control" />
+        <span asp-validation-for="Subject" class="text-danger"></span>
+      </div>
+      <div class="mb-3 max-w-600">
+        <label asp-for="Message" class="form-label"></label>
+        <textarea asp-for="Message" class="form-control" rows="6"></textarea>
+        <span asp-validation-for="Message" class="text-danger"></span>
+      </div>
+
+      <!-- reCAPTCHA или скрытое поле для защиты -->
+      <button class="btn btn-primary">Отправить</button>
+    </form>
+  </div>
+</div>
+

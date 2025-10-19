@@ -11,6 +11,8 @@ namespace Partnerly.Models
         [Required]
         public Guid? UserId { get; set; }
         [Required]
+        public string? TicketID { get; set; }
+        [Required]
         public string? Subject { get; set; }
         [Required]
         [SupportTicketStatus]

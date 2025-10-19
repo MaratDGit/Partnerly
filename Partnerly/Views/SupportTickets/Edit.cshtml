@@ -1,0 +1,110 @@
+﻿@model Partnerly.Models.ViewModels.SupportTicketViewModel;
+@await Html.PartialAsync("_Toast")
+
+@{
+    ViewData["Title"] = "Редактировать задачу";
+    Layout = "_ContentNavbarLayout";
+}
+
+<div class="card">
+    <div class="card-header justify-content-between">
+        <h5>@ViewData["Title"]</h5>
+    </div>
+
+    <div class="card-body">
+        <form id="supportTicketEditForm" asp-action="Edit">
+            @await Html.PartialAsync("_StickyButtons", new Partnerly.Models.ViewModels.FormActionsViewModel {
+                Back = new Partnerly.Models.ViewModels.ActionBack(id: Model.Id,visible: true, fromController: "SupportTickets", toController: "SupportTickets", fromAction: "Edit", toAction: "Index"),
+                Undo = new Partnerly.Models.ViewModels.ActionUndo(id: Model.Id, visible: true, fromController: "SupportTickets", toController: "SupportTickets", fromAction: "Edit", toAction: "Edit"),
+                Save = new Partnerly.Models.ViewModels.ActionSave(id: Model.Id, visible: true, fromController: "SupportTickets", toController: "SupportTickets", fromAction: "Edit", toAction: "Edit"),
+                Create = new Partnerly.Models.ViewModels.ActionCreate(id: Model.Id, visible: true, fromController: "SupportTickets", toController: "SupportTickets", fromAction: "Edit", toAction: "Create"),
+                Delete = new Partnerly.Models.ViewModels.ActionDelete(id: Model.Id, visible: true, fromController: "SupportTickets", toController: "SupportTickets", fromAction: "Edit", toAction: "Delete"),
+            })
+
+            @if (TempData.Peek("FormToast") != null)
+            {
+                <div class="alert alert-danger">@TempData["FormToast"]</div>
+                TempData.Remove("FormToast");
+            }
+
+            <input type="hidden" asp-for="Id" />
+            <input type="hidden" asp-for="UserId" />
+            <input type="hidden" asp-for="AssignedTo" id="assignedTo" />
+
+            <div class="form-floating mb-1 max-w-600">
+                <input asp-for="TicketID"  id="ticketID" class="form-control" readonly/>
+                <label asp-for="TicketID"></label>
+            </div>
+            <div class="form-floating mb-1 max-w-600 position-relative">
+                <input asp-for="Subject"
+                       id="subject"
+                       name="subject"
+                       type="text"
+                       class="form-control lookup-input pe-5"
+                       placeholder=" "
+                       data-lookup="true"
+                       data-lookup-source="/SupportTickets/GetLookupList"
+                       data-lookup-title="Задачи"
+                       data-edit-url-base="/SupportTickets/Edit/"
+                       data-lookup-column-names="subject:Заголовок,status:Статус,isRead:Прочитано"
+                       data-lookup-display-field="Subject"
+                       data-lookup-param="fieldName"
+                       data-lookup-param-value="Subject" autofocus/>
+                <label asp-for="Subject"></label>
+                <i class='bx bx-search lookup-icon'></i>
+                <span asp-validation-for="Subject" class="text-danger"></span>
+            </div>
+            <div class="form-floating mb-1 max-w-600">
+                <input asp-for="CreatorName"  id="creatorName" class="form-control" readonly/>
+                <label asp-for="CreatorName"></label>
+            </div>
+            <div class="form-floating mb-1 max-w-600">
+               <select asp-for="Status"
+                            asp-items="Model.TicketStatuses"
+                            class="form-select"
+                            id="status">
+                        <option value=""></option>
+                    </select>
+                    <label asp-for="Status"></label>
+                    <span asp-validation-for="Status" class="text-danger"></span>
+            </div>
+            <div class="form-floating mb-1 max-w-600 position-relative">
+                <input asp-for="AssignedToName"
+                       id="assignedToName"
+                       name="assignedToName"
+                       type="text"
+                       class="form-control lookup-input pe-5"
+                       placeholder=" "
+                       data-lookup="true"
+                       data-lookup-source="/Users/GetLookupList"
+                       data-lookup-title="Пользователи"
+                       data-edit-url-base=""
+                       data-lookup-column-names="name:Название,email:Электронная почта"
+                       data-lookup-display-field="AssignedToName"
+                       data-lookup-param="fieldName"
+                       data-lookup-param-value="Name" 
+                       data-lookup-target-id="assignedTo"
+                       readonly/>
+                <label asp-for="AssignedToName"></label>
+                <i class='bx bx-search lookup-icon'></i>
+                <span asp-validation-for="AssignedTo" class="text-danger"></span>
+            </div>
+            <div class="form-floating mb-1 max-w-600">
+                <textarea asp-for="Message"  id="message" class="form-control" style="height: 300px" rows="10"></textarea>
+                <label asp-for="Message"></label>
+                <span asp-validation-for="Message" class="text-danger"></span>    
+            </div>
+            <div class="form-check form-switch mb-2">
+                <input asp-for="IsReadBool" class="form-check-input" type="checkbox" id="isRead" />
+                <label class="form-check-label" asp-for="IsRead" for="isRead"></label>
+            </div>
+        </form>
+    </div>
+</div>
+
+<script src="~/js/form-change-tracker.js"></script>
+<script>
+    enableSaveOnChange("#supportTicketEditForm", "#btnSave");
+</script>
+
+

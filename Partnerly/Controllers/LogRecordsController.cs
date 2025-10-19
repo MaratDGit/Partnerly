@@ -13,7 +13,7 @@ using System.Text.Json;
 
 namespace Partnerly.Controllers
 {
-    [ClaimAuthorize(ClaimTypes.Role, RoleTypeAttribute.Admin, RoleTypeAttribute.Employee)]
+    [ClaimAuthorize(ClaimTypes.Role, RoleTypeAttribute.Admin)]
     public class LogRecordsController : _BaseController
     {
         public LogRecordsController(IEventBus eventBus, IUserService userService, ICurrentUserService currentUser, ILogService logService)

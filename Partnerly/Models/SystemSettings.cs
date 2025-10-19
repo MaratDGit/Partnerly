@@ -33,6 +33,11 @@ namespace Partnerly.Models
         public int? OnlineStatusAutoRefreshMinute { get; set; }
         #endregion
 
+        #region TaskTickedID
+        [Display(Name = "Task Ticked ID")]
+        public string? TaskTickedID { get; set; }
+        #endregion
+
         #region System Columns
         public bool IsDeleted { get; set; } = false;
         [Required]

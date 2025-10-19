@@ -61,8 +61,8 @@
     </li>
 
     <li class="menu-header small text-uppercase"><span class="menu-header-text">Разное</span></li>
-    <li class="menu-item">
-      <a href='@TempData.Peek("support")' target="_blank" class="menu-link">
+    <li class='menu-item@(currentPage.Contains("/SupportTickets/OpenNewCase") ? " active" : "")'>
+      <a asp-controller="SupportTickets" asp-action="OpenNewCase" class="menu-link">
         <i class="menu-icon tf-icons bx bx-support"></i>
         <div>Поддержка</div><div class="badge bg-label-primary fs-tiny rounded-pill ms-auto text-uppercase">24/7</div>
       </a>
@@ -73,45 +73,57 @@
         <div>Документация</div>
       </a>
     </li>
-    @if (ViewBag?.RoleType == Partnerly.Descriptors.Attributes.RoleTypeAttribute.Delete)
+    @if (ViewBag?.RoleType == Partnerly.Descriptors.Attributes.RoleTypeAttribute.Delete || ViewBag?.RoleType == Partnerly.Descriptors.Attributes.RoleTypeAttribute.Update)
     {
         <li class="menu-header small text-uppercase"><span class="menu-header-text">Настройки системы</span></li>
-        <li class='menu-item@(currentPage.StartsWith("/SystemPreferences") ? " active" : "")'>
-          <a asp-controller="SystemPreferences" asp-action="Index" class="menu-link">
-            <i class="menu-icon tf-icons bx bx-slider"></i>
-            <div>Системные настройки</div>
-          </a>
-        </li>
+        if (ViewBag?.RoleType == Partnerly.Descriptors.Attributes.RoleTypeAttribute.Delete)
+        {
+            <li class='menu-item@(currentPage.StartsWith("/SystemPreferences") ? " active" : "")'>
+              <a asp-controller="SystemPreferences" asp-action="Index" class="menu-link">
+                <i class="menu-icon tf-icons bx bx-slider"></i>
+                <div>Системные настройки</div>
+              </a>
+            </li>
+            <li class='menu-item@(currentPage.StartsWith("/Roles") ? " active" : "")'>
+              <a asp-controller="Roles" asp-action="Index" class="menu-link">
+                <i class="menu-icon tf-icons bx bx-paint-roll"></i>
+                <div>Роли</div>
+              </a>
+            </li>
+            <li class='menu-item@(currentPage.StartsWith("/EmailTemplates") ? " active" : "")'>
+              <a asp-controller="EmailTemplates" asp-action="Index" class="menu-link">
+                <i class="menu-icon tf-icons bx bx-sitemap"></i>
+                <div>Шаблоны электронной почты</div>
+              </a>
+            </li>
+             <li class='menu-item@(currentPage.StartsWith("/LogRecords") ? " active" : "")'>
+              <a asp-controller="LogRecords" asp-action="Index" class="menu-link">
+                <i class="menu-icon tf-icons bx bx-file"></i>
+                <div>Журналы</div>
+              </a>
+            </li>
+        }
         <li class='menu-item@(currentPage.StartsWith("/Users") ? " active" : "")'>
-          <a asp-controller="Users" asp-action="Index" class="menu-link">
+            <a asp-controller="Users" asp-action="Index" class="menu-link">
             <i class="menu-icon tf-icons bx bx-user"></i>
             <div>Пользователи</div>
-          </a>
+            </a>
         </li>
-        <li class='menu-item@(currentPage.StartsWith("/Roles") ? " active" : "")'>
-          <a asp-controller="Roles" asp-action="Index" class="menu-link">
-            <i class="menu-icon tf-icons bx bx-paint-roll"></i>
-            <div>Роли</div>
-          </a>
-        </li>
+        
         <li class='menu-item@(currentPage.StartsWith("/UserGroups") ? " active" : "")'>
-          <a asp-controller="UserGroups" asp-action="Index" class="menu-link">
+            <a asp-controller="UserGroups" asp-action="Index" class="menu-link">
             <i class="menu-icon tf-icons bx bx-group"></i>
             <div>Группы</div>
-          </a>
+            </a>
         </li>
-        <li class='menu-item@(currentPage.StartsWith("/EmailTemplates") ? " active" : "")'>
-          <a asp-controller="EmailTemplates" asp-action="Index" class="menu-link">
-            <i class="menu-icon tf-icons bx bx-sitemap"></i>
-            <div>Шаблоны электронной почты</div>
-          </a>
-        </li>
-        <li class='menu-item@(currentPage.StartsWith("/LogRecords") ? " active" : "")'>
-          <a asp-controller="LogRecords" asp-action="Index" class="menu-link">
-            <i class="menu-icon tf-icons bx bx-file"></i>
-            <div>Журналы</div>
-          </a>
-        </li>     
+        
+       
+        <li class='menu-item@(currentPage.StartsWith("/SupportTickets") &&  !currentPage.Contains("/OpenNewCase") ? " active" : "")'>
+            <a asp-controller="SupportTickets" asp-action="Index" class="menu-link">
+            <i class="menu-icon tf-icons bx bx-pencil"></i>
+            <div>Случаи поддержки и задачи</div>
+            </a>
+        </li>    
     }
   </ul>
 </aside>

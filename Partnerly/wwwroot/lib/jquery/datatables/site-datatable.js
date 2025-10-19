@@ -32,7 +32,20 @@
                         }
                         return `<input type="checkbox" disabled ${data ? "checked" : ""} />`;
                     }
-                    if (f.linkTemplate) return `<a title="${title}" href="${f.linkTemplate.replace("{id}", row.id)}">${data}</a>`;
+
+                    if (f.linkTemplate) {
+                        let href = f.linkTemplate;
+
+                        // Ищем все плейсхолдеры в виде {ключ}
+                        href = href.replace(/{(\w+)}/g, (match, key) => {
+                            // Если в row есть такое поле — подставляем его значение
+                            // Если нет — оставляем пустую строку (или можно match, если хочешь оставить {ключ})
+                            return row.hasOwnProperty(key) ? row[key] : "";
+                        });
+
+                        return `<a title="${title}" href="${href}">${data}</a>`;
+                    }
+
                     if (f.format) {
                         const [typeFormat, formatString] = f.format.split(":");
 
@@ -100,7 +113,6 @@
             });
         }
 
-        /*$(`#${tableId}`).CustomDataTable({ data: data, columns: columns });*/
         $(`#${tableId}`).CustomDataTable({
             data: data,
             columns: columns,

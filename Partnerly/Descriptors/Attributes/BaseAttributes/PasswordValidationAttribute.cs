@@ -4,7 +4,7 @@ using System.Text.RegularExpressions;
 
 namespace Partnerly.Descriptors.Attributes.BaseAttributes
 {
-    public class PasswordValidationAttribute : StringLenghtAttribute
+    public class PasswordValidationAttribute : CusromStringLenghtAttribute
     {
         public bool RequireDigit { get; set; } = true;
         public bool RequireLowercase { get; set; } = true;
