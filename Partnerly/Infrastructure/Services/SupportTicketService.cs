@@ -68,7 +68,7 @@ namespace Partnerly.Infrastructure.Services
                 await _supportTicketRepository.AddAsync(newTicket);
                 await _supportTicketRepository.SaveChangesAsync();
 
-                await _eventBus.PublishAsync(new SupportTickedCreatedEvent(newTicket: newTicket, sendEmail: true, sendNote: true));
+                await _eventBus.PublishAsync(new SupportTickedCreatedEvent(newTicket: newTicket, type: SupportTickedCreatedEvent.EventType.Created, sendEmail: true, sendNote: true));
             }
             catch (Exception ex)
             {
@@ -79,6 +79,16 @@ namespace Partnerly.Infrastructure.Services
             return ServiceResult<SupportTicket?>.Ok(newTicket);
         }
 
+        public async Task<ServiceResult<SupportTicket?>> UpdateSupportTicketAsync(SupportTicket? ticket, Guid? oldAssignedTo)
+        {
+            var result = await UpdateSupportTicketAsync(ticket);
+            if (result.Success && result.Data.AssignedTo != oldAssignedTo && oldAssignedTo != null)
+            {
+                await _eventBus.PublishAsync(new SupportTickedCreatedEvent(newTicket: result.Data, type: SupportTickedCreatedEvent.EventType.Assigned, sendEmail: true, sendNote: true));
+            }
+            return result;
+        }
+
         public async Task<ServiceResult<SupportTicket?>> UpdateSupportTicketAsync(SupportTicket? ticket)
         {
             if (ticket == null)
@@ -87,7 +97,9 @@ namespace Partnerly.Infrastructure.Services
                 return ServiceResult<SupportTicket?>.Fail(new List<string> { String.Format(ErrorMessages.RecordIsNullFromController, "SupportTicket") });
             }
 
-            if (await _supportTicketRepository.GetByIdAsync(ticket.Id) == null)
+            var currentTicket = await _supportTicketRepository.GetByIdAsync(ticket.Id);
+            
+            if (currentTicket == null)
             {
                 await _logService.CreateLogAsync(LogActionsAttribute.SupportTicketUpdated, LogTypeAttribute.Error, String.Format(ErrorMessages.Cannotbefound, "SupportTicket Id"));
                 return ServiceResult<SupportTicket?>.Fail(new List<string> { String.Format(ErrorMessages.Cannotbefound, "SupportTicket Id") });
@@ -111,6 +123,16 @@ namespace Partnerly.Infrastructure.Services
             }
 
             return ServiceResult<SupportTicket?>.Ok(ticket);
+        }
+
+        public async Task<ServiceResult<SupportTicket?>> ChangeTicketStatus(SupportTicket? ticket, string? oldStatus)
+        {
+            var result = await UpdateSupportTicketAsync(ticket);
+            if (result.Success)
+            {
+                await _eventBus.PublishAsync(new SupportTickedStatusChangedEvent(ticket: result.Data, oldStatus: oldStatus, sendEmail: true, sendNote: true));
+            }
+            return result;
         }
 
         public async Task<ServiceResult<SupportTicket?>> DeleteSupportTicketAsync(Guid? id)

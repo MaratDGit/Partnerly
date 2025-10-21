@@ -41,6 +41,7 @@ builder.Services.AddScoped<ISupportTicketRepository, SupportTicketRepository>();
 builder.Services.AddTransient<IEmailSender, EmailSender>();
 builder.Services.AddTransient<UserRegisteredEventHandler>();
 builder.Services.AddTransient<SupportTickedCreatedEventHandler>();
+builder.Services.AddTransient<SupportTickedStatusChangedEventHandler>();
 
 // Hosted & middleware-related
 builder.Services.AddHostedService<OnlineStatusService>();
@@ -78,6 +79,7 @@ using (var scope = app.Services.CreateScope())
     var eventBus = services.GetRequiredService<IEventBus>();
     eventBus.Subscribe<UserRegisteredEvent, UserRegisteredEventHandler>();
     eventBus.Subscribe<SupportTickedCreatedEvent, SupportTickedCreatedEventHandler>();
+    eventBus.Subscribe<SupportTickedStatusChangedEvent, SupportTickedStatusChangedEventHandler>();
 }
 
 if (!app.Environment.IsDevelopment())

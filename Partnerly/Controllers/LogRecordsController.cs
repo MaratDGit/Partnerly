@@ -66,7 +66,10 @@ namespace Partnerly.Controllers
         protected override async Task<IEnumerable<TEntity>> GetEntitiesAsync<TEntity>()
         {
             if (typeof(TEntity) == typeof(Log))
-                return (IEnumerable<TEntity>)await _logService.GetAllLogsAsync();
+            { 
+                var result = await _logService.GetAllLogsAsync();
+                return (IEnumerable<TEntity>)result.OrderByDescending(_ => _.CreatedDate);
+            }
 
             return Enumerable.Empty<TEntity>();
         }
@@ -79,9 +82,9 @@ namespace Partnerly.Controllers
                 return new List<GridField>
                 {
                     new GridField { FieldName = "select", DisplayName = $"", DefaultValue = false, Type = "checkbox"},
-                    new GridField { FieldName = "actionView", DisplayName = FieldsDisplayNames.Action },
+                    new GridField { FieldName = "actionView", DisplayName = FieldsDisplayNames.Action, LinkTemplate = "/LogRecords/View/{id}" },
                     new GridField { FieldName = "typeView", DisplayName = FieldsDisplayNames.Type, IsFilterable = true },
-                    new GridField { FieldName = "logMessage", DisplayName = FieldsDisplayNames.Message, LinkTemplate = "/LogRecords/View/{id}" },
+                    new GridField { FieldName = "logMessage", DisplayName = FieldsDisplayNames.Message },
                     new GridField { FieldName = "filePath", DisplayName = FieldsDisplayNames.FilePath, DefaultValue = "" },
                     new GridField { FieldName = "method", DisplayName = FieldsDisplayNames.Method},
                     new GridField { FieldName = "lineNumber", DisplayName = FieldsDisplayNames.LineNumber},

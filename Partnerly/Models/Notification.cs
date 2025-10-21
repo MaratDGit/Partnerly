@@ -19,6 +19,7 @@ namespace Partnerly.Models
         public string? Type { get; set; }
 
         public bool IsRead { get; set; } = false;
+        public Guid? TicketID { get; set; }
 
         public string? Link { get; set; } // куда ведёт уведомление
 

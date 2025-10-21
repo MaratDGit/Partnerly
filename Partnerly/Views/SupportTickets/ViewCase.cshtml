@@ -4,7 +4,25 @@
 @{
     ViewData["Title"] = "Просмотреть задачу";
     Layout = "_ContentNavbarLayout";
+    bool hasRole = ViewBag?.RoleType == Partnerly.Descriptors.Attributes.RoleTypeAttribute.Delete || ViewBag?.RoleType == Partnerly.Descriptors.Attributes.RoleTypeAttribute.Update;
+    bool hasAdminRole = ViewBag?.RoleType == Partnerly.Descriptors.Attributes.RoleTypeAttribute.Delete;
 }
+
+<style>
+.task-id {
+  background: linear-gradient(90deg, #007bff, #00c4ff);
+  color: #fff;
+  font-weight: 600;
+  padding: 4px 12px;
+  border-radius: 12px;
+  font-size: 0.9rem;
+  box-shadow: 0 2px 8px rgba(0, 123, 255, 0.3);
+}
+
+.text-muted {
+  color: #6c757d !important;
+}
+</style>
 
 <div class="card">
     <div class="card-header justify-content-between">
@@ -12,58 +30,53 @@
     </div>
 
     <div class="card-body">
-        <form id="supportTicketViewForm" asp-action="ViewCase">
-            @await Html.PartialAsync("_StickyButtons", new Partnerly.Models.ViewModels.FormActionsViewModel {
-                Back = new Partnerly.Models.ViewModels.ActionBack(id: Model.Id,visible: true, fromController: "SupportTickets", toController: "SupportTickets", fromAction: "ViewCase", toAction: "Index"),
-                Menu = new Partnerly.Models.ViewModels.ActionMenu(visible: true),
-                MenuActions = new List<Partnerly.Models.ViewModels.MenuItemAction> {
-                    new Partnerly.Models.ViewModels.MenuItemAction(icon: "bx bx-fast-forward", displayName: "Начинать"),
-                    new Partnerly.Models.ViewModels.MenuItemAction(icon: "bx bx-x", displayName: "Закрыть задачу"),
-                    new Partnerly.Models.ViewModels.MenuItemAction(icon: "bx bx-reply", displayName: "Отвечать"),
-                }
-            })
-
-            @if (TempData.Peek("FormToast") != null)
-            {
-                <div class="alert alert-danger">@TempData["FormToast"]</div>
-                TempData.Remove("FormToast");
+        @await Html.PartialAsync("_StickyButtons", new Partnerly.Models.ViewModels.FormActionsViewModel {
+            Back = new Partnerly.Models.ViewModels.ActionBack(id: Model.Id,visible: true, fromController: "SupportTickets", toController: "SupportTickets", fromAction: "ViewCase", toAction: "Index"),
+            Menu = new Partnerly.Models.ViewModels.ActionMenu(visible: hasRole),
+            MenuActions = new List<Partnerly.Models.ViewModels.MenuItemAction> {
+                new Partnerly.Models.ViewModels.MenuItemAction(visible:hasRole, icon: "bx bx-fast-forward", displayName: "Начинать", fromController: "SupportTickets", toController: "SupportTickets", fromAction: "ViewCase", toAction: "StartCase", routID: @Model.Id),
+                new Partnerly.Models.ViewModels.MenuItemAction(visible:hasRole, icon: "bx bx-x", displayName: "Закрыть задачу", fromController: "SupportTickets", toController: "SupportTickets", fromAction: "ViewCase", toAction: "CloseCase", routID: @Model.Id),
+                new Partnerly.Models.ViewModels.MenuItemAction(visible:hasAdminRole, icon: "bx bx-reply", displayName: "Назначить", fromController: "SupportTickets", toController: "SupportTickets", fromAction: "ViewCase", toAction: "Edit", routID: @Model.Id),
             }
+        })
+        @if (@Model.Status == Partnerly.Descriptors.Attributes.SupportTicketStatusAttribute.InProgress || @Model.Status == Partnerly.Descriptors.Attributes.SupportTicketStatusAttribute.Closed)
+        {
+             <div class="alert alert-primary">@Model.StatusAsView</div>
+        }
+       
+        <div class="mb-1 max-w-600">
+            <div class="container my-5">
+                <div class="task-card p-4 mx-auto">
+                    <div class="d-flex justify-content-between align-items-center mb-3">
+                        <small class="text-muted">
+                        <i class="bx bx-calendar-event me-1 text-primary"></i>
+                        @(Model.CreatedDate.Value.ToString("dd MMMM yyyy", new System.Globalization.CultureInfo("ru-RU")))
+                        </small>
+                        <span class="task-id">@Model.TicketID</span>
+                    </div>
 
-            <input type="hidden" asp-for="Id" />
-            <input type="hidden" asp-for="UserId" />
-            <input type="hidden" asp-for="AssignedTo" id="assignedTo" />
+                    <div class="mb-3">
+                        <h6 class="fw-bold text-dark mb-1">@Model.Subject</h6>
+                        <p class="small text-muted mb-0">
+                        @Model.Message
+                        </p>
+                    </div>
 
-            <div class="form-floating mb-1 max-w-600">
-                <input asp-for="TicketID"  id="ticketID" class="form-control" readonly/>
-                <label asp-for="TicketID"></label>
+                    <div class="d-flex justify-content-between align-items-center border-top pt-3">
+                        <div class="small text-muted">
+                        <i class="bi bi-person-fill text-primary me-1"></i>
+                        <strong>От:</strong> @Model.CreatorName
+                        </div>
+                        <div class="small text-muted">
+                        <i class="bi bi-person-fill text-success me-1"></i>
+                        <strong>Кому:</strong> @Model.AssignedToName
+                        </div>
+                    </div>
+                </div>
             </div>
-            <div class="form-floating mb-1 max-w-600">
-                <input asp-for="Subject"  id="subject" class="form-control" readonly/>
-                <label asp-for="Subject"></label>
-            </div>
-            <div class="form-floating mb-1 max-w-600">
-                <input asp-for="CreatorName"  id="creatorName" class="form-control" readonly/>
-                <label asp-for="CreatorName"></label>
-            </div>
-             <div class="form-floating mb-1 max-w-600">
-                <input asp-for="StatusAsView"  id="status" class="form-control" readonly/>
-                <label asp-for="Status"></label>
-            </div>
-            <div class="form-floating mb-1 max-w-600">
-                <input asp-for="AssignedToName"  id="assignedToName" class="form-control" readonly/>
-                <label asp-for="AssignedToName"></label>
-            </div>
-            <div class="form-floating mb-1 max-w-600">
-                <textarea asp-for="Message"  id="message" class="form-control" style="height: 300px" rows="10" readonly></textarea>
-                <label asp-for="Message"></label> 
-            </div>
-        </form>
+        </div>
     </div>
 </div>
 
-<script src="~/js/form-change-tracker.js"></script>
-<script>
-    
-</script>
 
 

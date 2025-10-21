@@ -1,5 +1,10 @@
 ﻿@model  Partnerly.Models.ViewModels.FormActionsViewModel
 
+@{
+    bool hasRole = ViewBag?.RoleType == Partnerly.Descriptors.Attributes.RoleTypeAttribute.Delete || ViewBag?.RoleType == Partnerly.Descriptors.Attributes.RoleTypeAttribute.Update;
+    bool hasAdminRole = ViewBag?.RoleType == Partnerly.Descriptors.Attributes.RoleTypeAttribute.Delete;
+}
+
 <div class="sticky-buttons justify-content-between mb-6">
     @if (Model?.Back?.Visible == true)
     {   
@@ -19,13 +24,13 @@
             <i class="@Model.Save.Icon me-1 fs-3"></i>
         </button>
     }
-    @if (Model?.Create?.Visible == true)
+    @if (Model?.Create?.Visible == true && hasAdminRole)
     {   
          <a asp-action="@Model.Create.ToAction" asp-controller="@Model.Create.ToController" class="btn btn-link p-0" title="@Model.Create.Title">
             <i class="@Model.Create.Icon me-1 fs-3"></i>
          </a>
     }
-    @if (Model?.Delete?.Visible == true)
+    @if (Model?.Delete?.Visible == true && hasAdminRole)
     {   
          <a asp-action="@Model.Delete.ToAction" asp-controller="@Model.Delete.ToController" asp-route-id="@Model.Delete.Id" class="btn btn-link p-0" title="@Model.Delete.Title">
             <i class="@Model.Delete.Icon me-1 fs-3"></i>
@@ -40,23 +45,26 @@
             <ul class="dropdown-menu dropdown-menu-end">
                 @foreach (var action in Model.MenuActions)
                 {
-                    <li>
-                        @if (action.IsModal == true)
-                        {
-                            <a class="dropdown-item" href="#" data-bs-toggle="modal" data-bs-target="@action.ModalTarget" onclick="@action.OnClick">
-                                <i class="@action.Icon me-1"></i> @action.DisplayName
-                            </a>
-                        }
-                        else
-                        {
-                            <a class="dropdown-item"
-                               asp-action="@action.ToAction"
-                               asp-controller="@action.ToController"
-                               asp-route-id="@action.RouteID">
-                                <i class="@action.Icon me-1"></i> @action.DisplayName
-                            </a>
-                        }
-                    </li>
+                    @if(action.Visible == true)
+                    {
+                        <li>
+                            @if (action.IsModal == true)
+                            {
+                                <a class="dropdown-item" href="#" data-bs-toggle="modal" data-bs-target="@action.ModalTarget" onclick="@action.OnClick">
+                                    <i class="@action.Icon me-1"></i> @action.DisplayName
+                                </a>
+                            }
+                            else
+                            {
+                                <a class="dropdown-item"
+                                   asp-action="@action.ToAction"
+                                   asp-controller="@action.ToController"
+                                   asp-route-id="@action.RouteID">
+                                    <i class="@action.Icon me-1"></i> @action.DisplayName
+                                </a>
+                            }
+                        </li>
+                    }
                 }
             </ul>
         </div>

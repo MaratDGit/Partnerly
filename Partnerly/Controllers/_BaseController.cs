@@ -50,10 +50,10 @@ namespace Partnerly.Controllers
             bool unknownAction = false;
             if (!string.IsNullOrEmpty(actionName))
             {
-                if (actionName.ToLower() == Constants.Edit.ToLower()) roleType = RoleTypeAttribute.Update;
+                if (actionName.ToLower() == Constants.Edit.ToLower() 
+                    || actionName.ToLower() == Constants.Create.ToLower()) roleType = RoleTypeAttribute.Update;
                 else if (actionName.ToLower() == Constants.Delete.ToLower()
-                    || actionName.ToLower() == Constants.DeleteConfirmed.ToLower()
-                    || actionName.ToLower() == Constants.Create.ToLower()) roleType = RoleTypeAttribute.Delete;
+                    || actionName.ToLower() == Constants.DeleteConfirmed.ToLower()) roleType = RoleTypeAttribute.Delete;
                 else unknownAction = true;
             }
 

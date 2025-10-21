@@ -23,5 +23,11 @@ namespace Partnerly.Infrastructure.Repositories
             .OrderByDescending(n => n.CreatedDate)
             .ToListAsync();
         }
+
+        public async Task<Notification?> GetNotificationByTicketIDAsync(Guid? ticketID)
+        {
+            return await _dbSet
+            .Where(n => n.TicketID == ticketID && ticketID != null).FirstOrDefaultAsync();
+        }
     }
 }

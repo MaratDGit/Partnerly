@@ -15,6 +15,9 @@ namespace Partnerly.Descriptors.Messages
         public const string UserRegistrationNotification =  "Добро пожаловать, {0}! 🎉 " +
                                                             "Мы рады видеть вас на нашем сайте.";
         public const string NewTickedToEmployeeNotification = "У вас новый тикет в службу поддержки. {0}";
+        public const string TickedStartedNotification = "Ваш запрос мы начали смотреть. {0}";
+        public const string TickedReopenedNotification = "Ваш запрос был снова открыт. {0}";
+        public const string TickedClosedNotification = "Ваш запрос был закрыт. {0}";
         #endregion
     }
 }

@@ -41,6 +41,42 @@ namespace Partnerly.Controllers
             return View(model);
         }
 
+        [ClaimAuthorize(ClaimTypes.Role, RoleTypeAttribute.Admin, RoleTypeAttribute.Employee)]
+        public async Task<IActionResult> StartCase(Guid? id)
+        {
+            if (id != null)
+            {
+                var ticket = await _supportTicketService.GetSupportTicketByIDAsync(id);
+                string? status = ticket?.Status;
+                if (status != null && status != SupportTicketStatusAttribute.InProgress)
+                {
+                    ticket.IsRead = true;
+                    ticket.Status = SupportTicketStatusAttribute.InProgress;
+                    await _supportTicketService.ChangeTicketStatus(ticket, status);
+                }
+            }
+
+            return RedirectToAction(nameof(ViewCase), new { id = id });
+        }
+
+        [ClaimAuthorize(ClaimTypes.Role, RoleTypeAttribute.Admin, RoleTypeAttribute.Employee)]
+        public async Task<IActionResult> CloseCase(Guid? id)
+        {
+            if (id != null)
+            {
+                var ticket = await _supportTicketService.GetSupportTicketByIDAsync(id);
+                string? status = ticket?.Status;
+                if (status != null && status != SupportTicketStatusAttribute.Closed)
+                {
+                    ticket.IsRead = true;
+                    ticket.Status = SupportTicketStatusAttribute.Closed;
+                    await _supportTicketService.ChangeTicketStatus(ticket, status);
+                }
+            }
+
+            return RedirectToAction(nameof(ViewCase), new { id = id });
+        }
+
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> OpenNewCase(SupportTicketViewModel model)
@@ -120,7 +156,7 @@ namespace Partnerly.Controllers
             return View(ticketAsView);
         }
 
-        [ClaimAuthorize(ClaimTypes.Role, RoleTypeAttribute.Admin, RoleTypeAttribute.Employee)]
+        [ClaimAuthorize(ClaimTypes.Role, RoleTypeAttribute.Admin)]
         public async Task<IActionResult> Create()
         {
             SupportTicketViewModel model = new SupportTicketViewModel() { UserId = _currentUser.UserId, Status = SupportTicketStatusAttribute.New,};    
@@ -129,7 +165,7 @@ namespace Partnerly.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        [ClaimAuthorize(ClaimTypes.Role, RoleTypeAttribute.Admin, RoleTypeAttribute.Employee)]
+        [ClaimAuthorize(ClaimTypes.Role, RoleTypeAttribute.Admin)]
         public async Task<IActionResult> Create(SupportTicketViewModel model)
         {
             if (ModelState.IsValid)
@@ -164,7 +200,7 @@ namespace Partnerly.Controllers
             return View(model);
         }
 
-        [ClaimAuthorize(ClaimTypes.Role, RoleTypeAttribute.Admin, RoleTypeAttribute.Employee)]
+        [ClaimAuthorize(ClaimTypes.Role, RoleTypeAttribute.Admin)]
         public async Task<IActionResult> Edit(Guid id)
         {
             var ticket = await _supportTicketService.GetSupportTicketByIDAsync(id);
@@ -187,7 +223,7 @@ namespace Partnerly.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        [ClaimAuthorize(ClaimTypes.Role, RoleTypeAttribute.Admin, RoleTypeAttribute.Employee)]
+        [ClaimAuthorize(ClaimTypes.Role, RoleTypeAttribute.Admin)]
         public async Task<IActionResult> Edit(Guid id, SupportTicketViewModel model)
         {
             if (id != model.Id) return NotFound();
@@ -197,13 +233,14 @@ namespace Partnerly.Controllers
                 SupportTicket? ticket = await _supportTicketService.GetSupportTicketByIDAsync(model.Id);
                 if (ticket != null)
                 {
+                    Guid? oldAssignedTo = ticket.AssignedTo;
                     ticket.Subject = model.Subject;
                     ticket.Message = model.Message;
                     ticket.IsRead = model.IsRead;
                     ticket.AssignedTo = model.AssignedTo;
                     ticket.Status = model.Status;
 
-                    ServiceResult<SupportTicket?> result = await _supportTicketService.UpdateSupportTicketAsync(ticket);
+                    ServiceResult<SupportTicket?> result = await _supportTicketService.UpdateSupportTicketAsync(ticket, oldAssignedTo);
 
                     if (!result.Success)
                     {
@@ -263,8 +300,9 @@ namespace Partnerly.Controllers
                     .Select(u => new
                     {
                         id = u.Id,
+                        ticketID = u.TicketID,
                         subject = u.Subject,
-                        status = u.Status,
+                        status = AttributeDropdownHelper.GetValue<SupportTicketStatusAttribute>(u.Status),
                         isRead = u.IsRead
                     })
                     .OrderBy(u => u.subject)
@@ -289,7 +327,12 @@ namespace Partnerly.Controllers
         protected override async Task<IEnumerable<TEntity>> GetEntitiesAsync<TEntity>()
         {
             if (typeof(TEntity) == typeof(SupportTicket))
-                return (IEnumerable<TEntity>)await _supportTicketService.GetAllSupportTicketAsync();
+            {
+                var result = await _supportTicketService.GetAllSupportTicketAsync();
+                var entities = HasPermision(RoleTypeAttribute.Delete) ? result : result.Where(_ => _.UserId == _currentUser.UserId || _.AssignedTo == _currentUser.UserId);
+
+                return (IEnumerable<TEntity>)entities.OrderByDescending(_ => _.TicketID);
+            }
 
             return Enumerable.Empty<TEntity>();
         }
@@ -302,8 +345,8 @@ namespace Partnerly.Controllers
                 return new List<GridField>
                 {
                     new GridField { FieldName = "select", DisplayName = $"", DefaultValue = false, Type = "checkbox"},
-                    new GridField { FieldName = "ticketID", DisplayName = $"{FieldsDisplayNames.TaskNumber}", IsSortable = true, LinkTemplate = "/SupportTickets/Edit/{id}" },
-                    new GridField { FieldName = "subject", DisplayName = $"{FieldsDisplayNames.Subject}", LinkTemplate = "/SupportTickets/Edit/{id}" },
+                    new GridField { FieldName = "ticketID", DisplayName = $"{FieldsDisplayNames.TaskNumber}", IsSortable = true, LinkTemplate = HasPermision(RoleTypeAttribute.Delete) ? "/SupportTickets/Edit/{id}" : "/SupportTickets/ViewCase/{id}" },
+                    new GridField { FieldName = "subject", DisplayName = $"{FieldsDisplayNames.Subject}", LinkTemplate = HasPermision(RoleTypeAttribute.Delete) ? "/SupportTickets/Edit/{id}" : "/SupportTickets/ViewCase/{id}" },
                     new GridField { FieldName = "message", DisplayName = FieldsDisplayNames. Message},
                     new GridField { FieldName = "status", DisplayName = FieldsDisplayNames.Status, IsSortable = true, IsFilterable = true },
                     new GridField { FieldName = "creatorName", DisplayName = FieldsDisplayNames.CreatorName, IsSortable = true, IsFilterable = true, LinkTemplate = "/Users/Edit/{userId}"},
@@ -322,6 +365,11 @@ namespace Partnerly.Controllers
 
             if (row is SupportTicketGridView)
             {
+                GridAction? edit = actions.Where(_ => _.Name == "Edit").FirstOrDefault();
+                if (edit != null)
+                {
+                    edit.IsVisible = HasPermision(RoleTypeAttribute.Delete);
+                }
                 actions.Add(new GridAction { Name = "ViewCase", DisplayName = FieldsDisplayNames.Viewcase, IsVisible = HasPermision(RoleTypeAttribute.Update), UrlTemplate = "/SupportTickets/ViewCase/{id}", CssClass = "dropdown-item", Icon = "bx bx-show me-1" });
             }
 

@@ -27,6 +27,9 @@ namespace Partnerly.Infrastructure.Services
         public async Task<Notification?> GetNotificationByIDAsync(Guid? id) =>
             await _notificationRepository.GetByIdAsync(id);
 
+        public async Task<Notification?> GetNotificationByTicketIDAsync(Guid? ticketID) =>
+           await _notificationRepository.GetNotificationByTicketIDAsync(ticketID);
+
         public async Task<List<Notification>> GetUserNotificationsAsync(Guid userID, bool onlyUnread = false) =>
             await _notificationRepository.GetUserNotificationsAsync(userID, onlyUnread);
 
@@ -86,6 +89,7 @@ namespace Partnerly.Infrastructure.Services
             newnotification.Type = notification.Type;
             newnotification.Link = notification.Link;
             newnotification.UserId = notification.UserId;
+            newnotification.TicketID = notification.TicketID;
             newnotification.IsDeleted = false;
 
             await _notificationRepository.AddAsync(newnotification);

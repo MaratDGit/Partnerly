@@ -8,13 +8,21 @@ namespace Partnerly.Events
 {
     public class SupportTickedCreatedEvent : IEvent
     {
+        public enum EventType
+        { 
+            Created,
+            Assigned
+        };
+
         public SupportTicket? NewTicket { get; }
+        public EventType Type { get; }
         public bool SendEmail { get; }
         public bool SendNotification { get; }
 
-        public SupportTickedCreatedEvent(SupportTicket newTicket, bool sendEmail = true, bool sendNote = true)
+        public SupportTickedCreatedEvent(SupportTicket newTicket, EventType type, bool sendEmail = true, bool sendNote = true)
         {
             NewTicket = newTicket;
+            Type = type;
             SendEmail = sendEmail;
             SendNotification = sendNote;
         }
@@ -48,14 +56,24 @@ namespace Partnerly.Events
                 {
                     var appUrl = _config["AppSettings:BaseUrl"];
                     var confirmationLink = $"{appUrl}/SupportTickets/ViewCase/{@event.NewTicket.Id}";
-
                     var message = string.Format(Messages.NewTickedToEmployeeNotification, @event.NewTicket.TicketID);
-                    Notification notification = new Notification { UserId = (Guid)@event.NewTicket.AssignedTo, Type = NotificationTypeAttribute.Warning, Message = message, Link = confirmationLink };
 
-                    await _notificationService.CreateNotificationAsync(notification);
+                    if (@event.Type == SupportTickedCreatedEvent.EventType.Created)
+                    {
+                        Notification notification = new Notification { UserId = (Guid)@event.NewTicket.AssignedTo, Type = NotificationTypeAttribute.Warning, TicketID = @event.NewTicket.Id, Message = message, Link = confirmationLink };
+                        await _notificationService.CreateNotificationAsync(notification);
+                        await _logService.CreateLogAsync(LogActionsAttribute.SupportTicketCreated, LogTypeAttribute.Information, "Ticked ID - " + @event.NewTicket.TicketID);
+                    }
+                    else if (@event.Type == SupportTickedCreatedEvent.EventType.Assigned)
+                    {
+                        Notification? notification = await _notificationService.GetNotificationByTicketIDAsync(@event.NewTicket.Id);
+                        if (notification != null && @event.NewTicket.AssignedTo != null)
+                        {
+                            notification.UserId = (Guid)@event.NewTicket.AssignedTo;
+                            await _notificationService.UpdateNotificationAsync(notification);
+                        }
+                    }
                 }
-
-                await _logService.CreateLogAsync(LogActionsAttribute.SupportTicketCreated, LogTypeAttribute.Information, "Ticked ID - " + @event.NewTicket.TicketID);
             }
         }
     }

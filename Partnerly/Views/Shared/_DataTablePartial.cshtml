@@ -1,5 +1,7 @@
 ﻿@{
     bool isWithoutVard = ViewData["WithoutCard"] as bool? ?? false;
+    bool hasRole = ViewBag?.RoleType == Partnerly.Descriptors.Attributes.RoleTypeAttribute.Delete || ViewBag?.RoleType == Partnerly.Descriptors.Attributes.RoleTypeAttribute.Update;
+    bool hasAdminRole = ViewBag?.RoleType == Partnerly.Descriptors.Attributes.RoleTypeAttribute.Delete;
 }
 
 @if (isWithoutVard != true)
@@ -8,7 +10,7 @@
         <div class="card-header d-flex justify-content-between align-items-center">
             <h5>@ViewData["TableName"]</h5>
 
-            @if (ViewData["NewRecordControler"] != null)
+            @if (ViewData["NewRecordControler"] != null && hasAdminRole)
             { 
                 <a id="btnAddNew" class="btn btn-sm btn-outline-primary" 
                    asp-action="Create" asp-controller="@ViewData["NewRecordControler"]">
