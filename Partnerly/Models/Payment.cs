@@ -32,6 +32,7 @@ namespace Partnerly.Models
         public string? Status { get; set; }
         #endregion
         #region System Columns
+        public string? Note { get; set; }
         [Required]
         public Guid? CreatedBy { get; set; }
         [Required]

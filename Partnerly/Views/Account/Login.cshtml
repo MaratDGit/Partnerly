@@ -28,13 +28,13 @@
           <!-- Logo -->
           <div class="app-brand justify-content-center">
             <a href="/" class="app-brand-link gap-2">
-              <span class="app-brand-logo demo">@await Html.PartialAsync("../_Partials/_Macros")</span>
+              <span class="app-brand-logo demo"><img src="~/favicon.png" alt="Logo" width="32" height="32" class="me-2" />@*@await Html.PartialAsync("../_Partials/_Macros")*@</span>
               <span class="app-brand-text demo text-heading fw-bold">@TempData.Peek("appName")</span>
             </a>
           </div>
           <!-- /Logo -->
-          <h5 class="mb-1">Добро пожаловать в @TempData.Peek("appName")!</h5>
-          <p class="mb-6">Пожалуйста, войдите в свою учетную запись и начните приключение.</p>
+          <h5 class="mb-1">Пора работать!</h5>
+          <p class="mb-6">Введите логин и пароль, чтобы продолжить.</p>
 
           <form id="formAuthentication" class="mb-2" asp-action="Login" method="POST">
             <div class="form-floating mb-2">

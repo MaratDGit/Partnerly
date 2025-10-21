@@ -14,6 +14,7 @@ namespace Partnerly.Models
         public ICollection<UserGroupMember> Members { get; set; } = new List<UserGroupMember>();
 
         #region System Columns
+        public string? Note { get; set; }
         public bool IsDeleted { get; set; } = false;
         [Required]
         public Guid? CreatedBy { get; set; }

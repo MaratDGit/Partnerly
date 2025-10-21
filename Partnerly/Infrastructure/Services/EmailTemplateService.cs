@@ -43,7 +43,7 @@ namespace Partnerly.Infrastructure.Services
             newRec.Subject = rec.Subject;
             newRec.BodyHtml = rec.BodyHtml;
             newRec.BodyPlain = rec.BodyPlain;
-
+            newRec.Note = rec.Note;
             newRec.IsDeleted = false;
 
             await _templateRepo.AddAsync(newRec);

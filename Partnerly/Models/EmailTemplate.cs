@@ -17,6 +17,7 @@ namespace Partnerly.Models
         public string? AttachmentsMeta { get; set; }
 
         #region System Columns
+        public string? Note { get; set; }
         public bool IsDeleted { get; set; } = false;
         [Required]
         public Guid? CreatedBy { get; set; }

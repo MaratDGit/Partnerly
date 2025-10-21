@@ -48,6 +48,7 @@ namespace Partnerly.Infrastructure.Services
             newuserGroup.Name = userGroup.Name;
             newuserGroup.Description = userGroup.Description;
             newuserGroup.IsDeleted = false;
+            newuserGroup.Note = userGroup.Note;
 
             if (userGroup.Members.Count > 0)
             {

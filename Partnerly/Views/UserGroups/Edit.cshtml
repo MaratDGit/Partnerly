@@ -22,8 +22,8 @@
                 Delete = new Partnerly.Models.ViewModels.ActionDelete(id: Model.Id, visible: true, fromController: "UserGroups", toController: "UserGroups", fromAction: "Edit", toAction: "Delete"),
                 Menu = new Partnerly.Models.ViewModels.ActionMenu(visible: true),
                 MenuActions = new List<Partnerly.Models.ViewModels.MenuItemAction> {
-                    new Partnerly.Models.ViewModels.MenuItemAction(icon: "bx bx-bell", displayName: "Отправить уведомление"),
-                    new Partnerly.Models.ViewModels.MenuItemAction(icon: "bx bx-envelope-open", displayName: "Отправить электронное письмо"),
+                    new Partnerly.Models.ViewModels.MenuItemAction(visible: true, icon: "bx bx-bell", displayName: "Отправить уведомление"),
+                    new Partnerly.Models.ViewModels.MenuItemAction(visible: true, icon: "bx bx-envelope-open", displayName: "Отправить электронное письмо"),
                 }
             })
 

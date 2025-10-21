@@ -9,7 +9,8 @@
     class='app-brand demo @((@ViewData["navbarFull"] != null && Convert.ToBoolean(@ViewData["navbarFull"])) ? "d-xl-none" : "")'>
     <a asp-controller="Home" asp-action="Index" class="app-brand-link">
       <span class="app-brand-logo demo">
-        @await Html.PartialAsync("../_Partials/_Macros")
+          <img src="~/favicon.png" alt="Logo" width="32" height="32" class="me-2" />
+       @* @await Html.PartialAsync("../_Partials/_Macros")*@
       </span>
       <span class="app-brand-text demo menu-text fw-bold ms-2">@TempData.Peek("appName")</span>
     </a>

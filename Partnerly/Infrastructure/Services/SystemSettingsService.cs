@@ -41,6 +41,8 @@ namespace Partnerly.Infrastructure.Services
             newSetup.IsMaintenanceMode = rec.IsMaintenanceMode;
             newSetup.OnlineStatusAutoRefreshMinute = rec.OnlineStatusAutoRefreshMinute;
 
+            newSetup.Note = rec.Note;
+
             await _setupRepo.AddAsync(newSetup);
             await _setupRepo.SaveChangesAsync();
 

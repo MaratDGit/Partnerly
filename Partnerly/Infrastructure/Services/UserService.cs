@@ -109,6 +109,7 @@ namespace Partnerly.Infrastructure.Services
             newUser.AllowSendEmails = true;
             newUser.AllowSendNotifications = true;
             newUser.PhotoUrl = Constants.DefaultUserProfilePhotoPath;
+            newUser.Note = user.Note;
 
             if (!string.IsNullOrEmpty(newUser.FirstName) && !string.IsNullOrEmpty(newUser.LastName))
             {

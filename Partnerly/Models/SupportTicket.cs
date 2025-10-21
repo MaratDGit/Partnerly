@@ -23,6 +23,7 @@ namespace Partnerly.Models
         public bool? IsRead { get; set; } = false;
 
         #region System Columns
+        public string? Note { get; set; }
         public bool IsDeleted { get; set; } = false;
         [Required]
         public Guid? CreatedBy { get; set; }

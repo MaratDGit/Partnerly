@@ -42,6 +42,7 @@ namespace Partnerly.Infrastructure.Services
             newRole.Name = role.Name;
             newRole.Type = role.Type;
             newRole.IsDeleted = false;
+            newRole.Note = role.Note;
 
             await _roleRepo.AddAsync(newRole);
             await _roleRepo.SaveChangesAsync();

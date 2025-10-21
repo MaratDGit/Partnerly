@@ -16,6 +16,7 @@ namespace Partnerly.Models
 
         #region System Columns
         public bool IsDeleted { get; set; } = false;
+        public string? Note { get; set; }
         [Required]
         public Guid? CreatedBy { get; set; }
         [Required]

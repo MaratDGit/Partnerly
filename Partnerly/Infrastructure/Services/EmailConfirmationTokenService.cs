@@ -71,6 +71,7 @@ namespace Partnerly.Infrastructure.Services
             newtoken.TokenType = tokenRec.TokenType;
             newtoken.ExpiresAt = DateTime.UtcNow.AddHours(tokenExpiredHousr);
             newtoken.Used = false;
+            newtoken.Note = tokenRec.Note;
 
             await _tokenRepo.AddAsync(newtoken);
             await _tokenRepo.SaveChangesAsync();

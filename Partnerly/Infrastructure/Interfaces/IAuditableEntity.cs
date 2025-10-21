@@ -2,6 +2,7 @@
 {
     public interface IAuditableEntity
     {
+        string? Note { get; set; }
         Guid? CreatedBy { get; set; }
         Guid? UpdatedBy { get; set; }
         DateTime? CreatedDate { get; set; }

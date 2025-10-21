@@ -57,6 +57,8 @@ namespace Partnerly.Infrastructure.Services
             newTicket.Status = SupportTicketStatusAttribute.New;
             newTicket.IsRead = false;
             newTicket.UserId = ticket.UserId;
+            newTicket.Note = ticket.Note;
+
             if (ticket.AssignedTo == null)
             {
                 var superAdmin = await _userRepo.GetByEmailAsync(Constants.SuperUserEmail);

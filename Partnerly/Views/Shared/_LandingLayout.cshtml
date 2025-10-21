@@ -14,7 +14,7 @@
         <div class="container">
             <div class="logo">
                 <a asp-controller="Home" asp-action="Index" class="app-brand-link gap-2">
-                    <span>@await Html.PartialAsync("../_Partials/_Macros")</span>
+                    <span><img src="~/favicon.png" alt="Logo" width="32" height="32" class="me-2" />@*@await Html.PartialAsync("../_Partials/_Macros")*@</span>
                     <span>@TempData.Peek("appName")</span>
                 </a>
             </div>

@@ -24,6 +24,7 @@ namespace Partnerly.Models
         public string? Link { get; set; } // куда ведёт уведомление
 
         #region System Columns
+        public string? Note { get; set; }
         public bool IsDeleted { get; set; } = false;
         [Required]
         public Guid? CreatedBy { get; set; }

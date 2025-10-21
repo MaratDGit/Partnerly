@@ -25,10 +25,6 @@
 </style>
 
 <div class="card">
-    <div class="card-header justify-content-between">
-        <h5>@ViewData["Title"]</h5>
-    </div>
-
     <div class="card-body">
         @await Html.PartialAsync("_StickyButtons", new Partnerly.Models.ViewModels.FormActionsViewModel {
             Back = new Partnerly.Models.ViewModels.ActionBack(id: Model.Id,visible: true, fromController: "SupportTickets", toController: "SupportTickets", fromAction: "ViewCase", toAction: "Index"),

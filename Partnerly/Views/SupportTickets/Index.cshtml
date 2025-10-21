@@ -1,11 +1,11 @@
 ﻿@{
-    ViewData["Title"] = "Случаи поддержки и задачи";
+    ViewData["Title"] = "Задачи";
     Layout = "_ContentNavbarLayout";
 }
 
 @await Html.PartialAsync("_DataTablePartial", null, new ViewDataDictionary(ViewData)
 {
-    { "TableName", "Случаи поддержки и задачи" },
+    { "TableName", ViewData["Title"] },
     { "TableId", "supportTicketTable" },
     { "NewRecordControler", "SupportTickets" }
 })

@@ -91,6 +91,7 @@ namespace Partnerly.Infrastructure.Services
             newnotification.UserId = notification.UserId;
             newnotification.TicketID = notification.TicketID;
             newnotification.IsDeleted = false;
+            newnotification.Note = notification.Note;
 
             await _notificationRepository.AddAsync(newnotification);
             await _notificationRepository.SaveChangesAsync();

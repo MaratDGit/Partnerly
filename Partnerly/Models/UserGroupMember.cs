@@ -10,8 +10,9 @@ namespace Partnerly.Models
         public Guid UserId { get; set; }
         [Key, Column(Order = 1)]
         public Guid GroupId { get; set; }
-        
+
         #region System Columns
+        public string? Note { get; set; }
         public bool IsDeleted { get; set; } = false;
         [Required]
         public Guid? CreatedBy { get; set; }
