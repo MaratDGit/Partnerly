@@ -18,6 +18,7 @@
                 Back = new Partnerly.Models.ViewModels.ActionBack(id: Model.Id, visible: true, fromController: "Roles", toController: "Roles", fromAction: "Edit", toAction: "Index"),
                 Undo = new Partnerly.Models.ViewModels.ActionUndo(id: Model.Id, visible: true, fromController: "Roles", toController: "Roles", fromAction: "Edit", toAction: "Edit"),
                 Save = new Partnerly.Models.ViewModels.ActionSave(id: Model.Id, visible: true, fromController: "Roles", toController: "Roles", fromAction: "Edit", toAction: "Edit"),
+                Note = new Partnerly.Models.ViewModels.ActionNote(visible: true, note: Model.Note, id: Model.Id),
                 Menu = new Partnerly.Models.ViewModels.ActionMenu(visible: true),
                 MenuActions = new List<Partnerly.Models.ViewModels.MenuItemAction> {
                     new Partnerly.Models.ViewModels.MenuItemAction(visible: true, icon: "bx bx-show", displayName: "Просмотреть пользователя", toController: "Users", toAction: "Edit", routID: Model.Id),
@@ -25,6 +26,7 @@
             })
 
             <input type="hidden" asp-for="Id" />
+            <input type="hidden" id="hiddenNote" asp-for="Note" />
 
             <div class="form-floating mb-1 max-w-600 position-relative">
                 <input asp-for="UserName"

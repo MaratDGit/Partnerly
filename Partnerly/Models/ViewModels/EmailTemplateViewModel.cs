@@ -26,6 +26,7 @@ namespace Partnerly.Models.ViewModels
 
         public string? BodyPlain { get; set; }
         public string? AttachmentsMeta { get; set; }
+        public string? Note { get; set; }
         public Guid? CreatedBy { get; set; }
         public DateTime? CreatedDate { get; set; }
         public Guid? UpdatedBy { get; set; }

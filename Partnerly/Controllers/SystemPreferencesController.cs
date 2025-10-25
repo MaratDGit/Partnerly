@@ -50,6 +50,8 @@ namespace Partnerly.Controllers
                     setting.ForgotPasswordTokenExpiredAtHours = model.ForgotPasswordTokenExpiredAtHours;
                     setting.IsMaintenanceMode = model.IsMaintenanceMode;
 
+                    setting.Note = model.Note;
+
                     ServiceResult<SystemSettings?> result = await _systemSettingsService.UpdateSystemSettingsAsync(setting);
 
                     if (!result.Success)

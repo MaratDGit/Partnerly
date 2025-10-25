@@ -45,6 +45,7 @@ namespace Partnerly.Models.ViewModels
         public bool IsReadBool { get => IsRead ?? false; set => IsRead = value; }
 
         #region System Columns
+        public string? Note { get; set; }
         public Guid? CreatedBy { get; set; }
         public DateTime? CreatedDate { get; set; }
         public Guid? UpdatedBy { get; set; }

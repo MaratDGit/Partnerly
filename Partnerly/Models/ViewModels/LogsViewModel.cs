@@ -38,6 +38,7 @@ namespace Partnerly.Models.ViewModels
         #endregion
 
         #region System Columns
+        public string? Note { get; set; }
         public bool IsDeleted { get; set; } = false;
         public Guid? CreatedBy { get; set; }
         public DateTime? CreatedDate { get; set; }

@@ -115,6 +115,7 @@ namespace Partnerly.Controllers
 
                     group.Name = model.Name;
                     group.Description = model.Description;
+                    group.Note = model.Note;
 
                     List<UserGroupMember> members = new List<UserGroupMember>();
                     if (model.MembersGuids.Any())

@@ -239,6 +239,7 @@ namespace Partnerly.Controllers
                     ticket.IsRead = model.IsRead;
                     ticket.AssignedTo = model.AssignedTo;
                     ticket.Status = model.Status;
+                    ticket.Note = model.Note;
 
                     ServiceResult<SupportTicket?> result = await _supportTicketService.UpdateSupportTicketAsync(ticket, oldAssignedTo);
 

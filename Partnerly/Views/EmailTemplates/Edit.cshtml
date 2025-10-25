@@ -20,6 +20,7 @@
                 Save = new Partnerly.Models.ViewModels.ActionSave(id: Model.Id, visible: true, fromController: "EmailTemplates", toController: "EmailTemplates", fromAction: "Edit", toAction: "Edit"),
                 Create = new Partnerly.Models.ViewModels.ActionCreate(id: Model.Id, visible: true, fromController: "EmailTemplates", toController: "EmailTemplates", fromAction: "Edit", toAction: "Create"),
                 Delete = new Partnerly.Models.ViewModels.ActionDelete(id: Model.Id, visible: true, fromController: "EmailTemplates", toController: "EmailTemplates", fromAction: "Edit", toAction: "Delete"),
+                Note = new Partnerly.Models.ViewModels.ActionNote(visible: true, note: Model.Note, id: Model.Id),
                 Menu = new Partnerly.Models.ViewModels.ActionMenu(visible: true),
                 MenuActions = new List<Partnerly.Models.ViewModels.MenuItemAction> {
                     new Partnerly.Models.ViewModels.MenuItemAction(visible: true, icon: "bx bx-show", displayName: "Предпросмотр", toController: "EmailTemplates", toAction: "Edit", isModal: true, modalTarget: "#previewModal", onClick: "showPreview()"),
@@ -28,6 +29,7 @@
          
         <input type="hidden" asp-for="Id" />
         <input type="hidden" asp-for="Name" />
+        <input type="hidden" id="hiddenNote" asp-for="Note" />
 
         <div class="form-floating mb-1 max-w-600 position-relative">
             <input asp-for="NameView"

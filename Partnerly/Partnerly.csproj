@@ -40,6 +40,7 @@
     <Folder Include="wwwroot\assets\vendor\libs\masonry\" />
     <Folder Include="wwwroot\assets\vendor\libs\perfect-scrollbar\" />
     <Folder Include="wwwroot\assets\vendor\libs\popper\" />
+    <Folder Include="wwwroot\fonts\iconify\" />
   </ItemGroup>
 
 </Project>

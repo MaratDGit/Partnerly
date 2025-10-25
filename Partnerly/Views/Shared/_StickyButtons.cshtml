@@ -1,73 +1,213 @@
-﻿@model  Partnerly.Models.ViewModels.FormActionsViewModel
+﻿@model  Partnerly.Models.ViewModels.FormActionsViewModel;
 
 @{
     bool hasRole = ViewBag?.RoleType == Partnerly.Descriptors.Attributes.RoleTypeAttribute.Delete || ViewBag?.RoleType == Partnerly.Descriptors.Attributes.RoleTypeAttribute.Update;
     bool hasAdminRole = ViewBag?.RoleType == Partnerly.Descriptors.Attributes.RoleTypeAttribute.Delete;
 }
 
-<div class="sticky-buttons justify-content-between mb-6">
-    @if (Model?.Back?.Visible == true)
-    {   
-         <a asp-action="@Model.Back.ToAction" asp-controller="@Model.Back.ToController" class="btn btn-link p-0" title="@Model.Back.Title">
-            <i class="@Model.Back.Icon me-1 fs-3"></i>
-         </a>
-    }
-    @if (Model?.Undo?.Visible == true)
-    {   
-         <a asp-action="@Model.Undo.ToAction" asp-controller="@Model.Undo.ToController" class="btn btn-link p-0" title="@Model.Undo.Title">
-            <i class="@Model.Undo.Icon me-1 fs-3"></i>
-         </a>
-    }
-    @if (Model?.Save?.Visible == true)
-    {   
-        <button type="submit" id="btnSave" class="btn btn-link p-0" title="@Model.Save.Title">
-            <i class="@Model.Save.Icon me-1 fs-3"></i>
-        </button>
-    }
-    @if (Model?.Create?.Visible == true && hasAdminRole)
-    {   
-         <a asp-action="@Model.Create.ToAction" asp-controller="@Model.Create.ToController" class="btn btn-link p-0" title="@Model.Create.Title">
-            <i class="@Model.Create.Icon me-1 fs-3"></i>
-         </a>
-    }
-    @if (Model?.Delete?.Visible == true && hasAdminRole)
-    {   
-         <a asp-action="@Model.Delete.ToAction" asp-controller="@Model.Delete.ToController" asp-route-id="@Model.Delete.Id" class="btn btn-link p-0" title="@Model.Delete.Title">
-            <i class="@Model.Delete.Icon me-1 fs-3"></i>
-         </a>
-    }
-    @if (Model?.Menu?.Visible == true)
-    {   
-         <div class="btn-group">
-            <button type="button" class="btn btn-link p-0" data-bs-toggle="dropdown" title="@Model.Menu.Title">
-                <i class="@Model.Menu.Icon fs-3"></i>
+<style>
+.sticky-buttons {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid #ddd; /* линия под всей панелью */
+    padding-bottom: 0.5rem;
+    margin-bottom: 1.5rem;
+    position: sticky;
+    top: 0; /* Приклеивается к верху экрана */
+    background: #fff; /* Чтобы кнопки не "просвечивали" при прокрутке */
+    z-index: 100; /* Чтобы оставались поверх формы */
+    padding: 10px 0;
+    border-bottom: 1px solid #dee2e6;
+}
+
+.sticky-buttons .left-buttons {
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+}
+
+.sticky-buttons .right-buttons {
+    display: flex;
+    align-items: center;
+}
+
+.sticky-buttons .btn-note i {
+    font-size: 1.6rem;
+    transition: color 0.2s ease, transform 0.2s ease;
+}
+.sticky-buttons .btn-note:hover i {
+    transform: scale(1.15);
+}
+
+.sticky-buttons .btn-note {
+    border: none;
+    background: none;
+    box-shadow: none;
+    outline: none;
+    padding: 0;
+    color: #ccc;
+    transition: color 0.2s ease, transform 0.2s ease;
+}
+.sticky-buttons .btn-note.active {
+    color: #ffc107; /* жёлтая, если есть заметка */
+}
+.sticky-buttons .btn-note:hover {
+    transform: scale(1.15);
+}
+</style>
+
+
+<div class="sticky-buttons mb-6">
+    <div class="left-buttons">
+        @if (Model?.Back?.Visible == true)
+        {   
+            <a asp-action="@Model.Back.ToAction" asp-controller="@Model.Back.ToController" class="btn btn-link p-0" title="@Model.Back.Title">
+                <i class="@Model.Back.Icon me-1 fs-3"></i>
+            </a>
+        }
+        @if (Model?.Undo?.Visible == true)
+        {   
+            <a asp-action="@Model.Undo.ToAction" asp-controller="@Model.Undo.ToController" class="btn btn-link p-0" title="@Model.Undo.Title">
+                <i class="@Model.Undo.Icon me-1 fs-3"></i>
+            </a>
+        }
+        @if (Model?.Save?.Visible == true)
+        {   
+            <button type="submit" id="btnSave" class="btn btn-link p-0" title="@Model.Save.Title">
+                <i class="@Model.Save.Icon me-1 fs-3"></i>
             </button>
-            <ul class="dropdown-menu dropdown-menu-end">
-                @foreach (var action in Model.MenuActions)
-                {
-                    @if(action.Visible == true)
+        }
+        @if (Model?.Create?.Visible == true && hasAdminRole)
+        {   
+            <a asp-action="@Model.Create.ToAction" asp-controller="@Model.Create.ToController" class="btn btn-link p-0" title="@Model.Create.Title">
+                <i class="@Model.Create.Icon me-1 fs-3"></i>
+            </a>
+        }
+        @if (Model?.Delete?.Visible == true && hasAdminRole)
+        {   
+            <a asp-action="@Model.Delete.ToAction" asp-controller="@Model.Delete.ToController" asp-route-id="@Model.Delete.Id" class="btn btn-link p-0" title="@Model.Delete.Title">
+                <i class="@Model.Delete.Icon me-1 fs-3"></i>
+            </a>
+        }
+        @if (Model?.Menu?.Visible == true)
+        {   
+            <div class="btn-group">
+                <button type="button" class="btn btn-link p-0" data-bs-toggle="dropdown" title="@Model.Menu.Title">
+                    <i class="@Model.Menu.Icon fs-3"></i>
+                </button>
+                <ul class="dropdown-menu dropdown-menu-end">
+                    @foreach (var action in Model.MenuActions)
                     {
-                        <li>
-                            @if (action.IsModal == true)
-                            {
-                                <a class="dropdown-item" href="#" data-bs-toggle="modal" data-bs-target="@action.ModalTarget" onclick="@action.OnClick">
-                                    <i class="@action.Icon me-1"></i> @action.DisplayName
-                                </a>
-                            }
-                            else
-                            {
-                                <a class="dropdown-item"
-                                   asp-action="@action.ToAction"
-                                   asp-controller="@action.ToController"
-                                   asp-route-id="@action.RouteID">
-                                    <i class="@action.Icon me-1"></i> @action.DisplayName
-                                </a>
-                            }
-                        </li>
+                        @if(action.Visible == true)
+                        {
+                            <li>
+                                @if (action.IsModal == true)
+                                {
+                                    <a class="dropdown-item" href="#" data-bs-toggle="modal" data-bs-target="@action.ModalTarget" onclick="@action.OnClick">
+                                        <i class="@action.Icon me-1"></i> @action.DisplayName
+                                    </a>
+                                }
+                                else
+                                {
+                                    <a class="dropdown-item"
+                                       asp-action="@action.ToAction"
+                                       asp-controller="@action.ToController"
+                                       asp-route-id="@action.RouteID">
+                                        <i class="@action.Icon me-1"></i> @action.DisplayName
+                                    </a>
+                                }
+                            </li>
+                        }
                     }
-                }
-            </ul>
+                </ul>
+            </div>
+        }
+    </div>
+
+    @if (Model?.Note?.Visible == true)
+    {
+        <div class="right-buttons">
+        <button type="button" class="btn btn-note" title="Добавить заметку"
+            data-bs-toggle="modal" data-bs-target="#noteModal">
+            <i class="bx bx-note fs-3"></i>
+        </button>
         </div>
     }
 </div>
+
+<div class="modal fade" id="noteModal" tabindex="-1" aria-labelledby="noteModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content rounded-3 shadow-lg">
+      <div class="modal-header py-2">
+        <h6 class="modal-title" id="noteModalLabel">Заметка к документу</h6>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Закрыть"></button>
+      </div>
+
+      <div class="modal-body py-2">
+        <div class="form-floating">
+          <textarea id="noteText" asp-for="@Model.Note.Note" class="form-control" placeholder="Введите заметку..." style="height: 120px; font-size: 0.9rem;"></textarea>
+        </div>
+      </div>
+
+      <div class="modal-footer d-flex justify-content-between py-2">
+        <button type="button" class="btn btn-outline-secondary btn-sm" id="clearNoteBtn">Очистить</button>
+        <div>
+          <button type="button" class="btn btn-secondary btn-sm" data-bs-dismiss="modal" id="cancelNoteBtn">Отмена</button>
+          <button type="button" class="btn btn-primary btn-sm" id="saveNoteBtn">OK</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+    const noteText = document.getElementById('noteText');
+    const clearBtn = document.getElementById('clearNoteBtn');
+    const saveNoteBtn = document.getElementById('saveNoteBtn');
+    const cancelNoteBtn = document.getElementById('cancelNoteBtn');
+    const noteBtn = document.querySelector('.btn-note');
+
+    let lastSavedNote = noteText.value.trim();
+
+    function updateNoteButtonColor() {
+        if (noteText.value.trim().length > 0) {
+            noteBtn.classList.add('active');
+        } else {
+            noteBtn.classList.remove('active');
+        }
+    }
+
+    // Очистить текст
+    clearBtn.addEventListener('click', function () {
+        noteText.value = '';
+        noteText.focus();
+        updateNoteButtonColor();
+    });
+
+    // Сохраняем заметку
+    saveNoteBtn.addEventListener('click', function () {
+        const note = noteText.value.trim();
+        lastSavedNote = note;
+        const hiddenNote = document.getElementById('hiddenNote');
+        hiddenNote.value = note;
+        noteText.dispatchEvent(new Event('input', { bubbles: true }));
+
+        updateNoteButtonColor();
+        const modal = bootstrap.Modal.getInstance(document.getElementById('noteModal'));
+        modal.hide();
+    });
+
+    cancelNoteBtn.addEventListener('click', function () {
+        noteText.value = lastSavedNote;
+        updateNoteButtonColor();
+    });
+
+
+    // Отслеживаем ввод текста
+    noteText.addEventListener('input', updateNoteButtonColor);
+    updateNoteButtonColor();
+});
+</script>
 

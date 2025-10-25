@@ -49,6 +49,7 @@ namespace Partnerly.Controllers
                 modelAsView.Phone = user.Phone;
                 modelAsView.OldRoleId = user.RoleId;
                 modelAsView.OldRoleName = roleName;
+                modelAsView.Note = user.Note;   
             }
 
             if (modelAsView == null) return NotFound();
@@ -70,6 +71,7 @@ namespace Partnerly.Controllers
                 {
                     user.RoleId = role.Id;
                     user.LastRoleUpdateTime = DateTime.UtcNow;
+                    user.Note = model.Note;
                     ServiceResult<User?> result = await _userService.UpdateUserAsync(user);
 
                     if (!result.Success)

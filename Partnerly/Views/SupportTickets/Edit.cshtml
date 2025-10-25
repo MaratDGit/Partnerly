@@ -19,6 +19,7 @@
                 Save = new Partnerly.Models.ViewModels.ActionSave(id: Model.Id, visible: true, fromController: "SupportTickets", toController: "SupportTickets", fromAction: "Edit", toAction: "Edit"),
                 Create = new Partnerly.Models.ViewModels.ActionCreate(id: Model.Id, visible: true, fromController: "SupportTickets", toController: "SupportTickets", fromAction: "Edit", toAction: "Create"),
                 Delete = new Partnerly.Models.ViewModels.ActionDelete(id: Model.Id, visible: true, fromController: "SupportTickets", toController: "SupportTickets", fromAction: "Edit", toAction: "Delete"),
+                Note = new Partnerly.Models.ViewModels.ActionNote(visible: true, note: Model.Note, id: Model.Id),
             })
 
             @if (TempData.Peek("FormToast") != null)
@@ -30,6 +31,7 @@
             <input type="hidden" asp-for="Id" />
             <input type="hidden" asp-for="UserId" />
             <input type="hidden" asp-for="AssignedTo" id="assignedTo" />
+            <input type="hidden" id="hiddenNote" asp-for="Note" />
 
             <div class="form-floating mb-1 max-w-600">
                 <input asp-for="TicketID"  id="ticketID" class="form-control" readonly/>

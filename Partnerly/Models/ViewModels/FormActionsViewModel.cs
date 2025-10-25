@@ -8,6 +8,7 @@
         public ActionCreate Create { get; set; }
         public ActionDelete Delete { get; set; }
         public ActionMenu Menu { get; set; }
+        public ActionNote Note { get; set; }
         public List<MenuItemAction> MenuActions { get; set; } = new List<MenuItemAction>();
     }
     public class FormActionBase
@@ -98,6 +99,18 @@
             ToAction = toAction;
         }
     }
+
+    public class ActionNote : FormActionBase
+    {
+        public string Note { get; set; }
+        public ActionNote(string? note = null, Guid? id = null, bool visible = false)
+        {
+            Id = id;
+            Note = note;
+            Visible = visible;
+        }
+    }
+
     public class ActionMenu : FormActionBase
     {
         public ActionMenu(bool? visible = null)

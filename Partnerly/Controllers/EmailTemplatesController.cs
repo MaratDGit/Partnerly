@@ -96,6 +96,7 @@
                 {
                     template.Subject = model.Subject;
                     template.BodyHtml = model.BodyHtml;
+                    template.Note = model.Note; 
                     ServiceResult<EmailTemplate?> result = await _emailTemplateService.UpdateTemplateAsync(template);
                     
                     if (!result.Success)

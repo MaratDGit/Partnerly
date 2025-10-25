@@ -19,12 +19,3 @@
 .max-w-600 {
     max-width: 600px;
 }
-
-.sticky-buttons {
-    position: sticky;
-    top: 0; /* Приклеивается к верху экрана */
-    background: #fff; /* Чтобы кнопки не "просвечивали" при прокрутке */
-    z-index: 100; /* Чтобы оставались поверх формы */
-    padding: 10px 0;
-    border-bottom: 1px solid #dee2e6;
-}

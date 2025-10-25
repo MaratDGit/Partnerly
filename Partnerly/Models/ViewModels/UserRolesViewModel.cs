@@ -43,7 +43,7 @@ namespace Partnerly.Models.ViewModels
         [Display(Name = FieldsDisplayNames.NewRole)]
         public string? NewRoleName { get; set; }
         #endregion
-
+        public string? Note { get; set; }
         public List<SelectListItem> RoleNamesList { get => AttributeDropdownHelper.ToSelectedList(RoleTypeAttribute.RoleNames); }
     }
 }

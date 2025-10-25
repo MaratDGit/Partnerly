@@ -22,6 +22,7 @@ namespace Partnerly.Models.ViewModels
         public List<string> MembersGuids { get; set; } = new List<string>();
 
         #region System Columns
+        public string? Note { get; set; }
         public Guid? CreatedBy { get; set; }
         public DateTime? CreatedDate { get; set; }
         public Guid? UpdatedBy { get; set; }

@@ -18,9 +18,11 @@
                 Back = new Partnerly.Models.ViewModels.ActionBack(visible: true, fromController: "SystemPreferences", toController: "Home", fromAction: "Index", toAction: "Index"),
                 Undo = new Partnerly.Models.ViewModels.ActionUndo(visible: true, fromController: "SystemPreferences", toController: "SystemPreferences", fromAction: "Index", toAction: "Index"),
                 Save = new Partnerly.Models.ViewModels.ActionSave(visible: true, fromController: "SystemPreferences", toController: "SystemPreferences", fromAction: "Index", toAction: "Index"),
-            })
+                Note = new Partnerly.Models.ViewModels.ActionNote(visible: true, note: Model.Note),
+             })
 
             <input type="hidden" asp-for="Id" />
+            <input type="hidden" id="hiddenNote" asp-for="Note" />
 
             <div class="form-check form-switch mb-2">
                 <input asp-for="IsMaintenanceModeBool" class="form-check-input" type="checkbox" id="isMaintenanceMode" />

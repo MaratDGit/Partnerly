@@ -160,6 +160,7 @@ namespace Partnerly.Controllers
                     user.EmailConfirmed = model.EmailConfirmed;
                     user.IsBlocked = model.IsBlocked;
                     user.Balance = model.Balance;
+                    user.Note = model.Note;
 
                     ServiceResult<User?> result = await _userService.UpdateUserAsync(user);
 
