@@ -27,5 +27,10 @@ namespace Partnerly.Infrastructure.Repositories
                 .Where(u => u.Name.ToUpper() == groupName.ToUpper())
                 .FirstOrDefaultAsync();
         }
+
+        public async Task<IEnumerable<UserGroupMember?>> GetAllUsersGroupsAsync()
+        {
+            return await _context.UserGroupMembers.ToListAsync();
+        }
     }
 }

@@ -24,6 +24,7 @@ namespace Partnerly.Descriptors.Messages
         // Payments
         public const string Open = "Открыто";
         public const string Pending = "В ожидании";
+        public const string Payed = "Оплачено"; 
         public const string Closed = "Закрыто";
         public const string Canceled = "Отменено";
         public const string Rejected = "Отклоненный";

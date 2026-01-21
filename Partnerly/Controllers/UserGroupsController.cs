@@ -222,7 +222,21 @@ namespace Partnerly.Controllers
             {
                 List<UserGridViewModel> userList = new List<UserGridViewModel>();
 
+                var members = await _userGroupService.GetAllUsersGroupsAsync();
                 var users = await _userService.GetAllUsersAsync();
+
+                //var result = from u in users
+                //             join gm in members on u.Id equals gm.UserId into gj
+                //             from subGroup in gj.DefaultIfEmpty()
+                //             orderby subGroup != null ? subGroup.GroupId : int.MaxValue, // сортируем по GroupId, не входящие в группу — в конец
+                //                     subGroup == null ? 1 : 0                            // чтобы пользователи без группы были после
+                //             select new
+                //             {
+                //                 UserId = u.UserId,
+                //                 u.Name,
+                //                 GroupId = subGroup?.GroupId, // если null — не в группе
+                //                 InGroup = subGroup != null
+                //             };
 
                 foreach (User? user in users)
                 {

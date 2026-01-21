@@ -35,6 +35,9 @@ namespace Partnerly.Infrastructure.Services
         public async Task<IEnumerable<UserGroup?>> GetAllUserGroupsAsync() =>
             await _userGroupRepository.GetAllAsync();
 
+        public async Task<IEnumerable<UserGroupMember?>> GetAllUsersGroupsAsync() =>
+            await _userGroupRepository.GetAllUsersGroupsAsync();
+
         public async Task<ServiceResult<UserGroup?>> CreateUserGroupAsync(UserGroup? userGroup)
         {
             if (userGroup == null)

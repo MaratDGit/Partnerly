@@ -11,6 +11,7 @@ namespace Partnerly.Infrastructure.Interfaces
         Task<IEnumerable<UserGroup?>> GetAllUserGroupsAsync();
         Task<UserGroup?> GetByIDAsync(Guid id);
         Task<UserGroup?> GetByGroupNameAsync(string groupName);
+        Task<IEnumerable<UserGroupMember?>> GetAllUsersGroupsAsync();
 
         Task<ServiceResult<UserGroup?>> CreateUserGroupAsync(UserGroup? group);
         Task<ServiceResult<UserGroup?>> UpdateUserGroupAsync(UserGroup? group, List<UserGroupMember> members);

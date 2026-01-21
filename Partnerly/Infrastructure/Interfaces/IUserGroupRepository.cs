@@ -8,6 +8,6 @@ namespace Partnerly.Infrastructure.Interfaces
         Task<IEnumerable<UserGroupMember?>> GetAllUsersByGroupIDAsync(Guid groupId);
         Task<IEnumerable<UserGroupMember?>> GetAllGroupsByUserIDAsync(Guid userId);
         Task<UserGroup?> GetByGroupNameAsync(string groupName);
-
+        Task<IEnumerable<UserGroupMember?>> GetAllUsersGroupsAsync();
     }
 }

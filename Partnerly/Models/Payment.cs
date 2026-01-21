@@ -27,7 +27,7 @@ namespace Partnerly.Models
         #endregion
         #region Status
         [Required]
-        [Display(Name = "Payment Method")]
+        [Display(Name = "Status")]
         [PaymentStatus]
         public string? Status { get; set; }
         #endregion

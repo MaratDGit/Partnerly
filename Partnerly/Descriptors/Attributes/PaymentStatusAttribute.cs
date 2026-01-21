@@ -7,6 +7,7 @@ namespace Partnerly.Descriptors.Attributes
     {
         public const string Open = "O";
         public const string Pending = "P";
+        public const string Payed = "A";
         public const string Closed = "C";
         public const string Canceled = "D";
         public const string Rejected = "R";
@@ -15,6 +16,7 @@ namespace Partnerly.Descriptors.Attributes
             : base(
                 Open, Constants.Open,
                 Pending, Constants.Pending,
+                Payed, Constants.Payed,
                 Closed, Constants.Closed,
                 Canceled, Constants.Canceled,
                 Rejected, Constants.Rejected)
