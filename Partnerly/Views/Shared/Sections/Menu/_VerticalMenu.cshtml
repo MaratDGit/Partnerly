@@ -8,10 +8,9 @@
   <div
     class='app-brand demo @((@ViewData["navbarFull"] != null && Convert.ToBoolean(@ViewData["navbarFull"])) ? "d-xl-none" : "")'>
     <a asp-controller="Home" asp-action="Index" class="app-brand-link">
-      <span class="app-brand-logo demo">
+      @* <span class="app-brand-logo demo">
           <img src="~/favicon.png" alt="Logo" width="32" height="32" class="me-2" />
-       @* @await Html.PartialAsync("../_Partials/_Macros")*@
-      </span>
+      </span> *@
       <span class="app-brand-text demo menu-text fw-bold ms-2">@TempData.Peek("appName")</span>
     </a>
 
@@ -30,34 +29,18 @@
       </a>
     </li>
 
-    <li class="menu-header small text-uppercase"><span class="menu-header-text">рефералы</span></li>
-
-    <li class='menu-item@(currentPage == "/Cards/Basic" ? " active" : "")'>
-      <a asp-controller="Cards" asp-action="Basic" class="menu-link">
-        <i class="menu-icon tf-icons bx bx-collection"></i>
-        <div class="text-truncate" data-i18n="Cards">Мои рефералы</div>
-      </a>
-    </li>
-
-    <li class='menu-item@(currentPage == "/Icons/Boxicons" ? " active" : "")'>
-      <a asp-controller="Icons" asp-action="Boxicons" class="menu-link">
-        <i class="menu-icon tf-icons bx bx-crown"></i>
-        <div>Бонусы и доходы</div>
-      </a>
-    </li>
-
-    <li class="menu-header small text-uppercase"><span class="menu-header-text">операции</span></li>
+    <li class="menu-header small text-uppercase"><span class="menu-header-text">игры</span></li>
 
     <li class='menu-item@(currentPage.StartsWith("/Forms") ? " active open" : "")'>
-      <a href="javascript:void(0);" class="menu-link menu-toggle">
+      <a href="" class="menu-link">
         <i class="menu-icon tf-icons bx bx-detail"></i>
-        <div>История операций</div>
+        <div>История игр</div>
       </a>
     </li>
     <li class='menu-item@(currentPage == "/FormValidation/Validation" ? " active" : "")'>
       <a href="" class="menu-link">
         <i class="menu-icon tf-icons bx bx-list-check"></i>
-        <div>Выплаты</div>
+        <div>Комнаты</div>
       </a>
     </li>
 
@@ -94,7 +77,7 @@
             <li class='menu-item@(currentPage.StartsWith("/EmailTemplates") ? " active" : "")'>
               <a asp-controller="EmailTemplates" asp-action="Index" class="menu-link">
                 <i class="menu-icon tf-icons bx bx-sitemap"></i>
-                <div>Шаблоны электронной почты</div>
+                <div>Шаблоны эл. почты</div>
               </a>
             </li>
              <li class='menu-item@(currentPage.StartsWith("/LogRecords") ? " active" : "")'>
@@ -122,7 +105,7 @@
         <li class='menu-item@(currentPage.StartsWith("/SupportTickets") &&  !currentPage.Contains("/OpenNewCase") ? " active" : "")'>
             <a asp-controller="SupportTickets" asp-action="Index" class="menu-link">
             <i class="menu-icon tf-icons bx bx-pencil"></i>
-            <div>Случаи поддержки и задачи</div>
+            <div>Задачи</div>
             </a>
         </li>    
     }

@@ -81,13 +81,18 @@ namespace Partnerly.Infrastructure.Services
             return ServiceResult<SupportTicket?>.Ok(newTicket);
         }
 
-        public async Task<ServiceResult<SupportTicket?>> UpdateSupportTicketAsync(SupportTicket? ticket, Guid? oldAssignedTo)
+        public async Task<ServiceResult<SupportTicket?>> UpdateSupportTicketAsync(SupportTicket? ticket, Guid? oldAssignedTo, string oldStatus)
         {
             var result = await UpdateSupportTicketAsync(ticket);
             if (result.Success && result.Data.AssignedTo != oldAssignedTo && oldAssignedTo != null)
             {
                 await _eventBus.PublishAsync(new SupportTickedCreatedEvent(newTicket: result.Data, type: SupportTickedCreatedEvent.EventType.Assigned, sendEmail: true, sendNote: true));
             }
+            if (result.Success && !string.IsNullOrEmpty(oldStatus) && !string.IsNullOrEmpty(ticket.Status) && oldStatus != ticket.Status)
+            {
+                await _eventBus.PublishAsync(new SupportTickedStatusChangedEvent(ticket: result.Data, oldStatus: oldStatus, sendEmail: true, sendNote: true));
+            }
+
             return result;
         }
 

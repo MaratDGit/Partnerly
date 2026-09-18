@@ -26,8 +26,8 @@ namespace Partnerly.Descriptors.Messages
         public const string Role = "Роль";
         public const string NewRole = "Новая роль";
         public const string TemplateType = "Тип шаблона";
-        public const string AllowSendNotifications = "Включить уведомления";
-        public const string AllowSendEmails = "Включить емейл рассылки";
+        public const string AllowSendNotifications = "Уведомления";
+        public const string AllowSendEmails = "Эмейл рассылки";
 
         public const string Edit = "Редактировать";
         public const string Delete = "Удалить";
@@ -42,6 +42,7 @@ namespace Partnerly.Descriptors.Messages
         public const string EmailConfirmationTokenHours = "токен Подтвержд. Email (часы)";
         public const string ForgotPasswordTokenExpiredAtHours = "токен Забыли пароль (часы)";
         public const string Automaticonlinestatusupdate = "онлайн-статус (минута)";
+        public const string ScrollingText = "Бегущая строка";
 
         public const string Action = "Действие";
         public const string Type = "Тип";

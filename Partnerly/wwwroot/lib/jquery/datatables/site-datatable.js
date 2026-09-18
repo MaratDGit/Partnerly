@@ -14,7 +14,7 @@
             return {
                 data: f.fieldName,
                 title: isSelectColumn ? `<input type="checkbox" id="select-all-checkbox" />` : f.displayName,
-                visible: f.isVisible,
+                visible: f.isVisible !== false,
                 orderable: f.isSortable,
                 isFilterable: f.isFilterable,
                 render: function (data, type, row) {

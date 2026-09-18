@@ -57,7 +57,7 @@ namespace Partnerly.Infrastructure.Services
             if (user == null)
             {
                 await _logService.CreateLogAsync(LogActionsAttribute.UserCreated, LogTypeAttribute.Error, String.Format(ErrorMessages.RecordIsNullFromController, "User"));
-                return ServiceResult<User?>.Fail(new List<string> { });
+                return ServiceResult<User?>.Fail(new List<string> { String.Format(ErrorMessages.RecordIsNullFromController, "User") });
             }
 
             var newUser = new User { Id = Guid.NewGuid() };
@@ -83,7 +83,7 @@ namespace Partnerly.Infrastructure.Services
                 if (referrerUser == null || referrerUser?.IsBlocked == true || referrerUser?.IsDeleted == true)
                 {
                     await _logService.CreateLogAsync(LogActionsAttribute.UserCreated, LogTypeAttribute.Error, ErrorMessages.ReferrerUserCannotBeFoundOrInactive);
-                    return ServiceResult<User?>.Fail(new List<string> { });
+                    return ServiceResult<User?>.Fail(new List<string> { ErrorMessages.ReferrerUserCannotBeFoundOrInactive });
                 }
             }
 
@@ -126,7 +126,7 @@ namespace Partnerly.Infrastructure.Services
                 await _userRepo.AddAsync(newUser);
                 await _userRepo.SaveChangesAsync();
 
-                bool sendEmailTo = newUser?.Id == newUser.CreatedBy;
+                bool sendEmailTo = newUser?.Id == newUser?.CreatedBy;
                 await _eventBus.PublishAsync(new UserRegisteredEvent(newUser: newUser, sendEmail: sendEmailTo, sendNote: true));
             }
             catch (Exception ex)
@@ -143,7 +143,7 @@ namespace Partnerly.Infrastructure.Services
             if (user == null)
             {
                 await _logService.CreateLogAsync(LogActionsAttribute.UserUpdated, LogTypeAttribute.Error, String.Format(ErrorMessages.RecordIsNullFromController, "User"));
-                return ServiceResult<User?>.Fail(new List<string> {});
+                return ServiceResult<User?>.Fail(new List<string> { String.Format(ErrorMessages.RecordIsNullFromController, "User") });
             }
 
             if (await _userRepo.GetByIdAsync(user.Id) == null)
@@ -194,8 +194,18 @@ namespace Partnerly.Infrastructure.Services
                 return ServiceResult<User?>.Fail(new List<string> { ErrorMessages.NoPermissionForThisAction });
             }
 
-            //_userRepo.Delete(user);
-            await _userRepo.SaveChangesAsync();
+            try
+            {
+                //_userRepo.Delete(user);
+                //await _userRepo.SaveChangesAsync();
+                user.IsDeleted = true;
+                await UpdateUserAsync(user);
+            }
+            catch (Exception ex)
+            {
+                await _logService.CreateLogAsync(LogActionsAttribute.UserDeleted, LogTypeAttribute.Error, ex.Message);
+                return ServiceResult<User?>.Fail(new List<string> { ex.Message });
+            }
 
             return ServiceResult<User?>.Ok(user);
         }

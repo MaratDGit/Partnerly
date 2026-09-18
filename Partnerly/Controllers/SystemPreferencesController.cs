@@ -49,6 +49,7 @@ namespace Partnerly.Controllers
                     setting.EmailConfirmationTokenExpiredAtHours = model.EmailConfirmationTokenExpiredAtHours;
                     setting.ForgotPasswordTokenExpiredAtHours = model.ForgotPasswordTokenExpiredAtHours;
                     setting.IsMaintenanceMode = model.IsMaintenanceMode;
+                    setting.ScrollingText = model.ScrollingText;
 
                     setting.Note = model.Note;
 

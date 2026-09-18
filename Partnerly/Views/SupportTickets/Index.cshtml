@@ -1,6 +1,7 @@
 ﻿@{
     ViewData["Title"] = "Задачи";
     Layout = "_ContentNavbarLayout";
+    bool hasAdminRole = ViewBag?.RoleType == Partnerly.Descriptors.Attributes.RoleTypeAttribute.Delete;
 }
 
 @await Html.PartialAsync("_DataTablePartial", null, new ViewDataDictionary(ViewData)
@@ -13,10 +14,11 @@
 @section PageScripts {
     <script>
         $(document).ready(function () {
-            initUniqueDataTable("supportTicketTable", '@Url.Action("GetData", "SupportTickets")', {
+            initUniqueDataTable("supportTicketTable", '@Url.Action("GetData", controller: "SupportTickets")', 
+            {
                 getDataParams: { tableModel: "SupportTicket" },
-                exportAllUrl: '@Url.Action("ExportAllToExcel", "SupportTickets")',
-                exportSelectedUrl: '@Url.Action("ExportToExcel", "SupportTickets")'
+                exportAllUrl: '@(hasAdminRole? Url.Action("ExportAllToExcel", "SupportTickets"): "")',
+                exportSelectedUrl: '@(hasAdminRole? Url.Action("ExportToExcel", "SupportTickets"): "")',
             });
         });
     </script>

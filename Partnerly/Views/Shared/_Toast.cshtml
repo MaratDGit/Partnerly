@@ -1,6 +1,6 @@
 ﻿@{
     var message = TempData["ToastMessage"] as string;
-    var toastType = TempData["ToastType"] as string ?? "success"; // по умолчанию success
+    var toastType = TempData["ToastType"] as string ?? "success"; // by default success
 }
 
 @if (!string.IsNullOrEmpty(message))

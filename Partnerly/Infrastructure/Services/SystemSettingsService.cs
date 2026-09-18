@@ -40,6 +40,7 @@ namespace Partnerly.Infrastructure.Services
             newSetup.ForgotPasswordTokenExpiredAtHours = rec.ForgotPasswordTokenExpiredAtHours;
             newSetup.IsMaintenanceMode = rec.IsMaintenanceMode;
             newSetup.OnlineStatusAutoRefreshMinute = rec.OnlineStatusAutoRefreshMinute;
+            newSetup.ScrollingText = rec.ScrollingText;
 
             newSetup.Note = rec.Note;
 

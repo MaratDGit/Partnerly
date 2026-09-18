@@ -71,11 +71,11 @@ using (var scope = app.Services.CreateScope())
 {
     var services = scope.ServiceProvider;
 
-    // 1. Инициализация базы
+    // 1. Initialize database
     var context = services.GetRequiredService<AppDbContext>();
     DbInitializer.Initialize(context);
 
-    // 2. Подписка на события
+    // 2. follow to event
     var eventBus = services.GetRequiredService<IEventBus>();
     eventBus.Subscribe<UserRegisteredEvent, UserRegisteredEventHandler>();
     eventBus.Subscribe<SupportTickedCreatedEvent, SupportTickedCreatedEventHandler>();

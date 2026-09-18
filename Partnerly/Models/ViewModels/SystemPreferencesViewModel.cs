@@ -32,6 +32,11 @@ namespace Partnerly.Models.ViewModels
         [Display(Name = FieldsDisplayNames.Automaticonlinestatusupdate)]
         public int? OnlineStatusAutoRefreshMinute { get; set; }
         #endregion
+
+        #region ScrollingText
+        [Display(Name = FieldsDisplayNames.ScrollingText)]
+        public string? ScrollingText { get; set; }
+        #endregion
         public string? Note { get; set; }
     }
 }

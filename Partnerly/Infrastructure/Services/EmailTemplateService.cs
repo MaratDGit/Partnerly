@@ -57,19 +57,19 @@ namespace Partnerly.Infrastructure.Services
             if (rec == null)
             {
                 await _logService.CreateLogAsync(LogActionsAttribute.EmailTemplateUpdated, LogTypeAttribute.Error, String.Format(ErrorMessages.RecordIsNullFromController, "EmailTemplate"));
-                return ServiceResult<EmailTemplate?>.Fail(new List<string> { });
+                return ServiceResult<EmailTemplate?>.Fail(new List<string> { String.Format(ErrorMessages.RecordIsNullFromController, "EmailTemplate") });
             }
 
             if (await _templateRepo.GetByIdAsync(rec.Id) == null)
             {
                 await _logService.CreateLogAsync(LogActionsAttribute.EmailTemplateUpdated, LogTypeAttribute.Error, String.Format(ErrorMessages.Cannotbefound, "EmailTemplate"));
-                return ServiceResult<EmailTemplate?>.Fail(new List<string> { });
+                return ServiceResult<EmailTemplate?>.Fail(new List<string> { String.Format(ErrorMessages.Cannotbefound, "EmailTemplate") });
             }
 
             if (!await _permissionService.CanUpdateAsync(_currentUserService.UserId, rec))
             {
                 await _logService.CreateLogAsync(LogActionsAttribute.EmailTemplateUpdated, LogTypeAttribute.Critical, ErrorMessages.NoPermissionForThisAction);
-                return ServiceResult<EmailTemplate?>.Fail(new List<string> { });
+                return ServiceResult<EmailTemplate?>.Fail(new List<string> { ErrorMessages.NoPermissionForThisAction });
             }
 
             _templateRepo.Update(rec);
@@ -83,20 +83,20 @@ namespace Partnerly.Infrastructure.Services
             if (id == null)
             {
                 await _logService.CreateLogAsync(LogActionsAttribute.EmailTemplateDeleted, LogTypeAttribute.Error, String.Format(ErrorMessages.RecordIsNullFromController, "EmailTemplate ID"));
-                return ServiceResult<EmailTemplate?>.Fail(new List<string> { });
+                return ServiceResult<EmailTemplate?>.Fail(new List<string> { String.Format(ErrorMessages.RecordIsNullFromController, "EmailTemplate ID") });
             }
 
             var rec = await _templateRepo.GetByIdAsync(id);
             if (rec == null)
             {
                 await _logService.CreateLogAsync(LogActionsAttribute.EmailTemplateDeleted, LogTypeAttribute.Error, String.Format(ErrorMessages.Cannotbefound, "EmailTemplate"));
-                return ServiceResult<EmailTemplate?>.Fail(new List<string> { });
+                return ServiceResult<EmailTemplate?>.Fail(new List<string> { String.Format(ErrorMessages.Cannotbefound, "EmailTemplate") });
             }
 
             if (!await _permissionService.CanDeleteAsync(_currentUserService.UserId, rec))
             {
                 await _logService.CreateLogAsync(LogActionsAttribute.EmailTemplateDeleted, LogTypeAttribute.Critical, ErrorMessages.NoPermissionForThisAction);
-                return ServiceResult<EmailTemplate?>.Fail(new List<string> { });
+                return ServiceResult<EmailTemplate?>.Fail(new List<string> { ErrorMessages.NoPermissionForThisAction });
             }
 
             _templateRepo.Delete(rec);

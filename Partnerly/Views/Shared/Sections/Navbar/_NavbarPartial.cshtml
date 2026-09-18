@@ -112,6 +112,41 @@
 .badge-animate {
     animation: pulseBadge 0.6s ease-in-out;
 }
+    .navbar-marquee {
+        position: absolute;
+        left: 0;
+        right: 0;
+        top: 100%;
+        height: 32px;
+        overflow: hidden;
+        white-space: nowrap;
+        display: flex;
+        align-items: center;
+        color: #0d6efd;
+        z-index: 10;
+    }
+
+    .navbar-marquee-content {
+        display: inline-block;
+        flex-shrink: 0;
+        padding-left: 100%;
+        animation: marquee 20s linear infinite;
+        font-size: 14px;
+        font-weight: 500;
+    }
+
+    @@keyframes marquee {
+        from
+
+    {
+        transform: translateX(0);
+    }
+
+    to {
+        transform: translateX(-100%);
+    }
+
+    }
 </style>
 
 @if (ViewData["navbarFull"] != null)
@@ -119,7 +154,6 @@
 <div class="navbar-brand app-brand demo d-none d-xl-flex py-0 me-4">
   <a asp-controller="Home" asp-action="Index" class="app-brand-link gap-2">
       <span class="app-brand-logo demo">
-        @*@await Html.PartialAsync("../_Partials/_Macros")*@
       </span>
       <span class="app-brand-text demo menu-text fw-bold">@TempData.Peek("appName")</span>
     </a>
@@ -136,9 +170,15 @@
 }
 
 <div class="navbar-nav-right d-flex align-items-center" id="navbar-collapse">
-
+    @if (ViewData["ScrollingText"] is string navbarMessage && !string.IsNullOrWhiteSpace(navbarMessage))
+    {
+        <div class="navbar-marquee">
+            <div class="navbar-marquee-content">
+                @navbarMessage
+            </div>
+        </div>
+    }
   <ul class="navbar-nav flex-row align-items-center ms-auto">
-    
     <li class="nav-item dropdown me-4">
       <a class="btn btn-xs dropdown-toggle" href="#" id="notificationDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
         <i class="bx bxs-bell-ring"></i>
@@ -166,8 +206,7 @@
         </div>
       </a>
       <ul class="dropdown-menu dropdown-menu-end">
-        <li>
-          <a class="dropdown-item" asp-controller="Home" asp-action="Index">
+        <li>       
             <div class="d-flex">
               <div class="flex-shrink-0 me-3">
                 <div class="avatar avatar-online">
@@ -178,8 +217,7 @@
                 <h6 class="mb-0">@ViewBag?.UserFullName</h6>
                 <small class="text-muted">@ViewBag?.UserRefCode</small>
               </div>
-            </div>
-          </a>
+            </div>          
         </li>
         <li>
           <div class="dropdown-divider my-1"></div>
@@ -194,14 +232,6 @@
           <a class="dropdown-item" asp-controller="Dashboard" asp-action="Settings">
             <i class="bx bx-cog bx-md me-2"></i>
             <span>Настройки</span>
-          </a>
-        </li>
-        <li>
-          <a class="dropdown-item" asp-controller="Dashboard" asp-action="Payments">
-            <span class="d-flex align-items-center align-middle">
-              <i class="flex-shrink-0 bx bx-credit-card bx-md me-3"></i>
-              <span class="flex-grow-1 align-middle">Платежи</span>
-            </span>
           </a>
         </li>
         <li>
@@ -230,7 +260,7 @@ document.addEventListener('DOMContentLoaded', function() {
         .withAutomaticReconnect()
         .build();
 
-    // 🔹 Обработка новых уведомлений
+    // Processing new notifications
     connection.on("ReceiveNotification", function (notification) {
 
         const emptyItem = list.querySelector('.no-notifications');
@@ -238,7 +268,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
         const li = document.createElement('li');
         let date = new Date(notification.createdDate);
-        date = new Date(date.getTime() + 4 * 60 * 60 * 1000); // +4 часа
+        date = new Date(date.getTime() + 4 * 60 * 60 * 1000); // +4 hour
         const created = date.toLocaleString('ru-RU', {
             day: '2-digit',
             month: 'long',
@@ -285,22 +315,19 @@ document.addEventListener('DOMContentLoaded', function() {
 
         list.prepend(li);
 
-        // Показываем кнопку "Отметить все как прочитанные"
+        // Displaying the "Mark all as read" button.
         markAllBtn.closest('div').style.display = 'block';
-
-        // Обновляем бейдж
+        // Updating the badge
         badge.textContent = list.querySelectorAll('li.dropdown-item').length;
         badge.style.display = 'inline-block';
     });
 
     function animateBadge(badge) {
-        // Убираем класс, чтобы перезапустить анимацию
+        // Remove the class to restart the animation.
         badge.classList.remove("badge-animate");
-
-        // Force reflow, чтобы браузер применил изменение
+        // Force a reflow so the browser applies the change.
         void badge.offsetWidth;
-
-        // Добавляем класс обратно
+        // We add the class back.
         badge.classList.add("badge-animate");
     }
 
@@ -309,9 +336,9 @@ document.addEventListener('DOMContentLoaded', function() {
         if (badge && badge.textContent !== "0") {
             animateBadge(badge);
         }
-    }, 5000); // каждые 5 секунд
+    }, 5000); // every 5 seconds
 
-    // 🔹 Обновление счётчика уведомлений
+    // Updating the notification counter
     connection.on("UpdateUnreadCount", function (count) {
         if (count > 0) {
             badge.textContent = count;
@@ -321,25 +348,21 @@ document.addEventListener('DOMContentLoaded', function() {
             badge.style.display = 'none';
             markAllBtn.closest('div').style.display = 'none';
 
-            // Если уведомлений нет, показываем заглушку "Нет новых уведомлений"
+            // If there are no notifications, we display the "No new notifications" placeholder.
             list.innerHTML = '<li class="text-center text-muted small py-2 no-notifications">Нет новых уведомлений</li>';
         }
     });
 
-    // 🔹 Запуск подключения
+    // Start Connection
     connection.start()
-        .then(() => console.log("✅ Подключено к SignalR NotificationHub"))
-        .catch(err => console.error("❌ Ошибка подключения SignalR:", err));
+        .then(() => console.log("Connected to SignalR NotificationHub"))
+        .catch(err => console.error("Error Connection SignalR:", err));
 
-    // =============================
-    // 🔹 Обработчики кликов по списку
-    // =============================
     list.addEventListener('click', function (e) {
         const btn = e.target.closest('button');
         if (!btn) return;
         e.stopPropagation();
 
-        // Удаление / отметка как прочитанное
         if (btn.classList.contains('mark-read')) {
             const li = btn.closest('li');
             const id = btn.dataset.id;
@@ -353,7 +376,6 @@ document.addEventListener('DOMContentLoaded', function() {
                 });
         }
 
-        // Показать / скрыть полное сообщение
         if (btn.classList.contains('toggle-details')) {
             const li = btn.closest('li');
             const msg = li.querySelector('.notification-message, .notification-full');
@@ -365,7 +387,6 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     });
 
-    // 🔹 Кнопка "Отметить все как прочитанные"
     markAllBtn.addEventListener('click', function() {
         fetch('/Notification/MarkAllAsRead', { method: 'POST' })
             .then(res => {});

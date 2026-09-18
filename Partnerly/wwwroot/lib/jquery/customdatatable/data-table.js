@@ -1,10 +1,5 @@
 ﻿(function ($) {
     $.fn.CustomDataTable = function (options) {
-        //const settings = $.extend({
-        //    data: [],
-        //    columns: [],
-        //    pageSize: 10
-        //}, options);
         const settings = $.extend({
             data: [],
             columns: [],
@@ -107,6 +102,11 @@
                 const $trHead = $('<tr></tr>');
 
                 settings.columns.forEach(col => {
+
+                    if (col.visible === false) {
+                        return;
+                    }
+
                     const $th = $(`<th>
                         <span class="th-content">${col.title} ${col.orderable ? '<i class="bx bx-sort"></i>' : ''}</span>
                         <div class="resize-handle"></div>
@@ -144,6 +144,11 @@
                 pageData.forEach(row => {
                     const $tr = $('<tr></tr>');
                     settings.columns.forEach(col => {
+
+                        if (col.visible === false) {
+                            return;
+                        }
+
                         let value = row[col.data];
                         if (col.render) value = col.render(value, null, row);
                         $tr.append(`<td>${value}</td>`);

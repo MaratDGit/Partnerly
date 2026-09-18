@@ -30,6 +30,7 @@ namespace Partnerly.Controllers
             return View();
         }
 
+        [ClaimAuthorize(ClaimTypes.Role, RoleTypeAttribute.Admin)]
         public async Task<IActionResult> Create()
         {
             return View();
@@ -325,23 +326,23 @@ namespace Partnerly.Controllers
         }
 
 
-        [HttpPost]
-        public async Task<IActionResult> ExportToExcel([FromForm] string selectedIds)
-        {
-            var ids = JsonSerializer.Deserialize<List<Guid>>(selectedIds);
+        //[HttpPost]
+        //public async Task<IActionResult> ExportToExcel([FromForm] string selectedIds)
+        //{
+        //    var ids = JsonSerializer.Deserialize<List<Guid>>(selectedIds);
 
-            var users = await _userGroupService.GetAllUserGroupsAsync();
-            var data = users.Where(x => ids.Contains(x.Id)).ToList();
+        //    var users = await _userGroupService.GetAllUserGroupsAsync();
+        //    var data = users.Where(x => ids.Contains(x.Id)).ToList();
 
-            return await ExportToExcel(data, "users.xlsx");
-        }
+        //    return await ExportToExcel(data, "users.xlsx");
+        //}
 
-        [HttpPost]
-        public async Task<IActionResult> ExportAllToExcel([FromForm] string data)
-        {
-            var allData = JsonSerializer.Deserialize<List<UserViewModel>>(data);
-            var users = await _userGroupService.GetAllUserGroupsAsync();
-            return await ExportToExcel(users, "users.xlsx");
-        }
+        //[HttpPost]
+        //public async Task<IActionResult> ExportAllToExcel([FromForm] string data)
+        //{
+        //    var allData = JsonSerializer.Deserialize<List<UserViewModel>>(data);
+        //    var users = await _userGroupService.GetAllUserGroupsAsync();
+        //    return await ExportToExcel(users, "users.xlsx");
+        //}
     }
 }

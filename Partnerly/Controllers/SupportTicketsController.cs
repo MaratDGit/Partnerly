@@ -10,6 +10,7 @@ using Partnerly.Models;
 using Partnerly.Models.GridViews;
 using Partnerly.Models.ViewModels;
 using System.Security.Claims;
+using System.Text.Json;
 
 namespace Partnerly.Controllers
 {
@@ -233,7 +234,9 @@ namespace Partnerly.Controllers
                 SupportTicket? ticket = await _supportTicketService.GetSupportTicketByIDAsync(model.Id);
                 if (ticket != null)
                 {
+                    string oldStatus = ticket.Status;
                     Guid? oldAssignedTo = ticket.AssignedTo;
+
                     ticket.Subject = model.Subject;
                     ticket.Message = model.Message;
                     ticket.IsRead = model.IsRead;
@@ -241,7 +244,7 @@ namespace Partnerly.Controllers
                     ticket.Status = model.Status;
                     ticket.Note = model.Note;
 
-                    ServiceResult<SupportTicket?> result = await _supportTicketService.UpdateSupportTicketAsync(ticket, oldAssignedTo);
+                    ServiceResult<SupportTicket?> result = await _supportTicketService.UpdateSupportTicketAsync(ticket, oldAssignedTo, oldStatus);
 
                     if (!result.Success)
                     {
@@ -320,7 +323,9 @@ namespace Partnerly.Controllers
         {
             if (tableModel == nameof(Partnerly.Models.SupportTicket))
             {
-                return await GetGridDataAsync<SupportTicketGridView, SupportTicket>("SupportTickets");
+                var result = await GetGridDataAsync<SupportTicketGridView, SupportTicket>("SupportTickets");
+                
+                return result;
             }
             return Json(new { fields = new object[0], data = new object[0] });
         }
@@ -399,24 +404,30 @@ namespace Partnerly.Controllers
             }
         }
 
-        //[HttpPost]
-        //public async Task<IActionResult> ExportToExcel([FromForm] string selectedIds)
-        //{
-        //    var ids = JsonSerializer.Deserialize<List<Guid>>(selectedIds);
+        [HttpPost]
+        public async Task<IActionResult> ExportToExcel([FromForm] string selectedIds)
+        {
+            if (!string.IsNullOrWhiteSpace(selectedIds))
+            {
+                var ids = JsonSerializer.Deserialize<List<Guid>>(selectedIds);
+                if (ids.Count > 0)
+                {
+                    var tickets = await _supportTicketService.GetAllSupportTicketAsync();
+                    var data = tickets.Where(x => ids.Contains(x.Id)).ToList();
 
-        //    var users = await _userService.GetAllUsersAsync();
-        //    var data = users.Where(x => ids.Contains(x.Id)).ToList();
+                    return await ExportToExcel(data, "supportTickets.xlsx");
+                }
+            }
+            return BadRequest("No records selected.");
+        }
 
-        //    return await ExportToExcel(data, "users.xlsx");
-        //}
-
-        //[HttpPost]
-        //public async Task<IActionResult> ExportAllToExcel([FromForm] string data)
-        //{
-        //    var allData = JsonSerializer.Deserialize<List<UserViewModel>>(data);
-        //    var users = await _userService.GetAllUsersAsync();
-        //    return await ExportToExcel(users, "users.xlsx");
-        //}
+        [HttpPost]
+        public async Task<IActionResult> ExportAllToExcel([FromForm] string data)
+        {
+            //var allData = JsonSerializer.Deserialize<List<UserViewModel>>(data);
+            var tickets = await _supportTicketService.GetAllSupportTicketAsync();
+            return await ExportToExcel(tickets, "supportTickets.xlsx");
+        }
 
     }
 }

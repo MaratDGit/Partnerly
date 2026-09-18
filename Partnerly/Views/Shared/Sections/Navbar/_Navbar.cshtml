@@ -3,7 +3,7 @@
   ViewData["navbarDetached"] = (ViewData["navbarDetached"] ??= null);
   ViewData["containerNav"] = (ViewData["containerNav"] ??= "container-fluid");
 }
-@if (@ViewData["navbarDetached"] != null)
+@* @if (@ViewData["navbarDetached"] != null)
 {
   <nav
   class='layout-navbar @((@ViewData["navbarDetached"] != null) ? @ViewData["navbarDetached"] : "") @((@ViewData["navbarDetached"] != null) ? @ViewData["containerNav"] : "") navbar navbar-expand-xl align-items-center bg-navbar-theme'
@@ -21,4 +21,15 @@ else
     </div>
   </nav>
 
-}
+} *@
+
+
+
+
+
+<nav class='layout-navbar @((@ViewData["navbarDetached"] != null) ? @ViewData["navbarDetached"] : "") @((@ViewData["navbarDetached"] != null) ? @ViewData["containerNav"] : "") navbar navbar-expand-xl align-items-center bg-navbar-theme'
+     id="layout-navbar">
+    @await Html.PartialAsync("Sections/Navbar/_NavbarPartial")
+</nav>
+
+

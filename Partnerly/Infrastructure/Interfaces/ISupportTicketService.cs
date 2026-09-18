@@ -10,7 +10,7 @@ namespace Partnerly.Infrastructure.Interfaces
         Task<IEnumerable<SupportTicket?>> GetUserSupportTicketsAsync(Guid? userID);
         Task<ServiceResult<SupportTicket?>> ChangeTicketStatus(SupportTicket? ticket, string? oldStatus);
         Task<ServiceResult<SupportTicket?>> CreateSupportTicketAsync(SupportTicket? ticket);
-        Task<ServiceResult<SupportTicket?>> UpdateSupportTicketAsync(SupportTicket? ticket, Guid? oldAssignedTo);
+        Task<ServiceResult<SupportTicket?>> UpdateSupportTicketAsync(SupportTicket? ticket, Guid? oldAssignedTo, string oldStatus);
         Task<ServiceResult<SupportTicket?>> UpdateSupportTicketAsync(SupportTicket? ticket);
         Task<ServiceResult<SupportTicket?>> DeleteSupportTicketAsync(Guid? id);
     }

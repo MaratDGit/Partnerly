@@ -467,6 +467,9 @@ namespace Partnerly.Migrations
                         .IsRequired()
                         .HasColumnType("int");
 
+                    b.Property<string>("ScrollingText")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("TaskTickedID")
                         .HasColumnType("nvarchar(max)");
 

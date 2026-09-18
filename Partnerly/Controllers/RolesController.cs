@@ -9,6 +9,7 @@ using Partnerly.Models;
 using Partnerly.Models.GridViews;
 using Partnerly.Models.ViewModels;
 using System.Security.Claims;
+using System.Text.Json;
 
 namespace Partnerly.Controllers
 {
@@ -215,23 +216,29 @@ namespace Partnerly.Controllers
             }
         }
 
-        //[HttpPost]
-        //public async Task<IActionResult> ExportToExcel([FromForm] string selectedIds)
-        //{
-        //    //var ids = JsonSerializer.Deserialize<List<Guid>>(selectedIds);
+        [HttpPost]
+        public async Task<IActionResult> ExportToExcel([FromForm] string selectedIds)
+        {
+            if (!string.IsNullOrWhiteSpace(selectedIds))
+            {
+                var ids = JsonSerializer.Deserialize<List<Guid>>(selectedIds);
+                if (ids.Count > 0)
+                {
+                    var roles = await _roleService.GetAllRolesAsync();
+                    var data = roles.Where(x => ids.Contains(x.Id)).ToList();
 
-        //    //var users = await _userService.GetAllUsersAsync();
-        //    //var data = users.Where(x => ids.Contains(x.Id)).ToList();
+                    return await ExportToExcel(data, "roles.xlsx");
+                }
+            }
+            return BadRequest("No records selected.");
+        }
 
-        //    //return await ExportToExcel(data, "users.xlsx");
-        //}
-
-        //[HttpPost]
-        //public async Task<IActionResult> ExportAllToExcel([FromForm] string data)
-        //{
-        //    var allData = JsonSerializer.Deserialize<List<UserViewModel>>(data);
-        //    var users = await _userService.GetAllUsersAsync();
-        //    return await ExportToExcel(users, "users.xlsx");
-        //}
+        [HttpPost]
+        public async Task<IActionResult> ExportAllToExcel([FromForm] string data)
+        {
+            //var allData = JsonSerializer.Deserialize<List<UserViewModel>>(data);
+            var roles = await _roleService.GetAllRolesAsync();
+            return await ExportToExcel(roles, "roles.xlsx");
+        }
     }
 }

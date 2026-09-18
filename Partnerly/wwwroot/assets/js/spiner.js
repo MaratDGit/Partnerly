@@ -1,37 +1,96 @@
-﻿$(document).ready(function () {
-    // 🌀 Показываем лоадер при AJAX
+﻿$(function () {
+
+    const loader = document.getElementById("globalLoader");
+
+    if (!loader) {
+        return;
+    }
+
+    let loaderTimeout = null;
+
+
+    function showLoader() {
+
+        clearTimeout(loaderTimeout);
+
+        // show
+        loader.style.display = "flex";
+
+        // max time to show — 15 seconds
+        loaderTimeout = setTimeout(function () {
+            hideLoader();
+        }, 15000);
+    }
+
+
+    function hideLoader() {
+
+        clearTimeout(loaderTimeout);
+        loaderTimeout = null;
+        loader.style.display = "none";
+    }
+
+
+    // ==========================================
+    // AJAX
+    // ==========================================
+
     $(document).ajaxStart(function () {
-        $("#globalLoader").fadeIn(200);
-    }).ajaxStop(function () {
-        $("#globalLoader").fadeOut(200);
+        showLoader();
     });
 
-    // 🌀 Показываем лоадер при отправке любой формы
-    $("form").on("submit", function () {
-        $("#globalLoader").fadeIn(200);
+    $(document).ajaxStop(function () {
+        hideLoader();
     });
 
-    // 🌀 Показываем лоадер при переходе по ссылке
-    $(document).on("click", "a", function (e) {
+
+    // ==========================================
+    // FORM SUBMIT
+    // ==========================================
+
+    $(document).on("submit", "form", function () {
+        showLoader();
+    });
+
+
+    // ==========================================
+    // LINKS
+    // ==========================================
+
+    $(document).on("click", "a", function () {
+
         const href = $(this).attr("href");
 
-        // Пропускаем:
         if (
-            !href ||                                  // нет href
-            href.startsWith("#") ||                    // якорные ссылки
-            href.startsWith("javascript:") ||          // javascript-ссылки
-            $(this).attr("target") === "_blank" ||     // открытие в новой вкладке
-            $(this).attr("data-bs-toggle") ||       // bootstrap dropdown, collapse, modal и т.п.
-            $(this).attr("data-no-loader")         // наш кастомный атрибут
+            !href ||
+            href.startsWith("#") ||
+            href.startsWith("javascript:") ||
+            $(this).attr("target") === "_blank" ||
+            $(this).attr("data-bs-toggle") ||
+            $(this).attr("data-no-loader")
         ) {
-            return; // не показываем лоадер
+            return;
         }
 
-        $("#globalLoader").fadeIn(200);
+        showLoader();
     });
 
-    // 🌀 Если используешь SPA-навигацию (например, AJAX переходы) — можно добавить обработчик popstate
-    window.addEventListener('beforeunload', function () {
-        $("#globalLoader").fadeIn(200);
+
+    // ==========================================
+    // BACK / FORWARD
+    // ==========================================
+
+    window.addEventListener("pageshow", function () {
+        hideLoader();
     });
+
+
+    // ==========================================
+    // BEFORE PAGE GOES INTO BFCache
+    // ==========================================
+
+    window.addEventListener("pagehide", function () {
+        hideLoader();
+    });
+
 });

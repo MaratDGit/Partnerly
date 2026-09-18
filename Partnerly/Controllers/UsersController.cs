@@ -29,6 +29,7 @@ namespace Partnerly.Controllers
             return View();
         }
 
+        [ClaimAuthorize(ClaimTypes.Role, RoleTypeAttribute.Admin)]
         public async Task<IActionResult> Create()
         {
             return View();
@@ -246,7 +247,17 @@ namespace Partnerly.Controllers
         protected override async Task<IEnumerable<TEntity>> GetEntitiesAsync<TEntity>()
         {
             if (typeof(TEntity) == typeof(User))
-                return (IEnumerable<TEntity>)await _userService.GetAllUsersAsync();
+            {
+                var viewRole = await _roleService.GetRoleByNameAsync(RoleTypeAttribute.User);
+                var users = await _userService.GetAllUsersAsync();
+
+                if (!base.HasPermision(RoleTypeAttribute.Delete))
+                {
+                    users = users.Where(_ => _.RoleId == viewRole?.Id);
+                }
+
+                return (IEnumerable<TEntity>)users;
+            }
 
             return Enumerable.Empty<TEntity>();
         }
@@ -258,13 +269,13 @@ namespace Partnerly.Controllers
             {
                 return new List<GridField>
                 {
-                    new GridField { FieldName = "select", DisplayName = $"", DefaultValue = false, Type = "checkbox"},
+                    new GridField { FieldName = "select", DisplayName = $"", DefaultValue = false, Type = "checkbox", IsVisible = base.HasPermision(RoleTypeAttribute.Delete)},
                     new GridField { FieldName = "userName", DisplayName = $"{FieldsDisplayNames.FirstName} {FieldsDisplayNames.LastName}", LinkTemplate = "/Users/Edit/{id}" },
                     new GridField { FieldName = "email", DisplayName = FieldsDisplayNames.Email, LinkTemplate = "/Users/Edit/{id}" },
                     new GridField { FieldName = "myReferralCode", DisplayName = FieldsDisplayNames.ReferrerCode, LinkTemplate = "/Users/Edit/{id}" },
                     new GridField { FieldName = "referrerName", DisplayName = FieldsDisplayNames.ReffererName, DefaultValue = "" },
                     new GridField { FieldName = "phone", DisplayName = FieldsDisplayNames.Phone},
-                    new GridField { FieldName = "balance", DisplayName = FieldsDisplayNames.Balance, DefaultValue = "0"},
+                    //new GridField { FieldName = "balance", DisplayName = FieldsDisplayNames.Balance, DefaultValue = "0"},
                     new GridField { FieldName = "lastActivity", DisplayName = FieldsDisplayNames.LastActivity, Format="date:lastActivity" },
                     new GridField { FieldName = "isOnlayn", DisplayName = FieldsDisplayNames.IsOnlayn, IsFilterable = true, Type = "checkbox"},
                     new GridField { FieldName = "isBlocked", DisplayName = FieldsDisplayNames.IsBlocked, IsFilterable = true, Type = "checkbox"},
@@ -301,18 +312,24 @@ namespace Partnerly.Controllers
         [HttpPost]
         public async Task<IActionResult> ExportToExcel([FromForm] string selectedIds)
         {
-            var ids = JsonSerializer.Deserialize<List<Guid>>(selectedIds);
+            if (!string.IsNullOrWhiteSpace(selectedIds))
+            {
+                var ids = JsonSerializer.Deserialize<List<Guid>>(selectedIds);
+                if (ids.Count > 0)
+                {
+                    var users = await _userService.GetAllUsersAsync();
+                    var data = users.Where(x => ids.Contains(x.Id)).ToList();
 
-            var users = await _userService.GetAllUsersAsync();
-            var data = users.Where(x => ids.Contains(x.Id)).ToList();
+                    return await ExportToExcel(data, "users.xlsx");
+                }
+            }
 
-            return await ExportToExcel(data, "users.xlsx");
+            return BadRequest("No users selected.");
         }
 
         [HttpPost]
         public async Task<IActionResult> ExportAllToExcel([FromForm] string data)
         {
-            var allData = JsonSerializer.Deserialize<List<UserViewModel>>(data);
             var users = await _userService.GetAllUsersAsync();
             return await ExportToExcel(users, "users.xlsx");
         }

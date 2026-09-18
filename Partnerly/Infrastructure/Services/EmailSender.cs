@@ -96,7 +96,7 @@ namespace Partnerly.Infrastructure.Services
             var smtpPort = int.Parse(_config["EmailSettings:Port"]);
             var smtpUser = _config["EmailSettings:Username"];
             var smtpPass = _config["EmailSettings:Password"];
-            var companyName = _config["EmailSettings:CompanyName"]; // добавьте сюда название компании
+            var companyName = _config["EmailSettings:CompanyName"];
 
             if (smtpHost == null || smtpUser == null || smtpPass == null)
             {

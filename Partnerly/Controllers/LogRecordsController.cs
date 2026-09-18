@@ -85,9 +85,9 @@ namespace Partnerly.Controllers
                     new GridField { FieldName = "actionView", DisplayName = FieldsDisplayNames.Action, LinkTemplate = "/LogRecords/View/{id}" },
                     new GridField { FieldName = "typeView", DisplayName = FieldsDisplayNames.Type, IsFilterable = true },
                     new GridField { FieldName = "logMessage", DisplayName = FieldsDisplayNames.Message },
-                    new GridField { FieldName = "filePath", DisplayName = FieldsDisplayNames.FilePath, DefaultValue = "" },
-                    new GridField { FieldName = "method", DisplayName = FieldsDisplayNames.Method},
-                    new GridField { FieldName = "lineNumber", DisplayName = FieldsDisplayNames.LineNumber},
+                    //new GridField { FieldName = "filePath", DisplayName = FieldsDisplayNames.FilePath, DefaultValue = "" },
+                    //new GridField { FieldName = "method", DisplayName = FieldsDisplayNames.Method},
+                    //new GridField { FieldName = "lineNumber", DisplayName = FieldsDisplayNames.LineNumber},
                     new GridField { FieldName = "creatorUserName", DisplayName = FieldsDisplayNames.CreatorName },
                     new GridField { FieldName = "createdDate", DisplayName = FieldsDisplayNames.CreatedDate, IsFilterable = true, Format="date:lastActivity"},
                 };
@@ -114,18 +114,24 @@ namespace Partnerly.Controllers
         [HttpPost]
         public async Task<IActionResult> ExportToExcel([FromForm] string selectedIds)
         {
-            var ids = JsonSerializer.Deserialize<List<Guid>>(selectedIds);
+            if (!string.IsNullOrWhiteSpace(selectedIds))
+            {
+                var ids = JsonSerializer.Deserialize<List<Guid>>(selectedIds);
+                if (ids.Count > 0)
+                {
+                    var logs = await _logService.GetAllLogsAsync();
+                    var data = logs.Where(x => ids.Contains(x.Id)).ToList();
 
-            var logs = await _logService.GetAllLogsAsync();
-            var data = logs.Where(x => ids.Contains(x.Id)).ToList();
-
-            return await ExportToExcel(data, "logs.xlsx");
+                    return await ExportToExcel(data, "logs.xlsx");
+                }
+            }
+            return BadRequest("No records selected.");
         }
 
         [HttpPost]
         public async Task<IActionResult> ExportAllToExcel([FromForm] string data)
         {
-            var allData = JsonSerializer.Deserialize<List<LoginViewModel>>(data);
+            //var allData = JsonSerializer.Deserialize<List<LoginViewModel>>(data);
             var logs = await _logService.GetAllLogsAsync();
             return await ExportToExcel(logs, "logs.xlsx");
         }

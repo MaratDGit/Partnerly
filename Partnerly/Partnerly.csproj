@@ -7,6 +7,13 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Content Remove="C:\Users\IIG\.nuget\packages\datatables.net-dt\2.3.4\contentFiles\any\any\wwwroot\css\dataTables.dataTables.css" />
+    <Content Remove="C:\Users\IIG\.nuget\packages\datatables.net-dt\2.3.4\contentFiles\any\any\wwwroot\css\dataTables.dataTables.min.css" />
+    <Content Remove="C:\Users\IIG\.nuget\packages\datatables.net-dt\2.3.4\contentFiles\any\any\wwwroot\js\dataTables.dataTables.js" />
+    <Content Remove="C:\Users\IIG\.nuget\packages\datatables.net-dt\2.3.4\contentFiles\any\any\wwwroot\js\dataTables.dataTables.min.js" />
+  </ItemGroup>
+
+  <ItemGroup>
     <None Remove="Views\Shared\_CommonMasterLayout.cshtml~RF65ba5cc9.TMP" />
   </ItemGroup>
 
@@ -27,14 +34,12 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Descriptors\Enums\" />
     <Folder Include="wwwroot\assets\img\elements\" />
     <Folder Include="wwwroot\assets\img\favicon\" />
     <Folder Include="wwwroot\assets\img\layouts\" />
     <Folder Include="wwwroot\assets\vendor\css\pages\" />
     <Folder Include="wwwroot\assets\vendor\fonts\" />
     <Folder Include="wwwroot\assets\vendor\js\" />
-    <Folder Include="wwwroot\assets\vendor\libs\apex-charts\" />
     <Folder Include="wwwroot\assets\vendor\libs\highlight\" />
     <Folder Include="wwwroot\assets\vendor\libs\jquery\" />
     <Folder Include="wwwroot\assets\vendor\libs\masonry\" />

@@ -44,6 +44,11 @@
                <label asp-for="OnlineStatusAutoRefreshMinute"></label>
                <span asp-validation-for="OnlineStatusAutoRefreshMinute" class="text-danger"></span>
             </div>
+            <div class="form-floating mb-1 max-w-600">
+                <textarea asp-for="ScrollingText" id="message" class="form-control" style="height: 150px" rows="5"></textarea>
+                <label asp-for="ScrollingText"></label>
+                <span asp-validation-for="ScrollingText" class="text-danger"></span>
+            </div>
         </form>
     </div>
 </div>

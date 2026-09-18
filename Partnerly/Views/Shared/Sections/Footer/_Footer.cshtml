@@ -9,7 +9,7 @@
       <div class="text-body">
         © <script>
         document.write(new Date().getFullYear())
-        </script>, сделано от <a href='@TempData.Peek("authorUrl")' class="footer-link fw-medium">@TempData.Peek("authorName")  <img src="~/favicon.png" alt="Logo" width="20" height="20" class="me-2" /></a>
+        </script>, сделано от <a href='@TempData.Peek("authorUrl")' class="footer-link fw-medium">@TempData.Peek("authorName")  @* <img src="~/favicon.png" alt="Logo" width="20" height="20" class="me-2" /> *@</a>
       </div>
       <div class="d-none d-lg-inline-block">
         <a href='@TempData.Peek("licenseUrl")' class="footer-link me-4" >Лицензия</a>

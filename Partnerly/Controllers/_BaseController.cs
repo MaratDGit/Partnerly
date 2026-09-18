@@ -11,7 +11,7 @@ using Partnerly.Models.GridViews;
 
 namespace Partnerly.Controllers
 {
-    [Authorize] // только для авторизованных
+    [Authorize] // for authorized users only
     public class _BaseController : Controller
     {
         protected readonly IEventBus _eventBus;
@@ -50,11 +50,12 @@ namespace Partnerly.Controllers
             bool unknownAction = false;
             if (!string.IsNullOrEmpty(actionName))
             {
-                if (actionName.ToLower() == Constants.Edit.ToLower() 
-                    || actionName.ToLower() == Constants.Create.ToLower()) roleType = RoleTypeAttribute.Update;
-                else if (actionName.ToLower() == Constants.Delete.ToLower()
-                    || actionName.ToLower() == Constants.DeleteConfirmed.ToLower()) roleType = RoleTypeAttribute.Delete;
-                else unknownAction = true;
+                if (actionName.ToLower() == Constants.Edit.ToLower() || actionName.ToLower() == Constants.Create.ToLower()) 
+                    roleType = RoleTypeAttribute.Update;
+                else if (actionName.ToLower() == Constants.Delete.ToLower() || actionName.ToLower() == Constants.DeleteConfirmed.ToLower()) 
+                    roleType = RoleTypeAttribute.Delete;
+                else 
+                    unknownAction = true;
             }
 
             if (!unknownAction && !HasPermision(roleType))

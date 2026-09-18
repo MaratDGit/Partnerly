@@ -5,20 +5,31 @@ using Partnerly.Infrastructure.Interfaces;
 using Partnerly.Infrastructure.Services;
 using Partnerly.Models;
 using Partnerly.Models.ViewModels;
+using System;
 
 namespace Partnerly.Controllers
 {
     public class DashboardController : _BaseController
     {
         private readonly INotificationService _notificationService;
-        public DashboardController(IEventBus eventBus, IUserService userService, ICurrentUserService currentUser, ILogService logService, INotificationService notificationService)
+        private readonly ISystemSettingsService _systemSettingsService;
+        public DashboardController(IEventBus eventBus, IUserService userService, ICurrentUserService currentUser, ILogService logService, INotificationService notificationService, ISystemSettingsService systemSettingsService)
         : base(eventBus, userService, currentUser, logService)
         {
             _notificationService = notificationService;
+            _systemSettingsService = systemSettingsService;
         }
 
         public async Task<IActionResult> Index()
         {
+            string message = null;
+            if (User.Identity?.IsAuthenticated == true)
+            {
+                SystemSettings? setting = await _systemSettingsService.GetSetupByIDAsync(1);
+                message = setting?.IsMaintenanceMode == true ? Messages.SiteUnderMaintenanceMode : setting?.ScrollingText;
+            }
+            ViewData["ScrollingText"] = message;
+
             return View();
         }
 

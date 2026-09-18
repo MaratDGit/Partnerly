@@ -9,6 +9,7 @@ namespace Partnerly.Descriptors.Messages
         public const string RecordSaved = "Запись успешно сохранена!";
         public const string SupportSuccess = "Ваше сообщение отправлено. Мы свяжемся с вами вскоре.";
         public const string CaseCreationLimit = "Вы сегодня больше не можете открыть дело.";
+        public const string SiteUnderMaintenanceMode = "Сайт находится в режиме обслуживания.";
         #endregion
 
         #region Notifications

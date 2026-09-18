@@ -26,7 +26,7 @@ namespace Partnerly.Models.ViewModels
         public string? Subject { get; set; }
 
         [SupportTicketStatus]
-        [Required(ErrorMessage = $"{FieldsDisplayNames.Subject} {ErrorMessages.FieldRequired}")]
+        [Required(ErrorMessage = $"{FieldsDisplayNames.Message} {ErrorMessages.FieldRequired}")]
         [Display(Name = FieldsDisplayNames.Message)]
         public string? Message { get; set; }
 

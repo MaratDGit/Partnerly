@@ -7,7 +7,7 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>@ViewData["Title"] - Branch</title>
+    <title>@ViewData["Title"] - @TempData.Peek("appName")</title>
 
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
@@ -18,8 +18,8 @@
         <div class="container">
             <div class="logo">
                 <a asp-controller="Home" asp-action="Index" class="app-brand-link gap-2">
-                    <span><img src="~/favicon.png" alt="Logo" width="32" height="32" class="me-2" />@*@await Html.PartialAsync("../_Partials/_Macros")*@</span>
-                    <span>Branch</span>
+                    @* <span><img src="~/favicon.png" alt="Logo" width="32" height="32" class="me-2" /></span> *@
+                    <span>@TempData.Peek("appName")</span>
                 </a>
             </div>
         </div>

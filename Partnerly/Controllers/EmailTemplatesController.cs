@@ -227,7 +227,7 @@
             var users = await _emailTemplateService.GetAllTemplatesAsync();
             var data = users.Where(x => ids.Contains(x.Id)).ToList();
 
-            return await ExportToExcel(data, "Templates.xlsx");
+            return await ExportToExcel(data, "emailTemplates.xlsx");
         }
 
         [HttpPost]
@@ -235,7 +235,7 @@
         {
             //var allData = JsonSerializer.Deserialize<List<UserViewModel>>(data);
             var users = await _emailTemplateService.GetAllTemplatesAsync();
-            return await ExportToExcel(users, "Templates.xlsx");
+            return await ExportToExcel(users, "emailTemplates.xlsx");
         }
         #endregion
     }

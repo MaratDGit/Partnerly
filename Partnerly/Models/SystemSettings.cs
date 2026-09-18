@@ -38,6 +38,11 @@ namespace Partnerly.Models
         public string? TaskTickedID { get; set; }
         #endregion
 
+        #region ScrollingText
+        [Display(Name = "Scrolling Text")]
+        public string? ScrollingText { get; set; }
+        #endregion
+
         #region System Columns
         public string? Note { get; set; }
         public bool IsDeleted { get; set; } = false;
