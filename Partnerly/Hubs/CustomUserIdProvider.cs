@@ -7,7 +7,6 @@ namespace Partnerly.Hubs
     {
         public string? GetUserId(HubConnectionContext connection)
         {
-            // Возвращаем ID пользователя из клейма NameIdentifier (ClaimTypes.NameIdentifier)
             return connection.User?.FindFirst(ClaimTypes.NameIdentifier)?.Value;
         }
     }

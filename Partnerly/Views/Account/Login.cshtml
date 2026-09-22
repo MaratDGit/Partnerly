@@ -1,7 +1,7 @@
 ﻿@model Partnerly.Models.ViewModels.LoginViewModel
 @{
   Layout = "_BlankLayout";
-  ViewData["Title"] = "Вход";
+  ViewData["Title"] = "Log in";
 }
 
 @section PageStyles {
@@ -38,7 +38,7 @@
 
           <form id="formAuthentication" class="mb-2" asp-action="Login" method="POST">
             <div class="form-floating mb-2">
-                <input asp-for="Email" class="form-control" id="email" placeholder="Введите свой адрес электронной почты" autofocus/>
+                            <input asp-for="Email" class="form-control" id="email" placeholder=@Localizer["Enteryouremailaddress"] autofocus />
                 <label asp-for="Email"></label>
                 <span asp-validation-for="Email" class="text-danger"></span>
             </div>
@@ -57,19 +57,19 @@
                   <label asp-for="RememberMe" class="form-check-label"></label>
                 </div>
                 <a asp-controller="Account" asp-action="ForgotPassword">
-                  <span>Забыли пароль?</span>
+                                    <span>@Localizer["Forgotyourpassword"]</span>
                 </a>
               </div>
             </div>
             <div class="mb-6">
-              <button class="btn btn-primary d-grid w-100" type="submit">Войти</button>
+              <button class="btn btn-primary d-grid w-100" type="submit">@Localizer["Login"]</button>
             </div>
           </form>
 
           <p class="text-center">
-            <span>Впервые на нашей платформе?</span>
+                        <span>@Localizer["Newtoourplatform"]</span>
             <a asp-controller="Account" asp-action="Register">
-              <span>Создать аккаунт</span>
+                            <span>@Localizer["Createanaccount"]</span>
             </a>
           </p>
         </div>
@@ -81,14 +81,14 @@
   <div class="modal-dialog">
     <div class="modal-content">
       <div class="modal-header">
-        <h5 class="modal-title" id="emailErrorModalLabel">Ошибка</h5>
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Закрыть"></button>
+        <h5 class="modal-title" id="emailErrorModalLabel">@Localizer["Error"]</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="@Localizer["Close"]"></button>
       </div>
       <div class="modal-body">
         @ViewBag.EmailConfirmationMessage
       </div>
       <div class="modal-footer">
-        <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Ок</button>
+                    <button type="button" class="btn btn-primary" data-bs-dismiss="modal">@Localizer["OK"]</button>
       </div>
     </div>
   </div>

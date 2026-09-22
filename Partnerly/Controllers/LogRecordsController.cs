@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Localization;
 using Partnerly.Descriptors.Attributes;
 using Partnerly.Descriptors.Attributes.BaseAttributes;
 using Partnerly.Descriptors.Messages;
@@ -16,8 +17,8 @@ namespace Partnerly.Controllers
     [ClaimAuthorize(ClaimTypes.Role, RoleTypeAttribute.Admin)]
     public class LogRecordsController : _BaseController
     {
-        public LogRecordsController(IEventBus eventBus, IUserService userService, ICurrentUserService currentUser, ILogService logService)
-        : base(eventBus, userService, currentUser, logService)
+        public LogRecordsController(IEventBus eventBus, IUserService userService, ICurrentUserService currentUser, ILogService logService, IStringLocalizer<SharedResource> localizer)
+        : base(eventBus, userService, currentUser, logService, localizer)
         {
         }
 

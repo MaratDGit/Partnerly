@@ -5,17 +5,17 @@ namespace Partnerly.Models.ViewModels
 {
     public class LoginViewModel
     {
-        [Required(ErrorMessage = ErrorMessages.EmailRequired)]
         [EmailAddress()]
-        [Display(Name = FieldsDisplayNames.Email)]
+        [Required(ErrorMessageResourceType = typeof(ErrorMessages), ErrorMessageResourceName = nameof(ErrorMessages.EmailRequired))]
+        [Display(Name = nameof(FieldsDisplayNames.Email), ResourceType = typeof(FieldsDisplayNames))]
         public string? Email { get; set; }
 
-        [Required(ErrorMessage = ErrorMessages.PasswordRequired)]
         [DataType(DataType.Password)]
-        [Display(Name = FieldsDisplayNames.Password)]
+        [Required(ErrorMessageResourceType = typeof(ErrorMessages), ErrorMessageResourceName = nameof(ErrorMessages.PasswordRequired))]
+        [Display(Name = nameof(FieldsDisplayNames.Password), ResourceType = typeof(FieldsDisplayNames))]
         public string? Password { get; set; }
 
-        [Display(Name = FieldsDisplayNames.RememberMe)]
+        [Display(Name = nameof(FieldsDisplayNames.RememberMe), ResourceType = typeof(FieldsDisplayNames))]
         public bool RememberMe { get; set; }
     }
 }

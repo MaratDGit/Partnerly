@@ -2,13 +2,13 @@
 @await Html.PartialAsync("_Toast")
 
 @{
-    ViewData["Title"] = "Редактировать задачу";
+    ViewData["Title"] = "Edit task";
     Layout = "_ContentNavbarLayout";
 }
 
 <div class="card">
     <div class="card-header justify-content-between">
-        <h5>@ViewData["Title"]</h5>
+        <h5>@Localizer["Edittask"]</h5>
     </div>
 
     <div class="card-body">
@@ -46,9 +46,9 @@
                        placeholder=" "
                        data-lookup="true"
                        data-lookup-source="/SupportTickets/GetLookupList"
-                       data-lookup-title="Задачи"
+                       data-lookup-title=@Localizer["Tasks"]
                        data-edit-url-base="/SupportTickets/Edit/"
-                       data-lookup-column-names="ticketID:Номер,subject:Заголовок,status:Статус,isRead:Прочитано"
+                       data-lookup-column-names="ticketID:@Localizer["Number"],subject:@Localizer["Subject"],status:@Localizer["Status"],isRead:@Localizer["IsRead"]"
                        data-lookup-display-field="Subject"
                        data-lookup-param="fieldName"
                        data-lookup-param-value="Subject" autofocus/>
@@ -79,9 +79,9 @@
                        placeholder=" "
                        data-lookup="true"
                        data-lookup-source="/Users/GetLookupList"
-                       data-lookup-title="Пользователи"
+                       data-lookup-title=@Localizer["Users"]
                        data-edit-url-base=""
-                       data-lookup-column-names="name:Название,email:Электронная почта"
+                       data-lookup-column-names="name:@Localizer["Name"],email:@Localizer["Email"]"
                        data-lookup-display-field="AssignedToName"
                        data-lookup-param="fieldName"
                        data-lookup-param-value="Name" 

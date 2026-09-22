@@ -11,17 +11,17 @@ namespace Partnerly.Models.ViewModels
         public Guid Id { get; set; }
 
         [EmailTemplateName]
-        [Required(ErrorMessage = $"{FieldsDisplayNames.TemplateType} {ErrorMessages.FieldRequired}")]
-        [Display(Name = FieldsDisplayNames.TemplateType)]
+        [Required(ErrorMessageResourceType = typeof(ErrorMessages), ErrorMessageResourceName = nameof(ErrorMessages.FieldRequired))]
+        [Display(Name = nameof(FieldsDisplayNames.TemplateType), ResourceType = typeof(FieldsDisplayNames))]
         public string? Name { get; set; }
         public string? NameView { get => AttributeDropdownHelper.GetValue<EmailTemplateNameAttribute>(Name) ?? Name; }
 
-        [Required(ErrorMessage = $"{FieldsDisplayNames.Subject} {ErrorMessages.FieldRequired}")]
-        [Display(Name = FieldsDisplayNames.Subject)]
+        [Required(ErrorMessageResourceType = typeof(ErrorMessages), ErrorMessageResourceName = nameof(ErrorMessages.FieldRequired))]
+        [Display(Name = nameof(FieldsDisplayNames.Subject), ResourceType = typeof(FieldsDisplayNames))]
         public string? Subject { get; set; }
 
-        [Required(ErrorMessage = $"{FieldsDisplayNames.BodyHTML} {ErrorMessages.FieldRequired}")]
-        [Display(Name = FieldsDisplayNames.BodyHTML)]
+        [Required(ErrorMessageResourceType = typeof(ErrorMessages), ErrorMessageResourceName = nameof(ErrorMessages.FieldRequired))]
+        [Display(Name = nameof(FieldsDisplayNames.BodyHTML), ResourceType = typeof(FieldsDisplayNames))]
         public string? BodyHtml { get; set; }
 
         public string? BodyPlain { get; set; }

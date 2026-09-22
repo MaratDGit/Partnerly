@@ -100,7 +100,7 @@ namespace Partnerly.Descriptors.Messages
         public const string Edit = "Edit";
 
         // Support Ticket statuses
-        public const string New = "Новый";
-        public const string InProgress = "В ходе выполнения";
+        //public const string New = "Новый";
+        //public const string InProgress = "В ходе выполнения";
     }
 }

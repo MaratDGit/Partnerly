@@ -7,24 +7,24 @@ namespace Partnerly.Models.ViewModels
     public class ChangePasswordViewModel
     {
         #region Email
-        [Required(ErrorMessage = ErrorMessages.EmailRequired)]
         [EmailAddress]
-        [Display(Name = FieldsDisplayNames.Email)]
+        [Required(ErrorMessageResourceType = typeof(ErrorMessages), ErrorMessageResourceName = nameof(ErrorMessages.EmailRequired))]
+        [Display(Name = nameof(FieldsDisplayNames.Email), ResourceType = typeof(FieldsDisplayNames))]
         public string? Email { get; set; }
         #endregion
         #region Password
-        [Required(ErrorMessage = ErrorMessages.PasswordRequired)]
         [DataType(DataType.Password)]
         [PasswordValidation]
-        [Display(Name = FieldsDisplayNames.Password)]
+        [Required(ErrorMessageResourceType = typeof(ErrorMessages), ErrorMessageResourceName = nameof(ErrorMessages.PasswordRequired))]
+        [Display(Name = nameof(FieldsDisplayNames.Password), ResourceType = typeof(FieldsDisplayNames))]
         public string? Password { get; set; }
         #endregion
 
         #region ConfirmPassword
-        [Required(ErrorMessage = $"{FieldsDisplayNames.ConfirmPassword} {ErrorMessages.FieldRequired}")]
         [DataType(DataType.Password)]
-        [Display(Name = FieldsDisplayNames.ConfirmPassword)]
-        [Compare("Password", ErrorMessage = ErrorMessages.CompareConfirmPassword)]
+        [Compare("Password", ErrorMessageResourceType = typeof(ErrorMessages), ErrorMessageResourceName = nameof(ErrorMessages.CompareConfirmPassword))]
+        [Required(ErrorMessageResourceType = typeof(ErrorMessages), ErrorMessageResourceName = nameof(ErrorMessages.FieldRequired))]
+        [Display(Name = nameof(FieldsDisplayNames.ConfirmPassword), ResourceType = typeof(FieldsDisplayNames))]
         public string? ConfirmPassword { get; set; }
         #endregion
     }

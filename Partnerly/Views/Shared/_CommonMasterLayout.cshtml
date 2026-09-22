@@ -42,7 +42,7 @@
     <div id="globalLoader" style="display:none;">
         <div class="loader-container">
             <div class="spinner"></div>
-            <div class="loader-text">Загрузка...</div>
+            <div class="loader-text">@Localizer["LookupLoading"]</div>
         </div>
     </div>
 
@@ -63,6 +63,47 @@
 
   <!-- jQuery -->
 <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+
+<script>
+     const dateLocalization = {
+        culture: '@CultureInfo.CurrentUICulture.Name',
+        justNow: '@Localizer["JustNow"]',
+        minuteAgo: '@Localizer["MinuteAgo"]',
+        minutesAgo: '@Localizer["MinutesAgo"]',
+        hourAgo: '@Localizer["HourAgo"]',
+        hoursAgo: '@Localizer["HoursAgo"]'
+    };
+
+    const lookupLocalization = {
+        selectRecord: @Html.Raw(Json.Serialize(Localizer["LookupSelectRecord"].Value)),
+        search: @Html.Raw(Json.Serialize(Localizer["LookupSearch"].Value)),
+        loading: @Html.Raw(Json.Serialize(Localizer["LookupLoading"].Value)),
+        noData: @Html.Raw(Json.Serialize(Localizer["LookupNoData"].Value)),
+        loadError: @Html.Raw(Json.Serialize(Localizer["LookupLoadError"].Value))
+    };
+
+        const dataTableLocalization = {
+        filters: @Html.Raw(Json.Serialize(Localizer["DataTableFilters"].Value)),
+        close: @Html.Raw(Json.Serialize(Localizer["Close"].Value)),
+        cancel: @Html.Raw(Json.Serialize(Localizer["Cancel"].Value)),
+        apply: @Html.Raw(Json.Serialize(Localizer["DataTableApply"].Value)),
+        reset: @Html.Raw(Json.Serialize(Localizer["DataTableReset"].Value)),
+        exportExcel: @Html.Raw(Json.Serialize(Localizer["DataTableExportExcel"].Value)),
+        exportAll: @Html.Raw(Json.Serialize(Localizer["DataTableExportAll"].Value)),
+        exportSelected: @Html.Raw(Json.Serialize(Localizer["DataTableExportSelected"].Value)),
+        search: @Html.Raw(Json.Serialize(Localizer["DataTableSearch"].Value)),
+        filteredRecords: @Html.Raw(Json.Serialize(Localizer["DataTableFilteredRecords"].Value)),
+        totalRecords: @Html.Raw(Json.Serialize(Localizer["DataTableTotalRecords"].Value)),
+        shownRecords: @Html.Raw(Json.Serialize(Localizer["DataTableShownRecords"].Value)),
+        filterActive: @Html.Raw(Json.Serialize(Localizer["DataTableFilterActive"].Value)),
+        from: @Html.Raw(Json.Serialize(Localizer["DataTableFrom"].Value)),
+        to: @Html.Raw(Json.Serialize(Localizer["DataTableTo"].Value)),
+        all: @Html.Raw(Json.Serialize(Localizer["DataTableAll"].Value)),
+        yes: @Html.Raw(Json.Serialize(Localizer["DataTableYes"].Value)),
+        no: @Html.Raw(Json.Serialize(Localizer["DataTableNo"].Value)),
+        actions: @Html.Raw(Json.Serialize(Localizer["DataTableActions"].Value))
+    };
+</script>
 
  <script src="~/assets/js/spiner.js"></script>
  <script src="~/js/field-lookup.js"></script>

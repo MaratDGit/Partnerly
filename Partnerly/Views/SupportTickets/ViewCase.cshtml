@@ -2,7 +2,7 @@
 @await Html.PartialAsync("_Toast")
 
 @{
-    ViewData["Title"] = "Просмотреть задачу";
+    ViewData["Title"] = "View Case";
     Layout = "_ContentNavbarLayout";
     bool hasRole = ViewBag?.RoleType == Partnerly.Descriptors.Attributes.RoleTypeAttribute.Delete || ViewBag?.RoleType == Partnerly.Descriptors.Attributes.RoleTypeAttribute.Update;
     bool hasAdminRole = ViewBag?.RoleType == Partnerly.Descriptors.Attributes.RoleTypeAttribute.Delete;
@@ -30,9 +30,9 @@
             Back = new Partnerly.Models.ViewModels.ActionBack(id: Model.Id,visible: true, fromController: "SupportTickets", toController: "SupportTickets", fromAction: "ViewCase", toAction: "Index"),
             Menu = new Partnerly.Models.ViewModels.ActionMenu(visible: hasRole),
             MenuActions = new List<Partnerly.Models.ViewModels.MenuItemAction> {
-                new Partnerly.Models.ViewModels.MenuItemAction(visible:hasRole, icon: "bx bx-fast-forward", displayName: "Начинать", fromController: "SupportTickets", toController: "SupportTickets", fromAction: "ViewCase", toAction: "StartCase", routID: @Model.Id),
-                new Partnerly.Models.ViewModels.MenuItemAction(visible:hasRole, icon: "bx bx-x", displayName: "Закрыть задачу", fromController: "SupportTickets", toController: "SupportTickets", fromAction: "ViewCase", toAction: "CloseCase", routID: @Model.Id),
-                new Partnerly.Models.ViewModels.MenuItemAction(visible:hasAdminRole, icon: "bx bx-reply", displayName: "Назначить", fromController: "SupportTickets", toController: "SupportTickets", fromAction: "ViewCase", toAction: "Edit", routID: @Model.Id),
+                new Partnerly.Models.ViewModels.MenuItemAction(visible:hasRole, icon: "bx bx-fast-forward", displayName: Localizer["Start"], fromController: "SupportTickets", toController: "SupportTickets", fromAction: "ViewCase", toAction: "StartCase", routID: @Model.Id),
+                new Partnerly.Models.ViewModels.MenuItemAction(visible:hasRole, icon: "bx bx-x", displayName: Localizer["Close"], fromController: "SupportTickets", toController: "SupportTickets", fromAction: "ViewCase", toAction: "CloseCase", routID: @Model.Id),
+                new Partnerly.Models.ViewModels.MenuItemAction(visible:hasAdminRole, icon: "bx bx-reply", displayName: Localizer["Assignto"], fromController: "SupportTickets", toController: "SupportTickets", fromAction: "ViewCase", toAction: "Edit", routID: @Model.Id),
             }
         })
         @if (@Model.Status == Partnerly.Descriptors.Attributes.SupportTicketStatusAttribute.InProgress || @Model.Status == Partnerly.Descriptors.Attributes.SupportTicketStatusAttribute.Closed)
@@ -46,7 +46,7 @@
                     <div class="d-flex justify-content-between align-items-center mb-3">
                         <small class="text-muted">
                         <i class="bx bx-calendar-event me-1 text-primary"></i>
-                        @(Model.CreatedDate.Value.ToString("dd MMMM yyyy", new System.Globalization.CultureInfo("ru-RU")))
+                        @(Model.CreatedDate.Value.ToString("dd MMMM yyyy", new System.Globalization.CultureInfo(@CultureInfo.CurrentUICulture.Name)))
                         </small>
                         <span class="task-id">@Model.TicketID</span>
                     </div>
@@ -61,11 +61,11 @@
                     <div class="d-flex justify-content-between align-items-center border-top pt-3">
                         <div class="small text-muted">
                         <i class="bi bi-person-fill text-primary me-1"></i>
-                        <strong>От:</strong> @Model.CreatorName
+                        <strong>@Localizer["From"]:</strong> @Model.CreatorName
                         </div>
                         <div class="small text-muted">
                         <i class="bi bi-person-fill text-success me-1"></i>
-                        <strong>Кому:</strong> @Model.AssignedToName
+                        <strong>@Localizer["To"]:</strong> @Model.AssignedToName
                         </div>
                     </div>
                 </div>

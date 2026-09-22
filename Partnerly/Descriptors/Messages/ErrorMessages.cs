@@ -17,32 +17,59 @@ namespace Partnerly.Descriptors.Messages
         #endregion
 
         #region Views errors
-        public const string ReferrerUserCannotBeFoundOrInactive = "Реферер-пользователь не найден или неактивен";
-        public const string IncorectPasswordOrUsername = "Неверный логин или пароль";
-        public const string IncorectPassword = "Неверный пароль";
-        public const string IncorectEmail = "Неверный Email";
-        public const string UserAccessDenied = "у пользователя нету доступа";
-        public const string FieldRequired = "oбязательное поле";
-        public const string UniqueValue = "с таким именем уже существует";
-        public const string CannotDeleteSystemRecords = "Вы не можете удалить системное рекорды";
-        public const string TypeValidPhoneNumber = "Введите правильный номер в формате +374 XX XXXXXX";
-        public const string InvalidRefferalCode = "Такого реферального кода не существует";
-        public const string UserWithEmailArleadyExist = "Пользователь с таким Email уже существует";
-        public const string UserWithPhoneArleadyExist = "Пользователь с таким телефоном уже существует";
-        public const string ReadPolicyAndTerms = "Необходимо согласиться с условиями";
-        public const string StringMaxLength = "Длина строки должна быть до {0} символов";
-        public const string StringMinMaxLength = "Длина строки должна быть от {0} до {1} символов";
-        public const string EmailRequired = $"{FieldsDisplayNames.Email} {FieldRequired}";
-        public const string PasswordRequired = $"{FieldsDisplayNames.Password} {FieldRequired}";
-        public const string CompareConfirmPassword = "Пароли не совпадают";
-        public const string PasswordRequireDigit = "Пароль должен содержать хотя бы одну цифру";
-        public const string PasswordRequireLowercase = "Пароль должен содержать хотя бы одну строчную букву";
-        public const string PasswordRequireUppercase = "Пароль должен содержать хотя бы одну заглавную букву";
-        public const string PasswordRequireSpecial = "Пароль должен содержать хотя бы один спецсимвол";
-        public const string LoginEmailConfirmationMessage = "Чтобы войти в систему, пожалуйста, подтвердите адрес вашей электронной почты. Мы отправили письмо с инструкциями на указанный вами адрес. Проверьте почту и перейдите по ссылке подтверждения.";
-        public const string UserIsBlocked = "Пользователь заблокирован";
-        public const string LinkIsExpired = "Ссылка больше недействительна";
-        public const string LinkExpiredDetail = "Похоже, что срок действия этой ссылки закончился. Чтобы завершить подтверждение email, получите новую ссылку.";
+        //public const string ReferrerUserCannotBeFoundOrInactive = "Реферер-пользователь не найден или неактивен";
+        //public const string IncorectPasswordOrUsername = "Неверный логин или пароль";
+        //public const string IncorectPassword = "Неверный пароль";
+        //public const string IncorectEmail = "Неверный Email";
+        //public const string UserAccessDenied = "у пользователя нету доступа";
+        //public const string FieldRequired = "oбязательное поле";
+        //public const string UniqueValue = "с таким именем уже существует";
+        //public const string CannotDeleteSystemRecords = "Вы не можете удалить системное рекорды";
+        //public const string TypeValidPhoneNumber = "Введите правильный номер в формате +374 XX XXXXXX";
+        //public const string InvalidRefferalCode = "Такого реферального кода не существует";
+        //public const string UserWithEmailArleadyExist = "Пользователь с таким Email уже существует";
+        //public const string UserWithPhoneArleadyExist = "Пользователь с таким телефоном уже существует";
+        //public const string ReadPolicyAndTerms = "Необходимо согласиться с условиями";
+        //public const string StringMaxLength = "Длина строки должна быть до {0} символов";
+        //public const string StringMinMaxLength = "Длина строки должна быть от {0} до {1} символов";
+        //public const string EmailRequired = $"{FieldsDisplayNames.Email} {FieldRequired}";
+        //public const string PasswordRequired = $"{FieldsDisplayNames.Password} {FieldRequired}";
+        //public const string CompareConfirmPassword = "Пароли не совпадают";
+        //public const string PasswordRequireDigit = "Пароль должен содержать хотя бы одну цифру";
+        //public const string PasswordRequireLowercase = "Пароль должен содержать хотя бы одну строчную букву";
+        //public const string PasswordRequireUppercase = "Пароль должен содержать хотя бы одну заглавную букву";
+        //public const string PasswordRequireSpecial = "Пароль должен содержать хотя бы один спецсимвол";
+        //public const string LoginEmailConfirmationMessage = "Чтобы войти в систему, пожалуйста, подтвердите адрес вашей электронной почты. Мы отправили письмо с инструкциями на указанный вами адрес. Проверьте почту и перейдите по ссылке подтверждения.";
+        //public const string UserIsBlocked = "Пользователь заблокирован";
+        //public const string LinkIsExpired = "Ссылка больше недействительна";
+        //public const string LinkExpiredDetail = "Похоже, что срок действия этой ссылки закончился. Чтобы завершить подтверждение email, получите новую ссылку.";
+
+        public static string ReferrerUserCannotBeFoundOrInactive => Messages.Get(nameof(ReferrerUserCannotBeFoundOrInactive));
+        public static string IncorectPasswordOrUsername => Messages.Get(nameof(IncorectPasswordOrUsername));
+        public static string IncorectPassword => Messages.Get(nameof(IncorectPassword));
+        public static string IncorectEmail => Messages.Get(nameof(IncorectEmail));
+        public static string UserAccessDenied => Messages.Get(nameof(UserAccessDenied));
+        public static string FieldRequired => Messages.Get(nameof(FieldRequired));
+        public static string UniqueValue => Messages.Get(nameof(UniqueValue));
+        public static string CannotDeleteSystemRecords => Messages.Get(nameof(CannotDeleteSystemRecords));
+        public static string TypeValidPhoneNumber => Messages.Get(nameof(TypeValidPhoneNumber));
+        public static string InvalidRefferalCode => Messages.Get(nameof(InvalidRefferalCode));
+        public static string UserWithEmailArleadyExist => Messages.Get(nameof(UserWithEmailArleadyExist));
+        public static string UserWithPhoneArleadyExist => Messages.Get(nameof(UserWithPhoneArleadyExist));
+        public static string ReadPolicyAndTerms => Messages.Get(nameof(ReadPolicyAndTerms));
+        public static string StringMaxLength => Messages.Get(nameof(StringMaxLength));
+        public static string StringMinMaxLength => Messages.Get(nameof(StringMinMaxLength));
+        public static string EmailRequired => Messages.Get(nameof(EmailRequired));
+        public static string PasswordRequired => Messages.Get(nameof(PasswordRequired));
+        public static string CompareConfirmPassword => Messages.Get(nameof(CompareConfirmPassword));
+        public static string PasswordRequireDigit => Messages.Get(nameof(PasswordRequireDigit));
+        public static string PasswordRequireLowercase => Messages.Get(nameof(PasswordRequireLowercase));
+        public static string PasswordRequireUppercase => Messages.Get(nameof(PasswordRequireUppercase));
+        public static string PasswordRequireSpecial => Messages.Get(nameof(PasswordRequireSpecial));
+        public static string LoginEmailConfirmationMessage => Messages.Get(nameof(LoginEmailConfirmationMessage));
+        public static string UserIsBlocked => Messages.Get(nameof(UserIsBlocked));
+        public static string LinkIsExpired => Messages.Get(nameof(LinkIsExpired));
+        public static string LinkExpiredDetail => Messages.Get(nameof(LinkExpiredDetail));
         #endregion
     }
 }

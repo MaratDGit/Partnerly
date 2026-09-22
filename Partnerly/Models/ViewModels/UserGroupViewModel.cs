@@ -10,13 +10,12 @@ namespace Partnerly.Models.ViewModels
         public Guid Id { get; set; }
 
         [CusromStringLenght(min: 2, max: 15)]
-        [Required(ErrorMessage = $"{FieldsDisplayNames.Name} {ErrorMessages.FieldRequired}")]
-        //[Unique(typeof(UserGroup), nameof(UserGroup.Name), ErrorMessage = $"{FieldsDisplayNames.Group} {ErrorMessages.UniqueValue}")]
-        [Display(Name = FieldsDisplayNames.Name)]
+        [Required(ErrorMessageResourceType = typeof(ErrorMessages), ErrorMessageResourceName = nameof(ErrorMessages.FieldRequired))]
+        [Display(Name = nameof(FieldsDisplayNames.Name), ResourceType = typeof(FieldsDisplayNames))]
         public string? Name { get; set; }
 
         [CusromStringLenght(max: 100)]
-        [Display(Name = FieldsDisplayNames.Description)]
+        [Display(Name = nameof(FieldsDisplayNames.Description), ResourceType = typeof(FieldsDisplayNames))]
         public string? Description { get; set; }
 
         public List<string> MembersGuids { get; set; } = new List<string>();

@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Localization;
 using Partnerly.Descriptors.Attributes;
 using Partnerly.Descriptors.Attributes.BaseAttributes;
 using Partnerly.Descriptors.Messages;
@@ -18,8 +19,8 @@ namespace Partnerly.Controllers
     public class UsersController : _BaseController
     {
         protected readonly IRoleService _roleService;
-        public UsersController(IEventBus eventBus, IRoleService roleService, IUserService userService, ICurrentUserService currentUser, ILogService logService)
-        : base(eventBus, userService, currentUser, logService)
+        public UsersController(IEventBus eventBus, IRoleService roleService, IUserService userService, ICurrentUserService currentUser, ILogService logService, IStringLocalizer<SharedResource> localizer)
+        : base(eventBus, userService, currentUser, logService, localizer)
         {
             _roleService = roleService;
         }
@@ -270,7 +271,7 @@ namespace Partnerly.Controllers
                 return new List<GridField>
                 {
                     new GridField { FieldName = "select", DisplayName = $"", DefaultValue = false, Type = "checkbox", IsVisible = base.HasPermision(RoleTypeAttribute.Delete)},
-                    new GridField { FieldName = "userName", DisplayName = $"{FieldsDisplayNames.FirstName} {FieldsDisplayNames.LastName}", LinkTemplate = "/Users/Edit/{id}" },
+                    new GridField { FieldName = "userName", DisplayName = $"{FieldsDisplayNames.FullName}", LinkTemplate = "/Users/Edit/{id}" },
                     new GridField { FieldName = "email", DisplayName = FieldsDisplayNames.Email, LinkTemplate = "/Users/Edit/{id}" },
                     new GridField { FieldName = "myReferralCode", DisplayName = FieldsDisplayNames.ReferrerCode, LinkTemplate = "/Users/Edit/{id}" },
                     new GridField { FieldName = "referrerName", DisplayName = FieldsDisplayNames.ReffererName, DefaultValue = "" },

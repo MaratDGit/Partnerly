@@ -128,7 +128,7 @@
     @if (Model?.Note?.Visible == true)
     {
         <div class="right-buttons">
-        <button type="button" class="btn btn-note" title="Добавить заметку"
+            <button type="button" class="btn btn-note" title=@Localizer["Addanote"]
             data-bs-toggle="modal" data-bs-target="#noteModal">
             <i class="bx bx-note fs-3"></i>
         </button>
@@ -140,21 +140,21 @@
   <div class="modal-dialog modal-dialog-centered">
     <div class="modal-content rounded-3 shadow-lg">
       <div class="modal-header py-2">
-        <h6 class="modal-title" id="noteModalLabel">Заметка к документу</h6>
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Закрыть"></button>
+                <h6 class="modal-title" id="noteModalLabel">@Localizer["Notetothedocument"]</h6>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label=@Localizer["Close"]></button>
       </div>
 
       <div class="modal-body py-2">
         <div class="form-floating">
-          <textarea id="noteText" asp-for="@Model.Note.Note" class="form-control" placeholder="Введите заметку..." style="height: 120px; font-size: 0.9rem;"></textarea>
+             <textarea id="noteText" asp-for="@Model.Note.Note" class="form-control" placeholder=@Localizer["Enteranote"] style="height: 120px; font-size: 0.9rem;"></textarea>
         </div>
       </div>
 
       <div class="modal-footer d-flex justify-content-between py-2">
-        <button type="button" class="btn btn-outline-secondary btn-sm" id="clearNoteBtn">Очистить</button>
+                <button type="button" class="btn btn-outline-secondary btn-sm" id="clearNoteBtn">@Localizer["Clear"]</button>
         <div>
-          <button type="button" class="btn btn-secondary btn-sm" data-bs-dismiss="modal" id="cancelNoteBtn">Отмена</button>
-          <button type="button" class="btn btn-primary btn-sm" id="saveNoteBtn">OK</button>
+                    <button type="button" class="btn btn-secondary btn-sm" data-bs-dismiss="modal" id="cancelNoteBtn">@Localizer["Cancel"]</button>
+                    <button type="button" class="btn btn-primary btn-sm" id="saveNoteBtn">@Localizer["OK"]</button>
         </div>
       </div>
     </div>

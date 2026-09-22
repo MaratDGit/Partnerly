@@ -1,7 +1,7 @@
 ﻿@model Partnerly.Models.ViewModels.RegisterViewModel
 @{
   Layout = "_BlankLayout";
-  ViewData["Title"] = "Зарегистрироваться";
+  ViewData["Title"] = "Sign up";
 }
 
 @section PageStyles {
@@ -40,13 +40,13 @@
                 }
                 else
                 {
-                    <input asp-for="ReferrerCode" class="form-control" id="referrerCode" name="referrerCode" placeholder="Реферальный код пригласителя"/>
+                                <input asp-for="ReferrerCode" class="form-control" id="referrerCode" name="referrerCode" placeholder=@Localizer["Referrersreferralcode"] />
                 }
                 <label asp-for="ReferrerCode"></label>
                 <span asp-validation-for="ReferrerCode" class="text-danger"></span>
             </div>
             <div class="form-floating mb-2">
-               <input asp-for="Email" class="form-control" id="email" name="email" placeholder="Введите свой адрес электронной почты"/>
+                            <input asp-for="Email" class="form-control" id="email" name="email" placeholder=@Localizer["Enteryouremailaddress"] />
                <label asp-for="Email"></label>
                <span asp-validation-for="Email" class="text-danger"></span>
             </div>
@@ -76,21 +76,21 @@
               <div class="form-check mb-0 ms-2">
                  <input asp-for="TermsConditions" class="form-check-input" type="checkbox" id="terms-conditions"/>
                 <label class="form-check-label" for="terms-conditions">
-                  Я согласен с
-                  <a asp-controller="Home" asp-action="Privacy" target="_blank">Политика конфиденциальности и условия</a>
+                                    @Localizer["Iagreewith"]
+                          <a asp-controller="Home" asp-action="Privacy" target="_blank">@Localizer["PrivacyPolicyandTerms"]</a>
                 </label>
               </div>
               <span asp-validation-for="TermsConditions" class="text-danger"></span>
             </div>
             <button class="btn btn-primary d-grid w-100">
-              Зарегистрироваться
+                            @Localizer["Signup"]
             </button>
           </form>
 
           <p class="text-center">
-            <span>У вас уже есть аккаунт?</span>
+                        <span>@Localizer["Doyoualreadhaveanaccount"]</span>
             <a asp-action="Login">
-              <span>Войти</span>
+              <span>@Localizer["Login"]</span>
             </a>
           </p>
         </div>

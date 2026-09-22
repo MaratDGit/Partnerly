@@ -8,62 +8,62 @@ namespace Partnerly.Models.ViewModels
     {
         #region FullName
         [CusromStringLenght(min: 4, max: 50)]
-        [Required(ErrorMessage = $"{FieldsDisplayNames.FirstName} {FieldsDisplayNames.LastName} {ErrorMessages.FieldRequired}")]
-        [Display(Name = $"{FieldsDisplayNames.FirstName} {FieldsDisplayNames.LastName}")]
+        [Required(ErrorMessageResourceType = typeof(ErrorMessages), ErrorMessageResourceName = nameof(ErrorMessages.FieldRequired))]    
+        [Display(Name = nameof(FieldsDisplayNames.FullName), ResourceType = typeof(FieldsDisplayNames))]
         public string? FullName { get; set; }
         #endregion
         #region FirstName
         [CusromStringLenght(min:4, max: 20)]
         //[Required(ErrorMessage = $"{FieldsDisplayNames.FirstName} {ErrorMessages.FieldRequired}")]
-        [Display(Name = FieldsDisplayNames.FirstName)]
+        [Display(Name = nameof(FieldsDisplayNames.FirstName), ResourceType = typeof(FieldsDisplayNames))]
         public string? FirstName { get; set; }
         #endregion
         #region LastName
         [CusromStringLenght(min: 4, max: 20)]
         //[Required(ErrorMessage = $"{FieldsDisplayNames.LastName} {ErrorMessages.FieldRequired}")]
-        [Display(Name = FieldsDisplayNames.LastName)]
+        [Display(Name = nameof(FieldsDisplayNames.LastName), ResourceType = typeof(FieldsDisplayNames))]
         public string? LastName { get; set; }
         #endregion
 
         #region ReferrerCode
         [CusromStringLenght(max: 8)]
-        [Display(Name = FieldsDisplayNames.ReferrerCode)]
+        [Display(Name = nameof(FieldsDisplayNames.ReferrerCode), ResourceType = typeof(FieldsDisplayNames))]
         public string? ReferrerCode { get; set; }
-        public bool FromReferrerLink { get; set; } = false; 
+        public bool FromReferrerLink { get; set; } = false;
         #endregion
 
         #region Email
-        [Required(ErrorMessage = ErrorMessages.EmailRequired)]
+        [Required(ErrorMessageResourceType = typeof(ErrorMessages), ErrorMessageResourceName = nameof(ErrorMessages.EmailRequired))]
         [EmailAddress]
-        [Display(Name = FieldsDisplayNames.Email)]
+        [Display(Name = nameof(FieldsDisplayNames.Email), ResourceType = typeof(FieldsDisplayNames))]
         public string? Email { get; set; }
         #endregion
 
         #region Phone
-        [Required(ErrorMessage = $"{FieldsDisplayNames.Phone} {ErrorMessages.FieldRequired}")]
-        [ArmenianPhone(ErrorMessage = ErrorMessages.TypeValidPhoneNumber)]
-        [Display(Name = FieldsDisplayNames.Phone)]
+        [Required(ErrorMessageResourceType = typeof(ErrorMessages), ErrorMessageResourceName = nameof(ErrorMessages.FieldRequired))]
+        [ArmenianPhone(ErrorMessageResourceType = typeof(ErrorMessages), ErrorMessageResourceName = nameof(ErrorMessages.TypeValidPhoneNumber))]
+        [Display(Name = nameof(FieldsDisplayNames.Phone), ResourceType = typeof(FieldsDisplayNames))]
         public string? Phone { get; set; }
         #endregion
 
         #region Password
-        [Required(ErrorMessage = ErrorMessages.PasswordRequired)]
         [DataType(DataType.Password)]
         [PasswordValidation]
-        [Display(Name = FieldsDisplayNames.Password)]
+        [Required(ErrorMessageResourceType = typeof(ErrorMessages), ErrorMessageResourceName = nameof(ErrorMessages.PasswordRequired))]
+        [Display(Name = nameof(FieldsDisplayNames.Password), ResourceType = typeof(FieldsDisplayNames))]
         public string? Password { get; set; }
         #endregion
 
         #region ConfirmPassword
-        [Required(ErrorMessage = $"{FieldsDisplayNames.ConfirmPassword} {ErrorMessages.FieldRequired}")]
+        [Required(ErrorMessageResourceType = typeof(ErrorMessages), ErrorMessageResourceName = nameof(ErrorMessages.FieldRequired))]
         [DataType(DataType.Password)]
-        [Display(Name = FieldsDisplayNames.ConfirmPassword)]
-        [Compare("Password", ErrorMessage = ErrorMessages.CompareConfirmPassword)]
+        [Display(Name = nameof(FieldsDisplayNames.ConfirmPassword), ResourceType = typeof(FieldsDisplayNames))]
+        [Compare("Password", ErrorMessageResourceType = typeof(ErrorMessages), ErrorMessageResourceName = nameof(ErrorMessages.CompareConfirmPassword))]
         public string? ConfirmPassword { get; set; }
         #endregion
 
         #region TermsConditions
-        [Display(Name = FieldsDisplayNames.TermsConditions)]
+        [Display(Name = nameof(FieldsDisplayNames.TermsConditions), ResourceType = typeof(FieldsDisplayNames))]
         public bool TermsConditions { get; set; }
         #endregion
     }

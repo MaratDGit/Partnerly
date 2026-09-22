@@ -9,7 +9,7 @@
     <div class="authentication-inner">
       <div class="card px-sm-6 px-0">
         <div class="card-body">
-          <h2 class="text-danger">Ошибка.</h2>
+            <h2 class="text-danger">@Localizer["Error"]</h2>
             @if (Model.ShowRequestId)
             {
                 <p>
@@ -19,7 +19,7 @@
 
             <h3>@(Model.ErrorCode ?? "")</h3>
             <p>
-                У вас нет прав для просмотра этой страницы. Если вы считаете, что это ошибка — обратитесь к администратору.
+                        @Localizer["Youdonothavepermissionviewpage"]
             </p>
             <p>
                 <strong>@(Model.ErrorMessage)</strong>

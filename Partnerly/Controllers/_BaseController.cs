@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
+using Microsoft.Extensions.Localization;
 using OfficeOpenXml;
 using Partnerly.Descriptors.Attributes;
 using Partnerly.Descriptors.Messages;
@@ -17,14 +18,16 @@ namespace Partnerly.Controllers
         protected readonly IEventBus _eventBus;
         protected readonly IUserService _userService;
         protected readonly ICurrentUserService _currentUser;
-        protected readonly ILogService _logService;   
+        protected readonly ILogService _logService;
+        protected readonly IStringLocalizer<SharedResource> _localizer;
 
-        public _BaseController(IEventBus eventBus, IUserService userService, ICurrentUserService currentUser, ILogService logService)
+        public _BaseController(IEventBus eventBus, IUserService userService, ICurrentUserService currentUser, ILogService logService, IStringLocalizer<SharedResource> localizer)
         {
             _eventBus = eventBus;
             _userService = userService;
             _currentUser = currentUser;
             _logService = logService;
+            _localizer = localizer;
         }
         public override async Task OnActionExecutionAsync(ActionExecutingContext context, ActionExecutionDelegate next)
         {

@@ -1,4 +1,6 @@
-﻿namespace Partnerly.Models.ViewModels
+﻿using Partnerly.Descriptors.Messages;
+
+namespace Partnerly.Models.ViewModels
 {
     public class FormActionsViewModel
     {
@@ -36,7 +38,7 @@
             Id = id;
             Icon = "bx bx-arrow-back";
             Visible = visible ?? false;
-            Title = "Назад";
+            Title = FieldsDisplayNames.Back;
             FromController = fromController; 
             ToController = toController;
             FromAction = fromAction;
@@ -50,7 +52,7 @@
             Id = id;
             Icon = "bx bx-undo";
             Visible = visible ?? false;
-            Title = "Редактировать";
+            Title = FieldsDisplayNames.Edit;
             FromController = fromController;
             ToController = toController;
             FromAction = fromAction;
@@ -64,7 +66,7 @@
             Id = id;
             Icon = "bx bx-save";
             Visible = visible ?? false;
-            Title = "Сохранить";
+            Title = FieldsDisplayNames.Save;
             FromController = fromController;
             ToController = toController;
             FromAction = fromAction;
@@ -78,7 +80,7 @@
             Id = id;
             Icon = "bx bx-plus";
             Visible = visible ?? false;
-            Title = "Создать";
+            Title = FieldsDisplayNames.Create;
             FromController = fromController;
             ToController = toController;
             FromAction = fromAction;
@@ -92,7 +94,7 @@
             Id = id;
             Icon = "bx bx-trash";
             Visible = visible ?? false;
-            Title = "Удалить";
+            Title = FieldsDisplayNames.Delete;
             FromController = fromController;
             ToController = toController;
             FromAction = fromAction;
@@ -117,7 +119,7 @@
         {
             Icon = "bx bx-dots-horizontal-rounded";
             Visible = visible ?? false;
-            Title = "Дополнительно";
+            Title = FieldsDisplayNames.More;
         }
     }
 

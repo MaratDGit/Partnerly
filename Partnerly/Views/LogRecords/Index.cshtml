@@ -1,11 +1,11 @@
 ﻿@{
-    ViewData["Title"] = "Журналы";
+    ViewData["Title"] = "Logs";
     Layout = "_ContentNavbarLayout";
 }
 
 @await Html.PartialAsync("_DataTablePartial", null, new ViewDataDictionary(ViewData)
 {
-    { "TableName", "Журналы" },
+    { "TableName", Localizer["Logs"] },
     { "TableId", "logsTable" },
 })
 

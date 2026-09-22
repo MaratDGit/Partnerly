@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Localization;
 using Partnerly.Descriptors.Attributes;
 using Partnerly.Events.BaseEvents;
 using Partnerly.Infrastructure.Interfaces;
@@ -10,8 +11,8 @@ namespace Partnerly.Controllers
     {
         private readonly INotificationService _notificationService;
 
-        public NotificationController(IEventBus eventBus, IUserService userService, ICurrentUserService currentUser, ILogService logService, INotificationService notificationService)
-        : base(eventBus, userService, currentUser, logService)
+        public NotificationController(IEventBus eventBus, IUserService userService, ICurrentUserService currentUser, ILogService logService, INotificationService notificationService, IStringLocalizer<SharedResource> localizer)
+        : base(eventBus, userService, currentUser, logService, localizer)
         {
             _notificationService = notificationService;
         }

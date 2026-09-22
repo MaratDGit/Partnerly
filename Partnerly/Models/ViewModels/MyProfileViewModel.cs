@@ -10,18 +10,18 @@ namespace Partnerly.Models.ViewModels
         #endregion
 
         #region UserName
-        [Display(Name = FieldsDisplayNames.FirstName)]
+        [Display(Name = nameof(FieldsDisplayNames.FirstName), ResourceType = typeof(FieldsDisplayNames))]
         public string? UserName { get; set; }
         #endregion
 
         #region Email
-        [Display(Name = FieldsDisplayNames.Email)]
+        [Display(Name = nameof(FieldsDisplayNames.Email), ResourceType = typeof(FieldsDisplayNames))]
         public string? Email { get; set; }
         #endregion
 
         #region Phone
-        [Required(ErrorMessage = $"{FieldsDisplayNames.Phone} {ErrorMessages.FieldRequired}")]
-        [Display(Name = FieldsDisplayNames.Phone)]
+        [Required(ErrorMessageResourceType = typeof(ErrorMessages), ErrorMessageResourceName = nameof(ErrorMessages.FieldRequired))]
+        [Display(Name = nameof(FieldsDisplayNames.Phone), ResourceType = typeof(FieldsDisplayNames))]
         public string? Phone { get; set; }
         #endregion
 
@@ -30,17 +30,17 @@ namespace Partnerly.Models.ViewModels
         #endregion
 
         #region RoleName
-        [Display(Name = FieldsDisplayNames.Role)]
+        [Display(Name = nameof(FieldsDisplayNames.Role), ResourceType = typeof(FieldsDisplayNames))]
         public string? RoleName { get; set; }
         #endregion
 
         #region MyReferralCode
-        [Display(Name = FieldsDisplayNames.ReferrerCode)]
+        [Display(Name = nameof(FieldsDisplayNames.ReferrerCode), ResourceType = typeof(FieldsDisplayNames))]
         public string? MyReferralCode { get; set; }
         #endregion
 
         #region ReferrerName
-        [Display(Name = FieldsDisplayNames.ReffererName)]
+        [Display(Name = nameof(FieldsDisplayNames.ReffererName), ResourceType = typeof(FieldsDisplayNames))]
         public string? ReferrerName { get; set; }
         #endregion
         public DateTime? CreatedDate { get; set; }

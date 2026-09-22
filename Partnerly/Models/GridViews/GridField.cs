@@ -12,5 +12,6 @@
         public string? Format { get; set; }
         public object? DefaultValue { get; set; }
         public string? Type { get; set; }
+        public string? Data { get; set; }
     }
 }

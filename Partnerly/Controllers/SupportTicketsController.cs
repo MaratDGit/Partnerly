@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Localization;
 using Partnerly.Descriptors.Attributes;
 using Partnerly.Descriptors.Attributes.BaseAttributes;
 using Partnerly.Descriptors.Messages;
@@ -17,8 +18,8 @@ namespace Partnerly.Controllers
     public class SupportTicketsController : _BaseController
     {
         protected readonly ISupportTicketService _supportTicketService;
-        public SupportTicketsController(IEventBus eventBus, ISupportTicketService supportTicketService, IUserService userService, ICurrentUserService currentUser, ILogService logService)
-        : base(eventBus, userService, currentUser, logService)
+        public SupportTicketsController(IEventBus eventBus, ISupportTicketService supportTicketService, IUserService userService, ICurrentUserService currentUser, ILogService logService, IStringLocalizer<SharedResource> localizer)
+        : base(eventBus, userService, currentUser, logService, localizer)
         {
             _supportTicketService = supportTicketService;
         }

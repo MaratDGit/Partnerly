@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Localization;
 using Partnerly.Descriptors.Messages;
 using Partnerly.Events.BaseEvents;
 using Partnerly.Infrastructure.Interfaces;
@@ -13,8 +14,8 @@ namespace Partnerly.Controllers
     {
         private readonly INotificationService _notificationService;
         private readonly ISystemSettingsService _systemSettingsService;
-        public DashboardController(IEventBus eventBus, IUserService userService, ICurrentUserService currentUser, ILogService logService, INotificationService notificationService, ISystemSettingsService systemSettingsService)
-        : base(eventBus, userService, currentUser, logService)
+        public DashboardController(IEventBus eventBus, IUserService userService, ICurrentUserService currentUser, ILogService logService, INotificationService notificationService, ISystemSettingsService systemSettingsService, IStringLocalizer<SharedResource> localizer)
+        : base(eventBus, userService, currentUser, logService, localizer)
         {
             _notificationService = notificationService;
             _systemSettingsService = systemSettingsService;

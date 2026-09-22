@@ -10,11 +10,10 @@
     <link rel="stylesheet" href="~/assets/css/landing.css" />
 </head>
 <body>
-    <header class="landing-header">
+    @* <header class="landing-header">
         <div class="container">
             <div class="logo">
                 <a asp-controller="Home" asp-action="Index" class="app-brand-link gap-2">
-                    @* <span><img src="~/favicon.png" alt="Logo" width="32" height="32" class="me-2" /></span> *@
                     <span>@TempData.Peek("appName")</span>
                 </a>
             </div>
@@ -27,6 +26,124 @@
             <div class="menu-toggle" onclick="document.body.classList.toggle('menu-open')">
                 ☰
             </div>
+        </div>
+    </header> *@
+
+    @{
+        var currentCulture = CultureInfo.CurrentUICulture.TwoLetterISOLanguageName;
+
+        var currentFlag = currentCulture switch
+        {
+            "en" => "gb",
+            "ru" => "ru",
+            "hy" => "am",
+            _ => "gb"
+        };
+    }
+
+    <header class="landing-header">
+        <div class="container">
+
+            <div class="logo">
+                <a asp-controller="Home"
+                   asp-action="Index"
+                   class="app-brand-link gap-2">
+                    <span>@TempData.Peek("appName")</span>
+                </a>
+            </div>
+
+            <nav class="nav-links">
+
+                <a href="#pricing">@Localizer["Rates"]</a>
+                <a href="#videos">@Localizer["Educationalvideos"]</a>
+
+                <!-- Language -->
+                <div class="landing-language">
+                    <button type="button"
+                            class="landing-language-toggle"
+                            onclick="this.parentElement.classList.toggle('open')">
+
+                        <img src="https://flagcdn.com/24x18/@(currentFlag).png"
+                             alt="@currentCulture"
+                             width="24"
+                             height="18" />
+                    </button>
+
+                    <div class="landing-language-menu">
+
+                        <form asp-controller="Language"
+                              asp-action="SetLanguage"
+                              method="post">
+
+                            <input type="hidden"
+                                   name="returnUrl"
+                                   value="@Context.Request.Path@Context.Request.QueryString" />
+
+                            <button type="submit"
+                                    name="culture"
+                                    value="en">
+                                <img src="https://flagcdn.com/24x18/gb.png"
+                                     width="24"
+                                     height="18"
+                                     alt="English" />
+                                <span>English</span>
+                            </button>
+                        </form>
+
+                        <form asp-controller="Language"
+                              asp-action="SetLanguage"
+                              method="post">
+
+                            <input type="hidden"
+                                   name="returnUrl"
+                                   value="@Context.Request.Path@Context.Request.QueryString" />
+
+                            <button type="submit"
+                                    name="culture"
+                                    value="ru">
+                                <img src="https://flagcdn.com/24x18/ru.png"
+                                     width="24"
+                                     height="18"
+                                     alt="Русский" />
+                                <span>Русский</span>
+                            </button>
+                        </form>
+
+                        <form asp-controller="Language"
+                              asp-action="SetLanguage"
+                              method="post">
+
+                            <input type="hidden"
+                                   name="returnUrl"
+                                   value="@Context.Request.Path@Context.Request.QueryString" />
+
+                            <button type="submit"
+                                    name="culture"
+                                    value="hy">
+                                <img src="https://flagcdn.com/24x18/am.png"
+                                     width="24"
+                                     height="18"
+                                     alt="Հայերեն" />
+                                <span>Հայերեն</span>
+                            </button>
+                        </form>
+
+                    </div>
+                </div>
+
+                <a asp-controller="Account"
+                   asp-action="Login"
+                   class="btn-outline">
+                    @Localizer["Login"]
+                </a>
+
+            </nav>
+
+            <div class="menu-toggle"
+                 onclick="document.body.classList.toggle('menu-open')">
+                ☰
+            </div>
+
         </div>
     </header>
 
@@ -41,9 +158,10 @@
         <div class="container">
             <p>&copy; <script>
         document.write(new Date().getFullYear())
-        </script> @TempData.Peek("appName"). Все права защищены.</p>
+                </script> @TempData.Peek("appName"). @Localizer["Allrightsreserved"].
+            </p>
             <nav>
-                <a asp-controller="Home" asp-action="Privacy">Политика</a>
+                <a asp-controller="Home" asp-action="Privacy">@Localizer["Policy"]</a>
             </nav>
         </div>
     </footer>

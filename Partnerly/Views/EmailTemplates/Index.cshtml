@@ -1,11 +1,11 @@
 ﻿@{
-    ViewData["Title"] = "Шаблоны электронной почты";
+    ViewData["Title"] = "Email templates";
     Layout = "_ContentNavbarLayout";
 }
 
 @await Html.PartialAsync("_DataTablePartial", null, new ViewDataDictionary(ViewData)
 {
-    { "TableName", "Шаблоны электронной почты" },
+    { "TableName", Localizer["Emailtemplates"] },
     { "TableId", "emailTemplatesTable" },
     { "NewRecordControler", "EmailTemplates" }
 })

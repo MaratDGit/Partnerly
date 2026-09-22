@@ -5,9 +5,9 @@ namespace Partnerly.Models.ViewModels
 {
     public class ForgotPasswordViewModel
     {
-        [Required(ErrorMessage = ErrorMessages.EmailRequired)]
         [EmailAddress()]
-        [Display(Name = FieldsDisplayNames.Email)]
+        [Required(ErrorMessageResourceType = typeof(ErrorMessages), ErrorMessageResourceName = nameof(ErrorMessages.EmailRequired))]
+        [Display(Name = nameof(FieldsDisplayNames.Email), ResourceType = typeof(FieldsDisplayNames))]
         public string? Email { get; set; }
     }
 }

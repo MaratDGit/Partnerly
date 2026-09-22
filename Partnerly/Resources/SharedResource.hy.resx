@@ -1,0 +1,735 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <!-- 
+    Microsoft ResX Schema 
+    
+    Version 2.0
+    
+    The primary goals of this format is to allow a simple XML format 
+    that is mostly human readable. The generation and parsing of the 
+    various data types are done through the TypeConverter classes 
+    associated with the data types.
+    
+    Example:
+    
+    ... ado.net/XML headers & schema ...
+    <resheader name="resmimetype">text/microsoft-resx</resheader>
+    <resheader name="version">2.0</resheader>
+    <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+    <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+    <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
+    <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+    <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+        <value>[base64 mime encoded serialized .NET Framework object]</value>
+    </data>
+    <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+        <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
+        <comment>This is a comment</comment>
+    </data>
+                
+    There are any number of "resheader" rows that contain simple 
+    name/value pairs.
+    
+    Each data row contains a name, and value. The row also contains a 
+    type or mimetype. Type corresponds to a .NET class that support 
+    text/value conversion through the TypeConverter architecture. 
+    Classes that don't support this are serialized and stored with the 
+    mimetype set.
+    
+    The mimetype is used for serialized objects, and tells the 
+    ResXResourceReader how to depersist the object. This is currently not 
+    extensible. For a given mimetype the value must be set accordingly:
+    
+    Note - application/x-microsoft.net.object.binary.base64 is the format 
+    that the ResXResourceWriter will generate, however the reader can 
+    read any of the formats listed below.
+    
+    mimetype: application/x-microsoft.net.object.binary.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+            : and then encoded with base64 encoding.
+    
+    mimetype: application/x-microsoft.net.object.soap.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
+            : and then encoded with base64 encoding.
+
+    mimetype: application/x-microsoft.net.object.bytearray.base64
+    value   : The object must be serialized into a byte array 
+            : using a System.ComponentModel.TypeConverter
+            : and then encoded with base64 encoding.
+    -->
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="Cancel" xml:space="preserve">
+    <value>Չեղարկել</value>
+  </data>
+  <data name="CaseCreationLimit" xml:space="preserve">
+    <value>Դուք այսօր այլևս չեք կարող գործ բացել։</value>
+  </data>
+  <data name="CompareConfirmPassword" xml:space="preserve">
+    <value>Գաղտնաբառերը չեն համընկնում</value>
+  </data>
+  <data name="ConnectedToNotificationHub" xml:space="preserve">
+    <value>ConnectedToNotificationHub</value>
+  </data>
+  <data name="Delete" xml:space="preserve">
+    <value>Ջնջել</value>
+  </data>
+  <data name="Details" xml:space="preserve">
+    <value>Մանրամասներ</value>
+  </data>
+  <data name="Documentation" xml:space="preserve">
+    <value>Փաստաթղթեր</value>
+  </data>
+  <data name="Edit" xml:space="preserve">
+    <value>Խմբագրել</value>
+  </data>
+  <data name="EmailRequired" xml:space="preserve">
+    <value>Էլ․ հասցեն պարտադիր լրացման դաշտ է</value>
+  </data>
+  <data name="ErrorConnectionSignalR" xml:space="preserve">
+    <value>ErrorConnectionSignalR</value>
+  </data>
+  <data name="FieldRequired" xml:space="preserve">
+    <value>պարտադիր դաշտ է</value>
+  </data>
+  <data name="Groups" xml:space="preserve">
+    <value>Խմբեր</value>
+  </data>
+  <data name="Hide" xml:space="preserve">
+    <value>Թաքցնել</value>
+  </data>
+  <data name="IncorectEmail" xml:space="preserve">
+    <value>Անվավեր էլ․ հասցե</value>
+  </data>
+  <data name="IncorectPassword" xml:space="preserve">
+    <value>Սխալ գաղտնաբառ</value>
+  </data>
+  <data name="IncorectPasswordOrUsername" xml:space="preserve">
+    <value>Սխալ էլ․ հասցե կամ գաղտնաբառ</value>
+  </data>
+  <data name="InvalidRefferalCode" xml:space="preserve">
+    <value>Այս հղման կոդը գոյություն չունի։</value>
+  </data>
+  <data name="LinkExpiredDetail" xml:space="preserve">
+    <value>Այս հղումը, կարծես, ժամկետանց է։ Էլ․ հասցեի հաստատումն ավարտելու համար, խնդրում ենք ձեռք բերել նոր հղում։</value>
+  </data>
+  <data name="LinkIsExpired" xml:space="preserve">
+    <value>Հղումն այլևս վավեր չէ։</value>
+  </data>
+  <data name="LoginEmailConfirmationMessage" xml:space="preserve">
+    <value>Մուտք գործելու համար խնդրում ենք հաստատել ձեր էլեկտրոնային փոստի հասցեն: Մենք հրահանգներով էլեկտրոնային նամակ ենք ուղարկել ձեր տրամադրած հասցեին: Ստուգեք ձեր էլեկտրոնային փոստը և հետևեք հաստատման հղմանը:</value>
+  </data>
+  <data name="Logout" xml:space="preserve">
+    <value>Ելք</value>
+  </data>
+  <data name="Logs" xml:space="preserve">
+    <value>Ժուրնալներ</value>
+  </data>
+  <data name="Markallasread" xml:space="preserve">
+    <value>Նշել բոլորը որպես կարդացված</value>
+  </data>
+  <data name="Miscellaneous" xml:space="preserve">
+    <value>Բազմազան</value>
+  </data>
+  <data name="Myprofile" xml:space="preserve">
+    <value>Իմ պրոֆիլը</value>
+  </data>
+  <data name="NewTickedToEmployeeNotification" xml:space="preserve">
+    <value>Դուք ունեք նոր աջակցության տոմս։ {0}</value>
+  </data>
+  <data name="NoNewNotifications" xml:space="preserve">
+    <value>Նոր ծանուցումներ չկան</value>
+  </data>
+  <data name="PasswordRequired" xml:space="preserve">
+    <value>Գաղտնաբառը պարտադիր լրացման դաշտ է</value>
+  </data>
+  <data name="PasswordRequireDigit" xml:space="preserve">
+    <value>Գաղտնաբառը պետք է պարունակի առնվազն մեկ թիվ։</value>
+  </data>
+  <data name="PasswordRequireLowercase" xml:space="preserve">
+    <value>Գաղտնաբառը պետք է պարունակի առնվազն մեկ փոքրատառ տառ</value>
+  </data>
+  <data name="PasswordRequireSpecial" xml:space="preserve">
+    <value>Գաղտնաբառը պետք է պարունակի առնվազն մեկ հատուկ նիշ։</value>
+  </data>
+  <data name="PasswordRequireUppercase" xml:space="preserve">
+    <value>Գաղտնաբառը պետք է պարունակի առնվազն մեկ մեծատառ</value>
+  </data>
+  <data name="ReadPolicyAndTerms" xml:space="preserve">
+    <value>Դուք պետք է համաձայնեք օգտագործման պայմաններին և դրույթներին</value>
+  </data>
+  <data name="RecordSaved" xml:space="preserve">
+    <value>Գրառումը հաջողությամբ պահպանվել է։</value>
+  </data>
+  <data name="ReferrerUserCannotBeFoundOrInactive" xml:space="preserve">
+    <value>Հղող օգտատերը չի գտնվել կամ անգործուն է եղել։</value>
+  </data>
+  <data name="Save" xml:space="preserve">
+    <value>Պահպանել</value>
+  </data>
+  <data name="Settings" xml:space="preserve">
+    <value>Կարգավորումներ</value>
+  </data>
+  <data name="SiteUnderMaintenanceMode" xml:space="preserve">
+    <value>Կայքը գտնվում է սպասարկման ռեժիմում։</value>
+  </data>
+  <data name="Statistics" xml:space="preserve">
+    <value>Վիճակագրություն</value>
+  </data>
+  <data name="StringMaxLength" xml:space="preserve">
+    <value>Տողի երկարությունը պետք է լինի մինչև {0} նիշ։</value>
+  </data>
+  <data name="StringMinMaxLength" xml:space="preserve">
+    <value>Տողի երկարությունը պետք է լինի {0}-ից {1} նիշերի միջև։</value>
+  </data>
+  <data name="Support" xml:space="preserve">
+    <value>Աջակցություն</value>
+  </data>
+  <data name="SupportSuccess" xml:space="preserve">
+    <value>Ձեր հաղորդագրությունը ուղարկված է։ Մենք շուտով կկապնվենք ձեզ հետ։</value>
+  </data>
+  <data name="Systemsettings" xml:space="preserve">
+    <value>Համակարգի կարգավորումներ</value>
+  </data>
+  <data name="Tasks" xml:space="preserve">
+    <value>Առաջադրանքներ</value>
+  </data>
+  <data name="TickedClosedNotification" xml:space="preserve">
+    <value>Ձեր հարցումը փակվել է։ {0}</value>
+  </data>
+  <data name="TickedReopenedNotification" xml:space="preserve">
+    <value>Ձեր հարցումը վերաբացվել է։ {0}</value>
+  </data>
+  <data name="TickedStartedNotification" xml:space="preserve">
+    <value>Մենք սկսել ենք Ձեր հարցումը դիտարկել։ {0}</value>
+  </data>
+  <data name="TypeValidPhoneNumber" xml:space="preserve">
+    <value>Խնդրում ենք մուտքագրել ճիշտ համարը +374 XX XXXXXX ձևաչափով</value>
+  </data>
+  <data name="UniqueValue" xml:space="preserve">
+    <value>այդ անունով արդեն գոյություն ունի</value>
+  </data>
+  <data name="UserAccessDenied" xml:space="preserve">
+    <value>օգտատերը մուտք չունի</value>
+  </data>
+  <data name="UserIsBlocked" xml:space="preserve">
+    <value>Օգտատերը արգելափակվել է</value>
+  </data>
+  <data name="UserRegistrationNotification" xml:space="preserve">
+    <value>Բարի գալուստ, {0}! 🎉 Ուրախ ենք տեսնել ձեզ մեր կայքում։</value>
+  </data>
+  <data name="Userroles" xml:space="preserve">
+    <value>Օգտատիրոջ դերեր</value>
+  </data>
+  <data name="Users" xml:space="preserve">
+    <value>Օգտատերեր</value>
+  </data>
+  <data name="UserWithEmailArleadyExist" xml:space="preserve">
+    <value>Այս էլ․ հասցեով օգտատեր արդեն գոյություն ունի։</value>
+  </data>
+  <data name="UserWithPhoneArleadyExist" xml:space="preserve">
+    <value>Այս համարով օգտատեր արդեն գոյություն ունի։</value>
+  </data>
+  <data name="View" xml:space="preserve">
+    <value>Նայեք</value>
+  </data>
+  <data name="CannotDeleteSystemRecords" xml:space="preserve">
+    <value>Դուք չեք կարող ջնջել համակարգի գրառումները։</value>
+  </data>
+  <data name="Emailtemplates" xml:space="preserve">
+    <value>Էլփոստի ձևանմուշներ</value>
+  </data>
+  <data name="FirstName" xml:space="preserve">
+    <value>Անուն</value>
+  </data>
+  <data name="Email" xml:space="preserve">
+    <value>Էլ․ փոստ</value>
+  </data>
+  <data name="Password" xml:space="preserve">
+    <value>Գաղտնաբառ</value>
+  </data>
+  <data name="NewPassword" xml:space="preserve">
+    <value>Նոր գաղտնաբառ</value>
+  </data>
+  <data name="ConfirmPassword" xml:space="preserve">
+    <value>Հաստատել գաղտնաբառը</value>
+  </data>
+  <data name="RememberMe" xml:space="preserve">
+    <value>Հիշիր ինձ</value>
+  </data>
+  <data name="Phone" xml:space="preserve">
+    <value>Հեռախոսահամար</value>
+  </data>
+  <data name="LastName" xml:space="preserve">
+    <value>Ազգանուն</value>
+  </data>
+  <data name="ReferrerCode" xml:space="preserve">
+    <value>Հղման կոդ</value>
+  </data>
+  <data name="ReffererName" xml:space="preserve">
+    <value>Հղողի անունը</value>
+  </data>
+  <data name="TermsConditions" xml:space="preserve">
+    <value>Գաղտնիության քաղաքականություն և պայմաններ</value>
+  </data>
+  <data name="Subject" xml:space="preserve">
+    <value>Վերնագիր</value>
+  </data>
+  <data name="BodyHTML" xml:space="preserve">
+    <value>HTML տեքստ</value>
+  </data>
+  <data name="Balance" xml:space="preserve">
+    <value>Մնացորդ</value>
+  </data>
+  <data name="LastActivity" xml:space="preserve">
+    <value>Վերջին ակտիվությունը</value>
+  </data>
+  <data name="IsOnlayn" xml:space="preserve">
+    <value>Առցանց</value>
+  </data>
+  <data name="IsBlocked" xml:space="preserve">
+    <value>Արգելափակված է</value>
+  </data>
+  <data name="EmailConfirmed" xml:space="preserve">
+    <value>Էլ․ հասցեն հաստատված է</value>
+  </data>
+  <data name="Role" xml:space="preserve">
+    <value>Դեր</value>
+  </data>
+  <data name="NewRole" xml:space="preserve">
+    <value>Նոր դեր</value>
+  </data>
+  <data name="TemplateType" xml:space="preserve">
+    <value>Շաբլոնի տեսակը</value>
+  </data>
+  <data name="AllowSendNotifications" xml:space="preserve">
+    <value>Ծանուցումներ</value>
+  </data>
+  <data name="AllowSendEmails" xml:space="preserve">
+    <value>Էլ․ փոստով Ծանուցումներ</value>
+  </data>
+  <data name="CreatedDate" xml:space="preserve">
+    <value>Ստեղծման ամսաթիվը</value>
+  </data>
+  <data name="CreatorName" xml:space="preserve">
+    <value>Ստեղծվել է</value>
+  </data>
+  <data name="UpdatedDate" xml:space="preserve">
+    <value>Թարմացման ամսաթիվը</value>
+  </data>
+  <data name="UpdaterName" xml:space="preserve">
+    <value>Թարմացված է</value>
+  </data>
+  <data name="MaintenanceMode" xml:space="preserve">
+    <value>Սպասարկման ռեժիմ</value>
+  </data>
+  <data name="EmailConfirmationTokenHours" xml:space="preserve">
+    <value>Հաստատել էլ. փոստի տոկենը (ժամերով)</value>
+  </data>
+  <data name="ForgotPasswordTokenExpiredAtHours" xml:space="preserve">
+    <value>Տոկեն Մոռացել եմ գաղտնաբառը (ժամ)</value>
+  </data>
+  <data name="Automaticonlinestatusupdate" xml:space="preserve">
+    <value>առցանց կարգավիճակ (րոպե)</value>
+  </data>
+  <data name="ScrollingText" xml:space="preserve">
+    <value>Տիկ-գիծ</value>
+  </data>
+  <data name="Create" xml:space="preserve">
+    <value>Ստեղծել</value>
+  </data>
+  <data name="More" xml:space="preserve">
+    <value>Ավելին</value>
+  </data>
+  <data name="Back" xml:space="preserve">
+    <value>Հետ</value>
+  </data>
+  <data name="Action" xml:space="preserve">
+    <value>Գործողություն </value>
+  </data>
+  <data name="Type" xml:space="preserve">
+    <value>Տեսակ</value>
+  </data>
+  <data name="Message" xml:space="preserve">
+    <value>Հաղորդագրություն</value>
+  </data>
+  <data name="FilePath" xml:space="preserve">
+    <value>Ֆայլի ուղի</value>
+  </data>
+  <data name="Method" xml:space="preserve">
+    <value>Մեթոդ </value>
+  </data>
+  <data name="LineNumber" xml:space="preserve">
+    <value>Line համարը</value>
+  </data>
+  <data name="User" xml:space="preserve">
+    <value>Օգտատեր</value>
+  </data>
+  <data name="Name" xml:space="preserve">
+    <value>Անուն</value>
+  </data>
+  <data name="Description" xml:space="preserve">
+    <value>Նկարագրություն</value>
+  </data>
+  <data name="Group" xml:space="preserve">
+    <value>Խումբ</value>
+  </data>
+  <data name="IsRead" xml:space="preserve">
+    <value>Կարդացված</value>
+  </data>
+  <data name="Status" xml:space="preserve">
+    <value>Կարգավիճակ</value>
+  </data>
+  <data name="AssignedTo" xml:space="preserve">
+    <value>Նշանակված</value>
+  </data>
+  <data name="TaskNumber" xml:space="preserve">
+    <value>Առաջադրանքի համարը</value>
+  </data>
+  <data name="Viewcase" xml:space="preserve">
+    <value>Դիտել գործը</value>
+  </data>
+  <data name="FullName" xml:space="preserve">
+    <value>Անուն Ազգանուն</value>
+  </data>
+  <data name="LookupSelectRecord" xml:space="preserve">
+    <value>Ընտրեք գրառումը</value>
+  </data>
+  <data name="LookupSearch" xml:space="preserve">
+    <value>Որոնում...</value>
+  </data>
+  <data name="LookupLoading" xml:space="preserve">
+    <value>Բեռնում...</value>
+  </data>
+  <data name="LookupNoData" xml:space="preserve">
+    <value>Տվյալներ չկան</value>
+  </data>
+  <data name="LookupLoadError" xml:space="preserve">
+    <value>Բեռնման սխալ</value>
+  </data>
+  <data name="EditUser" xml:space="preserve">
+    <value>Խմբագրել օգտատիրոջը</value>
+  </data>
+  <data name="EditRole" xml:space="preserve">
+    <value>Փոխել դերը</value>
+  </data>
+  <data name="Enteryouremailaddress" xml:space="preserve">
+    <value>Մուտքագրեք ձեր էլ․ հասցեն</value>
+  </data>
+  <data name="DeleteUser" xml:space="preserve">
+    <value>Օգտատիրոջ ջնջում</value>
+  </data>
+  <data name="Confirm" xml:space="preserve">
+    <value>Հաստատել</value>
+  </data>
+  <data name="CreateUser" xml:space="preserve">
+    <value>Ստեղծել օգտատեր</value>
+  </data>
+  <data name="Referrersreferralcode" xml:space="preserve">
+    <value>Հրավիրողի հղման կոդը</value>
+  </data>
+  <data name="Addanote" xml:space="preserve">
+    <value>Նշում</value>
+  </data>
+  <data name="Notetothedocument" xml:space="preserve">
+    <value>Նշում փաստաթղթին</value>
+  </data>
+  <data name="Close" xml:space="preserve">
+    <value>Փակել</value>
+  </data>
+  <data name="Enteranote" xml:space="preserve">
+    <value>Մուտքագրեք նշում...</value>
+  </data>
+  <data name="Clear" xml:space="preserve">
+    <value>Մաքրել</value>
+  </data>
+  <data name="OK" xml:space="preserve">
+    <value>Լավ</value>
+  </data>
+  <data name="Error" xml:space="preserve">
+    <value>Սխալ</value>
+  </data>
+  <data name="Youdonothavepermissionviewpage" xml:space="preserve">
+    <value>Դուք չունեք այս էջը դիտելու թույլտվություն։ Եթե կարծում եք, որ սա սխալ է, խնդրում ենք կապվել ադմինիստրատորի հետ։</value>
+  </data>
+  <data name="License" xml:space="preserve">
+    <value>Լիցենզիա</value>
+  </data>
+  <data name="madefrom" xml:space="preserve">
+    <value>պատրաստված է</value>
+  </data>
+  <data name="Theemailverificationtokenhasexpired" xml:space="preserve">
+    <value>Էլ․ փոստի հաստատման տոկենի ժամկետը լրացել է։</value>
+  </data>
+  <data name="ThetokenForgotpasswordhasexpired" xml:space="preserve">
+    <value>Մոռացել եք գաղտնաբառը Թոքենի ժամկետը  լրացել է</value>
+  </data>
+  <data name="Onlinestatusautoupdateinterval" xml:space="preserve">
+    <value>(րոպե) ավտոմատ առցանց կարգավիճակի թարմացում</value>
+  </data>
+  <data name="Start" xml:space="preserve">
+    <value>Սկսել</value>
+  </data>
+  <data name="Assignto" xml:space="preserve">
+    <value>Նշանակել</value>
+  </data>
+  <data name="From" xml:space="preserve">
+    <value>Ումից</value>
+  </data>
+  <data name="To" xml:space="preserve">
+    <value>Ում</value>
+  </data>
+  <data name="Closed" xml:space="preserve">
+    <value>Փակ է</value>
+  </data>
+  <data name="New" xml:space="preserve">
+    <value>Նոր</value>
+  </data>
+  <data name="InProgress" xml:space="preserve">
+    <value>Ընթացքի մեջ է</value>
+  </data>
+  <data name="Contactsupport" xml:space="preserve">
+    <value>Կապվեք աջակցության ծառայության հետ</value>
+  </data>
+  <data name="Send" xml:space="preserve">
+    <value>Ուղարկել</value>
+  </data>
+  <data name="Edittask" xml:space="preserve">
+    <value>Խմբագրել առաջադրանքը</value>
+  </data>
+  <data name="Number" xml:space="preserve">
+    <value>Համար</value>
+  </data>
+  <data name="Deletetask" xml:space="preserve">
+    <value>Ջնջել առաջադրանքը</value>
+  </data>
+  <data name="Createatask" xml:space="preserve">
+    <value>Ստեղծել առաջադրանք</value>
+  </data>
+  <data name="Changerole" xml:space="preserve">
+    <value>Փոխել դերը</value>
+  </data>
+  <data name="Viewuser" xml:space="preserve">
+    <value>Դիտել օգտատիրոջը</value>
+  </data>
+  <data name="Selectarole" xml:space="preserve">
+    <value>Ընտրեք դեր</value>
+  </data>
+  <data name="Edittemplate" xml:space="preserve">
+    <value>Խմբագրել ձևանմուշը</value>
+  </data>
+  <data name="Preview" xml:space="preserve">
+    <value>Նախադիտում</value>
+  </data>
+  <data name="Templates" xml:space="preserve">
+    <value>Շաբլոններ</value>
+  </data>
+  <data name="Topic" xml:space="preserve">
+    <value>Թեմա</value>
+  </data>
+  <data name="Emailpreview" xml:space="preserve">
+    <value>Նամակի նախադիտում</value>
+  </data>
+  <data name="Deletingthetemplate" xml:space="preserve">
+    <value>Շաբլոնի ջնջում</value>
+  </data>
+  <data name="Createatemplate" xml:space="preserve">
+    <value>Ստեղծեք ձևանմուշ</value>
+  </data>
+  <data name="Profile" xml:space="preserve">
+    <value>Պրոֆիլ</value>
+  </data>
+  <data name="Changepassword" xml:space="preserve">
+    <value>Փոխել գաղտնաբառը</value>
+  </data>
+  <data name="Notifications" xml:space="preserve">
+    <value>Ծանուցումներ</value>
+  </data>
+  <data name="Youwillreceiveimportantnotifications" xml:space="preserve">
+    <value>Կարևոր ծանուցումներ կգան</value>
+  </data>
+  <data name="DataTableFilters" xml:space="preserve">
+    <value>Ֆիլտրեր</value>
+  </data>
+  <data name="DataTableApply" xml:space="preserve">
+    <value>Կիրառել</value>
+  </data>
+  <data name="DataTableReset" xml:space="preserve">
+    <value>Վերականգնել բոլորը</value>
+  </data>
+  <data name="DataTableExportExcel" xml:space="preserve">
+    <value>Արտահանել Excel</value>
+  </data>
+  <data name="DataTableExportAll" xml:space="preserve">
+    <value>Արտահանել բոլորը</value>
+  </data>
+  <data name="DataTableExportSelected" xml:space="preserve">
+    <value>Արտահանել ընտրվածները</value>
+  </data>
+  <data name="DataTableSearch" xml:space="preserve">
+    <value>Որոնում...</value>
+  </data>
+  <data name="DataTableFilteredRecords" xml:space="preserve">
+    <value>Ֆիլտրված գրառումներ՝ {0}՝ {1}-ից</value>
+  </data>
+  <data name="DataTableTotalRecords" xml:space="preserve">
+    <value>Ընդամենը գրառումներ՝ {0}</value>
+  </data>
+  <data name="DataTableShownRecords" xml:space="preserve">
+    <value>Ցուցադրված է {0}–{1}՝ {2}-ից</value>
+  </data>
+  <data name="DataTableFilterActive" xml:space="preserve">
+    <value>Ֆիլտրը ակտիվ է</value>
+  </data>
+  <data name="DataTableFrom" xml:space="preserve">
+    <value>Սկսած</value>
+  </data>
+  <data name="DataTableTo" xml:space="preserve">
+    <value>Մինչև</value>
+  </data>
+  <data name="DataTableAll" xml:space="preserve">
+    <value>Բոլորը</value>
+  </data>
+  <data name="DataTableYes" xml:space="preserve">
+    <value>Այո</value>
+  </data>
+  <data name="DataTableNo" xml:space="preserve">
+    <value>Ոչ</value>
+  </data>
+  <data name="DataTableActions" xml:space="preserve">
+    <value>Գործողություններ</value>
+  </data>
+  <data name="Rates" xml:space="preserve">
+    <value>Սակագներ</value>
+  </data>
+  <data name="Educationalvideos" xml:space="preserve">
+    <value>Ուսումնական տեսանյութեր</value>
+  </data>
+  <data name="Allrightsreserved" xml:space="preserve">
+    <value>Բոլոր իրավունքները պաշտպանված են</value>
+  </data>
+  <data name="Policy" xml:space="preserve">
+    <value>Քաղաքականություն</value>
+  </data>
+  <data name="Login" xml:space="preserve">
+    <value>Մուտք գործել</value>
+  </data>
+  <data name="Youremailsuccessfullyverified" xml:space="preserve">
+    <value>Ձեր էլ․ հասցեն հաջողությամբ հաստատվել է։</value>
+  </data>
+  <data name="Younowloginusingyourcredentials" xml:space="preserve">
+    <value>Այժմ կարող եք մուտք գործել՝ օգտագործելով ձեր մուտքի տվյալները։</value>
+  </data>
+  <data name="Enternewpasswordconfirm" xml:space="preserve">
+    <value>Մուտքագրեք ձեր հաշվի նոր գաղտնաբառը և հաստատեք այն։ Պահպանելուց հետո դուք կկարողանաք մուտք գործել նոր գաղտնաբառով։</value>
+  </data>
+  <data name="EnteryouremailaddressandclickGet" xml:space="preserve">
+    <value>Մուտքագրեք ձեր էլ. փոստի հասցեն և սեղմեք «Ստանալ»</value>
+  </data>
+  <data name="Get" xml:space="preserve">
+    <value>Ստանալ</value>
+  </data>
+  <data name="Doyoualreadhaveanaccount" xml:space="preserve">
+    <value>Դուք արդեն ունե՞ք հաշիվ։</value>
+  </data>
+  <data name="Wehavesentemailwithinstructionsresetyourpassword" xml:space="preserve">
+    <value>Մենք ձեզ էլ.փոստ ենք ուղարկել գաղտնաբառի վերականգնման հրահանգներով: Խնդրում ենք հետևել էլ.փոստում նշված հղմանը՝ նոր գաղտնաբառ սահմանելու համար:</value>
+  </data>
+  <data name="Forgotyourpassword" xml:space="preserve">
+    <value>Մոռացե՞լ եք գաղտնաբառը։</value>
+  </data>
+  <data name="Newtoourplatform" xml:space="preserve">
+    <value>Նորեկ եք մեր հարթակում՞</value>
+  </data>
+  <data name="Createanaccount" xml:space="preserve">
+    <value>Ստեղծեք հաշիվ</value>
+  </data>
+  <data name="PrivacyPolicyandTerms" xml:space="preserve">
+    <value>Գաղտնիության քաղաքականություն և պայմաններ</value>
+  </data>
+  <data name="Iagreewith" xml:space="preserve">
+    <value>Ես համաձայն եմ</value>
+  </data>
+  <data name="Signup" xml:space="preserve">
+    <value>Գրանցվել</value>
+  </data>
+  <data name="Registrationwassuccessful" xml:space="preserve">
+    <value>Գրանցումը հաջող էր։</value>
+  </data>
+  <data name="Youraccounthasbeensuccessfullycreated" xml:space="preserve">
+    <value>Ձեր հաշիվը հաջողությամբ ստեղծվել է։ Մուտք գործելու համար, խնդրում ենք հաստատել ձեր էլեկտրոնային փոստի հասցեն։ Ձեր էլեկտրոնային փոստի հասցեին ուղարկվել է հրահանգներով էլեկտրոնային նամակ։</value>
+  </data>
+  <data name="JustNow" xml:space="preserve">
+    <value>հենց հիմա</value>
+  </data>
+  <data name="MinuteAgo" xml:space="preserve">
+    <value>մեկ րոպե առաջ</value>
+  </data>
+  <data name="MinutesAgo" xml:space="preserve">
+    <value>րոպե առաջ</value>
+  </data>
+  <data name="HourAgo" xml:space="preserve">
+    <value>մեկ ժամ առաջ</value>
+  </data>
+  <data name="HoursAgo" xml:space="preserve">
+    <value>ժամ առաջ</value>
+  </data>
+</root>

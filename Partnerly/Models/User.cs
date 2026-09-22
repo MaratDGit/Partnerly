@@ -23,7 +23,7 @@ namespace Partnerly.Models
         #endregion
         #region Phone
         [Required]
-        [ArmenianPhone(ErrorMessage = ErrorMessages.TypeValidPhoneNumber)]
+        //[ArmenianPhone(ErrorMessage = ErrorMessages.TypeValidPhoneNumber)]
         [Display(Name = "Phone")]
         public string? Phone { get; set; }
         #endregion

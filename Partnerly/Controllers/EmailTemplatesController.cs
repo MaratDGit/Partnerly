@@ -1,6 +1,7 @@
 ﻿namespace Partnerly.Controllers
 {
     using Microsoft.AspNetCore.Mvc;
+    using Microsoft.Extensions.Localization;
     using Partnerly.Descriptors.Attributes;
     using Partnerly.Descriptors.Attributes.BaseAttributes;
     using Partnerly.Descriptors.Messages;
@@ -19,8 +20,8 @@
     {
         private readonly IEmailTemplateService _emailTemplateService;
 
-        public EmailTemplatesController(IEventBus eventBus, IUserService userService, ICurrentUserService currentUser, IEmailTemplateService emailTemplateService, ILogService logService)
-        : base(eventBus, userService, currentUser, logService)
+        public EmailTemplatesController(IEventBus eventBus, IUserService userService, ICurrentUserService currentUser, IEmailTemplateService emailTemplateService, ILogService logService, IStringLocalizer<SharedResource> localizer)
+        : base(eventBus, userService, currentUser, logService, localizer)
         {
             _emailTemplateService = emailTemplateService;
         }

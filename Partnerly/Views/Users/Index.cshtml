@@ -1,12 +1,12 @@
 ﻿@{
-    ViewData["Title"] = "Пользователи";
+    ViewData["Title"] = "Users";
     Layout = "_ContentNavbarLayout";
     bool hasAdminRole = ViewBag?.RoleType == Partnerly.Descriptors.Attributes.RoleTypeAttribute.Delete;
 }
 
 @await Html.PartialAsync("_DataTablePartial", null, new ViewDataDictionary(ViewData)
 {
-    { "TableName", "Пользователи" },
+    { "TableName", @Localizer["Users"] },
     { "TableId", "usersTable" },
     { "NewRecordControler", "Users" }
 })

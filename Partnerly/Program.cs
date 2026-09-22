@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.SignalR;
+﻿using Microsoft.AspNetCore.Localization;
+using Microsoft.AspNetCore.SignalR;
 using Microsoft.EntityFrameworkCore;
 using Partnerly.Events;
 using Partnerly.Events.BaseEvents;
@@ -9,11 +10,21 @@ using Partnerly.Infrastructure.Services;
 using Partnerly.Infrastructure.Services.HostedServices;
 using Partnerly.Infrastructure.Services.MiddlewareServices;
 using Partnerly.Models;
+using System.Globalization;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // -------------------- SERVICES --------------------
-builder.Services.AddControllersWithViews();
+builder.Services.AddLocalization(options =>
+{
+    options.ResourcesPath = "Resources";
+});
+
+builder.Services
+    .AddControllersWithViews()
+    .AddViewLocalization()
+    .AddDataAnnotationsLocalization();
+//builder.Services.AddControllersWithViews();
 builder.Services.AddSignalR();
 
 // Scoped services
@@ -65,6 +76,22 @@ builder.Services.AddSingleton<IEventBus, EventBus>();
 builder.Services.AddSingleton<IUserIdProvider, CustomUserIdProvider>();
 
 var app = builder.Build();
+
+var supportedCultures = new[]
+{
+    new CultureInfo("en"),
+    new CultureInfo("ru"),
+    new CultureInfo("hy")
+};
+
+var localizationOptions = new RequestLocalizationOptions
+{
+    DefaultRequestCulture = new RequestCulture("en"),
+    SupportedCultures = supportedCultures,
+    SupportedUICultures = supportedCultures
+};
+
+app.UseRequestLocalization(localizationOptions);
 
 // -------------------- INITIALIZATION --------------------
 using (var scope = app.Services.CreateScope())

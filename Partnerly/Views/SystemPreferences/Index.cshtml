@@ -2,13 +2,13 @@
 @await Html.PartialAsync("_Toast")
 
 @{
-    ViewData["Title"] = "Системные настройки";
+    ViewData["Title"] = "System settings";
     Layout = "_ContentNavbarLayout";
 }
 
 <div class="card">
     <div class="card-header justify-content-between">
-        <h5>@ViewData["Title"]</h5>
+        <h5>@Localizer["Systemsettings"]</h5>
     </div>
 
     <div class="card-body">
@@ -30,17 +30,17 @@
             </div>
 
             <div class="form-floating mb-1 max-w-600">
-                   <input asp-for="EmailConfirmationTokenExpiredAtHours" class="form-control" id="emailConfirmationTokenExpiredAtHours" name="emailConfirmationTokenExpiredAtHours" placeholder="Срок действия токена подтверждения электронной почты истек"/>
+                <input asp-for="EmailConfirmationTokenExpiredAtHours" class="form-control" id="emailConfirmationTokenExpiredAtHours" name="emailConfirmationTokenExpiredAtHours" placeholder=@Localizer["Theemailverificationtokenhasexpired"] />
                    <label asp-for="EmailConfirmationTokenExpiredAtHours"></label>
                    <span asp-validation-for="EmailConfirmationTokenExpiredAtHours" class="text-danger"></span>
             </div>
             <div class="form-floating mb-1 max-w-600">
-               <input asp-for="ForgotPasswordTokenExpiredAtHours" class="form-control" id="forgotPasswordTokenExpiredAtHours" name="forgotPasswordTokenExpiredAtHours" placeholder="Срок действия токена Забыли пароль истек"/>
+                <input asp-for="ForgotPasswordTokenExpiredAtHours" class="form-control" id="forgotPasswordTokenExpiredAtHours" name="forgotPasswordTokenExpiredAtHours" placeholder=@Localizer["ThetokenForgotpasswordhasexpired"] />
                <label asp-for="ForgotPasswordTokenExpiredAtHours"></label>
                <span asp-validation-for="ForgotPasswordTokenExpiredAtHours" class="text-danger"></span>
             </div>
             <div class="form-floating mb-1 max-w-600">
-               <input asp-for="OnlineStatusAutoRefreshMinute" class="form-control" id="onlineStatusAutoRefreshMinute" name="onlineStatusAutoRefreshMinute" placeholder="Минута автоматического обновления онлайн-статуса"/>
+                <input asp-for="OnlineStatusAutoRefreshMinute" class="form-control" id="onlineStatusAutoRefreshMinute" name="onlineStatusAutoRefreshMinute" placeholder=@Localizer["Onlinestatusautoupdateinterval"] />
                <label asp-for="OnlineStatusAutoRefreshMinute"></label>
                <span asp-validation-for="OnlineStatusAutoRefreshMinute" class="text-danger"></span>
             </div>

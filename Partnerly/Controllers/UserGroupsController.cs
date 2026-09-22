@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Localization;
 using Partnerly.Descriptors.Attributes;
 using Partnerly.Descriptors.Attributes.BaseAttributes;
 using Partnerly.Descriptors.Messages;
@@ -19,8 +20,8 @@ namespace Partnerly.Controllers
     {
         private readonly IUserGroupService _userGroupService;
 
-        public UserGroupsController(IEventBus eventBus, IUserService userService, ICurrentUserService currentUser, ILogService logService, IUserGroupService userGroupService)
-        : base(eventBus, userService, currentUser, logService)
+        public UserGroupsController(IEventBus eventBus, IUserService userService, ICurrentUserService currentUser, ILogService logService, IUserGroupService userGroupService, IStringLocalizer<SharedResource> localizer)
+        : base(eventBus, userService, currentUser, logService, localizer)
         {
             _userGroupService = userGroupService;
         }
@@ -225,19 +226,6 @@ namespace Partnerly.Controllers
 
                 var members = await _userGroupService.GetAllUsersGroupsAsync();
                 var users = await _userService.GetAllUsersAsync();
-
-                //var result = from u in users
-                //             join gm in members on u.Id equals gm.UserId into gj
-                //             from subGroup in gj.DefaultIfEmpty()
-                //             orderby subGroup != null ? subGroup.GroupId : int.MaxValue, // сортируем по GroupId, не входящие в группу — в конец
-                //                     subGroup == null ? 1 : 0                            // чтобы пользователи без группы были после
-                //             select new
-                //             {
-                //                 UserId = u.UserId,
-                //                 u.Name,
-                //                 GroupId = subGroup?.GroupId, // если null — не в группе
-                //                 InGroup = subGroup != null
-                //             };
 
                 foreach (User? user in users)
                 {

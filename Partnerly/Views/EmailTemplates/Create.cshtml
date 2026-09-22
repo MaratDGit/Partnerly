@@ -2,13 +2,13 @@
 @await Html.PartialAsync("_Toast")
 
 @{
-    ViewData["Title"] = "Создать шаблон";
+    ViewData["Title"] = "Create a template";
     Layout = "_ContentNavbarLayout";
 }
 
 <div class="card">
     <div class="card-header d-flex justify-content-between align-items-center">
-        <h5>@ViewData["Title"]</h5>
+        <h5>@Localizer["Createatemplate"]</h5>
     </div>
 
     <div class="card-body">
@@ -20,7 +20,7 @@
                 Save = new Partnerly.Models.ViewModels.ActionSave(id: Model.Id, visible: true, fromController: "EmailTemplates", toController: "EmailTemplates", fromAction: "Edit", toAction: "Edit"),
                 Menu = new Partnerly.Models.ViewModels.ActionMenu(visible: true),
                 MenuActions = new List<Partnerly.Models.ViewModels.MenuItemAction> {
-                    new Partnerly.Models.ViewModels.MenuItemAction(visible: true, icon: "bx bx-show", displayName: "Предпросмотр", toController: "EmailTemplates", toAction: "Edit", isModal: true, modalTarget: "#previewModal", onClick: "showPreview()"),
+                    new Partnerly.Models.ViewModels.MenuItemAction(visible: true, icon: "bx bx-show", displayName: Localizer["Preview"], toController: "EmailTemplates", toAction: "Edit", isModal: true, modalTarget: "#previewModal", onClick: "showPreview()"),
                 }
             })
 
@@ -33,9 +33,9 @@
                     placeholder=" "
                     data-lookup="true"
                     data-lookup-source="/EmailTemplates/GetLookupList"
-                    data-lookup-title="Шаблоны"
+                    data-lookup-title=@Localizer["Templates"]
                     data-edit-url-base="/EmailTemplates/Edit/"
-                    data-lookup-column-names="name:Название,subject:Тема"
+                    data-lookup-column-names="name:@Localizer["Name"],subject:@Localizer["Topic"]"
                     data-lookup-display-field="Name"
                     data-lookup-param="fieldName"
                     data-lookup-param-value="Name" autofocus/>
@@ -63,8 +63,8 @@
   <div class="modal-dialog modal-lg">
     <div class="modal-content">
       <div class="modal-header">
-        <h5 class="modal-title" id="previewModalLabel">Предпросмотр письма</h5>
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Закрыть"></button>
+                <h5 class="modal-title" id="previewModalLabel">@Localizer["Emailpreview"]</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label=@Localizer["Close"]></button>
       </div>
       <div class="modal-body">
         <h4 id="previewSubject"></h4>
@@ -72,7 +72,7 @@
         <div id="previewBody"></div>
       </div>
       <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Закрыть</button>
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">@Localizer["Close"]</button>
       </div>
     </div>
   </div>

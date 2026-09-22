@@ -14,33 +14,34 @@ namespace Partnerly.Models.ViewModels
 
         [Required]
         public Guid? UserId { get; set; }
-        [Display(Name = FieldsDisplayNames.User)]
+
+        [Display(Name = nameof(FieldsDisplayNames.User), ResourceType = typeof(FieldsDisplayNames))]
         public string? CreatorName { get; set; }
 
-        [Display(Name = FieldsDisplayNames.TaskNumber)]
+        [Display(Name = nameof(FieldsDisplayNames.TaskNumber), ResourceType = typeof(FieldsDisplayNames))]
         public string? TicketID { get; set; }
 
         [CusromStringLenght(max:50)]
-        [Required(ErrorMessage = $"{FieldsDisplayNames.Subject} {ErrorMessages.FieldRequired}")]
-        [Display(Name = FieldsDisplayNames.Subject)]
+        [Required(ErrorMessageResourceType = typeof(ErrorMessages), ErrorMessageResourceName = nameof(ErrorMessages.FieldRequired))]
+        [Display(Name = nameof(FieldsDisplayNames.Subject), ResourceType = typeof(FieldsDisplayNames))]
         public string? Subject { get; set; }
 
         [SupportTicketStatus]
-        [Required(ErrorMessage = $"{FieldsDisplayNames.Message} {ErrorMessages.FieldRequired}")]
-        [Display(Name = FieldsDisplayNames.Message)]
+        [Required(ErrorMessageResourceType = typeof(ErrorMessages), ErrorMessageResourceName = nameof(ErrorMessages.FieldRequired))]
+        [Display(Name = nameof(FieldsDisplayNames.Message), ResourceType = typeof(FieldsDisplayNames))]
         public string? Message { get; set; }
 
-        [Required(ErrorMessage = $"{FieldsDisplayNames.Status} {ErrorMessages.FieldRequired}")]
-        [Display(Name = FieldsDisplayNames.Status)]
+        [Required(ErrorMessageResourceType = typeof(ErrorMessages), ErrorMessageResourceName = nameof(ErrorMessages.FieldRequired))]
+        [Display(Name = nameof(FieldsDisplayNames.Status), ResourceType = typeof(FieldsDisplayNames))]
         public string? Status { get; set; }
         public string? StatusAsView { get => AttributeDropdownHelper.GetValue<SupportTicketStatusAttribute>(Status);}
         public List<SelectListItem> TicketStatuses { get => AttributeDropdownHelper.FromAttribute<SupportTicketStatusAttribute>(); }
 
         public Guid? AssignedTo { get; set; }
-        [Display(Name = FieldsDisplayNames.AssignedTo)]
+        [Display(Name = nameof(FieldsDisplayNames.AssignedTo), ResourceType = typeof(FieldsDisplayNames))]
         public string? AssignedToName { get; set; }
 
-        [Display(Name = FieldsDisplayNames.IsRead)]
+        [Display(Name = nameof(FieldsDisplayNames.IsRead), ResourceType = typeof(FieldsDisplayNames))]
         public bool? IsRead { get; set; } = false;
         public bool IsReadBool { get => IsRead ?? false; set => IsRead = value; }
 

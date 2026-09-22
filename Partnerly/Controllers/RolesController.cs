@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Localization;
 using Partnerly.Descriptors.Attributes;
 using Partnerly.Descriptors.Attributes.BaseAttributes;
 using Partnerly.Descriptors.Messages;
@@ -17,8 +18,8 @@ namespace Partnerly.Controllers
     public class RolesController : _BaseController
     {
         protected readonly IRoleService _roleService;
-        public RolesController(IEventBus eventBus, IUserService userService, ICurrentUserService currentUser, ILogService logService, IRoleService roleService)
-        : base(eventBus, userService, currentUser, logService)
+        public RolesController(IEventBus eventBus, IUserService userService, ICurrentUserService currentUser, ILogService logService, IRoleService roleService, IStringLocalizer<SharedResource> localizer)
+        : base(eventBus, userService, currentUser, logService, localizer)
         {
             _roleService = roleService;
         }

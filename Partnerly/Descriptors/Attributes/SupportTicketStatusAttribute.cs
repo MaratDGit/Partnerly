@@ -12,9 +12,9 @@ namespace Partnerly.Descriptors.Attributes
 
         public SupportTicketStatusAttribute()
             : base(
-                New, Constants.New,
-                InProgress, Constants.InProgress,
-                Closed, Constants.Closed)
+                New, FieldsDisplayNames.New,
+                InProgress, FieldsDisplayNames.InProgress,
+                Closed, FieldsDisplayNames.Closed)
         { }
     }
 }

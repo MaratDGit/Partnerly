@@ -1,11 +1,11 @@
 ﻿@model Partnerly.Models.ViewModels.SupportTicketViewModel;
 @{
-    ViewData["Title"] = "Поддержка";
+    ViewData["Title"] = "Support";
 }
 
 <div class="card">
   <div class="card-body">
-    <h5>Связаться с поддержкой</h5>
+        <h5>@Localizer["Contactsupport"]</h5>
 
     @if (TempData.Peek("SupportSuccess") != null)
     {
@@ -38,8 +38,8 @@
         <span asp-validation-for="Message" class="text-danger"></span>
       </div>
 
-      <!-- reCAPTCHA или скрытое поле для защиты -->
-      <button class="btn btn-primary">Отправить</button>
+      <!-- reCAPTCHA -->
+            <button class="btn btn-primary">@Localizer["Send"]</button>
     </form>
   </div>
 </div>

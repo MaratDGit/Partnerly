@@ -25,15 +25,15 @@
                         <div class="modal-dialog modal-lg modal-dialog-scrollable">
                             <div class="modal-content">
                                 <div class="modal-header">
-                                    <h5 class="modal-title">Фильтры</h5>
-                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Закрыть"></button>
+                                    <h5 class="modal-title">${dataTableLocalization.filters}</h5>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="${dataTableLocalization.close}"></button>
                                 </div>
                                 <div class="modal-body">
                                     <form id="${modalId}-form" class="row g-3"></form>
                                 </div>
                                 <div class="modal-footer">
-                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Отмена</button>
-                                    <button type="button" class="btn btn-primary btn-apply-filters">Применить</button>
+                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">${dataTableLocalization.cancel}</button>
+                                    <button type="button" class="btn btn-primary btn-apply-filters">${dataTableLocalization.apply}</button>
                                 </div>
                             </div>
                         </div>
@@ -46,7 +46,7 @@
 
             // Кнопка сброса
             $buttonsDiv.append(`
-                    <a class="btn-cancel btn btn-sm me-2" title="Сбросить всё">
+                    <a class="btn-cancel btn btn-sm me-2" title="${dataTableLocalization.reset}">
                         <i class="bx bx-undo"></i>
                     </a>
                 `);
@@ -55,12 +55,12 @@
             if (settings.exportAllUrl || settings.exportSelectedUrl) {
                 const $exportDropdown = $(`
                     <div class="dropdown">
-                        <a class="btn btn-sm dropdown-toggle btn-excel" type="button" data-bs-toggle="dropdown" aria-expanded="false" title="Экспорт в Excel">
+                        <a class="btn btn-sm dropdown-toggle btn-excel" type="button" data-bs-toggle="dropdown" aria-expanded="false" title="${dataTableLocalization.exportExcel}">
                             <i class="bx bxs-file-export"></i>
                         </a>
                         <ul class="dropdown-menu">
-                            ${settings.exportAllUrl ? '<li><a class="dropdown-item btn-export-all" href="#">Экспорт всё</a></li>' : ''}
-                            ${settings.exportSelectedUrl ? '<li><a class="dropdown-item btn-export-selected" href="#">Экспорт выбранные</a></li>' : ''}
+                            ${settings.exportAllUrl ? `<li><a class="dropdown-item btn-export-all" href="#">${dataTableLocalization.exportAll}</a></li>` : ''}
+                            ${settings.exportSelectedUrl ? `<li><a class="dropdown-item btn-export-selected" href="#">${dataTableLocalization.exportSelected}</a></li>` : ''}
                         </ul>
                     </div>
                 `);
@@ -69,7 +69,7 @@
 
             // Кнопка фильтров
             $buttonsDiv.append(`
-                <a class="btn btn-sm btn-filter" title="Фильтры">
+                <a class="btn btn-sm btn-filter" title="${dataTableLocalization.filters}">
                     <i class="bx bx-filter"></i>
                 </a>
             `);
@@ -77,7 +77,7 @@
             $cardWrapper.prepend($buttonsDiv);
 
             // --- Поиск ---
-            const $searchDiv = $('<div class="custom-datatable-search"><input type="text" placeholder="Поиск..." /><i class="bx bx-x"></i></div>');
+            const $searchDiv = $(`<div class="custom-datatable-search"><input type="text" placeholder="${dataTableLocalization.search}" /><i class="bx bx-x"></i></div>`);
             $cardWrapper.prepend($searchDiv);
             const $searchInput = $searchDiv.find('input');
             const $clearBtn = $searchDiv.find('i');
@@ -160,9 +160,17 @@
 
                 // Info
                 if ($searchInput.val().trim() !== '') {
-                    $info.text(`Отфильтровано записей: ${filteredData.length} из ${settings.data.length}`);
+                    //$info.text(`Отфильтровано записей: ${filteredData.length} из ${settings.data.length}`);
+                    $info.text(
+                        dataTableLocalization.filteredRecords
+                            .replace("{0}", filteredData.length)
+                            .replace("{1}", settings.data.length)
+                    );
                 } else {
-                    $info.text(`Всего записей: ${settings.data.length}`);
+                    //$info.text(`Всего записей: ${settings.data.length}`);
+                    $info.text(
+                        dataTableLocalization.totalRecords.replace("{0}", settings.data.length)
+                    );
                 }
 
                 enableColumnResize();
@@ -239,7 +247,11 @@
                 // --- Добавляем текст "Показано X–Y из Z записей" ---
                 const start = (currentPage - 1) * pageSize + 1;
                 const end = Math.min(currentPage * pageSize, filteredData.length);
-                const infoText = `Показано ${start}–${end} из ${filteredData.length} записей`;
+                //const infoText = `Показано ${start}–${end} из ${filteredData.length} записей`;
+                const infoText = dataTableLocalization.shownRecords
+                    .replace("{0}", start)
+                    .replace("{1}", end)
+                    .replace("{2}", filteredData.length);
                 $info.text(infoText);
             }
 
@@ -251,7 +263,7 @@
                     if (activeFilters[field]) {
                         if ($icon.length === 0) {
                             $(this).find(".th-content").append(
-                                ` <i class="bx bx-filter-alt filter-indicator" style="color:#4e73df;" title="Фильтр активен"></i>`
+                                ` <i class="bx bx-filter-alt filter-indicator" style="color:#4e73df;" title="${dataTableLocalization.filterActive}"></i>`
                             );
                         }
                     } else {
@@ -304,20 +316,20 @@
                 $form.empty();
 
                 settings.columns.forEach(col => {
-                    if (!col.data || col.data === "select" || col.title === "Действия" || !col.isFilterable) return;
+                    if (!col.data || col.data === "select" || col.title === dataTableLocalization.actions || !col.isFilterable) return;
 
                     const uniqueValues = [...new Set(settings.data.map(r => r[col.data]))].filter(v => v != null && v !== "");
 
                     let inputHtml = "";
 
-                    if (col.dataType === "date" || col.title.toLowerCase().includes("дата")) {
+                    if (col.dataType === "date" || col.title.toLowerCase().includes("date") || col.title.toLowerCase().includes("дата") || col.title.toLowerCase().includes("ամսաթիվ")) {
                                     inputHtml = `
                             <div class="col-md-6">
                                 <label>${col.title}</label>
                                 <div class="input-group">
-                                    <input type="date" class="form-control filter-input" placeholder="От" data-field="${col.data}" data-type="date-from">
+                                    <input type="date" class="form-control filter-input" placeholder="${dataTableLocalization.from}" data-field="${col.data}" data-type="date-from">
                                     <span class="input-group-text">–</span>
-                                    <input type="date" class="form-control filter-input" placeholder="До" data-field="${col.data}" data-type="date-to">
+                                    <input type="date" class="form-control filter-input" placeholder="${dataTableLocalization.to}" data-field="${col.data}" data-type="date-to">
                                 </div>
                             </div>
                         `;
@@ -326,9 +338,9 @@
                             <div class="col-md-6">
                                 <label>${col.title}</label>
                                 <select class="form-select filter-input" data-field="${col.data}">
-                                    <option value="">Все</option>
-                                    <option value="true">Да</option>
-                                    <option value="false">Нет</option>
+                                    <option value="">${dataTableLocalization.all}</option>
+                                    <option value="true">${dataTableLocalization.yes}</option>
+                                    <option value="false">${dataTableLocalization.no}</option>
                                 </select>
                             </div>
                         `;
@@ -337,7 +349,7 @@
                 <div class="col-md-6">
                     <label>${col.title}</label>
                     <select class="form-select filter-input" data-field="${col.data}">
-                        <option value="">Все</option>
+                        <option value="">${dataTableLocalization.all}</option>
                         ${uniqueValues.map(v => `<option value="${v}">${v}</option>`).join("")}
                     </select>
                 </div>

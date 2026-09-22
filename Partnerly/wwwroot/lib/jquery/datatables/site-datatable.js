@@ -49,40 +49,109 @@
                     if (f.format) {
                         const [typeFormat, formatString] = f.format.split(":");
 
+                        //if (typeFormat === "date") {
+                        //    if (formatString === "lastActivity") {
+                        //        const d = new Date(data); // дата с сервера (UTC)
+                        //        const now = new Date();   // текущее локальное время
+
+                        //        // Разница в миллисекундах
+                        //        const diffMs = now.getTime() - d.getTime();
+
+                        //        const diffSec = Math.floor(diffMs / 1000);
+                        //        const diffMin = Math.floor(diffSec / 60);
+                        //        const diffHour = Math.floor(diffMin / 60);
+                        //        const diffDay = Math.floor(diffHour / 24);
+
+                        //        if (diffMin < 1) return "только что";
+                        //        if (diffMin < 60) return diffMin + " минут назад";
+                        //        if (diffHour < 24) return diffHour + " часов назад";
+
+                        //        // Больше одного дня — выводим дату
+                        //        return d.getDate().toString().padStart(2, "0") + "/" +
+                        //            (d.getMonth() + 1).toString().padStart(2, "0") + "/" +
+                        //            d.getFullYear();
+                        //    }
+
+                        //    const d = new Date(data);
+                        //    if (isNaN(d)) return data;
+                        //    switch (formatString) {
+                        //        case "MM/dd/yyyy":
+                        //            return (d.getMonth() + 1).toString().padStart(2, "0") + "/" + d.getDate().toString().padStart(2, "0") + "/" + d.getFullYear();
+                        //        case "dd.MM.yyyy":
+                        //            return d.getDate().toString().padStart(2, "0") + "." + (d.getMonth() + 1).toString().padStart(2, "0") + "." + d.getFullYear();
+                        //        case "dd/MM/yyyy HH:mm":
+                        //            return d.getDate().toString().padStart(2, "0") + "/" + (d.getMonth() + 1).toString().padStart(2, "0") + "/" + d.getFullYear() + " " + d.getHours().toString().padStart(2, "0") + ":" + d.getMinutes().toString().padStart(2, "0");
+                        //        default:
+                        //            return d.toLocaleDateString();
+                        //    }
+                        //}
                         if (typeFormat === "date") {
-                            if (formatString === "lastActivity") {
-                                const d = new Date(data); // дата с сервера (UTC)
-                                const now = new Date();   // текущее локальное время
-
-                                // Разница в миллисекундах
-                                const diffMs = now.getTime() - d.getTime();
-
-                                const diffSec = Math.floor(diffMs / 1000);
-                                const diffMin = Math.floor(diffSec / 60);
-                                const diffHour = Math.floor(diffMin / 60);
-                                const diffDay = Math.floor(diffHour / 24);
-
-                                if (diffMin < 1) return "только что";
-                                if (diffMin < 60) return diffMin + " минут назад";
-                                if (diffHour < 24) return diffHour + " часов назад";
-
-                                // Больше одного дня — выводим дату
-                                return d.getDate().toString().padStart(2, "0") + "/" +
-                                    (d.getMonth() + 1).toString().padStart(2, "0") + "/" +
-                                    d.getFullYear();
-                            }
 
                             const d = new Date(data);
-                            if (isNaN(d)) return data;
+
+                            if (isNaN(d.getTime())) {
+                                return data;
+                            }
+
+                            if (formatString === "lastActivity") {
+
+                                const now = new Date();
+
+                                const diffMs = now.getTime() - d.getTime();
+
+                                const diffMin = Math.floor(diffMs / 60000);
+                                const diffHour = Math.floor(diffMin / 60);
+
+                                const loc = dateLocalization;
+
+                                if (diffMin < 1) {
+                                    return loc.justNow;
+                                }
+
+                                if (diffMin === 1) {
+                                    return loc.minuteAgo;
+                                }
+
+                                if (diffMin < 60) {
+                                    return `${diffMin} ${loc.minutesAgo}`;
+                                }
+
+                                if (diffHour === 1) {
+                                    return loc.hourAgo;
+                                }
+
+                                if (diffHour < 24) {
+                                    return `${diffHour} ${loc.hoursAgo}`;
+                                }
+
+                                return new Intl.DateTimeFormat(loc.culture, {
+                                    day: "2-digit",
+                                    month: "2-digit",
+                                    year: "numeric"
+                                }).format(d);
+                            }
+
                             switch (formatString) {
+
                                 case "MM/dd/yyyy":
-                                    return (d.getMonth() + 1).toString().padStart(2, "0") + "/" + d.getDate().toString().padStart(2, "0") + "/" + d.getFullYear();
                                 case "dd.MM.yyyy":
-                                    return d.getDate().toString().padStart(2, "0") + "." + (d.getMonth() + 1).toString().padStart(2, "0") + "." + d.getFullYear();
+                                    return new Intl.DateTimeFormat(dateLocalization.culture, {
+                                        day: "2-digit",
+                                        month: "2-digit",
+                                        year: "numeric"
+                                    }).format(d);
+
                                 case "dd/MM/yyyy HH:mm":
-                                    return d.getDate().toString().padStart(2, "0") + "/" + (d.getMonth() + 1).toString().padStart(2, "0") + "/" + d.getFullYear() + " " + d.getHours().toString().padStart(2, "0") + ":" + d.getMinutes().toString().padStart(2, "0");
+                                    return new Intl.DateTimeFormat(dateLocalization.culture, {
+                                        day: "2-digit",
+                                        month: "2-digit",
+                                        year: "numeric",
+                                        hour: "2-digit",
+                                        minute: "2-digit"
+                                    }).format(d);
+
                                 default:
-                                    return d.toLocaleDateString();
+                                    return new Intl.DateTimeFormat(dateLocalization.culture).format(d);
                             }
                         }
                         if (typeFormat === "number") return parseFloat(data).toLocaleString(undefined, { minimumFractionDigits: parseInt(formatString) || 0 });
@@ -96,7 +165,7 @@
         if (hasVisibleActions) {
             columns.push({
                 data: null,
-                title: "Действия",
+                title: dataTableLocalization.actions,
                 orderable: false,
                 render: function (data, type, row) {
                     let items = (row.actions || []).filter(a => a.isVisible).map(a => {

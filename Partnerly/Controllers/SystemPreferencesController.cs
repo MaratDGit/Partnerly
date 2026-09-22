@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Localization;
 using Partnerly.Descriptors.Attributes;
 using Partnerly.Descriptors.Attributes.BaseAttributes;
 using Partnerly.Descriptors.Messages;
@@ -16,8 +17,8 @@ namespace Partnerly.Controllers
     public class SystemPreferencesController : _BaseController
     {
         protected readonly ISystemSettingsService _systemSettingsService;
-        public SystemPreferencesController(IEventBus eventBus, ISystemSettingsService systemSettingsService, IUserService userService, ICurrentUserService currentUser, ILogService logService)
-        : base(eventBus, userService, currentUser, logService)
+        public SystemPreferencesController(IEventBus eventBus, ISystemSettingsService systemSettingsService, IUserService userService, ICurrentUserService currentUser, ILogService logService, IStringLocalizer<SharedResource> localizer)
+        : base(eventBus, userService, currentUser, logService, localizer)
         {
             _systemSettingsService = systemSettingsService;
         }

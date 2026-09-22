@@ -1,13 +1,13 @@
 ﻿@model Partnerly.Models.ViewModels.MySettingsViewModel;
 @await Html.PartialAsync("_Toast")
 @{
-  ViewData["Title"] = "Настройки";
+    ViewData["Title"] = "Settings";
   Layout = "_ContentNavbarLayout";
 }
 
 <div class="card">
     <div class="card-header">
-        <h5>@ViewData["Title"]</h5>
+        <h5>@Localizer["Settings"]</h5>
     </div>
     <form id="settingsForm" asp-action="Settings">
         <input type="hidden" id="activeTab" name="ActiveTab" value="@Model?.ActiveTab" />
@@ -23,14 +23,14 @@
            <div class="nav-align-top nav-tabs mb-6">
             <ul class="nav nav-tabs nav-fill" role="tablist">
                 <li class="nav-item">
-                <button type="button" class="nav-link active" role="tab" data-bs-toggle="tab" data-bs-target="#navs-justified-profile" aria-controls="navs-justified-profile" aria-selected="false"><span class="d-none d-sm-block"><i class="tf-icons bx bx-user bx-sm me-1_5 align-text-bottom"></i> Профиль</span><i class="bx bx-user bx-sm d-sm-none"></i></button>
+                        <button type="button" class="nav-link active" role="tab" data-bs-toggle="tab" data-bs-target="#navs-justified-profile" aria-controls="navs-justified-profile" aria-selected="false"><span class="d-none d-sm-block"><i class="tf-icons bx bx-user bx-sm me-1_5 align-text-bottom"></i> @Localizer["Profile"]</span><i class="bx bx-user bx-sm d-sm-none"></i></button>
             </li>
                 <li class="nav-item">
-                <button type="button" class="nav-link" role="tab" data-bs-toggle="tab" data-bs-target="#navs-justified-home" aria-controls="navs-justified-home" aria-selected="true"><span class="d-none d-sm-block"><i class="tf-icons bx bx-key bx-sm me-1_5 align-text-bottom"></i> Изменить пароль </span><i class="bx bx-key bx-sm d-sm-none"></i></button>
+                        <button type="button" class="nav-link" role="tab" data-bs-toggle="tab" data-bs-target="#navs-justified-home" aria-controls="navs-justified-home" aria-selected="true"><span class="d-none d-sm-block"><i class="tf-icons bx bx-key bx-sm me-1_5 align-text-bottom"></i> @Localizer["Changepassword"] </span><i class="bx bx-key bx-sm d-sm-none"></i></button>
             </li>
        
             <li class="nav-item">
-                <button type="button" class="nav-link" role="tab" data-bs-toggle="tab" data-bs-target="#navs-justified-messages" aria-controls="navs-justified-messages" aria-selected="false"><span class="d-none d-sm-block"><i class="tf-icons bx bx-bell bx-sm me-1_5 align-text-bottom"></i> Уведомления</span><i class="bx bx-bell bx-sm d-sm-none"></i></button>
+                        <button type="button" class="nav-link" role="tab" data-bs-toggle="tab" data-bs-target="#navs-justified-messages" aria-controls="navs-justified-messages" aria-selected="false"><span class="d-none d-sm-block"><i class="tf-icons bx bx-bell bx-sm me-1_5 align-text-bottom"></i> @Localizer["Notifications"]</span><i class="bx bx-bell bx-sm d-sm-none"></i></button>
             </li>
             </ul>
             <div class="tab-content">
@@ -48,12 +48,12 @@
                    <span asp-validation-for="LastName" class="text-danger"></span>
                 </div>
                 <div class="form-floating mb-1 max-w-600">
-                   <input asp-for="Email" class="form-control" id="email" name="email" placeholder="Введите свой адрес электронной почты" readonly/>
+                   <input asp-for="Email" class="form-control" id="email" name="email" readonly/>
                    <label asp-for="Email"></label>
                    <span asp-validation-for="Email" class="text-danger"></span>
                 </div>
                 <div class="form-floating mb-1 max-w-600">
-                   <input asp-for="Phone" class="form-control" id="phone" name="phone" placeholder="+37477123456" readonly/>
+                   <input asp-for="Phone" class="form-control" id="phone" name="phone" readonly/>
                    <label asp-for="Phone"></label>
                    <span asp-validation-for="Phone" class="text-danger"></span>
                 </div>
@@ -99,7 +99,7 @@
                         <input asp-for="AllowSendNotificationsBool" class="form-check-input" type="checkbox" id="allowSendNotifications" />
                         <label class="form-check-label" asp-for="AllowSendNotifications" for="allowSendNotifications"></label>
                         <span id="warningSpan" class="text-warning ms-2 @(!Model.AllowSendNotificationsBool ? "" : "d-none")">
-                            ⚠️ Важные уведомления будут приходить
+                                    ⚠️ @Localizer["Youwillreceiveimportantnotifications"]
                         </span>
                     </div>
                 </div>

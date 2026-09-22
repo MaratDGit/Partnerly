@@ -1,4 +1,5 @@
-﻿using Partnerly.Descriptors.Attributes.BaseAttributes;
+﻿using Microsoft.AspNetCore.Components.Forms;
+using Partnerly.Descriptors.Attributes.BaseAttributes;
 using Partnerly.Descriptors.Messages;
 using System.ComponentModel.DataAnnotations;
 
@@ -13,28 +14,28 @@ namespace Partnerly.Models.ViewModels
 
         #region FirstName
         [CusromStringLenght(min: 4, max: 20)]
-        [Required(ErrorMessage = $"{FieldsDisplayNames.FirstName} {ErrorMessages.FieldRequired}")]
-        [Display(Name = FieldsDisplayNames.FirstName)]
+        [Required(ErrorMessageResourceType = typeof(ErrorMessages), ErrorMessageResourceName = nameof(ErrorMessages.FieldRequired))]
+        [Display(Name = nameof(FieldsDisplayNames.FirstName), ResourceType = typeof(FieldsDisplayNames))]
         public string? FirstName { get; set; }
         #endregion
 
         #region LastName
         [CusromStringLenght(min: 4, max: 20)]
-        [Required(ErrorMessage = $"{FieldsDisplayNames.LastName} {ErrorMessages.FieldRequired}")]
-        [Display(Name = FieldsDisplayNames.LastName)]
+        [Required(ErrorMessageResourceType = typeof(ErrorMessages), ErrorMessageResourceName = nameof(ErrorMessages.FieldRequired))]
+        [Display(Name = nameof(FieldsDisplayNames.LastName), ResourceType = typeof(FieldsDisplayNames))]
         public string? LastName { get; set; }
         #endregion
         #region Email
-        [Required(ErrorMessage = ErrorMessages.EmailRequired)]
         [EmailAddress]
-        [Display(Name = FieldsDisplayNames.Email)]
+        [Required(ErrorMessageResourceType = typeof(ErrorMessages), ErrorMessageResourceName = nameof(ErrorMessages.EmailRequired))]
+        [Display(Name = nameof(FieldsDisplayNames.Email), ResourceType = typeof(FieldsDisplayNames))]
         public string? Email { get; set; }
         #endregion
 
         #region Phone
-        [Required(ErrorMessage = $"{FieldsDisplayNames.Phone} {ErrorMessages.FieldRequired}")]
-        [ArmenianPhone(ErrorMessage = ErrorMessages.TypeValidPhoneNumber)]
-        [Display(Name = FieldsDisplayNames.Phone)]
+        [ArmenianPhone(ErrorMessageResourceType = typeof(ErrorMessages), ErrorMessageResourceName = nameof(ErrorMessages.TypeValidPhoneNumber))]
+        [Required(ErrorMessageResourceType = typeof(ErrorMessages), ErrorMessageResourceName = nameof(ErrorMessages.FieldRequired))]
+        [Display(Name = nameof(FieldsDisplayNames.Phone), ResourceType = typeof(FieldsDisplayNames))]
         public string? Phone { get; set; }
         #endregion
 
@@ -43,19 +44,18 @@ namespace Partnerly.Models.ViewModels
         #endregion
 
         #region Balance
-        [Display(Name = FieldsDisplayNames.Balance)]
+        [Display(Name = nameof(FieldsDisplayNames.Balance), ResourceType = typeof(FieldsDisplayNames))]
         public decimal? Balance { get; set; }
         #endregion
 
         #region RoleId
-        //[Required]
-        [Display(Name = FieldsDisplayNames.Role)]
+        [Display(Name = nameof(FieldsDisplayNames.Role), ResourceType = typeof(FieldsDisplayNames))]
         public Guid? RoleId { get; set; }
         #endregion
 
         #region MyReferralCode
         [Required]
-        [Display(Name = FieldsDisplayNames.ReferrerCode)]
+        [Display(Name = nameof(FieldsDisplayNames.ReferrerCode), ResourceType = typeof(FieldsDisplayNames))]
         public string? MyReferralCode { get; set; }
         #endregion
 
@@ -75,13 +75,13 @@ namespace Partnerly.Models.ViewModels
         #endregion
 
         #region IsBlocked
-        [Display(Name = FieldsDisplayNames.IsBlocked)]
+        [Display(Name = nameof(FieldsDisplayNames.IsBlocked), ResourceType = typeof(FieldsDisplayNames))]
         public bool? IsBlocked { get; set; }
         public bool IsBlockedBool { get => IsBlocked ?? false; set => IsBlocked = value; }
         #endregion
 
         #region EmailConfirmed
-        [Display(Name = FieldsDisplayNames.EmailConfirmed)]
+        [Display(Name = nameof(FieldsDisplayNames.EmailConfirmed), ResourceType = typeof(FieldsDisplayNames))]
         public bool? EmailConfirmed { get; set; }
         public bool EmailConfirmedBool { get => EmailConfirmed ?? false; set => EmailConfirmed = value; }
         #endregion

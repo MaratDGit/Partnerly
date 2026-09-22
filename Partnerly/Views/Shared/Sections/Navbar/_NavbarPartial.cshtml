@@ -179,6 +179,95 @@
         </div>
     }
   <ul class="navbar-nav flex-row align-items-center ms-auto">
+
+        @{
+            var currentCulture = CultureInfo.CurrentUICulture.TwoLetterISOLanguageName;
+
+            var currentFlag = currentCulture switch
+            {
+                "en" => "gb",
+                "ru" => "ru",
+                "hy" => "am",
+                _ => "un"
+            };
+        }
+
+        <li class="nav-item dropdown me-4">
+            <a class="nav-link dropdown-toggle hide-arrow"
+               href="javascript:void(0);"
+               data-bs-toggle="dropdown"
+               aria-expanded="false">
+
+                <img src="https://flagcdn.com/24x18/@(currentFlag).png"
+                     alt="@currentCulture"
+                     width="24"
+                     height="18" />
+            </a>
+
+            <ul class="dropdown-menu dropdown-menu-end">
+
+                <li>
+                    <form asp-controller="Language" asp-action="SetLanguage" method="post">
+                        <input type="hidden"
+                               name="returnUrl"
+                               value="@Context.Request.Path@Context.Request.QueryString" />
+
+                        <button type="submit"
+                                name="culture"
+                                value="en"
+                                class="dropdown-item">
+                            <img src="https://flagcdn.com/24x18/gb.png"
+                                 width="24"
+                                 height="18"
+                                 class="me-2"
+                                 alt="English" />
+                            English
+                        </button>
+                    </form>
+                </li>
+
+                <li>
+                    <form asp-controller="Language" asp-action="SetLanguage" method="post">
+                        <input type="hidden"
+                               name="returnUrl"
+                               value="@Context.Request.Path@Context.Request.QueryString" />
+
+                        <button type="submit"
+                                name="culture"
+                                value="ru"
+                                class="dropdown-item">
+                            <img src="https://flagcdn.com/24x18/ru.png"
+                                 width="24"
+                                 height="18"
+                                 class="me-2"
+                                 alt="Русский" />
+                            Русский
+                        </button>
+                    </form>
+                </li>
+
+                <li>
+                    <form asp-controller="Language" asp-action="SetLanguage" method="post">
+                        <input type="hidden"
+                               name="returnUrl"
+                               value="@Context.Request.Path@Context.Request.QueryString" />
+
+                        <button type="submit"
+                                name="culture"
+                                value="hy"
+                                class="dropdown-item">
+                            <img src="https://flagcdn.com/24x18/am.png"
+                                 width="24"
+                                 height="18"
+                                 class="me-2"
+                                 alt="Հայերեն" />
+                            Հայերեն
+                        </button>
+                    </form>
+                </li>
+
+            </ul>
+        </li>
     <li class="nav-item dropdown me-4">
       <a class="btn btn-xs dropdown-toggle" href="#" id="notificationDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
         <i class="bx bxs-bell-ring"></i>
@@ -188,12 +277,12 @@
              style="width: 320px; overflow: hidden;">
           <div id="notificationListWrapper" style="max-height: 380px; overflow-y: auto; overflow-x: hidden;" class="p-2">
             <ul id="notificationList" class="list-unstyled mb-0">
-                <li class="text-center text-muted small py-2 no-notifications">Нет новых уведомлений</li>
+                        <li class="text-center text-muted small py-2 no-notifications">@Localizer["NoNewNotifications"]</li>
             </ul>
           </div>
           <div class="p-2 border-top bg-light text-center" style="display:none;">
             <button id="markAllReadBtn" class="btn btn-primary btn-sm w-100">
-              Отметить все как прочитанные
+                        @Localizer["Markallasread"]
             </button>
           </div>
         </div>
@@ -225,13 +314,13 @@
         <li>
           <a class="dropdown-item" asp-controller="Dashboard" asp-action="MyProfile">
             <i class="bx bx-user bx-md me-2"></i>
-            <span>Мой профиль</span>
+                        <span>@Localizer["Myprofile"]</span>
           </a>
         </li>
         <li>
           <a class="dropdown-item" asp-controller="Dashboard" asp-action="Settings">
             <i class="bx bx-cog bx-md me-2"></i>
-            <span>Настройки</span>
+                        <span>@Localizer["Settings"]</span>
           </a>
         </li>
         <li>
@@ -240,7 +329,7 @@
         <li>
           <a class="dropdown-item" asp-controller="Account" asp-action="Logout">
             <i class="bx bx-power-off bx-md me-2"></i>
-            <span>Выйти</span>
+                        <span>@Localizer["Logout"]</span>
           </a>
         </li>
       </ul>
@@ -250,159 +339,232 @@
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/microsoft-signalr/8.0.0/signalr.min.js"></script>
 <script>
-document.addEventListener('DOMContentLoaded', function() {
-    const list = document.getElementById('notificationList');
-    const badge = document.getElementById('unreadCountBadge');
-    const markAllBtn = document.getElementById('markAllReadBtn');
 
-    const connection = new signalR.HubConnectionBuilder()
-        .withUrl("/notificationHub")
-        .withAutomaticReconnect()
-        .build();
+            const notificationLocalization = {
+            noNotifications: '@Html.Raw(Localizer["NoNewNotifications"])',
+            markAllAsRead: '@Html.Raw(Localizer["Markallasread"])',
+            details: '@Html.Raw(Localizer["Details"])',
+            hide: '@Html.Raw(Localizer["Hide"])',
+            view: '@Html.Raw(Localizer["View"])',
+            connected: '@Html.Raw(Localizer["ConnectedToNotificationHub"])',
+            connectionError: '@Html.Raw(Localizer["ErrorConnectionSignalR"])'
+        };
+        const currentCulture = '@CultureInfo.CurrentUICulture.Name';
 
-    // Processing new notifications
-    connection.on("ReceiveNotification", function (notification) {
+    document.addEventListener('DOMContentLoaded', function() {
+        const list = document.getElementById('notificationList');
+        const badge = document.getElementById('unreadCountBadge');
+        const markAllBtn = document.getElementById('markAllReadBtn');
 
-        const emptyItem = list.querySelector('.no-notifications');
-        if (emptyItem) emptyItem.remove();
+        const connection = new signalR.HubConnectionBuilder()
+            .withUrl("/notificationHub")
+            .withAutomaticReconnect()
+            .build();
 
-        const li = document.createElement('li');
-        let date = new Date(notification.createdDate);
-        date = new Date(date.getTime() + 4 * 60 * 60 * 1000); // +4 hour
-        const created = date.toLocaleString('ru-RU', {
-            day: '2-digit',
-            month: 'long',
-            year: 'numeric',
-            hour: '2-digit',
-            minute: '2-digit'
-        });
+        // Processing new notifications
+        connection.on("ReceiveNotification", function (notification) {
 
-        li.classList.add('dropdown-item', 'py-2', 'border-bottom', 'notification-item');
-        li.innerHTML = `
-            <div>
-                <div class="notification-date">
-                    <i class="bx bx-calendar"></i>
-                    <span>${created.replace(' г.', ' г.')}</span>
-                </div>
+            const emptyItem = list.querySelector('.no-notifications');
+            if (emptyItem) emptyItem.remove();
 
-                <div class="notification-message" id="msg-${notification.id}">
-                    ${notification.message}
-                </div>
+            const li = document.createElement('li');
 
-                <div class="notification-actions">
-                    <button class="btn btn-link btn-sm p-0 text-primary toggle-details" data-id="${notification.id}">
-                        Подробнее
-                    </button>
+            let date = new Date(notification.createdDate);
+            date = new Date(date.getTime() + 4 * 60 * 60 * 1000);
+
+            const created = date.toLocaleString(currentCulture, {
+                day: '2-digit',
+                month: 'long',
+                year: 'numeric',
+                hour: '2-digit',
+                minute: '2-digit'
+            });
+
+            li.classList.add(
+                'dropdown-item',
+                'py-2',
+                'border-bottom',
+                'notification-item'
+            );
+
+            li.innerHTML = `
+                <div>
+                    <div class="notification-date">
+                        <i class="bx bx-calendar"></i>
+                        <span>${created.replace(' г.', ' г.')}</span>
+                    </div>
+
+                    <div class="notification-message" id="msg-${notification.id}">
+                        ${notification.message}
+                    </div>
+
+                    <div class="notification-actions">
+                        <button
+                            class="btn btn-link btn-sm p-0 text-primary toggle-details"
+                            data-id="${notification.id}">
+                            ${notificationLocalization.details}
+                        </button>
+
+                        ${
+                            notification.link
+                                ? `<a href="${notification.link}"
+                                      class="btn btn-link btn-sm text-secondary p-0">
+                                       ${notificationLocalization.view}
+                                   </a>`
+                                : ""
+                        }
+                    </div>
 
                     ${
-                        notification.link
-                            ? `<a href="${notification.link}" class="btn btn-link btn-sm text-secondary p-0">
-                                   Посмотреть
-                               </a>`
+                        notification.type === "I"
+                            ? `<button
+                                   class="delete-notification mark-read"
+                                   data-id="${notification.id}">
+                                   <i class="bx bx-x"></i>
+                               </button>`
                             : ""
                     }
                 </div>
+            `;
 
-                ${
-                    notification.type === "I"
-                        ? `<button class="delete-notification mark-read" data-id="${notification.id}">
-                               <i class="bx bx-x"></i>
-                           </button>`
-                        : ""
-                }
-            </div>
-        `;
+            list.prepend(li);
 
-        list.prepend(li);
-
-        // Displaying the "Mark all as read" button.
-        markAllBtn.closest('div').style.display = 'block';
-        // Updating the badge
-        badge.textContent = list.querySelectorAll('li.dropdown-item').length;
-        badge.style.display = 'inline-block';
-    });
-
-    function animateBadge(badge) {
-        // Remove the class to restart the animation.
-        badge.classList.remove("badge-animate");
-        // Force a reflow so the browser applies the change.
-        void badge.offsetWidth;
-        // We add the class back.
-        badge.classList.add("badge-animate");
-    }
-
-    setInterval(() => {
-        const badge = document.getElementById("unreadCountBadge");
-        if (badge && badge.textContent !== "0") {
-            animateBadge(badge);
-        }
-    }, 5000); // every 5 seconds
-
-    // Updating the notification counter
-    connection.on("UpdateUnreadCount", function (count) {
-        if (count > 0) {
-            badge.textContent = count;
-            badge.style.display = 'inline-block';
             markAllBtn.closest('div').style.display = 'block';
-        } else {
-            badge.style.display = 'none';
-            markAllBtn.closest('div').style.display = 'none';
 
-            // If there are no notifications, we display the "No new notifications" placeholder.
-            list.innerHTML = '<li class="text-center text-muted small py-2 no-notifications">Нет новых уведомлений</li>';
+            badge.textContent =
+                list.querySelectorAll('li.dropdown-item').length;
+
+            badge.style.display = 'inline-block';
+        });
+
+        function animateBadge(badge) {
+            badge.classList.remove("badge-animate");
+
+            void badge.offsetWidth;
+
+            badge.classList.add("badge-animate");
         }
-    });
 
-    // Start Connection
-    connection.start()
-        .then(() => console.log("Connected to SignalR NotificationHub"))
-        .catch(err => console.error("Error Connection SignalR:", err));
+        setInterval(() => {
+            const badge = document.getElementById("unreadCountBadge");
 
-    list.addEventListener('click', function (e) {
-        const btn = e.target.closest('button');
-        if (!btn) return;
-        e.stopPropagation();
+            if (badge && badge.textContent !== "0") {
+                animateBadge(badge);
+            }
+        }, 5000);
 
-        if (btn.classList.contains('mark-read')) {
-            const li = btn.closest('li');
-            const id = btn.dataset.id;
+        // Updating the notification counter
+        connection.on("UpdateUnreadCount", function (count) {
 
-            fetch('/Notification/MarkAsRead?id=' + id, { method: 'POST' })
+            if (count > 0) {
+
+                badge.textContent = count;
+                badge.style.display = 'inline-block';
+
+                markAllBtn.closest('div').style.display = 'block';
+
+            } else {
+
+                badge.style.display = 'none';
+                markAllBtn.closest('div').style.display = 'none';
+
+                list.innerHTML = `
+                    <li class="text-center text-muted small py-2 no-notifications">
+                        ${notificationLocalization.noNotifications}
+                    </li>`;
+            }
+        });
+
+        // Start Connection
+        connection.start()
+            .then(() =>
+                console.log(notificationLocalization.connected)
+            )
+            .catch(err =>
+                console.error(
+                    notificationLocalization.connectionError,
+                    err
+                )
+            );
+
+        list.addEventListener('click', function(e) {
+
+            const btn = e.target.closest('button');
+
+            if (!btn) return;
+
+            e.stopPropagation();
+
+            if (btn.classList.contains('mark-read')) {
+
+                const li = btn.closest('li');
+                const id = btn.dataset.id;
+
+                fetch('/Notification/MarkAsRead?id=' + id, {
+                    method: 'POST'
+                })
                 .then(res => {
+
                     if (res.ok) {
                         li.remove();
                         updateBadge();
                     }
+
                 });
-        }
+            }
 
-        if (btn.classList.contains('toggle-details')) {
-            const li = btn.closest('li');
-            const msg = li.querySelector('.notification-message, .notification-full');
-            if (!msg) return;
+            if (btn.classList.contains('toggle-details')) {
 
-            msg.classList.toggle('notification-full');
-            msg.classList.toggle('notification-message');
-            btn.textContent = msg.classList.contains('notification-full') ? 'Скрыть' : 'Подробнее';
-        }
-    });
+                const li = btn.closest('li');
 
-    markAllBtn.addEventListener('click', function() {
-        fetch('/Notification/MarkAllAsRead', { method: 'POST' })
+                const msg = li.querySelector(
+                    '.notification-message, .notification-full'
+                );
+
+                if (!msg) return;
+
+                msg.classList.toggle('notification-full');
+                msg.classList.toggle('notification-message');
+
+                btn.textContent =
+                    msg.classList.contains('notification-full')
+                        ? notificationLocalization.hide
+                        : notificationLocalization.details;
+            }
+        });
+
+        markAllBtn.addEventListener('click', function() {
+
+            fetch('/Notification/MarkAllAsRead', {
+                method: 'POST'
+            })
             .then(res => {});
-    });
+        });
 
-    function updateBadge() {
-        const count = list.querySelectorAll('li.dropdown-item').length;
-        badge.textContent = count;
-        badge.style.display = count > 0 ? 'inline-block' : 'none';
-        markAllBtn.style.display = count > 0 ? 'block' : 'none';
-        markAllBtn.closest('div').style.display = count > 0 ? 'block' : 'none';
+        function updateBadge() {
 
-        if (count === 0) {
-            list.innerHTML = '<li class="text-center text-muted small py-2 no-notifications">Нет новых уведомлений</li>';
+            const count =
+                list.querySelectorAll('li.dropdown-item').length;
+
+            badge.textContent = count;
+
+            badge.style.display =
+                count > 0 ? 'inline-block' : 'none';
+
+            markAllBtn.style.display =
+                count > 0 ? 'block' : 'none';
+
+            markAllBtn.closest('div').style.display =
+                count > 0 ? 'block' : 'none';
+
+            if (count === 0) {
+
+                list.innerHTML = `
+                    <li class="text-center text-muted small py-2 no-notifications">
+                        ${notificationLocalization.noNotifications}
+                    </li>`;
+            }
         }
-    }
-});
+    });
 
 </script>

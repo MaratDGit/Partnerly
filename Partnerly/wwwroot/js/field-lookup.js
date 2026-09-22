@@ -1,4 +1,5 @@
-﻿document.addEventListener("DOMContentLoaded", () => {
+﻿
+document.addEventListener("DOMContentLoaded", () => {
     initLookupModal();
 
     document.querySelectorAll(".lookup-icon").forEach(icon => {
@@ -11,17 +12,17 @@
 });
 
 function initLookupModal() {
-    if (document.getElementById("lookupModal")) return; // уже есть
+    if (document.getElementById("lookupModal")) return; // уже есть   
 
     const modalHtml = `
     <div id="lookupModal" class="lookup-modal" style="display:none;">
         <div class="lookup-content">
             <div class="lookup-header">
-                <h5 id="lookupTitle">Выберите запись</h5>
+                <h5 id="lookupTitle">${lookupLocalization.selectRecord}</h5>
                 <button id="lookupClose" class="lookup-close">&times;</button>
             </div>
             <div class="lookup-body">
-                <input type="text" id="lookupSearch" placeholder="Поиск..." class="form-control mb-2" />
+                <input type="text" id="lookupSearch" placeholder="${lookupLocalization.search}" class="form-control mb-2" />
                 <div class="table-container">
                     <table id="lookupTable" class="table table-hover">
                         <thead><tr id="lookupHead"></tr></thead>
@@ -56,16 +57,16 @@ function openLookupModal(input) {
     const thead = document.getElementById("lookupHead");
     const title = document.getElementById("lookupTitle");
 
-    tbody.innerHTML = "<tr><td colspan='99'>Загрузка...</td></tr>";
+    tbody.innerHTML = `<tr><td colspan='99'>${lookupLocalization.loading}</td></tr>`;
     thead.innerHTML = "";
 
-    title.textContent = input.dataset.lookupTitle || "Выберите запись";
+    title.textContent = input.dataset.lookupTitle || lookupLocalization.selectRecord;
 
     let url = input.dataset.lookupSource;
 
     // ======== ВСТАВКА: добавляем параметр fieldName ========
-    const paramName = input.dataset.lookupParam;           // например: "fieldName"
-    const paramValue = input.dataset.lookupParamValue;     // например: "Name"
+    const paramName = input.dataset.lookupParam;           // "fieldName"
+    const paramValue = input.dataset.lookupParamValue;     // "Name"
     if (paramName && paramValue) {
         url += `?${encodeURIComponent(paramName)}=${encodeURIComponent(paramValue)}`;
     }
@@ -75,7 +76,7 @@ function openLookupModal(input) {
         .then(res => res.json())
         .then(data => {
             if (!Array.isArray(data) || data.length === 0) {
-                tbody.innerHTML = "<tr><td colspan='99' class='text-muted'>Нет данных</td></tr>";
+                tbody.innerHTML = `<tr><td colspan='99' class='text-muted'>${lookupLocalization.noData}</td></tr>`;
                 return;
             }
 
@@ -118,7 +119,7 @@ function openLookupModal(input) {
                     }
 
                     // обычное значение
-                    return `<td>${value ?? ""}</td>`;
+                    return `<td>${truncateText(value) ?? ""}</td>`;
                 }).join("");
 
                 tr.dataset.itemId = item.id;
@@ -127,7 +128,7 @@ function openLookupModal(input) {
             });
         })
         .catch(() => {
-            tbody.innerHTML = "<tr><td colspan='99' class='text-danger'>Ошибка загрузки</td></tr>";
+            tbody.innerHTML = `<tr><td colspan="99" class="text-danger">${lookupLocalization.loadError}</td></tr>`;
         });
 
     modal.style.display = "flex";
@@ -167,4 +168,12 @@ function handleLookupSelection(item, input) {
 
 function closeLookupModal() {
     document.getElementById("lookupModal").style.display = "none";
+}
+
+function truncateText(value, maxLength = 25) {
+    if (value == null) return "";
+    const text = String(value);
+    return text.length > maxLength
+        ? text.substring(0, maxLength) + "..."
+        : text;
 }
