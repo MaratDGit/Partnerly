@@ -732,4 +732,70 @@
   <data name="HoursAgo" xml:space="preserve">
     <value>hours ago</value>
   </data>
+  <data name="Join" xml:space="preserve">
+    <value>Join</value>
+  </data>
+  <data name="YourSmartBeloteAssistant" xml:space="preserve">
+    <value>Your Smart Belote Assistant.</value>
+  </data>
+  <data name="PlaySmarter" xml:space="preserve">
+    <value>Play Smarter</value>
+  </data>
+  <data name="WinwithConfidence" xml:space="preserve">
+    <value>Win with Confidence</value>
+  </data>
+  <data name="Undermaintenance" xml:space="preserve">
+    <value>Under maintenance</value>
+  </data>
+  <data name="Technicalmaintenanceunderway" xml:space="preserve">
+    <value>We apologize for the inconvenience; technical maintenance is currently underway.</value>
+  </data>
+  <data name="Seehowourplatformworks" xml:space="preserve">
+    <value>See how our platform works</value>
+  </data>
+  <data name="Howtoregisterandgetstarted" xml:space="preserve">
+    <value>How to register and get started</value>
+  </data>
+  <data name="Invitefriendsandearn" xml:space="preserve">
+    <value>Invite friends and earn</value>
+  </data>
+  <data name="Ratesandbonuslevels" xml:space="preserve">
+    <value>Rates and bonus levels</value>
+  </data>
+  <data name="Gamesplayed" xml:space="preserve">
+    <value>Games played</value>
+  </data>
+  <data name="Victories" xml:space="preserve">
+    <value>Victories</value>
+  </data>
+  <data name="Defeats" xml:space="preserve">
+    <value>Defeats</value>
+  </data>
+  <data name="WinRate" xml:space="preserve">
+    <value>Win Rate</value>
+  </data>
+  <data name="Gamesbyday" xml:space="preserve">
+    <value>Games by day</value>
+  </data>
+  <data name="WinsLosses" xml:space="preserve">
+    <value>Wins / Losses</value>
+  </data>
+  <data name="Sendnotification" xml:space="preserve">
+    <value>Send notification</value>
+  </data>
+  <data name="Sendanemail" xml:space="preserve">
+    <value>Send an email</value>
+  </data>
+  <data name="Connections" xml:space="preserve">
+    <value>Connections</value>
+  </data>
+  <data name="Editgroup" xml:space="preserve">
+    <value>Edit group</value>
+  </data>
+  <data name="Deletegroup" xml:space="preserve">
+    <value>Delete group</value>
+  </data>
+  <data name="Createagroup" xml:space="preserve">
+    <value>Create a group</value>
+  </data>
 </root>

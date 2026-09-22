@@ -180,19 +180,19 @@
     }
   <ul class="navbar-nav flex-row align-items-center ms-auto">
 
-        @{
-            var currentCulture = CultureInfo.CurrentUICulture.TwoLetterISOLanguageName;
+    @{
+        var currentCulture = CultureInfo.CurrentUICulture.TwoLetterISOLanguageName;
 
-            var currentFlag = currentCulture switch
-            {
-                "en" => "gb",
-                "ru" => "ru",
-                "hy" => "am",
-                _ => "un"
-            };
-        }
+        var currentFlag = currentCulture switch
+        {
+            "en" => "gb",
+            "ru" => "ru",
+            "hy" => "am",
+            _ => "un"
+        };
+    }
 
-        <li class="nav-item dropdown me-4">
+    <li class="nav-item dropdown me-4">
             <a class="nav-link dropdown-toggle hide-arrow"
                href="javascript:void(0);"
                data-bs-toggle="dropdown"
@@ -268,6 +268,7 @@
 
             </ul>
         </li>
+
     <li class="nav-item dropdown me-4">
       <a class="btn btn-xs dropdown-toggle" href="#" id="notificationDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
         <i class="bx bxs-bell-ring"></i>

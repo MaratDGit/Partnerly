@@ -732,4 +732,70 @@
   <data name="HoursAgo" xml:space="preserve">
     <value>ժամ առաջ</value>
   </data>
+  <data name="Join" xml:space="preserve">
+    <value>Միանալ</value>
+  </data>
+  <data name="YourSmartBeloteAssistant" xml:space="preserve">
+    <value>Ձեր խելացի Բելոտի օգնականը:</value>
+  </data>
+  <data name="PlaySmarter" xml:space="preserve">
+    <value>Խաղացեք ավելի խելացի</value>
+  </data>
+  <data name="WinwithConfidence" xml:space="preserve">
+    <value>Հաղթե՛ք վստահությամբ</value>
+  </data>
+  <data name="Undermaintenance" xml:space="preserve">
+    <value>Սպասարկման փուլում</value>
+  </data>
+  <data name="Technicalmaintenanceunderway" xml:space="preserve">
+    <value>Ներողություն ենք խնդրում անհարմարության համար, այս պահին մենք տեխնիկական սպասարկման աշխատանքներ ենք իրականացնում։</value>
+  </data>
+  <data name="Seehowourplatformworks" xml:space="preserve">
+    <value>Տեսեք, թե ինչպես է աշխատում մեր հարթակը</value>
+  </data>
+  <data name="Howtoregisterandgetstarted" xml:space="preserve">
+    <value>Ինչպես գրանցվել և սկսել</value>
+  </data>
+  <data name="Invitefriendsandearn" xml:space="preserve">
+    <value>Հրավիրեք ընկերներին և վաստակեք գումար</value>
+  </data>
+  <data name="Ratesandbonuslevels" xml:space="preserve">
+    <value>Սակագներ և բոնուսային մակարդակներ</value>
+  </data>
+  <data name="Gamesplayed" xml:space="preserve">
+    <value>Խաղացված խաղեր</value>
+  </data>
+  <data name="Victories" xml:space="preserve">
+    <value>Հաղթանակներ</value>
+  </data>
+  <data name="Defeats" xml:space="preserve">
+    <value>Պարտություններ</value>
+  </data>
+  <data name="WinRate" xml:space="preserve">
+    <value>Հաղթանակի ցուցանիշ</value>
+  </data>
+  <data name="Gamesbyday" xml:space="preserve">
+    <value>Օրվա խաղեր</value>
+  </data>
+  <data name="WinsLosses" xml:space="preserve">
+    <value>Հաղթանակներ / պարտություններ</value>
+  </data>
+  <data name="Sendnotification" xml:space="preserve">
+    <value>Ուղարկել ծանուցում</value>
+  </data>
+  <data name="Sendanemail" xml:space="preserve">
+    <value>Ուղարկել էլ. նամակ</value>
+  </data>
+  <data name="Connections" xml:space="preserve">
+    <value>Կապեր</value>
+  </data>
+  <data name="Editgroup" xml:space="preserve">
+    <value>Խմբագրել խումբը</value>
+  </data>
+  <data name="Deletegroup" xml:space="preserve">
+    <value>Խումբի ջնջում</value>
+  </data>
+  <data name="Createagroup" xml:space="preserve">
+    <value>Ստեղծել խումբ</value>
+  </data>
 </root>

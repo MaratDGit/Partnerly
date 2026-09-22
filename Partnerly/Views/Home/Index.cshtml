@@ -1,17 +1,17 @@
 ﻿@{
-    ViewData["Title"] = "Домашняя страница";
+    ViewData["Title"] = "Home";
     Layout = "_LandingLayout";
 }
 
 <section class="landing-container">
     <div class="landing-left">
-        <h1 class="landing-title">Зарабатывай с нашей <span>реферальной программой</span></h1>
+        <h1 class="landing-title">@Localizer["PlaySmarter"] <span>@Localizer["WinwithConfidence"]</span></h1>
         <p class="landing-subtitle">
-            Делись ссылкой, приглашай друзей и получай бонусы за их активность на платформе.
+            @Localizer["YourSmartBeloteAssistant"]
         </p>
         <div class="landing-actions">
-            <a asp-controller="Account" asp-action="Register" class="btn btn-primary">Присоединиться</a>
-            <a asp-controller="Account" asp-action="Login" class="btn btn-outline">Уже есть аккаунт</a>
+            <a asp-controller="Account" asp-action="Register" class="btn btn-primary">@Localizer["Join"]</a>
+            <a asp-controller="Account" asp-action="Login" class="btn btn-outline">@Localizer["Login"]</a>
         </div>
     </div>
 
@@ -24,7 +24,7 @@
     </div>
 </section>
 
-<section class="pricing-section" id="pricing">
+@* <section class="pricing-section" id="pricing">
     <div class="container section-no-flex">
         <div class="section-header">
             <h2 class="section-title">Тарифы и уровни вознаграждений</h2>
@@ -53,27 +53,27 @@
             </table>
         </div>
     </div>
-</section>
+</section> *@
 
 <section class="videos-section section-no-flex" id="videos">
     <div class="container section-no-flex">
         <div class="section-header">
-            <h2 class="section-title">Обучающие видео</h2>
-            <p class="section-subtitle">Смотрите, как работает наша платформа и реферальная программа</p>
+            <h2 class="section-title">@Localizer["Educationalvideos"]</h2>
+            <p class="section-subtitle">@Localizer["Seehowourplatformworks"]</p>
         </div>
 
         <div class="videos-grid">
             <div class="video-card">
-                <iframe src="https://www.youtube.com/embed/dQw4w9WgXcQ" title="Video 1" frameborder="0" allowfullscreen></iframe>
-                <p class="video-title">Как зарегистрироваться и начать</p>
+                <iframe src="" title="Video 1" frameborder="0" allowfullscreen></iframe>
+                <p class="video-title">@Localizer["Howtoregisterandgetstarted"]</p>
             </div>
             <div class="video-card">
-                <iframe src="https://www.youtube.com/embed/oHg5SJYRHA0" title="Video 2" frameborder="0" allowfullscreen></iframe>
-                <p class="video-title">Привлекаем друзей и зарабатываем</p>
+                <iframe src="" title="Video 2" frameborder="0" allowfullscreen></iframe>
+                <p class="video-title">@Localizer["Invitefriendsandearn"]</p>
             </div>
             <div class="video-card">
-                <iframe src="https://www.youtube.com/embed/3GwjfUFyY6M" title="Video 3" frameborder="0" allowfullscreen></iframe>
-                <p class="video-title">Тарифы и уровни бонусов</p>
+                <iframe src="" title="Video 3" frameborder="0" allowfullscreen></iframe>
+                <p class="video-title">@Localizer["Ratesandbonuslevels"]</p>
             </div>
         </div>
     </div>

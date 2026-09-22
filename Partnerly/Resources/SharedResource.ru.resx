@@ -732,4 +732,70 @@
   <data name="HoursAgo" xml:space="preserve">
     <value>часов назад</value>
   </data>
+  <data name="Join" xml:space="preserve">
+    <value>Присоединиться</value>
+  </data>
+  <data name="YourSmartBeloteAssistant" xml:space="preserve">
+    <value>Ваш умный помощник в игре в белот.</value>
+  </data>
+  <data name="PlaySmarter" xml:space="preserve">
+    <value>Играй с умом</value>
+  </data>
+  <data name="WinwithConfidence" xml:space="preserve">
+    <value>Побеждайте уверенно</value>
+  </data>
+  <data name="Undermaintenance" xml:space="preserve">
+    <value>На обслуживании</value>
+  </data>
+  <data name="Technicalmaintenanceunderway" xml:space="preserve">
+    <value>Приносим извинения за неудобства, в настоящее время проводятся технические работы.</value>
+  </data>
+  <data name="Seehowourplatformworks" xml:space="preserve">
+    <value>Смотрите, как работает наша платформа</value>
+  </data>
+  <data name="Howtoregisterandgetstarted" xml:space="preserve">
+    <value>Как зарегистрироваться и начать</value>
+  </data>
+  <data name="Invitefriendsandearn" xml:space="preserve">
+    <value>Привлекаем друзей и зарабатываем</value>
+  </data>
+  <data name="Ratesandbonuslevels" xml:space="preserve">
+    <value>Тарифы и уровни бонусов</value>
+  </data>
+  <data name="Gamesplayed" xml:space="preserve">
+    <value>Сыграно игр</value>
+  </data>
+  <data name="Victories" xml:space="preserve">
+    <value>Победы</value>
+  </data>
+  <data name="Defeats" xml:space="preserve">
+    <value>Поражения</value>
+  </data>
+  <data name="WinRate" xml:space="preserve">
+    <value>Процент побед</value>
+  </data>
+  <data name="Gamesbyday" xml:space="preserve">
+    <value>Игры по дням</value>
+  </data>
+  <data name="WinsLosses" xml:space="preserve">
+    <value>Победы / Поражения</value>
+  </data>
+  <data name="Sendnotification" xml:space="preserve">
+    <value>Отправить уведомление</value>
+  </data>
+  <data name="Sendanemail" xml:space="preserve">
+    <value>Отправить электронное письмо</value>
+  </data>
+  <data name="Connections" xml:space="preserve">
+    <value>Связи</value>
+  </data>
+  <data name="Editgroup" xml:space="preserve">
+    <value>Редактировать группу</value>
+  </data>
+  <data name="Deletegroup" xml:space="preserve">
+    <value>Удаление группу</value>
+  </data>
+  <data name="Createagroup" xml:space="preserve">
+    <value>Создать группу</value>
+  </data>
 </root>

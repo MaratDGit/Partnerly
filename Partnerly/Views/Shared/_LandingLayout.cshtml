@@ -8,27 +8,9 @@
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/assets/css/landing.css" />
+    <link rel="icon" type="image/png" href="~/favicon.png" asp-append-version="true" />
 </head>
 <body>
-    @* <header class="landing-header">
-        <div class="container">
-            <div class="logo">
-                <a asp-controller="Home" asp-action="Index" class="app-brand-link gap-2">
-                    <span>@TempData.Peek("appName")</span>
-                </a>
-            </div>
-            <nav class="nav-links">
-                <a href="#pricing">Тарифы</a>
-                <a href="#videos">Обучающие видео</a>
-                <a asp-controller="Account" asp-action="Login" class="btn-outline">Войти</a>
-            </nav>
-
-            <div class="menu-toggle" onclick="document.body.classList.toggle('menu-open')">
-                ☰
-            </div>
-        </div>
-    </header> *@
-
     @{
         var currentCulture = CultureInfo.CurrentUICulture.TwoLetterISOLanguageName;
 
@@ -48,13 +30,15 @@
                 <a asp-controller="Home"
                    asp-action="Index"
                    class="app-brand-link gap-2">
+                    
+                    <span class="app-brand-logo demo"><img src="~/favicon.png" alt="Logo" width="32" height="32" class="me-2" /></span>
                     <span>@TempData.Peek("appName")</span>
                 </a>
             </div>
 
             <nav class="nav-links">
 
-                <a href="#pricing">@Localizer["Rates"]</a>
+                @* <a href="#pricing">@Localizer["Rates"]</a> *@
                 <a href="#videos">@Localizer["Educationalvideos"]</a>
 
                 <!-- Language -->

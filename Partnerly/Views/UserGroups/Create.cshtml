@@ -2,13 +2,13 @@
 @await Html.PartialAsync("_Toast")
 
 @{
-    ViewData["Title"] = "Создать группу";
+    ViewData["Title"] = "Create a group";
     Layout = "_ContentNavbarLayout";
 }
 
 <div class="card">
     <div class="card-header d-flex justify-content-between align-items-center">
-        <h5>@ViewData["Title"]</h5>
+        <h5>@Localizer["Createagroup"]</h5>
     </div>
 
     <div class="card-body">
@@ -30,9 +30,9 @@
                        placeholder=" "
                        data-lookup="true"
                        data-lookup-source="/UserGroups/GetLookupList"
-                       data-lookup-title="Список групп"
+                       data-lookup-title=@Localizer["Groups"]
                        data-edit-url-base="/UserGroups/Edit/"
-                       data-lookup-column-names="name:Название,description:Описание"
+                       data-lookup-column-names="name:@Localizer["Name"],description:@Localizer["Description"]"
                        data-lookup-display-field="Name"
                        data-lookup-param="fieldName"
                        data-lookup-param-value="Name" autofocus/>
@@ -51,15 +51,11 @@
                 <div class="nav-align-top nav-tabs mb-6">
                     <ul class="nav nav-tabs nav-fill" role="tablist">
                         <li class="nav-item">
-                        <button type="button" class="nav-link active" role="tab" data-bs-toggle="tab" data-bs-target="#navs-justified-profile" aria-controls="navs-justified-profile" aria-selected="false"><span class="d-none d-sm-block"><i class="tf-icons bx bx-group bx-sm me-1_5 align-text-bottom"></i> Пользователи</span><i class="bx bx-user bx-sm d-sm-none"></i></button>
-                    </li>
+                            <button type="button" class="nav-link active" role="tab" data-bs-toggle="tab" data-bs-target="#navs-justified-profile" aria-controls="navs-justified-profile" aria-selected="false"><span class="d-none d-sm-block"><i class="tf-icons bx bx-group bx-sm me-1_5 align-text-bottom"></i> @Localizer["Users"]</span><i class="bx bx-user bx-sm d-sm-none"></i></button>
+                        </li>
                         <li class="nav-item">
-                        <button type="button" class="nav-link" role="tab" data-bs-toggle="tab" data-bs-target="#navs-justified-home" aria-controls="navs-justified-home" aria-selected="true"><span class="d-none d-sm-block"><i class="tf-icons bx bx-unlink bx-sm me-1_5 align-text-bottom"></i> Связи </span><i class="bx bx-unlink bx-sm d-sm-none"></i></button>
-                    </li>
-       
-                    <li class="nav-item">
-                        <button type="button" class="nav-link" role="tab" data-bs-toggle="tab" data-bs-target="#navs-justified-messages" aria-controls="navs-justified-messages" aria-selected="false"><span class="d-none d-sm-block"><i class="tf-icons bx bx-bell bx-sm me-1_5 align-text-bottom"></i> Уведомления</span><i class="bx bx-bell bx-sm d-sm-none"></i></button>
-                    </li>
+                            <button type="button" class="nav-link" role="tab" data-bs-toggle="tab" data-bs-target="#navs-justified-home" aria-controls="navs-justified-home" aria-selected="true"><span class="d-none d-sm-block"><i class="tf-icons bx bx-unlink bx-sm me-1_5 align-text-bottom"></i> @Localizer["Connections"] </span><i class="bx bx-unlink bx-sm d-sm-none"></i></button>
+                        </li>
                     </ul>
                     <div class="tab-content p-0">
                     <div class="tab-pane fade show active" id="navs-justified-profile" role="tabpanel">

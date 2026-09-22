@@ -19,3 +19,10 @@
 .max-w-600 {
     max-width: 600px;
 }
+
+
+.form-floating > label.required::after {
+    content: " *";
+    color: #dc3545 !important;
+    font-weight: 700;
+}

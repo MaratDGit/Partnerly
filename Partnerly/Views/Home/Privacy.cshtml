@@ -1,5 +1,5 @@
 ﻿@{
-    ViewData["Title"] = "Политика конфиденциальности и условия";
+    ViewData["Title"] = "Policyand and Terms";
     Layout = "";
 }
 <!DOCTYPE html>
@@ -12,13 +12,14 @@
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/assets/css/landing.css" />
+    <link rel="icon" type="image/png" href="~/favicon.png" asp-append-version="true" />
 </head>
 <body>
     <header class="landing-header">
         <div class="container">
             <div class="logo">
                 <a asp-controller="Home" asp-action="Index" class="app-brand-link gap-2">
-                    @* <span><img src="~/favicon.png" alt="Logo" width="32" height="32" class="me-2" /></span> *@
+                    <span><img src="~/favicon.png" alt="Logo" width="32" height="32" class="me-2" /></span>
                     <span>@TempData.Peek("appName")</span>
                 </a>
             </div>
@@ -26,39 +27,7 @@
     </header>
 
     <div class="referral-program" style="max-width: 800px; margin: 0 auto; padding: 20px;">
-  <h2 style="text-align: center; margin-bottom: 20px;">@ViewData["Title"]</h2>
-
-  <section class="friendly" style="margin-bottom: 30px;">
-    <p style="text-align: center;">
-      Мы ценим наших пользователей и рады, когда вы делитесь сервисом с друзьями!
-      Для этого у нас есть простая и удобная <strong>реферальная программа</strong>:
-    </p>
-    <ul style="list-style: none; padding: 0; text-align: center;">
-      <li style="margin: 10px 0;">✔ Каждый пользователь получает <strong>уникальный реферальный код</strong>.</li>
-      <li style="margin: 10px 0;">✔ Поделитесь им с друзьями, коллегами или в социальных сетях.</li>
-      <li style="margin: 10px 0;">✔ Когда новый пользователь зарегистрируется по вашему коду, он станет вашим рефералом.</li>
-      <li style="margin: 10px 0;">✔ За каждого приглашённого вы получаете <strong>вознаграждение или бонусы</strong>.</li>
-      <li style="margin: 10px 0;">✔ Чем больше друзей вы приглашаете — тем больше преимуществ и наград получаете.</li>
-    </ul>
-    <p style="margin-top: 20px; text-align: center;">
-      Всё прозрачно и удобно: вы всегда сможете следить за количеством приглашённых и своими бонусами в личном кабинете.
-    </p>
-    <blockquote style="margin: 30px auto; text-align: center; font-style: italic; font-size: 1.1em;">
-      Делитесь своим кодом и зарабатывайте вместе с нами!
-    </blockquote>
-  </section>
-
-  <section class="official">
-    <h4 style="margin-bottom: 15px; text-align: center;">Официальные условия участия</h4>
-    <ol style="padding-left: 20px;">
-      <li style="margin: 10px 0;">Каждый зарегистрированный пользователь сервиса получает уникальный реферальный код.</li>
-      <li style="margin: 10px 0;">Новый пользователь, использовавший данный код при регистрации, считается рефералом пригласившего пользователя.</li>
-      <li style="margin: 10px 0;">Пригласивший пользователь имеет право на получение вознаграждений в порядке и размере, определяемом компанией.</li>
-      <li style="margin: 10px 0;">Форма, размер и порядок предоставления вознаграждений могут изменяться компанией в одностороннем порядке.</li>
-      <li style="margin: 10px 0;">Компания вправе приостановить, изменить или прекратить действие реферальной программы в любое время без предварительного уведомления.</li>
-      <li style="margin: 10px 0;">В случае злоупотреблений, нарушения правил или попытки недобросовестного использования программы, компания оставляет за собой право аннулировать вознаграждения и ограничить доступ к участию в программе.</li>
-    </ol>
-  </section>
+        <h2 style="text-align: center; margin-bottom: 20px;">@Localizer["PrivacyPolicyandTerms"]</h2>
 </div>
 </body>
 </html>
