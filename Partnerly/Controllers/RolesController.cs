@@ -18,8 +18,8 @@ namespace Partnerly.Controllers
     public class RolesController : _BaseController
     {
         protected readonly IRoleService _roleService;
-        public RolesController(IEventBus eventBus, IUserService userService, ICurrentUserService currentUser, ILogService logService, IRoleService roleService, IStringLocalizer<SharedResource> localizer)
-        : base(eventBus, userService, currentUser, logService, localizer)
+        public RolesController(IEventBus eventBus, IUserService userService, ICurrentUserService currentUser, ILogService logService, IRoleService roleService, IStringLocalizer<SharedResource> localizer, ISystemSettingsService systemSettingsService)
+        : base(eventBus, userService, currentUser, logService, localizer, systemSettingsService)
         {
             _roleService = roleService;
         }

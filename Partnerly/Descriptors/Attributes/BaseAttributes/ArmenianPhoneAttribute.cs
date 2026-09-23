@@ -12,6 +12,9 @@ namespace Partnerly.Descriptors.Attributes.BaseAttributes
         {
             bool retval = false;
 
+            if (value == null)
+                return true;
+
             if (value != null)
             {
                 string? toStr = value.ToString();

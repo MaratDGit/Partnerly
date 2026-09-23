@@ -2,7 +2,6 @@
 
 namespace Partnerly.Descriptors.Messages
 {
-    [Localizable(true)]
     public class Constants
     {
         public const string SuperReferralCode = "BRANCH01";

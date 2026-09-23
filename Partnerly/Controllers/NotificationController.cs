@@ -11,8 +11,8 @@ namespace Partnerly.Controllers
     {
         private readonly INotificationService _notificationService;
 
-        public NotificationController(IEventBus eventBus, IUserService userService, ICurrentUserService currentUser, ILogService logService, INotificationService notificationService, IStringLocalizer<SharedResource> localizer)
-        : base(eventBus, userService, currentUser, logService, localizer)
+        public NotificationController(IEventBus eventBus, IUserService userService, ICurrentUserService currentUser, ILogService logService, INotificationService notificationService, IStringLocalizer<SharedResource> localizer, ISystemSettingsService systemSettingsService)
+        : base(eventBus, userService, currentUser, logService, localizer, systemSettingsService)
         {
             _notificationService = notificationService;
         }

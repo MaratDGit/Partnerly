@@ -98,41 +98,46 @@ namespace Partnerly.Controllers
                 return View(model);
             }
 
-            if (user.Role.Name != null && user.Email != null)
-            {
-                var claims = new List<Claim>
-                {
-                    new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
-                    new Claim(ClaimTypes.Name, $"{user.FirstName} {user.LastName}"),
-                    new Claim(ClaimTypes.Email, user.Email),
-                    new Claim(ClaimTypes.Role, user.Role.Name),
-                    new Claim(Constants.ClaimTypeLoginTime, DateTime.UtcNow.ToString("o")),
-                    new Claim(Constants.ClaimTypeFirstName, user.FirstName ?? ""),
-                    new Claim(Constants.ClaimTypeLastName, user.LastName ?? ""),
-                    new Claim(Constants.ClaimTypeRoleType, user.Role.Type ?? RoleTypeAttribute.View),
-                    new Claim(Constants.ClaimTypeReffCode, user.MyReferralCode ?? ""),
-                    new Claim(Constants.ClaimTypeUserPhotoUrl, user.PhotoUrl ?? Constants.DefaultUserProfilePhotoPath),
-            };
+            //if (user.Role.Name != null && user.Email != null)
+            //{
+            //    var claims = new List<Claim>
+            //    {
+            //        new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
+            //        new Claim(ClaimTypes.Name, $"{user.FirstName} {user.LastName}"),
+            //        new Claim(ClaimTypes.Email, user.Email),
+            //        new Claim(ClaimTypes.Role, user.Role.Name),
+            //        new Claim(Constants.ClaimTypeLoginTime, DateTime.UtcNow.ToString("o")),
+            //        new Claim(Constants.ClaimTypeFirstName, user.FirstName ?? ""),
+            //        new Claim(Constants.ClaimTypeLastName, user.LastName ?? ""),
+            //        new Claim(Constants.ClaimTypeRoleType, user.Role.Type ?? RoleTypeAttribute.View),
+            //        new Claim(Constants.ClaimTypeReffCode, user.MyReferralCode ?? ""),
+            //        new Claim(Constants.ClaimTypeUserPhotoUrl, user.PhotoUrl ?? Constants.DefaultUserProfilePhotoPath),
+            //    };
 
-                var claimsIdentity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
+            //    var claimsIdentity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
 
-                var authProperties = new AuthenticationProperties
-                {
-                    IsPersistent = model.RememberMe,
-                    ExpiresUtc = model.RememberMe
-                    ? DateTimeOffset.UtcNow.AddDays(14)
-                    : DateTimeOffset.UtcNow.AddMinutes(60)
-                };
+            //    var authProperties = new AuthenticationProperties
+            //    {
+            //        IsPersistent = model.RememberMe,
+            //        ExpiresUtc = model.RememberMe
+            //        ? DateTimeOffset.UtcNow.AddDays(14)
+            //        : DateTimeOffset.UtcNow.AddMinutes(60)
+            //    };
 
-                await HttpContext.SignInAsync(
-                    CookieAuthenticationDefaults.AuthenticationScheme,
-                    new ClaimsPrincipal(claimsIdentity),
-                    authProperties
-                );
+            //    await HttpContext.SignInAsync(
+            //        CookieAuthenticationDefaults.AuthenticationScheme,
+            //        new ClaimsPrincipal(claimsIdentity),
+            //        authProperties
+            //    );
 
-                if (!string.IsNullOrEmpty(returnUrl) && Url.IsLocalUrl(returnUrl))
-                    return Redirect(returnUrl);
-            }
+            //    if (!string.IsNullOrEmpty(returnUrl) && Url.IsLocalUrl(returnUrl))
+            //        return Redirect(returnUrl);
+            //}
+
+            await SignInUserAsync(user, model.RememberMe);
+
+            if (!string.IsNullOrEmpty(returnUrl) && Url.IsLocalUrl(returnUrl))
+                return Redirect(returnUrl);
 
             return RedirectToAction("Index", "Home");
         }
@@ -398,6 +403,220 @@ namespace Partnerly.Controllers
                 ErrorCode = ErrorMessages.LinkIsExpired,
                 ErrorMessage = ErrorMessages.LinkExpiredDetail
             });
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult GoogleLogin(string? returnUrl = null)
+        {
+            var redirectUrl = Url.Action(
+                nameof(GoogleCallback),
+                "Account",
+                new { returnUrl });
+
+            var properties = new AuthenticationProperties
+            {
+                RedirectUri = redirectUrl
+            };
+
+            return Challenge(properties, "Google");
+        }
+
+        [HttpGet]
+        public IActionResult GoogleRegister(
+            string googleId,
+            string email,
+            string? firstName,
+            string? lastName,
+            string? returnUrl)
+        {
+            var model = new GoogleRegisterViewModel
+            {
+                GoogleId = googleId,
+                Email = email,
+                FirstName = firstName,
+                LastName = lastName,
+                ReturnUrl = returnUrl
+            };
+
+            return View(model);
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> GoogleCallback(string? returnUrl = null)
+        {
+            var result = await HttpContext.AuthenticateAsync("Google");
+
+            if (!result.Succeeded || result.Principal == null)
+            {
+                return RedirectToAction(nameof(Login));
+            }
+
+            var principal = result.Principal;
+
+            var googleId = principal.FindFirstValue(
+                ClaimTypes.NameIdentifier);
+
+            var email = principal.FindFirstValue(
+                ClaimTypes.Email);
+
+            var firstName = principal.FindFirstValue(
+                ClaimTypes.GivenName);
+
+            var lastName = principal.FindFirstValue(
+                ClaimTypes.Surname);
+
+            if (string.IsNullOrWhiteSpace(googleId) ||
+                string.IsNullOrWhiteSpace(email))
+            {
+                return RedirectToAction(nameof(Login));
+            }
+
+            var user = await _userService.GetUserByEmailAsync(email);
+
+            if (user == null)
+            {
+                return RedirectToAction(
+                        nameof(GoogleRegister),
+                        new
+                        {
+                            googleId,
+                            email,
+                            firstName,
+                            lastName,
+                            returnUrl
+                        });
+            }
+
+            if (user.IsDeleted == true || user.IsBlocked == true)
+            {
+                return RedirectToAction(nameof(Login));
+            }
+
+            if (user.Role == null)
+            {
+                return RedirectToAction(nameof(Login));
+            }
+            
+            await SignInUserAsync(user, true);
+
+            if (string.IsNullOrEmpty(user.GoogleId))
+            {
+                user.GoogleId = googleId;
+
+                await _userService.UpdateUserAsync(user, user.Id);
+            }
+
+            if (!string.IsNullOrEmpty(returnUrl) &&
+                Url.IsLocalUrl(returnUrl))
+            {
+                return Redirect(returnUrl);
+            }
+
+            return RedirectToAction("Index", "Home");
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> GoogleRegister(GoogleRegisterViewModel model)
+        {
+            if (!ModelState.IsValid)
+                return View(model);
+
+            var existingUser = await _userService.GetUserByEmailAsync(model.Email);
+
+            if (existingUser != null)
+            {
+                ModelState.AddModelError("Email", ErrorMessages.UserWithEmailArleadyExist);
+                return View(model);
+            }
+
+            var user = new User
+            {
+                GoogleId = model.GoogleId,
+                Email = model.Email,
+                FirstName = model.FirstName,
+                LastName = model.LastName,
+                EmailConfirmed = true,
+
+                // Google user не имеет обычного password
+                PasswordHash = null,
+            };
+
+            await _userService.CreateUserAsync(user);
+
+           
+            var createdUser = await _userService.GetUserByEmailAsync(model.Email);
+
+            if (createdUser == null)
+            {
+                return RedirectToAction(nameof(Login));
+            }
+
+            await SignInUserAsync(createdUser, true);
+
+            if (!string.IsNullOrEmpty(model.ReturnUrl) &&
+                Url.IsLocalUrl(model.ReturnUrl))
+            {
+                return Redirect(model.ReturnUrl);
+            }
+
+            return RedirectToAction("Index", "Home");
+        }
+
+        private async Task SignInUserAsync(User user, bool rememberMe)
+        {
+            if (user.Role == null || user.Email == null)
+                throw new InvalidOperationException("User role or email is missing.");
+
+            var claims = new List<Claim>
+    {
+        new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
+        new Claim(ClaimTypes.Name, $"{user.FirstName} {user.LastName}"),
+        new Claim(ClaimTypes.Email, user.Email),
+        new Claim(ClaimTypes.Role, user.Role.Name),
+
+        new Claim(
+            Constants.ClaimTypeLoginTime,
+            DateTime.UtcNow.ToString("o")),
+
+        new Claim(
+            Constants.ClaimTypeFirstName,
+            user.FirstName ?? ""),
+
+        new Claim(
+            Constants.ClaimTypeLastName,
+            user.LastName ?? ""),
+
+        new Claim(
+            Constants.ClaimTypeRoleType,
+            user.Role.Type ?? RoleTypeAttribute.View),
+
+        new Claim(
+            Constants.ClaimTypeReffCode,
+            user.MyReferralCode ?? ""),
+
+        new Claim(
+            Constants.ClaimTypeUserPhotoUrl,
+            user.PhotoUrl ?? Constants.DefaultUserProfilePhotoPath)
+    };
+
+            var claimsIdentity = new ClaimsIdentity(
+                claims,
+                CookieAuthenticationDefaults.AuthenticationScheme);
+
+            var authProperties = new AuthenticationProperties
+            {
+                IsPersistent = rememberMe,
+                ExpiresUtc = rememberMe
+                    ? DateTimeOffset.UtcNow.AddDays(14)
+                    : DateTimeOffset.UtcNow.AddMinutes(60)
+            };
+
+            await HttpContext.SignInAsync(
+                CookieAuthenticationDefaults.AuthenticationScheme,
+                new ClaimsPrincipal(claimsIdentity),
+                authProperties);
         }
     }
 }

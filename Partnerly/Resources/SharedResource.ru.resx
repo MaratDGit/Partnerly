@@ -798,4 +798,20 @@
   <data name="Createagroup" xml:space="preserve">
     <value>Создать группу</value>
   </data>
+  <data name="ContinuewithGoogle" xml:space="preserve">
+    <value>Продолжить через Google</value>
+  </data>
+  <data name="Or" xml:space="preserve">
+    <value>Или</value>
+  </data>
+  <data name="Completeregistration" xml:space="preserve">
+    <value>Завершить регистрацию</value>
+  </data>
+  <data name="Completeyourregistration" xml:space="preserve">
+    <value>Завершите регистрацию</value>
+  </data>
+  <data name="WereceivedyourdataviaGoogle" xml:space="preserve">
+    <value>Мы получили ваши данные через Google.
+</value>
+  </data>
 </root>

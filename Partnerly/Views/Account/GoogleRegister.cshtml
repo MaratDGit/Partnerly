@@ -1,0 +1,91 @@
+﻿@model Partnerly.Models.ViewModels.GoogleRegisterViewModel
+
+@{
+    Layout = "_BlankLayout";
+    ViewData["Title"] = "Complete registration";
+}
+
+@section PageStyles {
+    <link rel="stylesheet" href="~/assets/vendor/css/pages/page-auth.css">
+}
+
+<div class="container-xxl">
+    <div class="authentication-wrapper authentication-basic container-p-y">
+        <div class="authentication-inner">
+
+            <div class="card px-sm-6 px-0">
+                <div class="card-body">
+
+                    <div class="app-brand justify-content-center mb-4">
+                        <a href="/" class="app-brand-link gap-2">
+                            <span class="app-brand-logo demo">
+                                <img src="~/favicon.png"
+                                     alt="Logo"
+                                     width="32"
+                                     height="32"
+                                     class="me-2" />
+                            </span>
+
+                            <span class="app-brand-text demo text-heading fw-bold">
+                                @TempData.Peek("appName")
+                            </span>
+                        </a>
+                    </div>
+
+                    @* <h4 class="mb-2 text-center">
+                        @Localizer["Completeyourregistration"]
+                    </h4> *@
+
+                    <p class="mb-4 text-center">
+                        @Localizer["WereceivedyourdataviaGoogle"]
+                    </p>
+
+                    <form asp-action="GoogleRegister"
+                          asp-controller="Account"
+                          method="post">
+
+                        @Html.AntiForgeryToken()
+
+                        <input asp-for="GoogleId"
+                               type="hidden" />
+
+                        <input asp-for="ReturnUrl"
+                               type="hidden" />
+
+                        <div class="form-floating mb-3">
+                            <input asp-for="FirstName"
+                                   class="form-control"
+                                   readonly />
+
+                            <label asp-for="FirstName"></label>
+                        </div>
+
+                        <div class="form-floating mb-3">
+                            <input asp-for="LastName"
+                                   class="form-control"
+                                   readonly />
+
+                            <label asp-for="LastName">
+                            </label>
+                        </div>
+
+                        <div class="form-floating mb-3">
+                            <input asp-for="Email"
+                                   class="form-control"
+                                   readonly />
+
+                            <label asp-for="Email">
+                            </label>
+                        </div>
+
+                        <button type="submit"
+                                class="btn btn-primary d-grid w-100">
+                            @Localizer["Completeregistration"]
+                        </button>
+                    </form>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>

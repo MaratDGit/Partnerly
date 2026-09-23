@@ -18,8 +18,8 @@ namespace Partnerly.Controllers
     public class SupportTicketsController : _BaseController
     {
         protected readonly ISupportTicketService _supportTicketService;
-        public SupportTicketsController(IEventBus eventBus, ISupportTicketService supportTicketService, IUserService userService, ICurrentUserService currentUser, ILogService logService, IStringLocalizer<SharedResource> localizer)
-        : base(eventBus, userService, currentUser, logService, localizer)
+        public SupportTicketsController(IEventBus eventBus, ISupportTicketService supportTicketService, IUserService userService, ICurrentUserService currentUser, ILogService logService, IStringLocalizer<SharedResource> localizer, ISystemSettingsService systemSettingsService)
+        : base(eventBus, userService, currentUser, logService, localizer, systemSettingsService)
         {
             _supportTicketService = supportTicketService;
         }

@@ -41,7 +41,20 @@
 
     <!-- Layout page -->
     <div class="layout-page">
-      <!-- Navbar -->
+
+        <!-- Top scrolling ticker -->
+        @if (ViewData["ScrollingText"] is string navbarMessage &&
+                    !string.IsNullOrWhiteSpace(navbarMessage))
+        {
+            <div class="navbar-marquee">
+                <div class="navbar-marquee-content">
+                    <i class="bx bx-info-circle me-2"></i>
+                    <span>@navbarMessage</span>
+                </div>
+            </div>
+        }
+
+            <!-- Navbar -->
       @if (@ViewData["isNavbar"] != null && Convert.ToBoolean(@ViewData["isNavbar"]))
       {
         @await Html.PartialAsync("Sections/Navbar/_Navbar")

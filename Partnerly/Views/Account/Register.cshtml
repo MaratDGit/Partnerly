@@ -87,6 +87,35 @@
             </button>
           </form>
 
+            <div class="mb-6">
+
+                <div class="text-center mb-3 text-muted">
+                    @Localizer["Or"]
+                </div>
+
+                <form asp-controller="Account"
+                        asp-action="GoogleLogin"
+                        method="post">
+
+                    @Html.AntiForgeryToken()
+
+                    <input type="hidden"
+                            name="returnUrl"
+                            value="@ViewBag.ReturnUrl" />
+
+                    <button type="submit"
+                            class="btn btn-outline-secondary d-grid w-100">
+
+                        <i class="bx bxl-google me-2"></i>
+
+                        @Localizer["ContinuewithGoogle"]
+
+                    </button>
+
+                </form>
+
+            </div>
+
           <p class="text-center">
                         <span>@Localizer["Doyoualreadhaveanaccount"]</span>
             <a asp-action="Login">

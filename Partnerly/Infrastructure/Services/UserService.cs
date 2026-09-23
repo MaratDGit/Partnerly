@@ -113,12 +113,13 @@ namespace Partnerly.Infrastructure.Services
 
             if (!string.IsNullOrEmpty(newUser.FirstName) && !string.IsNullOrEmpty(newUser.LastName))
             {
-                var avatarBytes = AvatarGenerator.GenerateAvatar(newUser.FirstName, newUser.LastName);
-                string filePath = Path.Combine("wwwroot", "assets/img/profiles", $"{newUser.Id.ToString()}.png");
-                File.WriteAllBytes(filePath, avatarBytes);
-                Directory.CreateDirectory(Path.GetDirectoryName(filePath)!);
-                File.WriteAllBytes(filePath, avatarBytes);
-                newUser.PhotoUrl = filePath.Replace("wwwroot", "~").Replace("\\", "/");
+                //var avatarBytes = AvatarGenerator.GenerateAvatar(newUser.FirstName, newUser.LastName);
+                //string filePath = Path.Combine("wwwroot", "assets/img/profiles", $"{newUser.Id.ToString()}.png");
+                //File.WriteAllBytes(filePath, avatarBytes);
+                //Directory.CreateDirectory(Path.GetDirectoryName(filePath)!);
+                //File.WriteAllBytes(filePath, avatarBytes);
+                //newUser.PhotoUrl = filePath.Replace("wwwroot", "~").Replace("\\", "/");
+                newUser.PhotoUrl = AvatarGenerator.GetOrCreateAvatar(newUser.FirstName);
             }
 
             try

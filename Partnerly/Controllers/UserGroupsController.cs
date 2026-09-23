@@ -20,8 +20,8 @@ namespace Partnerly.Controllers
     {
         private readonly IUserGroupService _userGroupService;
 
-        public UserGroupsController(IEventBus eventBus, IUserService userService, ICurrentUserService currentUser, ILogService logService, IUserGroupService userGroupService, IStringLocalizer<SharedResource> localizer)
-        : base(eventBus, userService, currentUser, logService, localizer)
+        public UserGroupsController(IEventBus eventBus, IUserService userService, ICurrentUserService currentUser, ILogService logService, IUserGroupService userGroupService, IStringLocalizer<SharedResource> localizer, ISystemSettingsService systemSettingsService)
+        : base(eventBus, userService, currentUser, logService, localizer, systemSettingsService)
         {
             _userGroupService = userGroupService;
         }

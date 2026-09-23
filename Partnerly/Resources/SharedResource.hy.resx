@@ -798,4 +798,19 @@
   <data name="Createagroup" xml:space="preserve">
     <value>Ստեղծել խումբ</value>
   </data>
+  <data name="ContinuewithGoogle" xml:space="preserve">
+    <value>Շարունակել Google-ի միջոցով</value>
+  </data>
+  <data name="Or" xml:space="preserve">
+    <value>Կամ</value>
+  </data>
+  <data name="Completeregistration" xml:space="preserve">
+    <value>Ավարտել գրանցումը</value>
+  </data>
+  <data name="Completeyourregistration" xml:space="preserve">
+    <value>Ավարտեք գրանցումը</value>
+  </data>
+  <data name="WereceivedyourdataviaGoogle" xml:space="preserve">
+    <value>Մենք ձեր տվյալները ստացել ենք Google-ից։</value>
+  </data>
 </root>

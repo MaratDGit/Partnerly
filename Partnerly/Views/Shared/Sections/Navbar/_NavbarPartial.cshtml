@@ -112,41 +112,6 @@
 .badge-animate {
     animation: pulseBadge 0.6s ease-in-out;
 }
-    .navbar-marquee {
-        position: absolute;
-        left: 0;
-        right: 0;
-        top: 100%;
-        height: 32px;
-        overflow: hidden;
-        white-space: nowrap;
-        display: flex;
-        align-items: center;
-        color: #0d6efd;
-        z-index: 10;
-    }
-
-    .navbar-marquee-content {
-        display: inline-block;
-        flex-shrink: 0;
-        padding-left: 100%;
-        animation: marquee 20s linear infinite;
-        font-size: 14px;
-        font-weight: 500;
-    }
-
-    @@keyframes marquee {
-        from
-
-    {
-        transform: translateX(0);
-    }
-
-    to {
-        transform: translateX(-100%);
-    }
-
-    }
 </style>
 
 @if (ViewData["navbarFull"] != null)
@@ -169,15 +134,7 @@
   </div>
 }
 
-<div class="navbar-nav-right d-flex align-items-center" id="navbar-collapse">
-    @if (ViewData["ScrollingText"] is string navbarMessage && !string.IsNullOrWhiteSpace(navbarMessage))
-    {
-        <div class="navbar-marquee">
-            <div class="navbar-marquee-content">
-                @navbarMessage
-            </div>
-        </div>
-    }
+<div class="navbar-nav-right d-flex align-items-center" id="navbar-collapse">   
   <ul class="navbar-nav flex-row align-items-center ms-auto">
 
     @{
@@ -265,9 +222,9 @@
                         </button>
                     </form>
                 </li>
-
+                
             </ul>
-        </li>
+    </li>
 
     <li class="nav-item dropdown me-4">
       <a class="btn btn-xs dropdown-toggle" href="#" id="notificationDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">

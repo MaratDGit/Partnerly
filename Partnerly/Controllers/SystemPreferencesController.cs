@@ -18,7 +18,7 @@ namespace Partnerly.Controllers
     {
         protected readonly ISystemSettingsService _systemSettingsService;
         public SystemPreferencesController(IEventBus eventBus, ISystemSettingsService systemSettingsService, IUserService userService, ICurrentUserService currentUser, ILogService logService, IStringLocalizer<SharedResource> localizer)
-        : base(eventBus, userService, currentUser, logService, localizer)
+        : base(eventBus, userService, currentUser, logService, localizer, systemSettingsService)
         {
             _systemSettingsService = systemSettingsService;
         }

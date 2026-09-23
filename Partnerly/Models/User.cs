@@ -11,6 +11,11 @@ namespace Partnerly.Models
         [Required]
         public Guid Id { get; set; }
         #endregion
+
+        #region GoogleId
+        public string? GoogleId { get; set; }
+        #endregion
+
         #region Email
         [Required]
         [Display(Name = "Email")]
@@ -22,8 +27,7 @@ namespace Partnerly.Models
         public string? PasswordHash { get; set; }
         #endregion
         #region Phone
-        [Required]
-        //[ArmenianPhone(ErrorMessage = ErrorMessages.TypeValidPhoneNumber)]
+        //[Required]
         [Display(Name = "Phone")]
         public string? Phone { get; set; }
         #endregion

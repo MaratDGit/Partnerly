@@ -8,6 +8,8 @@ using Partnerly.Descriptors.Messages;
 using Partnerly.Events.BaseEvents;
 using Partnerly.Helpers;
 using Partnerly.Infrastructure.Interfaces;
+using Partnerly.Infrastructure.Services;
+using Partnerly.Models;
 using Partnerly.Models.GridViews;
 
 namespace Partnerly.Controllers
@@ -20,17 +22,20 @@ namespace Partnerly.Controllers
         protected readonly ICurrentUserService _currentUser;
         protected readonly ILogService _logService;
         protected readonly IStringLocalizer<SharedResource> _localizer;
+        private readonly ISystemSettingsService _systemSettingsService;
 
-        public _BaseController(IEventBus eventBus, IUserService userService, ICurrentUserService currentUser, ILogService logService, IStringLocalizer<SharedResource> localizer)
+        public _BaseController(IEventBus eventBus, IUserService userService, ICurrentUserService currentUser, ILogService logService, IStringLocalizer<SharedResource> localizer, ISystemSettingsService systemSettingsService)
         {
             _eventBus = eventBus;
             _userService = userService;
             _currentUser = currentUser;
             _logService = logService;
             _localizer = localizer;
+            _systemSettingsService = systemSettingsService;
         }
         public override async Task OnActionExecutionAsync(ActionExecutingContext context, ActionExecutionDelegate next)
         {
+            string message = null;
             if (User.Identity?.IsAuthenticated == true)
             {
                 ViewBag.UserPhotoUrl = _currentUser.UserPhotoUrl;
@@ -42,9 +47,13 @@ namespace Partnerly.Controllers
                 //var user = await _userService.GetUserByIDAsync(_currentUser.UserId);
                 //if (user != null)
                 //{
-                    
+
                 //}
+                SystemSettings? setting = await _systemSettingsService.GetSetupByIDAsync(1);
+                message = setting?.IsMaintenanceMode == true ? Messages.SiteUnderMaintenanceMode : setting?.ScrollingText;
             }
+
+            ViewData["ScrollingText"] = message;
 
             var controllerName = context.RouteData.Values["controller"]?.ToString();
             var actionName = context.RouteData.Values["action"]?.ToString();

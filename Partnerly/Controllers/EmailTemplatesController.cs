@@ -20,8 +20,8 @@
     {
         private readonly IEmailTemplateService _emailTemplateService;
 
-        public EmailTemplatesController(IEventBus eventBus, IUserService userService, ICurrentUserService currentUser, IEmailTemplateService emailTemplateService, ILogService logService, IStringLocalizer<SharedResource> localizer)
-        : base(eventBus, userService, currentUser, logService, localizer)
+        public EmailTemplatesController(IEventBus eventBus, IUserService userService, ICurrentUserService currentUser, IEmailTemplateService emailTemplateService, ILogService logService, IStringLocalizer<SharedResource> localizer, ISystemSettingsService systemSettingsService)
+        : base(eventBus, userService, currentUser, logService, localizer, systemSettingsService)
         {
             _emailTemplateService = emailTemplateService;
         }

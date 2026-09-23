@@ -48,14 +48,14 @@
                    <span asp-validation-for="LastName" class="text-danger"></span>
                 </div>
                 <div class="form-floating mb-1 max-w-600">
+                    <input asp-for="Phone" class="form-control" id="phone" name="phone" placeholder="+37477123456" />
+                    <label asp-for="Phone"></label>
+                    <span asp-validation-for="Phone" class="text-danger"></span>
+                </div>
+                <div class="form-floating mb-1 max-w-600">
                    <input asp-for="Email" class="form-control" id="email" name="email" readonly/>
                    <label asp-for="Email"></label>
                    <span asp-validation-for="Email" class="text-danger"></span>
-                </div>
-                <div class="form-floating mb-1 max-w-600">
-                   <input asp-for="Phone" class="form-control" id="phone" name="phone" readonly/>
-                   <label asp-for="Phone"></label>
-                   <span asp-validation-for="Phone" class="text-danger"></span>
                 </div>
                 <div class="form-floating mb-2 max-w-600">
                    <input asp-for="MyReferralCode" class="form-control" id="myReferralCode" name="myReferralCode" readonly placeholder=""/>

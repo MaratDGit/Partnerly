@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using Microsoft.Extensions.Localization;
 using Partnerly.Descriptors.Messages;
 using Partnerly.Events.BaseEvents;
@@ -15,7 +16,7 @@ namespace Partnerly.Controllers
         private readonly INotificationService _notificationService;
         private readonly ISystemSettingsService _systemSettingsService;
         public DashboardController(IEventBus eventBus, IUserService userService, ICurrentUserService currentUser, ILogService logService, INotificationService notificationService, ISystemSettingsService systemSettingsService, IStringLocalizer<SharedResource> localizer)
-        : base(eventBus, userService, currentUser, logService, localizer)
+        : base(eventBus, userService, currentUser, logService, localizer, systemSettingsService)
         {
             _notificationService = notificationService;
             _systemSettingsService = systemSettingsService;
@@ -113,7 +114,7 @@ namespace Partnerly.Controllers
                         ModelState.AddModelError("Email", ErrorMessages.UserWithEmailArleadyExist);
                         return View(model);
                     }
-                    else
+                    else if (!string.IsNullOrEmpty(model.Phone))
                     {
                         User? userSamePhone = await _userService.GetUserByPhoneAsync(model?.Phone);
                         if (userSamePhone != null && userSamePhone.Id != user.Id)
@@ -121,10 +122,18 @@ namespace Partnerly.Controllers
                             ModelState.AddModelError("Phone", ErrorMessages.UserWithPhoneArleadyExist);
                             return View(model);
                         }
-                    }
 
+                        var error = ModelState["Phone"]?.Errors.FirstOrDefault()?.ErrorMessage;
+                        if (error != null)
+                        {
+                            ModelState.AddModelError("Phone", error);
+                            return View(model);
+                        }
+                    }
+                    
                     user.FirstName = model.FirstName;
                     user.LastName = model.LastName;
+                    user.Phone = model.Phone;
                     user.AllowSendEmails = model.AllowSendEmails;
                     user.AllowSendNotifications = model.AllowSendNotifications;
 
