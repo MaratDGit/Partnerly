@@ -814,4 +814,133 @@
     <value>Мы получили ваши данные через Google.
 </value>
   </data>
+  <data name="Open" xml:space="preserve">
+    <value>Открыто</value>
+  </data>
+  <data name="Pending" xml:space="preserve">
+    <value>В ожидании</value>
+  </data>
+  <data name="Payed" xml:space="preserve">
+    <value>Оплачено</value>
+  </data>
+  <data name="Canceled" xml:space="preserve">
+    <value>Отменено</value>
+  </data>
+  <data name="Rejected" xml:space="preserve">
+    <value>Отклонено</value>
+  </data>
+  <data name="UserSignIn" xml:space="preserve">
+    <value>Вход пользователя</value>
+  </data>
+  <data name="UserSignOut" xml:space="preserve">
+    <value>Выход пользователя</value>
+  </data>
+  <data name="UserCreated" xml:space="preserve">
+    <value>Создание пользователя</value>
+  </data>
+  <data name="UserDeleted" xml:space="preserve">
+    <value>Удаление пользователя</value>
+  </data>
+  <data name="UserUpdated" xml:space="preserve">
+    <value>Обновление пользователя</value>
+  </data>
+  <data name="RoleCreated" xml:space="preserve">
+    <value>Создание роли</value>
+  </data>
+  <data name="RoleDeleted" xml:space="preserve">
+    <value>Удаление роли</value>
+  </data>
+  <data name="RoleUpdated" xml:space="preserve">
+    <value>Обновление роли</value>
+  </data>
+  <data name="PaymentCreated" xml:space="preserve">
+    <value>Создание платежа</value>
+  </data>
+  <data name="PaymentDeleted" xml:space="preserve">
+    <value>Удаление платежа</value>
+  </data>
+  <data name="PaymentUpdated" xml:space="preserve">
+    <value>Обновление платежа</value>
+  </data>
+  <data name="SystemSettingsCreated" xml:space="preserve">
+    <value>Создание системных настроек</value>
+  </data>
+  <data name="SystemSettingsDeleted" xml:space="preserve">
+    <value>Удаление системных настроек</value>
+  </data>
+  <data name="SystemSettingsUpdated" xml:space="preserve">
+    <value>Обновление системных настроек</value>
+  </data>
+  <data name="EmailConfirmationTokenCreated" xml:space="preserve">
+    <value>Создание токена подтверждения электронной почты</value>
+  </data>
+  <data name="EmailConfirmationTokenDeleted" xml:space="preserve">
+    <value>Удаление токена подтверждения электронной почты</value>
+  </data>
+  <data name="EmailConfirmationTokenUpdated" xml:space="preserve">
+    <value>Обновление токена подтверждения электронной почты</value>
+  </data>
+  <data name="EmailTemplateCreated" xml:space="preserve">
+    <value>Создание шаблона электронной почты</value>
+  </data>
+  <data name="EmailTemplateDeleted" xml:space="preserve">
+    <value>Удаление шаблона электронной почты</value>
+  </data>
+  <data name="EmailTemplateUpdated" xml:space="preserve">
+    <value>Обновление шаблона электронной почты</value>
+  </data>
+  <data name="NotificationCreated" xml:space="preserve">
+    <value>Создание уведомления</value>
+  </data>
+  <data name="NotificationDeleted" xml:space="preserve">
+    <value>Удаление уведомления</value>
+  </data>
+  <data name="NotificationUpdated" xml:space="preserve">
+    <value>Обновление уведомления</value>
+  </data>
+  <data name="UserGroupCreated" xml:space="preserve">
+    <value>Создание группы пользователей</value>
+  </data>
+  <data name="UserGroupDeleted" xml:space="preserve">
+    <value>Удаление группы пользователей</value>
+  </data>
+  <data name="UserGroupUpdated" xml:space="preserve">
+    <value>Обновление группы пользователей</value>
+  </data>
+  <data name="SupportTicketCreated" xml:space="preserve">
+    <value>Создание тикета поддержки</value>
+  </data>
+  <data name="SupportTicketDeleted" xml:space="preserve">
+    <value>Удаление тикета поддержки</value>
+  </data>
+  <data name="SupportTicketUpdated" xml:space="preserve">
+    <value>Обновление тикета поддержки</value>
+  </data>
+  <data name="EmailSending" xml:space="preserve">
+    <value>Отправка электронной почты</value>
+  </data>
+  <data name="Information" xml:space="preserve">
+    <value>Информация</value>
+  </data>
+  <data name="Warning" xml:space="preserve">
+    <value>Предупреждение</value>
+  </data>
+  <data name="Critical" xml:space="preserve">
+    <value>Критический</value>
+  </data>
+  <data name="Success" xml:space="preserve">
+    <value>Успешно</value>
+  </data>
+  <data name="EmailConfirmation" xml:space="preserve">
+    <value>Подтверждение электронной почты</value>
+  </data>
+  <data name="Registration" xml:space="preserve">
+    <value>Регистрация</value>
+  </data>
+  <data name="ForgotPassword" xml:space="preserve">
+    <value>Забыли пароль</value>
+  </data>
+  <data name="CriticalError" xml:space="preserve">
+    <value>Критическая ошибка</value>
+  </data>
 </root>

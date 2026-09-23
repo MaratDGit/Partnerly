@@ -110,25 +110,28 @@ namespace Partnerly.Infrastructure.Services
             newUser.AllowSendNotifications = true;
             newUser.PhotoUrl = Constants.DefaultUserProfilePhotoPath;
             newUser.Note = user.Note;
+            newUser.GoogleId = user.GoogleId;
 
-            if (!string.IsNullOrEmpty(newUser.FirstName) && !string.IsNullOrEmpty(newUser.LastName))
+            if (!string.IsNullOrEmpty(newUser.FirstName))
             {
-                //var avatarBytes = AvatarGenerator.GenerateAvatar(newUser.FirstName, newUser.LastName);
-                //string filePath = Path.Combine("wwwroot", "assets/img/profiles", $"{newUser.Id.ToString()}.png");
-                //File.WriteAllBytes(filePath, avatarBytes);
-                //Directory.CreateDirectory(Path.GetDirectoryName(filePath)!);
-                //File.WriteAllBytes(filePath, avatarBytes);
-                //newUser.PhotoUrl = filePath.Replace("wwwroot", "~").Replace("\\", "/");
                 newUser.PhotoUrl = AvatarGenerator.GetOrCreateAvatar(newUser.FirstName);
             }
 
             try
             {
+                string withResource = "Internal";
+                if (newUser.GoogleId != null && newUser.PasswordHash == null)
+                {
+                    withResource = "Google";
+                    var generatedPassword = PasswordGenerator.Generate();
+                    newUser.PasswordHash = BCrypt.Net.BCrypt.HashPassword(generatedPassword);
+                }
+
                 await _userRepo.AddAsync(newUser);
                 await _userRepo.SaveChangesAsync();
 
                 bool sendEmailTo = newUser?.Id == newUser?.CreatedBy;
-                await _eventBus.PublishAsync(new UserRegisteredEvent(newUser: newUser, sendEmail: sendEmailTo, sendNote: true));
+                await _eventBus.PublishAsync(new UserRegisteredEvent(newUser: newUser, sendEmail: sendEmailTo, sendNote: true, registeredWithResource: withResource));
             }
             catch (Exception ex)
             {

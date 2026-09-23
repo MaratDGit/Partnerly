@@ -496,7 +496,7 @@
     <value>Փակել</value>
   </data>
   <data name="Enteranote" xml:space="preserve">
-    <value>Մուտքագրեք նշում...</value>
+    <value>Նշում ավելացրեք...</value>
   </data>
   <data name="Clear" xml:space="preserve">
     <value>Մաքրել</value>
@@ -812,5 +812,134 @@
   </data>
   <data name="WereceivedyourdataviaGoogle" xml:space="preserve">
     <value>Մենք ձեր տվյալները ստացել ենք Google-ից։</value>
+  </data>
+  <data name="Open" xml:space="preserve">
+    <value>Բաց</value>
+  </data>
+  <data name="Pending" xml:space="preserve">
+    <value>Սպասման մեջ</value>
+  </data>
+  <data name="Payed" xml:space="preserve">
+    <value>Վճարված</value>
+  </data>
+  <data name="Canceled" xml:space="preserve">
+    <value>Չեղարկված</value>
+  </data>
+  <data name="Rejected" xml:space="preserve">
+    <value>Մերժված</value>
+  </data>
+  <data name="UserSignIn" xml:space="preserve">
+    <value>Մուտք օգտվողի կողմից</value>
+  </data>
+  <data name="UserSignOut" xml:space="preserve">
+    <value>Ելք օգտվողի կողմից</value>
+  </data>
+  <data name="UserCreated" xml:space="preserve">
+    <value>Օգտվողի ստեղծում</value>
+  </data>
+  <data name="UserDeleted" xml:space="preserve">
+    <value>Օգտվողի ջնջում</value>
+  </data>
+  <data name="UserUpdated" xml:space="preserve">
+    <value>Օգտվողի թարմացում</value>
+  </data>
+  <data name="RoleCreated" xml:space="preserve">
+    <value>Դերի ստեղծում</value>
+  </data>
+  <data name="RoleDeleted" xml:space="preserve">
+    <value>Դերի ջնջում</value>
+  </data>
+  <data name="RoleUpdated" xml:space="preserve">
+    <value>Դերի թարմացում</value>
+  </data>
+  <data name="PaymentCreated" xml:space="preserve">
+    <value>Վճարման ստեղծում</value>
+  </data>
+  <data name="PaymentDeleted" xml:space="preserve">
+    <value>Վճարման ջնջում</value>
+  </data>
+  <data name="PaymentUpdated" xml:space="preserve">
+    <value>Վճարման թարմացում</value>
+  </data>
+  <data name="SystemSettingsCreated" xml:space="preserve">
+    <value>Համակարգի կարգավորումների ստեղծում</value>
+  </data>
+  <data name="SystemSettingsDeleted" xml:space="preserve">
+    <value>Համակարգի կարգավորումների ջնջում</value>
+  </data>
+  <data name="SystemSettingsUpdated" xml:space="preserve">
+    <value>Համակարգի կարգավորումների թարմացում</value>
+  </data>
+  <data name="EmailConfirmationTokenCreated" xml:space="preserve">
+    <value>Էլեկտրոնային փոստի հաստատման տոկենի ստեղծում</value>
+  </data>
+  <data name="EmailConfirmationTokenDeleted" xml:space="preserve">
+    <value>Էլեկտրոնային փոստի հաստատման տոկենի ջնջում</value>
+  </data>
+  <data name="EmailConfirmationTokenUpdated" xml:space="preserve">
+    <value>Էլեկտրոնային փոստի հաստատման տոկենի թարմացում</value>
+  </data>
+  <data name="EmailTemplateCreated" xml:space="preserve">
+    <value>Էլեկտրոնային փոստի ձևանմուշի ստեղծում</value>
+  </data>
+  <data name="EmailTemplateDeleted" xml:space="preserve">
+    <value>Էլեկտրոնային փոստի ձևանմուշի ջնջում</value>
+  </data>
+  <data name="EmailTemplateUpdated" xml:space="preserve">
+    <value>Էլեկտրոնային փոստի ձևանմուշի թարմացում</value>
+  </data>
+  <data name="NotificationCreated" xml:space="preserve">
+    <value>Ծանուցման ստեղծում</value>
+  </data>
+  <data name="NotificationDeleted" xml:space="preserve">
+    <value>Ծանուցման ջնջում</value>
+  </data>
+  <data name="NotificationUpdated" xml:space="preserve">
+    <value>Ծանուցման թարմացում</value>
+  </data>
+  <data name="UserGroupCreated" xml:space="preserve">
+    <value>Օգտվողների խմբի ստեղծում</value>
+  </data>
+  <data name="UserGroupDeleted" xml:space="preserve">
+    <value>Օգտվողների խմբի ջնջում</value>
+  </data>
+  <data name="UserGroupUpdated" xml:space="preserve">
+    <value>Օգտվողների խմբի թարմացում</value>
+  </data>
+  <data name="SupportTicketCreated" xml:space="preserve">
+    <value>Աջակցության տոմսի ստեղծում</value>
+  </data>
+  <data name="SupportTicketDeleted" xml:space="preserve">
+    <value>Աջակցության տոմսի ջնջում</value>
+  </data>
+  <data name="SupportTicketUpdated" xml:space="preserve">
+    <value>Աջակցության տոմսի թարմացում</value>
+  </data>
+  <data name="EmailSending" xml:space="preserve">
+    <value>Էլեկտրոնային փոստի ուղարկում</value>
+  </data>
+  <data name="Information" xml:space="preserve">
+    <value>Տեղեկություն</value>
+  </data>
+  <data name="Warning" xml:space="preserve">
+    <value>Զգուշացում</value>
+  </data>
+  <data name="Critical" xml:space="preserve">
+    <value>Կրիտիկական</value>
+  </data>
+  <data name="Success" xml:space="preserve">
+    <value>Հաջողությամբ</value>
+  </data>
+  <data name="EmailConfirmation" xml:space="preserve">
+    <value>Էլեկտրոնային փոստի հաստատում</value>
+  </data>
+  <data name="Registration" xml:space="preserve">
+    <value>Գրանցում</value>
+  </data>
+  <data name="ForgotPassword" xml:space="preserve">
+    <value>Մոռացված գաղտնաբառ</value>
+  </data>
+  <data name="CriticalError" xml:space="preserve">
+    <value>Կրիտիկական սխալ</value>
   </data>
 </root>

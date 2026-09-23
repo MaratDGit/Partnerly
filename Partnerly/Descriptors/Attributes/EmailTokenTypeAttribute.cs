@@ -10,8 +10,8 @@ namespace Partnerly.Descriptors.Attributes
 
         public EmailTokenTypeAttribute()
             : base(
-                Registration, Constants.Registration,
-                ForgotPassword, Constants.ForgotPassword)
+                Registration, FieldsDisplayNames.Registration,
+                ForgotPassword, FieldsDisplayNames.ForgotPassword)
         { }
     }
 }

@@ -12,10 +12,10 @@ namespace Partnerly.Descriptors.Attributes
 
         public NotificationTypeAttribute()
             : base(
-                Information, Constants.Information,
-                Warning, Constants.Warning,
-                Error, Constants.Error,
-                Success, Constants.Success)
+                Information, FieldsDisplayNames.Information,
+                Warning, FieldsDisplayNames.Warning,
+                Error, FieldsDisplayNames.Error,
+                Success, FieldsDisplayNames.Success)
         { }
     }
 }

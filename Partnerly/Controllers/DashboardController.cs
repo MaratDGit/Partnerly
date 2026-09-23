@@ -24,14 +24,6 @@ namespace Partnerly.Controllers
 
         public async Task<IActionResult> Index()
         {
-            string message = null;
-            if (User.Identity?.IsAuthenticated == true)
-            {
-                SystemSettings? setting = await _systemSettingsService.GetSetupByIDAsync(1);
-                message = setting?.IsMaintenanceMode == true ? Messages.SiteUnderMaintenanceMode : setting?.ScrollingText;
-            }
-            ViewData["ScrollingText"] = message;
-
             return View();
         }
 

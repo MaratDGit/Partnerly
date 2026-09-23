@@ -14,12 +14,12 @@ namespace Partnerly.Descriptors.Attributes
 
         public PaymentStatusAttribute()
             : base(
-                Open, Constants.Open,
-                Pending, Constants.Pending,
-                Payed, Constants.Payed,
-                Closed, Constants.Closed,
-                Canceled, Constants.Canceled,
-                Rejected, Constants.Rejected)
+                Open, FieldsDisplayNames.Open,
+                Pending, FieldsDisplayNames.Pending,
+                Payed, FieldsDisplayNames.Payed,
+                Closed, FieldsDisplayNames.Closed,
+                Canceled, FieldsDisplayNames.Canceled,
+                Rejected, FieldsDisplayNames.Rejected)
         { }
     }
 }

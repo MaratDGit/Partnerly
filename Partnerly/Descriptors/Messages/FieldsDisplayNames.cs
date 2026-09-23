@@ -133,5 +133,64 @@ namespace Partnerly.Descriptors.Messages
         public static string InProgress => Messages.Get(nameof(InProgress));
         public static string New => Messages.Get(nameof(New));
 
+        public static string Open => Messages.Get(nameof(Open));
+        public static string Pending => Messages.Get(nameof(Pending));
+        public static string Payed => Messages.Get(nameof(Payed));
+        public static string Canceled => Messages.Get(nameof(Canceled));
+        public static string Rejected => Messages.Get(nameof(Rejected));
+
+        public static string UserSignIn => Messages.Get(nameof(UserSignIn));
+        public static string UserSignOut => Messages.Get(nameof(UserSignOut));
+
+        public static string UserCreated => Messages.Get(nameof(UserCreated));
+        public static string UserDeleted => Messages.Get(nameof(UserDeleted));
+        public static string UserUpdated => Messages.Get(nameof(UserUpdated));
+
+        public static string RoleCreated => Messages.Get(nameof(RoleCreated));
+        public static string RoleDeleted => Messages.Get(nameof(RoleDeleted));
+        public static string RoleUpdated => Messages.Get(nameof(RoleUpdated));
+
+        public static string PaymentCreated => Messages.Get(nameof(PaymentCreated));
+        public static string PaymentDeleted => Messages.Get(nameof(PaymentDeleted));
+        public static string PaymentUpdated => Messages.Get(nameof(PaymentUpdated));
+
+        public static string SystemSettingsCreated => Messages.Get(nameof(SystemSettingsCreated));
+        public static string SystemSettingsDeleted => Messages.Get(nameof(SystemSettingsDeleted));
+        public static string SystemSettingsUpdated => Messages.Get(nameof(SystemSettingsUpdated));
+
+        public static string EmailConfirmationTokenCreated => Messages.Get(nameof(EmailConfirmationTokenCreated));
+        public static string EmailConfirmationTokenDeleted => Messages.Get(nameof(EmailConfirmationTokenDeleted));
+        public static string EmailConfirmationTokenUpdated => Messages.Get(nameof(EmailConfirmationTokenUpdated));
+
+        public static string EmailTemplateCreated => Messages.Get(nameof(EmailTemplateCreated));
+        public static string EmailTemplateDeleted => Messages.Get(nameof(EmailTemplateDeleted));
+        public static string EmailTemplateUpdated => Messages.Get(nameof(EmailTemplateUpdated));
+
+        public static string NotificationCreated => Messages.Get(nameof(NotificationCreated));
+        public static string NotificationDeleted => Messages.Get(nameof(NotificationDeleted));
+        public static string NotificationUpdated => Messages.Get(nameof(NotificationUpdated));
+
+        public static string UserGroupCreated => Messages.Get(nameof(UserGroupCreated));
+        public static string UserGroupDeleted => Messages.Get(nameof(UserGroupDeleted));
+        public static string UserGroupUpdated => Messages.Get(nameof(UserGroupUpdated));
+
+        public static string SupportTicketCreated => Messages.Get(nameof(SupportTicketCreated));
+        public static string SupportTicketDeleted => Messages.Get(nameof(SupportTicketDeleted));
+        public static string SupportTicketUpdated => Messages.Get(nameof(SupportTicketUpdated));
+
+        public static string EmailSending => Messages.Get(nameof(EmailSending));
+
+        public static string Information => Messages.Get(nameof(Information));
+        public static string Warning => Messages.Get(nameof(Warning));
+        public static string Error => Messages.Get(nameof(Error));
+        public static string Critical => Messages.Get(nameof(Critical));
+
+        public static string Success => Messages.Get(nameof(Success));
+
+        public static string EmailConfirmation => Messages.Get(nameof(EmailConfirmation));
+
+        public static string Registration => Messages.Get(nameof(Registration));
+        public static string ForgotPassword => Messages.Get(nameof(ForgotPassword));
+        public static string CriticalError => Messages.Get(nameof(CriticalError));
     }
 }

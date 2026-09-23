@@ -539,13 +539,11 @@ namespace Partnerly.Controllers
                 LastName = model.LastName,
                 EmailConfirmed = true,
 
-                // Google user не имеет обычного password
                 PasswordHash = null,
             };
 
             await _userService.CreateUserAsync(user);
-
-           
+       
             var createdUser = await _userService.GetUserByEmailAsync(model.Email);
 
             if (createdUser == null)
@@ -555,8 +553,7 @@ namespace Partnerly.Controllers
 
             await SignInUserAsync(createdUser, true);
 
-            if (!string.IsNullOrEmpty(model.ReturnUrl) &&
-                Url.IsLocalUrl(model.ReturnUrl))
+            if (!string.IsNullOrEmpty(model.ReturnUrl) && Url.IsLocalUrl(model.ReturnUrl))
             {
                 return Redirect(model.ReturnUrl);
             }

@@ -11,12 +11,14 @@ namespace Partnerly.Events
         public User NewUser { get; }
         public bool SendEmail { get; }
         public bool SendNotification { get; }
+        public string RegisteredWithResource { get; }
 
-        public UserRegisteredEvent(User newUser, bool sendEmail = true, bool sendNote = true)
+        public UserRegisteredEvent(User newUser, bool sendEmail = true, bool sendNote = true, string registeredWithResource = "Internal")
         {
             NewUser = newUser;
             SendEmail = sendEmail;
             SendNotification = sendNote;
+            RegisteredWithResource = registeredWithResource;
         }
     }
 
@@ -56,15 +58,29 @@ namespace Partnerly.Events
                     if (tokenResult?.Data?.UserId != null && tokenResult.Data.Token != null)
                     {
                         var appUrl = _config["AppSettings:BaseUrl"];
-                        var confirmationLink = $"{appUrl}/Account/ConfirmEmail?userId={tokenResult.Data.UserId}&token={tokenResult.Data.Token}";
+                        string templateName = null;
+                        string confirmationLink = null;
 
-                        var emailModel = new
+                        if (@event.RegisteredWithResource == "Internal")
                         {
-                            UserName = $"{@event.NewUser.FirstName} {@event.NewUser.LastName}",
-                            ConfirmationLink = confirmationLink,
-                        };
+                            templateName = EmailTemplateNameAttribute.EmailConfirmation;
+                            confirmationLink = $"{appUrl}/Account/ConfirmEmail?userId={tokenResult.Data.UserId}&token={tokenResult.Data.Token}";
+                        }
+                        else if (@event.RegisteredWithResource == "Google")
+                        { 
+                            
+                        }
 
-                        await _emailSender.SendEmailWithTemplateAsync(EmailTemplateNameAttribute.EmailConfirmation, @event.NewUser.Email, emailModel);
+                        if (!string.IsNullOrEmpty(templateName) && !string.IsNullOrEmpty(confirmationLink))
+                        {
+                            var emailModel = new
+                            {
+                                UserName = $"{@event.NewUser.FirstName} {@event.NewUser.LastName}",
+                                ConfirmationLink = confirmationLink,
+                            };
+
+                            await _emailSender.SendEmailWithTemplateAsync(templateName, @event.NewUser.Email, emailModel);
+                        }   
                     }
                 }
             }

@@ -12,10 +12,10 @@ namespace Partnerly.Descriptors.Attributes
 
         public LogTypeAttribute()
             : base(
-                Information, Constants.Information,
-                Warning, Constants.Warning,
-                Error, Constants.Error,
-                Critical, Constants.Critical)
+                Information, FieldsDisplayNames.Information,
+                Warning, FieldsDisplayNames.Warning,
+                Error, FieldsDisplayNames.Error,
+                Critical, FieldsDisplayNames.Critical)
         { }
     }
 }

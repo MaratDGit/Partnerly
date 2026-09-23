@@ -11,9 +11,9 @@ namespace Partnerly.Descriptors.Attributes
 
         public EmailTemplateNameAttribute()
             : base(
-                EmailConfirmation, Constants.EmailConfirmation,
-                ForgotPassword, Constants.ForgotPassword,
-                CriticalError, Constants.CriticalError
+                EmailConfirmation, FieldsDisplayNames.EmailConfirmation,
+                ForgotPassword, FieldsDisplayNames.ForgotPassword,
+                CriticalError, FieldsDisplayNames.CriticalError
               )
         { }
     }

@@ -48,46 +48,46 @@ namespace Partnerly.Descriptors.Attributes
 
         public LogActionsAttribute()
             : base(
-                UserSignIn, Constants.UserSignIn,
-                UserSignOut, Constants.UserSignOut,
+                UserSignIn, FieldsDisplayNames.UserSignIn,
+                UserSignOut, FieldsDisplayNames.UserSignOut,
 
-                UserCreated, Constants.UserCreated,
-                UserDeleted, Constants.UserDeleted,
-                UserUpdated, Constants.UserUpdated,
+                UserCreated, FieldsDisplayNames.UserCreated,
+                UserDeleted, FieldsDisplayNames.UserDeleted,
+                UserUpdated, FieldsDisplayNames.UserUpdated,
 
-                RoleCreated, Constants.RoleCreated,
-                RoleDeleted, Constants.RoleDeleted,
-                RoleUpdated, Constants.RoleUpdated,
+                RoleCreated, FieldsDisplayNames.RoleCreated,
+                RoleDeleted, FieldsDisplayNames.RoleDeleted,
+                RoleUpdated, FieldsDisplayNames.RoleUpdated,
 
-                PaymentCreated, Constants.PaymentCreated,
-                PaymentDeleted, Constants.PaymentDeleted,
-                PaymentUpdated, Constants.PaymentUpdated,
+                PaymentCreated, FieldsDisplayNames.PaymentCreated,
+                PaymentDeleted, FieldsDisplayNames.PaymentDeleted,
+                PaymentUpdated, FieldsDisplayNames.PaymentUpdated,
 
-                SystemSettingsCreated, Constants.SystemSettingsCreated,
-                SystemSettingsDeleted, Constants.SystemSettingsDeleted,
-                SystemSettingsUpdated, Constants.SystemSettingsUpdated,
+                SystemSettingsCreated, FieldsDisplayNames.SystemSettingsCreated,
+                SystemSettingsDeleted, FieldsDisplayNames.SystemSettingsDeleted,
+                SystemSettingsUpdated, FieldsDisplayNames.SystemSettingsUpdated,
 
-                EmailConfirmationTokenCreated, Constants.EmailConfirmationTokenCreated,
-                EmailConfirmationTokenDeleted, Constants.EmailConfirmationTokenDeleted,
-                EmailConfirmationTokenUpdated, Constants.EmailConfirmationTokenUpdated,
+                EmailConfirmationTokenCreated, FieldsDisplayNames.EmailConfirmationTokenCreated,
+                EmailConfirmationTokenDeleted, FieldsDisplayNames.EmailConfirmationTokenDeleted,
+                EmailConfirmationTokenUpdated, FieldsDisplayNames.EmailConfirmationTokenUpdated,
 
-                EmailTemplateCreated, Constants.EmailTemplateCreated,
-                EmailTemplateDeleted, Constants.EmailTemplateDeleted,
-                EmailTemplateUpdated, Constants.EmailTemplateUpdated,
+                EmailTemplateCreated, FieldsDisplayNames.EmailTemplateCreated,
+                EmailTemplateDeleted, FieldsDisplayNames.EmailTemplateDeleted,
+                EmailTemplateUpdated, FieldsDisplayNames.EmailTemplateUpdated,
 
-                NotificationCreated, Constants.NotificationCreated,
-                NotificationDeleted, Constants.NotificationDeleted,
-                NotificationUpdated, Constants.NotificationUpdated,
+                NotificationCreated, FieldsDisplayNames.NotificationCreated,
+                NotificationDeleted, FieldsDisplayNames.NotificationDeleted,
+                NotificationUpdated, FieldsDisplayNames.NotificationUpdated,
 
-                UserGroupCreated, Constants.NotificationCreated,
-                UserGroupDeleted, Constants.NotificationDeleted,
-                UserGroupUpdated, Constants.NotificationUpdated,
+                UserGroupCreated, FieldsDisplayNames.NotificationCreated,
+                UserGroupDeleted, FieldsDisplayNames.NotificationDeleted,
+                UserGroupUpdated, FieldsDisplayNames.NotificationUpdated,
 
-                SupportTicketCreated, Constants.SupportTicketCreated,
-                SupportTicketDeleted, Constants.SupportTicketDeleted,
-                SupportTicketUpdated, Constants.SupportTicketUpdated,
+                SupportTicketCreated, FieldsDisplayNames.SupportTicketCreated,
+                SupportTicketDeleted, FieldsDisplayNames.SupportTicketDeleted,
+                SupportTicketUpdated, FieldsDisplayNames.SupportTicketUpdated,
 
-                EmailSending, Constants.EmailSending
+                EmailSending, FieldsDisplayNames.EmailSending
                 )
         { }
     }

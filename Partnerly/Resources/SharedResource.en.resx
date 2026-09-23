@@ -813,4 +813,133 @@
   <data name="WereceivedyourdataviaGoogle" xml:space="preserve">
     <value>We received your data via Google.</value>
   </data>
+  <data name="Open" xml:space="preserve">
+    <value>Open</value>
+  </data>
+  <data name="Pending" xml:space="preserve">
+    <value>Pending</value>
+  </data>
+  <data name="Payed" xml:space="preserve">
+    <value>Payed</value>
+  </data>
+  <data name="Canceled" xml:space="preserve">
+    <value>Canceled</value>
+  </data>
+  <data name="Rejected" xml:space="preserve">
+    <value>Rejected</value>
+  </data>
+  <data name="UserSignIn" xml:space="preserve">
+    <value>User Sign In</value>
+  </data>
+  <data name="UserSignOut" xml:space="preserve">
+    <value>User Sign Out</value>
+  </data>
+  <data name="UserCreated" xml:space="preserve">
+    <value>User Creation</value>
+  </data>
+  <data name="UserDeleted" xml:space="preserve">
+    <value>User Deletion</value>
+  </data>
+  <data name="UserUpdated" xml:space="preserve">
+    <value>User Update</value>
+  </data>
+  <data name="RoleCreated" xml:space="preserve">
+    <value>Role Created</value>
+  </data>
+  <data name="RoleDeleted" xml:space="preserve">
+    <value>Role Deleted</value>
+  </data>
+  <data name="RoleUpdated" xml:space="preserve">
+    <value>Role Update</value>
+  </data>
+  <data name="PaymentCreated" xml:space="preserve">
+    <value>Payment Creation</value>
+  </data>
+  <data name="PaymentDeleted" xml:space="preserve">
+    <value>Payment Deleted</value>
+  </data>
+  <data name="PaymentUpdated" xml:space="preserve">
+    <value>Payment Updated</value>
+  </data>
+  <data name="SystemSettingsCreated" xml:space="preserve">
+    <value>System Settings Created</value>
+  </data>
+  <data name="SystemSettingsDeleted" xml:space="preserve">
+    <value>System Settings Deleted</value>
+  </data>
+  <data name="SystemSettingsUpdated" xml:space="preserve">
+    <value>System Settings Updated</value>
+  </data>
+  <data name="EmailConfirmationTokenCreated" xml:space="preserve">
+    <value>Email Confirmation Token Created</value>
+  </data>
+  <data name="EmailConfirmationTokenDeleted" xml:space="preserve">
+    <value>Email Confirmation Token Deleted</value>
+  </data>
+  <data name="EmailConfirmationTokenUpdated" xml:space="preserve">
+    <value>Email Confirmation Token Updated</value>
+  </data>
+  <data name="EmailTemplateCreated" xml:space="preserve">
+    <value>Email Template Created</value>
+  </data>
+  <data name="EmailTemplateDeleted" xml:space="preserve">
+    <value>Email Template Deleted</value>
+  </data>
+  <data name="EmailTemplateUpdated" xml:space="preserve">
+    <value>Email Template Updated</value>
+  </data>
+  <data name="NotificationCreated" xml:space="preserve">
+    <value>Notification Created</value>
+  </data>
+  <data name="NotificationDeleted" xml:space="preserve">
+    <value>Notification Deleted</value>
+  </data>
+  <data name="NotificationUpdated" xml:space="preserve">
+    <value>Notification Updated</value>
+  </data>
+  <data name="UserGroupCreated" xml:space="preserve">
+    <value>User Group Created</value>
+  </data>
+  <data name="UserGroupDeleted" xml:space="preserve">
+    <value>User Group Deleted</value>
+  </data>
+  <data name="UserGroupUpdated" xml:space="preserve">
+    <value>User Group Updated</value>
+  </data>
+  <data name="SupportTicketCreated" xml:space="preserve">
+    <value>Support Ticket Created</value>
+  </data>
+  <data name="SupportTicketDeleted" xml:space="preserve">
+    <value>Support Ticket Deleted</value>
+  </data>
+  <data name="SupportTicketUpdated" xml:space="preserve">
+    <value>Support Ticket Updated</value>
+  </data>
+  <data name="EmailSending" xml:space="preserve">
+    <value>Email Sending</value>
+  </data>
+  <data name="Information" xml:space="preserve">
+    <value>Information</value>
+  </data>
+  <data name="Warning" xml:space="preserve">
+    <value>Warning</value>
+  </data>
+  <data name="Critical" xml:space="preserve">
+    <value>Critical</value>
+  </data>
+  <data name="Success" xml:space="preserve">
+    <value>Success</value>
+  </data>
+  <data name="EmailConfirmation" xml:space="preserve">
+    <value>Email Confirmation</value>
+  </data>
+  <data name="Registration" xml:space="preserve">
+    <value>Registration</value>
+  </data>
+  <data name="ForgotPassword" xml:space="preserve">
+    <value>Forgot Password</value>
+  </data>
+  <data name="CriticalError" xml:space="preserve">
+    <value>Critical Error</value>
+  </data>
 </root>
