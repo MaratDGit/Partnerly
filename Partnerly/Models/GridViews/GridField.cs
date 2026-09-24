@@ -13,5 +13,15 @@
         public object? DefaultValue { get; set; }
         public string? Type { get; set; }
         public string? Data { get; set; }
+
+        public string? CssClass { get; set; }
+        public string? Style { get; set; }
+        public Dictionary<string, GridValueStyle>? ValueStyles { get; set; }
+    }
+
+    public class GridValueStyle
+    {
+        public string? CssClass { get; set; }
+        public string? Style { get; set; }
     }
 }

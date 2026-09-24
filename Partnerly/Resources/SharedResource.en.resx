@@ -942,4 +942,31 @@
   <data name="CriticalError" xml:space="preserve">
     <value>Critical Error</value>
   </data>
+  <data name="Joinedin" xml:space="preserve">
+    <value>Joined in</value>
+  </data>
+  <data name="Copyreferrallink" xml:space="preserve">
+    <value>Copy referral link</value>
+  </data>
+  <data name="Linkcopied" xml:space="preserve">
+    <value>Link copied!</value>
+  </data>
+  <data name="Copyerror" xml:space="preserve">
+    <value>Copy error:</value>
+  </data>
+  <data name="Noinformationonactivity" xml:space="preserve">
+    <value>No information on activity...</value>
+  </data>
+  <data name="Chronologyofactivities" xml:space="preserve">
+    <value>Chronology of activities</value>
+  </data>
+  <data name="AboutMe" xml:space="preserve">
+    <value>About Me</value>
+  </data>
+  <data name="Myteam" xml:space="preserve">
+    <value>My team</value>
+  </data>
+  <data name="Contacts" xml:space="preserve">
+    <value>Contacts</value>
+  </data>
 </root>

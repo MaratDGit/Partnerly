@@ -124,7 +124,10 @@ namespace Partnerly.Infrastructure.Services
             _notificationRepository.Update(notification);
             await _notificationRepository.SaveChangesAsync();
 
-            if (fromMarkAsRead)
+            if (notification.IsRead == false)
+                await SendNotification(notification.UserId.ToString(), notification);
+
+            if (fromMarkAsRead || notification.IsRead == false)
             {
                 var unread = await GetUserNotificationsAsync(notification.UserId, onlyUnread: true);
                 await UpdateUnreadCount(notification.UserId.ToString(), unread == null ? 0 : unread.Count());

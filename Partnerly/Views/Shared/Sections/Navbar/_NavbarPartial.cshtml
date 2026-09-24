@@ -434,16 +434,15 @@
         });
 
         // Start Connection
-        connection.start()
-            .then(() =>
-                console.log(notificationLocalization.connected)
-            )
-            .catch(err =>
-                console.error(
-                    notificationLocalization.connectionError,
-                    err
-                )
-            );
+       connection.start()
+            .then(() => {
+                console.log("SignalR connected");
+                console.log("Connection ID:", connection.connectionId);
+                console.log("State:", connection.state);
+            })
+            .catch(err => {
+                console.error("SignalR connection error:", err);
+            });
 
         list.addEventListener('click', function(e) {
 

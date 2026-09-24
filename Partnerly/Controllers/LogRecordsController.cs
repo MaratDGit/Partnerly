@@ -84,7 +84,17 @@ namespace Partnerly.Controllers
                 {
                     new GridField { FieldName = "select", DisplayName = $"", DefaultValue = false, Type = "checkbox"},
                     new GridField { FieldName = "actionView", DisplayName = FieldsDisplayNames.Action, LinkTemplate = "/LogRecords/View/{id}" },
-                    new GridField { FieldName = "typeView", DisplayName = FieldsDisplayNames.Type, IsFilterable = true },
+                    new GridField 
+                    { 
+                        FieldName = "typeView", DisplayName = FieldsDisplayNames.Type, IsFilterable = true,
+                        ValueStyles = new Dictionary<string, GridValueStyle>
+                        {
+                            [FieldsDisplayNames.Information] = new() { CssClass = "badge bg-label-success fs-tiny rounded-pill ms-auto text-uppercase"},
+                            [FieldsDisplayNames.Warning] = new() { CssClass = "badge bg-label-warning fs-tiny rounded-pill ms-auto text-uppercase" },
+                            [FieldsDisplayNames.Error] = new() { CssClass = "badge bg-label-warning fs-tiny rounded-pill ms-auto text-uppercase" },
+                            [FieldsDisplayNames.Critical] = new() { CssClass = "badge bg-label-danger fs-tiny rounded-pill ms-auto text-uppercase" },
+                        }
+                    },
                     new GridField { FieldName = "logMessage", DisplayName = FieldsDisplayNames.Message },
                     //new GridField { FieldName = "filePath", DisplayName = FieldsDisplayNames.FilePath, DefaultValue = "" },
                     //new GridField { FieldName = "method", DisplayName = FieldsDisplayNames.Method},

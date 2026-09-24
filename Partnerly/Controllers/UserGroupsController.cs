@@ -295,7 +295,7 @@ namespace Partnerly.Controllers
                 {
                     new GridField { FieldName = "select", DisplayName = $"", DefaultValue = false, Type = "checkbox"},
                     new GridField { FieldName = "userName", DisplayName = FieldsDisplayNames.User, LinkTemplate = "/Users/Edit/{id}" },
-                    new GridField { FieldName = "email", DisplayName = FieldsDisplayNames.Description },
+                    new GridField { FieldName = "email", DisplayName = FieldsDisplayNames.Email },
                     new GridField { FieldName = "createdDate", DisplayName = FieldsDisplayNames.CreatedDate, IsSortable = true, IsFilterable = true, Format="date:MM/dd/yyyy" }
                 };
             }

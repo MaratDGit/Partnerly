@@ -15,9 +15,11 @@ namespace Partnerly.Hubs
         public override async Task OnConnectedAsync()
         {
             var userId = Context.UserIdentifier;
+
             if (userId != null)
             {
                 var unread = await _notificationService.GetUserNotificationsAsync(Guid.Parse(userId), onlyUnread: true);
+
                 foreach (var n in unread)
                 {
                     await Clients.Caller.SendAsync("ReceiveNotification", n);

@@ -98,6 +98,8 @@
             let sortOrder = "asc";
 
             function renderTable() {
+                const searchValue = $searchInput.val().trim();
+
                 const $thead = $('<thead></thead>');
                 const $trHead = $('<tr></tr>');
 
@@ -150,7 +152,7 @@
                         }
 
                         let value = row[col.data];
-                        if (col.render) value = col.render(value, null, row);
+                        if (col.render) value = col.render(value, null, row, searchValue);
                         $tr.append(`<td>${value}</td>`);
                     });
                     $tbody.append($tr);

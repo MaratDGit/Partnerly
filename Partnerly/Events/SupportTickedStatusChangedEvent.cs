@@ -64,8 +64,9 @@ namespace Partnerly.Events
 
                     if (message != null)
                     {
-                        var appUrl = _config["AppSettings:BaseUrl"];
-                        var confirmationLink = $"{appUrl}/SupportTickets/ViewCase/{@event.Ticket.Id}";
+                        //var appUrl = _config["AppSettings:BaseUrl"];
+                        //var confirmationLink = $"{appUrl}/SupportTickets/ViewCase/{@event.Ticket.Id}";
+                        var confirmationLink = $"/SupportTickets/ViewCase/{@event.Ticket.Id}";
 
                         Notification notification = new Notification { UserId = (Guid)@event.Ticket.UserId, Type = NotificationTypeAttribute.Information, Message = message, Link = confirmationLink };
                         await _notificationService.CreateNotificationAsync(notification);

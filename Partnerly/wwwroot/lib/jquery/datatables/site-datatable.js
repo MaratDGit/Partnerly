@@ -17,13 +17,26 @@
                 visible: f.isVisible !== false,
                 orderable: f.isSortable,
                 isFilterable: f.isFilterable,
-                render: function (data, type, row) {
-                    if (data == null && f.defaultValue !== undefined && f.defaultValue !== null) data = f.defaultValue;
+                cssClass: f.cssClass,
+                style: f.style,
+                valueStyles: f.valueStyles,
+
+                render: function (data, type, row, searchValue) {
+
+                    if (data == null) {
+                        data = f.defaultValue ?? null;
+                    }
+
+                    if (data == null) {
+                        return "";
+                    }
 
                     const title = data;
                     if (typeof data === "string" && data.length > 40) {
                         data = data.substring(0, 40) + "...";
                     }
+
+                    const styleAttributes = getGridStyleAttributes(f, data);
 
                     if (f.type === "checkbox") {
                         if (isSelectColumn) {
@@ -35,56 +48,27 @@
 
                     if (f.linkTemplate) {
                         let href = f.linkTemplate;
-
-                        // Ищем все плейсхолдеры в виде {ключ}
                         href = href.replace(/{(\w+)}/g, (match, key) => {
-                            // Если в row есть такое поле — подставляем его значение
-                            // Если нет — оставляем пустую строку (или можно match, если хочешь оставить {ключ})
                             return row.hasOwnProperty(key) ? row[key] : "";
                         });
 
-                        return `<a title="${title}" href="${href}">${data}</a>`;
+                        const displayData = highlightSearchText(data, searchValue);
+                        return `<a 
+                                title="${title}" 
+                                href="${href}"
+                                ${styleAttributes}
+                                >${displayData}</a>`;
+
+                        //return `<a 
+                        //    title="${title}" 
+                        //    href="${href}"
+                        //    ${styleAttributes}
+                        //    >${data}</a>`;
                     }
 
                     if (f.format) {
                         const [typeFormat, formatString] = f.format.split(":");
 
-                        //if (typeFormat === "date") {
-                        //    if (formatString === "lastActivity") {
-                        //        const d = new Date(data); // дата с сервера (UTC)
-                        //        const now = new Date();   // текущее локальное время
-
-                        //        // Разница в миллисекундах
-                        //        const diffMs = now.getTime() - d.getTime();
-
-                        //        const diffSec = Math.floor(diffMs / 1000);
-                        //        const diffMin = Math.floor(diffSec / 60);
-                        //        const diffHour = Math.floor(diffMin / 60);
-                        //        const diffDay = Math.floor(diffHour / 24);
-
-                        //        if (diffMin < 1) return "только что";
-                        //        if (diffMin < 60) return diffMin + " минут назад";
-                        //        if (diffHour < 24) return diffHour + " часов назад";
-
-                        //        // Больше одного дня — выводим дату
-                        //        return d.getDate().toString().padStart(2, "0") + "/" +
-                        //            (d.getMonth() + 1).toString().padStart(2, "0") + "/" +
-                        //            d.getFullYear();
-                        //    }
-
-                        //    const d = new Date(data);
-                        //    if (isNaN(d)) return data;
-                        //    switch (formatString) {
-                        //        case "MM/dd/yyyy":
-                        //            return (d.getMonth() + 1).toString().padStart(2, "0") + "/" + d.getDate().toString().padStart(2, "0") + "/" + d.getFullYear();
-                        //        case "dd.MM.yyyy":
-                        //            return d.getDate().toString().padStart(2, "0") + "." + (d.getMonth() + 1).toString().padStart(2, "0") + "." + d.getFullYear();
-                        //        case "dd/MM/yyyy HH:mm":
-                        //            return d.getDate().toString().padStart(2, "0") + "/" + (d.getMonth() + 1).toString().padStart(2, "0") + "/" + d.getFullYear() + " " + d.getHours().toString().padStart(2, "0") + ":" + d.getMinutes().toString().padStart(2, "0");
-                        //        default:
-                        //            return d.toLocaleDateString();
-                        //    }
-                        //}
                         if (typeFormat === "date") {
 
                             const d = new Date(data);
@@ -154,10 +138,24 @@
                                     return new Intl.DateTimeFormat(dateLocalization.culture).format(d);
                             }
                         }
+                        if (typeFormat === "phone") {
+                            const phone = String(data).replace(/\D/g, "");
+
+                            if (phone.length === 11 && phone.startsWith("374")) {
+                                return `+374-${phone.substring(3, 5)}-${phone.substring(5, 7)}-${phone.substring(7, 9)}-${phone.substring(9, 11)}`;
+                            }
+
+                            return data;
+                        }
                         if (typeFormat === "number") return parseFloat(data).toLocaleString(undefined, { minimumFractionDigits: parseInt(formatString) || 0 });
                         if (typeFormat === "currency") return new Intl.NumberFormat("en-US", { style: "currency", currency: formatString || "USD" }).format(data);
                     }
-                    return `<span title="${title}" ${f.attr || ""}>${data}</span>`;
+
+                    //return `<span title="${title}"${styleAttributes} ${f.attr || ""}>${data}</span>`;
+
+                    const displayData = highlightSearchText(data, searchValue);
+
+                    return `<span title="${title}"${styleAttributes} ${f.attr || ""}>${displayData}</span>`;
                 }
             };
         });
@@ -259,4 +257,49 @@ function postToController(url, data) {
     document.body.appendChild(form);
     form.submit();
     document.body.removeChild(form);
+}
+
+function getGridStyleAttributes(field, value) {
+    let cssClass = field.cssClass || "";
+    let style = field.style || "";
+
+    if (field.valueStyles && value != null) {
+        const valueStyle = field.valueStyles[String(value)];
+
+        if (valueStyle) {
+            if (valueStyle.cssClass) {
+                cssClass += ` ${valueStyle.cssClass}`;
+            }
+
+            if (valueStyle.style) {
+                style += ` ${valueStyle.style}`;
+            }
+        }
+    }
+
+    let attributes = "";
+
+    if (cssClass) {
+        attributes += ` class="${cssClass}"`;
+    }
+
+    if (style) {
+        attributes += ` style="${style}"`;
+    }
+
+    return attributes;
+}
+
+function highlightSearchText(value, search) {
+    if (!search || value == null) {
+        return value ?? "";
+    }
+
+    const text = String(value);
+    const escapedSearch = search.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+
+    return text.replace(
+        new RegExp(`(${escapedSearch})`, "gi"),
+        '<mark class="datatable-search-highlight">$1</mark>'
+    );
 }

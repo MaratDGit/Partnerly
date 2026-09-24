@@ -670,7 +670,7 @@
     <value>Քաղաքականություն</value>
   </data>
   <data name="Login" xml:space="preserve">
-    <value>Մուտք գործել</value>
+    <value>Մուտք</value>
   </data>
   <data name="Youremailsuccessfullyverified" xml:space="preserve">
     <value>Ձեր էլ․ հասցեն հաջողությամբ հաստատվել է։</value>
@@ -941,5 +941,32 @@
   </data>
   <data name="CriticalError" xml:space="preserve">
     <value>Կրիտիկական սխալ</value>
+  </data>
+  <data name="Joinedin" xml:space="preserve">
+    <value>Միացել է</value>
+  </data>
+  <data name="Copyreferrallink" xml:space="preserve">
+    <value>Պատճենեք հղման հղումը</value>
+  </data>
+  <data name="Linkcopied" xml:space="preserve">
+    <value>Հղումը պատճենվեց։</value>
+  </data>
+  <data name="Copyerror" xml:space="preserve">
+    <value>Պատճենման սխալ՝</value>
+  </data>
+  <data name="Noinformationonactivity" xml:space="preserve">
+    <value>Գործունեության մասին տեղեկատվություն չկա...</value>
+  </data>
+  <data name="Chronologyofactivities" xml:space="preserve">
+    <value>Գործունեության ժամանակագրություն</value>
+  </data>
+  <data name="AboutMe" xml:space="preserve">
+    <value>Իմ մասին</value>
+  </data>
+  <data name="Myteam" xml:space="preserve">
+    <value>Իմ թիմը</value>
+  </data>
+  <data name="Contacts" xml:space="preserve">
+    <value>Կոնտակտներ</value>
   </data>
 </root>

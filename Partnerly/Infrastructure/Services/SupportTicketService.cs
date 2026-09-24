@@ -16,9 +16,10 @@ namespace Partnerly.Infrastructure.Services
         private readonly ICurrentUserService _currentUserService;
         private readonly ILogService _logService;
         private readonly IEventBus _eventBus;
-        private readonly ISystemSettingsRepository _systemSettingsRepository;   
+        private readonly ISystemSettingsRepository _systemSettingsRepository;
+        private readonly INotificationService _notificationService;
 
-        public SupportTicketService(ISupportTicketRepository supportTicketRepository, IUserRepository userRepo, ISystemSettingsRepository systemSettingsRepository, IRoleService roleService, IPermissionService permissionService, ICurrentUserService currentUserService, ILogService logService, IEventBus eventBus)
+        public SupportTicketService(ISupportTicketRepository supportTicketRepository, IUserRepository userRepo, ISystemSettingsRepository systemSettingsRepository, IRoleService roleService, IPermissionService permissionService, ICurrentUserService currentUserService, ILogService logService, IEventBus eventBus, INotificationService notificationService)
         {
             _supportTicketRepository = supportTicketRepository;
             _userRepo = userRepo;
@@ -28,6 +29,7 @@ namespace Partnerly.Infrastructure.Services
             _currentUserService = currentUserService;
             _logService = logService;
             _eventBus = eventBus;
+            _notificationService = notificationService;
         }
 
         public async Task<SupportTicket?> GetSupportTicketByIDAsync(Guid? id) =>
@@ -162,6 +164,12 @@ namespace Partnerly.Infrastructure.Services
             {
                 await _logService.CreateLogAsync(LogActionsAttribute.SupportTicketDeleted, LogTypeAttribute.Critical, ErrorMessages.NoPermissionForThisAction);
                 return ServiceResult<SupportTicket?>.Fail(new List<string> { ErrorMessages.NoPermissionForThisAction });
+            }
+
+            var notification = await _notificationService.GetNotificationByTicketIDAsync(id);
+            if (notification != null)
+            {
+                await _notificationService.DeleteNotificationAsync(notification.Id);
             }
 
             _supportTicketRepository.Delete(ticket);

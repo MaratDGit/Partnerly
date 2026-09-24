@@ -355,11 +355,21 @@ namespace Partnerly.Controllers
                     new GridField { FieldName = "ticketID", DisplayName = $"{FieldsDisplayNames.TaskNumber}", IsSortable = true, LinkTemplate = HasPermision(RoleTypeAttribute.Delete) ? "/SupportTickets/Edit/{id}" : "/SupportTickets/ViewCase/{id}" },
                     new GridField { FieldName = "subject", DisplayName = $"{FieldsDisplayNames.Subject}", LinkTemplate = HasPermision(RoleTypeAttribute.Delete) ? "/SupportTickets/Edit/{id}" : "/SupportTickets/ViewCase/{id}" },
                     new GridField { FieldName = "message", DisplayName = FieldsDisplayNames. Message},
-                    new GridField { FieldName = "status", DisplayName = FieldsDisplayNames.Status, IsSortable = true, IsFilterable = true },
+                    new GridField 
+                    { 
+                        FieldName = "status", DisplayName = FieldsDisplayNames.Status, IsSortable = true, IsFilterable = true,
+
+                        ValueStyles = new Dictionary<string, GridValueStyle>
+                        {
+                            [FieldsDisplayNames.New] = new() {  /*CssClass = "grid-red"*/ CssClass = "badge bg-label-danger fs-tiny rounded-pill ms-auto text-uppercase"},
+                            [FieldsDisplayNames.Closed] = new() { /*CssClass = "grid-green"*/ CssClass = "badge bg-label-success fs-tiny rounded-pill ms-auto text-uppercase" },
+                            [FieldsDisplayNames.InProgress] = new() { /*CssClass = "grid-yellow"*/ CssClass = "badge bg-label-warning fs-tiny rounded-pill ms-auto text-uppercase" },
+                        }
+                    },
                     new GridField { FieldName = "creatorName", DisplayName = FieldsDisplayNames.CreatorName, IsSortable = true, IsFilterable = true, LinkTemplate = "/Users/Edit/{userId}"},
                     new GridField { FieldName = "assignedToName", DisplayName = FieldsDisplayNames.AssignedTo, DefaultValue = "", IsSortable = true, IsFilterable = true,  LinkTemplate = "/Users/Edit/{assignedTo}" },
                     new GridField { FieldName = "isRead", DisplayName = FieldsDisplayNames.IsRead, Type = "checkbox", IsSortable = true, IsFilterable = true},
-                    new GridField { FieldName = "createdDate", DisplayName = FieldsDisplayNames.CreatedDate, IsSortable = true, IsFilterable = true, Format="date:MM/dd/yyyy" }
+                    new GridField { FieldName = "createdDate", DisplayName = FieldsDisplayNames.CreatedDate, IsSortable = true, IsFilterable = true, Format="date:MM/dd/yyyy"}
                 };
             }
 

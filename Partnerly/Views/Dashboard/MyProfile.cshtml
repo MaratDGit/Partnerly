@@ -1,16 +1,16 @@
 ﻿@model Partnerly.Models.ViewModels.MyProfileViewModel;
 @using System.Globalization;
 @{
-  ViewData["Title"] = "Мой профиль";
+  ViewData["Title"] = "My Profile";
 }
 
 @{
     string joinedText = "";
     if (Model.CreatedDate.HasValue)
     {
-        var month = Model.CreatedDate.Value.ToString("MMMM", new CultureInfo("ru-RU"));
+        var month = Model.CreatedDate.Value.ToString("MMMM", new System.Globalization.CultureInfo(@CultureInfo.CurrentUICulture.Name));
         var year = Model.CreatedDate.Value.Year;
-        joinedText = $"Присоединился в {month} {year}";
+        joinedText = $"{Localizer["Joinedin"]} {month} {year}";
     }
 }
 
@@ -18,77 +18,110 @@
 <div class="container-xxl flex-grow-1 container-p-y">
           
   <!-- Header -->
-<div class="row">
-    <div class="col-12">
-        <div class="card mb-3"> <!-- уменьшил mb-6 → mb-3 -->
-            <div class="user-profile-header d-flex flex-column flex-lg-row text-sm-start text-center mb-4"> <!-- mb-8 → mb-4 -->
-                <div class="flex-shrink-0 mt-0 mx-sm-0 mx-auto">
-                    <img src="@Url.Content(Model?.PhotoUrl)" alt="user image" class="d-block h-auto ms-0 ms-sm-3 rounded-3" style="width:80px; height:80px;"> <!-- уменьшил размер -->
-                </div>
-                <div class="flex-grow-1 mt-2 mt-lg-3">
-                    <div class="d-flex align-items-md-end align-items-sm-start align-items-center justify-content-md-between justify-content-start mx-3 flex-md-row flex-column gap-2"> <!-- mx-5 → mx-3, gap-4 → gap-2 -->
-                        <div class="user-profile-info">
-                            <h5 class="mb-1 mt-lg-3">@Model?.UserName</h5> <!-- h4 → h5, mb-2 → mb-1, mt-lg-7 → mt-lg-3 -->
-                            <ul class="list-inline mb-0 d-flex align-items-center flex-wrap justify-content-sm-start justify-content-center gap-2 mt-2"> <!-- gap-4 → gap-2, mt-4 → mt-2 -->
-                                <li class="list-inline-item">
-                                    <i class="icon-base bx bx-calendar me-1 align-top"></i>
-                                    <span class="fw-medium"> @joinedText</span>
-                                </li>
-                            </ul>
+    <div class="row">
+        <div class="col-12">
+            <div class="card mb-3">
+                <div class="user-profile-header d-flex flex-column flex-lg-row text-sm-start text-center mb-4"> <!-- mb-8 → mb-4 -->
+                    @* <div class="flex-shrink-0 mt-0 mx-sm-0 mx-auto">
+                        <img src="@Url.Content(Model?.PhotoUrl)" alt="user image" class="d-block h-auto ms-0 ms-sm-3 rounded-3" style="width:80px; height:80px;"> <!-- уменьшил размер -->
+                    </div> *@
+                    <div class="flex-grow-1 mt-2 mt-lg-3">
+                        <div class="d-flex align-items-md-end align-items-sm-start align-items-center justify-content-md-between justify-content-start mx-3 flex-md-row flex-column gap-2"> <!-- mx-5 → mx-3, gap-4 → gap-2 -->
+                            <div class="user-profile-info">
+                                <h5 class="mb-1 mt-lg-3">@Model?.UserName</h5> <!-- h4 → h5, mb-2 → mb-1, mt-lg-7 → mt-lg-3 -->
+                                <ul class="list-inline mb-0 d-flex align-items-center flex-wrap justify-content-sm-start justify-content-center gap-2 mt-2"> <!-- gap-4 → gap-2, mt-4 → mt-2 -->
+                                    <li class="list-inline-item">
+                                        <i class="icon-base bx bx-calendar me-1 align-top"></i>
+                                        <span class="fw-medium"> @joinedText</span>
+                                    </li>
+                                </ul>
+                            </div>
+                        
+                            <button class="btn btn-sm btn-primary mb-0" onclick="copyReferralLink('@Model?.MyReferralCode')">
+                                <i class="icon-base bx bx-copy-alt icon-sm me-1"></i>
+                                    @Localizer["Copyreferrallink"]
+                            </button>
                         </div>
-                        <!-- Кнопка копирования -->
-                        <button class="btn btn-sm btn-primary mb-0" onclick="copyReferralLink('@Model?.MyReferralCode')">
-                            <i class="icon-base bx bx-copy-alt icon-sm me-1"></i>
-                            Скопировать реферальную ссылку
-                        </button>
                     </div>
                 </div>
             </div>
         </div>
     </div>
-</div>
-<!--/ Header -->
+    <!--/ Header -->
 
-  <!-- Navbar pills -->
+@*   <!-- Navbar pills -->
  <div class="row">
     <div class="col-md-12">
       <div class="nav-align-top">
         <ul class="nav nav-pills flex-column flex-sm-row mb-6 gap-sm-0 gap-2" id="profileTabs" role="tablist">
             <li class="nav-item" role="presentation">
                 <a class="nav-link active" id="profile-tab" data-bs-toggle="pill" href="#profileTab" role="tab" aria-controls="profileTab" aria-selected="true">
-                    <i class="icon-base bx bx-user icon-sm me-1_5"></i> Профиль
+                   <i class="icon-base bx bx-user icon-sm me-1_5"></i> @Localizer["Profile"]
                 </a>
             </li>
             <li class="nav-item" role="presentation">
                 <a class="nav-link" id="teams-tab" data-bs-toggle="pill" href="#teamsTab" role="tab" aria-controls="teamsTab" aria-selected="false">
-                    <i class="icon-base bx bx-group icon-sm me-1_5"></i> Моя команда
+                   <i class="icon-base bx bx-group icon-sm me-1_5"></i> @Localizer["Myteam"]
                 </a>
             </li>
         </ul>
       </div>
     </div>
   </div>
-  <!--/ Navbar pills -->
+  <!--/ Navbar pills --> *@
 
- <div class="tab-content" id="profileTabsContent">
-    <!-- Профиль -->
-    <div class="tab-pane fade show active" id="profileTab" role="tabpanel" aria-labelledby="profile-tab">
+    <div class="row">
+        <div class="col-xl-4 col-lg-5 col-md-5">
+            <!-- About User -->
+            <div class="card mb-6">
+                <div class="card-body">
+                    <small class="card-text text-uppercase text-body-secondary small">@Localizer["AboutMe"]</small>
+                    <ul class="list-unstyled my-3 py-1">
+                        <li class="d-flex align-items-center mb-4"><i class="icon-base bx bx-user"></i><span class="fw-medium mx-2"</span> <span>@Model?.UserName</span></li>
+                        <li class="d-flex align-items-center mb-4"><i class="icon-base bx bx-crown"></i><span class="fw-medium mx-2"></span> <span>@Model?.ReferrerName</span></li>
+                        <li class="d-flex align-items-center mb-4"><i class="icon-base bx bx-check"></i><span class="fw-medium mx-2"></span> <span></span></li>
+                    </ul>
+                    <small class="card-text text-uppercase text-body-secondary small">@Localizer["Contacts"]</small>
+                    <ul class="list-unstyled my-3 py-1">
+                        <li class="d-flex align-items-center mb-4"><i class="icon-base bx bx-phone"></i><span class="fw-medium mx-2"></span> <span>@Model?.Phone</span></li>
+                        <li class="d-flex align-items-center mb-4"><i class="icon-base bx bx-envelope"></i><span class="fw-medium mx-2"></span> <span>@Model?.Email</span></li>
+                    </ul>
+                </div>
+            </div>
+                <!--/ About User -->
+        </div>
+
+        <div class="col-xl-8 col-lg-7 col-md-7">
+            <!-- Activity Timeline -->
+            <div class="card card-action mb-6">
+                <div class="card-header align-items-center">
+                    <h5 class="card-action-title mb-0"><i class="icon-base bx bx-bar-chart-alt-2 icon-lg text-body me-4"></i>@Localizer["Chronologyofactivities"]</h5>
+                </div>
+                <div class="card-body pt-3">
+                    <p>@Localizer["Noinformationonactivity"]</p>
+                </div>
+            </div>
+            <!--/ Activity Timeline -->
+        </div>
+    </div>
+
+ @*<div class="tab-content" id="profileTabsContent">
+   <div class="tab-pane fade show active" id="profileTab" role="tabpanel" aria-labelledby="profile-tab">
         <div class="row">
             <div class="col-xl-4 col-lg-5 col-md-5">
                 <!-- About User -->
                 <div class="card mb-6">
                     <div class="card-body">
-                        <small class="card-text text-uppercase text-body-secondary small">О себе</small>
+                        <small class="card-text text-uppercase text-body-secondary small">@Localizer["AboutMe"]</small>
                         <ul class="list-unstyled my-3 py-1">
-                            <li class="d-flex align-items-center mb-4"><i class="icon-base bx bx-user"></i><span class="fw-medium mx-2">Полное имя:</span> <span>@Model?.UserName</span></li>
-                            <li class="d-flex align-items-center mb-4"><i class="icon-base bx bx-crown"></i><span class="fw-medium mx-2">Реферер:</span> <span>@Model?.ReferrerName</span></li>
-                            <li class="d-flex align-items-center mb-4"><i class="icon-base bx bx-check"></i><span class="fw-medium mx-2">Статус:</span> <span>Активный</span></li>
-                            <li class="d-flex align-items-center mb-4"><i class="icon-base bx bx-flag"></i><span class="fw-medium mx-2">Страна:</span> <span>Армения</span></li>
+                            <li class="d-flex align-items-center mb-4"><i class="icon-base bx bx-user"></i><span class="fw-medium mx-2"</span> <span>@Model?.UserName</span></li>
+                            <li class="d-flex align-items-center mb-4"><i class="icon-base bx bx-crown"></i><span class="fw-medium mx-2"></span> <span>@Model?.ReferrerName</span></li>
+                            <li class="d-flex align-items-center mb-4"><i class="icon-base bx bx-check"></i><span class="fw-medium mx-2"></span> <span></span></li>
                         </ul>
-                        <small class="card-text text-uppercase text-body-secondary small">Контакты</small>
+                        <small class="card-text text-uppercase text-body-secondary small">@Localizer["Contacts"]</small>
                         <ul class="list-unstyled my-3 py-1">
-                            <li class="d-flex align-items-center mb-4"><i class="icon-base bx bx-phone"></i><span class="fw-medium mx-2">Телефон:</span> <span>@Model?.Phone</span></li>
-                            <li class="d-flex align-items-center mb-4"><i class="icon-base bx bx-envelope"></i><span class="fw-medium mx-2">Почта:</span> <span>@Model?.Email</span></li>
+                            <li class="d-flex align-items-center mb-4"><i class="icon-base bx bx-phone"></i><span class="fw-medium mx-2"></span> <span>@Model?.Phone</span></li>
+                            <li class="d-flex align-items-center mb-4"><i class="icon-base bx bx-envelope"></i><span class="fw-medium mx-2"></span> <span>@Model?.Email</span></li>
                         </ul>
                     </div>
                 </div>
@@ -99,80 +132,77 @@
                 <!-- Activity Timeline -->
                 <div class="card card-action mb-6">
                     <div class="card-header align-items-center">
-                        <h5 class="card-action-title mb-0"><i class="icon-base bx bx-bar-chart-alt-2 icon-lg text-body me-4"></i>Хронология деятельности</h5>
+                        <h5 class="card-action-title mb-0"><i class="icon-base bx bx-bar-chart-alt-2 icon-lg text-body me-4"></i>@Localizer["Chronologyofactivities"]</h5>
                     </div>
                     <div class="card-body pt-3">
-                        <!-- Здесь твой Timeline контент -->
-                        <p>Нет информации об активности...</p>
+                        <p>@Localizer["Noinformationonactivity"]</p>
                     </div>
                 </div>
                 <!--/ Activity Timeline -->
             </div>
         </div>
-    </div>
+    </div> *@
 
-    <!-- Команды -->
-   <!-- Команды -->
-<div class="tab-pane fade" id="teamsTab" role="tabpanel" aria-labelledby="teams-tab">
-    <div class="row g-4">
-        @foreach (var referall in Model.Refferals)
-        {
-            string username = $"{referall.FirstName} {referall.LastName}";
-            string refJoinedText = "";
-            if (referall.CreatedDate.HasValue)
+    @* <div class="tab-pane fade" id="teamsTab" role="tabpanel" aria-labelledby="teams-tab">
+        <div class="row g-4">
+            @foreach (var referall in Model.Refferals)
             {
-                var monthRef = referall.CreatedDate.Value.ToString("MMMM", new CultureInfo("ru-RU"));
-                var yearRef = referall.CreatedDate.Value.Year;
-                refJoinedText = $"{monthRef} {yearRef}";
-            }
+                string username = $"{referall.FirstName} {referall.LastName}";
+                string refJoinedText = "";
+                if (referall.CreatedDate.HasValue)
+                {
+                    var monthRef = referall.CreatedDate.Value.ToString("MMMM", new CultureInfo("ru-RU"));
+                    var yearRef = referall.CreatedDate.Value.Year;
+                    refJoinedText = $"{monthRef} {yearRef}";
+                }
 
-            <div class="col-xl-3 col-lg-4 col-md-6">
-                <div class="card">
-                    <div class="card-body text-center">
-                        <div class="dropdown btn-pinned">
-                            <button type="button" class="btn btn-icon btn-text-secondary rounded-pill dropdown-toggle hide-arrow" data-bs-toggle="dropdown" aria-expanded="false">
-                                <i class="icon-base bx bx-dots-vertical-rounded icon-md text-body-secondary"></i>
-                            </button>
-                            <ul class="dropdown-menu dropdown-menu-end">
-                                <li><a class="dropdown-item" href="javascript:void(0);">Посмотреть больше</a></li>
-                            </ul>
-                        </div>
-                        <div class="my-4">
-                            <div class="mx-auto my-4">
-                            <img src="@Url.Content(referall?.PhotoUrl)" alt="Avatar Image" class="rounded-circle w-px-75 h-px-75">
+                <div class="col-xl-3 col-lg-4 col-md-6">
+                    <div class="card">
+                        <div class="card-body text-center">
+                            <div class="dropdown btn-pinned">
+                                <button type="button" class="btn btn-icon btn-text-secondary rounded-pill dropdown-toggle hide-arrow" data-bs-toggle="dropdown" aria-expanded="false">
+                                    <i class="icon-base bx bx-dots-vertical-rounded icon-md text-body-secondary"></i>
+                                </button>
+                                <ul class="dropdown-menu dropdown-menu-end">
+                                    <li><a class="dropdown-item" href="javascript:void(0);">Посмотреть больше</a></li>
+                                </ul>
                             </div>
-                            <h6 class="mb-1 card-title">@username</h6>
-                            <i class="icon-base bx bx-calendar me-1 align-top"></i>
-                            <span class="text-body-secondary">@refJoinedText</span>
-                        </div>
-                        <div class="d-flex align-items-center justify-content-around mb-3">
-                            <div>
-                                <h6 class="mb-0">1</h6>
-                                <span class="badge bg-label-secondary">Уровень</span>
+                            <div class="my-4">
+                                <div class="mx-auto my-4">
+                                <img src="@Url.Content(referall?.PhotoUrl)" alt="Avatar Image" class="rounded-circle w-px-75 h-px-75">
+                                </div>
+                                <h6 class="mb-1 card-title">@username</h6>
+                                <i class="icon-base bx bx-calendar me-1 align-top"></i>
+                                <span class="text-body-secondary">@refJoinedText</span>
                             </div>
-                            <div>
-                                <h6 class="mb-0">129</h6>
-                                <span class="badge bg-label-warning">Рефералы</span>
+                            <div class="d-flex align-items-center justify-content-around mb-3">
+                                <div>
+                                    <h6 class="mb-0">1</h6>
+                                    <span class="badge bg-label-secondary">Уровень</span>
+                                </div>
+                                <div>
+                                    <h6 class="mb-0">129</h6>
+                                    <span class="badge bg-label-warning">Рефералы</span>
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
-            </div>
-        }
-    </div>
-</div>
+            }
+    
+        </div>
+    </div> 
+
+    </div>*@
 
  </div>
 
- </div>
-
-
-<!-- Toast уведомление -->
+<!-- Toast message -->
 <div class="position-fixed bottom-0 end-0 p-3" style="z-index: 1055">
   <div id="referralToast" class="toast align-items-center text-white bg-primary border-0" role="alert" aria-live="assertive" aria-atomic="true">
     <div class="d-flex">
       <div class="toast-body">
-        Ссылка скопирована!
+          @Localizer["Linkcopied"]
       </div>
       <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
     </div>
@@ -184,12 +214,12 @@ function copyReferralLink(code) {
     const url = `${window.location.origin}/Account/Register?reff=${code}`;
     
     navigator.clipboard.writeText(url).then(() => {
-        // Показываем Toast
+       
         const toastEl = document.getElementById('referralToast');
         const toast = new bootstrap.Toast(toastEl);
         toast.show();
     }).catch(err => {
-        console.error('Ошибка копирования: ', err);
+           console.error('Copy error:', err);
     });
 }
 </script>
