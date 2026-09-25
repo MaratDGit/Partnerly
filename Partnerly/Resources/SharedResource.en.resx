@@ -969,4 +969,25 @@
   <data name="Contacts" xml:space="preserve">
     <value>Contacts</value>
   </data>
+  <data name="Link" xml:space="preserve">
+    <value>Link</value>
+  </data>
+  <data name="Owner" xml:space="preserve">
+    <value>Owner</value>
+  </data>
+  <data name="Editnotification" xml:space="preserve">
+    <value>Edit notification</value>
+  </data>
+  <data name="Select" xml:space="preserve">
+    <value>Select</value>
+  </data>
+  <data name="Deletingthenotification" xml:space="preserve">
+    <value>Deleting the notification</value>
+  </data>
+  <data name="Createanotification" xml:space="preserve">
+    <value>Create a notification</value>
+  </data>
+  <data name="Usercannotbefound" xml:space="preserve">
+    <value>User cannot be found</value>
+  </data>
 </root>

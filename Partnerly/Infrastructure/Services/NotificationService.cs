@@ -59,7 +59,7 @@ namespace Partnerly.Infrastructure.Services
             if (userID == null)
             {
                 await _logService.CreateLogAsync(LogActionsAttribute.NotificationUpdated, LogTypeAttribute.Error, String.Format(ErrorMessages.RecordIsNullFromController, "user id"));
-                return ServiceResult<Notification?>.Fail(new List<string> { });
+                return ServiceResult<Notification?>.Fail(new List<string> { String.Format(ErrorMessages.RecordIsNullFromController, "user id") });
             }
 
             var userNotifications = await GetUserNotificationsAsync((Guid)userID, onlyUnread: true);
@@ -80,13 +80,13 @@ namespace Partnerly.Infrastructure.Services
             if (notification == null)
             {
                 await _logService.CreateLogAsync(LogActionsAttribute.NotificationCreated, LogTypeAttribute.Error, String.Format(ErrorMessages.RecordIsNullFromController, "Notification"));
-                return ServiceResult<Notification?>.Fail(new List<string> { });
+                return ServiceResult<Notification?>.Fail(new List<string> { String.Format(ErrorMessages.RecordIsNullFromController, "Notification") });
             }
 
             var newnotification = new Notification { Id = Guid.NewGuid() };
 
             newnotification.Message = notification.Message;
-            newnotification.Type = notification.Type;
+            newnotification.Type = notification.Type ?? NotificationTypeAttribute.Information;
             newnotification.Link = notification.Link;
             newnotification.UserId = notification.UserId;
             newnotification.TicketID = notification.TicketID;

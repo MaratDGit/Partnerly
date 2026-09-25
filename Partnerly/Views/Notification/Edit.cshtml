@@ -1,0 +1,63 @@
+﻿@model Partnerly.Models.ViewModels.NotificationsViewModel;
+@await Html.PartialAsync("_Toast")
+
+@{
+    ViewData["Title"] = "Edit Notification";
+    Layout = "_ContentNavbarLayout";
+}
+
+<div class="card">
+    <div class="card-header justify-content-between">
+        <h5>@Localizer["Editnotification"]</h5>
+    </div>
+
+    <div class="card-body">
+        <form id="notificationForm" asp-action="Edit">
+
+            @await Html.PartialAsync("_StickyButtons", new Partnerly.Models.ViewModels.FormActionsViewModel 
+            {
+                Back = new Partnerly.Models.ViewModels.ActionBack(id: Model.Id, visible: true, fromController: "Notification", toController: "Notification", fromAction: "Edit", toAction: "Index"),
+                Undo = new Partnerly.Models.ViewModels.ActionUndo(id: Model.Id, visible: true, fromController: "Notification", toController: "Notification", fromAction: "Edit", toAction: "Edit"),
+                Save = new Partnerly.Models.ViewModels.ActionSave(id: Model.Id, visible: true, fromController: "Notification", toController: "Notification", fromAction: "Edit", toAction: "Edit"),
+                Create = new Partnerly.Models.ViewModels.ActionCreate(id: Model.Id, visible: true, fromController: "Notification", toController: "Notification", fromAction: "Edit", toAction: "Create"),
+                Delete = new Partnerly.Models.ViewModels.ActionDelete(id: Model.Id, visible: true, fromController: "Notification", toController: "Notification", fromAction: "Edit", toAction: "Delete"),
+                Note = new Partnerly.Models.ViewModels.ActionNote(visible: true, note: Model.Note, id: Model.Id),
+            })
+
+            <input type="hidden" asp-for="Id" />
+            <input type="hidden" asp-for="UserId" />
+            <input type="hidden" asp-for="Type" />
+            <input type="hidden" id="hiddenNote" asp-for="Note" />
+
+            <div class="form-floating mb-1 max-w-600">
+                <input asp-for="CreatorName" id="creatorName" class="form-control" readonly />
+                <label asp-for="CreatorName"></label>
+            </div>
+            <div class="form-floating mb-1 max-w-600">
+                <input asp-for="OwnerName" id="ownerUserFullName" class="form-control" readonly />
+                <label asp-for="OwnerName"></label>
+            </div>
+            <div class="form-floating mb-1 max-w-600">
+                <textarea asp-for="Message" id="message" class="form-control" style="height: 200px" rows="10"></textarea>
+                <label asp-for="Message"></label>
+                <span asp-validation-for="Message" class="text-danger"></span>
+            </div>
+            <div class="form-floating mb-1 max-w-600">
+                <textarea asp-for="Link" id="link" class="form-control" style="height: 100px" rows="10"></textarea>
+                <label asp-for="Link"></label>
+                <span asp-validation-for="Link" class="text-danger"></span>
+            </div>
+            <div class="form-check form-switch mb-2">
+                <input asp-for="IsReadBool" class="form-check-input" type="checkbox" id="isRead" />
+                <label class="form-check-label" asp-for="IsRead" for="isRead"></label>
+            </div>
+        </form>
+    </div>
+</div>
+
+<script src="~/js/form-change-tracker.js"></script>
+<script>
+    enableSaveOnChange("#notificationForm", "#btnSave");
+</script>
+
+

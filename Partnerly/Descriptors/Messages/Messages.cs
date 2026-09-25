@@ -29,6 +29,7 @@ namespace Partnerly.Descriptors.Messages
         public static string SupportSuccess => Get(nameof(SupportSuccess));
         public static string CaseCreationLimit => Get(nameof(CaseCreationLimit));
         public static string SiteUnderMaintenanceMode => Get(nameof(SiteUnderMaintenanceMode));
+        public static string Usercannotbefound => Get(nameof(Usercannotbefound));
         #endregion
 
         #region Notifications

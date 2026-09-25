@@ -274,7 +274,7 @@ namespace Partnerly.Controllers
                     new GridField { FieldName = "userName", DisplayName = $"{FieldsDisplayNames.FullName}", LinkTemplate = "/Users/Edit/{id}" },
                     new GridField { FieldName = "email", DisplayName = FieldsDisplayNames.Email, LinkTemplate = "/Users/Edit/{id}" },
                     new GridField { FieldName = "myReferralCode", DisplayName = FieldsDisplayNames.ReferrerCode, LinkTemplate = "/Users/Edit/{id}" },
-                    new GridField { FieldName = "referrerName", DisplayName = FieldsDisplayNames.ReffererName, DefaultValue = "" },
+                    //new GridField { FieldName = "referrerName", DisplayName = FieldsDisplayNames.ReffererName, DefaultValue = "" },
                     new GridField { FieldName = "phone", DisplayName = FieldsDisplayNames.Phone, Format = "phone:"},
                     //new GridField { FieldName = "balance", DisplayName = FieldsDisplayNames.Balance, DefaultValue = "0"},
                     new GridField { FieldName = "lastActivity", DisplayName = FieldsDisplayNames.LastActivity,  IsSortable = true, Format="date:lastActivity" },
@@ -295,11 +295,11 @@ namespace Partnerly.Controllers
             {
                 userRow.UserName = $"{userRow.FirstName} {userRow.LastName}";
 
-                if (userRow.ReferrerId != null)
-                {
-                    var Referrer = await _userService.GetUserByIDAsync(userRow.ReferrerId);
-                    userRow.ReferrerName = $"{Referrer?.FirstName} {Referrer?.LastName}";
-                }
+                //if (userRow.ReferrerId != null)
+                //{
+                //    var Referrer = await _userService.GetUserByIDAsync(userRow.ReferrerId);
+                //    userRow.ReferrerName = $"{Referrer?.FirstName} {Referrer?.LastName}";
+                //}
 
                 Role? role = await _roleService.GetRoleByIDAsync(userRow.RoleId);
                 userRow.RoleName = role?.Name;

@@ -192,5 +192,7 @@ namespace Partnerly.Descriptors.Messages
         public static string Registration => Messages.Get(nameof(Registration));
         public static string ForgotPassword => Messages.Get(nameof(ForgotPassword));
         public static string CriticalError => Messages.Get(nameof(CriticalError));
+        public static string Link => Messages.Get(nameof(Link));
+        public static string Owner => Messages.Get(nameof(Owner));
     }
 }

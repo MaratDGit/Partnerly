@@ -969,4 +969,25 @@
   <data name="Contacts" xml:space="preserve">
     <value>Կոնտակտներ</value>
   </data>
+  <data name="Link" xml:space="preserve">
+    <value>Հղում</value>
+  </data>
+  <data name="Owner" xml:space="preserve">
+    <value>Սեփականատեր</value>
+  </data>
+  <data name="Editnotification" xml:space="preserve">
+    <value>Խմբագրել ծանուցումը</value>
+  </data>
+  <data name="Select" xml:space="preserve">
+    <value>Ընտրել</value>
+  </data>
+  <data name="Deletingthenotification" xml:space="preserve">
+    <value>Ծանուցման ջնջում</value>
+  </data>
+  <data name="Createanotification" xml:space="preserve">
+    <value>Ստեղծել ծանուցում</value>
+  </data>
+  <data name="Usercannotbefound" xml:space="preserve">
+    <value>Օգտատերը չի գտնվել</value>
+  </data>
 </root>

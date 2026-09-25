@@ -1,0 +1,23 @@
+﻿@{
+    ViewData["Title"] = "Notifications";
+    Layout = "_ContentNavbarLayout";
+}
+
+@await Html.PartialAsync("_DataTablePartial", null, new ViewDataDictionary(ViewData)
+{
+    { "TableName", Localizer["Notifications"] },
+    { "TableId", "notificationsTable" },
+    { "NewRecordControler", "Notification" }
+})
+
+@section PageScripts {
+    <script>
+        $(document).ready(function () {
+            initUniqueDataTable("notificationsTable", '@Url.Action("GetData", "Notification")', {
+                getDataParams: { tableModel: "Notification" },
+                exportAllUrl: '@Url.Action("ExportAllToExcel", "Notification")',
+                exportSelectedUrl: '@Url.Action("ExportToExcel", "Notification")'
+            });
+        });
+    </script>
+}

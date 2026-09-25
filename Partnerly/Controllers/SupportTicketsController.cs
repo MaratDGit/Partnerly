@@ -368,7 +368,7 @@ namespace Partnerly.Controllers
                     },
                     new GridField { FieldName = "creatorName", DisplayName = FieldsDisplayNames.CreatorName, IsSortable = true, IsFilterable = true, LinkTemplate = "/Users/Edit/{userId}"},
                     new GridField { FieldName = "assignedToName", DisplayName = FieldsDisplayNames.AssignedTo, DefaultValue = "", IsSortable = true, IsFilterable = true,  LinkTemplate = "/Users/Edit/{assignedTo}" },
-                    new GridField { FieldName = "isRead", DisplayName = FieldsDisplayNames.IsRead, Type = "checkbox", IsSortable = true, IsFilterable = true},
+                    //new GridField { FieldName = "isRead", DisplayName = FieldsDisplayNames.IsRead, Type = "checkbox", IsSortable = true, IsFilterable = true},
                     new GridField { FieldName = "createdDate", DisplayName = FieldsDisplayNames.CreatedDate, IsSortable = true, IsFilterable = true, Format="date:MM/dd/yyyy"}
                 };
             }

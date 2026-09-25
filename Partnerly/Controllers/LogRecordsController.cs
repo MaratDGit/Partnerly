@@ -21,9 +21,10 @@ namespace Partnerly.Controllers
         : base(eventBus, userService, currentUser, logService, localizer, systemSettingsService)
         {
         }
-
+        private static List<User> _users = new List<User>();
         public async Task<IActionResult> Index()
         {
+            _users = (List<User>)await _userService.GetAllUsersAsync();
             return View();
         }
 
@@ -113,7 +114,8 @@ namespace Partnerly.Controllers
             {
                 if (logRow.CreatedBy != null)
                 {
-                    var creator = await _userService.GetUserByIDAsync(logRow.CreatedBy);
+                    //var creator = await _userService.GetUserByIDAsync(logRow.CreatedBy);
+                    var creator = _users.FirstOrDefault(_ => _.Id == logRow.CreatedBy);
                     logRow.CreatorUserName = $"{creator?.FirstName} {creator?.LastName}";
                 }
 
