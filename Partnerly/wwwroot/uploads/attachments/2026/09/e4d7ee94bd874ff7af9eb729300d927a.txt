@@ -1,0 +1,44 @@
+DELETE FROM fabookbalance 
+FROM   fabookbalance AS b 
+       JOIN fixedasset AS a 
+         ON a.companyid = b.companyid 
+            AND a.assetid = b.assetid 
+WHERE  a.companyid = @Company 
+       AND a.assetcd = @Asset 
+
+DELETE FROM fabookhistory 
+FROM   fabookhistory AS h 
+       JOIN fixedasset AS a 
+         ON a.companyid = h.companyid 
+            AND a.assetid = h.assetid 
+WHERE  a.companyid = @Company 
+       AND a.assetcd = @Asset 
+
+DELETE FROM fadetails 
+FROM   fadetails AS d 
+       JOIN fixedasset AS a 
+         ON a.companyid = d.companyid 
+            AND a.assetid = d.assetid 
+WHERE  a.companyid = @Company 
+       AND a.assetcd = @Asset 
+
+DELETE FROM falocationhistory 
+FROM   falocationhistory AS l 
+       JOIN fixedasset AS a 
+         ON a.companyid = l.companyid 
+            AND a.assetid = l.assetid 
+WHERE  a.companyid = @Company 
+       AND a.assetcd = @Asset 
+
+DELETE FROM fatran 
+FROM   fatran AS t 
+       JOIN fixedasset AS a 
+         ON a.companyid = t.companyid 
+            AND a.assetid = t.assetid 
+WHERE  a.companyid = @Company 
+       AND a.assetcd = @Asset 
+
+DELETE FROM fixedasset 
+WHERE  companyid = @Company 
+       AND classid is not NULL
+       AND assetcd = @Asset

@@ -14,7 +14,6 @@ namespace Partnerly.Models
         [Required]
         public string? BodyHtml { get; set; }
         public string? BodyPlain { get; set; }
-        public string? AttachmentsMeta { get; set; }
 
         #region System Columns
         public string? Note { get; set; }

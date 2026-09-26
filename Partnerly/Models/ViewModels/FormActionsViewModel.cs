@@ -1,16 +1,18 @@
-﻿using Partnerly.Descriptors.Messages;
+﻿using Microsoft.EntityFrameworkCore.Metadata;
+using Partnerly.Descriptors.Messages;
 
 namespace Partnerly.Models.ViewModels
 {
     public class FormActionsViewModel
     {
-        public ActionBack Back { get; set; }
-        public ActionUndo Undo { get; set; }
-        public ActionSave Save { get; set; }
-        public ActionCreate Create { get; set; }
-        public ActionDelete Delete { get; set; }
-        public ActionMenu Menu { get; set; }
-        public ActionNote Note { get; set; }
+        public ActionBack Back { get; set; } = new();
+        public ActionUndo Undo { get; set; } = new();
+        public ActionSave Save { get; set; } = new();
+        public ActionCreate Create { get; set; } = new();
+        public ActionDelete Delete { get; set; } = new();
+        public ActionMenu Menu { get; set; } = new();
+        public ActionNote Note { get; set; } = new();
+        public ActionAttachements Attachements { get; set; } = new();
         public List<MenuItemAction> MenuActions { get; set; } = new List<MenuItemAction>();
     }
     public class FormActionBase
@@ -109,6 +111,19 @@ namespace Partnerly.Models.ViewModels
         {
             Id = id;
             Note = note;
+            Visible = visible;
+        }
+    }
+
+    public class ActionAttachements : FormActionBase
+    {
+        public string? EntityType { get; set; }
+        public Guid? EntityId { get; set; }
+
+        public ActionAttachements(string entityType = null, Guid? entityId = null, bool visible = false)
+        {
+            EntityType = entityType;
+            EntityId = entityId;
             Visible = visible;
         }
     }

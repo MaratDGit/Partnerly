@@ -22,17 +22,16 @@ namespace Partnerly.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder, 1L, 1);
 
-            modelBuilder.Entity("Partnerly.Models.EmailAttachment", b =>
+            modelBuilder.Entity("Partnerly.Models.Attachment", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("ContentType")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(255)
+                        .HasColumnType("nvarchar(255)");
 
                     b.Property<Guid?>("CreatedBy")
                         .IsRequired()
@@ -42,9 +41,21 @@ namespace Partnerly.Migrations
                         .IsRequired()
                         .HasColumnType("datetime2");
 
+                    b.Property<Guid>("EntityId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("EntityType")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
                     b.Property<string>("FileName")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(255)
+                        .HasColumnType("nvarchar(255)");
+
+                    b.Property<long>("FileSize")
+                        .HasColumnType("bigint");
 
                     b.Property<bool>("IsDeleted")
                         .HasColumnType("bit");
@@ -52,9 +63,18 @@ namespace Partnerly.Migrations
                     b.Property<string>("Note")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("Path")
+                    b.Property<int>("SortOrder")
+                        .HasColumnType("int");
+
+                    b.Property<string>("StoragePath")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(500)
+                        .HasColumnType("nvarchar(500)");
+
+                    b.Property<string>("StoredFileName")
+                        .IsRequired()
+                        .HasMaxLength(255)
+                        .HasColumnType("nvarchar(255)");
 
                     b.Property<Guid?>("UpdatedBy")
                         .IsRequired()
@@ -66,7 +86,9 @@ namespace Partnerly.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("EmailAttachments");
+                    b.HasIndex("EntityType", "EntityId", "IsDeleted");
+
+                    b.ToTable("Attachments");
                 });
 
             modelBuilder.Entity("Partnerly.Models.EmailConfirmationToken", b =>
@@ -128,9 +150,6 @@ namespace Partnerly.Migrations
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
-
-                    b.Property<string>("AttachmentsMeta")
-                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("BodyHtml")
                         .IsRequired()

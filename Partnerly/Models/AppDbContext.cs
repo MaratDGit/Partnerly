@@ -27,11 +27,11 @@ namespace Partnerly.Models
         public DbSet<EmailConfirmationToken>? EmailConfirmationTokens { get; set; }
         public DbSet<SystemSettings>? SystemSettings { get; set; }
         public DbSet<EmailTemplate>? EmailTemplates { get; set; }
-        public DbSet<EmailAttachment>? EmailAttachments { get; set; }
         public DbSet<Notification>? Notifications { get; set; }
         public DbSet<UserGroup>? UserGroups { get; set; }
         public DbSet<UserGroupMember>? UserGroupMembers { get; set; }
         public DbSet<SupportTicket>? SupportTickets { get; set; }
+        public DbSet<Attachment> Attachments { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -60,6 +60,14 @@ namespace Partnerly.Models
                 .WithMany() 
                 .HasForeignKey(ugm => ugm.UserId)
                 .OnDelete(DeleteBehavior.Cascade);
+
+            modelBuilder.Entity<Attachment>()
+                .HasIndex(x => new
+                {
+                    x.EntityType,
+                    x.EntityId,
+                    x.IsDeleted
+                });
 
             base.OnModelCreating(modelBuilder);
         }

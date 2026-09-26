@@ -47,6 +47,7 @@
     <Folder Include="wwwroot\assets\vendor\libs\perfect-scrollbar\" />
     <Folder Include="wwwroot\assets\vendor\libs\popper\" />
     <Folder Include="wwwroot\fonts\iconify\" />
+    <Folder Include="wwwroot\uploads\attachments\" />
   </ItemGroup>
 
 </Project>

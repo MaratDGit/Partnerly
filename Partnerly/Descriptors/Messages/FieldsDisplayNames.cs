@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel;
+using System.ComponentModel.DataAnnotations;
 
 namespace Partnerly.Descriptors.Messages
 {
@@ -194,5 +195,13 @@ namespace Partnerly.Descriptors.Messages
         public static string CriticalError => Messages.Get(nameof(CriticalError));
         public static string Link => Messages.Get(nameof(Link));
         public static string Owner => Messages.Get(nameof(Owner));
+        public static string FileName => Messages.Get(nameof(FileName));
+        public static string StoredFileName => Messages.Get(nameof(StoredFileName));
+        public static string ContentType => Messages.Get(nameof(ContentType));
+        public static string FileSize => Messages.Get(nameof(FileSize));
+        public static string StoragePath => Messages.Get(nameof(StoragePath));
+        public static string EntityType => Messages.Get(nameof(EntityType));
+        public static string Entity => Messages.Get(nameof(Entity));
+        public static string IsDeleted => Messages.Get(nameof(IsDeleted));
     }
 }

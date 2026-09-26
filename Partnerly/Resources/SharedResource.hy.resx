@@ -990,4 +990,61 @@
   <data name="Usercannotbefound" xml:space="preserve">
     <value>Օգտատերը չի գտնվել</value>
   </data>
+  <data name="Attachments" xml:space="preserve">
+    <value>Կցվածքներ</value>
+  </data>
+  <data name="Selectfiles" xml:space="preserve">
+    <value>Ընտրել ֆայլեր</value>
+  </data>
+  <data name="Upload" xml:space="preserve">
+    <value>Վերբեռնել</value>
+  </data>
+  <data name="Noattachments" xml:space="preserve">
+    <value>Կցված ֆայլեր չկան</value>
+  </data>
+  <data name="Failedtoloadattachments" xml:space="preserve">
+    <value>Չհաջողվեց բեռնել կցված ֆայլերը։</value>
+  </data>
+  <data name="Pleaseselectatleastonefile" xml:space="preserve">
+    <value>Խնդրում ենք ընտրել առնվազն մեկ ֆայլ</value>
+  </data>
+  <data name="Uploadfailed" xml:space="preserve">
+    <value>Վերբեռնումը ձախողվեց</value>
+  </data>
+  <data name="Faileduploadingfiles" xml:space="preserve">
+    <value>Ֆայլերի վերբեռնումը ձախողվեց</value>
+  </data>
+  <data name="Areyousureyouwanttodeletethisfile" xml:space="preserve">
+    <value>Վստա՞հ եք, որ ցանկանում եք ջնջել այս ֆայլը։</value>
+  </data>
+  <data name="Deletefailed" xml:space="preserve">
+    <value>Ջնջումը ձախողվեց։</value>
+  </data>
+  <data name="Failedtodeletethefile" xml:space="preserve">
+    <value>Չհաջողվեց ջնջել ֆայլը</value>
+  </data>
+  <data name="FileName" xml:space="preserve">
+    <value>Ֆայլի անունը</value>
+  </data>
+  <data name="StoredFileName" xml:space="preserve">
+    <value>Պահպանված ֆայլի անունը</value>
+  </data>
+  <data name="ContentType" xml:space="preserve">
+    <value>Բովանդակության տեսակ</value>
+  </data>
+  <data name="FileSize" xml:space="preserve">
+    <value>Ֆայլի չափսը</value>
+  </data>
+  <data name="StoragePath" xml:space="preserve">
+    <value>Պահպանման ուղի</value>
+  </data>
+  <data name="EntityType" xml:space="preserve">
+    <value>Կազմակերպության տեսակ</value>
+  </data>
+  <data name="Entity" xml:space="preserve">
+    <value>Կազմակերպություն</value>
+  </data>
+  <data name="IsDeleted" xml:space="preserve">
+    <value>Ջնջված է</value>
+  </data>
 </root>

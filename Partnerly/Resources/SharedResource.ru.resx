@@ -991,4 +991,61 @@
   <data name="Usercannotbefound" xml:space="preserve">
     <value>Пользователь не найден</value>
   </data>
+  <data name="Attachments" xml:space="preserve">
+    <value>Вложения</value>
+  </data>
+  <data name="Selectfiles" xml:space="preserve">
+    <value>Выберите файлы</value>
+  </data>
+  <data name="Upload" xml:space="preserve">
+    <value>Загрузить</value>
+  </data>
+  <data name="Noattachments" xml:space="preserve">
+    <value>Без вложений</value>
+  </data>
+  <data name="Failedtoloadattachments" xml:space="preserve">
+    <value>Не удалось загрузить вложения.</value>
+  </data>
+  <data name="Pleaseselectatleastonefile" xml:space="preserve">
+    <value>Пожалуйста, выберите хотя бы один файл.</value>
+  </data>
+  <data name="Uploadfailed" xml:space="preserve">
+    <value>Ошибка загрузки</value>
+  </data>
+  <data name="Faileduploadingfiles" xml:space="preserve">
+    <value>Не удалось загрузить файлы</value>
+  </data>
+  <data name="Areyousureyouwanttodeletethisfile" xml:space="preserve">
+    <value>Вы уверены, что хотите удалить этот файл?</value>
+  </data>
+  <data name="Deletefailed" xml:space="preserve">
+    <value>Ошибка при удалении.</value>
+  </data>
+  <data name="Failedtodeletethefile" xml:space="preserve">
+    <value>Не удалось удалить файл</value>
+  </data>
+  <data name="FileName" xml:space="preserve">
+    <value>Имя файла</value>
+  </data>
+  <data name="StoredFileName" xml:space="preserve">
+    <value>Имя сохраненного файла</value>
+  </data>
+  <data name="ContentType" xml:space="preserve">
+    <value>Тип контента</value>
+  </data>
+  <data name="FileSize" xml:space="preserve">
+    <value>Размер файла</value>
+  </data>
+  <data name="StoragePath" xml:space="preserve">
+    <value>Путь к хранилищу</value>
+  </data>
+  <data name="EntityType" xml:space="preserve">
+    <value>Тип сущности</value>
+  </data>
+  <data name="Entity" xml:space="preserve">
+    <value>Сущность</value>
+  </data>
+  <data name="IsDeleted" xml:space="preserve">
+    <value>Удалено</value>
+  </data>
 </root>

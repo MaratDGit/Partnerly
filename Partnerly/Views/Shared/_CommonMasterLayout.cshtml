@@ -84,7 +84,7 @@
         loadError: @Html.Raw(Json.Serialize(Localizer["LookupLoadError"].Value))
     };
 
-        const dataTableLocalization = {
+    const dataTableLocalization = {
         filters: @Html.Raw(Json.Serialize(Localizer["DataTableFilters"].Value)),
         close: @Html.Raw(Json.Serialize(Localizer["Close"].Value)),
         cancel: @Html.Raw(Json.Serialize(Localizer["Cancel"].Value)),
@@ -104,6 +104,16 @@
         yes: @Html.Raw(Json.Serialize(Localizer["DataTableYes"].Value)),
         no: @Html.Raw(Json.Serialize(Localizer["DataTableNo"].Value)),
         actions: @Html.Raw(Json.Serialize(Localizer["DataTableActions"].Value))
+    };
+    const attachementLocalization = {
+            ailedtoloadattachments: @Html.Raw(Json.Serialize(Localizer["Failedtoloadattachments"].Value)),
+            Failedtoloadattachments: @Html.Raw(Json.Serialize(Localizer["Failedtoloadattachments"].Value)),
+            Pleaseselectatleastonefile: @Html.Raw(Json.Serialize(Localizer["Pleaseselectatleastonefile"].Value)),
+            ploadfailed: @Html.Raw(Json.Serialize(Localizer["Uploadfailed"].Value)),
+            Faileduploadingfiles: @Html.Raw(Json.Serialize(Localizer["Faileduploadingfiles"].Value)),
+            Areyousureyouwanttodeletethisfile: @Html.Raw(Json.Serialize(Localizer["Areyousureyouwanttodeletethisfile"].Value)),
+            Deletefailed: @Html.Raw(Json.Serialize(Localizer["Deletefailed"].Value)),
+            Failedtodeletethefile: @Html.Raw(Json.Serialize(Localizer["Failedtodeletethefile"].Value)),
     };
 </script>
 

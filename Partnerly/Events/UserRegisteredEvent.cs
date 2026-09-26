@@ -64,7 +64,11 @@ namespace Partnerly.Events
                         if (@event.RegisteredWithResource == "Internal")
                         {
                             templateName = EmailTemplateNameAttribute.EmailConfirmation;
-                            confirmationLink = $"{appUrl}/Account/ConfirmEmail?userId={tokenResult.Data.UserId}&token={tokenResult.Data.Token}";
+                            //confirmationLink = $"{appUrl}/Account/ConfirmEmail?userId={tokenResult.Data.UserId}&token={tokenResult.Data.Token}";
+                            confirmationLink =
+                            $"{appUrl}/Account/ConfirmEmail" +
+                            $"?userId={tokenResult.Data.UserId}" +
+                            $"&token={Uri.EscapeDataString(tokenResult.Data.Token)}";
                         }
                         else if (@event.RegisteredWithResource == "Google")
                         { 
@@ -88,7 +92,7 @@ namespace Partnerly.Events
             if (@event.SendNotification == true)
             {
                 var message = string.Format(Messages.UserRegistrationNotification, @event.NewUser.FirstName);
-                Notification notification = new Notification { UserId = @event.NewUser.Id, Type = NotificationTypeAttribute.Information, Message = message, Link = "/profile" };
+                Notification notification = new Notification { UserId = @event.NewUser.Id, Type = NotificationTypeAttribute.Information, Message = message, Link = "/Dashboard/MyProfile" };
 
                 await _notificationService.CreateNotificationAsync(notification);
             }

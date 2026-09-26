@@ -30,6 +30,7 @@
 .sticky-buttons .right-buttons {
     display: flex;
     align-items: center;
+    gap: 0.5rem;
 }
 
 .sticky-buttons .btn-note i {
@@ -53,6 +54,33 @@
     color: #ffc107; /* жёлтая, если есть заметка */
 }
 .sticky-buttons .btn-note:hover {
+    transform: scale(1.15);
+}
+
+.sticky-buttons .btn-attachement i {
+    font-size: 1.6rem;
+    transition: color 0.2s ease, transform 0.2s ease;
+}
+
+.sticky-buttons .btn-attachement:hover i {
+    transform: scale(1.15);
+}
+
+.sticky-buttons .btn-attachement {
+    border: none;
+    background: none;
+    box-shadow: none;
+    outline: none;
+    padding: 0;
+    color: #ccc;
+    transition: color 0.2s ease, transform 0.2s ease;
+}
+
+.sticky-buttons .btn-attachement.active {
+    color: #ffc107; /* жёлтая, если есть attachement */
+}
+
+.sticky-buttons .btn-attachement:hover {
     transform: scale(1.15);
 }
 </style>
@@ -124,16 +152,27 @@
             </div>
         }
     </div>
+    <div class="right-buttons">
+        @if (Model?.Attachements?.Visible == true)
+        {
+            <button type="button"
+                    id="attachmentsBtn"
+                    class="btn btn-attachement"
+                    title="@Localizer["Attachments"]"
+                    data-bs-toggle="modal"
+                    data-bs-target="#attachmentsModal">
 
-    @if (Model?.Note?.Visible == true)
-    {
-        <div class="right-buttons">
+                <i class="bx bx-paperclip me-1"></i>
+            </button>
+        }
+        @if (Model?.Note?.Visible == true)
+        {
             <button type="button" class="btn btn-note" title=@Localizer["Addanote"]
-            data-bs-toggle="modal" data-bs-target="#noteModal">
-            <i class="bx bx-note fs-3"></i>
-        </button>
-        </div>
-    }
+                    data-bs-toggle="modal" data-bs-target="#noteModal">
+                <i class="bx bx-note fs-3"></i>
+            </button>
+        }
+    </div>
 </div>
 
 <div class="modal fade" id="noteModal" tabindex="-1" aria-labelledby="noteModalLabel" aria-hidden="true">
@@ -161,7 +200,118 @@
   </div>
 </div>
 
+<div class="modal fade"
+     id="attachmentsModal"
+     tabindex="-1"
+     aria-labelledby="attachmentsModalLabel"
+     aria-hidden="true">
+
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+
+            <div class="modal-header">
+                <h5 class="modal-title" id="attachmentsModalLabel">
+                    <i class="bx bx-paperclip me-1"></i>
+                    @Localizer["Attachments"]
+                </h5>
+
+                <button type="button"
+                        class="btn-close"
+                        data-bs-dismiss="modal"
+                        aria-label="@Localizer["Close"]">
+                </button>
+            </div>
+
+            <div class="modal-body">
+
+                <div id="attachmentsForm">
+
+                    <div id="attachmentsAntiForgeryToken">
+                        @Html.AntiForgeryToken()
+                    </div>
+
+                    <input type="hidden"
+                           id="attachmentEntityType"
+                           value="@Model.Attachements.EntityType" />
+
+                    <input type="hidden"
+                           id="attachmentEntityId"
+                           value="@Model.Attachements.EntityId" />
+
+                    <div class="mb-3">
+
+                        <label for="attachmentFiles"
+                               class="form-label">
+                            @Localizer["Selectfiles"]
+                        </label>
+
+                        <input type="file"
+                               id="attachmentFiles"
+                               name="files"
+                               class="form-control"
+                               multiple />
+
+                    </div>
+
+                    <div class="d-flex justify-content-end">
+
+                        <button type="button"
+                                id="uploadAttachmentsBtn"
+                                class="btn btn-primary"
+                                onclick="uploadAttachments()">
+
+                            <i class="bx bx-upload me-1"></i>
+                            @Localizer["Upload"]
+
+                        </button>
+
+                    </div>
+
+                </div>
+
+                <hr />
+
+                <div id="attachmentsLoading"
+                     class="text-center py-3"
+                     style="display:none;">
+
+                    <div class="spinner-border"></div>
+
+                </div>
+
+                <div id="attachmentsEmpty"
+                     class="text-center text-muted py-4"
+                     style="display:none;">
+
+                    @Localizer["Noattachments"]
+
+                </div>
+
+                <div id="attachmentsList"
+                     class="list-group">
+                </div>
+
+            </div>
+
+            <div class="modal-footer">
+
+                <button type="button"
+                        class="btn btn-secondary"
+                        data-bs-dismiss="modal">
+
+                    @Localizer["Close"]
+
+                </button>
+
+            </div>
+
+        </div>
+    </div>
+</div>
+
+
 <script>
+
 document.addEventListener('DOMContentLoaded', function () {
     const noteText = document.getElementById('noteText');
     const clearBtn = document.getElementById('clearNoteBtn');
@@ -179,14 +329,12 @@ document.addEventListener('DOMContentLoaded', function () {
         }
     }
 
-    // Очистить текст
     clearBtn.addEventListener('click', function () {
         noteText.value = '';
         noteText.focus();
         updateNoteButtonColor();
     });
 
-    // Сохраняем заметку
     saveNoteBtn.addEventListener('click', function () {
         const note = noteText.value.trim();
         lastSavedNote = note;
@@ -204,10 +352,394 @@ document.addEventListener('DOMContentLoaded', function () {
         updateNoteButtonColor();
     });
 
-
-    // Отслеживаем ввод текста
     noteText.addEventListener('input', updateNoteButtonColor);
     updateNoteButtonColor();
+
+    updateAttachmentsButton();
 });
+
+    async function updateAttachmentsButton() {
+
+        const attachmentsBtn =
+            document.getElementById("attachmentsBtn");
+
+        if (!attachmentsBtn)
+            return;
+
+        try {
+
+            const entityType =
+                document.getElementById("attachmentEntityType").value;
+
+            const entityId =
+                document.getElementById("attachmentEntityId").value;
+
+            const url =
+                `/Attachments/Get?entityType=${encodeURIComponent(entityType)}&entityId=${encodeURIComponent(entityId)}`;
+
+            const response = await fetch(url);
+
+            if (!response.ok)
+                return;
+
+            const attachments =
+                await response.json();
+
+            if (attachments && attachments.length > 0) {
+                attachmentsBtn.classList.add("active");
+            }
+            else {
+                attachmentsBtn.classList.remove("active");
+            }
+
+        }
+        catch (error) {
+
+            console.error(error);
+
+        }
+    }
+
+async function loadAttachments() {
+
+    const list =
+        document.getElementById("attachmentsList");
+
+    const empty =
+        document.getElementById("attachmentsEmpty");
+
+    const loading =
+        document.getElementById("attachmentsLoading");
+
+    list.innerHTML = "";
+
+    empty.style.display = "none";
+    loading.style.display = "block";
+
+    try {
+
+        const entityType =
+            document.getElementById("attachmentEntityType").value;
+
+        const entityId =
+            document.getElementById("attachmentEntityId").value;
+
+        const url =
+            `/Attachments/Get?entityType=${encodeURIComponent(entityType)}&entityId=${encodeURIComponent(entityId)}`;
+
+        const response = await fetch(url);
+
+        if (!response.ok)
+            throw new Error(
+                attachementLocalization.Failedtoloadattachments
+            );
+
+        const attachments = await response.json();
+
+        const attachmentsBtn = document.getElementById("attachmentsBtn");
+
+        if (attachmentsBtn) {
+            if (attachments && attachments.length > 0) {
+                attachmentsBtn.classList.add("active");
+            } else {
+                attachmentsBtn.classList.remove("active");
+            }
+        }
+
+        if (!attachments || attachments.length === 0) {
+
+            empty.style.display = "block";
+
+            return;
+        }
+
+        attachments.forEach(attachment => {
+
+            list.appendChild(
+                createAttachmentElement(attachment)
+            );
+
+        });
+
+    }
+    catch (error) {
+
+        console.error(error);
+
+        alert(
+            attachementLocalization.Failedtoloadattachments
+        );
+
+    }
+    finally {
+
+        loading.style.display = "none";
+    }
+}
+
+
+function createAttachmentElement(attachment) {
+
+    const item =
+        document.createElement("div");
+
+    item.className =
+        "list-group-item d-flex align-items-center justify-content-between";
+
+
+    const fileName =
+        document.createElement("span");
+
+    fileName.className =
+        "fw-semibold";
+
+    fileName.textContent =
+        attachment.fileName;
+
+
+    const actions =
+        document.createElement("div");
+
+    actions.className =
+        "d-flex gap-1";
+
+
+    const downloadButton =
+        document.createElement("a");
+
+    downloadButton.href =
+        `/Attachments/Download/${attachment.id}`;
+
+    downloadButton.className =
+        "btn btn-sm btn-outline-primary";
+
+    downloadButton.innerHTML =
+        '<i class="bx bx-download"></i>';
+
+
+    const deleteButton =
+        document.createElement("button");
+
+    deleteButton.type =
+        "button";
+
+    deleteButton.className =
+        "btn btn-sm btn-outline-danger";
+
+    deleteButton.innerHTML =
+        '<i class="bx bx-trash"></i>';
+
+    deleteButton.onclick = () =>
+        deleteAttachment(attachment.id);
+
+
+    actions.appendChild(downloadButton);
+    actions.appendChild(deleteButton);
+
+    item.appendChild(fileName);
+    item.appendChild(actions);
+
+    return item;
+}
+
+
+async function uploadAttachments() {
+
+    const fileInput =
+        document.getElementById("attachmentFiles");
+
+    const uploadButton =
+        document.getElementById("uploadAttachmentsBtn");
+
+
+    if (!fileInput.files.length) {
+
+        alert(
+            attachementLocalization.Pleaseselectatleastonefile
+        );
+
+        return;
+    }
+
+    const entityType =
+        document.getElementById("attachmentEntityType").value;
+
+    const entityId =
+        document.getElementById("attachmentEntityId").value;
+
+
+        const formData = new FormData();
+
+    const tokenInput = document.querySelector(
+        'input[name="__RequestVerificationToken"]'
+    );
+
+    if (!tokenInput) {
+        console.error("Anti-forgery token not found.");
+        return;
+    }
+
+    formData.append(
+        "__RequestVerificationToken",
+        tokenInput.value
+    );
+
+    formData.append(
+        "entityType",
+        entityType
+    );
+
+    formData.append(
+        "entityId",
+        entityId
+    );
+
+    for (const file of fileInput.files) {
+        formData.append("files", file);
+    }
+
+    uploadButton.disabled = true;
+
+    try {
+
+        const response = await fetch(
+            "@Url.Action("Upload", "Attachments")",
+            {
+                method: "POST",
+                body: formData
+            });
+
+
+        if (!response.ok)
+            throw new Error(
+                attachementLocalization.Uploadfailed
+            );
+
+
+        const result =
+            await response.json();
+
+
+        if (!result.success)
+            throw new Error(
+                attachementLocalization.Uploadfailed
+            );
+
+
+        fileInput.value = "";
+
+        await loadAttachments();
+
+    }
+    catch (error) {
+
+        console.error(error);
+
+        alert(
+            attachementLocalization.Faileduploadingfiles
+        );
+
+    }
+    finally {
+
+        uploadButton.disabled = false;
+    }
+}
+
+
+async function deleteAttachment(id) {
+
+    if (!confirm(
+        attachementLocalization.Areyousureyouwanttodeletethisfile
+    ))
+        return;
+
+
+    const tokenInput = document.querySelector(
+        'input[name="__RequestVerificationToken"]'
+    );
+
+    if (!tokenInput) {
+        console.error("Anti-forgery token not found.");
+        return;
+    }
+
+    const token = tokenInput.value;
+
+
+    const formData =
+        new FormData();
+
+    formData.append(
+        "id",
+        id
+    );
+
+    formData.append(
+        "__RequestVerificationToken",
+        token
+    );
+
+
+    try {
+
+        const response = await fetch(
+            "@Url.Action("Delete", "Attachments")",
+            {
+                method: "POST",
+                body: formData
+            });
+
+
+        if (!response.ok)
+            throw new Error(
+                attachementLocalization.Deletefailed
+            );
+
+
+        const result =
+            await response.json();
+
+
+        if (!result.success)
+            throw new Error(
+                attachementLocalization.Deletefailed
+            );
+
+
+        await loadAttachments();
+
+    }
+    catch (error) {
+
+        console.error(error);
+
+        alert(
+            attachementLocalization.Failedtodeletethefile
+        );
+    }
+}
+
+
+document.addEventListener(
+        "DOMContentLoaded",
+        function () {
+
+            const modal =
+                document.getElementById("attachmentsModal");
+
+            if (!modal)
+                return;
+
+
+            modal.addEventListener(
+                "shown.bs.modal",
+                function () {
+
+                    loadAttachments();
+
+                });
+        });
 </script>
+
 

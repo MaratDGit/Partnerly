@@ -13,12 +13,14 @@ namespace Partnerly.Infrastructure.Services
         private readonly IConfiguration _config;
         private readonly ILogService _logService;
         private readonly IEmailTemplateService _emailTemplateService;
+        private readonly IAttachmentService _attachmentService;
 
-        public EmailSender(IConfiguration config, ILogService logService, IEmailTemplateService emailTemplateService)
+        public EmailSender(IConfiguration config, ILogService logService, IEmailTemplateService emailTemplateService, IAttachmentService attachmentService)
         {
             _config = config;
             _logService = logService;
             _emailTemplateService = emailTemplateService;
+            _attachmentService = attachmentService;
         }
 
         public async Task SendEmailWithTemplateAsync(string? templateName, string? toEmail, object model)
@@ -34,7 +36,7 @@ namespace Partnerly.Infrastructure.Services
             await SendEmailAsync(emailMessage.To, emailMessage.Subject, emailMessage.BodyHtml, emailMessage.Attachments);
         }
 
-        public async Task SendEmailWithoutTemplateAsync(string? toEmail, string? subject, string? message, List<EmailAttachment>? attachments = null)
+        public async Task SendEmailWithoutTemplateAsync(string? toEmail, string? subject, string? message, List<Partnerly.Models.Attachment>? attachments = null)
         {
             if (string.IsNullOrEmpty(toEmail) || string.IsNullOrEmpty(subject) || string.IsNullOrEmpty(message))
                 return;
@@ -66,19 +68,7 @@ namespace Partnerly.Infrastructure.Services
                 bodyPlain = bodyPlainTemplate(model);
             }
 
-            List<EmailAttachment> attachments = new();
-            if (!string.IsNullOrEmpty(template.AttachmentsMeta))
-            {
-                try
-                {
-                    attachments = JsonSerializer.Deserialize<List<EmailAttachment>>(template.AttachmentsMeta) ?? new();
-                }
-                catch (Exception ex)
-                {
-                    await _logService.CreateLogAsync(LogActionsAttribute.EmailSending, LogTypeAttribute.Error,
-                        string.Format(ErrorMessages.JsonDeserializeProblem, $"EmailTemplate - {templateName}", ex.Message));
-                }
-            }
+            var attachments = await _attachmentService.GetAsync("EmailTemplate", template.Id);
 
             return new EmailMessage
             {
@@ -90,7 +80,7 @@ namespace Partnerly.Infrastructure.Services
             };
         }
 
-        private async Task SendEmailAsync(string email, string subject, string message, List<EmailAttachment>? attachments = null)
+        private async Task SendEmailAsync(string email, string subject, string message, List<Partnerly.Models.Attachment>? attachments = null)
         {
             var smtpHost = _config["EmailSettings:SmtpServer"];
             var smtpPort = int.Parse(_config["EmailSettings:Port"]);
@@ -125,15 +115,32 @@ namespace Partnerly.Infrastructure.Services
                         {
                             try
                             {
-                                var attachment = new Attachment(att.Path, att.ContentType)
+                                var stream =
+                                    await _attachmentService.GetFileAsync(att.Id);
+
+                                if (stream == null)
                                 {
-                                    Name = att.FileName
-                                };
-                                mailMessage.Attachments.Add(attachment);
+                                    await _logService.CreateLogAsync(
+                                        LogActionsAttribute.EmailSending,
+                                        LogTypeAttribute.Error,
+                                        $"Attachment file not found: {att.FileName}");
+
+                                    continue;
+                                }
+
+                                var mailAttachment =
+                                    new System.Net.Mail.Attachment(
+                                        stream,
+                                        att.FileName,
+                                        att.ContentType);
+
+                                mailMessage.Attachments.Add(mailAttachment);
                             }
                             catch (Exception ex)
                             {
-                                await _logService.CreateLogAsync(LogActionsAttribute.EmailSending, LogTypeAttribute.Error,
+                                await _logService.CreateLogAsync(
+                                    LogActionsAttribute.EmailSending,
+                                    LogTypeAttribute.Error,
                                     $"Error adding attachment {att.FileName}: {ex.Message}");
                             }
                         }
@@ -151,7 +158,7 @@ namespace Partnerly.Infrastructure.Services
         public string Subject { get; set; } = null!;
         public string BodyHtml { get; set; } = null!;
         public string? BodyPlain { get; set; }
-        public List<EmailAttachment> Attachments { get; set; } = new();
+        public List<Partnerly.Models.Attachment> Attachments { get; set; } = new();
     }
     public class EmailAttachment
     {
