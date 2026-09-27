@@ -1047,4 +1047,85 @@
   <data name="IsDeleted" xml:space="preserve">
     <value>Is Deleted</value>
   </data>
+  <data name="VsLastMonth" xml:space="preserve">
+    <value>vs last month</value>
+  </data>
+  <data name="OverallGameResults" xml:space="preserve">
+    <value>Overall game results</value>
+  </data>
+  <data name="GameActivityLast7Days" xml:space="preserve">
+    <value>Game activity over the last 7 days</value>
+  </data>
+  <data name="Last7Days" xml:space="preserve">
+    <value>Last 7 Days</value>
+  </data>
+  <data name="ThisYear" xml:space="preserve">
+    <value>This Year</value>
+  </data>
+  <data name="Last3Months" xml:space="preserve">
+    <value>Last 3 months</value>
+  </data>
+  <data name="Last30Days" xml:space="preserve">
+    <value>Last 30 Days</value>
+  </data>
+  <data name="Monday" xml:space="preserve">
+    <value>Monday</value>
+  </data>
+  <data name="Tuesday" xml:space="preserve">
+    <value>Tuesday</value>
+  </data>
+  <data name="Wednesday" xml:space="preserve">
+    <value>Wednesday</value>
+  </data>
+  <data name="Thursday" xml:space="preserve">
+    <value>Thursday</value>
+  </data>
+  <data name="Friday" xml:space="preserve">
+    <value>Friday</value>
+  </data>
+  <data name="Saturday" xml:space="preserve">
+    <value>Saturday</value>
+  </data>
+  <data name="Sunday" xml:space="preserve">
+    <value>Sunday</value>
+  </data>
+  <data name="January" xml:space="preserve">
+    <value>January</value>
+  </data>
+  <data name="February" xml:space="preserve">
+    <value>February</value>
+  </data>
+  <data name="March" xml:space="preserve">
+    <value>March</value>
+  </data>
+  <data name="April" xml:space="preserve">
+    <value>April</value>
+  </data>
+  <data name="May" xml:space="preserve">
+    <value>May</value>
+  </data>
+  <data name="June" xml:space="preserve">
+    <value>June</value>
+  </data>
+  <data name="July" xml:space="preserve">
+    <value>July</value>
+  </data>
+  <data name="August" xml:space="preserve">
+    <value>August</value>
+  </data>
+  <data name="September" xml:space="preserve">
+    <value>September</value>
+  </data>
+  <data name="October" xml:space="preserve">
+    <value>October</value>
+  </data>
+  <data name="November" xml:space="preserve">
+    <value>November</value>
+  </data>
+  <data name="December" xml:space="preserve">
+    <value>December</value>
+  </data>
+  <data name="Gamesbymonth" xml:space="preserve">
+    <value>Games by month</value>
+  </data>
 </root>

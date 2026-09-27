@@ -1,67 +1,367 @@
-﻿@{
-  ViewData["Title"] = "Dashboard";
+﻿@model Partnerly.Models.ViewModels.DashboardViewModel
+@{
+    ViewData["Title"] = "Dashboard";
+}
+
+@section PageStyles {
+    <link rel="stylesheet" href="~/assets/css/dashboard.css" asp-append-version="true" />
 }
 
 @section PageScripts {
-   <script src="~/assets/vendor/libs/apex-charts/chart.js"></script>
-}
-<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
-@* ************** Content ************** *@
-<!-- STATS CARDS -->
-    <div class="row text-center mb-4">
-        <div class="col-md-3 mb-3">
-            <div class="card stat-card shadow-sm">
-                <div class="card-body">
-                <h6>@Localizer["Gamesplayed"]</h6>
-                    <h2>128</h2>
+    <script>
+        window.dashboardCulture =
+            @Html.Raw(Json.Serialize(
+                System.Globalization.CultureInfo.CurrentUICulture.Name
+                ));
+        window.dashboardData = {
+            gamesByDay: @Html.Raw(Json.Serialize(Model.GamesByDay)),
+            victories: @Model.Victories,
+            defeats: @Model.Defeats
+        };
+        window.dashboardTranslations = {
+            games: @Html.Raw(Json.Serialize(Localizer["Games"].Value)),
+            victories: @Html.Raw(Json.Serialize(Localizer["Victories"].Value)),
+            defeats: @Html.Raw(Json.Serialize(Localizer["Defeats"].Value))
+        };
+        window.dashboardDateTranslations = {
+        days: [
+            @Html.Raw(Json.Serialize(Localizer["Monday"].Value)),
+            @Html.Raw(Json.Serialize(Localizer["Tuesday"].Value)),
+            @Html.Raw(Json.Serialize(Localizer["Wednesday"].Value)),
+            @Html.Raw(Json.Serialize(Localizer["Thursday"].Value)),
+            @Html.Raw(Json.Serialize(Localizer["Friday"].Value)),
+            @Html.Raw(Json.Serialize(Localizer["Saturday"].Value)),
+            @Html.Raw(Json.Serialize(Localizer["Sunday"].Value))
+        ],
+        months: [
+            @Html.Raw(Json.Serialize(Localizer["January"].Value)),
+            @Html.Raw(Json.Serialize(Localizer["February"].Value)),
+            @Html.Raw(Json.Serialize(Localizer["March"].Value)),
+            @Html.Raw(Json.Serialize(Localizer["April"].Value)),
+            @Html.Raw(Json.Serialize(Localizer["May"].Value)),
+            @Html.Raw(Json.Serialize(Localizer["June"].Value)),
+            @Html.Raw(Json.Serialize(Localizer["July"].Value)),
+            @Html.Raw(Json.Serialize(Localizer["August"].Value)),
+            @Html.Raw(Json.Serialize(Localizer["September"].Value)),
+            @Html.Raw(Json.Serialize(Localizer["October"].Value)),
+            @Html.Raw(Json.Serialize(Localizer["November"].Value)),
+            @Html.Raw(Json.Serialize(Localizer["December"].Value))
+        ]
+    };
+    </script>
+
+    <script src="~/assets/js/dashboard.js" asp-append-version="true"></script>
+}
+
+<div class="dashboard">
+
+    <!-- ==================== STAT CARDS ==================== -->
+    <div class="row g-4 mb-4">
+
+        <!-- Games -->
+        <div class="col-xl-3 col-sm-6">
+            <div class="dashboard-stat-card games-card">
+                <div class="stat-card-content">
+
+                    <div>
+                        <span class="stat-label">
+                            @Localizer["Gamesplayed"]
+                        </span>
+
+                        <h2 class="stat-value">@Model.GamesPlayed</h2>
+
+                        <div class="stat-description">
+                            <span class="@(Model.GamesPlayedImprovement
+                                          ? "stat-positive"
+                                          : "stat-negative")">
+
+                                <i class="bx @(Model.GamesPlayedChange >= 0
+                                               ? "bx-up-arrow-alt"
+                                               : "bx-down-arrow-alt")"></i>
+
+                                @Math.Abs(Model.GamesPlayedChange)%
+                            </span>
+
+                            <span>@Localizer["VsLastMonth"]</span>
+                        </div>
+                    </div>
+
+                    <div class="stat-icon">
+                        <i class="bx bx-game"></i>
+                    </div>
+
                 </div>
             </div>
         </div>
-        <div class="col-md-3 mb-3">
-            <div class="card stat-card shadow-sm">
-                <div class="card-body">
-                <h6>@Localizer["Victories"]</h6>
-                    <h2 class="text-success">74</h2>
+
+        <!-- Victories -->
+        <div class="col-xl-3 col-sm-6">
+            <div class="dashboard-stat-card victories-card">
+                <div class="stat-card-content">
+
+                    <div>
+                        <span class="stat-label">
+                            @Localizer["Victories"]
+                        </span>
+
+                        <h2 class="stat-value">@Model.Victories</h2>
+
+                        <div class="stat-description">
+                            <span class="@(Model.VictoriesImprovement
+                                          ? "stat-positive"
+                                          : "stat-negative")">
+
+                                <i class="bx @(Model.VictoriesChange >= 0
+                                               ? "bx-up-arrow-alt"
+                                               : "bx-down-arrow-alt")"></i>
+
+                                @Math.Abs(Model.VictoriesChange)%
+                            </span>
+
+                            <span>@Localizer["VsLastMonth"]</span>
+                        </div>
+                    </div>
+
+                    <div class="stat-icon">
+                        <i class="bx bx-trophy"></i>
+                    </div>
+
                 </div>
             </div>
         </div>
-        <div class="col-md-3 mb-3">
-            <div class="card stat-card shadow-sm">
-                <div class="card-body">
-                <h6>@Localizer["Defeats"]</h6>
-                    <h2 class="text-danger">54</h2>
+
+        <!-- Defeats -->
+        <div class="col-xl-3 col-sm-6">
+            <div class="dashboard-stat-card defeats-card">
+                <div class="stat-card-content">
+
+                    <div>
+                        <span class="stat-label">
+                            @Localizer["Defeats"]
+                        </span>
+
+                        <h2 class="stat-value">@Model.Defeats</h2>
+
+                        <div class="stat-description">
+                            <span class="@(Model.DefeatsImprovement
+                                          ? "stat-positive"
+                                          : "stat-negative")">
+
+                                <i class="bx @(Model.DefeatsChange <= 0
+                                               ? "bx-down-arrow-alt"
+                                               : "bx-up-arrow-alt")"></i>
+
+                                @Math.Abs(Model.DefeatsChange)%
+                            </span>
+
+                            <span>@Localizer["VsLastMonth"]</span>
+                        </div>
+                    </div>
+
+                    <div class="stat-icon">
+                        <i class="bx bx-x-circle"></i>
+                    </div>
+
                 </div>
             </div>
         </div>
-        <div class="col-md-3 mb-3">
-            <div class="card stat-card shadow-sm">
-                <div class="card-body">
-                    <h6>Win Rate</h6>
-                    <h2>57%</h2>
+
+        <!-- Win Rate -->
+        <div class="col-xl-3 col-sm-6">
+            <div class="dashboard-stat-card rate-card">
+                <div class="stat-card-content">
+
+                    <div>
+                        <span class="stat-label">
+                            @Localizer["WinRate"]
+                        </span>
+
+                        <h2 class="stat-value">@Model.WinRate%</h2>
+
+                        <div class="stat-description">
+                            <span class="@(Model.WinRateImprovement
+                                          ? "stat-positive"
+                                          : "stat-negative")">
+
+                                <i class="bx @(Model.WinRateChange >= 0
+                                               ? "bx-up-arrow-alt"
+                                               : "bx-down-arrow-alt")"></i>
+
+                                @Math.Abs(Model.WinRateChange)%
+                            </span>
+
+                            <span>@Localizer["VsLastMonth"]</span>
+                        </div>
+                    </div>
+
+                    <div class="stat-icon">
+                        <i class="bx bx-bar-chart-alt-2"></i>
+                    </div>
+
                 </div>
             </div>
         </div>
+
     </div>
 
-    <!-- CHARTS -->
-    <div class="row">
-        <div class="col-md-8 mb-4">
-            <div class="card shadow-sm">
-                <div class="card-body">
-                <h5 class="mb-3">📈 @Localizer["Gamesbyday"]</h5>
-                    <canvas id="gamesChart"></canvas>
+
+    <!-- ==================== CHARTS ==================== -->
+    <div class="row g-4">
+
+        <!-- Games by day -->
+        <div class="col-xl-8">
+
+            <div class="dashboard-card">
+
+                <div class="dashboard-card-header">
+
+                    <div>
+                        <h5>
+                            <i class="bx bx-line-chart"></i>
+                            <span id="gamesChartTitle">
+                                @Localizer["Gamesbyday"]
+                            </span>
+                        </h5>
+
+                        <span id="gamesChartSubtitle" class="dashboard-card-subtitle"></span>
+                    </div>
+
+                    <div class="chart-menu dropdown">
+                        <button class="btn btn-sm btn-light dropdown-toggle"
+                                type="button"
+                                id="gamesPeriodDropdown"
+                                data-bs-toggle="dropdown"
+                                aria-expanded="false">
+
+                            <span id="selectedGamesPeriod">
+                                @Localizer["Last7Days"]
+                            </span>
+                        </button>
+
+                        <ul class="dropdown-menu dropdown-menu-end">
+                            <li>
+                                <button class="dropdown-item games-period-option active"
+                                        type="button"
+                                        data-period="7days"
+                                        data-label="@Localizer["Last7Days"]"
+                                        data-title="@Localizer["Gamesbyday"]">
+
+                                    @Localizer["Last7Days"]
+                                </button>
+                            </li>
+
+                            <li>
+                                <button class="dropdown-item games-period-option"
+                                        type="button"
+                                        data-period="30days"
+                                        data-label="@Localizer["Last30Days"]"
+                                        data-title="@Localizer["Gamesbyday"]">
+
+                                    @Localizer["Last30Days"]
+                                </button>
+                            </li>
+
+                            <li>
+                                <button class="dropdown-item games-period-option"
+                                        type="button"
+                                        data-period="3months"
+                                        data-label="@Localizer["Last3Months"]"
+                                        data-title="@Localizer["Gamesbymonth"]">
+
+                                    @Localizer["Last3Months"]
+                                </button>
+                            </li>
+
+                            <li>
+                                <button class="dropdown-item games-period-option"
+                                        type="button"
+                                        data-period="year"
+                                        data-label="@Localizer["ThisYear"]"
+                                        data-title="@Localizer["Gamesbymonth"]">
+
+                                    @Localizer["ThisYear"]
+                                </button>
+                            </li>
+                        </ul>
+                    </div>
+
                 </div>
+
+                <div class="chart-container">
+                    <div class="chart-scroll">
+                        <div class="chart-inner">
+                            <canvas id="gamesChart"></canvas>
+                        </div>
+                    </div>
+                </div>
+
             </div>
+
         </div>
 
-        <div class="col-md-4 mb-4">
-            <div class="card shadow-sm">
-                <div class="card-body">
-                <h5 class="mb-3">🏆 @Localizer["WinsLosses"]</h5>
+
+        <!-- Wins / Losses -->
+        <div class="col-xl-4">
+
+            <div class="dashboard-card h-100">
+
+                <div class="dashboard-card-header">
+
+                    <div>
+                        <h5>
+                            <i class="bx bx-trophy"></i>
+                            @Localizer["WinsLosses"]
+                        </h5>
+
+                        <span class="dashboard-card-subtitle">
+                            @Localizer["OverallGameResults"]
+                        </span>
+                    </div>
+
+                </div>
+
+                <div class="donut-container">
                     <canvas id="winLoseChart"></canvas>
                 </div>
+
+                <div class="chart-summary">
+
+                    <div class="summary-item">
+                        <span class="summary-dot wins"></span>
+
+                        <div>
+                            <span class="summary-label">
+                                @Localizer["Victories"]
+                            </span>
+
+                            <strong>
+                                @Model.Victories
+                            </strong>
+                        </div>
+                    </div>
+
+                    <div class="summary-item">
+                        <span class="summary-dot losses"></span>
+
+                        <div>
+                            <span class="summary-label">
+                                @Localizer["Defeats"]
+                            </span>
+
+                            <strong>
+                                @Model.Defeats
+                            </strong>
+                        </div>
+                    </div>
+
+                </div>
+
             </div>
+
         </div>
+
     </div>
 
+</div>

@@ -164,7 +164,7 @@ namespace Partnerly.Controllers
                     new GridField { FieldName = "fileName", DisplayName = $"{FieldsDisplayNames.FileName}" },
                     //new GridField { FieldName = "storedFileName", DisplayName = FieldsDisplayNames.StoredFileName, },
                     new GridField { FieldName = "contentType", DisplayName = FieldsDisplayNames.ContentType, IsFilterable = true, IsSortable = true },
-                    new GridField { FieldName = "fileSize", DisplayName = FieldsDisplayNames.FileSize},
+                    new GridField { FieldName = "fileSize", DisplayName = FieldsDisplayNames.FileSize, Format = "size"},
                     new GridField { FieldName = "storagePath", DisplayName = FieldsDisplayNames.StoragePath },
                     new GridField { FieldName = "entityType", DisplayName = FieldsDisplayNames.EntityType, IsFilterable = true, IsSortable = true },
                     //new GridField { FieldName = "entity", DisplayName = FieldsDisplayNames.Entity, IsFilterable = true, IsSortable = true },

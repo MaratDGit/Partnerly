@@ -24,7 +24,89 @@ namespace Partnerly.Controllers
 
         public async Task<IActionResult> Index()
         {
-            return View();
+            var model = new DashboardViewModel
+            {
+                // Current month
+                GamesPlayed = 128,
+                Victories = 74,
+                Defeats = 54,
+
+                // Previous month
+                PreviousGamesPlayed = 114,
+                PreviousVictories = 68,
+                PreviousDefeats = 60,
+
+                GamesByDay = new List<GamesByDayViewModel>
+                {
+                    new() { Date = DateTime.Today.AddDays(-6), Count = 12 },
+                    new() { Date = DateTime.Today.AddDays(-5), Count = 19 },
+                    new() { Date = DateTime.Today.AddDays(-4), Count = 14 },
+                    new() { Date = DateTime.Today.AddDays(-3), Count = 22 },
+                    new() { Date = DateTime.Today.AddDays(-2), Count = 18 },
+                    new() { Date = DateTime.Today.AddDays(-1), Count = 27 },
+                    new() { Date = DateTime.Today, Count = 16 }
+                }
+            };
+
+            return View(model);
+        }
+
+        [HttpGet]
+        public IActionResult GetGamesByPeriod(string period)
+        {
+            var today = DateTime.Today;
+
+            var data = period switch
+            {
+                "7days" => Enumerable.Range(0, 7)
+                    .Select(i => new GamesByDayViewModel
+                    {
+                        Date = today.AddDays(-6 + i),
+                        Count = Random.Shared.Next(5, 30)
+                    })
+                    .ToList(),
+
+                "30days" => Enumerable.Range(0, 30)
+                    .Select(i => new GamesByDayViewModel
+                    {
+                        Date = today.AddDays(-29 + i),
+                        Count = Random.Shared.Next(5, 30)
+                    })
+                    .ToList(),
+
+                "3months" => Enumerable.Range(0, 3)
+                    .Select(i =>
+                    {
+                        var date = new DateTime(
+                            today.Year,
+                            today.Month,
+                            1
+                        ).AddMonths(-2 + i);
+
+                        return new GamesByDayViewModel
+                        {
+                            Date = date,
+                            Count = Random.Shared.Next(50, 150)
+                        };
+                    })
+                    .ToList(),
+
+                "year" => Enumerable.Range(1, 12)
+                    .Select(month => new GamesByDayViewModel
+                    {
+                        Date = new DateTime(
+                            today.Year,
+                            month,
+                            1
+                        ),
+                        Count = Random.Shared.Next(50, 200)
+                    })
+                    .ToList(),
+
+                _ => new List<GamesByDayViewModel>()
+            };
+
+            return Json(data);
         }
 
         public async Task<IActionResult> MyProfile()

@@ -1048,4 +1048,85 @@
   <data name="IsDeleted" xml:space="preserve">
     <value>Удалено</value>
   </data>
+  <data name="VsLastMonth" xml:space="preserve">
+    <value>по сравнению с прошлым месяцем</value>
+  </data>
+  <data name="OverallGameResults" xml:space="preserve">
+    <value>Общие результаты игр</value>
+  </data>
+  <data name="GameActivityLast7Days" xml:space="preserve">
+    <value>Игровая активность за последние 7 дней</value>
+  </data>
+  <data name="Last7Days" xml:space="preserve">
+    <value>Последние 7 дней</value>
+  </data>
+  <data name="ThisYear" xml:space="preserve">
+    <value>Этот год</value>
+  </data>
+  <data name="Last3Months" xml:space="preserve">
+    <value>Последние 3 месяца</value>
+  </data>
+  <data name="Last30Days" xml:space="preserve">
+    <value>Последние 30 дней</value>
+  </data>
+  <data name="Monday" xml:space="preserve">
+    <value>Понедельник</value>
+  </data>
+  <data name="Tuesday" xml:space="preserve">
+    <value>Вторник</value>
+  </data>
+  <data name="Wednesday" xml:space="preserve">
+    <value>Среда</value>
+  </data>
+  <data name="Thursday" xml:space="preserve">
+    <value>Четверг</value>
+  </data>
+  <data name="Friday" xml:space="preserve">
+    <value>Пятница</value>
+  </data>
+  <data name="Saturday" xml:space="preserve">
+    <value>Суббота</value>
+  </data>
+  <data name="Sunday" xml:space="preserve">
+    <value>Воскресенье</value>
+  </data>
+  <data name="January" xml:space="preserve">
+    <value>Январь</value>
+  </data>
+  <data name="February" xml:space="preserve">
+    <value>Февраль</value>
+  </data>
+  <data name="March" xml:space="preserve">
+    <value>Март</value>
+  </data>
+  <data name="April" xml:space="preserve">
+    <value>Апрель</value>
+  </data>
+  <data name="May" xml:space="preserve">
+    <value>Май</value>
+  </data>
+  <data name="June" xml:space="preserve">
+    <value>Июнь</value>
+  </data>
+  <data name="July" xml:space="preserve">
+    <value>Июль</value>
+  </data>
+  <data name="August" xml:space="preserve">
+    <value>Август</value>
+  </data>
+  <data name="September" xml:space="preserve">
+    <value>Сентябрь</value>
+  </data>
+  <data name="October" xml:space="preserve">
+    <value>Октябрь</value>
+  </data>
+  <data name="November" xml:space="preserve">
+    <value>Ноябрь</value>
+  </data>
+  <data name="December" xml:space="preserve">
+    <value>Декабрь</value>
+  </data>
+  <data name="Gamesbymonth" xml:space="preserve">
+    <value>Игры по месяцам</value>
+  </data>
 </root>

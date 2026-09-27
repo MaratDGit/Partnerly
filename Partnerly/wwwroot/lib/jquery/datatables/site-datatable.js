@@ -58,12 +58,6 @@
                                 href="${href}"
                                 ${styleAttributes}
                                 >${displayData}</a>`;
-
-                        //return `<a 
-                        //    title="${title}" 
-                        //    href="${href}"
-                        //    ${styleAttributes}
-                        //    >${data}</a>`;
                     }
 
                     if (f.format) {
@@ -149,9 +143,31 @@
                         }
                         if (typeFormat === "number") return parseFloat(data).toLocaleString(undefined, { minimumFractionDigits: parseInt(formatString) || 0 });
                         if (typeFormat === "currency") return new Intl.NumberFormat("en-US", { style: "currency", currency: formatString || "USD" }).format(data);
-                    }
+                        if (typeFormat === "size") {
+                            const size = Number(data);
 
-                    //return `<span title="${title}"${styleAttributes} ${f.attr || ""}>${data}</span>`;
+                            if (isNaN(size)) {
+                                return data;
+                            }
+
+                            const units = ["B", "KB", "MB", "GB", "TB"];
+
+                            let value = size;
+                            let unitIndex = 0;
+
+                            while (value >= 1024 && unitIndex < units.length - 1) {
+                                value /= 1024;
+                                unitIndex++;
+                            }
+
+                            const decimals = value < 10 && unitIndex > 0 ? 2 : 0;
+
+                            return `${value.toLocaleString(undefined, {
+                                minimumFractionDigits: decimals,
+                                maximumFractionDigits: decimals
+                            })} ${units[unitIndex]}`;
+                        }
+                    }
 
                     const displayData = highlightSearchText(data, searchValue);
 

@@ -1047,4 +1047,85 @@
   <data name="IsDeleted" xml:space="preserve">
     <value>Ջնջված է</value>
   </data>
+  <data name="VsLastMonth" xml:space="preserve">
+    <value>նախորդ ամսվա համեմատ</value>
+  </data>
+  <data name="OverallGameResults" xml:space="preserve">
+    <value>Խաղերի ընդհանուր արդյունքները</value>
+  </data>
+  <data name="GameActivityLast7Days" xml:space="preserve">
+    <value>Խաղային ակտիվությունը վերջին 7 օրվա ընթացքում</value>
+  </data>
+  <data name="Last7Days" xml:space="preserve">
+    <value>Վերջին 7 օրը</value>
+  </data>
+  <data name="ThisYear" xml:space="preserve">
+    <value>Այս տարի</value>
+  </data>
+  <data name="Last3Months" xml:space="preserve">
+    <value>Վերջին 3 ամիսները</value>
+  </data>
+  <data name="Last30Days" xml:space="preserve">
+    <value>Վերջին 30 օրերը</value>
+  </data>
+  <data name="Monday" xml:space="preserve">
+    <value>Երկուշաբթի</value>
+  </data>
+  <data name="Tuesday" xml:space="preserve">
+    <value>Երեքշաբթի</value>
+  </data>
+  <data name="Wednesday" xml:space="preserve">
+    <value>Չորեքշաբթի</value>
+  </data>
+  <data name="Thursday" xml:space="preserve">
+    <value>Հինգշաբթի</value>
+  </data>
+  <data name="Friday" xml:space="preserve">
+    <value>Ուրբաթ</value>
+  </data>
+  <data name="Saturday" xml:space="preserve">
+    <value>Շաբաթ</value>
+  </data>
+  <data name="Sunday" xml:space="preserve">
+    <value>Կիրակի</value>
+  </data>
+  <data name="January" xml:space="preserve">
+    <value>Հունվար</value>
+  </data>
+  <data name="February" xml:space="preserve">
+    <value>Փետրվար</value>
+  </data>
+  <data name="March" xml:space="preserve">
+    <value>March</value>
+  </data>
+  <data name="April" xml:space="preserve">
+    <value>Ապրիլ</value>
+  </data>
+  <data name="May" xml:space="preserve">
+    <value>Մայիս</value>
+  </data>
+  <data name="June" xml:space="preserve">
+    <value>Հունիս</value>
+  </data>
+  <data name="July" xml:space="preserve">
+    <value>Հուլիս</value>
+  </data>
+  <data name="August" xml:space="preserve">
+    <value>Օգոստոս</value>
+  </data>
+  <data name="September" xml:space="preserve">
+    <value>Սեպտեմբեր</value>
+  </data>
+  <data name="October" xml:space="preserve">
+    <value>Հոկտեմբեր</value>
+  </data>
+  <data name="November" xml:space="preserve">
+    <value>Նոյեմբեր</value>
+  </data>
+  <data name="December" xml:space="preserve">
+    <value>Դեկտեմբեր</value>
+  </data>
+  <data name="Gamesbymonth" xml:space="preserve">
+    <value>Խաղերն ըստ ամիսների</value>
+  </data>
 </root>

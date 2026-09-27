@@ -1,0 +1,2 @@
+ cloudflared tunnel --url https://192.168.1.135:5278 --no-tls-verify
+

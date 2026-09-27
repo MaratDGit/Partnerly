@@ -98,42 +98,6 @@ namespace Partnerly.Controllers
                 return View(model);
             }
 
-            //if (user.Role.Name != null && user.Email != null)
-            //{
-            //    var claims = new List<Claim>
-            //    {
-            //        new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
-            //        new Claim(ClaimTypes.Name, $"{user.FirstName} {user.LastName}"),
-            //        new Claim(ClaimTypes.Email, user.Email),
-            //        new Claim(ClaimTypes.Role, user.Role.Name),
-            //        new Claim(Constants.ClaimTypeLoginTime, DateTime.UtcNow.ToString("o")),
-            //        new Claim(Constants.ClaimTypeFirstName, user.FirstName ?? ""),
-            //        new Claim(Constants.ClaimTypeLastName, user.LastName ?? ""),
-            //        new Claim(Constants.ClaimTypeRoleType, user.Role.Type ?? RoleTypeAttribute.View),
-            //        new Claim(Constants.ClaimTypeReffCode, user.MyReferralCode ?? ""),
-            //        new Claim(Constants.ClaimTypeUserPhotoUrl, user.PhotoUrl ?? Constants.DefaultUserProfilePhotoPath),
-            //    };
-
-            //    var claimsIdentity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
-
-            //    var authProperties = new AuthenticationProperties
-            //    {
-            //        IsPersistent = model.RememberMe,
-            //        ExpiresUtc = model.RememberMe
-            //        ? DateTimeOffset.UtcNow.AddDays(14)
-            //        : DateTimeOffset.UtcNow.AddMinutes(60)
-            //    };
-
-            //    await HttpContext.SignInAsync(
-            //        CookieAuthenticationDefaults.AuthenticationScheme,
-            //        new ClaimsPrincipal(claimsIdentity),
-            //        authProperties
-            //    );
-
-            //    if (!string.IsNullOrEmpty(returnUrl) && Url.IsLocalUrl(returnUrl))
-            //        return Redirect(returnUrl);
-            //}
-
             await SignInUserAsync(user, model.RememberMe);
 
             if (!string.IsNullOrEmpty(returnUrl) && Url.IsLocalUrl(returnUrl))
