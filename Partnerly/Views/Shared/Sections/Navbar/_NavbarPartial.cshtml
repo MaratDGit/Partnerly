@@ -476,13 +476,11 @@
         animation: partnerlyPulseBadge .6s ease-in-out;
     }
 
-
     /* =========================================================
-           MOBILE
-           ========================================================= */
+       MOBILE NOTIFICATIONS
+       ========================================================= */
 
     @@media (max-width: 1199.98px) {
-
         .partnerly-mobile-menu-button {
             display: flex;
         }
@@ -498,16 +496,21 @@
         .partnerly-navbar-actions {
             gap: 3px;
         }
-
-        .partnerly-notification-dropdown {
+        
+        .partnerly-notification-dropdown
+        {
             position: fixed !important;
-            top: 62px !important;
-            right: 10px !important;
+            top: 64px !important;
             left: auto !important;
-            width: min(350px, calc(100vw - 20px));
+            right: 10px !important;
+            inset: auto 10px auto auto !important;
+            width: min(350px, calc(100vw - 20px)) !important;
+            max-width: calc(100vw - 20px);
+            margin: 0 !important;
+            transform: none !important;
         }
-    }
 
+    }
 
     @@media (max-width: 575.98px) {
 

@@ -1,8 +1,480 @@
-.misc-wrapper {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  min-height: calc(100vh - 1.5rem * 2);
-  text-align: center;
+:root {
+    --partnerly-primary: #696cff;
+    --partnerly-primary-light: rgba(105, 108, 255, .10);
+    --partnerly-primary-hover: rgba(105, 108, 255, .14);
+    --partnerly-text: #566a7f;
+    --partnerly-text-dark: #32475c;
+    --partnerly-muted: #a1acb8;
+    --partnerly-border: #e7e9ed;
+    --partnerly-background: #f7f7fb;
 }
+
+
+/* =========================================
+           PAGE
+        ========================================= */
+
+.partnerly-maintenance-page {
+    position: relative;
+    min-height: 100vh;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 40px 24px;
+    overflow: hidden;
+    background: radial-gradient( circle at 15% 15%, rgba(105, 108, 255, .08), transparent 32% ), radial-gradient( circle at 85% 85%, rgba(105, 108, 255, .06), transparent 32% ), var(--partnerly-background);
+}
+
+
+/* =========================================
+           BACKGROUND
+        ========================================= */
+
+.partnerly-maintenance-bg {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    overflow: hidden;
+}
+
+
+.maintenance-orb {
+    position: absolute;
+    border-radius: 50%;
+    filter: blur(2px);
+    opacity: .45;
+}
+
+
+.maintenance-orb-1 {
+    width: 320px;
+    height: 320px;
+    top: -180px;
+    left: -120px;
+    background: rgba(105, 108, 255, .07);
+}
+
+
+.maintenance-orb-2 {
+    width: 400px;
+    height: 400px;
+    right: -200px;
+    bottom: -220px;
+    background: rgba(105, 108, 255, .06);
+}
+
+
+/* =========================================
+           CONTAINER
+        ========================================= */
+
+.partnerly-maintenance-container {
+    position: relative;
+    z-index: 2;
+    width: 100%;
+    max-width: 1120px;
+}
+
+
+/* =========================================
+           CARD
+        ========================================= */
+
+.partnerly-maintenance-card {
+    position: relative;
+    overflow: hidden;
+    background: rgba(255, 255, 255, .94);
+    border: 1px solid rgba(231, 233, 237, .9);
+    border-radius: 24px;
+    box-shadow: 0 20px 60px rgba(50, 71, 92, .08), 0 4px 16px rgba(50, 71, 92, .04);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    padding: 32px 38px 24px;
+}
+
+
+/* =========================================
+           LOGO
+        ========================================= */
+
+.partnerly-maintenance-logo {
+    display: flex;
+    align-items: center;
+    gap: 11px;
+    color: var(--partnerly-text-dark);
+    font-size: 18px;
+    font-weight: 600;
+}
+
+
+    .partnerly-maintenance-logo img {
+        display: block;
+        width: 42px;
+        height: 42px;
+        border-radius: 11px;
+    }
+
+
+/* =========================================
+           STATUS
+        ========================================= */
+
+.partnerly-maintenance-status {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    margin-top: 34px;
+    padding: 7px 12px;
+    border-radius: 20px;
+    background: var(--partnerly-primary-light);
+    color: var(--partnerly-primary);
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: .5px;
+    text-transform: uppercase;
+}
+
+
+.partnerly-maintenance-status-dot {
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: var(--partnerly-primary);
+    box-shadow: 0 0 0 4px rgba(105, 108, 255, .10);
+    animation: maintenancePulse 2s ease-in-out infinite;
+}
+
+
+/* =========================================
+           CONTENT
+        ========================================= */
+
+.partnerly-maintenance-content {
+    display: flex;
+    align-items: center;
+    gap: 50px;
+    padding: 24px 10px 10px;
+}
+
+
+.partnerly-maintenance-text {
+    flex: 1 1 52%;
+    min-width: 0;
+}
+
+
+    .partnerly-maintenance-text h1 {
+        margin: 0 0 16px;
+        color: var(--partnerly-text-dark);
+        font-size: clamp(34px, 4vw, 52px);
+        font-weight: 700;
+        line-height: 1.12;
+        letter-spacing: -.8px;
+    }
+
+
+    .partnerly-maintenance-text p {
+        max-width: 560px;
+        margin: 0;
+        color: var(--partnerly-muted);
+        font-size: 15px;
+        line-height: 1.8;
+    }
+
+
+/* =========================================
+           BUTTON
+        ========================================= */
+
+.partnerly-maintenance-actions {
+    margin-top: 28px;
+}
+
+
+.partnerly-maintenance-button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 9px;
+    min-height: 44px;
+    padding: 0 18px;
+    border-radius: 10px;
+    background: var(--partnerly-primary);
+    color: #fff;
+    font-size: 13px;
+    font-weight: 600;
+    text-decoration: none;
+    box-shadow: 0 6px 16px rgba(105, 108, 255, .22);
+    transition: transform .2s ease, box-shadow .2s ease, background-color .2s ease;
+}
+
+
+    .partnerly-maintenance-button:hover {
+        color: #fff;
+        background: #5f62e6;
+        transform: translateY(-1px);
+        box-shadow: 0 8px 20px rgba(105, 108, 255, .28);
+    }
+
+
+    .partnerly-maintenance-button:active {
+        transform: translateY(0);
+    }
+
+
+    .partnerly-maintenance-button i {
+        font-size: 17px;
+    }
+
+
+/* =========================================
+           ILLUSTRATION
+        ========================================= */
+
+.partnerly-maintenance-illustration {
+    position: relative;
+    flex: 1 1 48%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 310px;
+}
+
+
+.partnerly-maintenance-illustration-glow {
+    position: absolute;
+    width: 280px;
+    height: 280px;
+    border-radius: 50%;
+    background: var(--partnerly-primary-light);
+    filter: blur(20px);
+}
+
+
+.maintenance-image {
+    position: relative;
+    z-index: 1;
+    display: block;
+    width: min(100%, 440px);
+    height: auto;
+    max-height: 330px;
+    object-fit: contain;
+    animation: maintenanceFloat 5s ease-in-out infinite;
+}
+
+
+/* =========================================
+           FOOTER
+        ========================================= */
+
+.partnerly-maintenance-footer {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 7px;
+    margin-top: 22px;
+    padding-top: 20px;
+    border-top: 1px solid #f0f1f3;
+    color: #b0b6bf;
+    font-size: 10px;
+}
+
+
+.maintenance-footer-separator {
+    color: #d8dbe0;
+}
+
+
+/* =========================================
+           ANIMATIONS
+        ========================================= */
+
+@keyframes maintenanceFloat {
+
+    0%,
+    100% {
+        transform: translateY(0);
+    }
+
+    50% {
+        transform: translateY(-8px);
+    }
+}
+
+
+@keyframes maintenancePulse {
+
+    0%,
+    100% {
+        opacity: 1;
+        transform: scale(1);
+    }
+
+    50% {
+        opacity: .55;
+        transform: scale(.82);
+    }
+}
+
+
+/* =========================================
+           TABLET
+        ========================================= */
+
+@media (max-width: 900px) {
+
+    .partnerly-maintenance-card {
+        padding: 28px 28px 22px;
+    }
+
+    .partnerly-maintenance-content {
+        gap: 20px;
+    }
+
+    .partnerly-maintenance-text h1 {
+        font-size: 38px;
+    }
+
+    .partnerly-maintenance-illustration {
+        min-height: 260px;
+    }
+
+    .maintenance-image {
+        max-height: 280px;
+    }
+}
+
+
+/* =========================================
+           MOBILE
+        ========================================= */
+
+@media (max-width: 700px) {
+
+    .partnerly-maintenance-page {
+        align-items: flex-start;
+        padding: 20px 14px;
+    }
+
+
+    .partnerly-maintenance-card {
+        border-radius: 18px;
+        padding: 24px 20px 18px;
+    }
+
+
+    .partnerly-maintenance-logo {
+        font-size: 16px;
+    }
+
+
+        .partnerly-maintenance-logo img {
+            width: 38px;
+            height: 38px;
+        }
+
+
+    .partnerly-maintenance-status {
+        margin-top: 26px;
+    }
+
+
+    .partnerly-maintenance-content {
+        flex-direction: column;
+        gap: 10px;
+        padding: 22px 0 0;
+        text-align: center;
+    }
+
+
+    .partnerly-maintenance-text {
+        width: 100%;
+    }
+
+
+        .partnerly-maintenance-text h1 {
+            font-size: 34px;
+            letter-spacing: -.5px;
+        }
+
+
+        .partnerly-maintenance-text p {
+            font-size: 14px;
+            line-height: 1.7;
+        }
+
+
+    .partnerly-maintenance-actions {
+        margin-top: 22px;
+    }
+
+
+    .partnerly-maintenance-button {
+        min-height: 42px;
+    }
+
+
+    .partnerly-maintenance-illustration {
+        width: 100%;
+        min-height: 230px;
+        margin-top: 5px;
+    }
+
+
+    .maintenance-image {
+        width: min(90%, 360px);
+        max-height: 250px;
+    }
+
+
+    .partnerly-maintenance-footer {
+        flex-wrap: wrap;
+        text-align: center;
+        line-height: 1.6;
+    }
+}
+
+
+/* =========================================
+           SMALL MOBILE
+        ========================================= */
+
+@media (max-width: 420px) {
+
+    .partnerly-maintenance-page {
+        padding: 12px;
+    }
+
+
+    .partnerly-maintenance-card {
+        padding: 20px 16px 16px;
+        border-radius: 16px;
+    }
+
+
+    .partnerly-maintenance-status {
+        margin-top: 22px;
+    }
+
+
+    .partnerly-maintenance-text h1 {
+        font-size: 30px;
+    }
+
+
+    .partnerly-maintenance-text p {
+        font-size: 13px;
+    }
+
+
+    .partnerly-maintenance-illustration {
+        min-height: 190px;
+    }
+
+
+    .maintenance-image {
+        max-height: 210px;
+    }
+}
+

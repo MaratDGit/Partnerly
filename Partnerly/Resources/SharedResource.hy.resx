@@ -247,7 +247,7 @@
     <value>Ձեր հաղորդագրությունը ուղարկված է։ Մենք շուտով կկապնվենք ձեզ հետ։</value>
   </data>
   <data name="Systemsettings" xml:space="preserve">
-    <value>Համակարգի կարգավորումներ</value>
+    <value>Կարգավորումներ</value>
   </data>
   <data name="Tasks" xml:space="preserve">
     <value>Առաջադրանքներ</value>
@@ -1286,5 +1286,14 @@
   </data>
   <data name="Youraccountisready" xml:space="preserve">
     <value>Ձեր հաշիվը պատրաստ է</value>
+  </data>
+  <data name="Main" xml:space="preserve">
+    <value>Գլխավոր</value>
+  </data>
+  <data name="Changephoto" xml:space="preserve">
+    <value>Փոխել լուսանկարը</value>
+  </data>
+  <data name="Moveandresizeyourphoto" xml:space="preserve">
+    <value>Տեղափոխեք և փոխեք լուսանկարի չափսը</value>
   </data>
 </root>

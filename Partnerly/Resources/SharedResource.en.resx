@@ -1287,4 +1287,13 @@
   <data name="Youraccountisready" xml:space="preserve">
     <value>Your account is ready</value>
   </data>
+  <data name="Main" xml:space="preserve">
+    <value>Main</value>
+  </data>
+  <data name="Changephoto" xml:space="preserve">
+    <value>Change photo</value>
+  </data>
+  <data name="Moveandresizeyourphoto" xml:space="preserve">
+    <value>Move and resize your photo</value>
+  </data>
 </root>

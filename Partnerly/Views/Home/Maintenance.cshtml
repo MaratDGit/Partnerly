@@ -1,21 +1,110 @@
 ﻿@{
-  Layout = "_BlankLayout";
-  ViewData["Title"] = "На обслуживании";
+    Layout = "_BlankLayout";
+    ViewData["Title"] = "In Maintenance";
 }
 
 @section PageStyles {
     <link rel="stylesheet" href="~/assets/vendor/css/pages/page-misc.css">
 }
 
-<div class="container-xxl container-p-y">
-  <div class="misc-wrapper">
-        <h3 class="mb-2 mx-2">@Localizer["Undermaintenance"] 🚧</h3>
-    <p class="mb-6 mx-2">
-            @Localizer["Technicalmaintenanceunderway"]
-    </p>
-    <a asp-controller="Home" asp-action="Index" class="btn btn-primary">@Localizer["Back"]</a>
-    <div class="mt-6">
-      <img src="~/assets/img/illustrations/Maintenance.svg" alt="girl-doing-yoga-light" width="500" class="img-fluid" data-app-light-img="illustrations/girl-doing-yoga-light.png" data-app-dark-img="illustrations/girl-doing-yoga-dark.png">
+<div class="partnerly-maintenance-page">
+
+    <div class="partnerly-maintenance-bg">
+        <div class="maintenance-orb maintenance-orb-1"></div>
+        <div class="maintenance-orb maintenance-orb-2"></div>
     </div>
-  </div>
+
+    <main class="partnerly-maintenance-container">
+
+        <div class="partnerly-maintenance-card">
+
+            <!-- Logo -->
+            <div class="partnerly-maintenance-logo">
+                <img src="~/favicon.png"
+                     alt="Partnerly"
+                     width="42"
+                     height="42" />
+
+                <span></span>
+            </div>
+
+
+            <!-- Status -->
+            <div class="partnerly-maintenance-status">
+                <span class="partnerly-maintenance-status-dot"></span>
+                <span>@Localizer["MaintenanceMode"]</span>
+            </div>
+
+
+            <!-- Content -->
+            <div class="partnerly-maintenance-content">
+
+                <div class="partnerly-maintenance-text">
+
+                    <h1>
+                        @Localizer["Undermaintenance"]
+                    </h1>
+
+                    <p>
+                        @Localizer["Technicalmaintenanceunderway"]
+                    </p>
+
+                    <div class="partnerly-maintenance-actions">
+
+                        <a asp-controller="Home"
+                           asp-action="Index"
+                           class="partnerly-maintenance-button">
+
+                            <i class="bx bx-arrow-back"></i>
+
+                            <span>
+                                @Localizer["Back"]
+                            </span>
+
+                        </a>
+
+                    </div>
+
+                </div>
+
+
+                <!-- Illustration -->
+                <div class="partnerly-maintenance-illustration">
+
+                    <div class="partnerly-maintenance-illustration-glow"></div>
+
+                    <img src="~/assets/img/illustrations/Maintenance.svg"
+                         alt="Maintenance"
+                         class="maintenance-image" />
+
+                </div>
+
+            </div>
+
+
+            <!-- Footer -->
+            <div class="partnerly-maintenance-footer">
+
+                <span>
+                    © <span id="maintenanceYear"></span>
+                    
+                </span>
+
+                <span class="maintenance-footer-separator">·</span>
+
+                <span>
+                    @Localizer["Technicalmaintenanceunderway"]
+                </span>
+
+            </div>
+
+        </div>
+
+    </main>
+
 </div>
+
+<script>
+    document.getElementById('maintenanceYear').textContent =
+        new Date().getFullYear();
+</script>

@@ -24,9 +24,15 @@
     // when the corresponding data becomes available.
     var activeMembers = totalMembers;
     var directReferrals = totalMembers;
-
-    <link rel="stylesheet" href="~/assets/vendor/css/pages/page-myprofile.css" />
 }
+
+<link rel="stylesheet"
+      href="~/assets/vendor/css/pages/page-myprofile.css" />
+
+<!-- Cropper.js -->
+<link rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/cropperjs@1.6.2/dist/cropper.min.css" />
+
 
 <div class="container-xxl flex-grow-1 container-p-y profile-page">
 
@@ -66,9 +72,7 @@
 
                     <!-- Camera overlay -->
                     <div class="profile-avatar-camera">
-
                         <i class="bx bx-camera"></i>
-
                     </div>
 
                 </label>
@@ -87,11 +91,13 @@
                 <div class="profile-name-row">
 
                     <div>
+
                         <h4 class="profile-name">
                             @Model?.UserName
                         </h4>
 
                         <div class="profile-meta">
+
                             @if (!string.IsNullOrEmpty(joinedText))
                             {
                                 <span>
@@ -99,7 +105,9 @@
                                     @joinedText
                                 </span>
                             }
+
                         </div>
+
                     </div>
 
 
@@ -122,63 +130,100 @@
 
 
         <!-- =====================================================
-             PHOTO UPLOAD PANEL
+             PHOTO UPLOAD / CROP PANEL
              ===================================================== -->
 
         <div id="photoUploadPanel"
              class="photo-upload-panel d-none">
 
-            <div class="photo-upload-preview">
+            <!-- Header -->
+            <div class="photo-upload-header">
 
-                <div id="photoUploadPreview"
-                     class="photo-upload-preview-image">
-
-                    <i class="bx bx-image"></i>
-
-                </div>
-
-            </div>
-
-
-            <div class="photo-upload-content">
-
-                <div class="photo-upload-info">
+                <div>
 
                     <strong>
                         @Localizer["Changephoto"]
                     </strong>
 
                     <span>
-                        JPG, PNG or WEBP · Max 5 MB
+                        @Localizer["Moveandresizeyourphoto"]
                     </span>
 
                 </div>
 
+                <button type="button"
+                        id="cancelPhotoBtn"
+                        class="photo-upload-close"
+                        aria-label="Close">
 
-                <div class="photo-upload-actions">
+                    <i class="bx bx-x"></i>
 
-                    <button type="button"
-                            id="cancelPhotoBtn"
-                            class="btn btn-sm btn-label-secondary">
+                </button>
 
-                        <i class="bx bx-x me-1"></i>
-
-                        @Localizer["Cancel"]
-
-                    </button>
+            </div>
 
 
-                    <button type="button"
-                            id="savePhotoBtn"
-                            class="btn btn-sm btn-primary">
+            <!-- Crop area -->
+            <div class="photo-crop-container">
 
-                        <i class="bx bx-check me-1"></i>
+                <img id="photoCropImage"
+                     alt="Photo crop preview" />
 
-                        @Localizer["Save"]
+            </div>
 
-                    </button>
 
-                </div>
+            <!-- Controls -->
+            <div class="photo-crop-controls">
+
+                <button type="button"
+                        id="zoomOutPhotoBtn"
+                        class="btn btn-label-secondary"
+                        title="@Localizer["Zoomout"]">
+
+                    <i class="bx bx-minus"></i>
+
+                </button>
+
+
+                <button type="button"
+                        id="resetPhotoBtn"
+                        class="btn btn-label-secondary">
+
+                    <i class="bx bx-reset me-1"></i>
+
+                    @Localizer["Reset"]
+
+                </button>
+
+
+                <button type="button"
+                        id="zoomInPhotoBtn"
+                        class="btn btn-label-secondary"
+                        title="@Localizer["Zoomin"]">
+
+                    <i class="bx bx-plus"></i>
+
+                </button>
+
+            </div>
+
+
+            <!-- Footer -->
+            <div class="photo-upload-footer">
+
+                <span class="photo-upload-format">
+                    JPG, PNG or WEBP · Max 5 MB
+                </span>
+
+                <button type="button"
+                        id="savePhotoBtn"
+                        class="btn btn-primary">
+
+                    <i class="bx bx-check me-1"></i>
+
+                    @Localizer["Save"]
+
+                </button>
 
             </div>
 
@@ -287,21 +332,11 @@
                             <!-- Section title -->
                             <div class="profile-section-title">
 
-                                <div class="profile-section-icon">
-
-                                    <i class="bx bx-user"></i>
-
-                                </div>
-
                                 <div>
 
                                     <h5>
                                         @Localizer["AboutMe"]
                                     </h5>
-
-                                    <span>
-                                        @* @Localizer["PersonalInformation"] *@
-                                    </span>
 
                                 </div>
 
@@ -324,7 +359,7 @@
                                     <div class="profile-info-content">
 
                                         <span class="profile-info-label">
-                                            @Localizer["Username"]
+                                            @Localizer["User"]
                                         </span>
 
                                         <strong>
@@ -399,12 +434,6 @@
                                  ================================= -->
 
                             <div class="profile-section-title">
-
-                                <div class="profile-section-icon profile-section-icon-green">
-
-                                    <i class="bx bx-address-book"></i>
-
-                                </div>
 
                                 <div>
 
@@ -523,10 +552,9 @@
                             <div class="profile-empty-state">
 
                                 <div class="profile-empty-icon">
-
                                     <i class="bx bx-time-five"></i>
-
                                 </div>
+
                                 <p>
                                     @Localizer["Noinformationonactivity"]
                                 </p>
@@ -567,9 +595,7 @@
                     <div class="team-stat-card">
 
                         <div class="team-stat-icon team-stat-icon-purple">
-
                             <i class="bx bx-group"></i>
-
                         </div>
 
                         <div class="team-stat-content">
@@ -595,9 +621,7 @@
                     <div class="team-stat-card">
 
                         <div class="team-stat-icon team-stat-icon-green">
-
                             <i class="bx bx-user-check"></i>
-
                         </div>
 
                         <div class="team-stat-content">
@@ -623,9 +647,7 @@
                     <div class="team-stat-card">
 
                         <div class="team-stat-icon team-stat-icon-blue">
-
                             <i class="bx bx-user-plus"></i>
-
                         </div>
 
                         <div class="team-stat-content">
@@ -662,6 +684,7 @@
                         <h5>
                             @Localizer["Myreferrals"]
                         </h5>
+
                     </div>
 
 
@@ -680,7 +703,6 @@
                      ================================================= -->
 
                 <div class="team-members-scroll">
-
 
                     @if (Model.Refferals != null &&
                                         Model.Refferals.Any())
@@ -826,6 +848,7 @@
                                         </span>
 
                                     </div>
+
                                 </div>
 
                             }
@@ -872,11 +895,12 @@
 
 
 <!-- =====================================================
-     REFERRAL TOAST
+     TOASTS
      ===================================================== -->
 
 <div class="position-fixed bottom-0 end-0 p-3"
      style="z-index: 1055">
+
 
     <!-- Referral -->
     <div id="referralToast"
@@ -937,6 +961,13 @@
 
 
 <!-- =====================================================
+     CROPPER.JS
+     ===================================================== -->
+
+<script src="https://cdn.jsdelivr.net/npm/cropperjs@1.6.2/dist/cropper.min.js"></script>
+
+
+<!-- =====================================================
      PAGE SCRIPT
      ===================================================== -->
 
@@ -948,14 +979,17 @@
 
     let selectedPhotoFile = null;
 
+    let photoCropper = null;
+
+
     const profilePhotoInput =
         document.getElementById("profilePhotoInput");
 
     const photoUploadPanel =
         document.getElementById("photoUploadPanel");
 
-    const photoUploadPreview =
-        document.getElementById("photoUploadPreview");
+    const photoCropImage =
+        document.getElementById("photoCropImage");
 
     const cancelPhotoBtn =
         document.getElementById("cancelPhotoBtn");
@@ -963,10 +997,29 @@
     const savePhotoBtn =
         document.getElementById("savePhotoBtn");
 
+    const zoomInPhotoBtn =
+        document.getElementById("zoomInPhotoBtn");
+
+    const zoomOutPhotoBtn =
+        document.getElementById("zoomOutPhotoBtn");
+
+    const resetPhotoBtn =
+        document.getElementById("resetPhotoBtn");
+
 
     /*
-     * Select photo
+     * Minimum zoom level.
+     *
+     * Prevents the user from making the image
+     * smaller than the crop area.
      */
+
+    let minimumPhotoZoom = 0;
+
+
+    /* =========================================================
+       SELECT PHOTO
+       ========================================================= */
 
     profilePhotoInput?.addEventListener(
         "change",
@@ -990,6 +1043,7 @@
                 "image/webp"
             ];
 
+
             if (!allowedTypes.includes(file.type)) {
 
                 alert(
@@ -1004,11 +1058,13 @@
 
             /*
              * Validate file size
+             *
              * 5 MB
              */
 
             const maxSize =
                 5 * 1024 * 1024;
+
 
             if (file.size > maxSize) {
 
@@ -1026,23 +1082,182 @@
 
 
             /*
-             * Preview
+             * Read image
              */
 
             const reader =
                 new FileReader();
 
+
             reader.onload =
                 function (event) {
 
-                    photoUploadPreview.innerHTML = `
-                        <img src="${event.target.result}"
-                             alt="Photo preview" />
-                    `;
+                    photoCropImage.src =
+                        event.target.result;
+
 
                     photoUploadPanel
                         .classList
                         .remove("d-none");
+
+
+                    /*
+                     * Destroy previous Cropper
+                     */
+
+                    if (photoCropper) {
+
+                        photoCropper.destroy();
+
+                        photoCropper = null;
+                    }
+
+
+                    /*
+                     * Initialize Cropper
+                     */
+
+                    photoCropImage.onload =
+                        function () {
+
+                            photoCropper =
+                                new Cropper(
+                                    photoCropImage,
+                                    {
+
+                                        /*
+                                         * Avatar is square
+                                         */
+
+                                        aspectRatio: 1,
+
+
+                                        /*
+                                         * Prevent image
+                                         * from leaving crop area
+                                         */
+
+                                        viewMode: 1,
+
+
+                                        /*
+                                         * Drag the image
+                                         */
+
+                                        dragMode: "move",
+
+
+                                        /*
+                                         * Initial crop size
+                                         */
+
+                                        autoCropArea: 0.85,
+
+
+                                        /*
+                                         * Disable unnecessary UI
+                                         */
+
+                                        restore: false,
+
+                                        guides: false,
+
+                                        center: true,
+
+                                        highlight: false,
+
+                                        background: false,
+
+
+                                        /*
+                                         * User cannot change
+                                         * crop box size.
+                                         */
+
+                                        cropBoxMovable: false,
+
+                                        cropBoxResizable: false,
+
+
+                                        /*
+                                         * Better mobile behavior
+                                         */
+
+                                        responsive: true,
+
+                                        toggleDragModeOnDblclick: false,
+
+
+                                        /*
+                                         * Calculate minimum
+                                         * zoom after initialization
+                                         */
+
+                                        ready: function () {
+
+                                            const cropBoxData =
+                                                this.cropper
+                                                    .getCropBoxData();
+
+                                            const containerData =
+                                                this.cropper
+                                                    .getContainerData();
+
+                                            const imageData =
+                                                this.cropper
+                                                    .getImageData();
+
+
+                                            /*
+                                             * Determine the scale
+                                             * required to cover
+                                             * the entire crop area.
+                                             */
+
+                                            const cropWidth =
+                                                cropBoxData.width;
+
+                                            const cropHeight =
+                                                cropBoxData.height;
+
+
+                                            const imageWidth =
+                                                imageData.naturalWidth;
+
+                                            const imageHeight =
+                                                imageData.naturalHeight;
+
+
+                                            const scaleX =
+                                                cropWidth /
+                                                imageWidth;
+
+                                            const scaleY =
+                                                cropHeight /
+                                                imageHeight;
+
+
+                                            minimumPhotoZoom =
+                                                Math.max(
+                                                    scaleX,
+                                                    scaleY
+                                                );
+
+
+                                            /*
+                                             * Cropper normally
+                                             * starts at a suitable
+                                             * scale, so we only
+                                             * keep this value for
+                                             * reference.
+                                             */
+
+                                        }
+
+                                    }
+                                );
+
+                        };
 
                 };
 
@@ -1053,9 +1268,63 @@
     );
 
 
-    /*
-     * Cancel selected photo
-     */
+    /* =========================================================
+       ZOOM IN
+       ========================================================= */
+
+    zoomInPhotoBtn?.addEventListener(
+        "click",
+        function () {
+
+            if (!photoCropper) {
+                return;
+            }
+
+            photoCropper.zoom(0.1);
+
+        }
+    );
+
+
+    /* =========================================================
+       ZOOM OUT
+       ========================================================= */
+
+    zoomOutPhotoBtn?.addEventListener(
+        "click",
+        function () {
+
+            if (!photoCropper) {
+                return;
+            }
+
+            photoCropper.zoom(-0.1);
+
+        }
+    );
+
+
+    /* =========================================================
+       RESET
+       ========================================================= */
+
+    resetPhotoBtn?.addEventListener(
+        "click",
+        function () {
+
+            if (!photoCropper) {
+                return;
+            }
+
+            photoCropper.reset();
+
+        }
+    );
+
+
+    /* =========================================================
+       CANCEL
+       ========================================================= */
 
     cancelPhotoBtn?.addEventListener(
         "click",
@@ -1065,27 +1334,35 @@
 
             profilePhotoInput.value = "";
 
+
+            if (photoCropper) {
+
+                photoCropper.destroy();
+
+                photoCropper = null;
+            }
+
+
             photoUploadPanel
                 .classList
                 .add("d-none");
 
-            photoUploadPreview.innerHTML = `
-                <i class="bx bx-image"></i>
-            `;
+
+            photoCropImage.src = "";
 
         }
     );
 
 
-    /*
-     * Save photo
-     */
+    /* =========================================================
+       SAVE PHOTO
+       ========================================================= */
 
     savePhotoBtn?.addEventListener(
         "click",
         async function () {
 
-            if (!selectedPhotoFile) {
+            if (!photoCropper) {
                 return;
             }
 
@@ -1096,6 +1373,7 @@
 
             savePhotoBtn.disabled = true;
 
+
             savePhotoBtn.innerHTML = `
                 <span class="spinner-border spinner-border-sm me-1"></span>
                 @Localizer["Saving"]
@@ -1104,20 +1382,83 @@
 
             try {
 
+                /*
+                 * Create final cropped image.
+                 *
+                 * 512x512 is more than enough for
+                 * profile avatars and keeps the file
+                 * reasonably small.
+                 */
+
+                const canvas =
+                    photoCropper.getCroppedCanvas(
+                        {
+                            width: 512,
+
+                            height: 512,
+
+                            imageSmoothingEnabled: true,
+
+                            imageSmoothingQuality: "high"
+                        }
+                    );
+
+
+                if (!canvas) {
+
+                    throw new Error(
+                        "Unable to crop photo."
+                    );
+
+                }
+
+
+                /*
+                 * Convert canvas to JPEG Blob
+                 */
+
+                const blob =
+                    await new Promise(
+                        resolve => {
+
+                            canvas.toBlob(
+                                resolve,
+
+                                "image/jpeg",
+
+                                0.90
+                            );
+
+                        }
+                    );
+
+
+                if (!blob) {
+
+                    throw new Error(
+                        "Unable to process photo."
+                    );
+
+                }
+
+
+                /*
+                 * FormData
+                 */
+
                 const formData =
                     new FormData();
 
+
                 formData.append(
                     "photo",
-                    selectedPhotoFile
+                    blob,
+                    "profile.jpg"
                 );
 
 
                 /*
                  * Anti-forgery token
-                 *
-                 * If your layout/form already contains
-                 * the token, it will be used here.
                  */
 
                 const tokenElement =
@@ -1131,6 +1472,10 @@
                         ? tokenElement.value
                         : "";
 
+
+                /*
+                 * Upload
+                 */
 
                 const response =
                     await fetch(
@@ -1174,20 +1519,28 @@
 
 
                 /*
-                 * Replace current avatar
+                 * Cache busting
                  */
+
+                const cacheBustedPhotoUrl =
+                    `${result.photoUrl}?v=${Date.now()}`;
+
+                /* =================================================
+                   UPDATE PROFILE AVATAR
+                   ================================================= */
 
                 const avatar =
                     document.getElementById(
                         "profileAvatar"
                     );
 
+
                 if (avatar) {
 
                     if (avatar.tagName === "IMG") {
 
                         avatar.src =
-                            `${result.photoUrl}?v=${Date.now()}`;
+                            cacheBustedPhotoUrl;
 
                     }
                     else {
@@ -1195,17 +1548,21 @@
                         const newAvatar =
                             document.createElement("img");
 
+
                         newAvatar.id =
                             "profileAvatar";
+
 
                         newAvatar.className =
                             "profile-avatar";
 
+
                         newAvatar.alt =
                             "User avatar";
 
+
                         newAvatar.src =
-                            `${result.photoUrl}?v=${Date.now()}`;
+                            cacheBustedPhotoUrl;
 
 
                         avatar.replaceWith(
@@ -1216,53 +1573,49 @@
 
                 }
 
-                    /*
-                 * Update Navbar avatars
-                 */
-                const cacheBustedPhotoUrl =`${result.photoUrl}?v=${Date.now()}`;
 
-                const navbarAvatar =
-                    document.getElementById("navbarUserAvatar");
+                /* =================================================
+                   UPDATE NAVBAR AVATARS
+                   ================================================= */
 
-                const navbarAvatarDropdown =
-                    document.getElementById("navbarUserAvatarDropdown");
+                    const navbarAvatars =
+                        document.querySelectorAll(
+                            ".partnerly-user-avatar, .partnerly-user-header-avatar"
+                        );
+
+                    navbarAvatars.forEach(function (avatar) {
+                        avatar.src = cacheBustedPhotoUrl;
+                    });
 
 
-                if (navbarAvatar) {
+                /* =================================================
+                   RESET CROP UI
+                   ================================================= */
 
-                    navbarAvatar.src =
-                        cacheBustedPhotoUrl;
+                if (photoCropper) {
 
+                    photoCropper.destroy();
+
+                    photoCropper = null;
                 }
 
-
-                if (navbarAvatarDropdown) {
-
-                    navbarAvatarDropdown.src =
-                        cacheBustedPhotoUrl;
-
-                }
-
-                /*
-                 * Reset upload
-                 */
 
                 selectedPhotoFile = null;
 
                 profilePhotoInput.value = "";
 
+
                 photoUploadPanel
                     .classList
                     .add("d-none");
 
-                photoUploadPreview.innerHTML = `
-                    <i class="bx bx-image"></i>
-                `;
+
+                photoCropImage.src = "";
 
 
-                /*
-                 * Show success toast
-                 */
+                /* =================================================
+                   SUCCESS TOAST
+                   ================================================= */
 
                 showPhotoToast(
                     result.message ||
@@ -1297,25 +1650,36 @@
     );
 
 
-    /*
-     * Photo success toast
-     */
+    /* =========================================================
+       PHOTO SUCCESS TOAST
+       ========================================================= */
 
-        function showPhotoToast(message) {
+    function showPhotoToast(message) {
 
         const toastEl =
-            document.getElementById("photoToast");
+            document.getElementById(
+                "photoToast"
+            );
+
 
         if (!toastEl) {
             return;
         }
 
+
         const toastBody =
-            toastEl.querySelector(".toast-body");
+            toastEl.querySelector(
+                ".toast-body"
+            );
+
 
         if (toastBody && message) {
-            toastBody.textContent = message;
+
+            toastBody.textContent =
+                message;
+
         }
+
 
         const toast =
             new bootstrap.Toast(
@@ -1325,7 +1689,9 @@
                 }
             );
 
+
         toast.show();
+
     }
 
 
@@ -1352,6 +1718,7 @@
                     document.getElementById(
                         "referralToast"
                     );
+
 
                 if (!toastEl) {
                     return;
@@ -1382,5 +1749,3 @@
     }
 
 </script>
-
-

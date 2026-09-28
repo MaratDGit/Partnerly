@@ -58,6 +58,19 @@ body {
 
 
 /* =========================================================
+   MAIN LAYOUT
+   ========================================================= */
+
+.partnerly-layout-main {
+    min-width: 0;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    flex: 1 1 auto;
+}
+
+
+/* =========================================================
    MAIN CONTENT
    ========================================================= */
 
@@ -93,6 +106,7 @@ body {
    ========================================================= */
 
 .partnerly-sidebar-header {
+    position: relative;
     height: var(--partnerly-navbar-height);
     display: flex;
     align-items: center;
@@ -101,6 +115,10 @@ body {
     border-bottom: 1px solid rgba(231, 233, 237, 0.75);
 }
 
+
+/* =========================================================
+   BRAND
+   ========================================================= */
 
 .partnerly-brand {
     min-width: 0;
@@ -147,7 +165,7 @@ body {
 
 
 /* =========================================================
-   SIDEBAR TOGGLE
+   DESKTOP SIDEBAR TOGGLE
    ========================================================= */
 
 .partnerly-sidebar-toggle {
@@ -227,29 +245,105 @@ body {
 
 
 /* =========================================================
-   MENU SECTION
+   COLLAPSIBLE SECTION GROUP
+   ========================================================= */
+
+.partnerly-menu-section-group {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+
+/* =========================================================
+   MENU SECTION HEADER
    ========================================================= */
 
 .partnerly-menu-section {
+    width: 100%;
     height: 34px;
     display: flex;
     align-items: center;
+    justify-content: space-between;
     padding: 0 12px;
     margin-top: 9px;
     margin-bottom: 3px;
+    border: 0;
+    background: transparent;
     color: var(--partnerly-muted);
+    font-family: inherit;
     font-size: 0.68rem;
     font-weight: 700;
     letter-spacing: 0.7px;
     text-transform: uppercase;
     white-space: nowrap;
-    transition: opacity .2s ease, height .25s ease, margin .25s ease, padding .25s ease;
+    text-align: left;
+    cursor: pointer;
+    transition: color .2s ease, background-color .2s ease, opacity .2s ease, height .25s ease, margin .25s ease, padding .25s ease;
 }
 
 
-    .partnerly-menu-section:first-child {
-        margin-top: 0;
-    }
+.partnerly-menu-section-group:first-child
+.partnerly-menu-section {
+    margin-top: 0;
+}
+
+
+.partnerly-menu-section:hover {
+    color: var(--partnerly-primary);
+}
+
+
+/* =========================================================
+   SECTION ARROW
+   ========================================================= */
+
+.partnerly-menu-section-arrow {
+    flex: 0 0 auto;
+    margin-left: 8px;
+    font-size: 16px;
+    transition: transform .25s ease, color .2s ease;
+}
+
+
+.partnerly-menu-section-toggle[aria-expanded="false"]
+.partnerly-menu-section-arrow {
+    transform: rotate(-90deg);
+}
+
+
+/* =========================================================
+   SECTION CONTENT
+   ========================================================= */
+
+.partnerly-menu-section-content {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: block;
+    max-height: 1000px;
+    overflow: hidden;
+    opacity: 1;
+    transition: max-height .3s ease, opacity .2s ease;
+}
+
+
+.partnerly-menu-section-group.is-collapsed
+.partnerly-menu-section-content {
+    max-height: 0;
+    opacity: 0;
+}
+
+
+/* =========================================================
+   SECTION BUTTON FOCUS
+   ========================================================= */
+
+.partnerly-menu-section:focus-visible {
+    outline: 2px solid rgba(105, 108, 255, 0.30);
+    outline-offset: 2px;
+    border-radius: 7px;
+}
 
 
 /* =========================================================
@@ -259,6 +353,7 @@ body {
 .partnerly-menu-item {
     position: relative;
     margin: 2px 0;
+    list-style: none;
 }
 
 
@@ -360,7 +455,7 @@ body {
 
 
 /* =========================================================
-   BADGE
+   MENU BADGE
    ========================================================= */
 
 .partnerly-menu-badge {
@@ -385,11 +480,12 @@ body {
     margin-left: auto;
     font-size: 16px;
     color: var(--partnerly-muted);
-    transition: opacity .2s ease, transform .2s ease;
+    transition: opacity .2s ease, transform .2s ease, color .2s ease;
 }
 
 
-.partnerly-menu-link:hover .partnerly-menu-external {
+.partnerly-menu-link:hover
+.partnerly-menu-external {
     color: var(--partnerly-primary);
     transform: translate(1px, -1px);
 }
@@ -442,36 +538,50 @@ body {
    COLLAPSED DESKTOP SIDEBAR
    ========================================================= */
 
-body.partnerly-sidebar-collapsed .partnerly-sidebar {
+body.partnerly-sidebar-collapsed
+.partnerly-sidebar {
     width: var(--partnerly-sidebar-collapsed-width);
 }
 
 
-body.partnerly-sidebar-collapsed .partnerly-layout-page {
+body.partnerly-sidebar-collapsed
+.partnerly-layout-page {
     margin-left: var(--partnerly-sidebar-collapsed-width);
 }
 
 
-body.partnerly-sidebar-collapsed .partnerly-brand-name {
+/* ---------------------------------------------------------
+   Brand
+   --------------------------------------------------------- */
+
+body.partnerly-sidebar-collapsed
+.partnerly-brand-name {
     width: 0;
     opacity: 0;
     margin: 0;
 }
 
 
-body.partnerly-sidebar-collapsed .partnerly-sidebar-header {
+body.partnerly-sidebar-collapsed
+.partnerly-sidebar-header {
     justify-content: center;
     padding-left: 12px;
     padding-right: 12px;
 }
 
 
-body.partnerly-sidebar-collapsed .partnerly-brand {
+body.partnerly-sidebar-collapsed
+.partnerly-brand {
     justify-content: center;
 }
 
 
-body.partnerly-sidebar-collapsed .partnerly-sidebar-toggle {
+/* ---------------------------------------------------------
+   Desktop toggle
+   --------------------------------------------------------- */
+
+body.partnerly-sidebar-collapsed
+.partnerly-sidebar-toggle {
     position: absolute;
     right: -17px;
     background: #fff;
@@ -480,12 +590,18 @@ body.partnerly-sidebar-collapsed .partnerly-sidebar-toggle {
 }
 
 
-    body.partnerly-sidebar-collapsed .partnerly-sidebar-toggle i {
+    body.partnerly-sidebar-collapsed
+    .partnerly-sidebar-toggle i {
         transform: rotate(180deg);
     }
 
 
-body.partnerly-sidebar-collapsed .partnerly-menu-section {
+/* ---------------------------------------------------------
+   Section headers
+   --------------------------------------------------------- */
+
+body.partnerly-sidebar-collapsed
+.partnerly-menu-section {
     height: 0;
     opacity: 0;
     margin-top: 0;
@@ -496,21 +612,45 @@ body.partnerly-sidebar-collapsed .partnerly-menu-section {
 }
 
 
-body.partnerly-sidebar-collapsed .partnerly-menu-link {
+/* ---------------------------------------------------------
+   Collapsible sections in collapsed sidebar
+   --------------------------------------------------------- */
+
+body.partnerly-sidebar-collapsed
+.partnerly-menu-section-content {
+    max-height: 1000px !important;
+    opacity: 1 !important;
+}
+
+
+/* ---------------------------------------------------------
+   Menu links
+   --------------------------------------------------------- */
+
+body.partnerly-sidebar-collapsed
+.partnerly-menu-link {
     justify-content: center;
     padding-left: 8px;
     padding-right: 8px;
 }
 
 
-body.partnerly-sidebar-collapsed .partnerly-menu-icon {
+body.partnerly-sidebar-collapsed
+.partnerly-menu-icon {
     margin: 0;
 }
 
 
-body.partnerly-sidebar-collapsed .partnerly-menu-text,
-body.partnerly-sidebar-collapsed .partnerly-menu-badge,
-body.partnerly-sidebar-collapsed .partnerly-menu-external {
+/* ---------------------------------------------------------
+   Hide text / badges / external icons
+   --------------------------------------------------------- */
+
+body.partnerly-sidebar-collapsed
+.partnerly-menu-text,
+body.partnerly-sidebar-collapsed
+.partnerly-menu-badge,
+body.partnerly-sidebar-collapsed
+.partnerly-menu-external {
     width: 0;
     opacity: 0;
     margin: 0;
@@ -518,12 +658,18 @@ body.partnerly-sidebar-collapsed .partnerly-menu-external {
 }
 
 
-body.partnerly-sidebar-collapsed .partnerly-sidebar-footer-content {
+/* ---------------------------------------------------------
+   Footer
+   --------------------------------------------------------- */
+
+body.partnerly-sidebar-collapsed
+.partnerly-sidebar-footer-content {
     justify-content: center;
 }
 
 
-body.partnerly-sidebar-collapsed .partnerly-sidebar-footer-text {
+body.partnerly-sidebar-collapsed
+.partnerly-sidebar-footer-text {
     display: none;
 }
 
@@ -654,23 +800,45 @@ body.partnerly-sidebar-collapsed .partnerly-sidebar-footer-text {
 
 .partnerly-sidebar-mobile-close {
     display: none;
-    width: 38px;
-    height: 38px;
-    border: 0;
-    background: transparent;
-    color: var(--partnerly-text);
-    border-radius: 10px;
+    position: absolute;
+    top: 18px;
+    right: 16px;
+    width: 36px;
+    height: 36px;
     align-items: center;
     justify-content: center;
-    font-size: 24px;
+    padding: 0;
+    margin: 0;
+    border: 1px solid #e7e9ed;
+    border-radius: 10px;
+    background: #fff;
+    color: #697a8d;
+    font-size: 20px;
+    line-height: 1;
     cursor: pointer;
-    transition: background-color .2s ease, color .2s ease;
+    box-shadow: 0 2px 8px rgba(50, 71, 92, 0.08);
+    transition: background-color .2s ease, border-color .2s ease, color .2s ease, transform .2s ease;
 }
 
 
     .partnerly-sidebar-mobile-close:hover {
         background: var(--partnerly-primary-light);
+        border-color: rgba(105, 108, 255, .18);
         color: var(--partnerly-primary);
+    }
+
+
+    .partnerly-sidebar-mobile-close:active {
+        transform: scale(.94);
+    }
+
+
+    .partnerly-sidebar-mobile-close i {
+        display: block;
+        width: 20px;
+        height: 20px;
+        line-height: 20px;
+        text-align: center;
     }
 
 
@@ -689,9 +857,9 @@ body.partnerly-mobile-menu-open {
 
 @media (max-width: 1199.98px) {
 
-    /* ---------------------------------------------
+    /* -----------------------------------------------------
        Sidebar
-       --------------------------------------------- */
+       ----------------------------------------------------- */
 
     .partnerly-sidebar {
         width: var(--partnerly-sidebar-width);
@@ -715,67 +883,88 @@ body.partnerly-mobile-menu-open {
     }
 
 
-    /* ---------------------------------------------
+    /* -----------------------------------------------------
        Main layout
-       --------------------------------------------- */
+       ----------------------------------------------------- */
 
-   /* .partnerly-layout-page {
+    .partnerly-layout-page {
         margin-left: 0 !important;
         min-height: 100vh;
-    }*/
+    }
 
 
-    body.partnerly-sidebar-collapsed .partnerly-sidebar {
+    /* -----------------------------------------------------
+       Collapsed desktop state must not affect mobile
+       ----------------------------------------------------- */
+
+    body.partnerly-sidebar-collapsed
+    .partnerly-sidebar {
         width: var(--partnerly-sidebar-width);
         transform: translateX(-100%);
     }
 
 
-        body.partnerly-sidebar-collapsed .partnerly-sidebar.mobile-open {
+        body.partnerly-sidebar-collapsed
+        .partnerly-sidebar.mobile-open {
             transform: translateX(0);
         }
 
 
-    body.partnerly-sidebar-collapsed .partnerly-layout-page {
+    body.partnerly-sidebar-collapsed
+    .partnerly-layout-page {
         margin-left: 0 !important;
     }
 
 
-    /* ---------------------------------------------
+    /* -----------------------------------------------------
        Restore sidebar content on mobile
-       --------------------------------------------- */
+       ----------------------------------------------------- */
 
-    body.partnerly-sidebar-collapsed .partnerly-brand-name,
-    body.partnerly-sidebar-collapsed .partnerly-menu-text,
-    body.partnerly-sidebar-collapsed .partnerly-menu-badge,
-    body.partnerly-sidebar-collapsed .partnerly-menu-external,
-    body.partnerly-sidebar-collapsed .partnerly-sidebar-footer-text {
+    body.partnerly-sidebar-collapsed
+    .partnerly-brand-name,
+    body.partnerly-sidebar-collapsed
+    .partnerly-menu-text,
+    body.partnerly-sidebar-collapsed
+    .partnerly-menu-badge,
+    body.partnerly-sidebar-collapsed
+    .partnerly-menu-external,
+    body.partnerly-sidebar-collapsed
+    .partnerly-sidebar-footer-text {
         width: auto;
         opacity: 1;
         overflow: visible;
     }
 
 
-    body.partnerly-sidebar-collapsed .partnerly-sidebar-header {
+    body.partnerly-sidebar-collapsed
+    .partnerly-sidebar-header {
         justify-content: flex-start;
         padding-left: 16px;
         padding-right: 16px;
     }
 
 
-    body.partnerly-sidebar-collapsed .partnerly-brand {
+    body.partnerly-sidebar-collapsed
+    .partnerly-brand {
         justify-content: flex-start;
     }
 
 
-    body.partnerly-sidebar-collapsed .partnerly-sidebar-toggle {
+    body.partnerly-sidebar-collapsed
+    .partnerly-sidebar-toggle {
         position: static;
         border: 0;
         box-shadow: none;
     }
 
 
-    body.partnerly-sidebar-collapsed .partnerly-menu-section {
+    /* -----------------------------------------------------
+       Restore section headers on mobile
+       ----------------------------------------------------- */
+
+    body.partnerly-sidebar-collapsed
+    .partnerly-menu-section {
+        width: 100%;
         height: 34px;
         opacity: 1;
         margin-top: 9px;
@@ -785,26 +974,50 @@ body.partnerly-mobile-menu-open {
     }
 
 
-    body.partnerly-sidebar-collapsed .partnerly-menu-link {
+    body.partnerly-sidebar-collapsed
+    .partnerly-menu-section-group:first-child
+    .partnerly-menu-section {
+        margin-top: 0;
+    }
+
+
+    body.partnerly-sidebar-collapsed
+    .partnerly-menu-section-arrow {
+        display: block;
+    }
+
+
+    /* -----------------------------------------------------
+       Restore menu links
+       ----------------------------------------------------- */
+
+    body.partnerly-sidebar-collapsed
+    .partnerly-menu-link {
         justify-content: flex-start;
         padding-left: 11px;
         padding-right: 11px;
     }
 
 
-    body.partnerly-sidebar-collapsed .partnerly-menu-icon {
+    body.partnerly-sidebar-collapsed
+    .partnerly-menu-icon {
         margin: 0;
     }
 
 
-    body.partnerly-sidebar-collapsed .partnerly-sidebar-footer-content {
+    /* -----------------------------------------------------
+       Footer
+       ----------------------------------------------------- */
+
+    body.partnerly-sidebar-collapsed
+    .partnerly-sidebar-footer-content {
         justify-content: flex-start;
     }
 
 
-    /* ---------------------------------------------
+    /* -----------------------------------------------------
        Navbar
-       --------------------------------------------- */
+       ----------------------------------------------------- */
 
     .partnerly-navbar {
         min-height: 64px;
@@ -815,7 +1028,7 @@ body.partnerly-mobile-menu-open {
 
 
 /* =========================================================
-   SMALL MOBILE
+   MOBILE FOOTER
    ========================================================= */
 
 @media (max-width: 767.98px) {
@@ -842,6 +1055,10 @@ body.partnerly-mobile-menu-open {
     }
 }
 
+
+/* =========================================================
+   SMALL MOBILE
+   ========================================================= */
 
 @media (max-width: 575.98px) {
 
@@ -875,34 +1092,10 @@ body.partnerly-mobile-menu-open {
     .partnerly-footer-links {
         gap: 12px;
     }
-}
-
-/* =========================================================
-   MAIN PAGE AREA
-   ========================================================= */
-
-.partnerly-layout-main {
-    min-width: 0;
-    min-height: 100vh;
-    display: flex;
-    flex-direction: column;
-    flex: 1 1 auto;
-}
 
 
-/* =========================================================
-   CONTENT
-   ========================================================= */
-
-.partnerly-layout-content {
-    flex: 1 0 auto;
-    min-width: 0;
-    width: 100%;
-}
-
-@media (max-width: 1199.98px) {
-
-    .partnerly-layout-page {
-        margin-left: 0 !important;
+    .partnerly-sidebar-mobile-close {
+        top: 14px;
+        right: 12px;
     }
 }

@@ -1288,4 +1288,13 @@
   <data name="Youraccountisready" xml:space="preserve">
     <value>Ваш аккаунт готов</value>
   </data>
+  <data name="Main" xml:space="preserve">
+    <value>Основной</value>
+  </data>
+  <data name="Changephoto" xml:space="preserve">
+    <value>Изменить фото</value>
+  </data>
+  <data name="Moveandresizeyourphoto" xml:space="preserve">
+    <value>Переместите и измените размер фотографии</value>
+  </data>
 </root>

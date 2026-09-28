@@ -1,7 +1,7 @@
-﻿
-/* =========================================================
+﻿/* =========================================================
            PROFILE PAGE
            ========================================================= */
+
 .profile-page {
     padding-bottom: 40px;
 }
@@ -24,7 +24,7 @@
     position: relative;
     height: 105px;
     overflow: hidden;
-    background: linear-gradient( 135deg, rgba(105, 108, 255, .95), rgba(105, 108, 255, .65) );
+    background: linear-gradient(135deg, rgba(105, 108, 255, .95), rgba(105, 108, 255, .65));
 }
 
 
@@ -103,8 +103,8 @@
 
 
 /*
-         * Camera overlay
-         */
+ * Camera overlay
+ */
 
 .profile-avatar-camera {
     position: absolute;
@@ -141,16 +141,245 @@
            ========================================================= */
 
 .photo-upload-panel {
-    display: flex;
-    align-items: center;
-    gap: 15px;
     margin: 0 28px 22px;
-    padding: 13px 15px;
+    padding: 20px;
     border: 1px solid rgba(105, 108, 255, .16);
-    border-radius: 12px;
-    background: rgba(105, 108, 255, .04);
+    border-radius: 14px;
+    background: rgba(105, 108, 255, .035);
+    box-shadow: 0 3px 12px rgba(67, 89, 113, .04);
 }
 
+
+/* =========================================================
+           PHOTO UPLOAD HEADER
+           ========================================================= */
+
+.photo-upload-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    margin-bottom: 18px;
+}
+
+
+    .photo-upload-header > div {
+        display: flex;
+        flex-direction: column;
+        gap: 3px;
+        min-width: 0;
+    }
+
+
+    .photo-upload-header strong {
+        color: #233446;
+        font-size: 14px;
+        font-weight: 600;
+    }
+
+
+    .photo-upload-header span {
+        color: #8592a3;
+        font-size: 11px;
+    }
+
+
+/* =========================================================
+           PHOTO UPLOAD CLOSE
+           ========================================================= */
+
+.photo-upload-close {
+    width: 36px;
+    height: 36px;
+    padding: 0;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    border: 1px solid rgba(67, 89, 113, .10);
+    border-radius: 10px;
+    background: #fff;
+    color: #697a8d;
+    font-size: 20px;
+    cursor: pointer;
+    box-shadow: 0 2px 7px rgba(67, 89, 113, .06);
+    transition: background-color .2s ease, border-color .2s ease, color .2s ease, transform .2s ease;
+}
+
+
+    .photo-upload-close:hover {
+        background: rgba(105, 108, 255, .08);
+        border-color: rgba(105, 108, 255, .18);
+        color: #696cff;
+    }
+
+
+    .photo-upload-close:active {
+        transform: scale(.94);
+    }
+
+
+/* =========================================================
+           PHOTO CROP CONTAINER
+           ========================================================= */
+
+.photo-crop-container {
+    position: relative;
+    width: 100%;
+    max-width: 520px;
+    height: 360px;
+    margin: 0 auto;
+    overflow: hidden;
+    border-radius: 14px;
+    background: #20202a;
+    box-shadow: inset 0 0 0 1px rgba(255, 255, 255, .04), 0 4px 14px rgba(67, 89, 113, .10);
+}
+
+
+    /*
+ * Original image before Cropper.js initialization.
+ */
+
+    .photo-crop-container > img {
+        display: block;
+        max-width: 100%;
+    }
+
+
+    /* =========================================================
+           CROPPER.JS CUSTOMIZATION
+           ========================================================= */
+
+    .photo-crop-container .cropper-container {
+        width: 100%;
+        height: 100%;
+    }
+
+
+    .photo-crop-container .cropper-bg {
+        background-image: none;
+        background-color: #20202a;
+    }
+
+
+    /*
+ * Dark area outside crop.
+ */
+
+    .photo-crop-container .cropper-modal {
+        background-color: #000;
+        opacity: .62;
+    }
+
+
+    /*
+ * Round avatar crop area.
+ */
+
+    .photo-crop-container .cropper-view-box {
+        border-radius: 50%;
+        outline: 0;
+        box-shadow: 0 0 0 1px rgba(255, 255, 255, .75);
+    }
+
+
+    .photo-crop-container .cropper-face {
+        background-color: transparent;
+    }
+
+
+    /*
+ * Hide guides because they are not useful
+ * for a profile avatar.
+ */
+
+    .photo-crop-container .cropper-dashed {
+        display: none;
+    }
+
+
+    /*
+ * Hide center line.
+ */
+
+    .photo-crop-container .cropper-center {
+        display: none;
+    }
+
+
+    /*
+ * Keep crop box fixed.
+ */
+
+    .photo-crop-container .cropper-crop-box {
+        outline: none;
+    }
+
+
+    .photo-crop-container .cropper-line,
+    .photo-crop-container .cropper-point {
+        display: none;
+    }
+
+
+/* =========================================================
+           PHOTO CROP CONTROLS
+           ========================================================= */
+
+.photo-crop-controls {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    margin-top: 16px;
+}
+
+
+    .photo-crop-controls .btn {
+        min-width: 42px;
+        height: 38px;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 9px;
+    }
+
+
+        .photo-crop-controls .btn i {
+            font-size: 17px;
+        }
+
+
+    .photo-crop-controls #resetPhotoBtn {
+        min-width: 88px;
+    }
+
+
+/* =========================================================
+           PHOTO UPLOAD FOOTER
+           ========================================================= */
+
+.photo-upload-footer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    margin-top: 18px;
+}
+
+
+.photo-upload-format {
+    color: #8592a3;
+    font-size: 11px;
+}
+
+
+/* =========================================================
+           OLD PHOTO PREVIEW
+           
+           Kept intentionally so existing markup/classes
+           don't break if used somewhere else.
+           ========================================================= */
 
 .photo-upload-preview {
     flex-shrink: 0;
@@ -973,6 +1202,8 @@
     .profile-referral-btn {
         margin-top: 2px;
     }
+
+
     /* Team */
 
     .team-member-list-header,
@@ -987,6 +1218,10 @@
         }
 }
 
+
+/* =========================================================
+           TABLET / MOBILE
+           ========================================================= */
 
 @media (max-width: 767.98px) {
 
@@ -1044,11 +1279,56 @@
     }
 
 
+    /* =====================================================
+       PHOTO CROP
+       ===================================================== */
+
     .photo-upload-panel {
-        align-items: flex-start;
         margin: 0 18px 20px;
+        padding: 16px;
     }
 
+
+    .photo-upload-header {
+        margin-bottom: 14px;
+    }
+
+
+    .photo-crop-container {
+        height: 320px;
+        border-radius: 12px;
+    }
+
+
+    .photo-upload-footer {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+
+        .photo-upload-footer .btn {
+            width: 100%;
+        }
+
+
+    .photo-upload-format {
+        text-align: center;
+    }
+
+
+    .photo-crop-controls {
+        margin-top: 14px;
+    }
+
+
+        .photo-crop-controls .btn {
+            height: 38px;
+        }
+
+
+    /* =====================================================
+       OLD PHOTO PANEL SUPPORT
+       ===================================================== */
 
     .photo-upload-content {
         flex-direction: column;
@@ -1079,6 +1359,8 @@
     .profile-empty-state {
         min-height: 250px;
     }
+
+
     /* Team */
 
     .team-members-scroll {
@@ -1133,6 +1415,10 @@
 }
 
 
+/* =========================================================
+           MOBILE
+           ========================================================= */
+
 @media (max-width: 575.98px) {
 
     .profile-tabs-wrapper {
@@ -1155,6 +1441,67 @@
             width: 100%;
             padding: 9px 10px;
         }
+
+
+    /* =====================================================
+       PHOTO CROP
+       ===================================================== */
+
+    .photo-upload-panel {
+        margin: 0 12px 18px;
+        padding: 14px;
+    }
+
+
+    .photo-upload-header {
+        align-items: flex-start;
+    }
+
+
+        .photo-upload-header strong {
+            font-size: 13px;
+        }
+
+
+        .photo-upload-header span {
+            font-size: 10px;
+        }
+
+
+    .photo-upload-close {
+        width: 34px;
+        height: 34px;
+    }
+
+
+    .photo-crop-container {
+        height: 290px;
+        border-radius: 11px;
+    }
+
+
+    .photo-crop-controls {
+        gap: 6px;
+    }
+
+
+        .photo-crop-controls .btn {
+            height: 36px;
+            min-width: 40px;
+            padding: 0 10px;
+        }
+
+
+        .photo-crop-controls #resetPhotoBtn {
+            min-width: 82px;
+        }
+
+
+    .photo-upload-format {
+        font-size: 10px;
+    }
+
+
     /* Team */
 
     .team-stat-card {
@@ -1186,6 +1533,10 @@
 }
 
 
+/* =========================================================
+           SMALL MOBILE
+           ========================================================= */
+
 @media (max-width: 480px) {
 
     .profile-name {
@@ -1213,6 +1564,33 @@
         width: 34px;
         height: 34px;
     }
+
+
+    /* =====================================================
+       PHOTO CROP
+       ===================================================== */
+
+    .photo-upload-panel {
+        margin: 0 10px 16px;
+    }
+
+
+    .photo-crop-container {
+        height: 260px;
+    }
+
+
+    .photo-crop-controls .btn {
+        min-width: 38px;
+        padding: 0 9px;
+    }
+
+
+    .photo-crop-controls #resetPhotoBtn {
+        min-width: 76px;
+    }
+
+
     /* Team */
 
     .team-member-row:not(.team-member-list-header) {
@@ -1241,4 +1619,3 @@
         font-size: 11px;
     }
 }
-
