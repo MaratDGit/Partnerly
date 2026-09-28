@@ -1,4 +1,4 @@
-﻿@await Html.PartialAsync("Sections/_Variables")
+﻿@* @await Html.PartialAsync("Sections/_Variables")
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -38,7 +38,6 @@
 
             <nav class="nav-links">
 
-                @* <a href="#pricing">@Localizer["Rates"]</a> *@
                 <a href="#videos">@Localizer["Educationalvideos"]</a>
 
                 <!-- Language -->
@@ -156,7 +155,368 @@
    @await RenderSectionAsync("Scripts", required: false)
 </body>
 </html>
+ *@
+
+@using System.Globalization
+
+@await Html.PartialAsync("Sections/_Variables")
+
+<!DOCTYPE html>
+<html lang="@CultureInfo.CurrentUICulture.TwoLetterISOLanguageName">
+
+<head>
+    <meta charset="utf-8" />
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0" />
+
+    <meta name="theme-color"
+          content="#696cff" />
+
+    <title>
+        @ViewData["Title"] - @TempData.Peek("appName")
+    </title>
+
+    <!-- Bootstrap -->
+    <link rel="stylesheet"
+          href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+
+    <!-- Landing -->
+    <link rel="stylesheet"
+          href="~/assets/css/landing.css"
+          asp-append-version="true" />
+
+    <!-- Boxicons -->
+    <link rel="stylesheet"
+          href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" />
+
+    <!-- Favicon -->
+    <link rel="icon"
+          type="image/png"
+          href="~/favicon.png"
+          asp-append-version="true" />
+</head>
+
+
+<body>
+
+    @{
+        var currentCulture =
+        CultureInfo.CurrentUICulture.TwoLetterISOLanguageName;
+
+        var currentFlag = currentCulture switch
+        {
+            "en" => "gb",
+            "ru" => "ru",
+            "hy" => "am",
+            _ => "gb"
+        };
+    }
+
+    <!-- =========================================================
+         HEADER
+         ========================================================= -->
+
+    <header class="landing-header">
+
+        <div class="container">
+
+            <!-- Logo -->
+
+            <div class="logo">
+
+                <a asp-controller="Home"
+                   asp-action="Index"
+                   class="app-brand-link gap-2">
+
+                    <span class="app-brand-logo demo">
+
+                        <img src="~/favicon.png"
+                             alt="@TempData.Peek("appName")"
+                             width="34"
+                             height="34"
+                             class="me-2" />
+
+                    </span>
+
+                    <span>
+                        @TempData.Peek("appName")
+                    </span>
+
+                </a>
+
+            </div>
+
+
+            <!-- Navigation -->
+
+            <nav class="nav-links">
+
+                <!-- Educational videos -->
+
+                <a href="#videos">
+                    @Localizer["Educationalvideos"]
+                </a>
+
+
+                <!-- Language -->
+
+                <div class="landing-language">
+
+                    <button type="button"
+                            class="landing-language-toggle"
+                            aria-label="Language"
+                            onclick="this.parentElement.classList.toggle('open')">
+
+                        <img src="https://flagcdn.com/24x18/@(currentFlag).png"
+                             alt="@currentCulture"
+                             width="24"
+                             height="18" />
+
+                    </button>
+
+
+                    <div class="landing-language-menu">
+
+                        <!-- English -->
+
+                        <form asp-controller="Language"
+                              asp-action="SetLanguage"
+                              method="post">
+
+                            <input type="hidden"
+                                   name="returnUrl"
+                                   value="@Context.Request.Path@Context.Request.QueryString" />
+
+                            <button type="submit"
+                                    name="culture"
+                                    value="en">
+
+                                <img src="https://flagcdn.com/24x18/gb.png"
+                                     width="24"
+                                     height="18"
+                                     alt="English" />
+
+                                <span>
+                                    English
+                                </span>
+
+                            </button>
+
+                        </form>
+
+
+                        <!-- Russian -->
+
+                        <form asp-controller="Language"
+                              asp-action="SetLanguage"
+                              method="post">
+
+                            <input type="hidden"
+                                   name="returnUrl"
+                                   value="@Context.Request.Path@Context.Request.QueryString" />
+
+                            <button type="submit"
+                                    name="culture"
+                                    value="ru">
+
+                                <img src="https://flagcdn.com/24x18/ru.png"
+                                     width="24"
+                                     height="18"
+                                     alt="Русский" />
+
+                                <span>
+                                    Русский
+                                </span>
+
+                            </button>
+
+                        </form>
+
+
+                        <!-- Armenian -->
+
+                        <form asp-controller="Language"
+                              asp-action="SetLanguage"
+                              method="post">
+
+                            <input type="hidden"
+                                   name="returnUrl"
+                                   value="@Context.Request.Path@Context.Request.QueryString" />
+
+                            <button type="submit"
+                                    name="culture"
+                                    value="hy">
+
+                                <img src="https://flagcdn.com/24x18/am.png"
+                                     width="24"
+                                     height="18"
+                                     alt="Հայերեն" />
+
+                                <span>
+                                    Հայերեն
+                                </span>
+
+                            </button>
+
+                        </form>
+
+                    </div>
+
+                </div>
+
+
+                <!-- Login -->
+
+                <a asp-controller="Account"
+                   asp-action="Login"
+                   class="btn-outline">
+
+                    @Localizer["Login"]
+
+                </a>
+
+            </nav>
+
+
+            <!-- Mobile menu -->
+
+            <button type="button"
+                    class="menu-toggle"
+                    aria-label="Open menu"
+                    onclick="document.body.classList.toggle('menu-open')">
+
+                <i class="bx bx-menu"></i>
+
+            </button>
+
+        </div>
+
+    </header>
 
 
 
+    <!-- =========================================================
+         MAIN CONTENT
+         ========================================================= -->
 
+    <main role="main">
+
+        @RenderBody()
+
+    </main>
+
+
+
+    <!-- =========================================================
+         FOOTER
+         ========================================================= -->
+
+    <footer class="landing-footer">
+
+        <div class="container">
+
+            <p>
+                &copy;
+                <span id="currentYear"></span>
+                @TempData.Peek("appName").
+                @Localizer["Allrightsreserved"].
+            </p>
+
+
+            <nav>
+
+                <a asp-controller="Home"
+                   asp-action="Privacy">
+
+                    @Localizer["Policy"]
+
+                </a>
+
+            </nav>
+
+        </div>
+
+    </footer>
+
+
+
+    <!-- =========================================================
+         SCRIPTS
+         ========================================================= -->
+
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+
+    <script src="~/js/site.js"
+            asp-append-version="true"></script>
+
+
+    <script>
+
+        /*
+         * Current year
+         */
+
+        document.getElementById("currentYear").textContent =
+            new Date().getFullYear();
+
+
+        /*
+         * Close language dropdown when clicking outside
+         */
+
+        document.addEventListener("click", function (event) {
+
+            const language = document.querySelector(".landing-language");
+
+            if (!language) {
+                return;
+            }
+
+            if (!language.contains(event.target)) {
+                language.classList.remove("open");
+            }
+
+        });
+
+
+        /*
+         * Close mobile menu after clicking a navigation link
+         */
+
+        document.querySelectorAll(".nav-links a").forEach(function (link) {
+
+            link.addEventListener("click", function () {
+
+                document.body.classList.remove("menu-open");
+
+            });
+
+        });
+
+
+        /*
+         * Close mobile menu after selecting a language
+         */
+
+        document.querySelectorAll(".landing-language-menu button")
+            .forEach(function (button) {
+
+                button.addEventListener("click", function () {
+
+                    document.body.classList.remove("menu-open");
+
+                });
+
+            });
+
+    </script>
+
+
+    @await RenderSectionAsync("Scripts", required: false)
+
+</body>
+
+</html>

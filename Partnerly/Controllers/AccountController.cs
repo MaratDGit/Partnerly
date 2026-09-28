@@ -25,9 +25,10 @@ namespace Partnerly.Controllers
         private readonly IEmailSender _emailSender;
         private readonly IEmailConfirmationTokenService _tokenService;
         private readonly IEventBus _eventBus;
+        private readonly IWebHostEnvironment _environment;
         #endregion
         #region Constructor
-        public AccountController(IConfiguration config, ILogger<AccountController> logger, IUserService userService, ILogService logService, ICurrentUserService currentUser, IEmailSender emailSender, IEmailConfirmationTokenService tokenService, IEventBus eventBus)
+        public AccountController(IConfiguration config, ILogger<AccountController> logger, IUserService userService, ILogService logService, ICurrentUserService currentUser, IEmailSender emailSender, IEmailConfirmationTokenService tokenService, IEventBus eventBus, IWebHostEnvironment environment)
         {
             _config = config;
             _logger = logger;
@@ -37,6 +38,7 @@ namespace Partnerly.Controllers
             _emailSender = emailSender;
             _tokenService = tokenService;
             _eventBus = eventBus;
+            _environment = environment;
         }
         #endregion
 
@@ -54,11 +56,11 @@ namespace Partnerly.Controllers
 
             var model = new RegisterViewModel();
             if (reff != null)
-            { 
+            {
                 model.ReferrerCode = reff;
                 model.FromReferrerLink = true;
             }
-            
+
             return View(model);
         }
 
@@ -85,7 +87,7 @@ namespace Partnerly.Controllers
                 return View(model);
             }
 
-            
+
             if (user.Role == null || user.IsBlocked == true)
             {
                 ModelState.AddModelError("Password", ErrorMessages.UserAccessDenied);
@@ -461,7 +463,7 @@ namespace Partnerly.Controllers
             {
                 return RedirectToAction(nameof(Login));
             }
-            
+
             await SignInUserAsync(user, true);
 
             if (string.IsNullOrEmpty(user.GoogleId))
@@ -507,7 +509,7 @@ namespace Partnerly.Controllers
             };
 
             await _userService.CreateUserAsync(user);
-       
+
             var createdUser = await _userService.GetUserByEmailAsync(model.Email);
 
             if (createdUser == null)
@@ -578,6 +580,102 @@ namespace Partnerly.Controllers
                 CookieAuthenticationDefaults.AuthenticationScheme,
                 new ClaimsPrincipal(claimsIdentity),
                 authProperties);
+        }
+    
+
+    [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> UploadPhoto(IFormFile photo)
+        {
+            if (photo == null || photo.Length == 0)
+            {
+                return BadRequest(new
+                {
+                    success = false,
+                    message = ErrorMessages.Photowasnotselected
+                });
+            }
+
+            var allowedTypes = new[]
+            {
+                "image/jpeg",
+                "image/png",
+                "image/webp"
+            };
+
+            if (!allowedTypes.Contains(photo.ContentType))
+            {
+                return BadRequest(new
+                {
+                    success = false,
+                    message = ErrorMessages.Invalidimageformat
+                });
+            }
+
+            const int maxSizeMB = 5;
+            const long maxFileSize = maxSizeMB * 1024 * 1024;
+            
+            if (photo.Length > maxFileSize)
+            {
+                return BadRequest(new
+                {
+                    success = false,
+                    message = ErrorMessages.Maximumfilesizeis + $"{maxFileSize.ToString()} MB"
+                });
+            }
+
+            var userId = User.FindFirstValue(
+                ClaimTypes.NameIdentifier);
+
+            if (string.IsNullOrEmpty(userId))
+            {
+                return Unauthorized();
+            }
+
+            var extension = Path.GetExtension(photo.FileName);
+
+            var fileName =
+                $"{Guid.NewGuid():N}{extension}";
+
+            var uploadsFolder = Path.Combine(
+                _environment.WebRootPath,
+                "uploads",
+                "profiles");
+
+            Directory.CreateDirectory(
+                uploadsFolder);
+
+            var filePath = Path.Combine(
+                uploadsFolder,
+                fileName);
+
+            await using (var stream = new FileStream(
+                filePath,
+                FileMode.Create))
+            {
+                await photo.CopyToAsync(stream);
+            }
+
+            var photoUrl =
+                $"/uploads/profiles/{fileName}";
+
+            var user = await _userService.GetUserByIDAsync(userId);
+            if (user?.IsBlocked != true && user.IsDeleted != true)
+            {
+                user.PhotoUrl = photoUrl;
+                var result = await _userService.UpdateUserAsync(user);
+                if (result?.Success == true)
+                {
+                    ViewBag.UserPhotoUrl = user.PhotoUrl;
+                }
+            }
+
+            return Json(new
+            {
+                success = true,
+                photoUrl,
+                message = ErrorMessages.Photosavedsuccessfully
+            });
         }
     }
 }

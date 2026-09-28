@@ -1,46 +1,281 @@
 ﻿@model Partnerly.Models.ViewModels.SupportTicketViewModel;
+
 @{
     ViewData["Title"] = "Support";
+
+    <link rel="stylesheet" href="~/assets/vendor/css/pages/page-newsupportticket.css" />
 }
 
-<div class="card">
-  <div class="card-body">
-        <h5>@Localizer["Contactsupport"]</h5>
+<div class="support-page">
 
+    <!-- ==================== HEADER ==================== -->
+    <div class="support-header mb-4">
+        <div class="support-header-content">
+
+            <div class="support-icon">
+                <i class="bx bx-support"></i>
+            </div>
+
+            <div>
+                <h4 class="mb-1">@Localizer["Contactsupport"]</h4>
+                <p class="mb-0">
+                    @Localizer["Supportheaderdescription"]
+                </p>
+            </div>
+
+        </div>
+    </div>
+
+
+    <!-- ==================== ALERTS ==================== -->
     @if (TempData.Peek("SupportSuccess") != null)
     {
-        <div class="alert alert-success">@TempData["SupportSuccess"]</div>
+        <div class="support-alert support-alert-success mb-4">
+            <div class="support-alert-icon">
+                <i class="bx bx-check"></i>
+            </div>
+
+            <div class="flex-grow-1">
+                <strong>@Localizer["Success"]</strong>
+                <div>@TempData["SupportSuccess"]</div>
+            </div>
+
+            <button type="button"
+                    class="btn-close"
+                    data-bs-dismiss="alert">
+            </button>
+        </div>
+
         TempData.Remove("SupportSuccess");
     }
+
     @if (TempData.Peek("CaseCreationLimit") != null)
     {
-        <div class="alert alert-danger">@TempData["CaseCreationLimit"]</div>
+        <div class="support-alert support-alert-danger mb-4">
+            <div class="support-alert-icon">
+                <i class="bx bx-error-circle"></i>
+            </div>
+
+            <div class="flex-grow-1">
+                <strong>@Localizer["Error"]</strong>
+                <div>@TempData["CaseCreationLimit"]</div>
+            </div>
+
+            <button type="button"
+                    class="btn-close"
+                    data-bs-dismiss="alert">
+            </button>
+        </div>
+
         TempData.Remove("CaseCreationLimit");
     }
 
-    <form asp-action="OpenNewCase" method="post">
-      <input asp-for="UserId" class="form-control" hidden/>
-      <input asp-for="Status" class="form-control" hidden/>
 
-      <div class="mb-3 max-w-600">
-        <label asp-for="CreatorName" class="form-label"></label>
-        <input asp-for="CreatorName" class="form-control" readonly/>
-      </div>
+    <!-- ==================== CONTENT ==================== -->
 
-      <div class="mb-3 max-w-600">
-        <label asp-for="Subject" class="form-label"></label>
-        <input asp-for="Subject" class="form-control" />
-        <span asp-validation-for="Subject" class="text-danger"></span>
-      </div>
-      <div class="mb-3 max-w-600">
-        <label asp-for="Message" class="form-label"></label>
-        <textarea asp-for="Message" class="form-control" rows="6"></textarea>
-        <span asp-validation-for="Message" class="text-danger"></span>
-      </div>
+    <div class="row g-4">
 
-      <!-- reCAPTCHA -->
-            <button class="btn btn-primary">@Localizer["Send"]</button>
-    </form>
-  </div>
+        <!-- ==================== LEFT INFO ==================== -->
+        <div class="col-xl-4">
+
+            <div class="support-info-card h-100">
+
+                <div class="support-info-top">
+                    <div class="support-info-icon">
+                        <i class="bx bx-message-rounded-dots"></i>
+                    </div>
+
+                    <h5> @Localizer["Howcanwehelp"]</h5>
+
+                    <p>
+                        @Localizer["Supportintrodescription"]
+                    </p>
+                </div>
+
+
+                <div class="support-info-items">
+
+                    <div class="support-info-item">
+                        <div class="support-item-icon">
+                            <i class="bx bx-edit-alt"></i>
+                        </div>
+
+                        <div>
+                            <h6>@Localizer["Describeyourissue"]</h6>
+                            <span>
+                                @Localizer["Describeyourissuedescription"]
+                            </span>
+                        </div>
+                    </div>
+
+
+                    <div class="support-info-item">
+                        <div class="support-item-icon">
+                            <i class="bx bx-time-five"></i>
+                        </div>
+
+                        <div>
+                            <h6>@Localizer["Wellreviewyourcase"]</h6>
+                            <span>
+                                @Localizer["Wellreviewyourcasedescription"]
+                            </span>
+                        </div>
+                    </div>
+
+
+                    <div class="support-info-item">
+                        <div class="support-item-icon">
+                            <i class="bx bx-check-circle"></i>
+                        </div>
+
+                        <div>
+                            <h6>@Localizer["Getassistance"]</h6>
+                            <span>
+                                @Localizer["Getassistancedescription"]
+                            </span>
+                        </div>
+                    </div>
+
+                </div>
+
+
+                <div class="support-info-footer">
+                    <i class="bx bx-info-circle"></i>
+
+                    <span>
+                        @Localizer["Supportsecuritywarning"]
+                    </span>
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- ==================== FORM ==================== -->
+        <div class="col-xl-8">
+
+            <div class="support-form-card">
+
+                <div class="support-form-header">
+
+                    <div>
+                        <h5 class="mb-1">@Localizer["Openasupportcase"]</h5>
+
+                        <p class="mb-0">
+                            @Localizer["Supportformdescription"]
+                        </p>
+                    </div>
+
+                    <div class="support-form-header-icon">
+                        <i class="bx bx-send"></i>
+                    </div>
+
+                </div>
+
+
+                <form asp-action="OpenNewCase"
+                      method="post"
+                      class="support-form">
+
+                    <input asp-for="UserId" hidden />
+                    <input asp-for="Status" hidden />
+
+
+                    <!-- Creator -->
+                    <div class="support-field">
+
+                        <label asp-for="CreatorName" class="form-label"></label>
+
+                        <div class="support-input-wrapper">
+
+                            <i class="bx bx-user"></i>
+
+                            <input asp-for="CreatorName"
+                                   class="form-control"
+                                   readonly />
+
+                        </div>
+
+                    </div>
+
+
+                    <!-- Subject -->
+                    <div class="support-field">
+
+                        <label asp-for="Subject" class="form-label"></label>
+
+                        <div class="support-input-wrapper">
+
+                            <i class="bx bx-heading"></i>
+
+                            <input asp-for="Subject"
+                                   class="form-control"
+                                   placeholder=@Localizer["Brieflydescribeyourissue"] />
+
+                        </div>
+
+                        <span asp-validation-for="Subject"
+                              class="text-danger">
+                        </span>
+
+                    </div>
+
+
+                    <!-- Message -->
+                    <div class="support-field">
+
+                        <label asp-for="Message" class="form-label"></label>
+
+                        <div class="support-textarea-wrapper">
+
+                            <i class="bx bx-message-detail"></i>
+
+                            <textarea asp-for="Message"
+                                      class="form-control"
+                                      rows="7"
+                                      placeholder=@Localizer["Describeissueindetail"]></textarea>
+
+                        </div>
+
+                        <span asp-validation-for="Message"
+                              class="text-danger">
+                        </span>
+
+                    </div>
+
+
+                    <!-- Footer -->
+                    <div class="support-form-footer">
+
+                        <div class="support-security">
+                            <i class="bx bx-lock-alt"></i>
+
+                            <span>
+                                @Localizer["Yourinformationissecure"]
+                            </span>
+                        </div>
+
+
+                        <button type="submit"
+                                class="btn btn-primary support-submit-btn">
+
+                            <i class="bx bx-send me-1"></i>
+
+                            @Localizer["Send"]
+
+                        </button>
+
+                    </div>
+
+                </form>
+
+            </div>
+
+        </div>
+
+    </div>
+
 </div>
+
 

@@ -6,84 +6,110 @@
 }
 
 @section PageStyles {
-    <link rel="stylesheet" href="~/assets/vendor/css/pages/page-auth.css">
+    <link rel="stylesheet"
+          href="~/assets/vendor/css/pages/page-auth.css"
+          asp-append-version="true">
 }
 
-<div class="container-xxl">
-    <div class="authentication-wrapper authentication-basic container-p-y">
-        <div class="authentication-inner">
+<div class="partnerly-auth-page partnerly-auth-page-single">
+    <div class="partnerly-auth-form">
+        <div class="auth-form-container auth-result-container google-register-container">
 
-            <div class="card px-sm-6 px-0">
-                <div class="card-body">
+            <div class="auth-result-logo">
+                <a asp-controller="Home" asp-action="Index" class="auth-logo">
+                    <span class="auth-logo-icon">
+                        <img src="~/favicon.png" alt="Logo">
+                    </span>
 
-                    <div class="app-brand justify-content-center mb-4">
-                        <a href="/" class="app-brand-link gap-2">
-                            <span class="app-brand-logo demo">
-                                <img src="~/favicon.png"
-                                     alt="Logo"
-                                     width="32"
-                                     height="32"
-                                     class="me-2" />
-                            </span>
+                    <span>@TempData.Peek("appName")</span>
+                </a>
+            </div>
 
-                            <span class="app-brand-text demo text-heading fw-bold">
-                                @TempData.Peek("appName")
-                            </span>
-                        </a>
-                    </div>
+            <div class="google-register-icon">
+                <i class="bx bxl-google"></i>
+            </div>
 
-                    @* <h4 class="mb-2 text-center">
-                        @Localizer["Completeyourregistration"]
-                    </h4> *@
+            <div class="auth-form-header">
 
-                    <p class="mb-4 text-center">
-                        @Localizer["WereceivedyourdataviaGoogle"]
-                    </p>
+                <h2>@Localizer["Completeregistration"]</h2>
 
-                    <form asp-action="GoogleRegister"
-                          asp-controller="Account"
-                          method="post">
+                <p>
+                    @Localizer["WereceivedyourdataviaGoogle"]
+                </p>
 
-                        @Html.AntiForgeryToken()
+            </div>
 
-                        <input asp-for="GoogleId"
-                               type="hidden" />
+            <div class="google-account-card">
 
-                        <input asp-for="ReturnUrl"
-                               type="hidden" />
-
-                        <div class="form-floating mb-3">
-                            <input asp-for="FirstName"
-                                   class="form-control"
-                                   readonly />
-
-                            <label asp-for="FirstName"></label>
-                        </div>
-
-                        <div class="form-floating mb-3">
-                            <input asp-for="LastName"
-                                   class="form-control"
-                                   readonly />
-
-                            <label asp-for="LastName">
-                            </label>
-                        </div>
-
-                        <div class="form-floating mb-3">
-                            <input asp-for="Email"
-                                   class="form-control"
-                                   readonly />
-
-                            <label asp-for="Email">
-                            </label>
-                        </div>
-
-                        <button type="submit"
-                                class="btn btn-primary d-grid w-100">
-                            @Localizer["Completeregistration"]
-                        </button>
-                    </form>
+                <div class="google-account-avatar">
+                    @if (!string.IsNullOrEmpty(Model.FirstName))
+                    {
+                        @Model.FirstName.Substring(0, 1).ToUpper()
+                    }
+                    else
+                    {
+                        <i class="bx bx-user"></i>
+                    }
                 </div>
+
+                <div class="google-account-info">
+
+                    <strong>
+                        @Model.FirstName @Model.LastName
+                    </strong>
+
+                    <span>
+                        @Model.Email
+                    </span>
+
+                    <small>
+                        <i class="bx bx-check-circle"></i>
+                        @Localizer["VerifiedwithGoogle"]
+                    </small>
+
+                </div>
+
+            </div>
+
+            <form asp-action="GoogleRegister"
+                  asp-controller="Account"
+                  method="post">
+
+                @Html.AntiForgeryToken()
+
+                <input asp-for="GoogleId"
+                       type="hidden" />
+
+                <input asp-for="ReturnUrl"
+                       type="hidden" />
+
+                <input asp-for="FirstName"
+                       type="hidden" />
+
+                <input asp-for="LastName"
+                       type="hidden" />
+
+                <input asp-for="Email"
+                       type="hidden" />
+
+                <button type="submit"
+                        class="btn auth-primary-btn">
+
+                    <span>@Localizer["Completeregistration"]</span>
+                    <i class="bx bx-check"></i>
+
+                </button>
+
+            </form>
+
+            <div class="auth-bottom-text">
+                <a asp-controller="Account"
+                   asp-action="Login">
+
+                    <i class="bx bx-left-arrow-alt"></i>
+                    @Localizer["Login"]
+
+                </a>
             </div>
 
         </div>

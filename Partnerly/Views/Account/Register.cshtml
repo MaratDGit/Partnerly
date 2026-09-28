@@ -1,129 +1,447 @@
 ﻿@model Partnerly.Models.ViewModels.RegisterViewModel
+
 @{
-  Layout = "_BlankLayout";
-  ViewData["Title"] = "Sign up";
+    Layout = "_BlankLayout";
+    ViewData["Title"] = "Sign up";
 }
 
 @section PageStyles {
-    <link rel="stylesheet" href="~/assets/vendor/css/pages/page-auth.css">
+
+    <link rel="stylesheet"
+          href="~/assets/vendor/css/pages/page-auth.css"
+          asp-append-version="true">
 }
 
-<div class="container-xxl">
-  <div class="authentication-wrapper authentication-basic container-p-y">
-    <div class="authentication-inner">
 
-      <div class="card px-sm-6 px-0">
-        <div class="card-body">
-          <!-- Logo -->
-          <div class="app-brand justify-content-center mb-6">
-            <a href="/" class="app-brand-link gap-2">
-             <span class="app-brand-logo demo"><img src="~/favicon.png" alt="Logo" width="32" height="32" class="me-2" /></span>
-              <span class="app-brand-text demo text-heading fw-bold">@TempData.Peek("appName")</span>
+<div class="partnerly-auth-page">
+
+
+    <!-- =====================================================
+         LEFT BRAND PANEL
+         ===================================================== -->
+
+    <div class="partnerly-auth-brand">
+
+        <div class="auth-brand-content">
+
+            <a asp-controller="Home"
+               asp-action="Index"
+               class="auth-logo">
+
+                <span class="auth-logo-icon">
+                    <img src="~/favicon.png"
+                         alt="Logo">
+                </span>
+
+                <span>
+                    @TempData.Peek("appName")
+                </span>
+
             </a>
-          </div>
-          <!-- /Logo -->
-          @* <h5 class="mb-1">Зарегистрируйтесь и станьте частью команды.</h5> *@
 
-          <form id="formAuthentication" class="mb-2" asp-action="Register" method="POST">
-            <div class="form-floating mb-2">
-               <input asp-for="FullName" class="form-control" id="fullName" name="fullName" placeholder="" autofocus/>
-               <label asp-for="FullName"></label>
-               <span asp-validation-for="FullName" class="text-danger"></span>
-            </div>
 
-            <div class="form-floating mb-2">
-                <input type="hidden" asp-for="FromReferrerLink" />
-                @if (Model.FromReferrerLink)
-                {
-                    <input type="text" class="form-control" value="@Model.ReferrerCode" readonly />
-                    <input type="hidden" asp-for="ReferrerCode" />
-                }
-                else
-                {
-                                <input asp-for="ReferrerCode" class="form-control" id="referrerCode" name="referrerCode" placeholder=@Localizer["Referrersreferralcode"] />
-                }
-                <label asp-for="ReferrerCode"></label>
-                <span asp-validation-for="ReferrerCode" class="text-danger"></span>
-            </div>
-            <div class="form-floating mb-2">
-                            <input asp-for="Email" class="form-control" id="email" name="email" placeholder=@Localizer["Enteryouremailaddress"] />
-               <label asp-for="Email"></label>
-               <span asp-validation-for="Email" class="text-danger"></span>
-            </div>
-            <div class="form-floating mb-2">
-               <input asp-for="Phone" class="form-control" id="phone" name="phone" placeholder="+37477123456"/>
-               <label asp-for="Phone"></label>
-               <span asp-validation-for="Phone" class="text-danger"></span>
-            </div>
-            <div class="mb-2 form-password-toggle">
-              <div class="form-floating input-group input-group-merge">
-                <input asp-for="Password" type="password" id="password" class="form-control" name="password" placeholder="&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;" aria-describedby="password"/>
-                <label asp-for="Password"></label>
-                <span class="input-group-text cursor-pointer"><i class="bx bx-hide"></i></span>
-              </div>
-              <span asp-validation-for="Password" class="text-danger"></span>
-            </div>
-            <div class="mb-2 form-password-toggle">
-              <div class="form-floating input-group input-group-merge">
-                <input asp-for="ConfirmPassword" type="password" id="confirmpassword" class="form-control" name="confirmpassword" placeholder="&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;" aria-describedby="password"/>
-                <label asp-for="ConfirmPassword"></label>
-                <span class="input-group-text cursor-pointer"><i class="bx bx-hide"></i></span>
-              </div>
-              <span asp-validation-for="ConfirmPassword" class="text-danger"></span>
-            </div>
+            <div class="auth-brand-main">
+                <h1>
+                    @Localizer["PlaySmarter"]
+                    <strong>
+                        @Localizer["WinwithConfidence"]
+                    </strong>
+                </h1>
 
-            <div class="my-8">
-              <div class="form-check mb-0 ms-2">
-                 <input asp-for="TermsConditions" class="form-check-input" type="checkbox" id="terms-conditions"/>
-                <label class="form-check-label" for="terms-conditions">
-                                    @Localizer["Iagreewith"]
-                          <a asp-controller="Home" asp-action="Privacy" target="_blank">@Localizer["PrivacyPolicyandTerms"]</a>
-                </label>
-              </div>
-              <span asp-validation-for="TermsConditions" class="text-danger"></span>
-            </div>
-            <button class="btn btn-primary d-grid w-100">
-                            @Localizer["Signup"]
-            </button>
-          </form>
+                <div class="auth-register-benefits">
 
-            <div class="mb-6">
+                    <div class="auth-benefit">
 
-                <div class="text-center mb-3 text-muted">
-                    @Localizer["Or"]
+                        <div class="auth-benefit-icon">
+                            <i class="bx bx-brain"></i>
+                        </div>
+
+                        <div>
+                            <strong>@Localizer["Smartexperience"]</strong>
+
+                            <span>
+                                @Localizer["YourSmartBeloteAssistant"]
+                            </span>
+                        </div>
+
+                    </div>
+
+
+                    <div class="auth-benefit">
+
+                        <div class="auth-benefit-icon">
+                            <i class="bx bx-group"></i>
+                        </div>
+
+                        <div>
+                            <strong>@Localizer["Buildyourteam"]</strong>
+
+                            <span>
+                                @Localizer["Connectwithyourteamnetwork"]
+                            </span>
+                        </div>
+
+                    </div>
+
+
+                    <div class="auth-benefit">
+
+                        <div class="auth-benefit-icon">
+                            <i class="bx bx-shield-check"></i>
+                        </div>
+
+                        <div>
+                            <strong>@Localizer["Secureaccount"]</strong>
+
+                            <span>
+                                @Localizer["Yourinformationstaysprotected"]
+                            </span>
+                        </div>
+
+                    </div>
+
                 </div>
 
-                <form asp-controller="Account"
-                        asp-action="GoogleLogin"
-                        method="post">
+            </div>
 
-                    @Html.AntiForgeryToken()
 
-                    <input type="hidden"
-                            name="returnUrl"
-                            value="@ViewBag.ReturnUrl" />
+            <div class="auth-brand-footer">
 
-                    <button type="submit"
-                            class="btn btn-outline-secondary d-grid w-100">
+                @* <span>
+                    <i class="bx bx-shield-check"></i>
+                    Secure account
+                </span>
 
-                        <i class="bx bxl-google me-2"></i>
-
-                        @Localizer["ContinuewithGoogle"]
-
-                    </button>
-
-                </form>
+                <span>
+                    <i class="bx bx-check-circle"></i>
+                    Smart experience
+                </span> *@
 
             </div>
 
-          <p class="text-center">
-                        <span>@Localizer["Doyoualreadhaveanaccount"]</span>
-            <a asp-action="Login">
-              <span>@Localizer["Login"]</span>
-            </a>
-          </p>
         </div>
-      </div>
+
     </div>
-  </div>
+
+
+    <!-- =====================================================
+         REGISTER FORM
+         ===================================================== -->
+
+    <div class="partnerly-auth-form partnerly-register-form">
+
+        <div class="auth-form-container">
+
+
+            <!-- Mobile logo -->
+
+            <div class="auth-mobile-logo">
+
+                <a asp-controller="Home"
+                   asp-action="Index"
+                   class="auth-logo">
+
+                    <span class="auth-logo-icon">
+                        <img src="~/favicon.png"
+                             alt="Logo">
+                    </span>
+
+                    <span>
+                        @TempData.Peek("appName")
+                    </span>
+
+                </a>
+
+            </div>
+
+
+            <!-- Header -->
+
+            <div class="auth-form-header">
+
+                <div class="auth-form-icon">
+                    <i class="bx bx-user-plus"></i>
+                </div>
+
+                <h2>
+                    @Localizer["Signup"]
+                </h2>
+
+            </div>
+
+
+            <!-- =================================================
+                 REGISTER FORM
+                 ================================================= -->
+
+            <form id="formAuthentication"
+                  class="auth-form"
+                  asp-action="Register"
+                  method="POST">
+
+
+                <!-- Full Name -->
+
+                <div class="form-floating mb-3">
+
+                    <input asp-for="FullName"
+                           class="form-control"
+                           id="fullName"
+                           placeholder=""
+                           autocomplete="name"
+                           autofocus />
+
+                    <label asp-for="FullName"></label>
+
+                    <span asp-validation-for="FullName"
+                          class="text-danger">
+                    </span>
+
+                </div>
+
+
+                <!-- Referral -->
+
+                <div class="form-floating mb-3">
+
+                    <input type="hidden"
+                           asp-for="FromReferrerLink" />
+
+
+                    @if (Model.FromReferrerLink)
+                    {
+                        <input type="text"
+                               class="form-control"
+                               value="@Model.ReferrerCode"
+                               readonly />
+
+                        <input type="hidden"
+                               asp-for="ReferrerCode" />
+                    }
+                    else
+                    {
+                        <input asp-for="ReferrerCode"
+                               class="form-control"
+                               id="referrerCode"
+                               placeholder="@Localizer["Referrersreferralcode"]" />
+                    }
+
+                    <label asp-for="ReferrerCode"></label>
+
+                    <span asp-validation-for="ReferrerCode"
+                          class="text-danger">
+                    </span>
+
+                </div>
+
+
+                <!-- Email -->
+
+                <div class="form-floating mb-3">
+
+                    <input asp-for="Email"
+                           class="form-control"
+                           id="email"
+                           placeholder="@Localizer["Enteryouremailaddress"]"
+                           autocomplete="email" />
+
+                    <label asp-for="Email"></label>
+
+                    <span asp-validation-for="Email"
+                          class="text-danger">
+                    </span>
+
+                </div>
+
+
+                <!-- Phone -->
+
+                <div class="form-floating mb-3">
+
+                    <input asp-for="Phone"
+                           class="form-control"
+                           id="phone"
+                           placeholder="+37477123456"
+                           autocomplete="tel" />
+
+                    <label asp-for="Phone"></label>
+
+                    <span asp-validation-for="Phone"
+                          class="text-danger">
+                    </span>
+
+                </div>
+
+
+                <!-- Password -->
+
+                <div class="mb-3 form-password-toggle">
+
+                    <div class="form-floating input-group input-group-merge">
+
+                        <input asp-for="Password"
+                               type="password"
+                               id="password"
+                               class="form-control"
+                               placeholder="••••••••"
+                               autocomplete="new-password" />
+
+                        <label asp-for="Password"></label>
+
+                        <span class="input-group-text cursor-pointer">
+
+                            <i class="bx bx-hide"></i>
+
+                        </span>
+
+                    </div>
+
+                    <span asp-validation-for="Password"
+                          class="text-danger">
+                    </span>
+
+                </div>
+
+
+                <!-- Confirm Password -->
+
+                <div class="mb-3 form-password-toggle">
+
+                    <div class="form-floating input-group input-group-merge">
+
+                        <input asp-for="ConfirmPassword"
+                               type="password"
+                               id="confirmpassword"
+                               class="form-control"
+                               placeholder="••••••••"
+                               autocomplete="new-password" />
+
+                        <label asp-for="ConfirmPassword"></label>
+
+                        <span class="input-group-text cursor-pointer">
+
+                            <i class="bx bx-hide"></i>
+
+                        </span>
+
+                    </div>
+
+                    <span asp-validation-for="ConfirmPassword"
+                          class="text-danger">
+                    </span>
+
+                </div>
+
+
+                <!-- Terms -->
+
+                <div class="auth-terms">
+
+                    <div class="form-check">
+
+                        <input asp-for="TermsConditions"
+                               class="form-check-input"
+                               type="checkbox"
+                               id="terms-conditions" />
+
+                        <label class="form-check-label"
+                               for="terms-conditions">
+
+                            @Localizer["Iagreewith"]
+
+                            <a asp-controller="Home"
+                               asp-action="Privacy"
+                               target="_blank">
+
+                                @Localizer["PrivacyPolicyandTerms"]
+
+                            </a>
+
+                        </label>
+
+                    </div>
+
+                    <span asp-validation-for="TermsConditions"
+                          class="text-danger">
+                    </span>
+
+                </div>
+
+
+                <!-- Register -->
+
+                <button class="btn auth-primary-btn"
+                        type="submit">
+
+                    <span>
+                        @Localizer["Signup"]
+                    </span>
+
+                    <i class="bx bx-right-arrow-alt"></i>
+
+                </button>
+
+            </form>
+
+
+            <!-- =================================================
+                 GOOGLE
+                 ================================================= -->
+
+            <div class="auth-divider">
+
+                <span>
+                    @Localizer["Or"]
+                </span>
+
+            </div>
+
+
+            <form asp-controller="Account"
+                  asp-action="GoogleLogin"
+                  method="post">
+
+                @Html.AntiForgeryToken()
+
+                <input type="hidden"
+                       name="returnUrl"
+                       value="@ViewBag.ReturnUrl" />
+
+                <button type="submit"
+                        class="btn auth-google-btn">
+
+                    <i class="bx bxl-google"></i>
+
+                    <span>
+                        @Localizer["ContinuewithGoogle"]
+                    </span>
+
+                </button>
+
+            </form>
+
+
+            <!-- =================================================
+                 LOGIN
+                 ================================================= -->
+
+            <div class="auth-bottom-text">
+
+                <span>
+                    @Localizer["Doyoualreadhaveanaccount"]
+                </span>
+
+                <a asp-controller="Account"
+                   asp-action="Login">
+
+                    @Localizer["Login"]
+
+                </a>
+
+            </div>
+
+        </div>
+
+    </div>
+
 </div>

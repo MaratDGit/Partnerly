@@ -17,33 +17,7 @@ namespace Partnerly.Descriptors.Messages
         #endregion
 
         #region Views errors
-        //public const string ReferrerUserCannotBeFoundOrInactive = "Реферер-пользователь не найден или неактивен";
-        //public const string IncorectPasswordOrUsername = "Неверный логин или пароль";
-        //public const string IncorectPassword = "Неверный пароль";
-        //public const string IncorectEmail = "Неверный Email";
-        //public const string UserAccessDenied = "у пользователя нету доступа";
-        //public const string FieldRequired = "oбязательное поле";
-        //public const string UniqueValue = "с таким именем уже существует";
-        //public const string CannotDeleteSystemRecords = "Вы не можете удалить системное рекорды";
-        //public const string TypeValidPhoneNumber = "Введите правильный номер в формате +374 XX XXXXXX";
-        //public const string InvalidRefferalCode = "Такого реферального кода не существует";
-        //public const string UserWithEmailArleadyExist = "Пользователь с таким Email уже существует";
-        //public const string UserWithPhoneArleadyExist = "Пользователь с таким телефоном уже существует";
-        //public const string ReadPolicyAndTerms = "Необходимо согласиться с условиями";
-        //public const string StringMaxLength = "Длина строки должна быть до {0} символов";
-        //public const string StringMinMaxLength = "Длина строки должна быть от {0} до {1} символов";
-        //public const string EmailRequired = $"{FieldsDisplayNames.Email} {FieldRequired}";
-        //public const string PasswordRequired = $"{FieldsDisplayNames.Password} {FieldRequired}";
-        //public const string CompareConfirmPassword = "Пароли не совпадают";
-        //public const string PasswordRequireDigit = "Пароль должен содержать хотя бы одну цифру";
-        //public const string PasswordRequireLowercase = "Пароль должен содержать хотя бы одну строчную букву";
-        //public const string PasswordRequireUppercase = "Пароль должен содержать хотя бы одну заглавную букву";
-        //public const string PasswordRequireSpecial = "Пароль должен содержать хотя бы один спецсимвол";
-        //public const string LoginEmailConfirmationMessage = "Чтобы войти в систему, пожалуйста, подтвердите адрес вашей электронной почты. Мы отправили письмо с инструкциями на указанный вами адрес. Проверьте почту и перейдите по ссылке подтверждения.";
-        //public const string UserIsBlocked = "Пользователь заблокирован";
-        //public const string LinkIsExpired = "Ссылка больше недействительна";
-        //public const string LinkExpiredDetail = "Похоже, что срок действия этой ссылки закончился. Чтобы завершить подтверждение email, получите новую ссылку.";
-
+     
         public static string ReferrerUserCannotBeFoundOrInactive => Messages.Get(nameof(ReferrerUserCannotBeFoundOrInactive));
         public static string IncorectPasswordOrUsername => Messages.Get(nameof(IncorectPasswordOrUsername));
         public static string IncorectPassword => Messages.Get(nameof(IncorectPassword));
@@ -70,6 +44,11 @@ namespace Partnerly.Descriptors.Messages
         public static string UserIsBlocked => Messages.Get(nameof(UserIsBlocked));
         public static string LinkIsExpired => Messages.Get(nameof(LinkIsExpired));
         public static string LinkExpiredDetail => Messages.Get(nameof(LinkExpiredDetail));
+
+        public static string Photowasnotselected => Messages.Get(nameof(Photowasnotselected));
+        public static string Invalidimageformat => Messages.Get(nameof(Invalidimageformat));
+        public static string Maximumfilesizeis => Messages.Get(nameof(Maximumfilesizeis));
+        public static string Photosavedsuccessfully => Messages.Get(nameof(Photosavedsuccessfully));
         #endregion
     }
 }

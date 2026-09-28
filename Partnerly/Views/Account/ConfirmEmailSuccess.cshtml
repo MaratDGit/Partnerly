@@ -1,22 +1,45 @@
 ﻿@{
-  Layout = "_BlankLayout";
-  ViewData["Title"] = "Email verified";
+    Layout = "_BlankLayout";
+    ViewData["Title"] = "Email verified";
 }
 
-<div class="container-xxl">
-  <div class="authentication-wrapper authentication-basic container-p-y">
-    <div class="authentication-inner">
-      <div class="card px-sm-6 px-0">
-        <div class="card-body">
-                    <h4 class="text-success mb-4">✅ @Localizer["Youremailsuccessfullyverified"]</h4>
-            <p class="mb-4">
-                        @Localizer["Younowloginusingyourcredentials"]
-            </p>
-            <a asp-controller="Account" asp-action="Login" class="btn btn-primary btn-lg">
-                @Localizer["Login"]
+@section PageStyles {
+    <link rel="stylesheet"
+          href="~/assets/vendor/css/pages/page-auth.css"
+          asp-append-version="true">
+}
+
+<div class="partnerly-auth-page partnerly-auth-page-single">
+    <div class="partnerly-auth-form">
+        <div class="auth-form-container auth-result-container">
+
+            <div class="auth-result-logo">
+                <a asp-controller="Home" asp-action="Index" class="auth-logo">
+                    <span class="auth-logo-icon">
+                        <img src="~/favicon.png" alt="Logo">
+                    </span>
+                    <span>@TempData.Peek("appName")</span>
+                </a>
+            </div>
+
+            <div class="auth-result-icon success">
+                <i class="bx bx-check"></i>
+            </div>
+
+            <div class="auth-form-header">
+                <h2>@Localizer["Youremailsuccessfullyverified"]</h2>
+
+                <p>
+                    @Localizer["Younowloginusingyourcredentials"]
+                </p>
+            </div>
+
+            <a asp-controller="Account"
+               asp-action="Login"
+               class="btn auth-primary-btn">
+                <span>@Localizer["Login"]</span>
+                <i class="bx bx-right-arrow-alt"></i>
             </a>
         </div>
-      </div>
     </div>
-  </div>
 </div>

@@ -322,7 +322,7 @@
     <value>Last Name</value>
   </data>
   <data name="ReferrerCode" xml:space="preserve">
-    <value>Ref  Code</value>
+    <value>Referral Code</value>
   </data>
   <data name="ReffererName" xml:space="preserve">
     <value>Refferer Name</value>
@@ -1127,5 +1127,164 @@
   </data>
   <data name="Gamesbymonth" xml:space="preserve">
     <value>Games by month</value>
+  </data>
+  <data name="Refresh" xml:space="preserve">
+    <value>Refresh</value>
+  </data>
+  <data name="Photowasnotselected" xml:space="preserve">
+    <value>Photo was not selected</value>
+  </data>
+  <data name="Invalidimageformat" xml:space="preserve">
+    <value>Invalid image format</value>
+  </data>
+  <data name="Maximumfilesizeis" xml:space="preserve">
+    <value>Maximum file size is </value>
+  </data>
+  <data name="Photosavedsuccessfully" xml:space="preserve">
+    <value>Photo saved successfully</value>
+  </data>
+  <data name="Active" xml:space="preserve">
+    <value>Active</value>
+  </data>
+  <data name="RecentActivity" xml:space="preserve">
+    <value>Recent activity</value>
+  </data>
+  <data name="TotalMembers" xml:space="preserve">
+    <value>Total Members</value>
+  </data>
+  <data name="ActiveMembers" xml:space="preserve">
+    <value>Active Members</value>
+  </data>
+  <data name="DirectReferrals" xml:space="preserve">
+    <value>Direct Referrals</value>
+  </data>
+  <data name="Myreferrals" xml:space="preserve">
+    <value>My referrals</value>
+  </data>
+  <data name="Member" xml:space="preserve">
+    <value>Member</value>
+  </data>
+  <data name="Referrals" xml:space="preserve">
+    <value>Referrals</value>
+  </data>
+  <data name="Noinformation" xml:space="preserve">
+    <value>No information</value>
+  </data>
+  <data name="Noreferals" xml:space="preserve">
+    <value>No referrals yet</value>
+  </data>
+  <data name="Referrer" xml:space="preserve">
+    <value>Referrer</value>
+  </data>
+  <data name="Manageyourprofilepasswordandnotificationpreferences" xml:space="preserve">
+    <value>Manage your profile, password and notification preferences.</value>
+  </data>
+  <data name="Manageyouraccount" xml:space="preserve">
+    <value>Manage your account</value>
+  </data>
+  <data name="Personalinformation" xml:space="preserve">
+    <value>Personal information</value>
+  </data>
+  <data name="Updateyourpassword" xml:space="preserve">
+    <value>Update your password</value>
+  </data>
+  <data name="Notificationpreferences" xml:space="preserve">
+    <value>Notification preferences</value>
+  </data>
+  <data name="Updateyourpersonalinformation" xml:space="preserve">
+    <value>Update your personal information.</value>
+  </data>
+  <data name="Keepsyouraccountsecurewithastrongpassword" xml:space="preserve">
+    <value>Keep your account secure with a strong password.</value>
+  </data>
+  <data name="Yourpasswordprotectsyouraccount" xml:space="preserve">
+    <value>Your password protects your account</value>
+  </data>
+  <data name="Useauniquepasswordthatyoudontuseanywhereelse" xml:space="preserve">
+    <value>Use a unique password that you don't use anywhere else.</value>
+  </data>
+  <data name="Choosehowyouwanttoreceivenotifications" xml:space="preserve">
+    <value>Choose how you want to receive notifications.</value>
+  </data>
+  <data name="Receiveimportantupdatesandmessagesbyemail" xml:space="preserve">
+    <value>Receive important updates and messages by email.</value>
+  </data>
+  <data name="ReceiveNotificationsDirectlyInPartnerly" xml:space="preserve">
+    <value>Receive notifications directly.</value>
+  </data>
+  <data name="Supportheaderdescription" xml:space="preserve">
+    <value>We're here to help. Send us a message and our support team will get back to you as soon as possible.</value>
+  </data>
+  <data name="Howcanwehelp" xml:space="preserve">
+    <value>How can we help?</value>
+  </data>
+  <data name="Supportintrodescription" xml:space="preserve">
+    <value>Have a question, found an issue, or need assistance? Tell us what happened and we'll help you resolve it.</value>
+  </data>
+  <data name="Describeyourissue" xml:space="preserve">
+    <value>Describe your issue</value>
+  </data>
+  <data name="Describeyourissuedescription" xml:space="preserve">
+    <value>Give us as much information as possible.</value>
+  </data>
+  <data name="Wellreviewyourcase" xml:space="preserve">
+    <value>We'll review your case</value>
+  </data>
+  <data name="Wellreviewyourcasedescription" xml:space="preserve">
+    <value>Our support team will review your request.</value>
+  </data>
+  <data name="Getassistance" xml:space="preserve">
+    <value>Get assistance</value>
+  </data>
+  <data name="Getassistancedescription" xml:space="preserve">
+    <value>We'll contact you with the next steps.</value>
+  </data>
+  <data name="Supportsecuritywarning" xml:space="preserve">
+    <value>Please avoid sharing passwords or other sensitive information in your message.</value>
+  </data>
+  <data name="Openasupportcase" xml:space="preserve">
+    <value>Open a support case</value>
+  </data>
+  <data name="Supportformdescription" xml:space="preserve">
+    <value>Fill in the information below and submit your request.</value>
+  </data>
+  <data name="Brieflydescribeyourissue" xml:space="preserve">
+    <value>Briefly describe your issue</value>
+  </data>
+  <data name="Describeissueindetail" xml:space="preserve">
+    <value>Describe your issue in detail...</value>
+  </data>
+  <data name="Yourinformationissecure" xml:space="preserve">
+    <value>Your information is secure</value>
+  </data>
+  <data name="Resetpassword" xml:space="preserve">
+    <value>Reset password</value>
+  </data>
+  <data name="EmailSent" xml:space="preserve">
+    <value>Email Sent</value>
+  </data>
+  <data name="Checkyourinbox" xml:space="preserve">
+    <value>Check your inbox</value>
+  </data>
+  <data name="VerifiedwithGoogle" xml:space="preserve">
+    <value>Verified with Google</value>
+  </data>
+  <data name="Smartexperience" xml:space="preserve">
+    <value>Smart experience</value>
+  </data>
+  <data name="Buildyourteam" xml:space="preserve">
+    <value>Build your team</value>
+  </data>
+  <data name="Connectwithyourteamnetwork" xml:space="preserve">
+    <value>Connect with your team network.</value>
+  </data>
+  <data name="Secureaccount" xml:space="preserve">
+    <value>Secure account</value>
+  </data>
+  <data name="Yourinformationstaysprotected" xml:space="preserve">
+    <value>Your information stays protected.</value>
+  </data>
+  <data name="Youraccountisready" xml:space="preserve">
+    <value>Your account is ready</value>
   </data>
 </root>

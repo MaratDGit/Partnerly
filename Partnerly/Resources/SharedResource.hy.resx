@@ -322,7 +322,7 @@
     <value>Ազգանուն</value>
   </data>
   <data name="ReferrerCode" xml:space="preserve">
-    <value>Հղման կոդ</value>
+    <value>Ուղղորդման կոդ</value>
   </data>
   <data name="ReffererName" xml:space="preserve">
     <value>Հղողի անունը</value>
@@ -604,7 +604,7 @@
     <value>Ծանուցումներ</value>
   </data>
   <data name="Youwillreceiveimportantnotifications" xml:space="preserve">
-    <value>Կարևոր ծանուցումներ կգան</value>
+    <value>Դուք կստանաք կարևոր ծանուցումներ</value>
   </data>
   <data name="DataTableFilters" xml:space="preserve">
     <value>Ֆիլտրեր</value>
@@ -1127,5 +1127,164 @@
   </data>
   <data name="Gamesbymonth" xml:space="preserve">
     <value>Խաղերն ըստ ամիսների</value>
+  </data>
+  <data name="Refresh" xml:space="preserve">
+    <value>Թարմացնել</value>
+  </data>
+  <data name="Photowasnotselected" xml:space="preserve">
+    <value>Լուսանկարը չի ընտրվել</value>
+  </data>
+  <data name="Invalidimageformat" xml:space="preserve">
+    <value>Պատկերի անվավեր ձևաչափ</value>
+  </data>
+  <data name="Maximumfilesizeis" xml:space="preserve">
+    <value>Ֆայլի առավելագույն չափսը՝ </value>
+  </data>
+  <data name="Photosavedsuccessfully" xml:space="preserve">
+    <value>Լուսանկարը հաջողությամբ պահպանվել է</value>
+  </data>
+  <data name="Active" xml:space="preserve">
+    <value>Ակտիվ</value>
+  </data>
+  <data name="RecentActivity" xml:space="preserve">
+    <value>Վերջին ակտիվությունը</value>
+  </data>
+  <data name="TotalMembers" xml:space="preserve">
+    <value>Մասնակիցների ընդհանուր թիվը</value>
+  </data>
+  <data name="ActiveMembers" xml:space="preserve">
+    <value>Ակտիվ մասնակիցներ</value>
+  </data>
+  <data name="DirectReferrals" xml:space="preserve">
+    <value>Ուղղակի ուղղորդումներ</value>
+  </data>
+  <data name="Myreferrals" xml:space="preserve">
+    <value>Իմ ուղղորդվածները</value>
+  </data>
+  <data name="Member" xml:space="preserve">
+    <value>Մասնակից</value>
+  </data>
+  <data name="Referrals" xml:space="preserve">
+    <value>Ուղղորդվածներ</value>
+  </data>
+  <data name="Noinformation" xml:space="preserve">
+    <value>Տեղեկություն չկա</value>
+  </data>
+  <data name="Noreferals" xml:space="preserve">
+    <value>Դեռևս ուղղորդվածներ չկան</value>
+  </data>
+  <data name="Referrer" xml:space="preserve">
+    <value>Ուղղորդող</value>
+  </data>
+  <data name="Manageyourprofilepasswordandnotificationpreferences" xml:space="preserve">
+    <value>Կառավարեք ձեր պրոֆիլը, գաղտնաբառը և ծանուցումների կարգավորումները։</value>
+  </data>
+  <data name="Manageyouraccount" xml:space="preserve">
+    <value>Կառավարեք ձեր հաշիվը</value>
+  </data>
+  <data name="Personalinformation" xml:space="preserve">
+    <value>Անձնական տվյալներ</value>
+  </data>
+  <data name="Updateyourpassword" xml:space="preserve">
+    <value>Թարմացրեք ձեր գաղտնաբառը</value>
+  </data>
+  <data name="Notificationpreferences" xml:space="preserve">
+    <value>Ծանուցումների կարգավորումներ</value>
+  </data>
+  <data name="Updateyourpersonalinformation" xml:space="preserve">
+    <value>Թարմացրեք ձեր անձնական տվյալները։</value>
+  </data>
+  <data name="Keepsyouraccountsecurewithastrongpassword" xml:space="preserve">
+    <value>Պաշտպանեք ձեր հաշիվը ուժեղ գաղտնաբառով։</value>
+  </data>
+  <data name="Yourpasswordprotectsyouraccount" xml:space="preserve">
+    <value>Ձեր գաղտնաբառը պաշտպանում է ձեր հաշիվը</value>
+  </data>
+  <data name="Useauniquepasswordthatyoudontuseanywhereelse" xml:space="preserve">
+    <value>Օգտագործեք եզակի գաղտնաբառ, որը չեք օգտագործում այլ վայրերում։</value>
+  </data>
+  <data name="Choosehowyouwanttoreceivenotifications" xml:space="preserve">
+    <value>Ընտրեք, թե ինչպես եք ցանկանում ստանալ ծանուցումները։</value>
+  </data>
+  <data name="Receiveimportantupdatesandmessagesbyemail" xml:space="preserve">
+    <value>Ստացեք կարևոր թարմացումներ և հաղորդագրություններ էլ․ փոստով։</value>
+  </data>
+  <data name="ReceiveNotificationsDirectlyInPartnerly" xml:space="preserve">
+    <value>Ստացեք ծանուցումները անմիջապես։</value>
+  </data>
+  <data name="Supportheaderdescription" xml:space="preserve">
+    <value>Մենք այստեղ ենք օգնելու համար։ Ուղարկեք մեզ հաղորդագրություն, և մեր աջակցության թիմը հնարավորինս շուտ կապ կհաստատի ձեզ հետ։</value>
+  </data>
+  <data name="Howcanwehelp" xml:space="preserve">
+    <value>Ինչպե՞ս կարող ենք օգնել։</value>
+  </data>
+  <data name="Supportintrodescription" xml:space="preserve">
+    <value>Ունե՞ք հարց, խնդիր եք հայտնաբերե՞լ կամ օգնության կարիք ունե՞ք։ Պատմեք մեզ, թե ինչ է տեղի ունեցել, և մենք կօգնենք լուծել խնդիրը։</value>
+  </data>
+  <data name="Describeyourissue" xml:space="preserve">
+    <value>Նկարագրեք ձեր խնդիրը</value>
+  </data>
+  <data name="Describeyourissuedescription" xml:space="preserve">
+    <value>Տրամադրեք մեզ հնարավորինս շատ տեղեկություն։</value>
+  </data>
+  <data name="Wellreviewyourcase" xml:space="preserve">
+    <value>Մենք կքննարկենք ձեր հարցումը</value>
+  </data>
+  <data name="Wellreviewyourcasedescription" xml:space="preserve">
+    <value>Մեր աջակցության թիմը կուսումնասիրի ձեր հարցումը։</value>
+  </data>
+  <data name="Getassistance" xml:space="preserve">
+    <value>Ստացեք օգնություն</value>
+  </data>
+  <data name="Getassistancedescription" xml:space="preserve">
+    <value>Մենք կապ կհաստատենք ձեզ հետ և կներկայացնենք հաջորդ քայլերը։</value>
+  </data>
+  <data name="Supportsecuritywarning" xml:space="preserve">
+    <value>Խնդրում ենք հաղորդագրության մեջ չնշել գաղտնաբառեր կամ այլ զգայուն տեղեկություններ։</value>
+  </data>
+  <data name="Openasupportcase" xml:space="preserve">
+    <value>Ստեղծել աջակցության հարցում</value>
+  </data>
+  <data name="Supportformdescription" xml:space="preserve">
+    <value>Լրացրեք ստորև նշված տեղեկությունները և ուղարկեք ձեր հարցումը։</value>
+  </data>
+  <data name="Brieflydescribeyourissue" xml:space="preserve">
+    <value>Համառոտ նկարագրեք ձեր խնդիրը</value>
+  </data>
+  <data name="Describeissueindetail" xml:space="preserve">
+    <value>Մանրամասն նկարագրեք ձեր խնդիրը...</value>
+  </data>
+  <data name="Yourinformationissecure" xml:space="preserve">
+    <value>Ձեր տեղեկությունները պաշտպանված են</value>
+  </data>
+  <data name="Resetpassword" xml:space="preserve">
+    <value>Գաղտնաբառի վերականգնում</value>
+  </data>
+  <data name="EmailSent" xml:space="preserve">
+    <value>Նամակը ուղարկված է</value>
+  </data>
+  <data name="Checkyourinbox" xml:space="preserve">
+    <value>Ստուգեք ձեր մուտքային նամակները</value>
+  </data>
+  <data name="VerifiedwithGoogle" xml:space="preserve">
+    <value>Հաստատված է Google-ի միջոցով</value>
+  </data>
+  <data name="Smartexperience" xml:space="preserve">
+    <value>Խելացի փորձառություն</value>
+  </data>
+  <data name="Buildyourteam" xml:space="preserve">
+    <value>Ձևավորե՛ք ձեր թիմը</value>
+  </data>
+  <data name="Connectwithyourteamnetwork" xml:space="preserve">
+    <value>Կապ հաստատեք ձեր թիմային ցանցի հետ։</value>
+  </data>
+  <data name="Secureaccount" xml:space="preserve">
+    <value>Ապահով հաշիվ</value>
+  </data>
+  <data name="Yourinformationstaysprotected" xml:space="preserve">
+    <value>Ձեր տեղեկատվությունը պաշտպանված է մնում։</value>
+  </data>
+  <data name="Youraccountisready" xml:space="preserve">
+    <value>Ձեր հաշիվը պատրաստ է</value>
   </data>
 </root>

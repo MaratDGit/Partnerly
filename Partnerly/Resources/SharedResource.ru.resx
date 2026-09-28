@@ -604,7 +604,7 @@
     <value>Уведомления</value>
   </data>
   <data name="Youwillreceiveimportantnotifications" xml:space="preserve">
-    <value>Важные уведомления будут приходить</value>
+    <value>Вы будете получать важные уведомления</value>
   </data>
   <data name="DataTableFilters" xml:space="preserve">
     <value>Фильтры</value>
@@ -1128,5 +1128,164 @@
   </data>
   <data name="Gamesbymonth" xml:space="preserve">
     <value>Игры по месяцам</value>
+  </data>
+  <data name="Refresh" xml:space="preserve">
+    <value>Обновить</value>
+  </data>
+  <data name="Photowasnotselected" xml:space="preserve">
+    <value>Фотография не выбрана</value>
+  </data>
+  <data name="Invalidimageformat" xml:space="preserve">
+    <value>Недопустимый формат изображения</value>
+  </data>
+  <data name="Maximumfilesizeis" xml:space="preserve">
+    <value>Максимальный размер файла - </value>
+  </data>
+  <data name="Photosavedsuccessfully" xml:space="preserve">
+    <value>Фотография успешно сохранена</value>
+  </data>
+  <data name="Active" xml:space="preserve">
+    <value>Активен</value>
+  </data>
+  <data name="RecentActivity" xml:space="preserve">
+    <value>Последняя активность</value>
+  </data>
+  <data name="TotalMembers" xml:space="preserve">
+    <value>Всего участников</value>
+  </data>
+  <data name="ActiveMembers" xml:space="preserve">
+    <value>Активные участники</value>
+  </data>
+  <data name="DirectReferrals" xml:space="preserve">
+    <value>Прямые рефералы</value>
+  </data>
+  <data name="Myreferrals" xml:space="preserve">
+    <value>Мои рефералы</value>
+  </data>
+  <data name="Member" xml:space="preserve">
+    <value>Участник</value>
+  </data>
+  <data name="Referrals" xml:space="preserve">
+    <value>Рефералы</value>
+  </data>
+  <data name="Noinformation" xml:space="preserve">
+    <value>Нет информации</value>
+  </data>
+  <data name="Noreferals" xml:space="preserve">
+    <value>Рефералов пока нет</value>
+  </data>
+  <data name="Referrer" xml:space="preserve">
+    <value>Реферер</value>
+  </data>
+  <data name="Manageyourprofilepasswordandnotificationpreferences" xml:space="preserve">
+    <value>Управляйте профилем, паролем и настройками уведомлений.</value>
+  </data>
+  <data name="Manageyouraccount" xml:space="preserve">
+    <value>Управление аккаунтом</value>
+  </data>
+  <data name="Personalinformation" xml:space="preserve">
+    <value>Личная информация</value>
+  </data>
+  <data name="Updateyourpassword" xml:space="preserve">
+    <value>Обновите свой пароль</value>
+  </data>
+  <data name="Notificationpreferences" xml:space="preserve">
+    <value>Настройки уведомлений</value>
+  </data>
+  <data name="Updateyourpersonalinformation" xml:space="preserve">
+    <value>Обновите личную информацию.</value>
+  </data>
+  <data name="Keepsyouraccountsecurewithastrongpassword" xml:space="preserve">
+    <value>Защитите свой аккаунт с помощью надежного пароля.</value>
+  </data>
+  <data name="Yourpasswordprotectsyouraccount" xml:space="preserve">
+    <value>Ваш пароль защищает ваш аккаунт</value>
+  </data>
+  <data name="Useauniquepasswordthatyoudontuseanywhereelse" xml:space="preserve">
+    <value>Используйте уникальный пароль, который вы не используете больше нигде.</value>
+  </data>
+  <data name="Choosehowyouwanttoreceivenotifications" xml:space="preserve">
+    <value>Выберите, как вы хотите получать уведомления.</value>
+  </data>
+  <data name="Receiveimportantupdatesandmessagesbyemail" xml:space="preserve">
+    <value>Получайте важные обновления и сообщения по электронной почте.</value>
+  </data>
+  <data name="ReceiveNotificationsDirectlyInPartnerly" xml:space="preserve">
+    <value>Получайте уведомления непосредственно.</value>
+  </data>
+  <data name="Supportheaderdescription" xml:space="preserve">
+    <value>Мы готовы помочь. Отправьте нам сообщение, и наша служба поддержки свяжется с вами как можно скорее.</value>
+  </data>
+  <data name="Howcanwehelp" xml:space="preserve">
+    <value>Чем мы можем помочь?</value>
+  </data>
+  <data name="Supportintrodescription" xml:space="preserve">
+    <value>У вас есть вопрос, вы обнаружили проблему или вам нужна помощь? Расскажите, что произошло, и мы поможем решить проблему.</value>
+  </data>
+  <data name="Describeyourissue" xml:space="preserve">
+    <value>Опишите вашу проблему</value>
+  </data>
+  <data name="Describeyourissuedescription" xml:space="preserve">
+    <value>Предоставьте нам как можно больше информации.</value>
+  </data>
+  <data name="Wellreviewyourcase" xml:space="preserve">
+    <value>Мы рассмотрим ваш запрос</value>
+  </data>
+  <data name="Wellreviewyourcasedescription" xml:space="preserve">
+    <value>Наша служба поддержки рассмотрит ваш запрос.</value>
+  </data>
+  <data name="Getassistance" xml:space="preserve">
+    <value>Получите помощь</value>
+  </data>
+  <data name="Getassistancedescription" xml:space="preserve">
+    <value>Мы свяжемся с вами и сообщим дальнейшие шаги.</value>
+  </data>
+  <data name="Supportsecuritywarning" xml:space="preserve">
+    <value>Не указывайте пароли и другую конфиденциальную информацию в сообщении.</value>
+  </data>
+  <data name="Openasupportcase" xml:space="preserve">
+    <value>Создать обращение в поддержку</value>
+  </data>
+  <data name="Supportformdescription" xml:space="preserve">
+    <value>Заполните информацию ниже и отправьте запрос.</value>
+  </data>
+  <data name="Brieflydescribeyourissue" xml:space="preserve">
+    <value>Кратко опишите вашу проблему</value>
+  </data>
+  <data name="Describeissueindetail" xml:space="preserve">
+    <value>Подробно опишите вашу проблему...</value>
+  </data>
+  <data name="Yourinformationissecure" xml:space="preserve">
+    <value>Ваша информация защищена</value>
+  </data>
+  <data name="Resetpassword" xml:space="preserve">
+    <value>Сброс пароля</value>
+  </data>
+  <data name="EmailSent" xml:space="preserve">
+    <value>Письмо отправлено</value>
+  </data>
+  <data name="Checkyourinbox" xml:space="preserve">
+    <value>Проверьте входящие</value>
+  </data>
+  <data name="VerifiedwithGoogle" xml:space="preserve">
+    <value>Подтверждено через Google</value>
+  </data>
+  <data name="Smartexperience" xml:space="preserve">
+    <value>Интеллектуальный опыт</value>
+  </data>
+  <data name="Buildyourteam" xml:space="preserve">
+    <value>Соберите свою команду</value>
+  </data>
+  <data name="Connectwithyourteamnetwork" xml:space="preserve">
+    <value>Наладьте связи внутри своей команды.</value>
+  </data>
+  <data name="Secureaccount" xml:space="preserve">
+    <value>Защитить аккаунт</value>
+  </data>
+  <data name="Yourinformationstaysprotected" xml:space="preserve">
+    <value>Ваша информация остается защищенной.</value>
+  </data>
+  <data name="Youraccountisready" xml:space="preserve">
+    <value>Ваш аккаунт готов</value>
   </data>
 </root>

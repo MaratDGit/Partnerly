@@ -1,227 +1,1386 @@
-﻿@model Partnerly.Models.ViewModels.MyProfileViewModel;
-@using System.Globalization;
-@{
-  ViewData["Title"] = "My Profile";
-}
+﻿@model Partnerly.Models.ViewModels.MyProfileViewModel
+@using System.Globalization
 
 @{
+    ViewData["Title"] = "My Profile";
+
     string joinedText = "";
+
     if (Model.CreatedDate.HasValue)
     {
-        var month = Model.CreatedDate.Value.ToString("MMMM", new System.Globalization.CultureInfo(@CultureInfo.CurrentUICulture.Name));
+        var month = Model.CreatedDate.Value.ToString(
+            "MMMM",
+            CultureInfo.CurrentUICulture);
+
         var year = Model.CreatedDate.Value.Year;
+
         joinedText = $"{Localizer["Joinedin"]} {month} {year}";
     }
+
+    var totalMembers = Model.Refferals?.Count() ?? 0;
+
+    // TODO:
+    // Replace these values with real calculations
+    // when the corresponding data becomes available.
+    var activeMembers = totalMembers;
+    var directReferrals = totalMembers;
+
+    <link rel="stylesheet" href="~/assets/vendor/css/pages/page-myprofile.css" />
 }
 
+<div class="container-xxl flex-grow-1 container-p-y profile-page">
 
-<div class="container-xxl flex-grow-1 container-p-y">
-          
-  <!-- Header -->
-    <div class="row">
+    <!-- =====================================================
+         PROFILE HEADER
+         ===================================================== -->
+
+    <div class="card profile-header-card mb-4">
+
+        <div class="profile-cover"></div>
+
+        <div class="profile-header-content">
+
+            <!-- Avatar -->
+            <div class="profile-avatar-wrapper">
+
+                <label for="profilePhotoInput"
+                       class="profile-avatar-upload"
+                       title="@Localizer["Changephoto"]">
+
+                    @if (!string.IsNullOrEmpty(Model?.PhotoUrl))
+                    {
+                        <img src="@Url.Content(Model.PhotoUrl)"
+                             alt="User avatar"
+                             class="profile-avatar"
+                             id="profileAvatar" />
+                    }
+                    else
+                    {
+                        <div class="profile-avatar profile-avatar-placeholder"
+                             id="profileAvatar">
+
+                            <i class="bx bx-user"></i>
+
+                        </div>
+                    }
+
+                    <!-- Camera overlay -->
+                    <div class="profile-avatar-camera">
+
+                        <i class="bx bx-camera"></i>
+
+                    </div>
+
+                </label>
+
+                <input type="file"
+                       id="profilePhotoInput"
+                       accept="image/jpeg,image/png,image/webp"
+                       hidden />
+
+            </div>
+
+
+            <!-- User information -->
+            <div class="profile-main-info">
+
+                <div class="profile-name-row">
+
+                    <div>
+                        <h4 class="profile-name">
+                            @Model?.UserName
+                        </h4>
+
+                        <div class="profile-meta">
+                            @if (!string.IsNullOrEmpty(joinedText))
+                            {
+                                <span>
+                                    <i class="bx bx-calendar"></i>
+                                    @joinedText
+                                </span>
+                            }
+                        </div>
+                    </div>
+
+
+                    <!-- Referral button -->
+                    <button type="button"
+                            class="btn btn-primary profile-referral-btn"
+                            onclick="copyReferralLink('@Model?.MyReferralCode')">
+
+                        <i class="bx bx-copy-alt me-1"></i>
+
+                        @Localizer["Copyreferrallink"]
+
+                    </button>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- =====================================================
+             PHOTO UPLOAD PANEL
+             ===================================================== -->
+
+        <div id="photoUploadPanel"
+             class="photo-upload-panel d-none">
+
+            <div class="photo-upload-preview">
+
+                <div id="photoUploadPreview"
+                     class="photo-upload-preview-image">
+
+                    <i class="bx bx-image"></i>
+
+                </div>
+
+            </div>
+
+
+            <div class="photo-upload-content">
+
+                <div class="photo-upload-info">
+
+                    <strong>
+                        @Localizer["Changephoto"]
+                    </strong>
+
+                    <span>
+                        JPG, PNG or WEBP · Max 5 MB
+                    </span>
+
+                </div>
+
+
+                <div class="photo-upload-actions">
+
+                    <button type="button"
+                            id="cancelPhotoBtn"
+                            class="btn btn-sm btn-label-secondary">
+
+                        <i class="bx bx-x me-1"></i>
+
+                        @Localizer["Cancel"]
+
+                    </button>
+
+
+                    <button type="button"
+                            id="savePhotoBtn"
+                            class="btn btn-sm btn-primary">
+
+                        <i class="bx bx-check me-1"></i>
+
+                        @Localizer["Save"]
+
+                    </button>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- =====================================================
+         PROFILE TABS
+         ===================================================== -->
+
+    <div class="row mb-4">
+
         <div class="col-12">
-            <div class="card mb-3">
-                <div class="user-profile-header d-flex flex-column flex-lg-row text-sm-start text-center mb-4"> <!-- mb-8 → mb-4 -->
-                    @* <div class="flex-shrink-0 mt-0 mx-sm-0 mx-auto">
-                        <img src="@Url.Content(Model?.PhotoUrl)" alt="user image" class="d-block h-auto ms-0 ms-sm-3 rounded-3" style="width:80px; height:80px;"> <!-- уменьшил размер -->
-                    </div> *@
-                    <div class="flex-grow-1 mt-2 mt-lg-3">
-                        <div class="d-flex align-items-md-end align-items-sm-start align-items-center justify-content-md-between justify-content-start mx-3 flex-md-row flex-column gap-2"> <!-- mx-5 → mx-3, gap-4 → gap-2 -->
-                            <div class="user-profile-info">
-                                <h5 class="mb-1 mt-lg-3">@Model?.UserName</h5> <!-- h4 → h5, mb-2 → mb-1, mt-lg-7 → mt-lg-3 -->
-                                <ul class="list-inline mb-0 d-flex align-items-center flex-wrap justify-content-sm-start justify-content-center gap-2 mt-2"> <!-- gap-4 → gap-2, mt-4 → mt-2 -->
-                                    <li class="list-inline-item">
-                                        <i class="icon-base bx bx-calendar me-1 align-top"></i>
-                                        <span class="fw-medium"> @joinedText</span>
-                                    </li>
-                                </ul>
-                            </div>
-                        
-                            <button class="btn btn-sm btn-primary mb-0" onclick="copyReferralLink('@Model?.MyReferralCode')">
-                                <i class="icon-base bx bx-copy-alt icon-sm me-1"></i>
-                                    @Localizer["Copyreferrallink"]
-                            </button>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-    <!--/ Header -->
 
-@*   <!-- Navbar pills -->
- <div class="row">
-    <div class="col-md-12">
-      <div class="nav-align-top">
-        <ul class="nav nav-pills flex-column flex-sm-row mb-6 gap-sm-0 gap-2" id="profileTabs" role="tablist">
-            <li class="nav-item" role="presentation">
-                <a class="nav-link active" id="profile-tab" data-bs-toggle="pill" href="#profileTab" role="tab" aria-controls="profileTab" aria-selected="true">
-                   <i class="icon-base bx bx-user icon-sm me-1_5"></i> @Localizer["Profile"]
-                </a>
-            </li>
-            <li class="nav-item" role="presentation">
-                <a class="nav-link" id="teams-tab" data-bs-toggle="pill" href="#teamsTab" role="tab" aria-controls="teamsTab" aria-selected="false">
-                   <i class="icon-base bx bx-group icon-sm me-1_5"></i> @Localizer["Myteam"]
-                </a>
-            </li>
-        </ul>
-      </div>
-    </div>
-  </div>
-  <!--/ Navbar pills --> *@
+            <div class="profile-tabs-wrapper">
 
-    <div class="row">
-        <div class="col-xl-4 col-lg-5 col-md-5">
-            <!-- About User -->
-            <div class="card mb-6">
-                <div class="card-body">
-                    <small class="card-text text-uppercase text-body-secondary small">@Localizer["AboutMe"]</small>
-                    <ul class="list-unstyled my-3 py-1">
-                        <li class="d-flex align-items-center mb-4"><i class="icon-base bx bx-user"></i><span class="fw-medium mx-2"</span> <span>@Model?.UserName</span></li>
-                        <li class="d-flex align-items-center mb-4"><i class="icon-base bx bx-crown"></i><span class="fw-medium mx-2"></span> <span>@Model?.ReferrerName</span></li>
-                        <li class="d-flex align-items-center mb-4"><i class="icon-base bx bx-check"></i><span class="fw-medium mx-2"></span> <span></span></li>
-                    </ul>
-                    <small class="card-text text-uppercase text-body-secondary small">@Localizer["Contacts"]</small>
-                    <ul class="list-unstyled my-3 py-1">
-                        <li class="d-flex align-items-center mb-4"><i class="icon-base bx bx-phone"></i><span class="fw-medium mx-2"></span> <span>@Model?.Phone</span></li>
-                        <li class="d-flex align-items-center mb-4"><i class="icon-base bx bx-envelope"></i><span class="fw-medium mx-2"></span> <span>@Model?.Email</span></li>
-                    </ul>
-                </div>
+                <ul class="nav nav-pills profile-tabs"
+                    id="profileTabs"
+                    role="tablist">
+
+                    <!-- Profile -->
+                    <li class="nav-item"
+                        role="presentation">
+
+                        <button class="nav-link active"
+                                id="profile-tab"
+                                data-bs-toggle="pill"
+                                data-bs-target="#profileTab"
+                                type="button"
+                                role="tab"
+                                aria-controls="profileTab"
+                                aria-selected="true">
+
+                            <i class="bx bx-user"></i>
+
+                            @Localizer["Profile"]
+
+                        </button>
+
+                    </li>
+
+
+                    <!-- My Team -->
+                    <li class="nav-item"
+                        role="presentation">
+
+                        <button class="nav-link"
+                                id="teams-tab"
+                                data-bs-toggle="pill"
+                                data-bs-target="#teamsTab"
+                                type="button"
+                                role="tab"
+                                aria-controls="teamsTab"
+                                aria-selected="false">
+
+                            <i class="bx bx-group"></i>
+
+                            @Localizer["Myteam"]
+
+                        </button>
+
+                    </li>
+
+                </ul>
+
             </div>
-                <!--/ About User -->
+
         </div>
 
-        <div class="col-xl-8 col-lg-7 col-md-7">
-            <!-- Activity Timeline -->
-            <div class="card card-action mb-6">
-                <div class="card-header align-items-center">
-                    <h5 class="card-action-title mb-0"><i class="icon-base bx bx-bar-chart-alt-2 icon-lg text-body me-4"></i>@Localizer["Chronologyofactivities"]</h5>
-                </div>
-                <div class="card-body pt-3">
-                    <p>@Localizer["Noinformationonactivity"]</p>
-                </div>
-            </div>
-            <!--/ Activity Timeline -->
-        </div>
     </div>
 
- @*<div class="tab-content" id="profileTabsContent">
-   <div class="tab-pane fade show active" id="profileTab" role="tabpanel" aria-labelledby="profile-tab">
-        <div class="row">
-            <div class="col-xl-4 col-lg-5 col-md-5">
-                <!-- About User -->
-                <div class="card mb-6">
-                    <div class="card-body">
-                        <small class="card-text text-uppercase text-body-secondary small">@Localizer["AboutMe"]</small>
-                        <ul class="list-unstyled my-3 py-1">
-                            <li class="d-flex align-items-center mb-4"><i class="icon-base bx bx-user"></i><span class="fw-medium mx-2"</span> <span>@Model?.UserName</span></li>
-                            <li class="d-flex align-items-center mb-4"><i class="icon-base bx bx-crown"></i><span class="fw-medium mx-2"></span> <span>@Model?.ReferrerName</span></li>
-                            <li class="d-flex align-items-center mb-4"><i class="icon-base bx bx-check"></i><span class="fw-medium mx-2"></span> <span></span></li>
-                        </ul>
-                        <small class="card-text text-uppercase text-body-secondary small">@Localizer["Contacts"]</small>
-                        <ul class="list-unstyled my-3 py-1">
-                            <li class="d-flex align-items-center mb-4"><i class="icon-base bx bx-phone"></i><span class="fw-medium mx-2"></span> <span>@Model?.Phone</span></li>
-                            <li class="d-flex align-items-center mb-4"><i class="icon-base bx bx-envelope"></i><span class="fw-medium mx-2"></span> <span>@Model?.Email</span></li>
-                        </ul>
-                    </div>
-                </div>
-                <!--/ About User -->
-            </div>
 
-            <div class="col-xl-8 col-lg-7 col-md-7">
-                <!-- Activity Timeline -->
-                <div class="card card-action mb-6">
-                    <div class="card-header align-items-center">
-                        <h5 class="card-action-title mb-0"><i class="icon-base bx bx-bar-chart-alt-2 icon-lg text-body me-4"></i>@Localizer["Chronologyofactivities"]</h5>
-                    </div>
-                    <div class="card-body pt-3">
-                        <p>@Localizer["Noinformationonactivity"]</p>
-                    </div>
-                </div>
-                <!--/ Activity Timeline -->
-            </div>
-        </div>
-    </div> *@
+    <!-- =====================================================
+         TAB CONTENT
+         ===================================================== -->
 
-    @* <div class="tab-pane fade" id="teamsTab" role="tabpanel" aria-labelledby="teams-tab">
-        <div class="row g-4">
-            @foreach (var referall in Model.Refferals)
-            {
-                string username = $"{referall.FirstName} {referall.LastName}";
-                string refJoinedText = "";
-                if (referall.CreatedDate.HasValue)
-                {
-                    var monthRef = referall.CreatedDate.Value.ToString("MMMM", new CultureInfo("ru-RU"));
-                    var yearRef = referall.CreatedDate.Value.Year;
-                    refJoinedText = $"{monthRef} {yearRef}";
-                }
+    <div class="tab-content"
+         id="profileTabsContent">
 
-                <div class="col-xl-3 col-lg-4 col-md-6">
-                    <div class="card">
-                        <div class="card-body text-center">
-                            <div class="dropdown btn-pinned">
-                                <button type="button" class="btn btn-icon btn-text-secondary rounded-pill dropdown-toggle hide-arrow" data-bs-toggle="dropdown" aria-expanded="false">
-                                    <i class="icon-base bx bx-dots-vertical-rounded icon-md text-body-secondary"></i>
-                                </button>
-                                <ul class="dropdown-menu dropdown-menu-end">
-                                    <li><a class="dropdown-item" href="javascript:void(0);">Посмотреть больше</a></li>
-                                </ul>
-                            </div>
-                            <div class="my-4">
-                                <div class="mx-auto my-4">
-                                <img src="@Url.Content(referall?.PhotoUrl)" alt="Avatar Image" class="rounded-circle w-px-75 h-px-75">
+
+        <!-- =================================================
+             PROFILE TAB
+             ================================================= -->
+
+        <div class="tab-pane fade show active"
+             id="profileTab"
+             role="tabpanel"
+             aria-labelledby="profile-tab">
+
+            <div class="row g-4">
+
+
+                <!-- =========================================
+                     ABOUT ME
+                     ========================================= -->
+
+                <div class="col-xl-4 col-lg-5">
+
+                    <div class="card profile-info-card h-100">
+
+                        <div class="card-body">
+
+
+                            <!-- Section title -->
+                            <div class="profile-section-title">
+
+                                <div class="profile-section-icon">
+
+                                    <i class="bx bx-user"></i>
+
                                 </div>
-                                <h6 class="mb-1 card-title">@username</h6>
-                                <i class="icon-base bx bx-calendar me-1 align-top"></i>
-                                <span class="text-body-secondary">@refJoinedText</span>
-                            </div>
-                            <div class="d-flex align-items-center justify-content-around mb-3">
+
                                 <div>
-                                    <h6 class="mb-0">1</h6>
-                                    <span class="badge bg-label-secondary">Уровень</span>
+
+                                    <h5>
+                                        @Localizer["AboutMe"]
+                                    </h5>
+
+                                    <span>
+                                        @* @Localizer["PersonalInformation"] *@
+                                    </span>
+
                                 </div>
-                                <div>
-                                    <h6 class="mb-0">129</h6>
-                                    <span class="badge bg-label-warning">Рефералы</span>
-                                </div>
+
                             </div>
+
+
+                            <!-- Information -->
+                            <div class="profile-info-list">
+
+
+                                <!-- Username -->
+                                <div class="profile-info-item">
+
+                                    <div class="profile-info-icon profile-icon-primary">
+
+                                        <i class="bx bx-user"></i>
+
+                                    </div>
+
+                                    <div class="profile-info-content">
+
+                                        <span class="profile-info-label">
+                                            @Localizer["Username"]
+                                        </span>
+
+                                        <strong>
+                                            @(string.IsNullOrWhiteSpace(Model?.UserName)
+                                                                                        ? "—"
+                                                                                        : Model.UserName)
+                                        </strong>
+
+                                    </div>
+
+                                </div>
+
+
+                                <!-- Referrer -->
+                                <div class="profile-info-item">
+
+                                    <div class="profile-info-icon profile-icon-warning">
+
+                                        <i class="bx bx-crown"></i>
+
+                                    </div>
+
+                                    <div class="profile-info-content">
+
+                                        <span class="profile-info-label">
+                                            @Localizer["Referrer"]
+                                        </span>
+
+                                        <strong>
+                                            @(string.IsNullOrWhiteSpace(Model?.ReferrerName)
+                                                                                        ? "—"
+                                                                                        : Model.ReferrerName)
+                                        </strong>
+
+                                    </div>
+
+                                </div>
+
+
+                                <!-- Status -->
+                                <div class="profile-info-item">
+
+                                    <div class="profile-info-icon profile-icon-success">
+
+                                        <i class="bx bx-check-circle"></i>
+
+                                    </div>
+
+                                    <div class="profile-info-content">
+
+                                        <span class="profile-info-label">
+                                            @Localizer["Status"]
+                                        </span>
+
+                                        <strong class="text-success">
+                                            @Localizer["Active"]
+                                        </strong>
+
+                                    </div>
+
+                                </div>
+
+                            </div>
+
+
+                            <!-- Divider -->
+                            <div class="profile-divider"></div>
+
+
+                            <!-- =================================
+                                 CONTACTS
+                                 ================================= -->
+
+                            <div class="profile-section-title">
+
+                                <div class="profile-section-icon profile-section-icon-green">
+
+                                    <i class="bx bx-address-book"></i>
+
+                                </div>
+
+                                <div>
+
+                                    <h5>
+                                        @Localizer["Contacts"]
+                                    </h5>
+
+                                </div>
+
+                            </div>
+
+
+                            <div class="profile-info-list">
+
+
+                                <!-- Phone -->
+                                <div class="profile-info-item">
+
+                                    <div class="profile-info-icon profile-icon-info">
+
+                                        <i class="bx bx-phone"></i>
+
+                                    </div>
+
+                                    <div class="profile-info-content">
+
+                                        <span class="profile-info-label">
+                                            @Localizer["Phone"]
+                                        </span>
+
+                                        <strong>
+                                            @(string.IsNullOrWhiteSpace(Model?.Phone)
+                                                                                        ? "—"
+                                                                                        : Model.Phone)
+                                        </strong>
+
+                                    </div>
+
+                                </div>
+
+
+                                <!-- Email -->
+                                <div class="profile-info-item">
+
+                                    <div class="profile-info-icon profile-icon-danger">
+
+                                        <i class="bx bx-envelope"></i>
+
+                                    </div>
+
+                                    <div class="profile-info-content">
+
+                                        <span class="profile-info-label">
+                                            @Localizer["Email"]
+                                        </span>
+
+                                        <strong class="profile-email">
+                                            @(string.IsNullOrWhiteSpace(Model?.Email)
+                                                                                        ? "—"
+                                                                                        : Model.Email)
+                                        </strong>
+
+                                    </div>
+
+                                </div>
+
+                            </div>
+
                         </div>
+
                     </div>
+
                 </div>
-            }
-    
+
+
+                <!-- =========================================
+                     ACTIVITY
+                     ========================================= -->
+
+                <div class="col-xl-8 col-lg-7">
+
+                    <div class="card profile-activity-card h-100">
+
+
+                        <!-- Header -->
+                        <div class="card-header profile-card-header">
+
+                            <div class="profile-section-title mb-0">
+
+                                <div class="profile-section-icon profile-section-icon-purple">
+
+                                    <i class="bx bx-bar-chart-alt-2"></i>
+
+                                </div>
+
+                                <div>
+
+                                    <h5>
+                                        @Localizer["Chronologyofactivities"]
+                                    </h5>
+
+                                    <span>
+                                        @Localizer["RecentActivity"]
+                                    </span>
+
+                                </div>
+
+                            </div>
+
+                        </div>
+
+
+                        <!-- Body -->
+                        <div class="card-body">
+
+                            <div class="profile-empty-state">
+
+                                <div class="profile-empty-icon">
+
+                                    <i class="bx bx-time-five"></i>
+
+                                </div>
+                                <p>
+                                    @Localizer["Noinformationonactivity"]
+                                </p>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
         </div>
-    </div> 
 
-    </div>*@
 
- </div>
+        <!-- =================================================
+             MY TEAM TAB
+             ================================================= -->
 
-<!-- Toast message -->
-<div class="position-fixed bottom-0 end-0 p-3" style="z-index: 1055">
-  <div id="referralToast" class="toast align-items-center text-white bg-primary border-0" role="alert" aria-live="assertive" aria-atomic="true">
-    <div class="d-flex">
-      <div class="toast-body">
-          @Localizer["Linkcopied"]
-      </div>
-      <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
+        <div class="tab-pane fade"
+             id="teamsTab"
+             role="tabpanel"
+             aria-labelledby="teams-tab">
+
+
+            <!-- =================================================
+                 TEAM STATISTICS
+                 ================================================= -->
+
+            <div class="row g-4 mb-4">
+
+
+                <!-- Total Members -->
+                <div class="col-xl-4 col-md-4">
+
+                    <div class="team-stat-card">
+
+                        <div class="team-stat-icon team-stat-icon-purple">
+
+                            <i class="bx bx-group"></i>
+
+                        </div>
+
+                        <div class="team-stat-content">
+
+                            <span>
+                                @Localizer["TotalMembers"]
+                            </span>
+
+                            <strong>
+                                @totalMembers
+                            </strong>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+                <!-- Active Members -->
+                <div class="col-xl-4 col-md-4">
+
+                    <div class="team-stat-card">
+
+                        <div class="team-stat-icon team-stat-icon-green">
+
+                            <i class="bx bx-user-check"></i>
+
+                        </div>
+
+                        <div class="team-stat-content">
+
+                            <span>
+                                @Localizer["ActiveMembers"]
+                            </span>
+
+                            <strong>
+                                @activeMembers
+                            </strong>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+                <!-- Direct Referrals -->
+                <div class="col-xl-4 col-md-4">
+
+                    <div class="team-stat-card">
+
+                        <div class="team-stat-icon team-stat-icon-blue">
+
+                            <i class="bx bx-user-plus"></i>
+
+                        </div>
+
+                        <div class="team-stat-content">
+
+                            <span>
+                                @Localizer["DirectReferrals"]
+                            </span>
+
+                            <strong>
+                                @directReferrals
+                            </strong>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <!-- =================================================
+                 MY REFERRALS
+                 ================================================= -->
+
+            <div class="card team-members-card">
+
+
+                <!-- Header -->
+                <div class="card-header team-members-header">
+
+                    <div>
+
+                        <h5>
+                            @Localizer["Myreferrals"]
+                        </h5>
+                    </div>
+
+
+                    @if (totalMembers > 0)
+                    {
+                        <span class="team-members-count">
+                            @totalMembers
+                        </span>
+                    }
+
+                </div>
+
+
+                <!-- =================================================
+                     SCROLLABLE MEMBERS AREA
+                     ================================================= -->
+
+                <div class="team-members-scroll">
+
+
+                    @if (Model.Refferals != null &&
+                                        Model.Refferals.Any())
+                    {
+
+                        <div class="team-member-list">
+
+
+                            <!-- Table Header -->
+                            <div class="team-member-row team-member-list-header">
+
+                                <div>
+                                    @Localizer["Member"]
+                                </div>
+
+                                <div>
+                                    @Localizer["Joinedin"]
+                                </div>
+
+                                <div>
+                                    @Localizer["Referrals"]
+                                </div>
+
+                                <div>
+                                    @Localizer["Status"]
+                                </div>
+
+                                <div></div>
+
+                            </div>
+
+
+                            <!-- Members -->
+                            @foreach (var referall in Model.Refferals)
+                            {
+
+                                var username =
+                                $"{referall.FirstName} {referall.LastName}".Trim();
+
+                                string refJoinedText = "";
+
+                                if (referall.CreatedDate.HasValue)
+                                {
+
+                                    var monthRef =
+                                    referall.CreatedDate.Value.ToString(
+                                    "MMM",
+                                    CultureInfo.CurrentUICulture);
+
+                                    var yearRef =
+                                    referall.CreatedDate.Value.Year;
+
+                                    refJoinedText =
+                                    $"{monthRef} {yearRef}";
+                                }
+
+
+                                <div class="team-member-row">
+
+
+                                    <!-- Member -->
+                                    <div class="team-member-main">
+
+                                        <div class="team-member-avatar">
+
+                                            @if (!string.IsNullOrEmpty(
+                                                                                referall.PhotoUrl))
+                                            {
+                                                <img src="@Url.Content(referall.PhotoUrl)"
+                                                     alt="Avatar" />
+                                            }
+                                            else
+                                            {
+                                                <i class="bx bx-user"></i>
+                                            }
+
+                                    </div>
+
+
+                                    <div class="team-member-info">
+
+                                        <strong>
+                                            @(string.IsNullOrWhiteSpace(username)
+                                                                                    ? "—"
+                                                                                    : username)
+                                    </strong>
+
+
+                                    @if (!string.IsNullOrEmpty(
+                                                                        referall.Email))
+                                            {
+                                                <span>
+                                                    @referall.Email
+                                                </span>
+                                            }
+
+                                        </div>
+
+                                    </div>
+
+
+                                    <!-- Joined -->
+                                    <div class="team-member-date">
+
+                                        @if (!string.IsNullOrEmpty(
+                                                                        refJoinedText))
+                                        {
+                                            <i class="bx bx-calendar"></i>
+
+                                            <span>
+                                                @refJoinedText
+                                            </span>
+                                        }
+                                        else
+                                        {
+                                            <span>—</span>
+                                        }
+
+                                    </div>
+
+
+                                    <!-- Referrals -->
+                                    <div class="team-member-referrals">
+
+                                        <i class="bx bx-group"></i>
+
+                                        <strong>
+                                            0
+                                        </strong>
+
+                                    </div>
+
+
+                                    <!-- Status -->
+                                    <div>
+
+                                        <span class="team-status-badge active">
+
+                                            <span class="team-status-dot"></span>
+
+                                            @Localizer["Active"]
+
+                                        </span>
+
+                                    </div>
+                                </div>
+
+                            }
+
+                        </div>
+
+                    }
+                    else
+                    {
+
+                        <!-- =================================================
+                             EMPTY TEAM
+                             ================================================= -->
+
+                        <div class="profile-empty-state team-empty-state">
+
+                            <div class="profile-empty-icon">
+
+                                <i class="bx bx-group"></i>
+
+                            </div>
+
+                            <h5>
+                                @Localizer["Noinformation"]
+                            </h5>
+
+                            <p>
+                                @Localizer["Noreferals"]
+                            </p>
+
+                        </div>
+
+                    }
+
+                </div>
+
+            </div>
+
+        </div>
+
     </div>
-  </div>
+
 </div>
 
+
+<!-- =====================================================
+     REFERRAL TOAST
+     ===================================================== -->
+
+<div class="position-fixed bottom-0 end-0 p-3"
+     style="z-index: 1055">
+
+    <!-- Referral -->
+    <div id="referralToast"
+         class="toast referral-toast"
+         role="alert"
+         aria-live="assertive"
+         aria-atomic="true">
+
+        <div class="d-flex align-items-center">
+
+            <div class="referral-toast-icon">
+                <i class="bx bx-check"></i>
+            </div>
+
+            <div class="toast-body">
+                @Localizer["Linkcopied"]
+            </div>
+
+            <button type="button"
+                    class="btn-close btn-close-white me-2 m-auto"
+                    data-bs-dismiss="toast"
+                    aria-label="Close">
+            </button>
+
+        </div>
+
+    </div>
+
+
+    <!-- Photo -->
+    <div id="photoToast"
+         class="toast referral-toast mt-2"
+         role="alert"
+         aria-live="assertive"
+         aria-atomic="true">
+
+        <div class="d-flex align-items-center">
+
+            <div class="referral-toast-icon">
+                <i class="bx bx-image"></i>
+            </div>
+
+            <div class="toast-body">
+                @Localizer["Photosaved"]
+            </div>
+
+            <button type="button"
+                    class="btn-close btn-close-white me-2 m-auto"
+                    data-bs-dismiss="toast"
+                    aria-label="Close">
+            </button>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<!-- =====================================================
+     PAGE SCRIPT
+     ===================================================== -->
+
 <script>
-function copyReferralLink(code) {
-    const url = `${window.location.origin}/Account/Register?reff=${code}`;
-    
-    navigator.clipboard.writeText(url).then(() => {
-       
-        const toastEl = document.getElementById('referralToast');
-        const toast = new bootstrap.Toast(toastEl);
+
+    /* =========================================================
+       PROFILE PHOTO
+       ========================================================= */
+
+    let selectedPhotoFile = null;
+
+    const profilePhotoInput =
+        document.getElementById("profilePhotoInput");
+
+    const photoUploadPanel =
+        document.getElementById("photoUploadPanel");
+
+    const photoUploadPreview =
+        document.getElementById("photoUploadPreview");
+
+    const cancelPhotoBtn =
+        document.getElementById("cancelPhotoBtn");
+
+    const savePhotoBtn =
+        document.getElementById("savePhotoBtn");
+
+
+    /*
+     * Select photo
+     */
+
+    profilePhotoInput?.addEventListener(
+        "change",
+        function () {
+
+            const file =
+                this.files?.[0];
+
+            if (!file) {
+                return;
+            }
+
+
+            /*
+             * Validate file type
+             */
+
+            const allowedTypes = [
+                "image/jpeg",
+                "image/png",
+                "image/webp"
+            ];
+
+            if (!allowedTypes.includes(file.type)) {
+
+                alert(
+                    "Please select JPG, PNG or WEBP image."
+                );
+
+                this.value = "";
+
+                return;
+            }
+
+
+            /*
+             * Validate file size
+             * 5 MB
+             */
+
+            const maxSize =
+                5 * 1024 * 1024;
+
+            if (file.size > maxSize) {
+
+                alert(
+                    "Maximum file size is 5 MB."
+                );
+
+                this.value = "";
+
+                return;
+            }
+
+
+            selectedPhotoFile = file;
+
+
+            /*
+             * Preview
+             */
+
+            const reader =
+                new FileReader();
+
+            reader.onload =
+                function (event) {
+
+                    photoUploadPreview.innerHTML = `
+                        <img src="${event.target.result}"
+                             alt="Photo preview" />
+                    `;
+
+                    photoUploadPanel
+                        .classList
+                        .remove("d-none");
+
+                };
+
+
+            reader.readAsDataURL(file);
+
+        }
+    );
+
+
+    /*
+     * Cancel selected photo
+     */
+
+    cancelPhotoBtn?.addEventListener(
+        "click",
+        function () {
+
+            selectedPhotoFile = null;
+
+            profilePhotoInput.value = "";
+
+            photoUploadPanel
+                .classList
+                .add("d-none");
+
+            photoUploadPreview.innerHTML = `
+                <i class="bx bx-image"></i>
+            `;
+
+        }
+    );
+
+
+    /*
+     * Save photo
+     */
+
+    savePhotoBtn?.addEventListener(
+        "click",
+        async function () {
+
+            if (!selectedPhotoFile) {
+                return;
+            }
+
+
+            const originalContent =
+                savePhotoBtn.innerHTML;
+
+
+            savePhotoBtn.disabled = true;
+
+            savePhotoBtn.innerHTML = `
+                <span class="spinner-border spinner-border-sm me-1"></span>
+                @Localizer["Saving"]
+            `;
+
+
+            try {
+
+                const formData =
+                    new FormData();
+
+                formData.append(
+                    "photo",
+                    selectedPhotoFile
+                );
+
+
+                /*
+                 * Anti-forgery token
+                 *
+                 * If your layout/form already contains
+                 * the token, it will be used here.
+                 */
+
+                const tokenElement =
+                    document.querySelector(
+                        'input[name="__RequestVerificationToken"]'
+                    );
+
+
+                const token =
+                    tokenElement
+                        ? tokenElement.value
+                        : "";
+
+
+                const response =
+                    await fetch(
+                        '@Url.Action("UploadPhoto", "Account")',
+                        {
+                            method: "POST",
+
+                            body: formData,
+
+                            headers: token
+                                ? {
+                                    "RequestVerificationToken":
+                                        token
+                                }
+                                : {}
+                        }
+                    );
+
+
+                if (!response.ok) {
+
+                    throw new Error(
+                        "Unable to upload photo."
+                    );
+
+                }
+
+
+                const result =
+                    await response.json();
+
+
+                if (!result.success) {
+
+                    throw new Error(
+                        result.message ||
+                        "Unable to upload photo."
+                    );
+
+                }
+
+
+                /*
+                 * Replace current avatar
+                 */
+
+                const avatar =
+                    document.getElementById(
+                        "profileAvatar"
+                    );
+
+                if (avatar) {
+
+                    if (avatar.tagName === "IMG") {
+
+                        avatar.src =
+                            `${result.photoUrl}?v=${Date.now()}`;
+
+                    }
+                    else {
+
+                        const newAvatar =
+                            document.createElement("img");
+
+                        newAvatar.id =
+                            "profileAvatar";
+
+                        newAvatar.className =
+                            "profile-avatar";
+
+                        newAvatar.alt =
+                            "User avatar";
+
+                        newAvatar.src =
+                            `${result.photoUrl}?v=${Date.now()}`;
+
+
+                        avatar.replaceWith(
+                            newAvatar
+                        );
+
+                    }
+
+                }
+
+                    /*
+                 * Update Navbar avatars
+                 */
+                const cacheBustedPhotoUrl =`${result.photoUrl}?v=${Date.now()}`;
+
+                const navbarAvatar =
+                    document.getElementById("navbarUserAvatar");
+
+                const navbarAvatarDropdown =
+                    document.getElementById("navbarUserAvatarDropdown");
+
+
+                if (navbarAvatar) {
+
+                    navbarAvatar.src =
+                        cacheBustedPhotoUrl;
+
+                }
+
+
+                if (navbarAvatarDropdown) {
+
+                    navbarAvatarDropdown.src =
+                        cacheBustedPhotoUrl;
+
+                }
+
+                /*
+                 * Reset upload
+                 */
+
+                selectedPhotoFile = null;
+
+                profilePhotoInput.value = "";
+
+                photoUploadPanel
+                    .classList
+                    .add("d-none");
+
+                photoUploadPreview.innerHTML = `
+                    <i class="bx bx-image"></i>
+                `;
+
+
+                /*
+                 * Show success toast
+                 */
+
+                showPhotoToast(
+                    result.message ||
+                    "@Localizer["Photosaved"]"
+                );
+
+            }
+            catch (error) {
+
+                console.error(
+                    "Photo upload error:",
+                    error
+                );
+
+
+                alert(
+                    error.message ||
+                    "Unable to upload photo."
+                );
+
+            }
+            finally {
+
+                savePhotoBtn.disabled = false;
+
+                savePhotoBtn.innerHTML =
+                    originalContent;
+
+            }
+
+        }
+    );
+
+
+    /*
+     * Photo success toast
+     */
+
+        function showPhotoToast(message) {
+
+        const toastEl =
+            document.getElementById("photoToast");
+
+        if (!toastEl) {
+            return;
+        }
+
+        const toastBody =
+            toastEl.querySelector(".toast-body");
+
+        if (toastBody && message) {
+            toastBody.textContent = message;
+        }
+
+        const toast =
+            new bootstrap.Toast(
+                toastEl,
+                {
+                    delay: 2500
+                }
+            );
+
         toast.show();
-    }).catch(err => {
-           console.error('Copy error:', err);
-    });
-}
+    }
+
+
+    /* =========================================================
+       REFERRAL LINK
+       ========================================================= */
+
+    function copyReferralLink(code) {
+
+        if (!code) {
+            return;
+        }
+
+
+        const url =
+            `${window.location.origin}/Account/Register?reff=${encodeURIComponent(code)}`;
+
+
+        navigator.clipboard
+            .writeText(url)
+            .then(() => {
+
+                const toastEl =
+                    document.getElementById(
+                        "referralToast"
+                    );
+
+                if (!toastEl) {
+                    return;
+                }
+
+
+                const toast =
+                    new bootstrap.Toast(
+                        toastEl,
+                        {
+                            delay: 2500
+                        }
+                    );
+
+
+                toast.show();
+
+            })
+            .catch(error => {
+
+                console.error(
+                    "Copy error:",
+                    error
+                );
+
+            });
+
+    }
+
 </script>
 
 

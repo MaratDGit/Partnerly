@@ -1,22 +1,60 @@
 ﻿@{
-  Layout = "_BlankLayout";
-  ViewData["Title"] = "Account created";
+    Layout = "_BlankLayout";
+    ViewData["Title"] = "Account created";
 }
 
-<div class="container-xxl">
-  <div class="authentication-wrapper authentication-basic container-p-y">
-    <div class="authentication-inner">
-      <div class="card px-sm-6 px-0">
-        <div class="card-body">
-                    <h4 class="text-success mb-4">✅ @Localizer["Registrationwassuccessful"]</h4>
-            <p class="mb-4">
-                        @Localizer["Youraccounthasbeensuccessfullycreated"]
-            </p>
-            <a asp-controller="Account" asp-action="Login" class="btn btn-primary btn-lg">
-                @Localizer["OK"]
+@section PageStyles {
+    <link rel="stylesheet"
+          href="~/assets/vendor/css/pages/page-auth.css"
+          asp-append-version="true">
+}
+
+<div class="partnerly-auth-page partnerly-auth-page-single">
+    <div class="partnerly-auth-form">
+        <div class="auth-form-container auth-result-container">
+
+            <div class="auth-result-logo">
+                <a asp-controller="Home" asp-action="Index" class="auth-logo">
+                    <span class="auth-logo-icon">
+                        <img src="~/favicon.png" alt="Logo">
+                    </span>
+
+                    <span>@TempData.Peek("appName")</span>
+                </a>
+            </div>
+
+            <div class="auth-result-icon success">
+                <i class="bx bx-user-check"></i>
+            </div>
+
+            <div class="auth-form-header">
+
+                <h2>
+                    @Localizer["Registrationwassuccessful"]
+                </h2>
+
+                <p>
+                    @Localizer["Youraccounthasbeensuccessfullycreated"]
+                </p>
+
+            </div>
+
+            <a asp-controller="Account"
+               asp-action="Login"
+               class="btn auth-primary-btn">
+
+                <span>@Localizer["OK"]</span>
+                <i class="bx bx-right-arrow-alt"></i>
+
             </a>
+
+            <div class="auth-result-footer">
+                <span>
+                    <i class="bx bx-check-circle"></i>
+                    @Localizer["Youraccountisready"]
+                </span>
+            </div>
+
         </div>
-      </div>
     </div>
-  </div>
 </div>
