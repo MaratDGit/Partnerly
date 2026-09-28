@@ -1,170 +1,628 @@
-﻿
+﻿@using System.Globalization
+
 <style>
-.notification-item {
-    position: relative;
-    padding-right: 30px;
-    border-radius: 8px;
-    background-color: #fff;
-    transition: background-color 0.2s ease;
-}
+    /* =========================================================
+           PARTNERLY NAVBAR
+           ========================================================= */
 
-.notification-item:hover {
-    background-color: #f8f9fa;
-}
-
-.notification-date {
-    display: flex;
-    align-items: center;
-    font-size: 0.8rem;
-    color: #6c757d;
-    margin-bottom: 4px;
-}
-
-.notification-date i {
-    font-size: 14px;
-    margin-right: 4px;
-    color: #6c757d;
-}
-
-.notification-message {
-    margin-top: 6px;
-    display: -webkit-box;
-    -webkit-line-clamp: 2;
-    -webkit-box-orient: vertical;
-    overflow: hidden;
-    text-overflow: ellipsis;
-}
-
-.notification-full {
-    margin-top: 6px;
-    white-space: normal;
-}
-
-#markAllReadBtn {
-    font-weight: 500;
-}
-
-#markAllReadBtn.btn-primary {
-    background-color: #0b5ed7;
-    border-color: #0a58ca;
-    color: #fff;
-}
-
-#markAllReadBtn.btn-primary:hover {
-    background-color: #0d6efd;
-    border-color: #0d6efd;
-}
-
-.notification-actions {
-    display: flex;
-    justify-content: flex-start;
-    align-items: center;
-    gap: 10px;
-    margin-top: 8px;
-}
-
-
-.delete-notification {
-    position: absolute;
-    top: 1px;
-    right: 1px; 
-    background-color: rgba(0, 0, 0, 0.05);
-    border: none;
-    border-radius: 50%;
-    width: 22px;
-    height: 22px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    cursor: pointer;
-    transition: background-color 0.2s ease;
-}
-
-.delete-notification:hover {
-    background-color: rgba(0, 0, 0, 0.15);
-}
-
-.delete-notification i {
-    font-size: 16px;
-    color: #333;
-    pointer-events: none;
-}
-
-#notificationDropdown {
-    outline: none !important;
-    box-shadow: none !important;
-    border: none !important;
-}
-#notificationDropdown:focus,
-#notificationDropdown:active {
-    outline: none !important;
-    box-shadow: none !important;
-    border: none !important;
-}
-
-@@keyframes pulseBadge {
-    0% { transform: scale(1); box-shadow: 0 0 0 rgba(255,0,0,0); }
-    30% { transform: scale(1.3); box-shadow: 0 0 10px rgba(255,0,0,0.6); }
-    60% { transform: scale(0.9); box-shadow: 0 0 5px rgba(255,0,0,0.4); }
-    100% { transform: scale(1); box-shadow: 0 0 0 rgba(255,0,0,0); }
-}
-
-.badge-animate {
-    animation: pulseBadge 0.6s ease-in-out;
-}
-</style>
-
-@if (ViewData["navbarFull"] != null)
-{
-<div class="navbar-brand app-brand demo d-none d-xl-flex py-0 me-4">
-  <a asp-controller="Home" asp-action="Index" class="app-brand-link gap-2">
-      <span class="app-brand-logo demo">
-      </span>
-      <span class="app-brand-text demo menu-text fw-bold">@TempData.Peek("appName")</span>
-    </a>
-</div>
-}
-
-@if (ViewData["navbarHideToggle"] == null)
-{
-  <div class="layout-menu-toggle navbar-nav align-items-xl-center me-4 me-xl-0 d-xl-none">
-    <a class="nav-item nav-link px-0 me-xl-6" data-no-loader="true" asp-controller="Home" asp-action="Index">
-      <i class="bx bx-menu bx-md"></i>
-    </a>
-  </div>
-}
-
-<div class="navbar-nav-right d-flex align-items-center" id="navbar-collapse">   
-  <ul class="navbar-nav flex-row align-items-center ms-auto">
-
-    @{
-        var currentCulture = CultureInfo.CurrentUICulture.TwoLetterISOLanguageName;
-
-        var currentFlag = currentCulture switch
-        {
-            "en" => "gb",
-            "ru" => "ru",
-            "hy" => "am",
-            _ => "un"
-        };
+    .partnerly-navbar-inner {
+        width: 100%;
+        min-height: 72px;
+        display: flex;
+        align-items: center;
+        gap: 14px;
     }
 
-    <li class="nav-item dropdown me-4">
-            <a class="nav-link dropdown-toggle hide-arrow"
-               href="javascript:void(0);"
-               data-bs-toggle="dropdown"
-               aria-expanded="false">
+    .partnerly-mobile-menu-button {
+        width: 40px;
+        height: 40px;
+        flex: 0 0 40px;
+        display: none;
+        align-items: center;
+        justify-content: center;
+        padding: 0;
+        border: 0;
+        border-radius: 10px;
+        background: rgba(67, 89, 113, 0.06);
+        color: #566a7f;
+        cursor: pointer;
+        transition: background-color .2s ease, color .2s ease, transform .2s ease;
+    }
+
+        .partnerly-mobile-menu-button:hover {
+            color: #696cff;
+            background: rgba(105, 108, 255, 0.10);
+        }
+
+        .partnerly-mobile-menu-button i {
+            font-size: 22px;
+        }
+
+
+    /* =========================================================
+           PAGE TITLE / SEARCH AREA
+           ========================================================= */
+
+    .partnerly-navbar-left {
+        min-width: 0;
+        display: flex;
+        align-items: center;
+        flex: 1;
+    }
+
+    .partnerly-navbar-page-title {
+        min-width: 0;
+        display: flex;
+        flex-direction: column;
+        line-height: 1.2;
+    }
+
+    .partnerly-navbar-page-title-main {
+        font-size: 0.95rem;
+        font-weight: 600;
+        color: #32475c;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+
+    .partnerly-navbar-page-title-subtitle {
+        margin-top: 3px;
+        font-size: 0.72rem;
+        color: #a1acb8;
+    }
+
+
+    /* =========================================================
+           NAVBAR ACTIONS
+           ========================================================= */
+
+    .partnerly-navbar-actions {
+        display: flex;
+        align-items: center;
+        gap: 7px;
+        margin-left: auto;
+    }
+
+
+    .partnerly-navbar-action {
+        position: relative;
+        width: 40px;
+        height: 40px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 0;
+        border: 0;
+        border-radius: 10px;
+        background: transparent;
+        color: #566a7f;
+        cursor: pointer;
+        transition: background-color .2s ease, color .2s ease;
+    }
+
+        .partnerly-navbar-action:hover {
+            color: #696cff;
+            background: rgba(105, 108, 255, 0.08);
+        }
+
+        .partnerly-navbar-action > i {
+            font-size: 21px;
+        }
+
+
+    /* =========================================================
+           LANGUAGE
+           ========================================================= */
+
+    .partnerly-language-button {
+        gap: 7px;
+    }
+
+        .partnerly-language-button img {
+            width: 23px;
+            height: 17px;
+            object-fit: cover;
+            border-radius: 3px;
+        }
+
+        .partnerly-language-button .bx-chevron-down {
+            font-size: 15px;
+        }
+
+    .partnerly-language-menu {
+        min-width: 175px;
+        padding: 7px;
+        border: 1px solid #e7e9ed;
+        border-radius: 12px;
+        box-shadow: 0 10px 35px rgba(50, 71, 92, 0.12);
+    }
+
+        .partnerly-language-menu .dropdown-item {
+            display: flex;
+            align-items: center;
+            min-height: 40px;
+            border-radius: 8px;
+            font-size: 0.86rem;
+            font-weight: 500;
+            color: #566a7f;
+        }
+
+            .partnerly-language-menu .dropdown-item:hover {
+                background: rgba(105, 108, 255, 0.08);
+                color: #696cff;
+            }
+
+        .partnerly-language-menu img {
+            width: 24px;
+            height: 18px;
+            object-fit: cover;
+            border-radius: 3px;
+        }
+
+
+    /* =========================================================
+           NOTIFICATIONS
+           ========================================================= */
+
+    .partnerly-notification-button {
+        position: relative;
+    }
+
+        .partnerly-notification-button i {
+            transition: transform .2s ease;
+        }
+
+        .partnerly-notification-button:hover i {
+            transform: rotate(-8deg);
+        }
+
+    #unreadCountBadge {
+        position: absolute !important;
+        top: 3px !important;
+        right: 2px !important;
+        left: auto !important;
+        min-width: 17px;
+        height: 17px;
+        display: none;
+        align-items: center;
+        justify-content: center;
+        padding: 0 4px;
+        border: 2px solid #fff;
+        font-size: 0.58rem;
+        font-weight: 700;
+        line-height: 13px;
+    }
+
+    .partnerly-notification-dropdown {
+        width: 350px;
+        padding: 0;
+        overflow: hidden;
+        border: 1px solid #e7e9ed;
+        border-radius: 14px;
+        box-shadow: 0 12px 40px rgba(50, 71, 92, 0.14);
+    }
+
+    .partnerly-notification-header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 14px 16px;
+        border-bottom: 1px solid #eef0f2;
+        background: #fff;
+    }
+
+    .partnerly-notification-header-title {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        font-size: 0.88rem;
+        font-weight: 600;
+        color: #32475c;
+    }
+
+        .partnerly-notification-header-title i {
+            color: #696cff;
+            font-size: 19px;
+        }
+
+    .partnerly-notification-body {
+        max-height: 380px;
+        overflow-y: auto;
+        overflow-x: hidden;
+        padding: 6px;
+    }
+
+    .partnerly-notification-footer {
+        display: none;
+        padding: 9px;
+        border-top: 1px solid #eef0f2;
+        background: #fafafa;
+    }
+
+        .partnerly-notification-footer .btn {
+            border-radius: 8px;
+        }
+
+    .notification-item {
+        position: relative;
+        padding: 11px !important;
+        margin-bottom: 3px;
+        border: 0 !important;
+        border-radius: 10px;
+        background: #fff;
+        transition: background-color .2s ease, transform .15s ease;
+    }
+
+        .notification-item:hover {
+            background: #f8f9fc;
+            transform: translateX(1px);
+        }
+
+    .notification-date {
+        display: flex;
+        align-items: center;
+        margin-bottom: 5px;
+        font-size: 0.72rem;
+        color: #a1acb8;
+    }
+
+        .notification-date i {
+            margin-right: 5px;
+            font-size: 14px;
+            color: #696cff;
+        }
+
+    .notification-message {
+        margin-top: 5px;
+        display: -webkit-box;
+        -webkit-line-clamp: 2;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        color: #566a7f;
+        font-size: 0.82rem;
+        line-height: 1.45;
+    }
+
+    .notification-full {
+        margin-top: 5px;
+        white-space: normal;
+        color: #566a7f;
+        font-size: 0.82rem;
+        line-height: 1.45;
+    }
+
+    .notification-actions {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        margin-top: 7px;
+    }
+
+        .notification-actions .btn {
+            font-size: 0.74rem;
+            text-decoration: none;
+        }
+
+    .delete-notification {
+        position: absolute;
+        top: 8px;
+        right: 7px;
+        width: 23px;
+        height: 23px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 0;
+        border: 0;
+        border-radius: 50%;
+        background: rgba(67, 89, 113, 0.06);
+        color: #697a8d;
+        cursor: pointer;
+        transition: background-color .2s ease, color .2s ease;
+    }
+
+        .delete-notification:hover {
+            background: rgba(255, 62, 29, 0.10);
+            color: #ff3e1d;
+        }
+
+        .delete-notification i {
+            font-size: 15px;
+            pointer-events: none;
+        }
+
+    .partnerly-no-notifications {
+        padding: 35px 15px !important;
+        color: #a1acb8;
+    }
+
+
+    /* =========================================================
+           USER
+           ========================================================= */
+
+    .partnerly-user-button {
+        display: flex;
+        align-items: center;
+        gap: 9px;
+        padding: 3px 5px 3px 3px !important;
+        border-radius: 12px;
+        transition: background-color .2s ease;
+    }
+
+        .partnerly-user-button:hover {
+            background: rgba(105, 108, 255, 0.07);
+        }
+
+    .partnerly-user-avatar {
+        width: 38px;
+        height: 38px;
+        flex: 0 0 38px;
+        object-fit: cover;
+        object-position: center;
+        border: 2px solid #fff;
+        border-radius: 50%;
+        box-shadow: 0 2px 8px rgba(50, 71, 92, 0.12);
+    }
+
+    .partnerly-user-chevron {
+        font-size: 16px;
+        color: #a1acb8;
+    }
+
+    .partnerly-user-menu {
+        min-width: 245px;
+        padding: 7px;
+        border: 1px solid #e7e9ed;
+        border-radius: 14px;
+        box-shadow: 0 12px 40px rgba(50, 71, 92, 0.14);
+    }
+
+    .partnerly-user-header {
+        display: flex;
+        align-items: center;
+        gap: 11px;
+        padding: 10px;
+    }
+
+    .partnerly-user-header-avatar {
+        width: 42px;
+        height: 42px;
+        flex: 0 0 42px;
+        object-fit: cover;
+        object-position: center;
+        border-radius: 50%;
+    }
+
+    .partnerly-user-info {
+        min-width: 0;
+    }
+
+    .partnerly-user-name {
+        margin: 0;
+        color: #32475c;
+        font-size: 0.88rem;
+        font-weight: 600;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+
+    .partnerly-user-ref {
+        display: block;
+        margin-top: 2px;
+        color: #a1acb8;
+        font-size: 0.72rem;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+
+    .partnerly-user-menu .dropdown-item {
+        display: flex;
+        align-items: center;
+        min-height: 40px;
+        border-radius: 8px;
+        color: #566a7f;
+        font-size: 0.84rem;
+        font-weight: 500;
+    }
+
+        .partnerly-user-menu .dropdown-item:hover {
+            background: rgba(105, 108, 255, 0.08);
+            color: #696cff;
+        }
+
+        .partnerly-user-menu .dropdown-item i {
+            width: 24px;
+            margin-right: 7px;
+            font-size: 19px;
+        }
+
+    .partnerly-user-menu .partnerly-logout:hover {
+        background: rgba(255, 62, 29, 0.08);
+        color: #ff3e1d;
+    }
+
+
+    /* =========================================================
+           BADGE ANIMATION
+           ========================================================= */
+
+    @@keyframes partnerlyPulseBadge {
+        0% {
+            transform: scale(1);
+            box-shadow: 0 0 0 rgba(255, 62, 29, 0);
+        }
+
+        30% {
+            transform: scale(1.25);
+            box-shadow: 0 0 8px rgba(255, 62, 29, 0.45);
+        }
+
+        60% {
+            transform: scale(.92);
+        }
+
+        100% {
+            transform: scale(1);
+            box-shadow: 0 0 0 rgba(255, 62, 29, 0);
+        }
+    }
+
+    .badge-animate {
+        animation: partnerlyPulseBadge .6s ease-in-out;
+    }
+
+
+    /* =========================================================
+           MOBILE
+           ========================================================= */
+
+    @@media (max-width: 1199.98px) {
+
+        .partnerly-mobile-menu-button {
+            display: flex;
+        }
+
+        .partnerly-navbar-inner {
+            min-height: 64px;
+        }
+
+        .partnerly-navbar-page-title {
+            display: none;
+        }
+
+        .partnerly-navbar-actions {
+            gap: 3px;
+        }
+
+        .partnerly-notification-dropdown {
+            position: fixed !important;
+            top: 62px !important;
+            right: 10px !important;
+            left: auto !important;
+            width: min(350px, calc(100vw - 20px));
+        }
+    }
+
+
+    @@media (max-width: 575.98px) {
+
+        .partnerly-navbar-inner {
+            gap: 7px;
+        }
+
+        .partnerly-navbar-actions {
+            gap: 1px;
+        }
+
+        .partnerly-navbar-action {
+            width: 38px;
+            height: 38px;
+        }
+
+        .partnerly-user-button {
+            padding-right: 1px !important;
+        }
+
+        .partnerly-user-chevron {
+            display: none;
+        }
+
+        .partnerly-user-menu {
+            min-width: 230px;
+        }
+    }
+</style>
+
+
+@{
+    var currentCulture = CultureInfo.CurrentUICulture.TwoLetterISOLanguageName;
+
+    var currentFlag = currentCulture switch
+    {
+        "en" => "gb",
+        "ru" => "ru",
+        "hy" => "am",
+        _ => "un"
+    };
+}
+
+
+<div class="partnerly-navbar-inner">
+
+    <!-- =====================================================
+         MOBILE MENU BUTTON
+         ===================================================== -->
+
+    <button type="button"
+            class="partnerly-mobile-menu-button"
+            data-mobile-toggle
+            aria-label="Toggle menu">
+
+        <i class="bx bx-menu"></i>
+
+    </button>
+
+
+    <!-- =====================================================
+         LEFT SIDE
+         ===================================================== -->
+
+    <div class="partnerly-navbar-left">
+
+        <div class="partnerly-navbar-page-title">
+
+           @*  <span class="partnerly-navbar-page-title-main">
+                @ViewData["Title"]
+            </span> *@
+
+        </div>
+
+    </div>
+
+
+    <!-- =====================================================
+         ACTIONS
+         ===================================================== -->
+
+    <div class="partnerly-navbar-actions">
+
+
+        <!-- =================================================
+             LANGUAGE
+             ================================================= -->
+
+        <div class="dropdown">
+
+            <button type="button"
+                    class="partnerly-navbar-action partnerly-language-button"
+                    data-bs-toggle="dropdown"
+                    aria-expanded="false"
+                    aria-label="Language">
 
                 <img src="https://flagcdn.com/24x18/@(currentFlag).png"
                      alt="@currentCulture"
                      width="24"
                      height="18" />
-            </a>
 
-            <ul class="dropdown-menu dropdown-menu-end">
+                <i class="bx bx-chevron-down"></i>
+
+            </button>
+
+
+            <ul class="dropdown-menu dropdown-menu-end partnerly-language-menu">
+
 
                 <li>
-                    <form asp-controller="Language" asp-action="SetLanguage" method="post">
+
+                    <form asp-controller="Language"
+                          asp-action="SetLanguage"
+                          method="post">
+
                         <input type="hidden"
                                name="returnUrl"
                                value="@Context.Request.Path@Context.Request.QueryString" />
@@ -173,18 +631,28 @@
                                 name="culture"
                                 value="en"
                                 class="dropdown-item">
+
                             <img src="https://flagcdn.com/24x18/gb.png"
                                  width="24"
                                  height="18"
                                  class="me-2"
                                  alt="English" />
-                            English
+
+                            <span>English</span>
+
                         </button>
+
                     </form>
+
                 </li>
 
+
                 <li>
-                    <form asp-controller="Language" asp-action="SetLanguage" method="post">
+
+                    <form asp-controller="Language"
+                          asp-action="SetLanguage"
+                          method="post">
+
                         <input type="hidden"
                                name="returnUrl"
                                value="@Context.Request.Path@Context.Request.QueryString" />
@@ -193,18 +661,28 @@
                                 name="culture"
                                 value="ru"
                                 class="dropdown-item">
+
                             <img src="https://flagcdn.com/24x18/ru.png"
                                  width="24"
                                  height="18"
                                  class="me-2"
                                  alt="Русский" />
-                            Русский
+
+                            <span>Русский</span>
+
                         </button>
+
                     </form>
+
                 </li>
 
+
                 <li>
-                    <form asp-controller="Language" asp-action="SetLanguage" method="post">
+
+                    <form asp-controller="Language"
+                          asp-action="SetLanguage"
+                          method="post">
+
                         <input type="hidden"
                                name="returnUrl"
                                value="@Context.Request.Path@Context.Request.QueryString" />
@@ -213,315 +691,776 @@
                                 name="culture"
                                 value="hy"
                                 class="dropdown-item">
+
                             <img src="https://flagcdn.com/24x18/am.png"
                                  width="24"
                                  height="18"
                                  class="me-2"
                                  alt="Հայերեն" />
-                            Հայերեն
+
+                            <span>Հայերեն</span>
+
                         </button>
+
                     </form>
+
                 </li>
-                
-            </ul>
-    </li>
 
-    <li class="nav-item dropdown me-4">
-      <a class="btn btn-xs dropdown-toggle" href="#" id="notificationDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-        <i class="bx bxs-bell-ring"></i>
-        <span id="unreadCountBadge" class="badge bg-danger rounded-pill" style="display:none; position:relative; top:-10px; left:-5px;">0</span>
-      </a>
-        <div class="dropdown-menu dropdown-menu-end p-0" aria-labelledby="notificationDropdown"
-             style="width: 320px; overflow: hidden;">
-          <div id="notificationListWrapper" style="max-height: 380px; overflow-y: auto; overflow-x: hidden;" class="p-2">
-            <ul id="notificationList" class="list-unstyled mb-0">
-                        <li class="text-center text-muted small py-2 no-notifications">@Localizer["NoNewNotifications"]</li>
             </ul>
-          </div>
-          <div class="p-2 border-top bg-light text-center" style="display:none;">
-            <button id="markAllReadBtn" class="btn btn-primary btn-sm w-100">
-                        @Localizer["Markallasread"]
+
+        </div>
+
+
+        <!-- =================================================
+             NOTIFICATIONS
+             ================================================= -->
+
+        <div class="dropdown">
+
+            <button type="button"
+                    class="partnerly-navbar-action partnerly-notification-button"
+                    id="notificationDropdown"
+                    data-bs-toggle="dropdown"
+                    aria-expanded="false"
+                    aria-label="Notifications">
+
+                <i class="bx bx-bell"></i>
+
+                <span id="unreadCountBadge"
+                      class="badge bg-danger rounded-pill">
+                    0
+                </span>
+
             </button>
-          </div>
-        </div>
-    </li>
 
-    <li class="nav-item navbar-dropdown dropdown-user dropdown">
-      <a class="nav-link dropdown-toggle hide-arrow p-0" href="javascript:void(0);" data-bs-toggle="dropdown">
-        <div class="avatar avatar-online">
-          <img src="@Url.Content(ViewBag?.UserPhotoUrl)" alt="Avatar" class="w-px-40 h-auto rounded-circle">
-        </div>
-      </a>
-      <ul class="dropdown-menu dropdown-menu-end">
-        <li>       
-            <div class="d-flex">
-              <div class="flex-shrink-0 me-3">
-                <div class="avatar avatar-online">
-                  <img src="@Url.Content(ViewBag?.UserPhotoUrl)" alt="Avatar" class="w-px-40 h-auto rounded-circle">
+
+            <div class="dropdown-menu dropdown-menu-end partnerly-notification-dropdown"
+                 aria-labelledby="notificationDropdown">
+
+
+                <!-- Header -->
+
+                <div class="partnerly-notification-header">
+
+                    <div class="partnerly-notification-header-title">
+
+                        <i class="bx bx-bell"></i>
+
+                        <span>
+                            @Localizer["Notifications"]
+                        </span>
+
+                    </div>
+
                 </div>
-              </div>
-              <div class="flex-grow-1">
-                <h6 class="mb-0">@ViewBag?.UserFullName</h6>
-                <small class="text-muted">@ViewBag?.UserRefCode</small>
-              </div>
-            </div>          
-        </li>
-        <li>
-          <div class="dropdown-divider my-1"></div>
-        </li>
-        <li>
-          <a class="dropdown-item" asp-controller="Dashboard" asp-action="MyProfile">
-            <i class="bx bx-user bx-md me-2"></i>
-                        <span>@Localizer["Myprofile"]</span>
-          </a>
-        </li>
-        <li>
-          <a class="dropdown-item" asp-controller="Dashboard" asp-action="Settings">
-            <i class="bx bx-cog bx-md me-2"></i>
-                        <span>@Localizer["Settings"]</span>
-          </a>
-        </li>
-        <li>
-          <div class="dropdown-divider my-1"></div>
-        </li>
-        <li>
-          <a class="dropdown-item" asp-controller="Account" asp-action="Logout">
-            <i class="bx bx-power-off bx-md me-2"></i>
-                        <span>@Localizer["Logout"]</span>
-          </a>
-        </li>
-      </ul>
-    </li>
-  </ul>
+
+
+                <!-- Notifications -->
+
+                <div id="notificationListWrapper"
+                     class="partnerly-notification-body">
+
+                    <ul id="notificationList"
+                        class="list-unstyled mb-0">
+
+                        <li class="text-center small partnerly-no-notifications no-notifications">
+
+                            @Localizer["NoNewNotifications"]
+
+                        </li>
+
+                    </ul>
+
+                </div>
+
+
+                <!-- Footer -->
+
+                <div id="notificationFooter"
+                     class="partnerly-notification-footer">
+
+                    <button type="button"
+                            id="markAllReadBtn"
+                            class="btn btn-primary btn-sm w-100">
+
+                        @Localizer["Markallasread"]
+
+                    </button>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- =================================================
+             USER
+             ================================================= -->
+
+        <div class="dropdown">
+
+            <button type="button"
+                    class="nav-link dropdown-toggle hide-arrow partnerly-user-button"
+                    data-bs-toggle="dropdown"
+                    aria-expanded="false">
+
+                <img src="@Url.Content(ViewBag?.UserPhotoUrl)"
+                     alt="Avatar"
+                     class="partnerly-user-avatar" />
+
+                <i class="bx bx-chevron-down partnerly-user-chevron"></i>
+
+            </button>
+
+
+            <ul class="dropdown-menu dropdown-menu-end partnerly-user-menu">
+
+
+                <!-- User Header -->
+
+                <li>
+
+                    <div class="partnerly-user-header">
+
+                        <img src="@Url.Content(ViewBag?.UserPhotoUrl)"
+                             alt="Avatar"
+                             class="partnerly-user-header-avatar" />
+
+                        <div class="partnerly-user-info">
+
+                            <p class="partnerly-user-name">
+                                @ViewBag?.UserFullName
+                            </p>
+
+                            <span class="partnerly-user-ref">
+                                @ViewBag?.UserRefCode
+                            </span>
+
+                        </div>
+
+                    </div>
+
+                </li>
+
+
+                <li>
+                    <hr class="dropdown-divider my-1" />
+                </li>
+
+
+                <!-- Profile -->
+
+                <li>
+
+                    <a class="dropdown-item"
+                       asp-controller="Dashboard"
+                       asp-action="MyProfile">
+
+                        <i class="bx bx-user"></i>
+
+                        <span>
+                            @Localizer["Myprofile"]
+                        </span>
+
+                    </a>
+
+                </li>
+
+
+                <!-- Settings -->
+
+                <li>
+
+                    <a class="dropdown-item"
+                       asp-controller="Dashboard"
+                       asp-action="Settings">
+
+                        <i class="bx bx-cog"></i>
+
+                        <span>
+                            @Localizer["Settings"]
+                        </span>
+
+                    </a>
+
+                </li>
+
+
+                <li>
+                    <hr class="dropdown-divider my-1" />
+                </li>
+
+
+                <!-- Logout -->
+
+                <li>
+
+                    <a class="dropdown-item partnerly-logout"
+                       asp-controller="Account"
+                       asp-action="Logout">
+
+                        <i class="bx bx-power-off"></i>
+
+                        <span>
+                            @Localizer["Logout"]
+                        </span>
+
+                    </a>
+
+                </li>
+
+            </ul>
+
+        </div>
+
+    </div>
+
 </div>
 
+
+<!-- =========================================================
+     SIGNALR
+     ========================================================= -->
+
 <script src="https://cdnjs.cloudflare.com/ajax/libs/microsoft-signalr/8.0.0/signalr.min.js"></script>
+
 <script>
 
-            const notificationLocalization = {
-            noNotifications: '@Html.Raw(Localizer["NoNewNotifications"])',
-            markAllAsRead: '@Html.Raw(Localizer["Markallasread"])',
-            details: '@Html.Raw(Localizer["Details"])',
-            hide: '@Html.Raw(Localizer["Hide"])',
-            view: '@Html.Raw(Localizer["View"])',
-            connected: '@Html.Raw(Localizer["ConnectedToNotificationHub"])',
-            connectionError: '@Html.Raw(Localizer["ErrorConnectionSignalR"])'
-        };
-        const currentCulture = '@CultureInfo.CurrentUICulture.Name';
+    const notificationLocalization = {
 
-    document.addEventListener('DOMContentLoaded', function() {
-        const list = document.getElementById('notificationList');
-        const badge = document.getElementById('unreadCountBadge');
-        const markAllBtn = document.getElementById('markAllReadBtn');
+        noNotifications:
+            '@Html.Raw(Localizer["NoNewNotifications"])',
 
-        const connection = new signalR.HubConnectionBuilder()
-            .withUrl("/notificationHub")
-            .withAutomaticReconnect()
-            .build();
+        markAllAsRead:
+            '@Html.Raw(Localizer["Markallasread"])',
 
-        // Processing new notifications
-        connection.on("ReceiveNotification", function (notification) {
+        details:
+            '@Html.Raw(Localizer["Details"])',
 
-            const emptyItem = list.querySelector('.no-notifications');
-            if (emptyItem) emptyItem.remove();
+        hide:
+            '@Html.Raw(Localizer["Hide"])',
 
-            const li = document.createElement('li');
+        view:
+            '@Html.Raw(Localizer["View"])',
 
-            let date = new Date(notification.createdDate);
-            date = new Date(date.getTime() + 4 * 60 * 60 * 1000);
+        connected:
+            '@Html.Raw(Localizer["ConnectedToNotificationHub"])',
 
-            const created = date.toLocaleString(currentCulture, {
-                day: '2-digit',
-                month: 'long',
-                year: 'numeric',
-                hour: '2-digit',
-                minute: '2-digit'
-            });
+        connectionError:
+            '@Html.Raw(Localizer["ErrorConnectionSignalR"])'
 
-            li.classList.add(
-                'dropdown-item',
-                'py-2',
-                'border-bottom',
-                'notification-item'
+    };
+
+
+    const currentCulture =
+        '@CultureInfo.CurrentUICulture.Name';
+
+
+    document.addEventListener(
+        'DOMContentLoaded',
+        function () {
+
+            const list =
+                document.getElementById('notificationList');
+
+            const badge =
+                document.getElementById('unreadCountBadge');
+
+            const markAllBtn =
+                document.getElementById('markAllReadBtn');
+
+            const notificationFooter =
+                document.getElementById('notificationFooter');
+
+
+            if (!list || !badge || !markAllBtn) {
+                return;
+            }
+
+
+            /*
+             * =================================================
+             * SignalR Connection
+             * =================================================
+             */
+
+            const connection =
+                new signalR.HubConnectionBuilder()
+                    .withUrl("/notificationHub")
+                    .withAutomaticReconnect()
+                    .build();
+
+
+            /*
+             * =================================================
+             * New Notification
+             * =================================================
+             */
+
+            connection.on(
+                "ReceiveNotification",
+                function (notification) {
+
+                    const emptyItem =
+                        list.querySelector('.no-notifications');
+
+                    if (emptyItem) {
+                        emptyItem.remove();
+                    }
+
+
+                    const li =
+                        document.createElement('li');
+
+
+                    /*
+                     * Notification date
+                     */
+
+                    let date =
+                        new Date(notification.createdDate);
+
+
+                    date =
+                        new Date(
+                            date.getTime() +
+                            4 * 60 * 60 * 1000
+                        );
+
+
+                    const created =
+                        date.toLocaleString(
+                            currentCulture,
+                            {
+                                day: '2-digit',
+                                month: 'long',
+                                year: 'numeric',
+                                hour: '2-digit',
+                                minute: '2-digit'
+                            }
+                        );
+
+
+                    /*
+                     * Notification item
+                     */
+
+                    li.classList.add(
+                        'dropdown-item',
+                        'py-2',
+                        'border-bottom',
+                        'notification-item'
+                    );
+
+
+                    li.innerHTML = `
+
+                        <div>
+
+                            <div class="notification-date">
+
+                                <i class="bx bx-calendar"></i>
+
+                                <span>
+                                    ${created.replace(' г.', ' г.')}
+                                </span>
+
+                            </div>
+
+
+                            <div class="notification-message"
+                                 id="msg-${notification.id}">
+
+                                ${notification.message}
+
+                            </div>
+
+
+                            <div class="notification-actions">
+
+                                <button
+                                    type="button"
+                                    class="btn btn-link btn-sm p-0 text-primary toggle-details"
+                                    data-id="${notification.id}">
+
+                                    ${notificationLocalization.details}
+
+                                </button>
+
+
+                                ${
+                                    notification.link
+                                        ? `
+                                            <a href="${notification.link}"
+                                               class="btn btn-link btn-sm text-secondary p-0">
+
+                                                ${notificationLocalization.view}
+
+                                            </a>
+                                          `
+                                        : ""
+                                }
+
+                            </div>
+
+
+                            ${
+                                notification.type === "I"
+                                    ? `
+                                        <button
+                                            type="button"
+                                            class="delete-notification mark-read"
+                                            data-id="${notification.id}">
+
+                                            <i class="bx bx-x"></i>
+
+                                        </button>
+                                      `
+                                    : ""
+                            }
+
+                        </div>
+
+                    `;
+
+
+                    list.prepend(li);
+
+
+                    notificationFooter.style.display =
+                        'block';
+
+
+                    badge.textContent =
+                        list.querySelectorAll(
+                            'li.dropdown-item'
+                        ).length;
+
+
+                    badge.style.display =
+                        'flex';
+
+
+                    animateBadge(badge);
+
+                }
             );
 
-            li.innerHTML = `
-                <div>
-                    <div class="notification-date">
-                        <i class="bx bx-calendar"></i>
-                        <span>${created.replace(' г.', ' г.')}</span>
-                    </div>
 
-                    <div class="notification-message" id="msg-${notification.id}">
-                        ${notification.message}
-                    </div>
+            /*
+             * =================================================
+             * Badge animation
+             * =================================================
+             */
 
-                    <div class="notification-actions">
-                        <button
-                            class="btn btn-link btn-sm p-0 text-primary toggle-details"
-                            data-id="${notification.id}">
-                            ${notificationLocalization.details}
-                        </button>
+            function animateBadge(element) {
 
-                        ${
-                            notification.link
-                                ? `<a href="${notification.link}"
-                                      class="btn btn-link btn-sm text-secondary p-0">
-                                       ${notificationLocalization.view}
-                                   </a>`
-                                : ""
-                        }
-                    </div>
-
-                    ${
-                        notification.type === "I"
-                            ? `<button
-                                   class="delete-notification mark-read"
-                                   data-id="${notification.id}">
-                                   <i class="bx bx-x"></i>
-                               </button>`
-                            : ""
-                    }
-                </div>
-            `;
-
-            list.prepend(li);
-
-            markAllBtn.closest('div').style.display = 'block';
-
-            badge.textContent =
-                list.querySelectorAll('li.dropdown-item').length;
-
-            badge.style.display = 'inline-block';
-        });
-
-        function animateBadge(badge) {
-            badge.classList.remove("badge-animate");
-
-            void badge.offsetWidth;
-
-            badge.classList.add("badge-animate");
-        }
-
-        setInterval(() => {
-            const badge = document.getElementById("unreadCountBadge");
-
-            if (badge && badge.textContent !== "0") {
-                animateBadge(badge);
-            }
-        }, 5000);
-
-        // Updating the notification counter
-        connection.on("UpdateUnreadCount", function (count) {
-
-            if (count > 0) {
-
-                badge.textContent = count;
-                badge.style.display = 'inline-block';
-
-                markAllBtn.closest('div').style.display = 'block';
-
-            } else {
-
-                badge.style.display = 'none';
-                markAllBtn.closest('div').style.display = 'none';
-
-                list.innerHTML = `
-                    <li class="text-center text-muted small py-2 no-notifications">
-                        ${notificationLocalization.noNotifications}
-                    </li>`;
-            }
-        });
-
-        // Start Connection
-       connection.start()
-            .then(() => {
-                console.log("SignalR connected");
-                console.log("Connection ID:", connection.connectionId);
-                console.log("State:", connection.state);
-            })
-            .catch(err => {
-                console.error("SignalR connection error:", err);
-            });
-
-        list.addEventListener('click', function(e) {
-
-            const btn = e.target.closest('button');
-
-            if (!btn) return;
-
-            e.stopPropagation();
-
-            if (btn.classList.contains('mark-read')) {
-
-                const li = btn.closest('li');
-                const id = btn.dataset.id;
-
-                fetch('/Notification/MarkAsRead?id=' + id, {
-                    method: 'POST'
-                })
-                .then(res => {
-
-                    if (res.ok) {
-                        li.remove();
-                        updateBadge();
-                    }
-
-                });
-            }
-
-            if (btn.classList.contains('toggle-details')) {
-
-                const li = btn.closest('li');
-
-                const msg = li.querySelector(
-                    '.notification-message, .notification-full'
+                element.classList.remove(
+                    "badge-animate"
                 );
 
-                if (!msg) return;
 
-                msg.classList.toggle('notification-full');
-                msg.classList.toggle('notification-message');
+                void element.offsetWidth;
 
-                btn.textContent =
-                    msg.classList.contains('notification-full')
-                        ? notificationLocalization.hide
-                        : notificationLocalization.details;
+
+                element.classList.add(
+                    "badge-animate"
+                );
+
             }
-        });
 
-        markAllBtn.addEventListener('click', function() {
 
-            fetch('/Notification/MarkAllAsRead', {
-                method: 'POST'
-            })
-            .then(res => {});
-        });
+            /*
+             * =================================================
+             * Periodic badge animation
+             * =================================================
+             */
 
-        function updateBadge() {
+            setInterval(
+                function () {
 
-            const count =
-                list.querySelectorAll('li.dropdown-item').length;
+                    const currentBadge =
+                        document.getElementById(
+                            "unreadCountBadge"
+                        );
 
-            badge.textContent = count;
 
-            badge.style.display =
-                count > 0 ? 'inline-block' : 'none';
+                    if (
+                        currentBadge &&
+                        currentBadge.textContent !== "0"
+                    ) {
 
-            markAllBtn.style.display =
-                count > 0 ? 'block' : 'none';
+                        animateBadge(currentBadge);
 
-            markAllBtn.closest('div').style.display =
-                count > 0 ? 'block' : 'none';
+                    }
 
-            if (count === 0) {
+                },
+                5000
+            );
 
-                list.innerHTML = `
-                    <li class="text-center text-muted small py-2 no-notifications">
-                        ${notificationLocalization.noNotifications}
-                    </li>`;
+
+            /*
+             * =================================================
+             * Update unread count
+             * =================================================
+             */
+
+            connection.on(
+                "UpdateUnreadCount",
+                function (count) {
+
+                    if (count > 0) {
+
+                        badge.textContent =
+                            count;
+
+                        badge.style.display =
+                            'flex';
+
+                        notificationFooter.style.display =
+                            'block';
+
+                    }
+                    else {
+
+                        badge.style.display =
+                            'none';
+
+                        notificationFooter.style.display =
+                            'none';
+
+
+                        list.innerHTML = `
+
+                            <li class="text-center small partnerly-no-notifications no-notifications">
+
+                                ${notificationLocalization.noNotifications}
+
+                            </li>
+
+                        `;
+
+                    }
+
+                }
+            );
+
+
+            /*
+             * =================================================
+             * Start SignalR
+             * ================================================= */
+
+            connection.start()
+                .then(function () {
+
+                    console.log(
+                        "SignalR connected"
+                    );
+
+                    console.log(
+                        "Connection ID:",
+                        connection.connectionId
+                    );
+
+                    console.log(
+                        "State:",
+                        connection.state
+                    );
+
+                })
+                .catch(function (error) {
+
+                    console.error(
+                        "SignalR connection error:",
+                        error
+                    );
+
+                });
+
+
+            /*
+             * =================================================
+             * Notification actions
+             * ================================================= */
+
+            list.addEventListener(
+                'click',
+                function (event) {
+
+                    const button =
+                        event.target.closest('button');
+
+
+                    if (!button) {
+                        return;
+                    }
+
+
+                    event.stopPropagation();
+
+
+                    /*
+                     * Mark notification as read
+                     */
+
+                    if (
+                        button.classList.contains(
+                            'mark-read'
+                        )
+                    ) {
+
+                        const li =
+                            button.closest('li');
+
+                        const id =
+                            button.dataset.id;
+
+
+                        fetch(
+                            '/Notification/MarkAsRead?id=' +
+                            id,
+                            {
+                                method: 'POST'
+                            }
+                        )
+                        .then(function (response) {
+
+                            if (response.ok) {
+
+                                li.remove();
+
+                                updateBadge();
+
+                            }
+
+                        });
+
+                    }
+
+
+                    /*
+                     * Toggle notification details
+                     */
+
+                    if (
+                        button.classList.contains(
+                            'toggle-details'
+                        )
+                    ) {
+
+                        const li =
+                            button.closest('li');
+
+
+                        const message =
+                            li.querySelector(
+                                '.notification-message, .notification-full'
+                            );
+
+
+                        if (!message) {
+                            return;
+                        }
+
+
+                        message.classList.toggle(
+                            'notification-full'
+                        );
+
+                        message.classList.toggle(
+                            'notification-message'
+                        );
+
+
+                        button.textContent =
+                            message.classList.contains(
+                                'notification-full'
+                            )
+                                ? notificationLocalization.hide
+                                : notificationLocalization.details;
+
+                    }
+
+                }
+            );
+
+
+            /*
+             * =================================================
+             * Mark all as read
+             * ================================================= */
+
+            markAllBtn.addEventListener(
+                'click',
+                function () {
+
+                    fetch(
+                        '/Notification/MarkAllAsRead',
+                        {
+                            method: 'POST'
+                        }
+                    )
+                    .then(function () {
+
+                        /*
+                         * SignalR will update
+                         * the unread counter.
+                         */
+
+                    });
+
+                }
+            );
+
+
+            /*
+             * =================================================
+             * Update local badge
+             * ================================================= */
+
+            function updateBadge() {
+
+                const count =
+                    list.querySelectorAll(
+                        'li.dropdown-item'
+                    ).length;
+
+
+                badge.textContent =
+                    count;
+
+
+                badge.style.display =
+                    count > 0
+                        ? 'flex'
+                        : 'none';
+
+
+                notificationFooter.style.display =
+                    count > 0
+                        ? 'block'
+                        : 'none';
+
+
+                if (count === 0) {
+
+                    list.innerHTML = `
+
+                        <li class="text-center small partnerly-no-notifications no-notifications">
+
+                            ${notificationLocalization.noNotifications}
+
+                        </li>
+
+                    `;
+
+                }
+
             }
+
         }
-    });
+    );
 
 </script>

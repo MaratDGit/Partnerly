@@ -1,21 +1,186 @@
 ﻿@{
-  TempData.Keep();
-  ViewData["containerNav"] = (ViewData["containerNav"] ??= "container-fluid");
+    TempData.Keep();
+    ViewData["containerNav"] = (ViewData["containerNav"] ??= "container-fluid");
 }
 
-<footer class="content-footer footer bg-footer-theme">
-  <div class="@ViewData["containerNav"]">
-    <div class="footer-container d-flex align-items-center justify-content-between py-4 flex-md-row flex-column">
-      <div class="text-body">
-        © <script>
-        document.write(new Date().getFullYear())
-        </script>, @Localizer["madefrom"] <a href='@TempData.Peek("authorUrl")' class="footer-link fw-medium">@TempData.Peek("authorName")  <img src="~/favicon.png" alt="Logo" width="20" height="20" class="me-2" /></a>
-      </div>
-      <div class="d-none d-lg-inline-block">
-                <a href='@TempData.Peek("licenseUrl")' class="footer-link me-4">@Localizer["License"]</a>
-                <a href='@TempData.Peek("documentation")' class="footer-link me-4">@Localizer["Documentation"]</a>
-                <a asp-controller="SupportTickets" asp-action="OpenNewCase" class="footer-link d-none d-sm-inline-block">@Localizer["Support"]</a>
-      </div>
+<style>
+    /* =========================================================
+       MINIMAL PARTNERLY FOOTER
+       ========================================================= */
+
+    .partnerly-footer {
+        width: 100%;
+        background: #fff;
+        border-top: 1px solid #eeeeef;
+    }
+
+    .partnerly-footer-inner {
+        min-height: 64px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 20px;
+        padding: 12px 0;
+        color: #a1a7b3;
+        font-size: 11px;
+    }
+
+    .partnerly-footer-left {
+        display: flex;
+        align-items: center;
+        flex-wrap: wrap;
+        gap: 5px;
+        min-width: 0;
+    }
+
+        .partnerly-footer-left a {
+            color: #697a8d;
+            font-weight: 500;
+            text-decoration: none;
+            transition: color .2s ease;
+        }
+
+            .partnerly-footer-left a:hover {
+                color: #696cff;
+            }
+
+    .partnerly-footer-separator {
+        color: #d5d7dc;
+        margin: 0 3px;
+    }
+
+    .partnerly-footer-brand {
+        color: #8a93a2;
+        font-weight: 500;
+    }
+
+
+    /* =========================================================
+       LINKS
+       ========================================================= */
+
+    .partnerly-footer-links {
+        display: flex;
+        align-items: center;
+        gap: 20px;
+        flex-shrink: 0;
+    }
+
+        .partnerly-footer-links a {
+            color: #8a93a2;
+            text-decoration: none;
+            transition: color .2s ease;
+        }
+
+            .partnerly-footer-links a:hover {
+                color: #696cff;
+            }
+
+
+    /* =========================================================
+       MOBILE
+       ========================================================= */
+
+    @@media (max-width: 767.98px) {
+        .partnerly-footer-inner
+
+    {
+        min-height: 0;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        gap: 8px;
+        padding: 14px 0;
+        text-align: center;
+    }
+
+    .partnerly-footer-left {
+        justify-content: center;
+    }
+
+    .partnerly-footer-links {
+        justify-content: center;
+        gap: 16px;
+    }
+
+    }
+
+
+    @@media (max-width: 575.98px) {
+        .partnerly-footer-inner
+
+    {
+        font-size: 10px;
+    }
+
+    .partnerly-footer-links {
+        gap: 12px;
+    }
+
+    }
+</style>
+
+@{
+    TempData.Keep();
+    ViewData["containerNav"] = (ViewData["containerNav"] ??= "container-fluid");
+}
+
+<footer class="partnerly-footer">
+
+    <div class="@ViewData["containerNav"]">
+
+        <div class="partnerly-footer-inner">
+
+            <div class="partnerly-footer-left">
+
+                <span>
+                    © <span id="partnerlyFooterYear"></span>
+                    @Localizer["madefrom"]
+                </span>
+
+                <a href="@TempData.Peek("authorUrl")"
+                   target="_blank"
+                   rel="noopener noreferrer">
+                    @TempData.Peek("authorName")
+                </a>
+
+                <span class="partnerly-footer-separator">·</span>
+
+                <span class="partnerly-footer-brand">
+                    Partnerly
+                </span>
+
+            </div>
+
+
+            <div class="partnerly-footer-links">
+
+                <a href="@TempData.Peek("licenseUrl")"
+                   target="_blank"
+                   rel="noopener noreferrer">
+                    @Localizer["License"]
+                </a>
+
+                <a href="@TempData.Peek("documentation")"
+                   target="_blank"
+                   rel="noopener noreferrer">
+                    @Localizer["Documentation"]
+                </a>
+
+                <a asp-controller="SupportTickets"
+                   asp-action="OpenNewCase">
+                    @Localizer["Support"]
+                </a>
+
+            </div>
+
+        </div>
+
     </div>
-  </div>
+
 </footer>
+
+<script>
+    document.getElementById('partnerlyFooterYear').textContent =
+        new Date().getFullYear();
+</script>

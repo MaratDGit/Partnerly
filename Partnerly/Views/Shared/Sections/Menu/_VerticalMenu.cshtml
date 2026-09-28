@@ -1,116 +1,395 @@
 ﻿@{
-  TempData.Keep();
-  string? currentPage = ViewContext.HttpContext.Request.Path;
+    TempData.Keep();
+
+    string currentPage = ViewContext.HttpContext.Request.Path.ToString();
+
+    bool isAdmin =
+        ViewBag?.RoleType == Partnerly.Descriptors.Attributes.RoleTypeAttribute.Delete;
+
+    bool isManager =
+        ViewBag?.RoleType == Partnerly.Descriptors.Attributes.RoleTypeAttribute.Update;
+
+    bool canAccessSystem =
+        isAdmin || isManager;
 }
 
-<aside id="layout-menu" class="layout-menu menu-vertical menu bg-menu-theme">
+<aside id="partnerlySidebar" class="partnerly-sidebar">
 
-  <div
-    class='app-brand demo @((@ViewData["navbarFull"] != null && Convert.ToBoolean(@ViewData["navbarFull"])) ? "d-xl-none" : "")'>
-    <a asp-controller="Home" asp-action="Index" class="app-brand-link">
-      <span class="app-brand-logo demo">
-          <img src="~/favicon.png" alt="Logo" width="32" height="32" class="me-2" />
-      </span>
-      <span class="app-brand-text demo menu-text fw-bold ms-2">@TempData.Peek("appName")</span>
-    </a>
+    <!-- Sidebar Header -->
+    <div class="partnerly-sidebar-header">
 
-    <a href="javascript:void(0);" class="layout-menu-toggle menu-link text-large ms-auto d-block d-xl-none">
-      <i class="bx bx-chevron-left bx-sm d-flex align-items-center justify-content-center"></i>
-    </a>
-  </div>
+        <a asp-controller="Home"
+           asp-action="Index"
+           class="partnerly-brand">
 
-  <div class="menu-inner-shadow"></div>
+            <span class="partnerly-brand-logo">
+                <img src="~/favicon.png"
+                     alt="Partnerly"
+                     width="38"
+                     height="38" />
+            </span>
 
-  <ul class="menu-inner py-1">
-    <li class='menu-item@(currentPage.EndsWith("/Dashboard") ? " active open" : "")'>
-      <a asp-controller="Dashboard" asp-action="Index" class="menu-link">
-        <i class="menu-icon tf-icons bx bx-home-smile"></i>
-                <div class="text-truncate" data-i18n="Dashboards">@Localizer["Statistics"]</div>
-      </a>
-    </li>
+            <span class="partnerly-brand-name">
+                @TempData.Peek("appName")
+            </span>
 
-        <li class="menu-header small text-uppercase"><span class="menu-header-text">@Localizer["Miscellaneous"]</span></li>
-    <li class='menu-item@(currentPage.Contains("/SupportTickets/OpenNewCase") ? " active" : "")'>
-      <a asp-controller="SupportTickets" asp-action="OpenNewCase" class="menu-link">
-        <i class="menu-icon tf-icons bx bx-support"></i>
-        <div>@Localizer["Support"]</div><div class="badge bg-label-primary fs-tiny rounded-pill ms-auto text-uppercase">24/7</div>
-      </a>
-    </li>
-    <li class="menu-item">
-      <a href='@TempData.Peek("documentation")' class="menu-link">
-        <i class="menu-icon tf-icons bx bx-file"></i>
-                <div>@Localizer["Documentation"]</div>
-      </a>
-    </li>
-    @if (ViewBag?.RoleType == Partnerly.Descriptors.Attributes.RoleTypeAttribute.Delete || ViewBag?.RoleType == Partnerly.Descriptors.Attributes.RoleTypeAttribute.Update)
-    {
-        <li class="menu-header small text-uppercase"><span class="menu-header-text">@Localizer["Systemsettings"]</span></li>
-        
-        if (ViewBag?.RoleType == Partnerly.Descriptors.Attributes.RoleTypeAttribute.Delete)
-        {
-            <li class='menu-item@(currentPage.StartsWith("/SystemPreferences") ? " active" : "")'>
-                <a asp-controller="SystemPreferences" asp-action="Index" class="menu-link">
-                    <i class="menu-icon tf-icons bx bx-slider"></i>
-                    <div>@Localizer["Settings"]</div>
+        </a>
+
+        <!-- Desktop collapse -->
+        <button type="button"
+                class="partnerly-sidebar-toggle"
+                data-sidebar-toggle
+                aria-label="Toggle sidebar">
+
+            <i class="bx bx-chevron-left"></i>
+
+        </button>
+
+        <button type="button"
+                class="partnerly-sidebar-mobile-close"
+                data-sidebar-close
+                aria-label="Close menu">
+            <i class="bx bx-x"></i>
+        </button>
+
+    </div>
+
+
+    <!-- Sidebar Content -->
+    <div class="partnerly-sidebar-content">
+
+        <ul class="partnerly-menu">
+
+
+            <!-- ========================= -->
+            <!-- MAIN -->
+            <!-- ========================= -->
+
+            <li class="partnerly-menu-section">
+                <span>@Localizer["Main"]</span>
+            </li>
+
+
+            <!-- Dashboard -->
+
+            <li class="partnerly-menu-item @(currentPage.StartsWith("/Dashboard") ? "active" : "")">
+
+                <a asp-controller="Dashboard"
+                   asp-action="Index"
+                   class="partnerly-menu-link">
+
+                    <span class="partnerly-menu-icon">
+                        <i class="bx bx-home-smile"></i>
+                    </span>
+
+                    <span class="partnerly-menu-text">
+                        @Localizer["Statistics"]
+                    </span>
+
                 </a>
+
             </li>
-            <li class='menu-item@(currentPage.StartsWith("/Roles") ? " active" : "")'>
-                <a asp-controller="Roles" asp-action="Index" class="menu-link">
-                    <i class="menu-icon tf-icons bx bx-paint-roll"></i>
-                    <div>@Localizer["Userroles"]</div>
+
+
+            <!-- ========================= -->
+            <!-- SUPPORT -->
+            <!-- ========================= -->
+
+            <li class="partnerly-menu-section">
+                <span>@Localizer["Miscellaneous"]</span>
+            </li>
+
+
+            <!-- Support -->
+
+            <li class="partnerly-menu-item @(currentPage.Contains("/SupportTickets/OpenNewCase") ? "active" : "")">
+
+                <a asp-controller="SupportTickets"
+                   asp-action="OpenNewCase"
+                   class="partnerly-menu-link">
+
+                    <span class="partnerly-menu-icon">
+                        <i class="bx bx-support"></i>
+                    </span>
+
+                    <span class="partnerly-menu-text">
+                        @Localizer["Support"]
+                    </span>
+
+                    <span class="partnerly-menu-badge">
+                        24/7
+                    </span>
+
                 </a>
+
             </li>
-        }
-
-        <li class='menu-item@(currentPage.StartsWith("/Users") ? " active" : "")'>
-            <a asp-controller="Users" asp-action="Index" class="menu-link">
-                <i class="menu-icon tf-icons bx bx-user"></i>
-                <div>@Localizer["Users"]</div>
-            </a>
-        </li>
-
-        <li class='menu-item@(currentPage.StartsWith("/UserGroups") ? " active" : "")'>
-            <a asp-controller="UserGroups" asp-action="Index" class="menu-link">
-                <i class="menu-icon tf-icons bx bx-group"></i>
-                <div>@Localizer["Groups"]</div>
-            </a>
-        </li>
 
 
-        <li class='menu-item@(currentPage.StartsWith("/SupportTickets") && !currentPage.Contains("/OpenNewCase") ? " active" : "")'>
-            <a asp-controller="SupportTickets" asp-action="Index" class="menu-link">
-                <i class="menu-icon tf-icons bx bx-pencil"></i>
-                <div>@Localizer["Tasks"]</div>
-            </a>
-        </li>
+            <!-- Documentation -->
 
-        if (ViewBag?.RoleType == Partnerly.Descriptors.Attributes.RoleTypeAttribute.Delete)
-        {
-            <li class='menu-item@(currentPage.StartsWith("/EmailTemplates") ? " active" : "")'>
-              <a asp-controller="EmailTemplates" asp-action="Index" class="menu-link">
-                <i class="menu-icon tf-icons bx bx-sitemap"></i>
-                        <div>@Localizer["Emailtemplates"]</div>
-              </a>
-            </li>
-             <li class='menu-item@(currentPage.StartsWith("/LogRecords") ? " active" : "")'>
-              <a asp-controller="LogRecords" asp-action="Index" class="menu-link">
-                <i class="menu-icon tf-icons bx bx-file"></i>
-                <div>@Localizer["Logs"]</div>
-              </a>
-            </li>
-            <li class='menu-item@(currentPage.StartsWith("/Notification") ? " active" : "")'>
-                <a asp-controller="Notification" asp-action="Index" class="menu-link">
-                    <i class="menu-icon tf-icons bx bx-bell"></i>
-                    <div>@Localizer["Notifications"]</div>
+            <li class="partnerly-menu-item">
+
+                <a href="@TempData.Peek("documentation")"
+                   target="_blank"
+                   rel="noopener noreferrer"
+                   class="partnerly-menu-link">
+
+                    <span class="partnerly-menu-icon">
+                        <i class="bx bx-file"></i>
+                    </span>
+
+                    <span class="partnerly-menu-text">
+                        @Localizer["Documentation"]
+                    </span>
+
+                    <i class="bx bx-link-external partnerly-menu-external"></i>
+
                 </a>
+
             </li>
-            <li class='menu-item@(currentPage.StartsWith("/Attachments") ? " active" : "")'>
-                <a asp-controller="Attachments" asp-action="Index" class="menu-link">
-                    <i class="menu-icon tf-icons bx bx-paperclip"></i>
-                    <div>@Localizer["Attachments"]</div>
-                </a>
-            </li>
-        }
-    }
-  </ul>
+
+
+            @if (canAccessSystem)
+            {
+
+                <!-- ========================= -->
+                <!-- SYSTEM -->
+                <!-- ========================= -->
+
+                <li class="partnerly-menu-section">
+                    <span>@Localizer["Systemsettings"]</span>
+                </li>
+
+
+                @if (isAdmin)
+                {
+
+                    <!-- Settings -->
+
+                    <li class="partnerly-menu-item @(currentPage.StartsWith("/SystemPreferences") ? "active" : "")">
+
+                        <a asp-controller="SystemPreferences"
+                           asp-action="Index"
+                           class="partnerly-menu-link">
+
+                            <span class="partnerly-menu-icon">
+                                <i class="bx bx-slider"></i>
+                            </span>
+
+                            <span class="partnerly-menu-text">
+                                @Localizer["Settings"]
+                            </span>
+
+                        </a>
+
+                    </li>
+
+
+                    <!-- Roles -->
+
+                    <li class="partnerly-menu-item @(currentPage.StartsWith("/Roles") ? "active" : "")">
+
+                        <a asp-controller="Roles"
+                           asp-action="Index"
+                           class="partnerly-menu-link">
+
+                            <span class="partnerly-menu-icon">
+                                <i class="bx bx-shield-quarter"></i>
+                            </span>
+
+                            <span class="partnerly-menu-text">
+                                @Localizer["Userroles"]
+                            </span>
+
+                        </a>
+
+                    </li>
+
+                }
+
+
+                <!-- Users -->
+
+                <li class="partnerly-menu-item @(currentPage.StartsWith("/Users") ? "active" : "")">
+
+                    <a asp-controller="Users"
+                       asp-action="Index"
+                       class="partnerly-menu-link">
+
+                        <span class="partnerly-menu-icon">
+                            <i class="bx bx-user"></i>
+                        </span>
+
+                        <span class="partnerly-menu-text">
+                            @Localizer["Users"]
+                        </span>
+
+                    </a>
+
+                </li>
+
+
+                <!-- Groups -->
+
+                <li class="partnerly-menu-item @(currentPage.StartsWith("/UserGroups") ? "active" : "")">
+
+                    <a asp-controller="UserGroups"
+                       asp-action="Index"
+                       class="partnerly-menu-link">
+
+                        <span class="partnerly-menu-icon">
+                            <i class="bx bx-group"></i>
+                        </span>
+
+                        <span class="partnerly-menu-text">
+                            @Localizer["Groups"]
+                        </span>
+
+                    </a>
+
+                </li>
+
+
+                <!-- Tasks -->
+
+                <li class="partnerly-menu-item @(currentPage.StartsWith("/SupportTickets") && !currentPage.Contains("/OpenNewCase") ? "active" : "")">
+
+                    <a asp-controller="SupportTickets"
+                       asp-action="Index"
+                       class="partnerly-menu-link">
+
+                        <span class="partnerly-menu-icon">
+                            <i class="bx bx-task"></i>
+                        </span>
+
+                        <span class="partnerly-menu-text">
+                            @Localizer["Tasks"]
+                        </span>
+
+                    </a>
+
+                </li>
+
+
+                @if (isAdmin)
+                {
+
+                    <!-- Email Templates -->
+
+                    <li class="partnerly-menu-item @(currentPage.StartsWith("/EmailTemplates") ? "active" : "")">
+
+                        <a asp-controller="EmailTemplates"
+                           asp-action="Index"
+                           class="partnerly-menu-link">
+
+                            <span class="partnerly-menu-icon">
+                                <i class="bx bx-envelope"></i>
+                            </span>
+
+                            <span class="partnerly-menu-text">
+                                @Localizer["Emailtemplates"]
+                            </span>
+
+                        </a>
+
+                    </li>
+
+
+                    <!-- Logs -->
+
+                    <li class="partnerly-menu-item @(currentPage.StartsWith("/LogRecords") ? "active" : "")">
+
+                        <a asp-controller="LogRecords"
+                           asp-action="Index"
+                           class="partnerly-menu-link">
+
+                            <span class="partnerly-menu-icon">
+                                <i class="bx bx-file-find"></i>
+                            </span>
+
+                            <span class="partnerly-menu-text">
+                                @Localizer["Logs"]
+                            </span>
+
+                        </a>
+
+                    </li>
+
+
+                    <!-- Notifications -->
+
+                    <li class="partnerly-menu-item @(currentPage.StartsWith("/Notification") ? "active" : "")">
+
+                        <a asp-controller="Notification"
+                           asp-action="Index"
+                           class="partnerly-menu-link">
+
+                            <span class="partnerly-menu-icon">
+                                <i class="bx bx-bell"></i>
+                            </span>
+
+                            <span class="partnerly-menu-text">
+                                @Localizer["Notifications"]
+                            </span>
+
+                        </a>
+
+                    </li>
+
+
+                    <!-- Attachments -->
+
+                    <li class="partnerly-menu-item @(currentPage.StartsWith("/Attachments") ? "active" : "")">
+
+                        <a asp-controller="Attachments"
+                           asp-action="Index"
+                           class="partnerly-menu-link">
+
+                            <span class="partnerly-menu-icon">
+                                <i class="bx bx-paperclip"></i>
+                            </span>
+
+                            <span class="partnerly-menu-text">
+                                @Localizer["Attachments"]
+                            </span>
+
+                        </a>
+
+                    </li>
+
+                }
+
+            }
+
+        </ul>
+
+    </div>
+
+
+    <!-- Sidebar Footer -->
+
+    <div class="partnerly-sidebar-footer">
+
+        <div class="partnerly-sidebar-footer-line"></div>
+
+        <div class="partnerly-sidebar-footer-content">
+
+            <span class="partnerly-sidebar-status"></span>
+
+            <span class="partnerly-sidebar-footer-text">
+                Partnerly
+            </span>
+
+        </div>
+
+    </div>
+
 </aside>
+
+
+<!-- Mobile overlay -->
+
+<div id="partnerlySidebarOverlay"
+     class="partnerly-sidebar-overlay"
+     data-sidebar-overlay>
+</div>

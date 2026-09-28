@@ -8,34 +8,35 @@
   data-template='vertical-menu-aspnet-core-mvc-template-free'>
 
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0" />
 
-  @{
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0" />
+
+    @{
         string title = ViewData["title"] as string ?? "";
         string appName = TempData.Peek("appName") as string ?? "";
         string productPage = TempData.Peek("productPage") as string ?? "";
     }
-  <title>@title</title>
-  <meta name="description" content="" />
 
-  <link rel="canonical" href='@productPage'>
-  <!-- Favicon -->
-  <link rel="icon" type="image/x-icon" href="~/favicon.png" />
+    <title>@title</title>
+    <meta name="description" content="" />
 
-  <!-- Core Styles -->
-  @await Html.PartialAsync("Sections/_Styles")
+    <link rel="canonical" href='@productPage'>
+    <!-- Favicon -->
+    <link rel="icon" type="image/x-icon" href="~/favicon.png" />
 
-  <!-- Vendor Styles -->
-  @RenderSection("VendorStyles", required: false)
+    <!-- Core Styles -->
+    @await Html.PartialAsync("Sections/_Styles")
 
-  <!-- Page Styles -->
-  @RenderSection("PageStyles", required: false)
+    <!-- Vendor Styles -->
+    @RenderSection("VendorStyles", required: false)
 
-  <!-- Include Scripts for customizer, helper, analytics, config -->
-  @await Html.PartialAsync("Sections/_ScriptsIncludes")
+    <!-- Page Styles -->
+    @RenderSection("PageStyles", required: false)
 
-   <link rel="stylesheet" href="~/assets/css/ticker.css" />
+    <link rel="stylesheet" href="~/assets/css/ticker.css" />
+    <link rel="stylesheet" href="~/assets/css/partnerly-layout.css" asp-append-version="true" />
+
 </head>
 
 <body>
@@ -48,87 +49,84 @@
         </div>
     </div>
 
-  <!-- Layout Content -->
-  @RenderBody()
-  <!--/ Layout Content -->
+      <!-- Layout Content -->
+      @RenderBody()
 
-  <!-- Core Scripts -->
-  @await Html.PartialAsync("Sections/_Scripts")
+      <!-- Core Scripts -->
+      @await Html.PartialAsync("Sections/_Scripts")
 
-  <!-- Vendor Scripts -->
-  @RenderSection("VendorScripts", required: false)
+      <!-- Vendor Scripts -->
+      @RenderSection("VendorScripts", required: false)
 
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/microsoft-signalr/7.0.11/signalr.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/microsoft-signalr/7.0.11/signalr.min.js"></script>
+    <script src="~/assets/js/partnerly-layout.js" asp-append-version="true"></script>
 
-  <!-- Main JS-->
-  <script src='~/assets/js/main.js'></script>
+    <!-- jQuery -->
+    <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
 
-  <!-- jQuery -->
-<script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+    <script>
+         const dateLocalization = {
+            culture: '@CultureInfo.CurrentUICulture.Name',
+            justNow: '@Localizer["JustNow"]',
+            minuteAgo: '@Localizer["MinuteAgo"]',
+            minutesAgo: '@Localizer["MinutesAgo"]',
+            hourAgo: '@Localizer["HourAgo"]',
+            hoursAgo: '@Localizer["HoursAgo"]'
+        };
 
-<script>
-     const dateLocalization = {
-        culture: '@CultureInfo.CurrentUICulture.Name',
-        justNow: '@Localizer["JustNow"]',
-        minuteAgo: '@Localizer["MinuteAgo"]',
-        minutesAgo: '@Localizer["MinutesAgo"]',
-        hourAgo: '@Localizer["HourAgo"]',
-        hoursAgo: '@Localizer["HoursAgo"]'
-    };
+        const lookupLocalization = {
+            selectRecord: @Html.Raw(Json.Serialize(Localizer["LookupSelectRecord"].Value)),
+            search: @Html.Raw(Json.Serialize(Localizer["LookupSearch"].Value)),
+            loading: @Html.Raw(Json.Serialize(Localizer["LookupLoading"].Value)),
+            noData: @Html.Raw(Json.Serialize(Localizer["LookupNoData"].Value)),
+            loadError: @Html.Raw(Json.Serialize(Localizer["LookupLoadError"].Value))
+        };
 
-    const lookupLocalization = {
-        selectRecord: @Html.Raw(Json.Serialize(Localizer["LookupSelectRecord"].Value)),
-        search: @Html.Raw(Json.Serialize(Localizer["LookupSearch"].Value)),
-        loading: @Html.Raw(Json.Serialize(Localizer["LookupLoading"].Value)),
-        noData: @Html.Raw(Json.Serialize(Localizer["LookupNoData"].Value)),
-        loadError: @Html.Raw(Json.Serialize(Localizer["LookupLoadError"].Value))
-    };
+        const dataTableLocalization = {
+            filters: @Html.Raw(Json.Serialize(Localizer["DataTableFilters"].Value)),
+            close: @Html.Raw(Json.Serialize(Localizer["Close"].Value)),
+            cancel: @Html.Raw(Json.Serialize(Localizer["Cancel"].Value)),
+            apply: @Html.Raw(Json.Serialize(Localizer["DataTableApply"].Value)),
+            reset: @Html.Raw(Json.Serialize(Localizer["DataTableReset"].Value)),
+            exportExcel: @Html.Raw(Json.Serialize(Localizer["DataTableExportExcel"].Value)),
+            exportAll: @Html.Raw(Json.Serialize(Localizer["DataTableExportAll"].Value)),
+            exportSelected: @Html.Raw(Json.Serialize(Localizer["DataTableExportSelected"].Value)),
+            search: @Html.Raw(Json.Serialize(Localizer["DataTableSearch"].Value)),
+            filteredRecords: @Html.Raw(Json.Serialize(Localizer["DataTableFilteredRecords"].Value)),
+            totalRecords: @Html.Raw(Json.Serialize(Localizer["DataTableTotalRecords"].Value)),
+            shownRecords: @Html.Raw(Json.Serialize(Localizer["DataTableShownRecords"].Value)),
+            filterActive: @Html.Raw(Json.Serialize(Localizer["DataTableFilterActive"].Value)),
+            from: @Html.Raw(Json.Serialize(Localizer["DataTableFrom"].Value)),
+            to: @Html.Raw(Json.Serialize(Localizer["DataTableTo"].Value)),
+            all: @Html.Raw(Json.Serialize(Localizer["DataTableAll"].Value)),
+            yes: @Html.Raw(Json.Serialize(Localizer["DataTableYes"].Value)),
+            no: @Html.Raw(Json.Serialize(Localizer["DataTableNo"].Value)),
+            actions: @Html.Raw(Json.Serialize(Localizer["DataTableActions"].Value))
+        };
+        const attachementLocalization = {
+                ailedtoloadattachments: @Html.Raw(Json.Serialize(Localizer["Failedtoloadattachments"].Value)),
+                Failedtoloadattachments: @Html.Raw(Json.Serialize(Localizer["Failedtoloadattachments"].Value)),
+                Pleaseselectatleastonefile: @Html.Raw(Json.Serialize(Localizer["Pleaseselectatleastonefile"].Value)),
+                ploadfailed: @Html.Raw(Json.Serialize(Localizer["Uploadfailed"].Value)),
+                Faileduploadingfiles: @Html.Raw(Json.Serialize(Localizer["Faileduploadingfiles"].Value)),
+                Areyousureyouwanttodeletethisfile: @Html.Raw(Json.Serialize(Localizer["Areyousureyouwanttodeletethisfile"].Value)),
+                Deletefailed: @Html.Raw(Json.Serialize(Localizer["Deletefailed"].Value)),
+                Failedtodeletethefile: @Html.Raw(Json.Serialize(Localizer["Failedtodeletethefile"].Value)),
+        };
+    </script>
 
-    const dataTableLocalization = {
-        filters: @Html.Raw(Json.Serialize(Localizer["DataTableFilters"].Value)),
-        close: @Html.Raw(Json.Serialize(Localizer["Close"].Value)),
-        cancel: @Html.Raw(Json.Serialize(Localizer["Cancel"].Value)),
-        apply: @Html.Raw(Json.Serialize(Localizer["DataTableApply"].Value)),
-        reset: @Html.Raw(Json.Serialize(Localizer["DataTableReset"].Value)),
-        exportExcel: @Html.Raw(Json.Serialize(Localizer["DataTableExportExcel"].Value)),
-        exportAll: @Html.Raw(Json.Serialize(Localizer["DataTableExportAll"].Value)),
-        exportSelected: @Html.Raw(Json.Serialize(Localizer["DataTableExportSelected"].Value)),
-        search: @Html.Raw(Json.Serialize(Localizer["DataTableSearch"].Value)),
-        filteredRecords: @Html.Raw(Json.Serialize(Localizer["DataTableFilteredRecords"].Value)),
-        totalRecords: @Html.Raw(Json.Serialize(Localizer["DataTableTotalRecords"].Value)),
-        shownRecords: @Html.Raw(Json.Serialize(Localizer["DataTableShownRecords"].Value)),
-        filterActive: @Html.Raw(Json.Serialize(Localizer["DataTableFilterActive"].Value)),
-        from: @Html.Raw(Json.Serialize(Localizer["DataTableFrom"].Value)),
-        to: @Html.Raw(Json.Serialize(Localizer["DataTableTo"].Value)),
-        all: @Html.Raw(Json.Serialize(Localizer["DataTableAll"].Value)),
-        yes: @Html.Raw(Json.Serialize(Localizer["DataTableYes"].Value)),
-        no: @Html.Raw(Json.Serialize(Localizer["DataTableNo"].Value)),
-        actions: @Html.Raw(Json.Serialize(Localizer["DataTableActions"].Value))
-    };
-    const attachementLocalization = {
-            ailedtoloadattachments: @Html.Raw(Json.Serialize(Localizer["Failedtoloadattachments"].Value)),
-            Failedtoloadattachments: @Html.Raw(Json.Serialize(Localizer["Failedtoloadattachments"].Value)),
-            Pleaseselectatleastonefile: @Html.Raw(Json.Serialize(Localizer["Pleaseselectatleastonefile"].Value)),
-            ploadfailed: @Html.Raw(Json.Serialize(Localizer["Uploadfailed"].Value)),
-            Faileduploadingfiles: @Html.Raw(Json.Serialize(Localizer["Faileduploadingfiles"].Value)),
-            Areyousureyouwanttodeletethisfile: @Html.Raw(Json.Serialize(Localizer["Areyousureyouwanttodeletethisfile"].Value)),
-            Deletefailed: @Html.Raw(Json.Serialize(Localizer["Deletefailed"].Value)),
-            Failedtodeletethefile: @Html.Raw(Json.Serialize(Localizer["Failedtodeletethefile"].Value)),
-    };
-</script>
+    <script src="~/assets/js/spiner.js"></script>
+    <script src="~/js/field-lookup.js"></script>
+    <link rel="stylesheet" href="~/css/field-lookup.css" />
 
- <script src="~/assets/js/spiner.js"></script>
- <script src="~/js/field-lookup.js"></script>
- <link rel="stylesheet" href="~/css/field-lookup.css" />
+    <!-- DataTables -->
+    <link rel="stylesheet" href="~/lib/jquery/customdatatable/data-table.css" />
+    <script src="~/lib/jquery/customdatatable/data-table.js"></script>
 
-<!-- DataTables -->
-<link rel="stylesheet" href="~/lib/jquery/customdatatable/data-table.css" />
-<script src="~/lib/jquery/customdatatable/data-table.js"></script>
+    <script src="~/lib/jquery/datatables/site-datatable.js"></script>
 
-<script src="~/lib/jquery/datatables/site-datatable.js"></script>
-
-<!-- Page Scripts-->
-@RenderSection("PageScripts", required: false)
+    <!-- Page Scripts-->
+    @RenderSection("PageScripts", required: false)
 
 </body>
 

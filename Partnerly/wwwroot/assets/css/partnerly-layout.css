@@ -1,0 +1,908 @@
+﻿/* =========================================================
+   PARTNERLY LAYOUT
+   Sidebar / Navbar / Content / Footer
+   ========================================================= */
+
+:root {
+    --partnerly-primary: #696cff;
+    --partnerly-primary-light: rgba(105, 108, 255, 0.10);
+    --partnerly-primary-hover: rgba(105, 108, 255, 0.14);
+    --partnerly-sidebar-width: 260px;
+    --partnerly-sidebar-collapsed-width: 82px;
+    --partnerly-navbar-height: 72px;
+    --partnerly-text: #566a7f;
+    --partnerly-text-dark: #32475c;
+    --partnerly-muted: #a1acb8;
+    --partnerly-border: #e7e9ed;
+    --partnerly-background: #fff;
+    --partnerly-page-background: #f5f5f9;
+    --partnerly-radius: 12px;
+    --partnerly-transition: width .25s ease, transform .25s ease, margin .25s ease, padding .25s ease, opacity .2s ease, background-color .2s ease, color .2s ease;
+}
+
+
+/* =========================================================
+   GLOBAL PAGE RESET
+   ========================================================= */
+
+html,
+body {
+    margin: 0;
+    padding: 0;
+    min-height: 100%;
+}
+
+html {
+    min-height: 100%;
+}
+
+body {
+    min-height: 100vh;
+    background: var(--partnerly-page-background);
+    overflow-x: hidden;
+}
+
+
+/* =========================================================
+   MAIN PARTNERLY PAGE
+   ========================================================= */
+
+.partnerly-layout-page {
+    min-width: 0;
+    min-height: 100vh;
+    margin-left: var(--partnerly-sidebar-width);
+    display: flex;
+    flex-direction: row;
+    transition: margin-left .25s ease;
+}
+
+
+/* =========================================================
+   MAIN CONTENT
+   ========================================================= */
+
+.partnerly-layout-content {
+    flex: 1 0 auto;
+    min-width: 0;
+    width: 100%;
+}
+
+
+/* =========================================================
+   SIDEBAR
+   ========================================================= */
+
+.partnerly-sidebar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    width: var(--partnerly-sidebar-width);
+    display: flex;
+    flex-direction: column;
+    background: var(--partnerly-background);
+    border-right: 1px solid var(--partnerly-border);
+    z-index: 1100;
+    transition: var(--partnerly-transition);
+    box-shadow: 4px 0 20px rgba(50, 71, 92, 0.035);
+}
+
+
+/* =========================================================
+   SIDEBAR HEADER
+   ========================================================= */
+
+.partnerly-sidebar-header {
+    height: var(--partnerly-navbar-height);
+    display: flex;
+    align-items: center;
+    padding: 0 16px;
+    flex-shrink: 0;
+    border-bottom: 1px solid rgba(231, 233, 237, 0.75);
+}
+
+
+.partnerly-brand {
+    min-width: 0;
+    display: flex;
+    align-items: center;
+    gap: 11px;
+    text-decoration: none !important;
+    color: var(--partnerly-text-dark) !important;
+    overflow: hidden;
+}
+
+
+.partnerly-brand-logo {
+    width: 40px;
+    height: 40px;
+    flex: 0 0 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 11px;
+    background: linear-gradient( 135deg, rgba(105, 108, 255, 0.13), rgba(105, 108, 255, 0.04) );
+    box-shadow: 0 3px 10px rgba(105, 108, 255, 0.08);
+    overflow: hidden;
+}
+
+
+    .partnerly-brand-logo img {
+        width: 34px;
+        height: 34px;
+        object-fit: contain;
+        display: block;
+    }
+
+
+.partnerly-brand-name {
+    font-size: 1.12rem;
+    font-weight: 700;
+    letter-spacing: -0.2px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    transition: opacity .2s ease, width .25s ease, margin .25s ease;
+}
+
+
+/* =========================================================
+   SIDEBAR TOGGLE
+   ========================================================= */
+
+.partnerly-sidebar-toggle {
+    width: 34px;
+    height: 34px;
+    flex: 0 0 34px;
+    margin-left: auto;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0;
+    border: 0;
+    border-radius: 9px;
+    background: rgba(67, 89, 113, 0.055);
+    color: #697a8d;
+    cursor: pointer;
+    transition: background-color .2s ease, color .2s ease, transform .2s ease;
+}
+
+
+    .partnerly-sidebar-toggle:hover {
+        color: var(--partnerly-primary);
+        background: var(--partnerly-primary-light);
+    }
+
+
+    .partnerly-sidebar-toggle i {
+        font-size: 21px;
+        transition: transform .25s ease;
+    }
+
+
+/* =========================================================
+   SIDEBAR CONTENT
+   ========================================================= */
+
+.partnerly-sidebar-content {
+    flex: 1;
+    min-height: 0;
+    overflow-y: auto;
+    overflow-x: hidden;
+    padding: 14px 12px 12px;
+    scrollbar-width: thin;
+}
+
+
+    .partnerly-sidebar-content::-webkit-scrollbar {
+        width: 5px;
+    }
+
+
+    .partnerly-sidebar-content::-webkit-scrollbar-track {
+        background: transparent;
+    }
+
+
+    .partnerly-sidebar-content::-webkit-scrollbar-thumb {
+        background: rgba(105, 108, 255, 0.18);
+        border-radius: 20px;
+    }
+
+
+        .partnerly-sidebar-content::-webkit-scrollbar-thumb:hover {
+            background: rgba(105, 108, 255, 0.35);
+        }
+
+
+/* =========================================================
+   MENU
+   ========================================================= */
+
+.partnerly-menu {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+
+/* =========================================================
+   MENU SECTION
+   ========================================================= */
+
+.partnerly-menu-section {
+    height: 34px;
+    display: flex;
+    align-items: center;
+    padding: 0 12px;
+    margin-top: 9px;
+    margin-bottom: 3px;
+    color: var(--partnerly-muted);
+    font-size: 0.68rem;
+    font-weight: 700;
+    letter-spacing: 0.7px;
+    text-transform: uppercase;
+    white-space: nowrap;
+    transition: opacity .2s ease, height .25s ease, margin .25s ease, padding .25s ease;
+}
+
+
+    .partnerly-menu-section:first-child {
+        margin-top: 0;
+    }
+
+
+/* =========================================================
+   MENU ITEM
+   ========================================================= */
+
+.partnerly-menu-item {
+    position: relative;
+    margin: 2px 0;
+}
+
+
+/* =========================================================
+   MENU LINK
+   ========================================================= */
+
+.partnerly-menu-link {
+    position: relative;
+    min-height: 46px;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    gap: 11px;
+    padding: 8px 11px;
+    border-radius: 11px;
+    text-decoration: none !important;
+    color: var(--partnerly-text) !important;
+    font-size: 0.9rem;
+    font-weight: 500;
+    white-space: nowrap;
+    overflow: hidden;
+    transition: background-color .2s ease, color .2s ease, box-shadow .2s ease, transform .2s ease;
+}
+
+
+    .partnerly-menu-link:hover {
+        color: var(--partnerly-primary) !important;
+        background: var(--partnerly-primary-light);
+        transform: translateX(1px);
+    }
+
+
+/* =========================================================
+   MENU ICON
+   ========================================================= */
+
+.partnerly-menu-icon {
+    width: 40px;
+    min-width: 40px;
+    height: 40px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    margin: 0;
+    padding: 0;
+}
+
+
+    .partnerly-menu-icon i {
+        display: block;
+        width: 20px;
+        height: 20px;
+        line-height: 20px;
+        text-align: center;
+    }
+
+
+.partnerly-menu-item .bx-support {
+    transform: translateX(1px);
+}
+
+
+/* =========================================================
+   MENU TEXT
+   ========================================================= */
+
+.partnerly-menu-text {
+    min-width: 0;
+    flex: 1;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    transition: opacity .2s ease, width .25s ease;
+}
+
+
+/* =========================================================
+   ACTIVE ITEM
+   ========================================================= */
+
+.partnerly-menu-item.active .partnerly-menu-link {
+    color: var(--partnerly-primary) !important;
+    background: linear-gradient( 90deg, rgba(105, 108, 255, 0.13), rgba(105, 108, 255, 0.055) );
+    box-shadow: inset 3px 0 0 var(--partnerly-primary);
+}
+
+
+.partnerly-menu-item.active .partnerly-menu-icon {
+    color: #fff;
+    background: var(--partnerly-primary);
+    box-shadow: 0 4px 10px rgba(105, 108, 255, 0.22);
+}
+
+
+.partnerly-menu-item.active .partnerly-menu-link:hover {
+    transform: none;
+}
+
+
+/* =========================================================
+   BADGE
+   ========================================================= */
+
+.partnerly-menu-badge {
+    flex: 0 0 auto;
+    padding: 3px 7px;
+    border-radius: 20px;
+    color: var(--partnerly-primary);
+    background: rgba(105, 108, 255, 0.10);
+    font-size: 0.65rem;
+    font-weight: 700;
+    line-height: 1;
+    transition: opacity .2s ease, transform .2s ease;
+}
+
+
+/* =========================================================
+   EXTERNAL LINK ICON
+   ========================================================= */
+
+.partnerly-menu-external {
+    flex: 0 0 auto;
+    margin-left: auto;
+    font-size: 16px;
+    color: var(--partnerly-muted);
+    transition: opacity .2s ease, transform .2s ease;
+}
+
+
+.partnerly-menu-link:hover .partnerly-menu-external {
+    color: var(--partnerly-primary);
+    transform: translate(1px, -1px);
+}
+
+
+/* =========================================================
+   SIDEBAR FOOTER
+   ========================================================= */
+
+.partnerly-sidebar-footer {
+    flex-shrink: 0;
+    padding: 8px 16px 14px;
+}
+
+
+.partnerly-sidebar-footer-line {
+    height: 1px;
+    margin-bottom: 12px;
+    background: var(--partnerly-border);
+}
+
+
+.partnerly-sidebar-footer-content {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 0 4px;
+    color: var(--partnerly-muted);
+    font-size: 0.72rem;
+}
+
+
+.partnerly-sidebar-status {
+    width: 7px;
+    height: 7px;
+    flex: 0 0 7px;
+    border-radius: 50%;
+    background: #71dd37;
+    box-shadow: 0 0 0 3px rgba(113, 221, 55, 0.12);
+}
+
+
+.partnerly-sidebar-footer-text {
+    white-space: nowrap;
+    transition: opacity .2s ease;
+}
+
+
+/* =========================================================
+   COLLAPSED DESKTOP SIDEBAR
+   ========================================================= */
+
+body.partnerly-sidebar-collapsed .partnerly-sidebar {
+    width: var(--partnerly-sidebar-collapsed-width);
+}
+
+
+body.partnerly-sidebar-collapsed .partnerly-layout-page {
+    margin-left: var(--partnerly-sidebar-collapsed-width);
+}
+
+
+body.partnerly-sidebar-collapsed .partnerly-brand-name {
+    width: 0;
+    opacity: 0;
+    margin: 0;
+}
+
+
+body.partnerly-sidebar-collapsed .partnerly-sidebar-header {
+    justify-content: center;
+    padding-left: 12px;
+    padding-right: 12px;
+}
+
+
+body.partnerly-sidebar-collapsed .partnerly-brand {
+    justify-content: center;
+}
+
+
+body.partnerly-sidebar-collapsed .partnerly-sidebar-toggle {
+    position: absolute;
+    right: -17px;
+    background: #fff;
+    border: 1px solid var(--partnerly-border);
+    box-shadow: 0 3px 10px rgba(50, 71, 92, 0.08);
+}
+
+
+    body.partnerly-sidebar-collapsed .partnerly-sidebar-toggle i {
+        transform: rotate(180deg);
+    }
+
+
+body.partnerly-sidebar-collapsed .partnerly-menu-section {
+    height: 0;
+    opacity: 0;
+    margin-top: 0;
+    margin-bottom: 0;
+    padding-top: 0;
+    padding-bottom: 0;
+    overflow: hidden;
+}
+
+
+body.partnerly-sidebar-collapsed .partnerly-menu-link {
+    justify-content: center;
+    padding-left: 8px;
+    padding-right: 8px;
+}
+
+
+body.partnerly-sidebar-collapsed .partnerly-menu-icon {
+    margin: 0;
+}
+
+
+body.partnerly-sidebar-collapsed .partnerly-menu-text,
+body.partnerly-sidebar-collapsed .partnerly-menu-badge,
+body.partnerly-sidebar-collapsed .partnerly-menu-external {
+    width: 0;
+    opacity: 0;
+    margin: 0;
+    overflow: hidden;
+}
+
+
+body.partnerly-sidebar-collapsed .partnerly-sidebar-footer-content {
+    justify-content: center;
+}
+
+
+body.partnerly-sidebar-collapsed .partnerly-sidebar-footer-text {
+    display: none;
+}
+
+
+/* =========================================================
+   NAVBAR
+   ========================================================= */
+
+.partnerly-navbar {
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+    min-height: var(--partnerly-navbar-height);
+    display: flex;
+    align-items: center;
+    flex-shrink: 0;
+    background: rgba(255, 255, 255, 0.94);
+    border-bottom: 1px solid var(--partnerly-border);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    padding: 0 24px;
+}
+
+
+/* =========================================================
+   FOOTER
+   ========================================================= */
+
+.partnerly-footer {
+    width: 100%;
+    flex-shrink: 0;
+    background: #fff;
+    border-top: 1px solid #eeeeef;
+}
+
+
+.partnerly-footer-inner {
+    min-height: 56px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 20px;
+    padding: 10px 0;
+    color: #a1a7b3;
+    font-size: 11px;
+}
+
+
+.partnerly-footer-left {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 5px;
+    min-width: 0;
+}
+
+
+    .partnerly-footer-left a {
+        color: #697a8d;
+        font-weight: 500;
+        text-decoration: none;
+        transition: color .2s ease;
+    }
+
+
+        .partnerly-footer-left a:hover {
+            color: var(--partnerly-primary);
+        }
+
+
+.partnerly-footer-separator {
+    color: #d5d7dc;
+    margin: 0 3px;
+}
+
+
+.partnerly-footer-brand {
+    color: #8a93a2;
+    font-weight: 500;
+}
+
+
+.partnerly-footer-links {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    flex-shrink: 0;
+}
+
+
+    .partnerly-footer-links a {
+        color: #8a93a2;
+        text-decoration: none;
+        transition: color .2s ease;
+    }
+
+
+        .partnerly-footer-links a:hover {
+            color: var(--partnerly-primary);
+        }
+
+
+/* =========================================================
+   MOBILE OVERLAY
+   ========================================================= */
+
+.partnerly-sidebar-overlay {
+    display: none;
+    position: fixed;
+    inset: 0;
+    z-index: 1090;
+    background: rgba(25, 35, 45, 0.45);
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity .25s ease, visibility .25s ease;
+}
+
+
+    .partnerly-sidebar-overlay.show {
+        opacity: 1;
+        visibility: visible;
+    }
+
+
+/* =========================================================
+   MOBILE CLOSE BUTTON
+   ========================================================= */
+
+.partnerly-sidebar-mobile-close {
+    display: none;
+    width: 38px;
+    height: 38px;
+    border: 0;
+    background: transparent;
+    color: var(--partnerly-text);
+    border-radius: 10px;
+    align-items: center;
+    justify-content: center;
+    font-size: 24px;
+    cursor: pointer;
+    transition: background-color .2s ease, color .2s ease;
+}
+
+
+    .partnerly-sidebar-mobile-close:hover {
+        background: var(--partnerly-primary-light);
+        color: var(--partnerly-primary);
+    }
+
+
+/* =========================================================
+   MOBILE BODY LOCK
+   ========================================================= */
+
+body.partnerly-mobile-menu-open {
+    overflow: hidden;
+}
+
+
+/* =========================================================
+   TABLET / MOBILE
+   ========================================================= */
+
+@media (max-width: 1199.98px) {
+
+    /* ---------------------------------------------
+       Sidebar
+       --------------------------------------------- */
+
+    .partnerly-sidebar {
+        width: var(--partnerly-sidebar-width);
+        transform: translateX(-100%);
+        box-shadow: 8px 0 30px rgba(25, 35, 45, 0.12);
+    }
+
+
+        .partnerly-sidebar.mobile-open {
+            transform: translateX(0);
+        }
+
+
+    .partnerly-sidebar-toggle {
+        display: none;
+    }
+
+
+    .partnerly-sidebar-mobile-close {
+        display: inline-flex;
+    }
+
+
+    /* ---------------------------------------------
+       Main layout
+       --------------------------------------------- */
+
+   /* .partnerly-layout-page {
+        margin-left: 0 !important;
+        min-height: 100vh;
+    }*/
+
+
+    body.partnerly-sidebar-collapsed .partnerly-sidebar {
+        width: var(--partnerly-sidebar-width);
+        transform: translateX(-100%);
+    }
+
+
+        body.partnerly-sidebar-collapsed .partnerly-sidebar.mobile-open {
+            transform: translateX(0);
+        }
+
+
+    body.partnerly-sidebar-collapsed .partnerly-layout-page {
+        margin-left: 0 !important;
+    }
+
+
+    /* ---------------------------------------------
+       Restore sidebar content on mobile
+       --------------------------------------------- */
+
+    body.partnerly-sidebar-collapsed .partnerly-brand-name,
+    body.partnerly-sidebar-collapsed .partnerly-menu-text,
+    body.partnerly-sidebar-collapsed .partnerly-menu-badge,
+    body.partnerly-sidebar-collapsed .partnerly-menu-external,
+    body.partnerly-sidebar-collapsed .partnerly-sidebar-footer-text {
+        width: auto;
+        opacity: 1;
+        overflow: visible;
+    }
+
+
+    body.partnerly-sidebar-collapsed .partnerly-sidebar-header {
+        justify-content: flex-start;
+        padding-left: 16px;
+        padding-right: 16px;
+    }
+
+
+    body.partnerly-sidebar-collapsed .partnerly-brand {
+        justify-content: flex-start;
+    }
+
+
+    body.partnerly-sidebar-collapsed .partnerly-sidebar-toggle {
+        position: static;
+        border: 0;
+        box-shadow: none;
+    }
+
+
+    body.partnerly-sidebar-collapsed .partnerly-menu-section {
+        height: 34px;
+        opacity: 1;
+        margin-top: 9px;
+        margin-bottom: 3px;
+        padding: 0 12px;
+        overflow: visible;
+    }
+
+
+    body.partnerly-sidebar-collapsed .partnerly-menu-link {
+        justify-content: flex-start;
+        padding-left: 11px;
+        padding-right: 11px;
+    }
+
+
+    body.partnerly-sidebar-collapsed .partnerly-menu-icon {
+        margin: 0;
+    }
+
+
+    body.partnerly-sidebar-collapsed .partnerly-sidebar-footer-content {
+        justify-content: flex-start;
+    }
+
+
+    /* ---------------------------------------------
+       Navbar
+       --------------------------------------------- */
+
+    .partnerly-navbar {
+        min-height: 64px;
+        padding-left: 16px;
+        padding-right: 16px;
+    }
+}
+
+
+/* =========================================================
+   SMALL MOBILE
+   ========================================================= */
+
+@media (max-width: 767.98px) {
+
+    .partnerly-footer-inner {
+        min-height: 0;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        gap: 8px;
+        padding: 14px 0;
+        text-align: center;
+    }
+
+
+    .partnerly-footer-left {
+        justify-content: center;
+    }
+
+
+    .partnerly-footer-links {
+        justify-content: center;
+        gap: 16px;
+    }
+}
+
+
+@media (max-width: 575.98px) {
+
+    :root {
+        --partnerly-sidebar-width: min(290px, 86vw);
+    }
+
+
+    .partnerly-navbar {
+        padding-left: 12px;
+        padding-right: 12px;
+    }
+
+
+    .partnerly-sidebar-header {
+        height: 64px;
+    }
+
+
+    .partnerly-sidebar-content {
+        padding-left: 10px;
+        padding-right: 10px;
+    }
+
+
+    .partnerly-footer-inner {
+        font-size: 10px;
+    }
+
+
+    .partnerly-footer-links {
+        gap: 12px;
+    }
+}
+
+/* =========================================================
+   MAIN PAGE AREA
+   ========================================================= */
+
+.partnerly-layout-main {
+    min-width: 0;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    flex: 1 1 auto;
+}
+
+
+/* =========================================================
+   CONTENT
+   ========================================================= */
+
+.partnerly-layout-content {
+    flex: 1 0 auto;
+    min-width: 0;
+    width: 100%;
+}
+
+@media (max-width: 1199.98px) {
+
+    .partnerly-layout-page {
+        margin-left: 0 !important;
+    }
+}
