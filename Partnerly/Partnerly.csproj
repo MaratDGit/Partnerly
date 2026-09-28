@@ -37,11 +37,7 @@
   <ItemGroup>
     <Folder Include="wwwroot\assets\vendor\fonts\" />
     <Folder Include="wwwroot\assets\vendor\js\" />
-    <Folder Include="wwwroot\assets\vendor\libs\highlight\" />
     <Folder Include="wwwroot\assets\vendor\libs\jquery\" />
-    <Folder Include="wwwroot\assets\vendor\libs\masonry\" />
-    <Folder Include="wwwroot\assets\vendor\libs\perfect-scrollbar\" />
-    <Folder Include="wwwroot\assets\vendor\libs\popper\" />
     <Folder Include="wwwroot\fonts\iconify\" />
     <Folder Include="wwwroot\uploads\attachments\" />
     <Folder Include="wwwroot\uploads\profiles\" />
