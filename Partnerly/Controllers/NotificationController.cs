@@ -163,7 +163,11 @@ namespace Partnerly.Controllers
             var template = await _notificationService.GetNotificationByIDAsync(id);
             if (template == null) return NotFound();
 
-            return View();
+            var model = new NotificationsViewModel
+            {
+                Id = template.Id
+            };
+            return View(model);
         }
 
         [HttpPost, ActionName("DeleteConfirmed")]
@@ -181,6 +185,7 @@ namespace Partnerly.Controllers
                     {
                         ModelState.AddModelError("", error);
                     }
+                    
                     return View();
                 }
             }

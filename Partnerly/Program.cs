@@ -62,6 +62,8 @@ builder.Services.AddTransient<SupportTickedStatusChangedEventHandler>();
 builder.Services.AddHostedService<OnlineStatusService>();
 builder.Services.AddHttpContextAccessor();
 builder.Services.AddScoped<ICurrentUserService, CurrentUserService>();
+// AI Services
+builder.Services.AddHttpClient<IOpenAIService, OpenAIService>();
 
 // Database
 builder.Services.AddDbContext<AppDbContext>(options =>

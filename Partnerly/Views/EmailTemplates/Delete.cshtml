@@ -1,26 +1,22 @@
-﻿@model Partnerly.Models.ViewModels.EmailTemplateViewModel;
-@await Html.PartialAsync("_Toast")
+﻿@model Partnerly.Models.ViewModels.EmailTemplateViewModel
 
 @{
     ViewData["Title"] = "Deleting the template";
     Layout = "_ContentNavbarLayout";
 }
 
-<div class="card">
-    <div class="card-header d-flex justify-content-between align-items-center">
-        <h5>@Localizer["Deletingthetemplate"]</h5>
-    </div>
+@await Html.PartialAsync(
+"_DeleteConfirmation",
+    new Partnerly.Models.ViewModels.DeleteConfirmationViewModel
+    {
+        Id = Model.Id,
+        Title = Localizer["Deletingthetemplate"],
+        Message = Localizer["Areyousureyouwanttodeletethisfile"],
+        DeleteAction = "DeleteConfirmed",
+        DeleteController = "EmailTemplates",
+        CancelAction = "Index",
+        CancelController = "EmailTemplates"
+    })
 
-    <div class="card-body">
-        <form id="emailTemplateForm" asp-action="DeleteConfirmed">
-            <div class="sticky-buttons justify-content-between mb-6">
-                 <a asp-action="Index" class="btn btn-sm btn-outline-primary">
-                    <i class="bx bx-arrow-back me-1 fs-6"></i> @Localizer["Cancel"]
-                </a>
-                <button type="submit" class="btn btn-sm btn-outline-danger"><i class="bx bx-trash me-1 fs-6"></i> @Localizer["Confirm"]</button>
-            </div>
 
-            <input type="hidden" asp-for="Id" />
-        </form>
-    </div>
-</div>
+

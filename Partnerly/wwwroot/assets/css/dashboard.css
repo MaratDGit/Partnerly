@@ -468,7 +468,7 @@
     position: absolute;
     top: 14px;
     right: 14px;
-    z-index: 10;
+    z-index: 30;
     width: 30px;
     height: 30px;
     display: flex;
@@ -489,4 +489,94 @@
     }
 .dashboard-card-header {
     padding-right: 40px;
+}
+
+/* =========================================
+   CARD REFRESH / LOADING
+========================================= */
+
+.dashboard-card,
+.dashboard-stat-card {
+    position: relative;
+}
+
+
+    /* Card content becomes slightly transparent */
+
+    .dashboard-card.is-refreshing,
+    .dashboard-stat-card.is-refreshing {
+        pointer-events: none;
+    }
+
+        .dashboard-card.is-refreshing > :not(.dashboard-refresh-overlay),
+        .dashboard-stat-card.is-refreshing > :not(.dashboard-refresh-overlay) {
+            opacity: .45;
+        }
+
+
+/* Loading overlay */
+
+.dashboard-refresh-overlay {
+    position: absolute;
+    inset: 0;
+    z-index: 20;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: inherit;
+    background: rgba(255, 255, 255, .25);
+    backdrop-filter: blur(1px);
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity .2s ease, visibility .2s ease;
+}
+
+
+/* Show overlay */
+
+.dashboard-card.is-refreshing .dashboard-refresh-overlay,
+.dashboard-stat-card.is-refreshing .dashboard-refresh-overlay {
+    opacity: 1;
+    visibility: visible;
+}
+
+
+/* Spinner */
+
+.dashboard-refresh-spinner {
+    width: 28px;
+    height: 28px;
+    border: 3px solid rgba(105, 108, 255, .18);
+    border-top-color: #696cff;
+    border-radius: 50%;
+    animation: dashboardRefreshSpin .7s linear infinite;
+}
+
+
+@keyframes dashboardRefreshSpin {
+
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+
+/* Refresh button */
+
+.dashboard-card-refresh.is-loading {
+    color: #696cff;
+    cursor: wait;
+}
+
+
+    .dashboard-card-refresh.is-loading i {
+        animation: dashboardRefreshButtonSpin .7s linear infinite;
+    }
+
+
+@keyframes dashboardRefreshButtonSpin {
+
+    to {
+        transform: rotate(360deg);
+    }
 }

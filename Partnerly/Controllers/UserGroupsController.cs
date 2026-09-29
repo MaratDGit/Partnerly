@@ -10,6 +10,7 @@ using Partnerly.Infrastructure.Services;
 using Partnerly.Models;
 using Partnerly.Models.GridViews;
 using Partnerly.Models.ViewModels;
+using System.Net.Sockets;
 using System.Security.Claims;
 using System.Text.Json;
 
@@ -154,7 +155,11 @@ namespace Partnerly.Controllers
             var group = await _userGroupService.GetByIDAsync(id);
             if (group == null) return NotFound();
 
-            return View();
+            var model = new UserGroupViewModel
+            {
+                Id = group.Id
+            };
+            return View(model);
         }
 
         [HttpPost, ActionName("DeleteConfirmed")]

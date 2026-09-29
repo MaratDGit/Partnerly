@@ -1,4 +1,5 @@
-﻿@model Partnerly.Models.ViewModels.SystemPreferencesViewModel;
+﻿@model Partnerly.Models.ViewModels.SystemPreferencesViewModel
+
 @await Html.PartialAsync("_Toast")
 
 @{
@@ -6,56 +7,422 @@
     Layout = "_ContentNavbarLayout";
 }
 
-<div class="card">
-    <div class="card-header justify-content-between">
-        <h5>@Localizer["Systemsettings"]</h5>
+@section PageStyles {
+    <link rel="stylesheet"
+          href="~/assets/vendor/css/pages/system-preferences.css"
+          asp-append-version="true" />
+}
+
+<div class="system-preferences-page">
+
+    <!-- PAGE HEADER -->
+    <div class="system-preferences-header">
+
+        <div class="system-preferences-title">
+
+            <div class="system-preferences-icon">
+                <i class="bx bx-cog"></i>
+            </div>
+
+            <div>
+                <h4 class="mb-1">
+                    @Localizer["Systemsettings"]
+                </h4>
+            </div>
+
+        </div>
+
     </div>
 
-    <div class="card-body">
-        <form id="systemPreferencesForm" asp-action="Edit">
 
-             @await Html.PartialAsync("_StickyButtons", new Partnerly.Models.ViewModels.FormActionsViewModel {
-                Back = new Partnerly.Models.ViewModels.ActionBack(visible: true, fromController: "SystemPreferences", toController: "Home", fromAction: "Index", toAction: "Index"),
-                Undo = new Partnerly.Models.ViewModels.ActionUndo(visible: true, fromController: "SystemPreferences", toController: "SystemPreferences", fromAction: "Index", toAction: "Index"),
-                Save = new Partnerly.Models.ViewModels.ActionSave(visible: true, fromController: "SystemPreferences", toController: "SystemPreferences", fromAction: "Index", toAction: "Index"),
-                Note = new Partnerly.Models.ViewModels.ActionNote(visible: true, note: Model.Note),
-             })
+    <!-- SETTINGS CARD -->
+    <div class="card system-preferences-card">
 
-            <input type="hidden" asp-for="Id" />
-            <input type="hidden" id="hiddenNote" asp-for="Note" />
+        <div class="card-body">
 
-            <div class="form-check form-switch mb-2">
-                <input asp-for="IsMaintenanceModeBool" class="form-check-input" type="checkbox" id="isMaintenanceMode" />
-                <label class="form-check-label" asp-for="IsMaintenanceMode" for="isMaintenanceMode"></label>
-            </div>
+            <form id="systemPreferencesForm"
+                  asp-action="Edit">
 
-            <div class="form-floating mb-1 max-w-600">
-                <input asp-for="EmailConfirmationTokenExpiredAtHours" class="form-control" id="emailConfirmationTokenExpiredAtHours" name="emailConfirmationTokenExpiredAtHours" placeholder=@Localizer["Theemailverificationtokenhasexpired"] />
-                   <label asp-for="EmailConfirmationTokenExpiredAtHours"></label>
-                   <span asp-validation-for="EmailConfirmationTokenExpiredAtHours" class="text-danger"></span>
-            </div>
-            <div class="form-floating mb-1 max-w-600">
-                <input asp-for="ForgotPasswordTokenExpiredAtHours" class="form-control" id="forgotPasswordTokenExpiredAtHours" name="forgotPasswordTokenExpiredAtHours" placeholder=@Localizer["ThetokenForgotpasswordhasexpired"] />
-               <label asp-for="ForgotPasswordTokenExpiredAtHours"></label>
-               <span asp-validation-for="ForgotPasswordTokenExpiredAtHours" class="text-danger"></span>
-            </div>
-            <div class="form-floating mb-1 max-w-600">
-                <input asp-for="OnlineStatusAutoRefreshMinute" class="form-control" id="onlineStatusAutoRefreshMinute" name="onlineStatusAutoRefreshMinute" placeholder=@Localizer["Onlinestatusautoupdateinterval"] />
-               <label asp-for="OnlineStatusAutoRefreshMinute"></label>
-               <span asp-validation-for="OnlineStatusAutoRefreshMinute" class="text-danger"></span>
-            </div>
-            <div class="form-floating mb-1 max-w-600">
-                <textarea asp-for="ScrollingText" id="message" class="form-control" style="height: 150px" rows="5"></textarea>
-                <label asp-for="ScrollingText"></label>
-                <span asp-validation-for="ScrollingText" class="text-danger"></span>
-            </div>
-        </form>
+                @await Html.PartialAsync(
+                "_StickyButtons",
+                                new Partnerly.Models.ViewModels.FormActionsViewModel
+                                {
+                                    Back = new Partnerly.Models.ViewModels.ActionBack(
+                                visible: true,
+                                fromController: "SystemPreferences",
+                                toController: "Home",
+                                fromAction: "Index",
+                                toAction: "Index"
+                                ),
+
+                                    Undo = new Partnerly.Models.ViewModels.ActionUndo(
+                                visible: true,
+                                fromController: "SystemPreferences",
+                                toController: "SystemPreferences",
+                                fromAction: "Index",
+                                toAction: "Index"
+                                ),
+
+                                    Save = new Partnerly.Models.ViewModels.ActionSave(
+                                visible: true,
+                                fromController: "SystemPreferences",
+                                toController: "SystemPreferences",
+                                fromAction: "Index",
+                                toAction: "Index"
+                                ),
+
+                                    Note = new Partnerly.Models.ViewModels.ActionNote(
+                                visible: true,
+                                note: Model.Note
+                                ),
+                                }
+                                )
+
+                <input type="hidden"
+                       asp-for="Id" />
+
+                <input type="hidden"
+                       id="hiddenNote"
+                       asp-for="Note" />
+
+
+                <!-- ========================================= -->
+                <!-- TABS -->
+                <!-- ========================================= -->
+
+                <div class="system-settings-tabs">
+
+                    <ul class="nav nav-tabs"
+                        id="systemSettingsTabs"
+                        role="tablist">
+
+                        <!-- SYSTEM -->
+
+                        <li class="nav-item"
+                            role="presentation">
+
+                            <button class="nav-link active"
+                                    id="system-tab"
+                                    data-bs-toggle="tab"
+                                    data-bs-target="#system-tab-pane"
+                                    type="button"
+                                    role="tab"
+                                    aria-controls="system-tab-pane"
+                                    aria-selected="true">
+
+                                <i class="bx bx-server"></i>
+
+                                <span>
+                                    @Localizer["System"]
+                                </span>
+
+                            </button>
+
+                        </li>
+
+
+                        <!-- SECURITY -->
+
+                        <li class="nav-item"
+                            role="presentation">
+
+                            <button class="nav-link"
+                                    id="security-tab"
+                                    data-bs-toggle="tab"
+                                    data-bs-target="#security-tab-pane"
+                                    type="button"
+                                    role="tab"
+                                    aria-controls="security-tab-pane"
+                                    aria-selected="false">
+
+                                <i class="bx bx-shield-quarter"></i>
+
+                                <span>
+                                    @Localizer["Security"]
+                                </span>
+
+                            </button>
+
+                        </li>
+
+
+                        <!-- NOTIFICATIONS -->
+
+                        <li class="nav-item"
+                            role="presentation">
+
+                            <button class="nav-link"
+                                    id="notifications-tab"
+                                    data-bs-toggle="tab"
+                                    data-bs-target="#notifications-tab-pane"
+                                    type="button"
+                                    role="tab"
+                                    aria-controls="notifications-tab-pane"
+                                    aria-selected="false">
+
+                                <i class="bx bx-bell"></i>
+
+                                <span>
+                                    @Localizer["Notifications"]
+                                </span>
+
+                            </button>
+
+                        </li>
+
+                    </ul>
+
+
+                    <!-- ========================================= -->
+                    <!-- TAB CONTENT -->
+                    <!-- ========================================= -->
+
+                    <div class="tab-content"
+                         id="systemSettingsTabContent">
+
+
+                        <!-- ========================================= -->
+                        <!-- SYSTEM TAB -->
+                        <!-- ========================================= -->
+
+                        <div class="tab-pane fade show active"
+                             id="system-tab-pane"
+                             role="tabpanel"
+                             aria-labelledby="system-tab"
+                             tabindex="0">
+
+                            <div class="settings-tab-content">
+
+                                <!-- Maintenance Mode -->
+
+                                <div class="maintenance-setting">
+
+                                    <div class="maintenance-setting-info">
+
+                                        <div class="maintenance-icon">
+                                            <i class="bx bx-wrench"></i>
+                                        </div>
+
+                                        <div>
+
+                                            <div class="maintenance-title">
+                                                @Localizer["MaintenanceMode"]
+                                            </div>
+
+                                        </div>
+
+                                    </div>
+
+
+                                    <div class="form-check form-switch">
+
+                                        <input asp-for="IsMaintenanceModeBool"
+                                               class="form-check-input"
+                                               type="checkbox"
+                                               id="isMaintenanceMode" />
+
+                                    </div>
+
+                                </div>
+
+                            </div>
+
+                        </div>
+
+
+                        <!-- ========================================= -->
+                        <!-- SECURITY TAB -->
+                        <!-- ========================================= -->
+
+                        <div class="tab-pane fade"
+                             id="security-tab-pane"
+                             role="tabpanel"
+                             aria-labelledby="security-tab"
+                             tabindex="0">
+
+                            <div class="settings-tab-content">
+
+                                <div class="settings-tab-header">
+
+                                </div>
+
+
+                                <div class="row g-4">
+
+
+                                    <!-- Email confirmation -->
+
+                                    <div class="col-xl-4 col-md-6">
+
+                                        <div class="settings-field">
+
+                                            <div class="settings-field-icon">
+                                                <i class="bx bx-envelope"></i>
+                                            </div>
+
+                                            <div class="form-floating flex-grow-1">
+
+                                                <input asp-for="EmailConfirmationTokenExpiredAtHours"
+                                                       class="form-control"
+                                                       id="emailConfirmationTokenExpiredAtHours"
+                                                       placeholder="@Localizer["Theemailverificationtokenhasexpired"]" />
+
+                                                <label asp-for="EmailConfirmationTokenExpiredAtHours"></label>
+
+                                            </div>
+
+                                        </div>
+
+                                        <span asp-validation-for="EmailConfirmationTokenExpiredAtHours"
+                                              class="text-danger validation-message">
+                                        </span>
+
+                                    </div>
+
+
+                                    <!-- Forgot password -->
+
+                                    <div class="col-xl-4 col-md-6">
+
+                                        <div class="settings-field">
+
+                                            <div class="settings-field-icon">
+                                                <i class="bx bx-lock-open-alt"></i>
+                                            </div>
+
+                                            <div class="form-floating flex-grow-1">
+
+                                                <input asp-for="ForgotPasswordTokenExpiredAtHours"
+                                                       class="form-control"
+                                                       id="forgotPasswordTokenExpiredAtHours"
+                                                       placeholder="@Localizer["ThetokenForgotpasswordhasexpired"]" />
+
+                                                <label asp-for="ForgotPasswordTokenExpiredAtHours"></label>
+
+                                            </div>
+
+                                        </div>
+
+                                        <span asp-validation-for="ForgotPasswordTokenExpiredAtHours"
+                                              class="text-danger validation-message">
+                                        </span>
+
+                                    </div>
+
+
+                                    <!-- Online status -->
+
+                                    <div class="col-xl-4 col-md-6">
+
+                                        <div class="settings-field">
+
+                                            <div class="settings-field-icon">
+                                                <i class="bx bx-time-five"></i>
+                                            </div>
+
+                                            <div class="form-floating flex-grow-1">
+
+                                                <input asp-for="OnlineStatusAutoRefreshMinute"
+                                                       class="form-control"
+                                                       id="onlineStatusAutoRefreshMinute"
+                                                       placeholder="@Localizer["Onlinestatusautoupdateinterval"]" />
+
+                                                <label asp-for="OnlineStatusAutoRefreshMinute"></label>
+
+                                            </div>
+
+                                        </div>
+
+                                        <span asp-validation-for="OnlineStatusAutoRefreshMinute"
+                                              class="text-danger validation-message">
+                                        </span>
+
+                                    </div>
+
+                                </div>
+
+                            </div>
+
+                        </div>
+
+
+                        <!-- ========================================= -->
+                        <!-- NOTIFICATIONS TAB -->
+                        <!-- ========================================= -->
+
+                        <div class="tab-pane fade"
+                             id="notifications-tab-pane"
+                             role="tabpanel"
+                             aria-labelledby="notifications-tab"
+                             tabindex="0">
+
+                            <div class="settings-tab-content">
+
+                                <div class="settings-tab-header">
+
+                                </div>
+
+
+                                <div class="scrolling-text-box">
+
+                                    <div class="scrolling-text-icon">
+                                        <i class="bx bx-message-square-dots"></i>
+                                    </div>
+
+                                    <div class="form-floating flex-grow-1">
+
+                                        <textarea asp-for="ScrollingText"
+                                                  id="message"
+                                                  class="form-control scrolling-textarea"
+                                                  rows="5"
+                                                  placeholder="@Localizer["ScrollingText"]"></textarea>
+
+                                        <label asp-for="ScrollingText"></label>
+
+                                    </div>
+
+                                </div>
+
+
+                                <span asp-validation-for="ScrollingText"
+                                      class="text-danger validation-message">
+                                </span>
+
+
+                                <div class="scrolling-text-hint">
+
+                                    <i class="bx bx-info-circle"></i>
+
+                                    <span>
+                                        @Localizer["ScrollingTextDescription"]
+                                    </span>
+
+                                </div>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </form>
+
+        </div>
+
     </div>
+
 </div>
 
+
 <script src="~/js/form-change-tracker.js"></script>
+
 <script>
-    enableSaveOnChange("#systemPreferencesForm", "#btnSave");
+
+    enableSaveOnChange(
+        "#systemPreferencesForm",
+        "#btnSave"
+    );
+
 </script>
-
-

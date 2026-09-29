@@ -52,6 +52,33 @@ namespace Partnerly.Controllers
         }
 
         [HttpGet]
+        public IActionResult GetStats()
+        {
+            // TODO:
+            // Replace these values with real database calculations
+            // when the Game entity/repository is implemented.
+
+            var gamesPlayed = 130;
+            var victories = 80;
+            var defeats = 50;
+
+            var winRate = gamesPlayed == 0
+                ? 0
+                : Math.Round(
+                    (decimal)victories / gamesPlayed * 100,
+                    1
+                );
+
+            return Json(new
+            {
+                gamesPlayed,
+                victories,
+                defeats,
+                winRate
+            });
+        }
+
+        [HttpGet]
         public IActionResult GetGamesByPeriod(string period)
         {
             var today = DateTime.Today;

@@ -1,0 +1,439 @@
+﻿/* =========================================================
+   PARTNERLY AI BUTTON
+   ========================================================= */
+
+.partnerly-ai-button {
+    position: relative;
+}
+
+    .partnerly-ai-button i {
+        transition: transform .2s ease;
+    }
+
+    .partnerly-ai-button:hover i {
+        transform: scale(1.08);
+    }
+
+
+/* =========================================================
+   AI PANEL
+   ========================================================= */
+
+.partnerly-ai-panel {
+    position: fixed;
+    top: 80px;
+    right: 20px;
+    width: 430px;
+    height: calc(100vh - 100px);
+    display: flex;
+    flex-direction: column;
+    z-index: 1080;
+    background: #fff;
+    border: 1px solid #e7e9ed;
+    border-radius: 16px;
+    box-shadow: 0 18px 55px rgba(50, 71, 92, .18);
+    overflow: hidden;
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(-8px) scale(.98);
+    transition: opacity .2s ease, visibility .2s ease, transform .2s ease;
+}
+
+
+    /* OPEN */
+
+    .partnerly-ai-panel.show {
+        opacity: 1;
+        visibility: visible;
+        transform: translateY(0) scale(1);
+    }
+
+
+/* =========================================================
+   HEADER
+   ========================================================= */
+
+.partnerly-ai-header {
+    min-height: 68px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 12px 15px;
+    border-bottom: 1px solid #eef0f2;
+    background: #fff;
+}
+
+.partnerly-ai-header-left {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.partnerly-ai-icon {
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 10px;
+    background: rgba(105, 108, 255, .1);
+    color: #696cff;
+    font-size: 21px;
+}
+
+.partnerly-ai-title {
+    color: #32475c;
+    font-size: .9rem;
+    font-weight: 600;
+}
+
+.partnerly-ai-status {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    margin-top: 2px;
+    color: #a1acb8;
+    font-size: .7rem;
+}
+
+.partnerly-ai-status-dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: #28c76f;
+}
+
+.partnerly-ai-header-actions {
+    display: flex;
+    align-items: center;
+    gap: 3px;
+}
+
+.partnerly-ai-header-button {
+    width: 34px;
+    height: 34px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0;
+    border: 0;
+    border-radius: 8px;
+    background: transparent;
+    color: #697a8d;
+    cursor: pointer;
+    transition: background-color .2s ease, color .2s ease;
+}
+
+    .partnerly-ai-header-button:hover {
+        background: rgba(105, 108, 255, .08);
+        color: #696cff;
+    }
+
+    .partnerly-ai-header-button i {
+        font-size: 18px;
+    }
+
+
+/* =========================================================
+   CHAT
+   ========================================================= */
+
+.partnerly-ai-chat {
+    flex: 1;
+    min-height: 0;
+    overflow-y: auto;
+    overflow-x: hidden;
+    padding: 20px;
+}
+
+
+/* =========================================================
+   WELCOME
+   ========================================================= */
+
+.partnerly-ai-welcome {
+    margin-top: 35px;
+    text-align: center;
+}
+
+.partnerly-ai-welcome-icon {
+    width: 58px;
+    height: 58px;
+    margin: 0 auto 14px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 15px;
+    background: rgba(105, 108, 255, .1);
+    color: #696cff;
+    font-size: 30px;
+}
+
+.partnerly-ai-welcome h5 {
+    margin-bottom: 7px;
+    color: #566a7f;
+    font-weight: 600;
+}
+
+.partnerly-ai-welcome p {
+    max-width: 340px;
+    margin: 0 auto;
+    color: #8592a3;
+    font-size: .78rem;
+    line-height: 1.5;
+}
+
+
+/* =========================================================
+   SUGGESTIONS
+   ========================================================= */
+
+.partnerly-ai-suggestions {
+    display: flex;
+    flex-direction: column;
+    gap: 7px;
+    margin-top: 22px;
+}
+
+.partnerly-ai-suggestion {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    gap: 9px;
+    padding: 10px 12px;
+    border: 1px solid rgba(67, 89, 113, .1);
+    border-radius: 9px;
+    background: #fff;
+    color: #566a7f;
+    text-align: left;
+    font-size: .78rem;
+    cursor: pointer;
+    transition: background-color .2s ease, border-color .2s ease;
+}
+
+    .partnerly-ai-suggestion:hover {
+        background: rgba(105, 108, 255, .04);
+        border-color: rgba(105, 108, 255, .3);
+    }
+
+    .partnerly-ai-suggestion i {
+        color: #696cff;
+        font-size: 17px;
+    }
+
+
+/* =========================================================
+   MESSAGES
+   ========================================================= */
+
+.partnerly-ai-message {
+    display: flex;
+    gap: 9px;
+    max-width: 92%;
+    margin-bottom: 17px;
+}
+
+    .partnerly-ai-message.user {
+        margin-left: auto;
+        flex-direction: row-reverse;
+    }
+
+.partnerly-ai-message-avatar {
+    width: 30px;
+    height: 30px;
+    flex: 0 0 30px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    background: rgba(105, 108, 255, .1);
+    color: #696cff;
+    font-size: 16px;
+}
+
+.partnerly-ai-message.user
+.partnerly-ai-message-avatar {
+    background: #696cff;
+    color: #fff;
+}
+
+.partnerly-ai-message-content {
+    min-width: 0;
+}
+
+.partnerly-ai-message-name {
+    margin-bottom: 3px;
+    color: #a1acb8;
+    font-size: .65rem;
+}
+
+.partnerly-ai-message-text {
+    padding: 9px 12px;
+    border-radius: 10px;
+    background: #f5f5f9;
+    color: #566a7f;
+    font-size: .78rem;
+    line-height: 1.55;
+    white-space: pre-wrap;
+    overflow-wrap: anywhere;
+}
+
+.partnerly-ai-message.user
+.partnerly-ai-message-text {
+    background: #696cff;
+    color: #fff;
+}
+
+
+/* =========================================================
+   TYPING
+   ========================================================= */
+
+.partnerly-ai-typing {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    padding: 11px 13px;
+    border-radius: 10px;
+    background: #f5f5f9;
+}
+
+    .partnerly-ai-typing span {
+        width: 5px;
+        height: 5px;
+        border-radius: 50%;
+        background: #8592a3;
+        animation: partnerlyAiTyping 1.2s infinite ease-in-out;
+    }
+
+        .partnerly-ai-typing span:nth-child(2) {
+            animation-delay: .15s;
+        }
+
+        .partnerly-ai-typing span:nth-child(3) {
+            animation-delay: .3s;
+        }
+
+@keyframes partnerlyAiTyping {
+
+    0%,
+    60%,
+    100% {
+        opacity: .3;
+        transform: translateY(0);
+    }
+
+    30% {
+        opacity: 1;
+        transform: translateY(-3px);
+    }
+}
+
+
+/* =========================================================
+   INPUT
+   ========================================================= */
+
+.partnerly-ai-input-wrapper {
+    padding: 11px 13px 13px;
+    border-top: 1px solid #eef0f2;
+    background: #fff;
+}
+
+.partnerly-ai-input-box {
+    display: flex;
+    align-items: flex-end;
+    gap: 6px;
+    padding: 6px 6px 6px 11px;
+    border: 1px solid rgba(67, 89, 113, .15);
+    border-radius: 10px;
+    background: #fff;
+    transition: border-color .2s ease, box-shadow .2s ease;
+}
+
+    .partnerly-ai-input-box:focus-within {
+        border-color: rgba(105, 108, 255, .5);
+        box-shadow: 0 0 0 3px rgba(105, 108, 255, .08);
+    }
+
+    .partnerly-ai-input-box textarea {
+        flex: 1;
+        min-width: 0;
+        min-height: 34px;
+        max-height: 110px;
+        padding: 7px 0;
+        resize: none;
+        border: 0;
+        outline: 0;
+        background: transparent;
+        color: #566a7f;
+        font-size: .8rem;
+        line-height: 1.45;
+    }
+
+        .partnerly-ai-input-box textarea::placeholder {
+            color: #a1acb8;
+        }
+
+.partnerly-ai-send {
+    width: 34px;
+    height: 34px;
+    flex: 0 0 34px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0;
+    border: 0;
+    border-radius: 8px;
+    background: #696cff;
+    color: #fff;
+    font-size: 17px;
+    cursor: pointer;
+}
+
+    .partnerly-ai-send:disabled {
+        opacity: .4;
+        cursor: not-allowed;
+    }
+
+.partnerly-ai-input-footer {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 5px;
+    padding: 0 2px;
+    color: #a1acb8;
+    font-size: .6rem;
+}
+
+
+/* =========================================================
+   MOBILE
+   ========================================================= */
+
+@media (max-width: 575.98px) {
+
+    .partnerly-ai-panel {
+        top: 64px;
+        right: 8px;
+        left: 8px;
+        width: auto;
+        height: calc(100vh - 72px);
+        border-radius: 14px;
+    }
+
+    .partnerly-ai-chat {
+        padding: 15px;
+    }
+
+    .partnerly-ai-welcome {
+        margin-top: 25px;
+    }
+
+    .partnerly-ai-message {
+        max-width: 96%;
+    }
+
+    .partnerly-ai-input-footer span:first-child {
+        display: none;
+    }
+}

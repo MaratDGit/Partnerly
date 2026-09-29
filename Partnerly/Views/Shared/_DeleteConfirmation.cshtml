@@ -1,0 +1,65 @@
+﻿@model Partnerly.Models.ViewModels.DeleteConfirmationViewModel
+
+<div class="delete-confirmation-page">
+
+    <div class="card delete-confirmation-card">
+
+        <div class="card-header delete-confirmation-header">
+            <h5>
+                <i class="@Model.Icon"></i>
+                @Model.Title
+            </h5>
+        </div>
+
+        <div class="card-body delete-confirmation-body">
+
+           @*  <div class="delete-confirmation-icon">
+                <i class="@Model.Icon"></i>
+            </div> *@
+
+            <div class="delete-confirmation-message">
+
+                @if (!string.IsNullOrWhiteSpace(Model.Message))
+                {
+                    <p>
+                        @Model.Message
+                    </p>
+                }
+
+            </div>
+
+            <form asp-action="@Model.DeleteAction"
+                  asp-controller="@Model.DeleteController"
+                  method="post">
+
+                <input type="hidden" name="Id" value="@Model.Id" />
+
+                <div class="delete-confirmation-actions">
+
+                    <a asp-action="@Model.CancelAction"
+                       asp-controller="@Model.CancelController"
+                       class="btn btn-sm btn-outline-secondary">
+
+                        <i class="bx bx-arrow-back me-1"></i>
+                        @Localizer["Cancel"]
+
+                    </a>
+
+                    <button type="submit"
+                            class="btn btn-sm btn-danger">
+
+                        <i class="bx bx-trash me-1"></i>
+                        @Localizer["Confirm"]
+
+                    </button>
+
+                </div>
+
+            </form>
+
+        </div>
+
+    </div>
+
+</div>
+

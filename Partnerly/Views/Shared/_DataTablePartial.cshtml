@@ -8,31 +8,234 @@
 {
     <div class="card">
         <div class="card-header d-flex justify-content-between align-items-center">
-            <h5>@ViewData["TableName"]</h5>
+            <h5>
+                <i class="bx bx-info-circle"></i>
+                @ViewData["TableName"]
+            </h5>
 
             @if (ViewData["NewRecordControler"] != null && hasAdminRole)
-            { 
-                <a id="btnAddNew" class="btn btn-sm btn-outline-primary" 
-                   asp-action="Create" asp-controller="@ViewData["NewRecordControler"]">
-                    <i class="bx bx-plus me-1 fs-6"></i> @Localizer["Create"]
+            {
+                <a id="btnAddNew"
+                   class="btn btn-sm btn-outline-primary"
+                   asp-action="Create"
+                   asp-controller="@ViewData["NewRecordControler"]">
+                    <i class="bx bx-plus me-1 fs-6"></i>
+                    @Localizer["Create"]
                 </a>
             }
         </div>
 
-        <div class="table-custom-a custom-datatable-wrapper"> 
+        <div class="table-custom-a custom-datatable-wrapper">
             <table id="@ViewData["TableId"]"></table>
         </div>
-
-        <div class="custom-datatable-pagination"></div> 
-    </div>    
+    </div>
 }
 else
 {
-    <div class="table-custom-a custom-datatable-wrapper"> 
+    <div class="table-custom-a custom-datatable-wrapper">
         <table id="@ViewData["TableId"]"></table>
     </div>
-
-    <div class="custom-datatable-pagination"></div>    
 }
 
+<style>
 
+    /* =========================================================
+       TABLE CONTAINER / PAGE CARD
+       ========================================================= */
+
+    .card:has(> .table-custom-a) {
+        position: relative;
+        width: 100%;
+        margin-bottom: 24px;
+        border: 1px solid rgba(67, 89, 113, 0.10);
+        border-radius: 16px;
+        background: #fff;
+        box-shadow: 0 4px 18px rgba(67, 89, 113, 0.06);
+        overflow: hidden;
+    }
+
+
+        /* =========================================================
+       TABLE CARD HEADER
+       ========================================================= */
+
+        .card:has(> .table-custom-a) > .card-header {
+            min-height: 68px;
+            padding: 15px 20px;
+            border-bottom: 1px solid rgba(67, 89, 113, 0.08);
+            background: #fff;
+        }
+
+
+            /* =========================================================
+       TITLE
+       ========================================================= */
+
+            .card:has(> .table-custom-a) > .card-header h5 {
+                display: flex;
+                align-items: center;
+                gap: 9px;
+                margin: 0;
+                color: #384551;
+                font-size: 16px;
+                font-weight: 600;
+                line-height: 1.4;
+            }
+
+
+                /* INFO ICON */
+
+                .card:has(> .table-custom-a) > .card-header h5 > i {
+                    width: 32px;
+                    height: 32px;
+                    display: inline-flex;
+                    align-items: center;
+                    justify-content: center;
+                    flex-shrink: 0;
+                    border-radius: 9px;
+                    background: rgba(105, 108, 255, 0.10);
+                    color: #696cff;
+                    font-size: 18px;
+                    transition: color .2s ease, background-color .2s ease, transform .2s ease;
+                }
+
+
+                /* Small hover effect */
+
+                .card:has(> .table-custom-a) > .card-header h5:hover > i {
+                    color: #5f61e6;
+                    background: rgba(105, 108, 255, 0.15);
+                    transform: translateY(-1px);
+                }
+
+
+            /* =========================================================
+       CREATE BUTTON
+       ========================================================= */
+
+            .card:has(> .table-custom-a) > .card-header #btnAddNew {
+                min-height: 36px;
+                display: inline-flex;
+                align-items: center;
+                justify-content: center;
+                padding: 7px 14px;
+                border: 1px solid #696cff;
+                border-radius: 8px;
+                color: #696cff;
+                background: rgba(105, 108, 255, 0.04);
+                font-size: 13px;
+                font-weight: 500;
+                box-shadow: none;
+                transition: color .2s ease, background-color .2s ease, border-color .2s ease, box-shadow .2s ease, transform .2s ease;
+            }
+
+
+                .card:has(> .table-custom-a) > .card-header #btnAddNew:hover {
+                    color: #fff;
+                    background: #696cff;
+                    border-color: #696cff;
+                    box-shadow: 0 4px 10px rgba(105, 108, 255, 0.22);
+                    transform: translateY(-1px);
+                }
+
+
+                .card:has(> .table-custom-a) > .card-header #btnAddNew:active {
+                    transform: scale(.97);
+                }
+
+
+                .card:has(> .table-custom-a) > .card-header #btnAddNew i {
+                    font-size: 16px;
+                }
+
+
+        /* =========================================================
+       TABLE AREA
+       ========================================================= */
+
+        .card:has(> .table-custom-a) > .table-custom-a {
+            border-radius: 0;
+            background: #fff;
+        }
+
+
+            .card:has(> .table-custom-a) > .table-custom-a.custom-datatable-wrapper {
+                box-shadow: none;
+            }
+
+
+    /* =========================================================
+       WITHOUT CARD MODE
+       ========================================================= */
+
+    .table-custom-a.custom-datatable-wrapper {
+        width: 100%;
+    }
+
+
+    /* =========================================================
+       RESPONSIVE
+       ========================================================= */
+
+    @@media (max-width: 767.98px) {
+
+        .card:has(> .table-custom-a) {
+            margin-bottom: 18px;
+            border-radius: 12px;
+        }
+
+
+            .card:has(> .table-custom-a) > .card-header {
+                min-height: auto;
+                padding: 13px 14px;
+            }
+
+
+                .card:has(> .table-custom-a) > .card-header h5 {
+                    font-size: 14px;
+                }
+
+
+                    .card:has(> .table-custom-a) > .card-header h5 > i {
+                        width: 30px;
+                        height: 30px;
+                        font-size: 16px;
+                    }
+
+
+                .card:has(> .table-custom-a) > .card-header #btnAddNew {
+                    min-height: 34px;
+                    padding: 6px 10px;
+                    font-size: 12px;
+                }
+
+
+                    .card:has(> .table-custom-a) > .card-header #btnAddNew i {
+                        margin-right: 3px !important;
+                    }
+    }
+
+
+    /* =========================================================
+       VERY SMALL MOBILE
+       ========================================================= */
+
+    @@media (max-width: 420px) {
+
+        .card:has(> .table-custom-a) > .card-header {
+            align-items: flex-start !important;
+            gap: 10px;
+        }
+
+
+            .card:has(> .table-custom-a) > .card-header h5 {
+                font-size: 13px;
+            }
+
+
+            .card:has(> .table-custom-a) > .card-header #btnAddNew {
+                flex-shrink: 0;
+            }
+    }
+
+</style>

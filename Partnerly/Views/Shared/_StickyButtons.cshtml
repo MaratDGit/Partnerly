@@ -5,87 +5,6 @@
     bool hasAdminRole = ViewBag?.RoleType == Partnerly.Descriptors.Attributes.RoleTypeAttribute.Delete;
 }
 
-<style>
-.sticky-buttons {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    border-bottom: 1px solid #ddd; /* линия под всей панелью */
-    padding-bottom: 0.5rem;
-    margin-bottom: 1.5rem;
-    position: sticky;
-    top: 0; /* Приклеивается к верху экрана */
-    background: #fff; /* Чтобы кнопки не "просвечивали" при прокрутке */
-    z-index: 100; /* Чтобы оставались поверх формы */
-    padding: 10px 0;
-    border-bottom: 1px solid #dee2e6;
-}
-
-.sticky-buttons .left-buttons {
-    display: flex;
-    align-items: center;
-    gap: 0.4rem;
-}
-
-.sticky-buttons .right-buttons {
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-}
-
-.sticky-buttons .btn-note i {
-    font-size: 1.6rem;
-    transition: color 0.2s ease, transform 0.2s ease;
-}
-.sticky-buttons .btn-note:hover i {
-    transform: scale(1.15);
-}
-
-.sticky-buttons .btn-note {
-    border: none;
-    background: none;
-    box-shadow: none;
-    outline: none;
-    padding: 0;
-    color: #ccc;
-    transition: color 0.2s ease, transform 0.2s ease;
-}
-.sticky-buttons .btn-note.active {
-    color: #ffc107; /* жёлтая, если есть заметка */
-}
-.sticky-buttons .btn-note:hover {
-    transform: scale(1.15);
-}
-
-.sticky-buttons .btn-attachement i {
-    font-size: 1.6rem;
-    transition: color 0.2s ease, transform 0.2s ease;
-}
-
-.sticky-buttons .btn-attachement:hover i {
-    transform: scale(1.15);
-}
-
-.sticky-buttons .btn-attachement {
-    border: none;
-    background: none;
-    box-shadow: none;
-    outline: none;
-    padding: 0;
-    color: #ccc;
-    transition: color 0.2s ease, transform 0.2s ease;
-}
-
-.sticky-buttons .btn-attachement.active {
-    color: #ffc107; /* жёлтая, если есть attachement */
-}
-
-.sticky-buttons .btn-attachement:hover {
-    transform: scale(1.15);
-}
-</style>
-
-
 <div class="sticky-buttons mb-6">
     <div class="left-buttons">
         @if (Model?.Back?.Visible == true)
@@ -176,29 +95,63 @@
 </div>
 
 <div class="modal fade" id="noteModal" tabindex="-1" aria-labelledby="noteModalLabel" aria-hidden="true">
-  <div class="modal-dialog modal-dialog-centered">
-    <div class="modal-content rounded-3 shadow-lg">
-      <div class="modal-header py-2">
-                <h6 class="modal-title" id="noteModalLabel">@Localizer["Notetothedocument"]</h6>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label=@Localizer["Close"]></button>
-      </div>
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content rounded-3 shadow-lg">
 
-      <div class="modal-body py-2">
-        <div class="form-floating">
-             <textarea id="noteText" asp-for="@Model.Note.Note" class="form-control" placeholder=@Localizer["Enteranote"] style="height: 120px; font-size: 0.9rem;"></textarea>
-        </div>
-      </div>
+            <div class="modal-header py-2">
+                <h6 class="modal-title" id="noteModalLabel">
+                    <span class="note-modal-icon">
+                        <i class="bx bx-note"></i>
+                    </span>
+                    <span>@Localizer["Notetothedocument"]</span>
+                </h6>
 
-      <div class="modal-footer d-flex justify-content-between py-2">
-                <button type="button" class="btn btn-outline-secondary btn-sm" id="clearNoteBtn">@Localizer["Clear"]</button>
-        <div>
-                    <button type="button" class="btn btn-secondary btn-sm" data-bs-dismiss="modal" id="cancelNoteBtn">@Localizer["Cancel"]</button>
-                    <button type="button" class="btn btn-primary btn-sm" id="saveNoteBtn">@Localizer["OK"]</button>
+                <button type="button"
+                        class="btn-close"
+                        data-bs-dismiss="modal"
+                        aria-label="@Localizer["Close"]">
+                </button>
+            </div>
+
+            <div class="modal-body py-2">
+                <div class="form-floating">
+                    <textarea id="noteText"
+                              asp-for="@Model.Note.Note"
+                              class="form-control"
+                              placeholder="@Localizer["Enteranote"]"
+                              style="height: 120px; font-size: 0.9rem;"></textarea>
+                </div>
+            </div>
+
+            <div class="modal-footer d-flex justify-content-between py-2">
+
+                <button type="button"
+                        class="btn btn-outline-secondary btn-sm"
+                        id="clearNoteBtn">
+                    @Localizer["Clear"]
+                </button>
+
+                <div>
+                    <button type="button"
+                            class="btn btn-secondary btn-sm"
+                            data-bs-dismiss="modal"
+                            id="cancelNoteBtn">
+                        @Localizer["Cancel"]
+                    </button>
+
+                    <button type="button"
+                            class="btn btn-primary btn-sm"
+                            id="saveNoteBtn">
+                        @Localizer["OK"]
+                    </button>
+                </div>
+
+            </div>
+
         </div>
-      </div>
     </div>
-  </div>
 </div>
+
 
 <div class="modal fade"
      id="attachmentsModal"

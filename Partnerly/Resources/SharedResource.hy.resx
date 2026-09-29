@@ -1015,7 +1015,7 @@
     <value>Ֆայլերի վերբեռնումը ձախողվեց</value>
   </data>
   <data name="Areyousureyouwanttodeletethisfile" xml:space="preserve">
-    <value>Վստա՞հ եք, որ ցանկանում եք ջնջել այս ֆայլը։</value>
+    <value>Վստա՞հ եք, որ ցանկանում եք ջնջել ։</value>
   </data>
   <data name="Deletefailed" xml:space="preserve">
     <value>Ջնջումը ձախողվեց։</value>
@@ -1295,5 +1295,14 @@
   </data>
   <data name="Moveandresizeyourphoto" xml:space="preserve">
     <value>Տեղափոխեք և փոխեք լուսանկարի չափսը</value>
+  </data>
+  <data name="ScrollingTextDescription" xml:space="preserve">
+    <value>Սա տեղեկատվական տող է։</value>
+  </data>
+  <data name="System" xml:space="preserve">
+    <value>Համակարգ</value>
+  </data>
+  <data name="Security" xml:space="preserve">
+    <value>Անվտանգություն</value>
   </data>
 </root>

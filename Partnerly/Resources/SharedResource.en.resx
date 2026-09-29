@@ -1015,7 +1015,7 @@
     <value>Failed uploading files</value>
   </data>
   <data name="Areyousureyouwanttodeletethisfile" xml:space="preserve">
-    <value>Are you sure you want to delete this file?</value>
+    <value>Are you sure you want to delete ?</value>
   </data>
   <data name="Deletefailed" xml:space="preserve">
     <value>Delete failed.</value>
@@ -1295,5 +1295,14 @@
   </data>
   <data name="Moveandresizeyourphoto" xml:space="preserve">
     <value>Move and resize your photo</value>
+  </data>
+  <data name="ScrollingTextDescription" xml:space="preserve">
+    <value>This is a ticker.</value>
+  </data>
+  <data name="System" xml:space="preserve">
+    <value>System</value>
+  </data>
+  <data name="Security" xml:space="preserve">
+    <value>Security</value>
   </data>
 </root>

@@ -188,7 +188,12 @@ namespace Partnerly.Controllers
             var template = await _userService.GetUserByIDAsync(id);
             if (template == null) return NotFound();
 
-            return View();
+
+            var model = new UserViewModel
+            {
+                Id = template.Id
+            };
+            return View(model);
         }
 
         [HttpPost, ActionName("DeleteConfirmed")]

@@ -1016,7 +1016,7 @@
     <value>Не удалось загрузить файлы</value>
   </data>
   <data name="Areyousureyouwanttodeletethisfile" xml:space="preserve">
-    <value>Вы уверены, что хотите удалить этот файл?</value>
+    <value>Вы уверены, что хотите удалить ?</value>
   </data>
   <data name="Deletefailed" xml:space="preserve">
     <value>Ошибка при удалении.</value>
@@ -1296,5 +1296,14 @@
   </data>
   <data name="Moveandresizeyourphoto" xml:space="preserve">
     <value>Переместите и измените размер фотографии</value>
+  </data>
+  <data name="ScrollingTextDescription" xml:space="preserve">
+    <value>Это бегущая строка.</value>
+  </data>
+  <data name="System" xml:space="preserve">
+    <value>Система</value>
+  </data>
+  <data name="Security" xml:space="preserve">
+    <value>Безопасность</value>
   </data>
 </root>

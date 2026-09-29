@@ -1,545 +1,10 @@
 ﻿@using System.Globalization
 
-<style>
-    /* =========================================================
-           PARTNERLY NAVBAR
-           ========================================================= */
-
-    .partnerly-navbar-inner {
-        width: 100%;
-        min-height: 72px;
-        display: flex;
-        align-items: center;
-        gap: 14px;
-    }
-
-    .partnerly-mobile-menu-button {
-        width: 40px;
-        height: 40px;
-        flex: 0 0 40px;
-        display: none;
-        align-items: center;
-        justify-content: center;
-        padding: 0;
-        border: 0;
-        border-radius: 10px;
-        background: rgba(67, 89, 113, 0.06);
-        color: #566a7f;
-        cursor: pointer;
-        transition: background-color .2s ease, color .2s ease, transform .2s ease;
-    }
-
-        .partnerly-mobile-menu-button:hover {
-            color: #696cff;
-            background: rgba(105, 108, 255, 0.10);
-        }
-
-        .partnerly-mobile-menu-button i {
-            font-size: 22px;
-        }
-
-
-    /* =========================================================
-           PAGE TITLE / SEARCH AREA
-           ========================================================= */
-
-    .partnerly-navbar-left {
-        min-width: 0;
-        display: flex;
-        align-items: center;
-        flex: 1;
-    }
-
-    .partnerly-navbar-page-title {
-        min-width: 0;
-        display: flex;
-        flex-direction: column;
-        line-height: 1.2;
-    }
-
-    .partnerly-navbar-page-title-main {
-        font-size: 0.95rem;
-        font-weight: 600;
-        color: #32475c;
-        white-space: nowrap;
-        overflow: hidden;
-        text-overflow: ellipsis;
-    }
-
-    .partnerly-navbar-page-title-subtitle {
-        margin-top: 3px;
-        font-size: 0.72rem;
-        color: #a1acb8;
-    }
-
-
-    /* =========================================================
-           NAVBAR ACTIONS
-           ========================================================= */
-
-    .partnerly-navbar-actions {
-        display: flex;
-        align-items: center;
-        gap: 7px;
-        margin-left: auto;
-    }
-
-
-    .partnerly-navbar-action {
-        position: relative;
-        width: 40px;
-        height: 40px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        padding: 0;
-        border: 0;
-        border-radius: 10px;
-        background: transparent;
-        color: #566a7f;
-        cursor: pointer;
-        transition: background-color .2s ease, color .2s ease;
-    }
-
-        .partnerly-navbar-action:hover {
-            color: #696cff;
-            background: rgba(105, 108, 255, 0.08);
-        }
-
-        .partnerly-navbar-action > i {
-            font-size: 21px;
-        }
-
-
-    /* =========================================================
-           LANGUAGE
-           ========================================================= */
-
-    .partnerly-language-button {
-        gap: 7px;
-    }
-
-        .partnerly-language-button img {
-            width: 23px;
-            height: 17px;
-            object-fit: cover;
-            border-radius: 3px;
-        }
-
-        .partnerly-language-button .bx-chevron-down {
-            font-size: 15px;
-        }
-
-    .partnerly-language-menu {
-        min-width: 175px;
-        padding: 7px;
-        border: 1px solid #e7e9ed;
-        border-radius: 12px;
-        box-shadow: 0 10px 35px rgba(50, 71, 92, 0.12);
-    }
-
-        .partnerly-language-menu .dropdown-item {
-            display: flex;
-            align-items: center;
-            min-height: 40px;
-            border-radius: 8px;
-            font-size: 0.86rem;
-            font-weight: 500;
-            color: #566a7f;
-        }
-
-            .partnerly-language-menu .dropdown-item:hover {
-                background: rgba(105, 108, 255, 0.08);
-                color: #696cff;
-            }
-
-        .partnerly-language-menu img {
-            width: 24px;
-            height: 18px;
-            object-fit: cover;
-            border-radius: 3px;
-        }
-
-
-    /* =========================================================
-           NOTIFICATIONS
-           ========================================================= */
-
-    .partnerly-notification-button {
-        position: relative;
-    }
-
-        .partnerly-notification-button i {
-            transition: transform .2s ease;
-        }
-
-        .partnerly-notification-button:hover i {
-            transform: rotate(-8deg);
-        }
-
-    #unreadCountBadge {
-        position: absolute !important;
-        top: 3px !important;
-        right: 2px !important;
-        left: auto !important;
-        min-width: 17px;
-        height: 17px;
-        display: none;
-        align-items: center;
-        justify-content: center;
-        padding: 0 4px;
-        border: 2px solid #fff;
-        font-size: 0.58rem;
-        font-weight: 700;
-        line-height: 13px;
-    }
-
-    .partnerly-notification-dropdown {
-        width: 350px;
-        padding: 0;
-        overflow: hidden;
-        border: 1px solid #e7e9ed;
-        border-radius: 14px;
-        box-shadow: 0 12px 40px rgba(50, 71, 92, 0.14);
-    }
-
-    .partnerly-notification-header {
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        padding: 14px 16px;
-        border-bottom: 1px solid #eef0f2;
-        background: #fff;
-    }
-
-    .partnerly-notification-header-title {
-        display: flex;
-        align-items: center;
-        gap: 8px;
-        font-size: 0.88rem;
-        font-weight: 600;
-        color: #32475c;
-    }
-
-        .partnerly-notification-header-title i {
-            color: #696cff;
-            font-size: 19px;
-        }
-
-    .partnerly-notification-body {
-        max-height: 380px;
-        overflow-y: auto;
-        overflow-x: hidden;
-        padding: 6px;
-    }
-
-    .partnerly-notification-footer {
-        display: none;
-        padding: 9px;
-        border-top: 1px solid #eef0f2;
-        background: #fafafa;
-    }
-
-        .partnerly-notification-footer .btn {
-            border-radius: 8px;
-        }
-
-    .notification-item {
-        position: relative;
-        padding: 11px !important;
-        margin-bottom: 3px;
-        border: 0 !important;
-        border-radius: 10px;
-        background: #fff;
-        transition: background-color .2s ease, transform .15s ease;
-    }
-
-        .notification-item:hover {
-            background: #f8f9fc;
-            transform: translateX(1px);
-        }
-
-    .notification-date {
-        display: flex;
-        align-items: center;
-        margin-bottom: 5px;
-        font-size: 0.72rem;
-        color: #a1acb8;
-    }
-
-        .notification-date i {
-            margin-right: 5px;
-            font-size: 14px;
-            color: #696cff;
-        }
-
-    .notification-message {
-        margin-top: 5px;
-        display: -webkit-box;
-        -webkit-line-clamp: 2;
-        -webkit-box-orient: vertical;
-        overflow: hidden;
-        text-overflow: ellipsis;
-        color: #566a7f;
-        font-size: 0.82rem;
-        line-height: 1.45;
-    }
-
-    .notification-full {
-        margin-top: 5px;
-        white-space: normal;
-        color: #566a7f;
-        font-size: 0.82rem;
-        line-height: 1.45;
-    }
-
-    .notification-actions {
-        display: flex;
-        align-items: center;
-        gap: 12px;
-        margin-top: 7px;
-    }
-
-        .notification-actions .btn {
-            font-size: 0.74rem;
-            text-decoration: none;
-        }
-
-    .delete-notification {
-        position: absolute;
-        top: 8px;
-        right: 7px;
-        width: 23px;
-        height: 23px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        padding: 0;
-        border: 0;
-        border-radius: 50%;
-        background: rgba(67, 89, 113, 0.06);
-        color: #697a8d;
-        cursor: pointer;
-        transition: background-color .2s ease, color .2s ease;
-    }
-
-        .delete-notification:hover {
-            background: rgba(255, 62, 29, 0.10);
-            color: #ff3e1d;
-        }
-
-        .delete-notification i {
-            font-size: 15px;
-            pointer-events: none;
-        }
-
-    .partnerly-no-notifications {
-        padding: 35px 15px !important;
-        color: #a1acb8;
-    }
-
-
-    /* =========================================================
-           USER
-           ========================================================= */
-
-    .partnerly-user-button {
-        display: flex;
-        align-items: center;
-        gap: 9px;
-        padding: 3px 5px 3px 3px !important;
-        border-radius: 12px;
-        transition: background-color .2s ease;
-    }
-
-        .partnerly-user-button:hover {
-            background: rgba(105, 108, 255, 0.07);
-        }
-
-    .partnerly-user-avatar {
-        width: 38px;
-        height: 38px;
-        flex: 0 0 38px;
-        object-fit: cover;
-        object-position: center;
-        border: 2px solid #fff;
-        border-radius: 50%;
-        box-shadow: 0 2px 8px rgba(50, 71, 92, 0.12);
-    }
-
-    .partnerly-user-chevron {
-        font-size: 16px;
-        color: #a1acb8;
-    }
-
-    .partnerly-user-menu {
-        min-width: 245px;
-        padding: 7px;
-        border: 1px solid #e7e9ed;
-        border-radius: 14px;
-        box-shadow: 0 12px 40px rgba(50, 71, 92, 0.14);
-    }
-
-    .partnerly-user-header {
-        display: flex;
-        align-items: center;
-        gap: 11px;
-        padding: 10px;
-    }
-
-    .partnerly-user-header-avatar {
-        width: 42px;
-        height: 42px;
-        flex: 0 0 42px;
-        object-fit: cover;
-        object-position: center;
-        border-radius: 50%;
-    }
-
-    .partnerly-user-info {
-        min-width: 0;
-    }
-
-    .partnerly-user-name {
-        margin: 0;
-        color: #32475c;
-        font-size: 0.88rem;
-        font-weight: 600;
-        white-space: nowrap;
-        overflow: hidden;
-        text-overflow: ellipsis;
-    }
-
-    .partnerly-user-ref {
-        display: block;
-        margin-top: 2px;
-        color: #a1acb8;
-        font-size: 0.72rem;
-        white-space: nowrap;
-        overflow: hidden;
-        text-overflow: ellipsis;
-    }
-
-    .partnerly-user-menu .dropdown-item {
-        display: flex;
-        align-items: center;
-        min-height: 40px;
-        border-radius: 8px;
-        color: #566a7f;
-        font-size: 0.84rem;
-        font-weight: 500;
-    }
-
-        .partnerly-user-menu .dropdown-item:hover {
-            background: rgba(105, 108, 255, 0.08);
-            color: #696cff;
-        }
-
-        .partnerly-user-menu .dropdown-item i {
-            width: 24px;
-            margin-right: 7px;
-            font-size: 19px;
-        }
-
-    .partnerly-user-menu .partnerly-logout:hover {
-        background: rgba(255, 62, 29, 0.08);
-        color: #ff3e1d;
-    }
-
-
-    /* =========================================================
-           BADGE ANIMATION
-           ========================================================= */
-
-    @@keyframes partnerlyPulseBadge {
-        0% {
-            transform: scale(1);
-            box-shadow: 0 0 0 rgba(255, 62, 29, 0);
-        }
-
-        30% {
-            transform: scale(1.25);
-            box-shadow: 0 0 8px rgba(255, 62, 29, 0.45);
-        }
-
-        60% {
-            transform: scale(.92);
-        }
-
-        100% {
-            transform: scale(1);
-            box-shadow: 0 0 0 rgba(255, 62, 29, 0);
-        }
-    }
-
-    .badge-animate {
-        animation: partnerlyPulseBadge .6s ease-in-out;
-    }
-
-    /* =========================================================
-       MOBILE NOTIFICATIONS
-       ========================================================= */
-
-    @@media (max-width: 1199.98px) {
-        .partnerly-mobile-menu-button {
-            display: flex;
-        }
-
-        .partnerly-navbar-inner {
-            min-height: 64px;
-        }
-
-        .partnerly-navbar-page-title {
-            display: none;
-        }
-
-        .partnerly-navbar-actions {
-            gap: 3px;
-        }
-        
-        .partnerly-notification-dropdown
-        {
-            position: fixed !important;
-            top: 64px !important;
-            left: auto !important;
-            right: 10px !important;
-            inset: auto 10px auto auto !important;
-            width: min(350px, calc(100vw - 20px)) !important;
-            max-width: calc(100vw - 20px);
-            margin: 0 !important;
-            transform: none !important;
-        }
-
-    }
-
-    @@media (max-width: 575.98px) {
-
-        .partnerly-navbar-inner {
-            gap: 7px;
-        }
-
-        .partnerly-navbar-actions {
-            gap: 1px;
-        }
-
-        .partnerly-navbar-action {
-            width: 38px;
-            height: 38px;
-        }
-
-        .partnerly-user-button {
-            padding-right: 1px !important;
-        }
-
-        .partnerly-user-chevron {
-            display: none;
-        }
-
-        .partnerly-user-menu {
-            min-width: 230px;
-        }
-    }
-</style>
+<link rel="stylesheet"
+      href="~/assets/css/navbar.css" />
+
+<link rel="stylesheet"
+      href="~/assets/css/partnerly-ai.css" />
 
 
 @{
@@ -713,6 +178,20 @@
 
         </div>
 
+
+        <!-- =================================================
+        AI ASSISTANT
+        ================================================= -->
+
+        <button type="button"
+                class="partnerly-navbar-action partnerly-ai-button"
+                id="partnerlyAiButton"
+                aria-label="AI Assistant"
+                title="AI Assistant">
+
+            <i class="bx bx-bot"></i>
+
+        </button>
 
         <!-- =================================================
              NOTIFICATIONS
@@ -921,10 +400,195 @@
 
 </div>
 
+<!-- =========================================================
+     PARTNERLY AI ASSISTANT
+     ========================================================= -->
+
+<div id="partnerlyAiPanel"
+     class="partnerly-ai-panel">
+
+    <!-- Header -->
+
+    <div class="partnerly-ai-header">
+
+        <div class="partnerly-ai-header-left">
+
+            <div class="partnerly-ai-icon">
+                <i class="bx bx-bot"></i>
+            </div>
+
+            <div>
+
+                <div class="partnerly-ai-title">
+                    Partnerly AI
+                </div>
+
+                <div class="partnerly-ai-status">
+
+                    <span class="partnerly-ai-status-dot"></span>
+
+                    <span>AI Assistant</span>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <div class="partnerly-ai-header-actions">
+
+            <button type="button"
+                    id="partnerlyAiClear"
+                    class="partnerly-ai-header-button"
+                    title="Clear chat">
+
+                <i class="bx bx-trash"></i>
+
+            </button>
+
+            <button type="button"
+                    id="partnerlyAiClose"
+                    class="partnerly-ai-header-button"
+                    title="Close">
+
+                <i class="bx bx-x"></i>
+
+            </button>
+
+        </div>
+
+    </div>
+
+
+    <!-- Chat -->
+
+    <div id="partnerlyAiChat"
+         class="partnerly-ai-chat">
+
+        <div id="partnerlyAiWelcome"
+             class="partnerly-ai-welcome">
+
+            <div class="partnerly-ai-welcome-icon">
+
+                <i class="bx bx-bot"></i>
+
+            </div>
+
+            <h5>
+                How can I help you?
+            </h5>
+
+            <p>
+                Ask Partnerly AI about your account,
+                tickets, payments, teams and more.
+            </p>
+
+
+            <div class="partnerly-ai-suggestions">
+
+                <button type="button"
+                        class="partnerly-ai-suggestion"
+                        data-message="Show me my open tickets">
+
+                    <i class="bx bx-task"></i>
+
+                    <span>
+                        Show my open tickets
+                    </span>
+
+                </button>
+
+
+                <button type="button"
+                        class="partnerly-ai-suggestion"
+                        data-message="Show my profile information">
+
+                    <i class="bx bx-user"></i>
+
+                    <span>
+                        Show my profile
+                    </span>
+
+                </button>
+
+
+                <button type="button"
+                        class="partnerly-ai-suggestion"
+                        data-message="Show my latest payments">
+
+                    <i class="bx bx-credit-card"></i>
+
+                    <span>
+                        Show my latest payments
+                    </span>
+
+                </button>
+
+
+                <button type="button"
+                        class="partnerly-ai-suggestion"
+                        data-message="Who is in my team?">
+
+                    <i class="bx bx-group"></i>
+
+                    <span>
+                        Show my team
+                    </span>
+
+                </button>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- Input -->
+
+    <div class="partnerly-ai-input-wrapper">
+
+        <div class="partnerly-ai-input-box">
+
+            <textarea id="partnerlyAiInput"
+                      rows="1"
+                      maxlength="4000"
+                      placeholder="Ask Partnerly AI..."></textarea>
+
+
+            <button type="button"
+                    id="partnerlyAiSend"
+                    class="partnerly-ai-send"
+                    disabled>
+
+                <i class="bx bx-send"></i>
+
+            </button>
+
+        </div>
+
+
+        <div class="partnerly-ai-input-footer">
+
+            <span>
+                AI can make mistakes. Check important information.
+            </span>
+
+            <span id="partnerlyAiCounter">
+                0 / 4000
+            </span>
+
+        </div>
+
+    </div>
+
+</div>
+
 
 <!-- =========================================================
-     SIGNALR
-     ========================================================= -->
+SIGNALR
+========================================================= -->
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/microsoft-signalr/8.0.0/signalr.min.js"></script>
 
@@ -955,14 +619,10 @@
 
     };
 
-
     const currentCulture =
         '@CultureInfo.CurrentUICulture.Name';
 
-
-    document.addEventListener(
-        'DOMContentLoaded',
-        function () {
+    document.addEventListener('DOMContentLoaded', function () {
 
             const list =
                 document.getElementById('notificationList');
@@ -1465,5 +1125,465 @@
 
         }
     );
+
+    document.addEventListener("DOMContentLoaded", function () {
+
+        const aiButton =
+            document.getElementById("partnerlyAiButton");
+
+        const aiPanel =
+            document.getElementById("partnerlyAiPanel");
+
+        const aiClose =
+            document.getElementById("partnerlyAiClose");
+
+        const aiClear =
+            document.getElementById("partnerlyAiClear");
+
+        const aiChat =
+            document.getElementById("partnerlyAiChat");
+
+        const aiWelcome =
+            document.getElementById("partnerlyAiWelcome");
+
+        const aiInput =
+            document.getElementById("partnerlyAiInput");
+
+        const aiSend =
+            document.getElementById("partnerlyAiSend");
+
+        const aiCounter =
+            document.getElementById("partnerlyAiCounter");
+
+
+        if (
+            !aiButton ||
+            !aiPanel ||
+            !aiInput ||
+            !aiSend
+        ) {
+            return;
+        }
+
+
+        /* =====================================================
+           OPEN / CLOSE
+           ===================================================== */
+
+        function openAI() {
+
+            aiPanel.classList.add("show");
+
+            setTimeout(function () {
+                aiInput.focus();
+            }, 150);
+
+        }
+
+
+        function closeAI() {
+
+            aiPanel.classList.remove("show");
+
+        }
+
+
+        aiButton.addEventListener(
+            "click",
+            function () {
+
+                if (aiPanel.classList.contains("show")) {
+                    closeAI();
+                }
+                else {
+                    openAI();
+                }
+
+            }
+        );
+
+
+        aiClose?.addEventListener(
+            "click",
+            closeAI
+        );
+
+
+        /* =====================================================
+           INPUT
+           ===================================================== */
+
+        function updateInput() {
+
+            const length =
+                aiInput.value.length;
+
+            aiCounter.textContent =
+                `${length} / 4000`;
+
+            aiSend.disabled =
+                aiInput.value.trim().length === 0;
+
+            aiInput.style.height = "auto";
+
+            aiInput.style.height =
+                Math.min(
+                    aiInput.scrollHeight,
+                    110
+                ) + "px";
+        }
+
+
+        aiInput.addEventListener(
+            "input",
+            updateInput
+        );
+
+
+        /* =====================================================
+           SCROLL
+           ===================================================== */
+
+        function scrollToBottom() {
+
+            aiChat.scrollTop =
+                aiChat.scrollHeight;
+
+        }
+
+
+        /* =====================================================
+           ADD MESSAGE
+           ===================================================== */
+
+        function addMessage(
+            message,
+            type
+        ) {
+
+            if (aiWelcome) {
+                aiWelcome.style.display =
+                    "none";
+            }
+
+
+            const wrapper =
+                document.createElement("div");
+
+            wrapper.className =
+                `partnerly-ai-message ${type}`;
+
+
+            const avatar =
+                document.createElement("div");
+
+            avatar.className =
+                "partnerly-ai-message-avatar";
+
+
+            avatar.innerHTML =
+                type === "user"
+                    ? '<i class="bx bx-user"></i>'
+                    : '<i class="bx bx-bot"></i>';
+
+
+            const content =
+                document.createElement("div");
+
+            content.className =
+                "partnerly-ai-message-content";
+
+
+            const name =
+                document.createElement("div");
+
+            name.className =
+                "partnerly-ai-message-name";
+
+            name.textContent =
+                type === "user"
+                    ? "You"
+                    : "Partnerly AI";
+
+
+            const text =
+                document.createElement("div");
+
+            text.className =
+                "partnerly-ai-message-text";
+
+            text.textContent =
+                message;
+
+
+            content.appendChild(name);
+            content.appendChild(text);
+
+            wrapper.appendChild(avatar);
+            wrapper.appendChild(content);
+
+            aiChat.appendChild(wrapper);
+
+            scrollToBottom();
+
+            return wrapper;
+        }
+
+
+        /* =====================================================
+           TYPING
+           ===================================================== */
+
+        function showTyping() {
+
+            const wrapper =
+                document.createElement("div");
+
+            wrapper.id =
+                "partnerlyAiTyping";
+
+            wrapper.className =
+                "partnerly-ai-message assistant";
+
+
+            wrapper.innerHTML = `
+
+                <div class="partnerly-ai-message-avatar">
+                    <i class="bx bx-bot"></i>
+                </div>
+
+                <div class="partnerly-ai-message-content">
+
+                    <div class="partnerly-ai-message-name">
+                        Partnerly AI
+                    </div>
+
+                    <div class="partnerly-ai-typing">
+
+                        <span></span>
+                        <span></span>
+                        <span></span>
+
+                    </div>
+
+                </div>
+
+            `;
+
+
+            aiChat.appendChild(wrapper);
+
+            scrollToBottom();
+
+            return wrapper;
+        }
+
+
+        /* =====================================================
+           SEND
+           ===================================================== */
+
+        async function sendMessage() {
+
+            const message =
+                aiInput.value.trim();
+
+
+            if (!message) {
+                return;
+            }
+
+
+            addMessage(
+                message,
+                "user"
+            );
+
+
+            aiInput.value = "";
+
+            updateInput();
+
+
+            const typing =
+                showTyping();
+
+
+            aiInput.disabled = true;
+            aiSend.disabled = true;
+
+
+            try {
+
+                const response =
+                    await fetch(
+                        "/AI/Ask",
+                        {
+                            method: "POST",
+
+                            headers: {
+                                "Content-Type":
+                                    "application/json"
+                            },
+
+                            body: JSON.stringify({
+                                message: message
+                            })
+                        }
+                    );
+
+
+                const data =
+                    await response.json();
+
+
+                typing.remove();
+
+
+                if (
+                    !response.ok ||
+                    !data.success
+                ) {
+
+                    addMessage(
+                        data.message ||
+                        "Unable to process your request.",
+                        "assistant"
+                    );
+
+                    return;
+                }
+
+
+                addMessage(
+                    data.answer ||
+                    "No response was returned.",
+                    "assistant"
+                );
+
+            }
+            catch (error) {
+
+                console.error(
+                    "Partnerly AI error:",
+                    error
+                );
+
+
+                typing.remove();
+
+
+                addMessage(
+                    "Unable to connect to Partnerly AI.",
+                    "assistant"
+                );
+
+            }
+            finally {
+
+                aiInput.disabled = false;
+
+                updateInput();
+
+                aiInput.focus();
+
+            }
+        }
+
+
+        aiSend.addEventListener(
+            "click",
+            sendMessage
+        );
+
+
+        /* =====================================================
+           ENTER
+           ===================================================== */
+
+        aiInput.addEventListener(
+            "keydown",
+            function (event) {
+
+                if (
+                    event.key === "Enter" &&
+                    !event.shiftKey
+                ) {
+
+                    event.preventDefault();
+
+                    if (!aiSend.disabled) {
+                        sendMessage();
+                    }
+
+                }
+
+            }
+        );
+
+
+        /* =====================================================
+           SUGGESTIONS
+           ===================================================== */
+
+        document
+            .querySelectorAll(
+                ".partnerly-ai-suggestion"
+            )
+            .forEach(function (button) {
+
+                button.addEventListener(
+                    "click",
+                    function () {
+
+                        aiInput.value =
+                            this.dataset.message || "";
+
+                        updateInput();
+
+                        aiInput.focus();
+
+                    }
+                );
+
+            });
+
+
+        /* =====================================================
+           CLEAR
+           ===================================================== */
+
+        aiClear?.addEventListener(
+            "click",
+            function () {
+
+                aiChat.innerHTML = "";
+
+
+                if (aiWelcome) {
+
+                    aiWelcome.style.display =
+                        "";
+
+                    aiChat.appendChild(
+                        aiWelcome
+                    );
+
+                }
+
+
+                aiInput.value = "";
+
+                updateInput();
+
+                aiInput.focus();
+
+            }
+        );
+
+
+        updateInput();
+
+    });
 
 </script>

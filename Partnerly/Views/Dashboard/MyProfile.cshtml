@@ -236,64 +236,56 @@
          PROFILE TABS
          ===================================================== -->
 
-    <div class="row mb-4">
+    <div class="profile-tabs-wrapper">
 
-        <div class="col-12">
+        <ul class="nav nav-pills profile-tabs"
+            id="profileTabs"
+            role="tablist">
 
-            <div class="profile-tabs-wrapper">
+            <!-- Profile -->
+            <li class="nav-item"
+                role="presentation">
 
-                <ul class="nav nav-pills profile-tabs"
-                    id="profileTabs"
-                    role="tablist">
+                <button class="nav-link active"
+                        id="profile-tab"
+                        data-bs-toggle="pill"
+                        data-bs-target="#profileTab"
+                        type="button"
+                        role="tab"
+                        aria-controls="profileTab"
+                        aria-selected="true">
 
-                    <!-- Profile -->
-                    <li class="nav-item"
-                        role="presentation">
+                    <i class="bx bx-user"></i>
 
-                        <button class="nav-link active"
-                                id="profile-tab"
-                                data-bs-toggle="pill"
-                                data-bs-target="#profileTab"
-                                type="button"
-                                role="tab"
-                                aria-controls="profileTab"
-                                aria-selected="true">
+                    @Localizer["Profile"]
 
-                            <i class="bx bx-user"></i>
+                </button>
 
-                            @Localizer["Profile"]
-
-                        </button>
-
-                    </li>
+            </li>
 
 
-                    <!-- My Team -->
-                    <li class="nav-item"
-                        role="presentation">
+            <!-- My Team -->
+            <li class="nav-item"
+                role="presentation">
 
-                        <button class="nav-link"
-                                id="teams-tab"
-                                data-bs-toggle="pill"
-                                data-bs-target="#teamsTab"
-                                type="button"
-                                role="tab"
-                                aria-controls="teamsTab"
-                                aria-selected="false">
+                <button class="nav-link"
+                        id="teams-tab"
+                        data-bs-toggle="pill"
+                        data-bs-target="#teamsTab"
+                        type="button"
+                        role="tab"
+                        aria-controls="teamsTab"
+                        aria-selected="false">
 
-                            <i class="bx bx-group"></i>
+                    <i class="bx bx-group"></i>
 
-                            @Localizer["Myteam"]
+                    @Localizer["Myteam"]
 
-                        </button>
+                </button>
 
-                    </li>
+            </li>
 
-                </ul>
-
-            </div>
-
-        </div>
+        </ul>
 
     </div>
 

@@ -8529,7 +8529,7 @@ li:not(:first-child) .dropdown-item, .dropdown-menu .dropdown-item:not(:first-ch
   width: 100%;
 }
 
-.tab-content:not(.doc-example-content) {
+/*.tab-content:not(.doc-example-content) {
   padding: 1.5rem;
 }
 .tab-content:not(.doc-example-content) .tab-pane {
@@ -8541,7 +8541,7 @@ li:not(:first-child) .dropdown-item, .dropdown-menu .dropdown-item:not(:first-ch
   opacity: 1;
   transform: unset !important;
   transition: all ease-out 0.2s 0.1s;
-}
+}*/
 
 .nav-scrollable {
   display: -webkit-inline-box;

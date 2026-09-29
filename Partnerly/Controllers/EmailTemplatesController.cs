@@ -127,9 +127,12 @@
                 TempData["ToastType"] = "error";
                 TempData["ToastMessage"] = ErrorMessages.CannotDeleteSystemRecords;
                 return RedirectToAction("Edit", model);
-            }
+            };
 
-            return View();
+            return View(new EmailTemplateViewModel
+            {
+                Id = template.Id,
+            });
         }
 
         [HttpPost, ActionName("DeleteConfirmed")]

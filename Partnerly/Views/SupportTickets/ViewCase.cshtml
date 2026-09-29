@@ -4,75 +4,726 @@
 @{
     ViewData["Title"] = "View Case";
     Layout = "_ContentNavbarLayout";
-    bool hasRole = ViewBag?.RoleType == Partnerly.Descriptors.Attributes.RoleTypeAttribute.Delete || ViewBag?.RoleType == Partnerly.Descriptors.Attributes.RoleTypeAttribute.Update;
+
+    bool hasRole = ViewBag?.RoleType == Partnerly.Descriptors.Attributes.RoleTypeAttribute.Delete
+                || ViewBag?.RoleType == Partnerly.Descriptors.Attributes.RoleTypeAttribute.Update;
+
     bool hasAdminRole = ViewBag?.RoleType == Partnerly.Descriptors.Attributes.RoleTypeAttribute.Delete;
+
+    bool isInProgress = Model.Status == Partnerly.Descriptors.Attributes.SupportTicketStatusAttribute.InProgress;
+    bool isClosed = Model.Status == Partnerly.Descriptors.Attributes.SupportTicketStatusAttribute.Closed;
 }
 
 <style>
-.task-id {
-  background: linear-gradient(90deg, #007bff, #00c4ff);
-  color: #fff;
-  font-weight: 600;
-  padding: 4px 12px;
-  border-radius: 12px;
-  font-size: 0.9rem;
-  box-shadow: 0 2px 8px rgba(0, 123, 255, 0.3);
-}
+    /* =========================================================
+           SUPPORT TICKET PAGE
+           ========================================================= */
 
-.text-muted {
-  color: #6c757d !important;
-}
+    .support-ticket-page {
+        width: 100%;
+    }
+
+    .support-ticket-card {
+        width: 100%;
+        max-width: 1100px;
+        margin: 0 auto;
+        border: 1px solid rgba(67, 89, 113, 0.10);
+        border-radius: 14px;
+        overflow: hidden;
+        box-shadow: 0 4px 14px rgba(67, 89, 113, 0.055);
+    }
+
+    /* =========================================================
+           HEADER
+           ========================================================= */
+
+    .support-ticket-header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 14px;
+        padding: 14px 20px;
+        min-height: 64px;
+        border-bottom: 1px solid rgba(67, 89, 113, 0.08);
+        background: #fff;
+    }
+
+    .support-ticket-header-left {
+        display: flex;
+        align-items: center;
+        gap: 11px;
+        min-width: 0;
+    }
+
+    .support-ticket-header-icon {
+        width: 36px;
+        height: 36px;
+        flex: 0 0 36px;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 10px;
+        background: rgba(105, 108, 255, 0.10);
+        color: #696cff;
+    }
+
+        .support-ticket-header-icon i {
+            font-size: 19px;
+            line-height: 1;
+        }
+
+    .support-ticket-title {
+        min-width: 0;
+    }
+
+        .support-ticket-title h5 {
+            margin: 0;
+            color: #384551;
+            font-size: 15px;
+            font-weight: 600;
+            line-height: 1.3;
+        }
+
+        .support-ticket-title span {
+            display: block;
+            margin-top: 2px;
+            color: #a1acb8;
+            font-size: 11px;
+            line-height: 1.3;
+        }
+
+    .support-ticket-number {
+        flex-shrink: 0;
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        padding: 5px 10px;
+        border-radius: 8px;
+        background: rgba(105, 108, 255, 0.09);
+        color: #696cff;
+        font-size: 11px;
+        font-weight: 600;
+        letter-spacing: .2px;
+        white-space: nowrap;
+    }
+
+        .support-ticket-number i {
+            font-size: 14px;
+        }
+
+    /* =========================================================
+           BODY
+           ========================================================= */
+
+    .support-ticket-body {
+        padding: 0 20px 24px;
+    }
+
+        .support-ticket-body > .sticky-buttons {
+            margin: 0 -20px 22px;
+            padding: 9px 20px;
+            border-bottom: 1px solid rgba(67, 89, 113, 0.08);
+            background: #fff;
+        }
+
+    /* =========================================================
+           STATUS
+           ========================================================= */
+
+    .support-ticket-status {
+        display: flex;
+        align-items: center;
+        gap: 11px;
+        margin-bottom: 22px;
+        padding: 11px 14px;
+        border-radius: 10px;
+        border: 1px solid rgba(105, 108, 255, 0.12);
+        background: rgba(105, 108, 255, 0.05);
+    }
+
+    .support-ticket-status-icon {
+        width: 32px;
+        height: 32px;
+        flex: 0 0 32px;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 8px;
+        background: rgba(105, 108, 255, 0.12);
+        color: #696cff;
+    }
+
+        .support-ticket-status-icon i {
+            font-size: 17px;
+        }
+
+    .support-ticket-status-content {
+        min-width: 0;
+    }
+
+    .support-ticket-status-label {
+        display: block;
+        margin-bottom: 1px;
+        color: #a1acb8;
+        font-size: 10px;
+        font-weight: 500;
+        text-transform: uppercase;
+        letter-spacing: .4px;
+    }
+
+    .support-ticket-status-value {
+        color: #566a7f;
+        font-size: 12px;
+        font-weight: 600;
+    }
+
+    /* =========================================================
+           MAIN TASK
+           ========================================================= */
+
+    .support-ticket-main {
+        width: 100%;
+        max-width: 860px;
+        margin: 0 auto;
+    }
+
+    .support-ticket-main-header {
+        margin-bottom: 19px;
+    }
+
+    .support-ticket-date {
+        display: inline-flex;
+        align-items: center;
+        gap: 5px;
+        margin-bottom: 7px;
+        color: #a1acb8;
+        font-size: 11px;
+    }
+
+        .support-ticket-date i {
+            color: #696cff;
+            font-size: 15px;
+        }
+
+    .support-ticket-subject {
+        margin: 0;
+        color: #384551;
+        font-size: 19px;
+        font-weight: 600;
+        line-height: 1.35;
+        word-break: break-word;
+    }
+
+    /* =========================================================
+           MESSAGE
+           ========================================================= */
+
+    .support-ticket-message {
+        position: relative;
+        margin-bottom: 20px;
+        padding: 17px 19px;
+        border: 1px solid rgba(67, 89, 113, 0.09);
+        border-radius: 12px;
+        background: #f8f8fa;
+    }
+
+    .support-ticket-message-label {
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        margin-bottom: 9px;
+        color: #566a7f;
+        font-size: 11px;
+        font-weight: 600;
+    }
+
+        .support-ticket-message-label i {
+            color: #696cff;
+            font-size: 16px;
+        }
+
+    .support-ticket-message-text {
+        margin: 0;
+        color: #566a7f;
+        font-size: 13px;
+        line-height: 1.65;
+        white-space: pre-wrap;
+        overflow-wrap: anywhere;
+    }
+
+    /* =========================================================
+           PEOPLE
+           ========================================================= */
+
+    .support-ticket-people {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 12px;
+        margin-top: 6px;
+    }
+
+    .support-ticket-person {
+        display: flex;
+        align-items: center;
+        gap: 11px;
+        padding: 13px;
+        border: 1px solid rgba(67, 89, 113, 0.09);
+        border-radius: 11px;
+        background: #fff;
+    }
+
+    .support-ticket-person-icon {
+        width: 36px;
+        height: 36px;
+        flex: 0 0 36px;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 9px;
+        background: rgba(105, 108, 255, 0.10);
+        color: #696cff;
+    }
+
+        .support-ticket-person-icon.assigned {
+            background: rgba(40, 199, 111, 0.10);
+            color: #28c76f;
+        }
+
+        .support-ticket-person-icon i {
+            font-size: 18px;
+        }
+
+    .support-ticket-person-info {
+        min-width: 0;
+    }
+
+    .support-ticket-person-label {
+        display: block;
+        margin-bottom: 2px;
+        color: #a1acb8;
+        font-size: 10px;
+        font-weight: 500;
+        text-transform: uppercase;
+        letter-spacing: .35px;
+    }
+
+    .support-ticket-person-name {
+        display: block;
+        color: #566a7f;
+        font-size: 12px;
+        font-weight: 600;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+    }
+
+    /* =========================================================
+           TABLET
+           ========================================================= */
+
+    @@media (max-width: 767.98px) {
+        .support-ticket-header
+
+    {
+        padding: 13px 17px;
+    }
+
+    .support-ticket-body {
+        padding: 0 17px 22px;
+    }
+
+        .support-ticket-body > .sticky-buttons {
+            margin-left: -17px;
+            margin-right: -17px;
+            padding-left: 17px;
+            padding-right: 17px;
+        }
+
+    .support-ticket-subject {
+        font-size: 18px;
+    }
+
+    .support-ticket-people {
+        grid-template-columns: 1fr;
+        gap: 9px;
+    }
+
+    }
+
+    /* =========================================================
+           MOBILE
+           ========================================================= */
+
+    @@media (max-width: 575.98px) {
+        .support-ticket-card
+
+    {
+        border-radius: 12px;
+    }
+
+    .support-ticket-header {
+        display: grid;
+        grid-template-columns: minmax(0, 1fr) auto;
+        grid-template-areas: "title ticket";
+        align-items: center;
+        gap: 8px;
+        padding: 12px 14px;
+        min-height: 0;
+    }
+
+    .support-ticket-header-left {
+        grid-area: title;
+        min-width: 0;
+        display: flex;
+        align-items: center;
+        gap: 9px;
+    }
+
+    .support-ticket-header-icon {
+        width: 34px;
+        height: 34px;
+        flex: 0 0 34px;
+        border-radius: 9px;
+    }
+
+        .support-ticket-header-icon i {
+            font-size: 18px;
+        }
+
+    .support-ticket-title {
+        min-width: 0;
+    }
+
+        .support-ticket-title h5 {
+            font-size: 14px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .support-ticket-title span {
+            font-size: 10px;
+            margin-top: 1px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+    .support-ticket-number {
+        grid-area: ticket;
+        margin: 0;
+        padding: 5px 8px;
+        gap: 4px;
+        border-radius: 7px;
+        font-size: 10px;
+        white-space: nowrap;
+    }
+
+        .support-ticket-number i {
+            font-size: 13px;
+        }
+
+    .support-ticket-body {
+        padding: 0 12px 18px;
+    }
+
+        .support-ticket-body > .sticky-buttons {
+            margin-left: -12px;
+            margin-right: -12px;
+            padding-left: 12px;
+            padding-right: 12px;
+            margin-bottom: 18px;
+        }
+
+    .support-ticket-status {
+        margin-bottom: 18px;
+        padding: 10px 12px;
+    }
+
+    .support-ticket-status-icon {
+        width: 30px;
+        height: 30px;
+        flex-basis: 30px;
+    }
+
+        .support-ticket-status-icon i {
+            font-size: 16px;
+        }
+
+    .support-ticket-status-value {
+        font-size: 11px;
+    }
+
+    .support-ticket-main-header {
+        margin-bottom: 16px;
+    }
+
+    .support-ticket-date {
+        margin-bottom: 6px;
+        font-size: 10px;
+    }
+
+    .support-ticket-subject {
+        font-size: 17px;
+    }
+
+    .support-ticket-message {
+        padding: 14px;
+        margin-bottom: 16px;
+        border-radius: 10px;
+    }
+
+    .support-ticket-message-label {
+        margin-bottom: 7px;
+        font-size: 10px;
+    }
+
+    .support-ticket-message-text {
+        font-size: 12px;
+        line-height: 1.6;
+    }
+
+    .support-ticket-people {
+        gap: 8px;
+    }
+
+    .support-ticket-person {
+        padding: 11px;
+        gap: 9px;
+        border-radius: 10px;
+    }
+
+    .support-ticket-person-icon {
+        width: 34px;
+        height: 34px;
+        flex-basis: 34px;
+    }
+
+        .support-ticket-person-icon i {
+            font-size: 17px;
+        }
+
+    .support-ticket-person-label {
+        font-size: 9px;
+    }
+
+    .support-ticket-person-name {
+        font-size: 11px;
+    }
+
+    }
 </style>
 
-<div class="card">
-    <div class="card-body">
-        @await Html.PartialAsync("_StickyButtons", new Partnerly.Models.ViewModels.FormActionsViewModel {
-            Back = new Partnerly.Models.ViewModels.ActionBack(id: Model.Id,visible: true, fromController: "SupportTickets", toController: "SupportTickets", fromAction: "ViewCase", toAction: "Index"),
-            Menu = new Partnerly.Models.ViewModels.ActionMenu(visible: hasRole),
-            MenuActions = new List<Partnerly.Models.ViewModels.MenuItemAction> {
-                new Partnerly.Models.ViewModels.MenuItemAction(visible:hasRole, icon: "bx bx-fast-forward", displayName: Localizer["Start"], fromController: "SupportTickets", toController: "SupportTickets", fromAction: "ViewCase", toAction: "StartCase", routID: @Model.Id),
-                new Partnerly.Models.ViewModels.MenuItemAction(visible:hasRole, icon: "bx bx-x", displayName: Localizer["Close"], fromController: "SupportTickets", toController: "SupportTickets", fromAction: "ViewCase", toAction: "CloseCase", routID: @Model.Id),
-                new Partnerly.Models.ViewModels.MenuItemAction(visible:hasAdminRole, icon: "bx bx-reply", displayName: Localizer["Assignto"], fromController: "SupportTickets", toController: "SupportTickets", fromAction: "ViewCase", toAction: "Edit", routID: @Model.Id),
-            }
-        })
-        @if (@Model.Status == Partnerly.Descriptors.Attributes.SupportTicketStatusAttribute.InProgress || @Model.Status == Partnerly.Descriptors.Attributes.SupportTicketStatusAttribute.Closed)
-        {
-             <div class="alert alert-primary">@Model.StatusAsView</div>
-        }
-       
-        <div class="mb-1 max-w-600">
-            <div class="container my-5">
-                <div class="task-card p-4 mx-auto">
-                    <div class="d-flex justify-content-between align-items-center mb-3">
-                        <small class="text-muted">
-                        <i class="bx bx-calendar-event me-1 text-primary"></i>
-                        @(Model.CreatedDate.Value.ToString("dd MMMM yyyy", new System.Globalization.CultureInfo(@CultureInfo.CurrentUICulture.Name)))
-                        </small>
-                        <span class="task-id">@Model.TicketID</span>
-                    </div>
+<div class="support-ticket-page">
 
-                    <div class="mb-3">
-                        <h6 class="fw-bold text-dark mb-1">@Model.Subject</h6>
-                        <p class="small text-muted mb-0">
-                        @Model.Message
-                        </p>
-                    </div>
+    <div class="card support-ticket-card">
 
-                    <div class="d-flex justify-content-between align-items-center border-top pt-3">
-                        <div class="small text-muted">
-                        <i class="bi bi-person-fill text-primary me-1"></i>
-                        <strong>@Localizer["From"]:</strong> @Model.CreatorName
-                        </div>
-                        <div class="small text-muted">
-                        <i class="bi bi-person-fill text-success me-1"></i>
-                        <strong>@Localizer["To"]:</strong> @Model.AssignedToName
-                        </div>
-                    </div>
+        <!-- Header -->
+
+        <div class="support-ticket-header">
+
+            <div class="support-ticket-header-left">
+
+                <div class="support-ticket-header-icon">
+                    <i class="bx bx-task"></i>
                 </div>
+
+                <div class="support-ticket-title">
+                    <h5>@Localizer["Viewcase"]</h5>
+                    @* <span>@Localizer["Supportticket"]</span> *@
+                </div>
+
             </div>
+
+            <div class="support-ticket-number">
+                <i class="bx bx-hash"></i>
+                @Model.TicketID
+            </div>
+
         </div>
+
+        <!-- Body -->
+
+        <div class="support-ticket-body">
+
+            @await Html.PartialAsync("_StickyButtons", new Partnerly.Models.ViewModels.FormActionsViewModel {
+            Back = new Partnerly.Models.ViewModels.ActionBack(
+            id: Model.Id,
+            visible: true,
+            fromController: "SupportTickets",
+            toController: "SupportTickets",
+            fromAction: "ViewCase",
+            toAction: "Index"
+            ),
+
+                        Menu = new Partnerly.Models.ViewModels.ActionMenu(
+                        visible: hasRole
+                        ),
+
+                        MenuActions = new List<Partnerly.Models.ViewModels.MenuItemAction> {
+
+                        new Partnerly.Models.ViewModels.MenuItemAction(
+                        visible: hasRole,
+                        icon: "bx bx-fast-forward",
+                        displayName: Localizer["Start"],
+                        fromController: "SupportTickets",
+                        toController: "SupportTickets",
+                        fromAction: "ViewCase",
+                        toAction: "StartCase",
+                        routID: @Model.Id
+                        ),
+
+                        new Partnerly.Models.ViewModels.MenuItemAction(
+                        visible: hasRole,
+                        icon: "bx bx-x",
+                        displayName: Localizer["Close"],
+                        fromController: "SupportTickets",
+                        toController: "SupportTickets",
+                        fromAction: "ViewCase",
+                        toAction: "CloseCase",
+                        routID: @Model.Id
+                        ),
+
+                        new Partnerly.Models.ViewModels.MenuItemAction(
+                        visible: hasAdminRole,
+                        icon: "bx bx-reply",
+                        displayName: Localizer["Assignto"],
+                        fromController: "SupportTickets",
+                        toController: "SupportTickets",
+                        fromAction: "ViewCase",
+                        toAction: "Edit",
+                        routID: @Model.Id
+                        )
+                        }
+                        })
+
+            @if (isInProgress || isClosed)
+            {
+                <div class="support-ticket-status">
+
+                    <div class="support-ticket-status-icon">
+
+                        @if (isClosed)
+                        {
+                            <i class="bx bx-check-circle"></i>
+                        }
+                        else
+                        {
+                            <i class="bx bx-loader-circle"></i>
+                        }
+
+                    </div>
+
+                    <div class="support-ticket-status-content">
+
+                        <span class="support-ticket-status-label">
+                            @Localizer["Status"]
+                        </span>
+
+                        <span class="support-ticket-status-value">
+                            @Model.StatusAsView
+                        </span>
+
+                    </div>
+
+                </div>
+            }
+
+            <!-- Main -->
+
+            <div class="support-ticket-main">
+
+                <!-- Date / Subject -->
+
+                <div class="support-ticket-main-header">
+
+                    <div class="support-ticket-date">
+
+                        <i class="bx bx-calendar-event"></i>
+
+                        @(Model.CreatedDate.Value.ToString(
+                                                "dd MMMM yyyy",
+                                                new System.Globalization.CultureInfo(
+                                                CultureInfo.CurrentUICulture.Name
+                                                )
+                                                ))
+
+                    </div>
+
+                    <h1 class="support-ticket-subject">
+                        @Model.Subject
+                    </h1>
+
+                </div>
+
+                <!-- Message -->
+
+                <div class="support-ticket-message">
+
+                    <div class="support-ticket-message-label">
+
+                        <i class="bx bx-message-detail"></i>
+
+                        @Localizer["Description"]
+
+                    </div>
+
+                    <p class="support-ticket-message-text">
+                        @Model.Message
+                    </p>
+
+                </div>
+
+                <!-- People -->
+
+                <div class="support-ticket-people">
+
+                    <div class="support-ticket-person">
+
+                        <div class="support-ticket-person-icon">
+                            <i class="bx bx-user"></i>
+                        </div>
+
+                        <div class="support-ticket-person-info">
+
+                            <span class="support-ticket-person-label">
+                                @Localizer["From"]
+                            </span>
+
+                            <span class="support-ticket-person-name">
+                                @Model.CreatorName
+                            </span>
+
+                        </div>
+
+                    </div>
+
+                    <div class="support-ticket-person">
+
+                        <div class="support-ticket-person-icon assigned">
+                            <i class="bx bx-user-check"></i>
+                        </div>
+
+                        <div class="support-ticket-person-info">
+
+                            <span class="support-ticket-person-label">
+                                @Localizer["To"]
+                            </span>
+
+                            <span class="support-ticket-person-name">
+                                @Model.AssignedToName
+                            </span>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
     </div>
+
 </div>
-
-
-

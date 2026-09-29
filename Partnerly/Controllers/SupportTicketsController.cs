@@ -270,7 +270,11 @@ namespace Partnerly.Controllers
             var ticket = await _supportTicketService.GetSupportTicketByIDAsync(id);
             if (ticket == null) return NotFound();
 
-            return View();
+            var model = new SupportTicketViewModel
+            {
+                Id = ticket.Id
+            };
+            return View(model);
         }
 
         [HttpPost, ActionName("DeleteConfirmed")]

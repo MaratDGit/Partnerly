@@ -1,65 +1,553 @@
-﻿.lookup-modal {
+﻿/* =========================================================
+   LOOKUP MODAL
+   Partnerly / Sneat style
+   ========================================================= */
+
+.lookup-modal {
     position: fixed;
     inset: 0;
     display: none;
     justify-content: center;
     align-items: center;
-    background: rgba(0,0,0,0.4);
+    padding: 20px;
+    background: rgba(67, 89, 113, 0.42);
+    backdrop-filter: blur(3px);
+    -webkit-backdrop-filter: blur(3px);
     z-index: 1050;
+    animation: lookupBackdropIn .18s ease;
 }
+
+
+/* =========================================================
+   LOOKUP CONTENT
+   ========================================================= */
 
 .lookup-content {
+    position: relative;
+    width: 720px;
+    max-width: 100%;
+    max-height: 82vh;
+    display: flex;
+    flex-direction: column;
+    padding: 0;
     background: #fff;
-    border-radius: 10px;
-    padding: 1rem;
-    width: 650px;
-    max-height: 80vh;
+    border: 1px solid rgba(67, 89, 113, 0.10);
+    border-radius: 16px;
+    box-shadow: 0 15px 45px rgba(67, 89, 113, 0.18), 0 5px 15px rgba(67, 89, 113, 0.08);
     overflow: hidden;
-    box-shadow: 0 2px 10px rgba(0,0,0,0.3);
-    cursor: pointer;
+    cursor: default;
+    animation: lookupModalIn .22s ease;
 }
+
+
+/* =========================================================
+   HEADER
+   ========================================================= */
 
 .lookup-header {
+    min-height: 66px;
     display: flex;
-    justify-content: space-between;
     align-items: center;
-    margin-bottom: 0.5rem;
+    justify-content: space-between;
+    gap: 15px;
+    margin: 0;
+    padding: 14px 18px;
+    border-bottom: 1px solid rgba(67, 89, 113, 0.08);
+    background: #fff;
 }
 
-.lookup-body {
-    overflow-y: auto;
-    max-height: 70vh;
-}
+
+    /* TITLE */
+
+    .lookup-header h5 {
+        position: relative;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        margin: 0;
+        color: #384551;
+        font-size: 16px;
+        font-weight: 600;
+        line-height: 1.4;
+    }
+
+
+        /* TITLE ICON */
+
+        .lookup-header h5::before {
+            content: "i";
+            width: 32px;
+            height: 32px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+            border-radius: 9px;
+            background: rgba(105, 108, 255, 0.10);
+            color: #696cff;
+            font-family: Arial, sans-serif;
+            font-size: 16px;
+            font-weight: 700;
+            font-style: normal;
+            line-height: 1;
+        }
+
+
+/* =========================================================
+   CLOSE BUTTON
+   ========================================================= */
 
 .lookup-close {
+    width: 34px;
+    height: 34px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    padding: 0;
     border: none;
-    background: none;
-    font-size: 1.5rem;
+    border-radius: 8px;
+    background: #f5f5fa;
+    color: #697a8d;
+    font-size: 0;
+    line-height: 1;
     cursor: pointer;
+    transition: color .2s ease, background-color .2s ease, transform .2s ease;
 }
 
-.table-container {
-    overflow-y: auto;
-    max-height: 65vh;
+
+    /* Use the existing × from HTML */
+
+    .lookup-close::before {
+        content: "\00d7";
+        font-size: 24px;
+        font-weight: 400;
+        line-height: 1;
+        transform: translateY(-1px);
+    }
+
+
+    .lookup-close:hover {
+        color: #ff4c51;
+        background: rgba(255, 76, 81, 0.10);
+        transform: rotate(90deg);
+    }
+
+
+    .lookup-close:active {
+        transform: rotate(90deg) scale(.92);
+    }
+
+
+/* =========================================================
+   BODY
+   ========================================================= */
+
+.lookup-body {
+    display: flex;
+    flex-direction: column;
+    min-height: 0;
+    padding: 16px 18px 18px;
+    overflow: hidden;
+    background: #fff;
 }
+
+
+/* =========================================================
+   SEARCH
+   ========================================================= */
+
+#lookupSearch {
+    width: 100%;
+    height: 40px;
+    flex-shrink: 0;
+    margin: 0 0 14px;
+    padding: 8px 13px;
+    border: 1px solid rgba(67, 89, 113, 0.18);
+    border-radius: 9px;
+    outline: none;
+    background: #fff;
+    color: #384551;
+    font-family: inherit;
+    font-size: 13px;
+    box-shadow: none;
+    transition: border-color .2s ease, box-shadow .2s ease, background-color .2s ease;
+}
+
+
+    #lookupSearch::placeholder {
+        color: #a1acb8;
+    }
+
+
+    #lookupSearch:hover {
+        border-color: rgba(67, 89, 113, 0.30);
+    }
+
+
+    #lookupSearch:focus {
+        border-color: #696cff;
+        background: #fff;
+        box-shadow: 0 0 0 3px rgba(105, 108, 255, 0.10);
+    }
+
+
+/* =========================================================
+   TABLE CONTAINER
+   ========================================================= */
+
+.table-container {
+    width: 100%;
+    max-height: 58vh;
+    overflow-x: auto;
+    overflow-y: auto;
+    border: 1px solid rgba(67, 89, 113, 0.10);
+    border-radius: 11px;
+    scrollbar-width: thin;
+    scrollbar-color: rgba(105, 108, 255, 0.25) transparent;
+}
+
+
+    /* Webkit scrollbar */
+
+    .table-container::-webkit-scrollbar {
+        width: 7px;
+        height: 7px;
+    }
+
+
+    .table-container::-webkit-scrollbar-track {
+        background: transparent;
+    }
+
+
+    .table-container::-webkit-scrollbar-thumb {
+        background: rgba(105, 108, 255, 0.25);
+        border-radius: 10px;
+    }
+
+
+        .table-container::-webkit-scrollbar-thumb:hover {
+            background: rgba(105, 108, 255, 0.45);
+        }
+
+
+/* =========================================================
+   LOOKUP TABLE
+   ========================================================= */
+
+#lookupTable {
+    width: 100%;
+    min-width: max-content;
+    margin: 0;
+    border-collapse: separate;
+    border-spacing: 0;
+    color: #566a7f;
+    font-size: 13px;
+}
+
+
+    /* =========================================================
+   TABLE HEADER
+   ========================================================= */
+
+    #lookupTable thead th {
+        position: sticky;
+        top: 0;
+        z-index: 2;
+        height: 46px;
+        padding: 10px 13px;
+        border-bottom: 1px solid rgba(67, 89, 113, 0.10);
+        border-right: 1px solid rgba(67, 89, 113, 0.06);
+        background: #f8f8fc;
+        color: #566a7f;
+        font-size: 11px;
+        font-weight: 600;
+        letter-spacing: .35px;
+        text-align: left;
+        white-space: nowrap;
+        vertical-align: middle;
+    }
+
+
+        #lookupTable thead th:first-child {
+            padding-left: 16px;
+        }
+
+
+        #lookupTable thead th:last-child {
+            border-right: none;
+        }
+
+
+    /* =========================================================
+   TABLE BODY
+   ========================================================= */
+
+    #lookupTable tbody td {
+        height: 48px;
+        padding: 9px 13px;
+        border-bottom: 1px solid rgba(67, 89, 113, 0.07);
+        color: #566a7f;
+        font-size: 13px;
+        white-space: nowrap;
+        vertical-align: middle;
+        background: #fff;
+        transition: background-color .15s ease, color .15s ease;
+    }
+
+
+        #lookupTable tbody td:first-child {
+            padding-left: 16px;
+        }
+
+
+    #lookupTable tbody tr:last-child td {
+        border-bottom: none;
+    }
+
+
+    /* =========================================================
+   ROW HOVER
+   ========================================================= */
+
+    #lookupTable tbody tr {
+        cursor: pointer;
+        transition: background-color .15s ease, box-shadow .15s ease;
+    }
+
+
+        #lookupTable tbody tr:hover td {
+            background: #f8f8ff;
+            color: #384551;
+        }
+
+
+            /* Small left accent on hover */
+
+            #lookupTable tbody tr:hover td:first-child {
+                box-shadow: inset 3px 0 0 #696cff;
+            }
+
+
+    /* =========================================================
+   CHECKBOX
+   ========================================================= */
+
+    #lookupTable input[type="checkbox"] {
+        width: 17px;
+        height: 17px;
+        margin: 0;
+        cursor: default;
+        vertical-align: middle;
+        accent-color: #696cff;
+        opacity: .85;
+    }
+
+
+    /* =========================================================
+   EMPTY / LOADING / ERROR STATES
+   ========================================================= */
+
+    #lookupTable tbody td.text-muted,
+    #lookupTable tbody td.text-danger {
+        height: 110px;
+        padding: 25px;
+        text-align: center;
+        font-size: 13px;
+    }
+
+
+    #lookupTable tbody td.text-muted {
+        color: #8592a3 !important;
+    }
+
+
+    #lookupTable tbody td.text-danger {
+        color: #ff4c51 !important;
+    }
+
+
+/* =========================================================
+   LOOKUP INPUT
+   ========================================================= */
 
 .lookup-input {
     width: 100%;
-    padding-right: 35px;
+    padding-right: 42px;
 }
+
+
+/* =========================================================
+   LOOKUP ICON IN FORM
+   ========================================================= */
 
 .lookup-icon {
     position: absolute;
     right: 15px;
     top: 50%;
+    width: 24px;
+    height: 24px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
     transform: translateY(-50%);
-    font-size: 22px;
-    color: #6c757d;
+    color: #8592a3;
+    font-size: 20px;
     cursor: pointer;
-    transition: color 0.2s ease;
     z-index: 2;
+    border-radius: 6px;
+    transition: color .2s ease, background-color .2s ease, transform .2s ease;
 }
 
-.lookup-icon:hover {
-    color: #0d6efd;
+
+    .lookup-icon:hover {
+        color: #696cff;
+        background: rgba(105, 108, 255, 0.10);
+        transform: translateY(-50%) scale(1.05);
+    }
+
+
+    .lookup-icon:active {
+        transform: translateY(-50%) scale(.95);
+    }
+
+
+/* =========================================================
+   ANIMATIONS
+   ========================================================= */
+
+@keyframes lookupBackdropIn {
+    from {
+        opacity: 0;
+    }
+
+    to {
+        opacity: 1;
+    }
+}
+
+
+@keyframes lookupModalIn {
+    from {
+        opacity: 0;
+        transform: translateY(-12px) scale(.98);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
+}
+
+
+/* =========================================================
+   RESPONSIVE
+   ========================================================= */
+
+@media (max-width: 767.98px) {
+
+    .lookup-modal {
+        padding: 12px;
+    }
+
+
+    .lookup-content {
+        width: 100%;
+        max-height: 90vh;
+        border-radius: 13px;
+    }
+
+
+    .lookup-header {
+        min-height: 58px;
+        padding: 12px 14px;
+    }
+
+
+        .lookup-header h5 {
+            font-size: 14px;
+        }
+
+
+            .lookup-header h5::before {
+                width: 30px;
+                height: 30px;
+                font-size: 15px;
+            }
+
+
+    .lookup-body {
+        padding: 13px 14px 14px;
+    }
+
+
+    #lookupSearch {
+        height: 38px;
+        margin-bottom: 12px;
+    }
+
+
+    .table-container {
+        max-height: 70vh;
+    }
+
+
+    #lookupTable thead th {
+        height: 44px;
+        padding: 9px 11px;
+        font-size: 10px;
+    }
+
+
+    #lookupTable tbody td {
+        height: 46px;
+        padding: 8px 11px;
+        font-size: 12px;
+    }
+
+
+        #lookupTable thead th:first-child,
+        #lookupTable tbody td:first-child {
+            padding-left: 13px;
+        }
+}
+
+
+/* =========================================================
+   SMALL MOBILE
+   ========================================================= */
+
+@media (max-width: 420px) {
+
+    .lookup-modal {
+        padding: 8px;
+    }
+
+
+    .lookup-content {
+        max-height: 94vh;
+        border-radius: 11px;
+    }
+
+
+    .lookup-header {
+        padding: 10px 12px;
+    }
+
+
+    .lookup-body {
+        padding: 10px 11px 11px;
+    }
+
+
+    .lookup-close {
+        width: 32px;
+        height: 32px;
+    }
+
+
+    .table-container {
+        max-height: 76vh;
+    }
 }

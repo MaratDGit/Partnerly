@@ -1,0 +1,857 @@
+﻿
+/* =========================================================
+       FORM ACTIONS BAR
+       ========================================================= */
+.sticky-buttons {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    min-height: 58px;
+    padding: 10px 14px;
+    margin-bottom: 1.5rem;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    background: rgba(255, 255, 255, 0.96);
+    border: 1px solid rgba(67, 89, 113, 0.10);
+    border-radius: 12px;
+    box-shadow: 0 2px 8px rgba(67, 89, 113, 0.06);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    transition: box-shadow 0.2s ease, border-color 0.2s ease;
+}
+
+.sticky-buttons:hover {
+    border-color: rgba(105, 108, 255, 0.16);
+    box-shadow: 0 4px 14px rgba(67, 89, 113, 0.08);
+}
+
+
+/* =========================================================
+       LEFT / RIGHT BUTTON GROUPS
+       ========================================================= */
+
+.sticky-buttons .left-buttons,
+.sticky-buttons .right-buttons {
+    display: flex;
+    align-items: center;
+}
+
+.sticky-buttons .left-buttons {
+    gap: 4px;
+}
+
+.sticky-buttons .right-buttons {
+    gap: 3px;
+}
+
+
+/* =========================================================
+       STANDARD ACTION BUTTONS
+       Back / Undo / Save / Create / Delete / Menu
+       ========================================================= */
+
+.sticky-buttons .left-buttons > .btn,
+.sticky-buttons .left-buttons > .btn-group > .btn {
+    width: 38px;
+    height: 38px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0 !important;
+    border-radius: 9px !important;
+    color: #697a8d;
+    text-decoration: none;
+    transition: background-color 0.18s ease, color 0.18s ease, transform 0.18s ease, box-shadow 0.18s ease;
+}
+
+    .sticky-buttons .left-buttons > .btn:hover,
+    .sticky-buttons .left-buttons > .btn-group > .btn:hover {
+        color: #696cff;
+        background: rgba(105, 108, 255, 0.10);
+        transform: translateY(-1px);
+    }
+
+    .sticky-buttons .left-buttons > .btn:active,
+    .sticky-buttons .left-buttons > .btn-group > .btn:active {
+        transform: translateY(0);
+    }
+
+    .sticky-buttons .left-buttons > .btn:focus-visible,
+    .sticky-buttons .left-buttons > .btn-group > .btn:focus-visible {
+        outline: none;
+        box-shadow: 0 0 0 3px rgba(105, 108, 255, 0.14);
+    }
+
+    .sticky-buttons .left-buttons > .btn i,
+    .sticky-buttons .left-buttons > .btn-group > .btn i {
+        margin: 0 !important;
+        font-size: 1.35rem !important;
+        line-height: 1;
+    }
+
+
+/* =========================================================
+       MENU
+       ========================================================= */
+
+.sticky-buttons .left-buttons .btn-group {
+    position: relative;
+}
+
+.sticky-buttons .left-buttons .dropdown-menu {
+    min-width: 210px;
+    margin-top: 7px !important;
+    padding: 6px;
+    border: 1px solid rgba(67, 89, 113, 0.10);
+    border-radius: 10px;
+    box-shadow: 0 8px 25px rgba(67, 89, 113, 0.14);
+    overflow: hidden;
+}
+
+.sticky-buttons .left-buttons .dropdown-item {
+    display: flex;
+    align-items: center;
+    min-height: 38px;
+    padding: 8px 10px;
+    border-radius: 7px;
+    color: #566a7f;
+    font-size: 0.875rem;
+    transition: background-color 0.15s ease, color 0.15s ease;
+}
+
+    .sticky-buttons .left-buttons .dropdown-item i {
+        width: 20px;
+        margin-right: 7px !important;
+        font-size: 1.05rem;
+        color: #697a8d;
+        transition: color 0.15s ease;
+    }
+
+    .sticky-buttons .left-buttons .dropdown-item:hover {
+        color: #696cff;
+        background: rgba(105, 108, 255, 0.08);
+    }
+
+        .sticky-buttons .left-buttons .dropdown-item:hover i {
+            color: #696cff;
+        }
+
+
+/* =========================================================
+       NOTE BUTTON
+       ========================================================= */
+
+/* =========================================================
+   NOTE MODAL
+   ========================================================= */
+
+#noteModal .modal-dialog {
+    width: 100%;
+    max-width: 500px;
+    margin: 1rem auto;
+}
+
+#noteModal .modal-content {
+    overflow: hidden;
+    border: 1px solid rgba(67, 89, 113, 0.10);
+    border-radius: 14px !important;
+    background: #fff;
+    box-shadow: 0 15px 45px rgba(67, 89, 113, 0.18);
+}
+
+
+/* =========================
+   HEADER
+   ========================= */
+
+#noteModal .modal-header {
+    min-height: 60px;
+    padding: 12px 18px;
+    border-bottom: 1px solid rgba(67, 89, 113, 0.08);
+    background: #fff;
+}
+
+#noteModal .modal-title {
+    display: flex;
+    align-items: center;
+    min-width: 0;
+    margin: 0;
+    color: #384551;
+    font-size: 15px;
+    font-weight: 600;
+    line-height: 1.3;
+}
+
+#noteModal .note-modal-icon {
+    width: 32px;
+    height: 32px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    flex: 0 0 32px;
+    margin-right: 9px;
+    border-radius: 9px;
+    background: rgba(105, 108, 255, 0.10);
+    color: #696cff;
+}
+
+    #noteModal .note-modal-icon i {
+        margin: 0 !important;
+        font-size: 18px;
+        line-height: 1;
+    }
+
+
+/* =========================
+   CLOSE BUTTON
+   ========================= */
+
+#noteModal .btn-close {
+    width: 32px;
+    height: 32px;
+    flex: 0 0 32px;
+    margin: 0 0 0 10px;
+    padding: 0;
+    border-radius: 8px;
+    opacity: 0.55;
+    transition: opacity 0.18s ease, background-color 0.18s ease;
+}
+
+    #noteModal .btn-close:hover {
+        opacity: 1;
+        background-color: rgba(67, 89, 113, 0.08);
+    }
+
+
+/* =========================
+   BODY
+   ========================= */
+
+#noteModal .modal-body {
+    padding: 18px;
+    background: #fff;
+}
+
+#noteModal #noteText {
+    width: 100%;
+    min-height: 120px;
+    border-color: #d9dee3;
+    border-radius: 9px;
+    color: #566a7f;
+    resize: vertical;
+    transition: border-color 0.18s ease, box-shadow 0.18s ease;
+}
+
+    #noteModal #noteText:focus {
+        border-color: #696cff;
+        box-shadow: 0 0 0 3px rgba(105, 108, 255, 0.12);
+    }
+
+
+/* =========================
+   FOOTER
+   ========================= */
+
+#noteModal .modal-footer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+    padding: 12px 18px;
+    border-top: 1px solid rgba(67, 89, 113, 0.08);
+    background: #fff;
+}
+
+    #noteModal .modal-footer > div {
+        display: flex;
+        align-items: center;
+        gap: 7px;
+    }
+
+    #noteModal .modal-footer .btn {
+        min-height: 34px;
+        padding: 6px 13px;
+        border-radius: 7px;
+        font-size: 0.8125rem;
+        font-weight: 500;
+    }
+
+
+/* =========================
+   MOBILE
+   ========================= */
+
+@media (max-width: 575.98px) {
+
+    #noteModal .modal-dialog {
+        width: auto;
+        margin: 0.75rem;
+    }
+
+    #noteModal .modal-content {
+        border-radius: 13px !important;
+    }
+
+    #noteModal .modal-header {
+        min-height: 56px;
+        padding: 10px 14px;
+    }
+
+    #noteModal .modal-title {
+        font-size: 14px;
+    }
+
+    #noteModal .note-modal-icon {
+        width: 30px;
+        height: 30px;
+        flex-basis: 30px;
+        margin-right: 8px;
+        border-radius: 8px;
+    }
+
+        #noteModal .note-modal-icon i {
+            font-size: 17px;
+        }
+
+    #noteModal .modal-body {
+        padding: 14px;
+    }
+
+    #noteModal #noteText {
+        min-height: 120px;
+    }
+
+    #noteModal .modal-footer {
+        flex-wrap: wrap;
+        padding: 10px 14px;
+        gap: 8px;
+    }
+
+        #noteModal .modal-footer > div {
+            margin-left: auto;
+            gap: 6px;
+        }
+
+        #noteModal .modal-footer .btn {
+            min-height: 34px;
+            padding: 6px 11px;
+        }
+}
+
+
+/* =========================
+   VERY SMALL PHONES
+   ========================= */
+
+@media (max-width: 380px) {
+
+    #noteModal .modal-dialog {
+        margin: 0.5rem;
+    }
+
+    #noteModal .modal-header {
+        padding: 9px 12px;
+    }
+
+    #noteModal .modal-body {
+        padding: 12px;
+    }
+
+    #noteModal .modal-footer {
+        padding: 9px 12px;
+    }
+
+        #noteModal .modal-footer > div {
+            width: 100%;
+            margin-left: 0;
+        }
+
+            #noteModal .modal-footer > div .btn {
+                flex: 1;
+            }
+
+        #noteModal .modal-footer > .btn {
+            width: 100%;
+        }
+}
+
+.sticky-buttons .btn-note {
+    width: 38px;
+    height: 38px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0 !important;
+    border: none;
+    border-radius: 9px;
+    background: transparent;
+    box-shadow: none;
+    outline: none;
+    color: #a1acb8;
+    transition: color 0.18s ease, background-color 0.18s ease, transform 0.18s ease;
+}
+
+    .sticky-buttons .btn-note i {
+        margin: 0 !important;
+        font-size: 1.35rem !important;
+        transition: color 0.18s ease, transform 0.18s ease;
+    }
+
+    .sticky-buttons .btn-note:hover {
+        color: #696cff;
+        background: rgba(105, 108, 255, 0.10);
+        transform: translateY(-1px);
+    }
+
+        .sticky-buttons .btn-note:hover i {
+            transform: scale(1.08);
+        }
+
+    .sticky-buttons .btn-note.active {
+        color: #ffab00;
+        background: rgba(255, 171, 0, 0.10);
+    }
+
+        .sticky-buttons .btn-note.active:hover {
+            color: #e99b00;
+            background: rgba(255, 171, 0, 0.15);
+        }
+
+
+/* =========================================================
+       ATTACHMENT BUTTON
+       ========================================================= */
+
+.sticky-buttons .btn-attachement {
+    width: 38px;
+    height: 38px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0 !important;
+    border: none;
+    border-radius: 9px;
+    background: transparent;
+    box-shadow: none;
+    outline: none;
+    color: #a1acb8;
+    transition: color 0.18s ease, background-color 0.18s ease, transform 0.18s ease;
+}
+
+    .sticky-buttons .btn-attachement i {
+        margin: 0 !important;
+        font-size: 1.35rem !important;
+        transition: color 0.18s ease, transform 0.18s ease;
+    }
+
+    .sticky-buttons .btn-attachement:hover {
+        color: #696cff;
+        background: rgba(105, 108, 255, 0.10);
+        transform: translateY(-1px);
+    }
+
+        .sticky-buttons .btn-attachement:hover i {
+            transform: scale(1.08);
+        }
+
+    .sticky-buttons .btn-attachement.active {
+        color: #696cff;
+        background: rgba(105, 108, 255, 0.10);
+    }
+
+        .sticky-buttons .btn-attachement.active:hover {
+            color: #5b5de6;
+            background: rgba(105, 108, 255, 0.15);
+        }
+
+
+/* =========================================================
+       NOTE MODAL
+       IMPORTANT:
+       Everything is scoped to #noteModal so it cannot
+       affect other Bootstrap modals.
+       ========================================================= */
+
+#noteModal .modal-dialog {
+    max-width: 500px;
+}
+
+#noteModal .modal-content {
+    overflow: hidden;
+    border: 1px solid rgba(67, 89, 113, 0.10);
+    border-radius: 14px !important;
+    box-shadow: 0 15px 45px rgba(67, 89, 113, 0.18);
+}
+
+#noteModal .modal-header {
+    min-height: 58px;
+    padding: 14px 18px;
+    border-bottom: 1px solid rgba(67, 89, 113, 0.08);
+    background: #fff;
+}
+
+#noteModal .modal-title {
+    display: flex;
+    align-items: center;
+    margin: 0;
+    color: #384551;
+    font-size: 15px;
+    font-weight: 600;
+}
+
+#noteModal .btn-close {
+    width: 32px;
+    height: 32px;
+    margin: 0;
+    border-radius: 8px;
+    opacity: 0.55;
+    transition: opacity 0.18s ease, background-color 0.18s ease;
+}
+
+    #noteModal .btn-close:hover {
+        opacity: 1;
+        background-color: rgba(67, 89, 113, 0.08);
+    }
+
+#noteModal .modal-body {
+    padding: 18px;
+    background: #fff;
+}
+
+#noteModal #noteText {
+    min-height: 120px;
+    border-color: #d9dee3;
+    border-radius: 9px;
+    color: #566a7f;
+    resize: vertical;
+    transition: border-color 0.18s ease, box-shadow 0.18s ease;
+}
+
+    #noteModal #noteText:focus {
+        border-color: #696cff;
+        box-shadow: 0 0 0 3px rgba(105, 108, 255, 0.12);
+    }
+
+#noteModal .modal-footer {
+    padding: 12px 18px;
+    border-top: 1px solid rgba(67, 89, 113, 0.08);
+    background: #fff;
+}
+
+    #noteModal .modal-footer .btn {
+        min-height: 34px;
+        padding: 6px 13px;
+        border-radius: 7px;
+        font-size: 0.8125rem;
+        font-weight: 500;
+    }
+
+#noteModal #clearNoteBtn {
+    color: #697a8d;
+    border-color: #d9dee3;
+}
+
+    #noteModal #clearNoteBtn:hover {
+        color: #566a7f;
+        background: #f5f5f9;
+    }
+
+
+/* =========================================================
+       ATTACHMENTS MODAL
+       ========================================================= */
+
+#attachmentsModal .modal-dialog {
+    max-width: 760px;
+}
+
+#attachmentsModal .modal-content {
+    overflow: hidden;
+    border: 1px solid rgba(67, 89, 113, 0.10);
+    border-radius: 14px;
+    box-shadow: 0 15px 45px rgba(67, 89, 113, 0.18);
+}
+
+#attachmentsModal .modal-header {
+    min-height: 62px;
+    padding: 14px 20px;
+    border-bottom: 1px solid rgba(67, 89, 113, 0.08);
+    background: #fff;
+}
+
+#attachmentsModal .modal-title {
+    display: flex;
+    align-items: center;
+    margin: 0;
+    color: #384551;
+    font-size: 16px;
+    font-weight: 600;
+}
+
+    #attachmentsModal .modal-title i {
+        width: 32px;
+        height: 32px;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        margin-right: 9px !important;
+        border-radius: 9px;
+        background: rgba(105, 108, 255, 0.10);
+        color: #696cff;
+        font-size: 17px;
+    }
+
+#attachmentsModal .btn-close {
+    width: 32px;
+    height: 32px;
+    margin: 0;
+    border-radius: 8px;
+    opacity: 0.55;
+    transition: opacity 0.18s ease, background-color 0.18s ease;
+}
+
+    #attachmentsModal .btn-close:hover {
+        opacity: 1;
+        background-color: rgba(67, 89, 113, 0.08);
+    }
+
+#attachmentsModal .modal-body {
+    padding: 20px;
+    background: #fff;
+}
+
+
+/* =========================================================
+       FILE INPUT
+       ========================================================= */
+
+#attachmentsModal .form-label {
+    margin-bottom: 7px;
+    color: #566a7f;
+    font-size: 0.8125rem;
+    font-weight: 500;
+}
+
+#attachmentsModal #attachmentFiles {
+    border-color: #d9dee3;
+    border-radius: 8px;
+    color: #566a7f;
+    transition: border-color 0.18s ease, box-shadow 0.18s ease;
+}
+
+    #attachmentsModal #attachmentFiles:focus {
+        border-color: #696cff;
+        box-shadow: 0 0 0 3px rgba(105, 108, 255, 0.12);
+    }
+
+
+/* =========================================================
+       UPLOAD BUTTON
+       ========================================================= */
+
+#attachmentsModal #uploadAttachmentsBtn {
+    min-height: 36px;
+    padding: 7px 14px;
+    border-radius: 8px;
+    font-size: 0.8125rem;
+    font-weight: 500;
+}
+
+    #attachmentsModal #uploadAttachmentsBtn i {
+        font-size: 1rem;
+    }
+
+
+/* =========================================================
+       DIVIDER
+       ========================================================= */
+
+#attachmentsModal hr {
+    margin: 20px 0;
+    border: 0;
+    border-top: 1px solid rgba(67, 89, 113, 0.10);
+    opacity: 1;
+}
+
+
+/* =========================================================
+       ATTACHMENTS LIST
+       ========================================================= */
+
+#attachmentsModal #attachmentsList {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+    #attachmentsModal #attachmentsList .list-group-item {
+        min-height: 52px;
+        padding: 8px 10px;
+        border: 1px solid rgba(67, 89, 113, 0.10);
+        border-radius: 9px !important;
+        background: #fff;
+        color: #566a7f;
+        transition: border-color 0.18s ease, background-color 0.18s ease, box-shadow 0.18s ease;
+    }
+
+        #attachmentsModal #attachmentsList .list-group-item:hover {
+            border-color: rgba(105, 108, 255, 0.22);
+            background: rgba(105, 108, 255, 0.025);
+            box-shadow: 0 2px 7px rgba(67, 89, 113, 0.05);
+        }
+
+    #attachmentsModal #attachmentsList .fw-semibold {
+        min-width: 0;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        padding-right: 10px;
+        color: #384551;
+        font-size: 0.875rem;
+    }
+
+
+    /* =========================================================
+       ATTACHMENT ACTION BUTTONS
+       ========================================================= */
+
+    #attachmentsModal #attachmentsList .btn {
+        width: 32px;
+        height: 32px;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        padding: 0;
+        border-radius: 7px;
+        transition: color 0.18s ease, background-color 0.18s ease, transform 0.18s ease;
+    }
+
+        #attachmentsModal #attachmentsList .btn:hover {
+            transform: translateY(-1px);
+        }
+
+        #attachmentsModal #attachmentsList .btn i {
+            margin: 0 !important;
+            font-size: 1rem;
+        }
+
+
+/* =========================================================
+       EMPTY / LOADING
+       ========================================================= */
+
+#attachmentsModal #attachmentsEmpty {
+    padding: 25px 10px !important;
+    font-size: 0.875rem;
+}
+
+#attachmentsModal #attachmentsLoading {
+    padding: 20px !important;
+}
+
+    #attachmentsModal #attachmentsLoading .spinner-border {
+        width: 1.7rem;
+        height: 1.7rem;
+        color: #696cff;
+    }
+
+
+/* =========================================================
+       ATTACHMENTS FOOTER
+       ========================================================= */
+
+#attachmentsModal .modal-footer {
+    padding: 12px 20px;
+    border-top: 1px solid rgba(67, 89, 113, 0.08);
+    background: #fff;
+}
+
+    #attachmentsModal .modal-footer .btn {
+        min-height: 36px;
+        padding: 7px 14px;
+        border-radius: 8px;
+        font-size: 0.8125rem;
+        font-weight: 500;
+    }
+
+
+/* =========================================================
+       RESPONSIVE
+       ========================================================= */
+
+@media (max-width: 767.98px) {
+
+    .sticky-buttons {
+        min-height: 54px;
+        padding: 8px 10px;
+        margin-left: -5px;
+        margin-right: -5px;
+        border-radius: 10px;
+    }
+
+        .sticky-buttons .left-buttons,
+        .sticky-buttons .right-buttons {
+            gap: 2px;
+        }
+
+            .sticky-buttons .left-buttons > .btn,
+            .sticky-buttons .left-buttons > .btn-group > .btn,
+            .sticky-buttons .btn-note,
+            .sticky-buttons .btn-attachement {
+                width: 36px;
+                height: 36px;
+            }
+
+                .sticky-buttons .left-buttons > .btn i,
+                .sticky-buttons .left-buttons > .btn-group > .btn i,
+                .sticky-buttons .btn-note i,
+                .sticky-buttons .btn-attachement i {
+                    font-size: 1.25rem !important;
+                }
+
+    #attachmentsModal .modal-body,
+    #noteModal .modal-body {
+        padding: 15px;
+    }
+
+    #attachmentsModal .modal-header,
+    #attachmentsModal .modal-footer,
+    #noteModal .modal-header,
+    #noteModal .modal-footer {
+        padding-left: 15px;
+        padding-right: 15px;
+    }
+
+    #attachmentsModal .modal-dialog {
+        margin: 0.75rem;
+    }
+
+    #attachmentsModal #attachmentsList .fw-semibold {
+        max-width: calc(100vw - 145px);
+    }
+}
+
+@media (max-width: 400px) {
+
+    .sticky-buttons {
+        padding-left: 7px;
+        padding-right: 7px;
+    }
+
+        .sticky-buttons .left-buttons > .btn,
+        .sticky-buttons .left-buttons > .btn-group > .btn,
+        .sticky-buttons .btn-note,
+        .sticky-buttons .btn-attachement {
+            width: 34px;
+            height: 34px;
+        }
+
+            .sticky-buttons .left-buttons > .btn i,
+            .sticky-buttons .left-buttons > .btn-group > .btn i,
+            .sticky-buttons .btn-note i,
+            .sticky-buttons .btn-attachement i {
+                font-size: 1.18rem !important;
+            }
+}
+
