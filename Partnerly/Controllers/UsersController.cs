@@ -25,6 +25,7 @@ namespace Partnerly.Controllers
             _roleService = roleService;
         }
 
+        #region Index / Create / Edit / Delete
         public async Task<IActionResult> Index()
         {
             return View();
@@ -216,6 +217,7 @@ namespace Partnerly.Controllers
             }
             return RedirectToAction(nameof(Index));
         }
+        #endregion
 
         [HttpGet]
         public async Task<IActionResult> GetLookupList(string fieldName)

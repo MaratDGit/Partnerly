@@ -27,6 +27,7 @@ namespace Partnerly.Controllers
             _userGroupService = userGroupService;
         }
 
+        #region Index / Create / Edit / Delete
         public async Task<IActionResult> Index()
         {
             return View();
@@ -182,6 +183,7 @@ namespace Partnerly.Controllers
             }
             return RedirectToAction(nameof(Index));
         }
+        #endregion
 
         [HttpGet]
         public async Task<IActionResult> GetLookupList(string fieldName)
@@ -318,24 +320,32 @@ namespace Partnerly.Controllers
             }
         }
 
+        #region Export to excel
+        [HttpPost]
+        public async Task<IActionResult> ExportToExcel([FromForm] string selectedIds)
+        {
+            if (!string.IsNullOrWhiteSpace(selectedIds))
+            {
+                var ids = JsonSerializer.Deserialize<List<Guid>>(selectedIds);
+                if (ids.Count > 0)
+                {
+                    var groups = await _userGroupService.GetAllUserGroupsAsync();
+                    var data = groups.Where(x => ids.Contains(x.Id)).ToList();
 
-        //[HttpPost]
-        //public async Task<IActionResult> ExportToExcel([FromForm] string selectedIds)
-        //{
-        //    var ids = JsonSerializer.Deserialize<List<Guid>>(selectedIds);
+                    return await ExportToExcel(data, "user-groups.xlsx");
+                }
+            }
 
-        //    var users = await _userGroupService.GetAllUserGroupsAsync();
-        //    var data = users.Where(x => ids.Contains(x.Id)).ToList();
+            return BadRequest("No users selected.");
+        }
 
-        //    return await ExportToExcel(data, "users.xlsx");
-        //}
-
-        //[HttpPost]
-        //public async Task<IActionResult> ExportAllToExcel([FromForm] string data)
-        //{
-        //    var allData = JsonSerializer.Deserialize<List<UserViewModel>>(data);
-        //    var users = await _userGroupService.GetAllUserGroupsAsync();
-        //    return await ExportToExcel(users, "users.xlsx");
-        //}
+        [HttpPost]
+        public async Task<IActionResult> ExportAllToExcel([FromForm] string data)
+        {
+            var allData = JsonSerializer.Deserialize<List<UserViewModel>>(data);
+            var users = await _userGroupService.GetAllUserGroupsAsync();
+            return await ExportToExcel(users, "user-groups.xlsx");
+        }
+        #endregion
     }
 }
