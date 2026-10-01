@@ -1,93 +1,164 @@
-﻿(function () {
+﻿(function (window, document) {
+
+    "use strict";
+
 
     function DataTable(options) {
 
-        var table = document.getElementById(options.id);
-
-        if (!table) {
+        if (!options) {
             return;
         }
 
-        var body = document.getElementById(
-            options.id + "-body"
-        );
 
-        var info = document.getElementById(
-            options.id + "-info"
-        );
+        /*
+         * ROOT
+         *
+         * This is the individual DataTable instance.
+         *
+         * IMPORTANT:
+         * We don't change any existing CSS classes or IDs.
+         */
 
-        var pageSizeSelect = document.getElementById(
-            options.id + "-page-size"
-        );
+        var root =
+            document.getElementById(
+                options.id
+            );
 
-        var pagination = document.getElementById(
-            options.id + "-pagination"
-        );
+        if (!root) {
+            return;
+        }
 
-        var searchInput = document.getElementById(
-            options.id + "-search"
-        );
+
+        /*
+         * =========================================================
+         * ELEMENTS
+         * =========================================================
+         */
+
+        var body =
+            root.querySelector(
+                "#" + options.id + "-body"
+            );
+
+        var info =
+            root.querySelector(
+                "#" + options.id + "-info"
+            );
+
+        var pageSizeSelect =
+            root.querySelector(
+                "#" + options.id + "-page-size"
+            );
+
+        var pagination =
+            root.querySelector(
+                "#" + options.id + "-pagination"
+            );
+
+        var searchInput =
+            root.querySelector(
+                "#" + options.id + "-search"
+            );
+
+
+        if (!body) {
+            return;
+        }
+
 
         var searchTimer = null;
 
+
+        /*
+         * =========================================================
+         * STATE
+         * =========================================================
+         */
+
         var state = {
+
             page: 1,
-            pageSize: options.paging.pageSize,
+
+            pageSize:
+                options.paging &&
+                    options.paging.pageSize
+                    ? options.paging.pageSize
+                    : 10,
+
             search: "",
+
             sortField:
-                options.sorting && options.sorting.defaultField
+                options.sorting &&
+                    options.sorting.defaultField
                     ? options.sorting.defaultField
                     : "",
+
             sortDirection:
-                options.sorting && options.sorting.defaultDirection
+                options.sorting &&
+                    options.sorting.defaultDirection
                     ? options.sorting.defaultDirection
                     : "asc",
+
             filters: {}
         };
 
 
         /*
+         * =========================================================
          * FILTER MODAL
+         * =========================================================
          */
 
         var filterModal =
-            document.getElementById(
-                options.id + "-filter-modal"
+            root.querySelector(
+                "#" + options.id + "-filter-modal"
             );
 
         var filterButton =
-            document.getElementById(
-                options.id + "-filter-button"
+            root.querySelector(
+                "[data-table-filter-button]"
             );
 
         var filterCount =
-            document.getElementById(
-                options.id + "-filter-count"
+            root.querySelector(
+                "[data-table-filter-count]"
             );
 
         var filterApplyButton =
-            document.getElementById(
-                options.id + "-filter-apply"
-            );
+            filterModal
+                ? filterModal.querySelector(
+                    "[data-table-filter-apply]"
+                )
+                : null;
 
         var filterResetButton =
-            document.getElementById(
-                options.id + "-filter-reset"
-            );
+            filterModal
+                ? filterModal.querySelector(
+                    "[data-table-filter-reset]"
+                )
+                : null;
 
         var filterModalInstance = null;
 
 
         /*
+         * =========================================================
          * LOAD
+         * =========================================================
          */
 
         function load() {
 
-            var url = new URL(
-                options.ajaxUrl,
-                window.location.origin
-            );
+            var url =
+                new URL(
+                    options.ajaxUrl,
+                    window.location.origin
+                );
+
+
+            /*
+             * Page
+             */
 
             url.searchParams.set(
                 "page",
@@ -135,21 +206,25 @@
              * Filters
              */
 
-            Object.keys(state.filters).forEach(function (field) {
+            Object.keys(
+                state.filters
+            ).forEach(function (field) {
 
                 var value =
                     state.filters[field];
 
                 if (Array.isArray(value)) {
 
-                    value.forEach(function (item) {
+                    value.forEach(
+                        function (item) {
 
-                        url.searchParams.append(
-                            "Filters[" + field + "]",
-                            item
-                        );
+                            url.searchParams.append(
+                                "Filters[" + field + "]",
+                                item
+                            );
 
-                    });
+                        }
+                    );
 
                 }
                 else if (
@@ -177,7 +252,9 @@
                 '">Loading...</td></tr>';
 
 
-            fetch(url.toString())
+            fetch(
+                url.toString()
+            )
                 .then(function (response) {
 
                     if (!response.ok) {
@@ -192,11 +269,17 @@
                 })
                 .then(function (result) {
 
-                    renderRows(result.items);
+                    renderRows(
+                        result.items
+                    );
 
-                    renderInfo(result);
+                    renderInfo(
+                        result
+                    );
 
-                    renderPagination(result);
+                    renderPagination(
+                        result
+                    );
                 })
                 .catch(function (error) {
 
@@ -211,12 +294,17 @@
 
 
         /*
+         * =========================================================
          * ROWS
+         * =========================================================
          */
 
         function renderRows(items) {
 
-            if (!items || items.length === 0) {
+            if (
+                !items ||
+                items.length === 0
+            ) {
 
                 body.innerHTML =
                     '<tr><td colspan="' +
@@ -228,12 +316,14 @@
 
             var html = "";
 
+
             items.forEach(function (item) {
 
-                var id = getValue(
-                    item,
-                    options.keyField || "Id"
-                );
+                var id =
+                    getValue(
+                        item,
+                        options.keyField || "Id"
+                    );
 
                 html +=
                     '<tr data-row-id="' +
@@ -245,43 +335,46 @@
                  * COLUMNS
                  */
 
-                options.columns.forEach(function (column) {
+                options.columns.forEach(
+                    function (column) {
 
-                    if (!column.visible) {
-                        return;
+                        if (!column.visible) {
+                            return;
+                        }
+
+                        var value =
+                            getValue(
+                                item,
+                                column.field
+                            );
+
+                        var formatted =
+                            formatCellValue(
+                                value,
+                                column,
+                                item,
+                                id
+                            );
+
+                        html +=
+                            '<td data-field="' +
+                            escapeHtml(
+                                column.field
+                            ) +
+                            '" ' +
+                            'data-original-value="' +
+                            escapeHtml(
+                                formatted.rawValue
+                            ) +
+                            '">' +
+                            formatted.html +
+                            "</td>";
                     }
-
-                    var value = getValue(
-                        item,
-                        column.field
-                    );
-
-                    var formatted =
-                        formatCellValue(
-                            value,
-                            column,
-                            item,
-                            id
-                        );
-
-                    html +=
-                        '<td data-field="' +
-                        escapeHtml(column.field) +
-                        '" ' +
-                        'data-original-value="' +
-                        escapeHtml(
-                            formatted.rawValue
-                        ) +
-                        '">' +
-                        formatted.html +
-                        "</td>";
-                });
+                );
 
 
                 /*
                  * ACTIONS
-                 *
-                 * Actions column is ALWAYS LAST.
                  */
 
                 if (hasActionsColumn()) {
@@ -400,7 +493,9 @@
                 html += "</tr>";
             });
 
+
             body.innerHTML = html;
+
 
             bindInlineEditButtons();
 
@@ -409,10 +504,17 @@
 
 
         /*
+         * =========================================================
          * FORMAT CELL VALUE
+         * =========================================================
          */
 
-        function formatCellValue(value, column, row, rowId) {
+        function formatCellValue(
+            value,
+            column,
+            row,
+            rowId
+        ) {
 
             /*
              * EMPTY
@@ -425,9 +527,12 @@
             ) {
 
                 return {
-                    html: escapeHtml(
-                        column.emptyText
-                    ),
+
+                    html:
+                        escapeHtml(
+                            column.emptyText
+                        ),
+
                     rawValue: ""
                 };
             }
@@ -437,7 +542,9 @@
              * BOOLEAN
              */
 
-            if (column.type === "Boolean") {
+            if (
+                column.type === "Boolean"
+            ) {
 
                 var checked =
                     value === true ||
@@ -447,11 +554,17 @@
                     value === "1";
 
                 return {
+
                     html:
                         '<input type="checkbox" ' +
                         'class="form-check-input data-table-boolean" ' +
-                        (checked ? "checked " : "") +
+                        (
+                            checked
+                                ? "checked "
+                                : ""
+                        ) +
                         'disabled>',
+
                     rawValue:
                         checked
                             ? "true"
@@ -464,7 +577,9 @@
              * NUMBER
              */
 
-            if (column.type === "Number") {
+            if (
+                column.type === "Number"
+            ) {
 
                 var numberValue =
                     Number(value);
@@ -472,17 +587,24 @@
                 if (!isNaN(numberValue)) {
 
                     return {
-                        html: escapeHtml(
-                            numberValue.toLocaleString()
-                        ),
+
+                        html:
+                            escapeHtml(
+                                numberValue.toLocaleString()
+                            ),
+
                         rawValue:
                             String(value)
                     };
                 }
 
                 return {
-                    html: escapeHtml(value),
-                    rawValue: String(value)
+
+                    html:
+                        escapeHtml(value),
+
+                    rawValue:
+                        String(value)
                 };
             }
 
@@ -491,7 +613,9 @@
              * CURRENCY
              */
 
-            if (column.type === "Currency") {
+            if (
+                column.type === "Currency"
+            ) {
 
                 var currencyValue =
                     Number(value);
@@ -499,22 +623,28 @@
                 if (!isNaN(currencyValue)) {
 
                     return {
-                        html: escapeHtml(
-                            currencyValue.toLocaleString(
-                                undefined,
-                                {
-                                    minimumFractionDigits: 2,
-                                    maximumFractionDigits: 2
-                                }
-                            )
-                        ),
+
+                        html:
+                            escapeHtml(
+                                currencyValue.toLocaleString(
+                                    undefined,
+                                    {
+                                        minimumFractionDigits: 2,
+                                        maximumFractionDigits: 2
+                                    }
+                                )
+                            ),
+
                         rawValue:
                             String(value)
                     };
                 }
 
                 return {
-                    html: escapeHtml(value),
+
+                    html:
+                        escapeHtml(value),
+
                     rawValue:
                         String(value)
                 };
@@ -525,15 +655,20 @@
              * DATE
              */
 
-            if (column.type === "Date") {
+            if (
+                column.type === "Date"
+            ) {
 
                 return {
-                    html: escapeHtml(
-                        formatDate(
-                            value,
-                            column.format
-                        )
-                    ),
+
+                    html:
+                        escapeHtml(
+                            formatDate(
+                                value,
+                                column.format
+                            )
+                        ),
+
                     rawValue:
                         String(value)
                 };
@@ -544,15 +679,20 @@
              * DATETIME
              */
 
-            if (column.type === "DateTime") {
+            if (
+                column.type === "DateTime"
+            ) {
 
                 return {
-                    html: escapeHtml(
-                        formatDateTime(
-                            value,
-                            column.format
-                        )
-                    ),
+
+                    html:
+                        escapeHtml(
+                            formatDateTime(
+                                value,
+                                column.format
+                            )
+                        ),
+
                     rawValue:
                         String(value)
                 };
@@ -563,18 +703,22 @@
              * EMAIL
              */
 
-            if (column.type === "Email") {
+            if (
+                column.type === "Email"
+            ) {
 
                 var email =
                     String(value);
 
                 return {
+
                     html:
                         '<a href="mailto:' +
                         escapeHtml(email) +
                         '">' +
                         escapeHtml(email) +
                         "</a>",
+
                     rawValue:
                         email
                 };
@@ -585,19 +729,26 @@
              * LINK
              */
 
-            if (column.type === "Link") {
+            if (
+                column.type === "Link"
+            ) {
 
-                var linkValue = value;
+                var linkValue =
+                    value;
 
                 if (
                     linkValue === null ||
                     linkValue === undefined ||
                     String(linkValue).trim() === ""
                 ) {
+
                     return {
-                        html: escapeHtml(
-                            column.emptyText || "—"
-                        ),
+
+                        html:
+                            escapeHtml(
+                                column.emptyText || "—"
+                            ),
+
                         rawValue: ""
                     };
                 }
@@ -610,21 +761,30 @@
                     );
 
                 if (!href) {
+
                     return {
-                        html: escapeHtml(
+
+                        html:
+                            escapeHtml(
+                                String(linkValue)
+                            ),
+
+                        rawValue:
                             String(linkValue)
-                        ),
-                        rawValue: String(linkValue)
                     };
                 }
 
                 return {
+
                     html:
                         '<a href="' +
                         escapeHtml(href) +
                         '" class="data-table-link">' +
-                        escapeHtml(String(linkValue)) +
+                        escapeHtml(
+                            String(linkValue)
+                        ) +
                         '</a>',
+
                     rawValue:
                         String(linkValue)
                 };
@@ -635,13 +795,17 @@
              * BADGE
              */
 
-            if (column.type === "Badge") {
+            if (
+                column.type === "Badge"
+            ) {
 
                 return {
+
                     html:
                         '<span class="data-table-badge">' +
                         escapeHtml(value) +
                         "</span>",
+
                     rawValue:
                         String(value)
                 };
@@ -653,36 +817,55 @@
              */
 
             return {
+
                 html:
                     escapeHtml(value),
+
                 rawValue:
                     String(value)
             };
         }
 
-        function buildColumnUrl(template, row, rowId) {
+
+        /*
+         * =========================================================
+         * COLUMN URL
+         * =========================================================
+         */
+
+        function buildColumnUrl(
+            template,
+            row,
+            rowId
+        ) {
+
             if (!template) {
                 return "";
             }
 
             return String(template).replace(
                 /\{([^}]+)\}/g,
-                function (match, fieldName) {
+                function (
+                    match,
+                    fieldName
+                ) {
 
                     if (
                         fieldName.toLowerCase() === "id" &&
                         rowId !== null &&
                         rowId !== undefined
                     ) {
+
                         return encodeURIComponent(
                             String(rowId)
                         );
                     }
 
-                    var value = getRowValue(
-                        row,
-                        fieldName
-                    );
+                    var value =
+                        getRowValue(
+                            row,
+                            fieldName
+                        );
 
                     return value === null ||
                         value === undefined
@@ -694,16 +877,36 @@
             );
         }
 
-        function getRowValue(row, field) {
 
-            if (!row || !field) {
+        /*
+         * =========================================================
+         * GET ROW VALUE
+         * =========================================================
+         */
+
+        function getRowValue(
+            row,
+            field
+        ) {
+
+            if (
+                !row ||
+                !field
+            ) {
                 return null;
             }
 
-            var parts = field.split(".");
-            var value = row;
+            var parts =
+                field.split(".");
 
-            for (var i = 0; i < parts.length; i++) {
+            var value =
+                row;
+
+            for (
+                var i = 0;
+                i < parts.length;
+                i++
+            ) {
 
                 if (
                     value === null ||
@@ -712,17 +915,24 @@
                     return null;
                 }
 
-                value = value[parts[i]];
+                value =
+                    value[parts[i]];
             }
 
             return value;
         }
 
+
         /*
+         * =========================================================
          * FORMAT DATE
+         * =========================================================
          */
 
-        function formatDate(value, format) {
+        function formatDate(
+            value,
+            format
+        ) {
 
             var date =
                 parseDateValue(value);
@@ -744,10 +954,15 @@
 
 
         /*
+         * =========================================================
          * FORMAT DATETIME
+         * =========================================================
          */
 
-        function formatDateTime(value, format) {
+        function formatDateTime(
+            value,
+            format
+        ) {
 
             var date =
                 parseDateValue(value);
@@ -773,8 +988,7 @@
 
 
             /*
-             * If no explicit format:
-             * use normal local datetime.
+             * No explicit format
              */
 
             if (!format) {
@@ -784,7 +998,7 @@
 
 
             /*
-             * Explicit backend format
+             * Explicit format
              */
 
             return formatDatePattern(
@@ -795,7 +1009,9 @@
 
 
         /*
+         * =========================================================
          * PARSE DATE
+         * =========================================================
          */
 
         function parseDateValue(value) {
@@ -808,9 +1024,15 @@
                 return null;
             }
 
-            if (value instanceof Date) {
+            if (
+                value instanceof Date
+            ) {
 
-                if (isNaN(value.getTime())) {
+                if (
+                    isNaN(
+                        value.getTime()
+                    )
+                ) {
                     return null;
                 }
 
@@ -823,9 +1045,6 @@
 
             /*
              * Remove { }
-             *
-             * Example:
-             * {9/30/2026 1:06:32 PM}
              */
 
             if (
@@ -845,12 +1064,6 @@
 
             /*
              * .NET DateTime
-             *
-             * Example:
-             * 9/30/2026 1:06:32 PM
-             *
-             * IMPORTANT:
-             * Backend value is treated as UTC.
              */
 
             var dotNetMatch =
@@ -882,10 +1095,6 @@
                     dotNetMatch[7].toUpperCase();
 
 
-                /*
-                 * Convert 12-hour time to 24-hour
-                 */
-
                 if (
                     amPm === "PM" &&
                     hours < 12
@@ -901,20 +1110,6 @@
                 }
 
 
-                /*
-                 * IMPORTANT:
-                 *
-                 * Treat backend value as UTC.
-                 *
-                 * Example:
-                 *
-                 * 13:06 UTC
-                 *
-                 * becomes:
-                 *
-                 * 17:06 UTC+4
-                 */
-
                 return new Date(
                     Date.UTC(
                         year,
@@ -929,12 +1124,7 @@
 
 
             /*
-             * ISO datetime WITHOUT timezone
-             *
-             * Example:
-             * 2026-09-30T13:06:32
-             *
-             * Treat it as UTC as well.
+             * ISO without timezone
              */
 
             var isoLocalMatch =
@@ -947,7 +1137,9 @@
                 var milliseconds =
                     isoLocalMatch[7]
                         ? Number(
-                            ("0." + isoLocalMatch[7]) * 1000
+                            ("0." +
+                                isoLocalMatch[7]) *
+                            1000
                         )
                         : 0;
 
@@ -966,15 +1158,13 @@
 
 
             /*
-             * ISO with explicit timezone
-             *
-             * Example:
-             * 2026-09-30T13:06:32Z
-             * 2026-09-30T13:06:32+00:00
+             * ISO with timezone
              */
 
             var date =
-                new Date(stringValue);
+                new Date(
+                    stringValue
+                );
 
             if (
                 isNaN(
@@ -989,10 +1179,14 @@
 
 
         /*
+         * =========================================================
          * RELATIVE DATE
+         * =========================================================
          */
 
-        function formatRelativeDate(date) {
+        function formatRelativeDate(
+            date
+        ) {
 
             var now =
                 new Date();
@@ -1007,29 +1201,15 @@
                 );
 
 
-            /*
-             * Future date
-             */
-
             if (seconds < 0) {
-
                 return "just now";
             }
 
-
-            /*
-             * Seconds
-             */
 
             if (seconds < 60) {
-
                 return "just now";
             }
 
-
-            /*
-             * Minutes
-             */
 
             var minutes =
                 Math.floor(
@@ -1047,10 +1227,6 @@
             }
 
 
-            /*
-             * Hours
-             */
-
             var hours =
                 Math.floor(
                     minutes / 60
@@ -1067,24 +1243,15 @@
             }
 
 
-            /*
-             * Yesterday
-             */
-
             var days =
                 Math.floor(
                     hours / 24
                 );
 
             if (days === 1) {
-
                 return "yesterday";
             }
 
-
-            /*
-             * Days
-             */
 
             if (days < 7) {
 
@@ -1093,25 +1260,14 @@
             }
 
 
-            /*
-             * Older than 7 days
-             */
-
             return date.toLocaleDateString();
         }
 
 
         /*
+         * =========================================================
          * DATE FORMAT PATTERN
-         *
-         * Supported:
-         *
-         * dd
-         * MM
-         * yyyy
-         * HH
-         * mm
-         * ss
+         * =========================================================
          */
 
         function formatDatePattern(
@@ -1166,42 +1322,50 @@
                 );
 
 
-            result = result.replace(
-                /yyyy/g,
-                String(year)
-            );
+            result =
+                result.replace(
+                    /yyyy/g,
+                    String(year)
+                );
 
-            result = result.replace(
-                /dd/g,
-                day
-            );
+            result =
+                result.replace(
+                    /dd/g,
+                    day
+                );
 
-            result = result.replace(
-                /MM/g,
-                month
-            );
+            result =
+                result.replace(
+                    /MM/g,
+                    month
+                );
 
-            result = result.replace(
-                /HH/g,
-                hours
-            );
+            result =
+                result.replace(
+                    /HH/g,
+                    hours
+                );
 
-            result = result.replace(
-                /mm/g,
-                minutes
-            );
+            result =
+                result.replace(
+                    /mm/g,
+                    minutes
+                );
 
-            result = result.replace(
-                /ss/g,
-                seconds
-            );
+            result =
+                result.replace(
+                    /ss/g,
+                    seconds
+                );
 
             return result;
         }
 
 
         /*
+         * =========================================================
          * HAS ACTIONS COLUMN
+         * =========================================================
          */
 
         function hasActionsColumn() {
@@ -1238,7 +1402,9 @@
 
 
         /*
+         * =========================================================
          * HAS EDITABLE COLUMNS
+         * =========================================================
          */
 
         function hasEditableColumns() {
@@ -1247,37 +1413,50 @@
                 return false;
             }
 
-            return options.columns.some(function (column) {
+            return options.columns.some(
+                function (column) {
 
-                return column.visible &&
-                    column.editable;
-            });
+                    return column.visible &&
+                        column.editable;
+                }
+            );
         }
 
 
         /*
+         * =========================================================
          * INFO
+         * =========================================================
          */
 
-        function renderInfo(result) {
+        function renderInfo(
+            result
+        ) {
 
             if (!info) {
                 return;
             }
 
-            if (result.total === 0) {
+            if (
+                result.total === 0
+            ) {
 
-                info.textContent = "No records";
+                info.textContent =
+                    "No records";
 
                 return;
             }
 
             var start =
-                ((result.page - 1) * result.pageSize) + 1;
+                (
+                    (result.page - 1) *
+                    result.pageSize
+                ) + 1;
 
             var end =
                 Math.min(
-                    result.page * result.pageSize,
+                    result.page *
+                    result.pageSize,
                     result.total
                 );
 
@@ -1292,27 +1471,37 @@
 
 
         /*
+         * =========================================================
          * PAGINATION
+         * =========================================================
          */
 
-        function renderPagination(result) {
+        function renderPagination(
+            result
+        ) {
 
             if (!pagination) {
                 return;
             }
 
-            var totalPages = Math.ceil(
-                result.total / result.pageSize
-            );
+            var totalPages =
+                Math.ceil(
+                    result.total /
+                    result.pageSize
+                );
 
-            if (totalPages <= 1) {
+            if (
+                totalPages <= 1
+            ) {
 
-                pagination.innerHTML = "";
+                pagination.innerHTML =
+                    "";
 
                 return;
             }
 
-            var currentPage = result.page;
+            var currentPage =
+                result.page;
 
             var html = "";
 
@@ -1325,7 +1514,11 @@
                 '<button type="button" ' +
                 'class="btn btn-sm btn-outline-secondary" ' +
                 'data-page="1" ' +
-                (currentPage === 1 ? "disabled" : "") +
+                (
+                    currentPage === 1
+                        ? "disabled"
+                        : ""
+                ) +
                 '>&laquo;</button>';
 
 
@@ -1336,8 +1529,14 @@
             html +=
                 '<button type="button" ' +
                 'class="btn btn-sm btn-outline-secondary" ' +
-                'data-page="' + (currentPage - 1) + '" ' +
-                (currentPage === 1 ? "disabled" : "") +
+                'data-page="' +
+                (currentPage - 1) +
+                '" ' +
+                (
+                    currentPage === 1
+                        ? "disabled"
+                        : ""
+                ) +
                 '>&lsaquo;</button>';
 
 
@@ -1345,22 +1544,27 @@
              * Page range
              */
 
-            var startPage = Math.max(
-                1,
-                currentPage - 1
-            );
-
-            var endPage = Math.min(
-                totalPages,
-                startPage + 2
-            );
-
-            if (endPage - startPage < 2) {
-
-                startPage = Math.max(
+            var startPage =
+                Math.max(
                     1,
-                    endPage - 2
+                    currentPage - 1
                 );
+
+            var endPage =
+                Math.min(
+                    totalPages,
+                    startPage + 2
+                );
+
+            if (
+                endPage - startPage < 2
+            ) {
+
+                startPage =
+                    Math.max(
+                        1,
+                        endPage - 2
+                    );
             }
 
 
@@ -1383,7 +1587,9 @@
                             : "btn-outline-secondary"
                     ) +
                     '" ' +
-                    'data-page="' + page + '">' +
+                    'data-page="' +
+                    page +
+                    '">' +
                     page +
                     '</button>';
             }
@@ -1396,8 +1602,14 @@
             html +=
                 '<button type="button" ' +
                 'class="btn btn-sm btn-outline-secondary" ' +
-                'data-page="' + (currentPage + 1) + '" ' +
-                (currentPage === totalPages ? "disabled" : "") +
+                'data-page="' +
+                (currentPage + 1) +
+                '" ' +
+                (
+                    currentPage === totalPages
+                        ? "disabled"
+                        : ""
+                ) +
                 '>&rsaquo;</button>';
 
 
@@ -1408,55 +1620,79 @@
             html +=
                 '<button type="button" ' +
                 'class="btn btn-sm btn-outline-secondary" ' +
-                'data-page="' + totalPages + '" ' +
-                (currentPage === totalPages ? "disabled" : "") +
+                'data-page="' +
+                totalPages +
+                '" ' +
+                (
+                    currentPage === totalPages
+                        ? "disabled"
+                        : ""
+                ) +
                 '>&raquo;</button>';
 
 
-            pagination.innerHTML = html;
+            pagination.innerHTML =
+                html;
 
 
             /*
              * Page click
              */
 
-            var buttons = pagination.querySelectorAll(
-                "[data-page]"
-            );
-
-            buttons.forEach(function (button) {
-
-                button.addEventListener(
-                    "click",
-                    function () {
-
-                        var page = parseInt(
-                            button.getAttribute("data-page"),
-                            10
-                        );
-
-                        if (!page || page === state.page) {
-                            return;
-                        }
-
-                        state.page = page;
-
-                        load();
-                    }
+            var buttons =
+                pagination.querySelectorAll(
+                    "[data-page]"
                 );
-            });
+
+            buttons.forEach(
+                function (button) {
+
+                    button.addEventListener(
+                        "click",
+                        function () {
+
+                            var page =
+                                parseInt(
+                                    button.getAttribute(
+                                        "data-page"
+                                    ),
+                                    10
+                                );
+
+                            if (
+                                !page ||
+                                page === state.page
+                            ) {
+                                return;
+                            }
+
+                            state.page =
+                                page;
+
+                            load();
+                        }
+                    );
+                }
+            );
         }
 
 
         /*
+         * =========================================================
          * GET VALUE
+         * =========================================================
          */
 
-        function getValue(object, field) {
+        function getValue(
+            object,
+            field
+        ) {
 
-            var parts = field.split(".");
+            var parts =
+                field.split(".");
 
-            var value = object;
+            var value =
+                object;
 
             for (
                 var i = 0;
@@ -1471,18 +1707,22 @@
                     return null;
                 }
 
-                var currentKey = Object.keys(value)
-                    .find(function (key) {
+                var currentKey =
+                    Object.keys(value)
+                        .find(
+                            function (key) {
 
-                        return key.toLowerCase() ===
-                            parts[i].toLowerCase();
-                    });
+                                return key.toLowerCase() ===
+                                    parts[i].toLowerCase();
+                            }
+                        );
 
                 if (!currentKey) {
                     return null;
                 }
 
-                value = value[currentKey];
+                value =
+                    value[currentKey];
             }
 
             return value;
@@ -1490,29 +1730,54 @@
 
 
         /*
+         * =========================================================
          * ESCAPE HTML
+         * =========================================================
          */
 
-        function escapeHtml(value) {
+        function escapeHtml(
+            value
+        ) {
 
             return String(value)
-                .replace(/&/g, "&amp;")
-                .replace(/</g, "&lt;")
-                .replace(/>/g, "&gt;")
-                .replace(/"/g, "&quot;")
-                .replace(/'/g, "&#039;");
+                .replace(
+                    /&/g,
+                    "&amp;"
+                )
+                .replace(
+                    /</g,
+                    "&lt;"
+                )
+                .replace(
+                    />/g,
+                    "&gt;"
+                )
+                .replace(
+                    /"/g,
+                    "&quot;"
+                )
+                .replace(
+                    /'/g,
+                    "&#039;"
+                );
         }
 
-        /*
- * =========================================================
- * SEARCH HIGHLIGHT
- * =========================================================
- */
 
-        function escapeRegExp(value) {
+        /*
+         * =========================================================
+         * SEARCH HIGHLIGHT
+         * =========================================================
+         */
+
+        function escapeRegExp(
+            value
+        ) {
 
             return String(value)
-                .replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+                .replace(
+                    /[.*+?^${}()|[\]\\]/g,
+                    "\\$&"
+                );
         }
 
 
@@ -1522,8 +1787,9 @@
                 return;
             }
 
+
             /*
-             * First remove previous highlights.
+             * Remove previous highlights
              */
 
             var previousHighlights =
@@ -1531,27 +1797,30 @@
                     ".data-table-search-highlight"
                 );
 
-            previousHighlights.forEach(function (element) {
+            previousHighlights.forEach(
+                function (element) {
 
-                var parent = element.parentNode;
+                    var parent =
+                        element.parentNode;
 
-                if (!parent) {
-                    return;
+                    if (!parent) {
+                        return;
+                    }
+
+                    parent.replaceChild(
+                        document.createTextNode(
+                            element.textContent
+                        ),
+                        element
+                    );
+
+                    parent.normalize();
                 }
-
-                parent.replaceChild(
-                    document.createTextNode(
-                        element.textContent
-                    ),
-                    element
-                );
-
-                parent.normalize();
-            });
+            );
 
 
             /*
-             * Nothing to highlight.
+             * Nothing to highlight
              */
 
             if (!state.search) {
@@ -1559,7 +1828,9 @@
             }
 
             var searchValue =
-                String(state.search).trim();
+                String(
+                    state.search
+                ).trim();
 
             if (!searchValue) {
                 return;
@@ -1567,21 +1838,15 @@
 
             var searchRegex =
                 new RegExp(
-                    escapeRegExp(searchValue),
+                    escapeRegExp(
+                        searchValue
+                    ),
                     "gi"
                 );
 
 
             /*
-             * Walk through text nodes only.
-             *
-             * This is important because cells can contain:
-             *
-             * <a>
-             * <span>
-             * other HTML
-             *
-             * and we don't want to destroy that markup.
+             * TreeWalker
              */
 
             var walker =
@@ -1589,141 +1854,160 @@
                     body,
                     NodeFilter.SHOW_TEXT,
                     {
-                        acceptNode: function (node) {
+                        acceptNode:
+                            function (node) {
 
-                            if (
-                                !node.nodeValue ||
-                                !node.nodeValue.trim()
-                            ) {
-                                return NodeFilter.FILTER_REJECT;
+                                if (
+                                    !node.nodeValue ||
+                                    !node.nodeValue.trim()
+                                ) {
+
+                                    return NodeFilter.FILTER_REJECT;
+                                }
+
+                                var parent =
+                                    node.parentElement;
+
+                                if (!parent) {
+
+                                    return NodeFilter.FILTER_REJECT;
+                                }
+
+                                if (
+                                    parent.closest(
+                                        "button, input, textarea, select"
+                                    )
+                                ) {
+
+                                    return NodeFilter.FILTER_REJECT;
+                                }
+
+                                if (
+                                    parent.closest(
+                                        ".data-table-actions"
+                                    )
+                                ) {
+
+                                    return NodeFilter.FILTER_REJECT;
+                                }
+
+                                return NodeFilter.FILTER_ACCEPT;
                             }
-
-                            /*
-                             * Don't touch inputs/buttons.
-                             */
-
-                            var parent =
-                                node.parentElement;
-
-                            if (!parent) {
-                                return NodeFilter.FILTER_REJECT;
-                            }
-
-                            if (
-                                parent.closest(
-                                    "button, input, textarea, select"
-                                )
-                            ) {
-                                return NodeFilter.FILTER_REJECT;
-                            }
-
-                            /*
-                             * Don't highlight inside
-                             * action buttons/links.
-                             */
-
-                            if (
-                                parent.closest(
-                                    ".data-table-actions"
-                                )
-                            ) {
-                                return NodeFilter.FILTER_REJECT;
-                            }
-
-                            return NodeFilter.FILTER_ACCEPT;
-                        }
                     }
                 );
 
             var nodes = [];
+
             var node;
 
             while (
-                (node = walker.nextNode())
+                (node =
+                    walker.nextNode())
             ) {
+
                 nodes.push(node);
             }
 
 
             /*
-             * Replace matching text.
+             * Replace matching text
              */
 
-            nodes.forEach(function (textNode) {
+            nodes.forEach(
+                function (textNode) {
 
-                var text =
-                    textNode.nodeValue;
+                    var text =
+                        textNode.nodeValue;
 
-                if (
-                    !searchRegex.test(text)
-                ) {
-                    searchRegex.lastIndex = 0;
-                    return;
-                }
+                    if (
+                        !searchRegex.test(text)
+                    ) {
 
-                searchRegex.lastIndex = 0;
+                        searchRegex.lastIndex =
+                            0;
 
-                var fragment =
-                    document.createDocumentFragment();
+                        return;
+                    }
 
-                var lastIndex = 0;
+                    searchRegex.lastIndex =
+                        0;
 
-                text.replace(
-                    searchRegex,
-                    function (match, offset) {
+                    var fragment =
+                        document.createDocumentFragment();
 
-                        if (offset > lastIndex) {
+                    var lastIndex =
+                        0;
+
+                    text.replace(
+                        searchRegex,
+                        function (
+                            match,
+                            offset
+                        ) {
+
+                            if (
+                                offset > lastIndex
+                            ) {
+
+                                fragment.appendChild(
+                                    document.createTextNode(
+                                        text.substring(
+                                            lastIndex,
+                                            offset
+                                        )
+                                    )
+                                );
+                            }
+
+                            var highlight =
+                                document.createElement(
+                                    "mark"
+                                );
+
+                            highlight.className =
+                                "data-table-search-highlight";
+
+                            highlight.textContent =
+                                match;
 
                             fragment.appendChild(
-                                document.createTextNode(
-                                    text.substring(
-                                        lastIndex,
-                                        offset
-                                    )
-                                )
+                                highlight
                             );
+
+                            lastIndex =
+                                offset +
+                                match.length;
+
+                            return match;
                         }
+                    );
 
-                        var highlight =
-                            document.createElement(
-                                "mark"
-                            );
-
-                        highlight.className =
-                            "data-table-search-highlight";
-
-                        highlight.textContent =
-                            match;
+                    if (
+                        lastIndex < text.length
+                    ) {
 
                         fragment.appendChild(
-                            highlight
+                            document.createTextNode(
+                                text.substring(
+                                    lastIndex
+                                )
+                            )
                         );
-
-                        lastIndex =
-                            offset + match.length;
-
-                        return match;
                     }
-                );
 
-                if (lastIndex < text.length) {
-
-                    fragment.appendChild(
-                        document.createTextNode(
-                            text.substring(lastIndex)
-                        )
+                    textNode.parentNode.replaceChild(
+                        fragment,
+                        textNode
                     );
                 }
-
-                textNode.parentNode.replaceChild(
-                    fragment,
-                    textNode
-                );
-            });
+            );
         }
 
+
         /*
+         * =========================================================
          * PAGE SIZE
+         * =========================================================
          */
 
         if (pageSizeSelect) {
@@ -1747,7 +2031,9 @@
 
 
         /*
+         * =========================================================
          * SEARCH
+         * =========================================================
          */
 
         if (searchInput) {
@@ -1756,174 +2042,144 @@
                 "input",
                 function () {
 
-                    clearTimeout(searchTimer);
-
-                    searchTimer = setTimeout(
-                        function () {
-
-                            state.search =
-                                searchInput.value.trim();
-
-                            state.page = 1;
-
-                            load();
-
-                        },
-                        options.debounceMs
+                    clearTimeout(
+                        searchTimer
                     );
+
+                    searchTimer =
+                        setTimeout(
+                            function () {
+
+                                state.search =
+                                    searchInput.value.trim();
+
+                                state.page = 1;
+
+                                load();
+
+                            },
+                            options.search.debounceMs || 300
+                        );
                 }
             );
         }
 
 
         /*
+         * =========================================================
          * SORTING
+         * =========================================================
          */
 
-        var sortButtons = table.querySelectorAll(
-            ".data-table-sort"
-        );
-
-        sortButtons.forEach(function (button) {
-
-            button.addEventListener(
-                "click",
-                function () {
-
-                    var field =
-                        button.getAttribute("data-field");
-
-                    if (!field) {
-                        return;
-                    }
-
-                    if (state.sortField === field) {
-
-                        state.sortDirection =
-                            state.sortDirection === "asc"
-                                ? "desc"
-                                : "asc";
-
-                    }
-                    else {
-
-                        state.sortField = field;
-
-                        state.sortDirection = "asc";
-                    }
-
-                    state.page = 1;
-
-                    updateSortIcons();
-
-                    load();
-                }
+        var sortButtons =
+            root.querySelectorAll(
+                ".data-table-sort"
             );
-        });
+
+        sortButtons.forEach(
+            function (button) {
+
+                button.addEventListener(
+                    "click",
+                    function () {
+
+                        var field =
+                            button.getAttribute(
+                                "data-field"
+                            );
+
+                        if (!field) {
+                            return;
+                        }
+
+                        if (
+                            state.sortField === field
+                        ) {
+
+                            state.sortDirection =
+                                state.sortDirection === "asc"
+                                    ? "desc"
+                                    : "asc";
+                        }
+                        else {
+
+                            state.sortField =
+                                field;
+
+                            state.sortDirection =
+                                "asc";
+                        }
+
+                        state.page = 1;
+
+                        updateSortIcons();
+
+                        load();
+                    }
+                );
+            }
+        );
 
 
         /*
+         * =========================================================
          * SORT ICONS
+         * =========================================================
          */
 
         function updateSortIcons() {
 
-            sortButtons.forEach(function (button) {
+            sortButtons.forEach(
+                function (button) {
 
-                var field =
-                    button.getAttribute("data-field");
+                    var field =
+                        button.getAttribute(
+                            "data-field"
+                        );
 
-                var icon =
-                    button.querySelector(
-                        ".data-table-sort-icon"
-                    );
+                    var icon =
+                        button.querySelector(
+                            ".data-table-sort-icon"
+                        );
 
-                if (!icon) {
-                    return;
+                    if (!icon) {
+                        return;
+                    }
+
+                    if (
+                        field !==
+                        state.sortField
+                    ) {
+
+                        icon.textContent =
+                            "";
+
+                        return;
+                    }
+
+                    if (
+                        state.sortDirection ===
+                        "asc"
+                    ) {
+
+                        icon.innerHTML =
+                            "&#9650;";
+
+                    }
+                    else {
+
+                        icon.innerHTML =
+                            "&#9660;";
+                    }
                 }
-
-                if (field !== state.sortField) {
-
-                    icon.textContent = "";
-
-                    return;
-                }
-
-                if (state.sortDirection === "asc") {
-
-                    icon.innerHTML = "&#9650;";
-
-                }
-                else {
-
-                    icon.innerHTML = "&#9660;";
-                }
-            });
+            );
         }
 
 
         /*
- * =========================================================
- * FILTERS
- * =========================================================
- *
- * Applied filters:
- *      state.filters
- *
- * Draft filters:
- *      values currently inside modal
- *
- * Apply:
- *      draft -> state.filters -> reload
- *
- * Cancel:
- *      discard draft
- *
- * Reset:
- *      clear filters -> reload
- *
- * =========================================================
- */
-
-
-        /*
-         * FILTER MODAL ELEMENTS
-         */
-
-        var filterModal =
-            document.getElementById(
-                options.id + "-filter-modal"
-            );
-
-        var filterButton =
-            table.querySelector(
-                "[data-table-filter-button]"
-            );
-
-        var filterCount =
-            table.querySelector(
-                "[data-table-filter-count]"
-            );
-
-        var filterApplyButton =
-            filterModal
-                ? filterModal.querySelector(
-                    "[data-table-filter-apply]"
-                )
-                : null;
-
-        var filterResetButton =
-            filterModal
-                ? filterModal.querySelector(
-                    "[data-table-filter-reset]"
-                )
-                : null;
-
-        var filterModalInstance = null;
-
-
-        /*
-         * UPDATE FILTER BUTTON
+         * =========================================================
+         * FILTERS
+         * =========================================================
          */
 
         function updateFilterButton() {
@@ -1938,10 +2194,6 @@
                 ).length;
 
 
-            /*
-             * Count
-             */
-
             if (filterCount) {
 
                 filterCount.textContent =
@@ -1951,10 +2203,6 @@
                     count === 0;
             }
 
-
-            /*
-             * Active state
-             */
 
             if (count > 0) {
 
@@ -1983,121 +2231,125 @@
         function updateFilterColumnIndicators() {
 
             var headers =
-                table.querySelectorAll("thead th");
-
-            if (!headers || headers.length === 0) {
-                return;
-            }
-
-
-            /*
-             * Remove old indicators.
-             */
-
-            headers.forEach(function (header) {
-
-                var oldIcon =
-                    header.querySelector(
-                        ".data-table-column-filter-icon"
-                    );
-
-                if (oldIcon) {
-                    oldIcon.remove();
-                }
-            });
-
-
-            /*
-             * No active filters.
-             */
+                root.querySelectorAll(
+                    "thead th"
+                );
 
             if (
-                !state.filters ||
-                Object.keys(state.filters).length === 0
+                !headers ||
+                headers.length === 0
             ) {
                 return;
             }
 
 
             /*
-             * Visible columns only.
-             *
-             * Header order must match visible columns.
+             * Remove old indicators
              */
 
+            headers.forEach(
+                function (header) {
+
+                    var oldIcon =
+                        header.querySelector(
+                            ".data-table-column-filter-icon"
+                        );
+
+                    if (oldIcon) {
+                        oldIcon.remove();
+                    }
+                }
+            );
+
+
+            if (
+                !state.filters ||
+                Object.keys(
+                    state.filters
+                ).length === 0
+            ) {
+                return;
+            }
+
+
             var visibleColumns =
-                options.columns.filter(function (column) {
+                options.columns.filter(
+                    function (column) {
 
-                    return column.visible;
-                });
-
-
-            visibleColumns.forEach(function (column, index) {
-
-                if (!hasActiveFilter(column.field)) {
-                    return;
-                }
-
-                var header =
-                    headers[index];
-
-                if (!header) {
-                    return;
-                }
-
-
-                /*
-                 * Create filter icon.
-                 */
-
-                var icon =
-                    document.createElement("i");
-
-                icon.className =
-                    "bx bx-filter-alt data-table-column-filter-icon";
-
-                icon.setAttribute(
-                    "title",
-                    "Filter: " + column.title
-                );
-
-                icon.setAttribute(
-                    "aria-label",
-                    "Filter active for " + column.title
+                        return column.visible;
+                    }
                 );
 
 
-                /*
-                 * If sortable button exists,
-                 * put icon inside the button.
-                 *
-                 * Otherwise put it directly
-                 * into the TH.
-                 */
+            visibleColumns.forEach(
+                function (
+                    column,
+                    index
+                ) {
 
-                var sortButton =
-                    header.querySelector(
-                        ".data-table-sort"
+                    if (
+                        !hasActiveFilter(
+                            column.field
+                        )
+                    ) {
+                        return;
+                    }
+
+                    var header =
+                        headers[index];
+
+                    if (!header) {
+                        return;
+                    }
+
+
+                    var icon =
+                        document.createElement(
+                            "i"
+                        );
+
+                    icon.className =
+                        "bx bx-filter-alt data-table-column-filter-icon";
+
+                    icon.setAttribute(
+                        "title",
+                        "Filter: " +
+                        column.title
                     );
 
-                if (sortButton) {
-
-                    sortButton.appendChild(
-                        icon
+                    icon.setAttribute(
+                        "aria-label",
+                        "Filter active for " +
+                        column.title
                     );
 
+
+                    var sortButton =
+                        header.querySelector(
+                            ".data-table-sort"
+                        );
+
+                    if (sortButton) {
+
+                        sortButton.appendChild(
+                            icon
+                        );
+
+                    }
+                    else {
+
+                        header.appendChild(
+                            icon
+                        );
+                    }
                 }
-                else {
-
-                    header.appendChild(
-                        icon
-                    );
-                }
-            });
+            );
         }
 
 
-        function hasActiveFilter(field) {
+        function hasActiveFilter(
+            field
+        ) {
 
             if (
                 !state.filters ||
@@ -2113,30 +2365,22 @@
                 state.filters[field];
 
 
-            /*
-             * Array filters:
-             *
-             * MultiSelect
-             * NumberRange
-             * DateRange
-             */
+            if (
+                Array.isArray(value)
+            ) {
 
-            if (Array.isArray(value)) {
+                return value.some(
+                    function (item) {
 
-                return value.some(function (item) {
-
-                    return (
-                        item !== null &&
-                        item !== undefined &&
-                        String(item).trim() !== ""
-                    );
-                });
+                        return (
+                            item !== null &&
+                            item !== undefined &&
+                            String(item).trim() !== ""
+                        );
+                    }
+                );
             }
 
-
-            /*
-             * Normal filters.
-             */
 
             return (
                 value !== null &&
@@ -2145,8 +2389,11 @@
             );
         }
 
+
         /*
-         * CLEAR MODAL
+         * =========================================================
+         * CLEAR FILTER MODAL
+         * =========================================================
          */
 
         function clearFilterModal() {
@@ -2156,86 +2403,79 @@
             }
 
 
-            /*
-             * Normal controls
-             *
-             * Text
-             * Boolean
-             * Select
-             * Number
-             * Date
-             */
-
             var controls =
                 filterModal.querySelectorAll(
                     ".data-table-modal-filter-control"
                 );
 
-            controls.forEach(function (control) {
+            controls.forEach(
+                function (control) {
 
-                control.value = "";
-            });
+                    control.value =
+                        "";
+                }
+            );
 
-
-            /*
-             * Range controls
-             */
 
             var rangeControls =
                 filterModal.querySelectorAll(
                     ".data-table-modal-range-control"
                 );
 
-            rangeControls.forEach(function (control) {
+            rangeControls.forEach(
+                function (control) {
 
-                control.value = "";
-            });
+                    control.value =
+                        "";
+                }
+            );
 
-
-            /*
-             * Multi select
-             */
 
             var multiSelects =
                 filterModal.querySelectorAll(
                     ".data-table-modal-multiselect"
                 );
 
-            multiSelects.forEach(function (container) {
+            multiSelects.forEach(
+                function (container) {
 
-                var checkboxes =
-                    container.querySelectorAll(
-                        'input[type="checkbox"]'
+                    var checkboxes =
+                        container.querySelectorAll(
+                            'input[type="checkbox"]'
+                        );
+
+                    checkboxes.forEach(
+                        function (checkbox) {
+
+                            checkbox.checked =
+                                false;
+                        }
                     );
 
-                checkboxes.forEach(
-                    function (checkbox) {
 
-                        checkbox.checked = false;
+                    var text =
+                        container.querySelector(
+                            ".data-table-modal-multiselect-text"
+                        );
+
+                    if (text) {
+
+                        text.textContent =
+                            "All";
                     }
-                );
 
-
-                var text =
-                    container.querySelector(
-                        ".data-table-modal-multiselect-text"
+                    container.classList.remove(
+                        "open"
                     );
-
-                if (text) {
-
-                    text.textContent =
-                        "All";
                 }
-
-                container.classList.remove(
-                    "open"
-                );
-            });
+            );
         }
 
 
         /*
+         * =========================================================
          * UPDATE MULTI SELECT TEXT
+         * =========================================================
          */
 
         function updateMultiSelectText(
@@ -2290,13 +2530,17 @@
             );
 
 
-            if (labels.length === 0) {
+            if (
+                labels.length === 0
+            ) {
 
                 text.textContent =
                     "All";
 
             }
-            else if (labels.length <= 2) {
+            else if (
+                labels.length <= 2
+            ) {
 
                 text.textContent =
                     labels.join(", ");
@@ -2312,7 +2556,9 @@
 
 
         /*
-         * SYNC MODAL FROM APPLIED STATE
+         * =========================================================
+         * SYNC MODAL FROM STATE
+         * =========================================================
          */
 
         function syncFilterModalFromState() {
@@ -2321,10 +2567,6 @@
                 return;
             }
 
-
-            /*
-             * Start clean
-             */
 
             clearFilterModal();
 
@@ -2342,44 +2584,42 @@
                     ".data-table-modal-filter-control"
                 );
 
-            controls.forEach(function (control) {
+            controls.forEach(
+                function (control) {
 
-                var field =
-                    control.getAttribute(
-                        "data-field"
-                    );
+                    var field =
+                        control.getAttribute(
+                            "data-field"
+                        );
 
-                if (!field) {
-                    return;
+                    if (!field) {
+                        return;
+                    }
+
+                    var value =
+                        filters[field];
+
+                    if (
+                        value === null ||
+                        value === undefined
+                    ) {
+                        return;
+                    }
+
+                    if (
+                        Array.isArray(value)
+                    ) {
+                        return;
+                    }
+
+                    control.value =
+                        String(value);
                 }
-
-                var value =
-                    filters[field];
-
-                if (
-                    value === null ||
-                    value === undefined
-                ) {
-                    return;
-                }
-
-
-                /*
-                 * Simple controls should
-                 * never receive arrays.
-                 */
-
-                if (Array.isArray(value)) {
-                    return;
-                }
-
-                control.value =
-                    String(value);
-            });
+            );
 
 
             /*
-             * RANGE FILTERS
+             * RANGE / MULTI SELECT
              */
 
             var filterElements =
@@ -2417,13 +2657,17 @@
                         Array.isArray(value)
                     ) {
 
-                        if (rangeControls[0]) {
+                        if (
+                            rangeControls[0]
+                        ) {
 
                             rangeControls[0].value =
                                 value[0] || "";
                         }
 
-                        if (rangeControls[1]) {
+                        if (
+                            rangeControls[1]
+                        ) {
 
                             rangeControls[1].value =
                                 value[1] || "";
@@ -2444,11 +2688,12 @@
 
                         var values =
                             Array.isArray(value)
-                                ? value.map(function (item) {
-                                    return String(item);
-                                })
+                                ? value.map(
+                                    function (item) {
+                                        return String(item);
+                                    }
+                                )
                                 : [];
-
 
                         var checkboxes =
                             multiSelect.querySelectorAll(
@@ -2467,7 +2712,6 @@
                             }
                         );
 
-
                         updateMultiSelectText(
                             multiSelect
                         );
@@ -2478,7 +2722,9 @@
 
 
         /*
+         * =========================================================
          * READ FILTERS FROM MODAL
+         * =========================================================
          */
 
         function readFiltersFromModal() {
@@ -2491,7 +2737,7 @@
 
 
             /*
-             * SIMPLE FILTERS
+             * SIMPLE
              */
 
             var controls =
@@ -2499,34 +2745,36 @@
                     ".data-table-modal-filter-control"
                 );
 
-            controls.forEach(function (control) {
+            controls.forEach(
+                function (control) {
 
-                var field =
-                    control.getAttribute(
-                        "data-field"
-                    );
+                    var field =
+                        control.getAttribute(
+                            "data-field"
+                        );
 
-                if (!field) {
-                    return;
+                    if (!field) {
+                        return;
+                    }
+
+                    var value =
+                        control.value;
+
+                    if (
+                        value !== null &&
+                        value !== undefined &&
+                        value !== ""
+                    ) {
+
+                        filters[field] =
+                            value;
+                    }
                 }
-
-                var value =
-                    control.value;
-
-                if (
-                    value !== null &&
-                    value !== undefined &&
-                    value !== ""
-                ) {
-
-                    filters[field] =
-                        value;
-                }
-            });
+            );
 
 
             /*
-             * FILTER CONTAINERS
+             * FILTER ELEMENTS
              */
 
             var filterElements =
@@ -2556,7 +2804,9 @@
                             ".data-table-modal-range-control"
                         );
 
-                    if (rangeControls.length > 0) {
+                    if (
+                        rangeControls.length > 0
+                    ) {
 
                         var min =
                             rangeControls[0]
@@ -2568,23 +2818,16 @@
                                 ? rangeControls[1].value
                                 : "";
 
-
                         if (
                             min !== "" ||
                             max !== ""
                         ) {
 
-                            /*
-                             * Keep exactly the same
-                             * format expected by backend:
-                             *
-                             * [min, max]
-                             */
-
-                            filters[field] = [
-                                min,
-                                max
-                            ];
+                            filters[field] =
+                                [
+                                    min,
+                                    max
+                                ];
                         }
 
                         return;
@@ -2612,7 +2855,9 @@
                         checkboxes.forEach(
                             function (checkbox) {
 
-                                if (checkbox.checked) {
+                                if (
+                                    checkbox.checked
+                                ) {
 
                                     values.push(
                                         checkbox.value
@@ -2621,8 +2866,9 @@
                             }
                         );
 
-
-                        if (values.length > 0) {
+                        if (
+                            values.length > 0
+                        ) {
 
                             filters[field] =
                                 values;
@@ -2637,7 +2883,9 @@
 
 
         /*
+         * =========================================================
          * INITIALIZE FILTER MODAL
+         * =========================================================
          */
 
         function initializeFilterModal() {
@@ -2651,11 +2899,12 @@
 
 
             /*
-             * Bootstrap modal
+             * Bootstrap
              */
 
             if (
-                typeof bootstrap !== "undefined" &&
+                typeof bootstrap !==
+                "undefined" &&
                 bootstrap.Modal
             ) {
 
@@ -2684,20 +2933,13 @@
                     "click",
                     function () {
 
-                        /*
-                         * Every time modal opens,
-                         * show APPLIED filters.
-                         *
-                         * This is important for Cancel.
-                         */
-
                         syncFilterModalFromState();
 
-
-                        if (filterModalInstance) {
+                        if (
+                            filterModalInstance
+                        ) {
 
                             filterModalInstance.show();
-
                         }
                     }
                 );
@@ -2714,41 +2956,20 @@
                     "click",
                     function () {
 
-                        /*
-                         * Read draft
-                         */
-
                         state.filters =
                             readFiltersFromModal();
 
-
-                        /*
-                         * Go to first page
-                         */
-
-                        state.page = 1;
-
-
-                        /*
-                         * Update button
-                         */
+                        state.page =
+                            1;
 
                         updateFilterButton();
 
-
-                        /*
-                         * Close modal
-                         */
-
-                        if (filterModalInstance) {
+                        if (
+                            filterModalInstance
+                        ) {
 
                             filterModalInstance.hide();
                         }
-
-
-                        /*
-                         * Reload table
-                         */
 
                         load();
                     }
@@ -2766,47 +2987,22 @@
                     "click",
                     function () {
 
-                        /*
-                         * Clear applied filters
-                         */
+                        state.filters =
+                            {};
 
-                        state.filters = {};
-
-
-                        /*
-                         * First page
-                         */
-
-                        state.page = 1;
-
-
-                        /*
-                         * Clear modal UI
-                         */
+                        state.page =
+                            1;
 
                         clearFilterModal();
 
-
-                        /*
-                         * Update button
-                         */
-
                         updateFilterButton();
 
-
-                        /*
-                         * Close modal
-                         */
-
-                        if (filterModalInstance) {
+                        if (
+                            filterModalInstance
+                        ) {
 
                             filterModalInstance.hide();
                         }
-
-
-                        /*
-                         * Reload
-                         */
 
                         load();
                     }
@@ -2831,7 +3027,6 @@
                             ".data-table-modal-multiselect-button"
                         );
 
-
                     var checkboxes =
                         container.querySelectorAll(
                             'input[type="checkbox"]'
@@ -2852,16 +3047,12 @@
                                 event.stopPropagation();
 
 
-                                /*
-                                 * Close other
-                                 * multiselects.
-                                 */
-
                                 multiSelects.forEach(
                                     function (other) {
 
                                         if (
-                                            other !== container
+                                            other !==
+                                            container
                                         ) {
 
                                             other.classList.remove(
@@ -2881,9 +3072,7 @@
 
 
                     /*
-                     * Checkbox changes
-                     *
-                     * No reload here.
+                     * Checkbox
                      */
 
                     checkboxes.forEach(
@@ -2905,10 +3094,15 @@
 
 
             /*
-             * CLICK OUTSIDE MULTI SELECT
+             * CLICK OUTSIDE
+             *
+             * IMPORTANT:
+             * Previously this was attached to document.
+             *
+             * Now it is attached to THIS DataTable root.
              */
 
-            document.addEventListener(
+            root.addEventListener(
                 "click",
                 function (event) {
 
@@ -2944,21 +3138,14 @@
             );
 
 
-            /*
-             * Initial button state
-             */
-
             updateFilterButton();
         }
 
 
         /*
+         * =========================================================
          * INLINE EDIT
-         */
-
-
-        /*
-         * BIND EDIT BUTTONS
+         * =========================================================
          */
 
         function bindInlineEditButtons() {
@@ -2972,32 +3159,41 @@
                     ".data-table-inline-edit"
                 );
 
-            buttons.forEach(function (button) {
+            buttons.forEach(
+                function (button) {
 
-                button.addEventListener(
-                    "click",
-                    function () {
+                    button.addEventListener(
+                        "click",
+                        function () {
 
-                        var id =
-                            button.getAttribute(
-                                "data-id"
+                            var id =
+                                button.getAttribute(
+                                    "data-id"
+                                );
+
+                            if (!id) {
+                                return;
+                            }
+
+                            enterInlineEdit(
+                                id
                             );
-
-                        if (!id) {
-                            return;
                         }
-
-                        enterInlineEdit(id);
-                    }
-                );
-            });
+                    );
+                }
+            );
         }
 
+
         /*
+         * =========================================================
          * ENTER INLINE EDIT
+         * =========================================================
          */
 
-        function enterInlineEdit(id) {
+        function enterInlineEdit(
+            id
+        ) {
 
             var rows =
                 body.querySelectorAll(
@@ -3006,19 +3202,22 @@
 
             var row = null;
 
-            rows.forEach(function (item) {
+            rows.forEach(
+                function (item) {
 
-                if (
-                    String(
-                        item.getAttribute(
-                            "data-row-id"
-                        )
-                    ) === String(id)
-                ) {
+                    if (
+                        String(
+                            item.getAttribute(
+                                "data-row-id"
+                            )
+                        ) ===
+                        String(id)
+                    ) {
 
-                    row = item;
+                        row = item;
+                    }
                 }
-            });
+            );
 
             if (!row) {
                 return;
@@ -3038,7 +3237,7 @@
 
 
             /*
-             * Convert editable cells to inputs
+             * Editable cells
              */
 
             options.columns.forEach(
@@ -3051,33 +3250,47 @@
                         return;
                     }
 
+
+                    /*
+                     * IMPORTANT:
+                     *
+                     * Don't use escapeHtml()
+                     * inside CSS selector.
+                     *
+                     * The field value is already
+                     * generated by our backend.
+                     */
+
                     var cell =
-                        row.querySelector(
-                            'td[data-field="' +
-                            escapeHtml(
-                                column.field
-                            ) +
-                            '"]'
+                        findCellByField(
+                            row,
+                            column.field
                         );
 
                     if (!cell) {
                         return;
                     }
 
+
                     var value =
                         cell.getAttribute(
                             "data-original-value"
                         );
 
-                    if (value === null) {
+                    if (
+                        value === null
+                    ) {
 
                         value =
                             cell.textContent.trim();
 
                         if (
-                            value === column.emptyText
+                            value ===
+                            column.emptyText
                         ) {
-                            value = "";
+
+                            value =
+                                "";
                         }
 
                         cell.setAttribute(
@@ -3086,7 +3299,15 @@
                         );
                     }
 
-                    if (column.type === "Boolean") {
+
+                    /*
+                     * BOOLEAN
+                     */
+
+                    if (
+                        column.type ===
+                        "Boolean"
+                    ) {
 
                         var checked =
                             value === "true" ||
@@ -3101,25 +3322,36 @@
                                 column.field
                             ) +
                             '" ' +
-                            (checked ? "checked" : "") +
+                            (
+                                checked
+                                    ? "checked"
+                                    : ""
+                            ) +
                             '>';
 
                     }
                     else {
 
-                        var inputType = "text";
+                        var inputType =
+                            "text";
 
-                        var inputMode = "";
+                        var inputMode =
+                            "";
 
                         if (
-                            column.type === "Number" ||
-                            column.type === "Currency"
+                            column.type ===
+                            "Number" ||
+                            column.type ===
+                            "Currency"
                         ) {
 
-                            inputType = "text";
-                            inputMode = "numeric";
+                            inputType =
+                                "text";
 
+                            inputMode =
+                                "numeric";
                         }
+
 
                         cell.innerHTML =
                             '<input type="' +
@@ -3134,16 +3366,27 @@
                             '" ' +
                             (
                                 inputMode
-                                    ? 'inputmode="' + inputMode + '" '
+                                    ? 'inputmode="' +
+                                    inputMode +
+                                    '" '
                                     : ""
                             ) +
                             'value="' +
-                            escapeHtml(value) +
+                            escapeHtml(
+                                value
+                            ) +
                             '">';
 
+
+                        /*
+                         * NUMBER VALIDATION
+                         */
+
                         if (
-                            column.type === "Number" ||
-                            column.type === "Currency"
+                            column.type ===
+                            "Number" ||
+                            column.type ===
+                            "Currency"
                         ) {
 
                             var numericInput =
@@ -3151,7 +3394,9 @@
                                     ".data-table-inline-input"
                                 );
 
-                            if (numericInput) {
+                            if (
+                                numericInput
+                            ) {
 
                                 numericInput.addEventListener(
                                     "input",
@@ -3162,23 +3407,26 @@
                                                 /[^0-9.]/g,
                                                 ""
                                             );
-
                                     }
                                 );
 
+
                                 numericInput.addEventListener(
                                     "keydown",
-                                    function (event) {
+                                    function (
+                                        event
+                                    ) {
 
-                                        var allowedKeys = [
-                                            "Backspace",
-                                            "Delete",
-                                            "Tab",
-                                            "ArrowLeft",
-                                            "ArrowRight",
-                                            "Home",
-                                            "End"
-                                        ];
+                                        var allowedKeys =
+                                            [
+                                                "Backspace",
+                                                "Delete",
+                                                "Tab",
+                                                "ArrowLeft",
+                                                "ArrowRight",
+                                                "Home",
+                                                "End"
+                                            ];
 
                                         if (
                                             allowedKeys.indexOf(
@@ -3204,7 +3452,9 @@
 
                                         if (
                                             event.key === "." &&
-                                            this.value.indexOf(".") === -1
+                                            this.value.indexOf(
+                                                "."
+                                            ) === -1
                                         ) {
                                             return;
                                         }
@@ -3212,17 +3462,15 @@
                                         event.preventDefault();
                                     }
                                 );
-
                             }
                         }
-
-                    };
+                    }
                 }
             );
 
 
             /*
-             * Replace actions
+             * ACTIONS
              */
 
             var actions =
@@ -3233,6 +3481,7 @@
             if (!actions) {
                 return;
             }
+
 
             actions.innerHTML =
                 '<button type="button" ' +
@@ -3251,15 +3500,60 @@
                 '<i class="bx bx-x"></i>' +
                 '</button>';
 
-            bindInlineSaveCancel(row);
+
+            bindInlineSaveCancel(
+                row
+            );
         }
 
 
         /*
-         * SAVE / CANCEL BUTTONS
+         * =========================================================
+         * FIND CELL
+         * =========================================================
          */
 
-        function bindInlineSaveCancel(row) {
+        function findCellByField(
+            row,
+            field
+        ) {
+
+            var cells =
+                row.querySelectorAll(
+                    "td[data-field]"
+                );
+
+            var result =
+                null;
+
+            cells.forEach(
+                function (cell) {
+
+                    if (
+                        cell.getAttribute(
+                            "data-field"
+                        ) === field
+                    ) {
+
+                        result =
+                            cell;
+                    }
+                }
+            );
+
+            return result;
+        }
+
+
+        /*
+         * =========================================================
+         * SAVE / CANCEL
+         * =========================================================
+         */
+
+        function bindInlineSaveCancel(
+            row
+        ) {
 
             var saveButton =
                 row.querySelector(
@@ -3282,7 +3576,9 @@
                     "click",
                     function () {
 
-                        saveInlineRow(row);
+                        saveInlineRow(
+                            row
+                        );
                     }
                 );
             }
@@ -3306,10 +3602,14 @@
 
 
         /*
+         * =========================================================
          * SAVE INLINE ROW
+         * =========================================================
          */
 
-        function saveInlineRow(row) {
+        function saveInlineRow(
+            row
+        ) {
 
             var id =
                 row.getAttribute(
@@ -3333,51 +3633,58 @@
 
             var fields = {};
 
+
             var inputs =
                 row.querySelectorAll(
                     ".data-table-inline-input"
                 );
 
-            inputs.forEach(function (input) {
+            inputs.forEach(
+                function (input) {
 
-                var field =
-                    input.getAttribute(
-                        "data-field"
-                    );
+                    var field =
+                        input.getAttribute(
+                            "data-field"
+                        );
 
-                if (!field) {
-                    return;
+                    if (!field) {
+                        return;
+                    }
+
+                    if (
+                        input.type ===
+                        "checkbox"
+                    ) {
+
+                        fields[field] =
+                            input.checked
+                                ? "true"
+                                : "false";
+
+                    }
+                    else {
+
+                        fields[field] =
+                            input.value;
+                    }
                 }
-
-                if (input.type === "checkbox") {
-
-                    fields[field] =
-                        input.checked
-                            ? "true"
-                            : "false";
-
-                }
-                else {
-
-                    fields[field] =
-                        input.value;
-
-                }
-            });
+            );
 
 
             /*
-             * Request
+             * REQUEST
              */
 
             var request = {
+
                 id: id,
+
                 fields: fields
             };
 
 
             /*
-             * Disable save button
+             * SAVE BUTTON
              */
 
             var saveButton =
@@ -3387,7 +3694,8 @@
 
             if (saveButton) {
 
-                saveButton.disabled = true;
+                saveButton.disabled =
+                    true;
 
                 saveButton.innerHTML =
                     '<i class="bx bx-loader-alt bx-spin"></i>';
@@ -3409,6 +3717,7 @@
                     method: "POST",
 
                     headers: {
+
                         "Content-Type":
                             "application/json",
 
@@ -3417,71 +3726,94 @@
                     },
 
                     body:
-                        JSON.stringify(request)
+                        JSON.stringify(
+                            request
+                        )
                 }
             )
-                .then(function (response) {
+                .then(
+                    function (response) {
 
-                    return response
-                        .json()
-                        .then(function (result) {
+                        return response
+                            .json()
+                            .then(
+                                function (result) {
 
-                            if (!response.ok) {
+                                    if (
+                                        !response.ok
+                                    ) {
 
-                                throw new Error(
-                                    result.message ||
-                                    "Update failed."
-                                );
-                            }
+                                        throw new Error(
+                                            result.message ||
+                                            "Update failed."
+                                        );
+                                    }
 
-                            return result;
-                        });
-                })
-                .then(function (result) {
-
-                    if (!result.success) {
-
-                        throw new Error(
-                            result.message ||
-                            "Update failed."
-                        );
+                                    return result;
+                                }
+                            );
                     }
+                )
+                .then(
+                    function (result) {
 
-                    load();
-                })
-                .catch(function (error) {
+                        if (
+                            !result.success
+                        ) {
 
-                    console.error(error);
+                            throw new Error(
+                                result.message ||
+                                "Update failed."
+                            );
+                        }
 
-                    alert(
-                        error.message ||
-                        "Unable to save changes."
-                    );
-
-                    if (saveButton) {
-
-                        saveButton.disabled = false;
-
-                        saveButton.innerHTML =
-                            '<i class="bx bx-check"></i>';
-
-                        saveButton.setAttribute(
-                            "title",
-                            "Save"
-                        );
+                        load();
                     }
-                });
+                )
+                .catch(
+                    function (error) {
+
+                        console.error(
+                            error
+                        );
+
+                        alert(
+                            error.message ||
+                            "Unable to save changes."
+                        );
+
+
+                        if (saveButton) {
+
+                            saveButton.disabled =
+                                false;
+
+                            saveButton.innerHTML =
+                                '<i class="bx bx-check"></i>';
+
+                            saveButton.setAttribute(
+                                "title",
+                                "Save"
+                            );
+                        }
+                    }
+                );
         }
 
 
         /*
+         * =========================================================
          * ANTI FORGERY TOKEN
+         * =========================================================
+         *
+         * IMPORTANT:
+         * Search only inside this table.
          */
 
         function getAntiForgeryToken() {
 
             var input =
-                document.querySelector(
+                root.querySelector(
                     'input[name="__RequestVerificationToken"]'
                 );
 
@@ -3494,78 +3826,95 @@
 
 
         /*
-         * INITIAL SORT ICON
+         * =========================================================
+         * INITIAL SORT
+         * =========================================================
          */
 
         updateSortIcons();
 
 
         /*
-         * INITIAL FILTER MODAL
+         * =========================================================
+         * INITIAL FILTER
+         * =========================================================
          */
 
         initializeFilterModal();
 
+
         /*
+         * =========================================================
          * RELOAD
+         * =========================================================
          */
 
         function resetTableToDefaultState() {
 
-            state.page = 1;
-            state.search = "";
-            state.filters = {};
+            state.page =
+                1;
+
+            state.search =
+                "";
+
+            state.filters =
+                {};
 
             state.sortField =
-                options.sorting && options.sorting.defaultField
+                options.sorting &&
+                    options.sorting.defaultField
                     ? options.sorting.defaultField
                     : "";
 
             state.sortDirection =
-                options.sorting && options.sorting.defaultDirection
+                options.sorting &&
+                    options.sorting.defaultDirection
                     ? options.sorting.defaultDirection
                     : "asc";
 
 
             /*
-             * Clear search input
+             * Search
              */
 
             if (searchInput) {
-                searchInput.value = "";
+
+                searchInput.value =
+                    "";
             }
 
 
             /*
-             * Reset filter modal
+             * Filter modal
              */
 
             syncFilterModalFromState();
 
 
             /*
-             * Reset filter button
+             * Filter button
              */
 
             updateFilterButton();
 
 
             /*
-             * Reset sorting icons
+             * Sorting
              */
 
             updateSortIcons();
 
 
             /*
-             * Reload grid
+             * Reload
              */
 
             load();
         }
 
+
         var reloadButton =
-            table.querySelector(
+            root.querySelector(
                 "[data-table-reload]"
             );
 
@@ -3576,19 +3925,33 @@
                 function () {
 
                     resetTableToDefaultState();
-
                 }
             );
         }
 
+
         /*
+         * =========================================================
          * INITIAL LOAD
+         * =========================================================
          */
 
-        load();
+        if (
+            options.autoLoad !== false
+        ) {
+
+            load();
+        }
     }
 
 
-    window.DataTable = DataTable;
+    /*
+     * =========================================================
+     * PUBLIC API
+     * =========================================================
+     */
 
-})();
+    window.DataTable =
+        DataTable;
+
+})(window, document);

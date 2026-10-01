@@ -460,12 +460,41 @@ namespace Partnerly.Controllers
             return new DataTableOptions
             {
                 Id = "usersTable",
+                Name = "Users",
                 AjaxUrl = "/Users/Data",
                 KeyField = "Id",
 
+                AutoLoad = true,     
+                ReloadEnabled = true,
+               
                 InlineEditing = true,
                 InlineUpdateUrl = "/Users/UpdateInline",
 
+                Paging = new DataTablePagingOptions
+                {
+                    Enabled = true,
+                    PageSize = 10,
+                    PageSizeOptions = new[] { 10, 25, 50, 100 },
+                    ShowInfo = true,
+                    ShowPageSize = true,
+                },
+
+                Search = new DataTableSearchOptions
+                {
+                    Enabled = true,
+                    Placeholder = "Search...",
+                    MinLength = 0,
+                    DebounceMs = 300,
+                },
+
+                Rows = new DataTableRowOptions
+                {
+                    Selectable = true,
+                    Clickable = true,
+                    Hover = true,
+                    Striped = false,
+                },
+ 
                 Columns = new List<DataTableColumn>
                 {
                     new DataTableColumn
@@ -473,7 +502,7 @@ namespace Partnerly.Controllers
                         Field = "Id",
                         Title = "ID",
                         Type = DataTableColumnType.Number,
-                        Visible = false
+                        Visible = false,
                     },
 
                     new DataTableColumn
@@ -481,8 +510,18 @@ namespace Partnerly.Controllers
                         Field = "FirstName",
                         Title = "First Name",
                         Type = DataTableColumnType.Link,
-                        Editable = true,
-                        UrlTemplate = "/Users/Edit/{Id}"
+                        UrlTemplate = "/Users/Edit/{Id}",
+
+                        Editable = true,                  
+                        Visible = true,
+                        Sortable = true,
+                        Searchable = true,
+                        Exportable = true,
+                        Width = "",
+                        Format = "",
+                        EmptyText = "-",
+                        Alignment = DataTableAlignment.Left,
+                        CssClass = "",
                     },
 
                     new DataTableColumn
@@ -577,6 +616,8 @@ namespace Partnerly.Controllers
                             Field = "RoleId",
                             Label = "Role",
                             Type = DataTableFilterType.MultiSelect,
+                            Placeholder = "Role Name",
+                            DefaultValue = "",
                             Options = new List<DataTableFilterOption>
                             {
                                 new DataTableFilterOption("5DAF66B1-8140-4D48-BC12-431086FA7144", "Admin"),
@@ -608,7 +649,11 @@ namespace Partnerly.Controllers
                     EditUrl = "/Users/Edit",
 
                     Delete = true,
-                    DeleteUrl = "/Users/Delete"
+                    DeleteUrl = "/Users/Delete",
+
+                    BulkDelete = true,
+                    InlineAdd = true,
+                    InlineDelete = true,
                 },
 
                 Export = new DataTableExportOptions

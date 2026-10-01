@@ -1,10 +1,14 @@
 ﻿@using Partnerly.Models.DataTable
 @model Partnerly.Models.DataTable.DataTableOptions
 
+<div id="@Model.Id"
+     class="data-table-wrapper"
+     data-datatable="true">
 
     @Html.AntiForgeryToken()
 
     <div class="data-table-toolbar">
+
         @if (Model.Actions.Enabled && Model.Actions.Add && !string.IsNullOrWhiteSpace(Model.Actions.AddUrl))
         {
             <a href="@Model.Actions.AddUrl"
@@ -20,6 +24,7 @@
                    class="form-control"
                    placeholder="@Model.Search.Placeholder" />
         }
+
     </div>
 
     <div class="data-table-grid-actions">
@@ -108,6 +113,7 @@
                         }
 
                     </ul>
+
                 </div>
             }
 
@@ -141,7 +147,7 @@
 
     <div class="table-responsive">
 
-        <table class="table table-striped">
+        <table class="table @(Model.Rows.Striped ? "table-striped" : "")">
 
             <thead>
 
@@ -249,259 +255,246 @@
     </div>
 
     @if (Model.Filters.Enabled)
-{
-    <div class="modal fade"
-         id="@Model.Id-filter-modal"
-         tabindex="-1"
-         aria-hidden="true">
+    {
+        <div class="modal fade"
+             id="@Model.Id-filter-modal"
+             tabindex="-1"
+             aria-hidden="true">
 
-        <div class="modal-dialog modal-dialog-centered modal-lg">
+            <div class="modal-dialog modal-dialog-centered modal-lg">
 
-            <div class="modal-content data-table-filter-modal">
+                <div class="modal-content data-table-filter-modal">
 
-                <div class="modal-header">
+                    <div class="modal-header">
 
-                    <div>
+                        <div>
 
-                        <div class="data-table-filter-modal-title">
+                            <div class="data-table-filter-modal-title">
 
-                            <span class="data-table-filter-modal-title-icon">
-                                <i class="bx bx-filter-alt"></i>
-                            </span>
+                                <span class="data-table-filter-modal-title-icon">
+                                    <i class="bx bx-filter-alt"></i>
+                                </span>
 
-                            <span>
-                                Filters
-                            </span>
+                                <span>
+                                    Filters
+                                </span>
+
+                            </div>
 
                         </div>
+
+                        <button type="button"
+                                class="btn-close"
+                                data-bs-dismiss="modal"
+                                aria-label="Close">
+                        </button>
+
                     </div>
 
-                    <button type="button"
-                            class="btn-close"
-                            data-bs-dismiss="modal"
-                            aria-label="Close">
-                    </button>
+                    <div class="modal-body">
 
-                </div>
+                        <div id="@Model.Id-filter-modal-body"
+                             class="data-table-filter-modal-body">
 
-                <div class="modal-body">
+                            @foreach (var filter in Model.Filters.Items)
+                            {
+                                <div class="data-table-modal-filter"
+                                     data-filter-field="@filter.Field">
 
-                    <div id="@Model.Id-filter-modal-body"
-                         class="data-table-filter-modal-body">
+                                    <label class="data-table-modal-filter-label">
+                                        @filter.Label
+                                    </label>
 
-                        @foreach (var filter in Model.Filters.Items)
-                        {
-                            <div class="data-table-modal-filter"
-                                 data-filter-field="@filter.Field">
+                                    @if (filter.Type == DataTableFilterType.Text)
+                                    {
+                                        <input type="text"
+                                               class="form-control data-table-modal-filter-control"
+                                               data-field="@filter.Field"
+                                               data-filter-type="text"
+                                               placeholder="@filter.Placeholder" />
+                                    }
 
-                                <label class="data-table-modal-filter-label">
-                                    @filter.Label
-                                </label>
+                                    @if (filter.Type == DataTableFilterType.Boolean)
+                                    {
+                                        <select class="form-select data-table-modal-filter-control"
+                                                data-field="@filter.Field"
+                                                data-filter-type="boolean">
 
-                                @if (filter.Type == DataTableFilterType.Text)
-                                {
-                                    <input type="text"
-                                           class="form-control data-table-modal-filter-control"
-                                           data-field="@filter.Field"
-                                           data-filter-type="text"
-                                           placeholder="@filter.Placeholder" />
-                                }
+                                            <option value="">All</option>
+                                            <option value="true">Yes</option>
+                                            <option value="false">No</option>
 
-                                @if (filter.Type == DataTableFilterType.Boolean)
-                                {
-                                    <select class="form-select data-table-modal-filter-control"
-                                            data-field="@filter.Field"
-                                            data-filter-type="boolean">
+                                        </select>
+                                    }
 
-                                        <option value="">All</option>
-                                        <option value="true">Yes</option>
-                                        <option value="false">No</option>
+                                    @if (filter.Type == DataTableFilterType.Select)
+                                    {
+                                        <select class="form-select data-table-modal-filter-control"
+                                                data-field="@filter.Field"
+                                                data-filter-type="select">
 
-                                    </select>
-                                }
-
-                                @if (filter.Type == DataTableFilterType.Select)
-                                {
-                                    <select class="form-select data-table-modal-filter-control"
-                                            data-field="@filter.Field"
-                                            data-filter-type="select">
-
-                                        <option value="">All</option>
-
-                                        @foreach (var option in filter.Options)
-                                        {
-                                            <option value="@option.Value">
-                                                @option.Label
-                                            </option>
-                                        }
-
-                                    </select>
-                                }
-
-                                @if (filter.Type == DataTableFilterType.MultiSelect)
-                                {
-                                    <div class="data-table-modal-multiselect"
-                                         data-field="@filter.Field">
-
-                                        <button type="button"
-                                                class="data-table-modal-multiselect-button">
-
-                                            <span class="data-table-modal-multiselect-text">
-                                                All
-                                            </span>
-
-                                            <i class="bx bx-chevron-down"></i>
-
-                                        </button>
-
-                                        <div class="data-table-modal-multiselect-dropdown">
+                                            <option value="">All</option>
 
                                             @foreach (var option in filter.Options)
                                             {
-                                                <label class="data-table-modal-multiselect-option">
-
-                                                    <input type="checkbox"
-                                                           value="@option.Value" />
-
-                                                    <span>
-                                                        @option.Label
-                                                    </span>
-
-                                                </label>
+                                                <option value="@option.Value">
+                                                    @option.Label
+                                                </option>
                                             }
 
-                                        </div>
+                                        </select>
+                                    }
 
-                                    </div>
-                                }
+                                    @if (filter.Type == DataTableFilterType.MultiSelect)
+                                    {
+                                        <div class="data-table-modal-multiselect"
+                                             data-field="@filter.Field">
 
-                                @if (filter.Type == DataTableFilterType.Number)
-                                {
-                                    <input type="number"
-                                           class="form-control data-table-modal-filter-control"
-                                           data-field="@filter.Field"
-                                           data-filter-type="number"
-                                           placeholder="@filter.Placeholder" />
-                                }
+                                            <button type="button"
+                                                    class="data-table-modal-multiselect-button">
 
-                                @if (filter.Type == DataTableFilterType.NumberRange)
-                                {
-                                    <div class="data-table-modal-range">
+                                                <span class="data-table-modal-multiselect-text">
+                                                    All
+                                                </span>
 
-                                        <div class="data-table-modal-range-item">
+                                                <i class="bx bx-chevron-down"></i>
 
-                                            @* <span class="data-table-modal-range-label">
-                                                From
-                                            </span> *@
+                                            </button>
 
-                                            <input type="number"
-                                                   class="form-control data-table-modal-range-control"
-                                                   data-field="@filter.Field"
-                                                   data-range="min" />
+                                            <div class="data-table-modal-multiselect-dropdown">
 
-                                        </div>
+                                                @foreach (var option in filter.Options)
+                                                {
+                                                    <label class="data-table-modal-multiselect-option">
 
-                                        <span class="data-table-modal-range-separator">
-                                            —
-                                        </span>
+                                                        <input type="checkbox"
+                                                               value="@option.Value" />
 
-                                        <div class="data-table-modal-range-item">
+                                                        <span>
+                                                            @option.Label
+                                                        </span>
 
-                                            @* <span class="data-table-modal-range-label">
-                                                To
-                                            </span> *@
+                                                    </label>
+                                                }
 
-                                            <input type="number"
-                                                   class="form-control data-table-modal-range-control"
-                                                   data-field="@filter.Field"
-                                                   data-range="max" />
+                                            </div>
 
                                         </div>
+                                    }
 
-                                    </div>
-                                }
+                                    @if (filter.Type == DataTableFilterType.Number)
+                                    {
+                                        <input type="number"
+                                               class="form-control data-table-modal-filter-control"
+                                               data-field="@filter.Field"
+                                               data-filter-type="number"
+                                               placeholder="@filter.Placeholder" />
+                                    }
 
-                                @if (filter.Type == DataTableFilterType.Date)
-                                {
-                                    <input type="date"
-                                           class="form-control data-table-modal-filter-control"
-                                           data-field="@filter.Field"
-                                           data-filter-type="date" />
-                                }
+                                    @if (filter.Type == DataTableFilterType.NumberRange)
+                                    {
+                                        <div class="data-table-modal-range">
 
-                                @if (filter.Type == DataTableFilterType.DateRange)
-                                {
-                                    <div class="data-table-modal-range">
+                                            <div class="data-table-modal-range-item">
 
-                                        <div class="data-table-modal-range-item">
+                                                <input type="number"
+                                                       class="form-control data-table-modal-range-control"
+                                                       data-field="@filter.Field"
+                                                       data-range="min" />
 
-                                            @* <span class="data-table-modal-range-label">
-                                                From
-                                            </span> *@
+                                            </div>
 
-                                            <input type="date"
-                                                   class="form-control data-table-modal-range-control"
-                                                   data-field="@filter.Field"
-                                                   data-range="min" />
+                                            <span class="data-table-modal-range-separator">
+                                                —
+                                            </span>
 
-                                        </div>
+                                            <div class="data-table-modal-range-item">
 
-                                        <span class="data-table-modal-range-separator">
-                                            —
-                                        </span>
+                                                <input type="number"
+                                                       class="form-control data-table-modal-range-control"
+                                                       data-field="@filter.Field"
+                                                       data-range="max" />
 
-                                        <div class="data-table-modal-range-item">
-
-                                            @* <span class="data-table-modal-range-label">
-                                                To
-                                            </span> *@
-
-                                            <input type="date"
-                                                   class="form-control data-table-modal-range-control"
-                                                   data-field="@filter.Field"
-                                                   data-range="max" />
+                                            </div>
 
                                         </div>
+                                    }
 
-                                    </div>
-                                }
+                                    @if (filter.Type == DataTableFilterType.Date)
+                                    {
+                                        <input type="date"
+                                               class="form-control data-table-modal-filter-control"
+                                               data-field="@filter.Field"
+                                               data-filter-type="date" />
+                                    }
 
-                            </div>
-                        }
+                                    @if (filter.Type == DataTableFilterType.DateRange)
+                                    {
+                                        <div class="data-table-modal-range">
+
+                                            <div class="data-table-modal-range-item">
+
+                                                <input type="date"
+                                                       class="form-control data-table-modal-range-control"
+                                                       data-field="@filter.Field"
+                                                       data-range="min" />
+
+                                            </div>
+
+                                            <span class="data-table-modal-range-separator">
+                                                —
+                                            </span>
+
+                                            <div class="data-table-modal-range-item">
+
+                                                <input type="date"
+                                                       class="form-control data-table-modal-range-control"
+                                                       data-field="@filter.Field"
+                                                       data-range="max" />
+
+                                            </div>
+
+                                        </div>
+                                    }
+
+                                </div>
+                            }
+
+                        </div>
 
                     </div>
 
-                </div>
-
-                <div class="modal-footer data-table-filter-modal-footer">
-
-                    <button type="button"
-                            class="btn btn-light"
-                            data-table-filter-reset>
-
-                        <i class="bx bx-undo"></i>
-                        Reset
-
-                    </button>
-
-                    <div class="data-table-filter-modal-footer-right">
+                    <div class="modal-footer data-table-filter-modal-footer">
 
                         <button type="button"
-                                class="btn btn-outline-secondary"
-                                data-bs-dismiss="modal">
+                                class="btn btn-light"
+                                data-table-filter-reset>
 
-                            Cancel
+                            <i class="bx bx-undo"></i>
+                            Reset
 
                         </button>
 
-                        <button type="button"
-                                class="btn btn-primary"
-                                data-table-filter-apply>
+                        <div class="data-table-filter-modal-footer-right">
 
-                            <i class="bx bx-check"></i>
-                            Apply filters
+                            <button type="button"
+                                    class="btn btn-outline-secondary"
+                                    data-bs-dismiss="modal">
 
-                        </button>
+                                Cancel
+
+                            </button>
+
+                            <button type="button"
+                                    class="btn btn-primary"
+                                    data-table-filter-apply>
+
+                                <i class="bx bx-check"></i>
+                                Apply filters
+
+                            </button>
+
+                        </div>
 
                     </div>
 
@@ -510,102 +503,147 @@
             </div>
 
         </div>
+    }
 
-    </div>
-}
+    @* 
+        =========================================================
+        DATATABLE CONFIGURATION
+        =========================================================
+    *@
 
+    <script type="application/json"
+            id="@Model.Id-config">
 
-<script>
+        @Html.Raw(
+            System.Text.Json.JsonSerializer.Serialize(
+                    new
+                    {
+                            id = Model.Id,
+                            ajaxUrl = Model.AjaxUrl,
+                            keyField = Model.KeyField,
 
-    document.addEventListener("DOMContentLoaded", function () {
+                            autoLoad = Model.AutoLoad,
+                            rememberState = Model.RememberState,
 
-        DataTable({
+                            paging = new
+                            {
+                                    enabled = Model.Paging.Enabled,
+                                    pageSize = Model.Paging.PageSize,
+                                    pageSizeOptions = Model.Paging.PageSizeOptions,
+                                    showInfo = Model.Paging.ShowInfo,
+                                    showPageSize = Model.Paging.ShowPageSize
+                            },
 
-            id: "@Model.Id",
+                            search = new
+                            {
+                                    enabled = Model.Search.Enabled,
+                                    placeholder = Model.Search.Placeholder,
+                                    minLength = Model.Search.MinLength,
+                                    debounceMs = Model.Search.DebounceMs
+                            },
 
-            ajaxUrl: "@Model.AjaxUrl",
+                            rows = new
+                            {
+                                    selectable = Model.Rows.Selectable,
+                                    clickable = Model.Rows.Clickable,
+                                    hover = Model.Rows.Hover,
+                                    striped = Model.Rows.Striped
+                            },
 
-            keyField: "@Model.KeyField",
+                            sorting = new
+                            {
+                                    enabled = Model.Sorting.Enabled,
+                                    defaultField = Model.Sorting.DefaultField,
+                                    defaultDirection = Model.Sorting.DefaultDirection
+                            },
 
-            paging: {
-                pageSize: @Model.Paging.PageSize
-            },
+                            inlineEditing = Model.InlineEditing,
+                            inlineUpdateUrl = Model.InlineUpdateUrl,
 
-            search: {
-                enabled: @Model.Search.Enabled.ToString().ToLowerInvariant(),
-                debounceMs: @Model.Search.DebounceMs
-            },
+                            columnCount =
+                                    Model.Columns.Count(x => x.Visible) +
+                                    (Model.Rows.Selectable ? 1 : 0) +
+                                    (
+                                            (
+                                                    Model.Actions.Enabled &&
+                                                    (
+                                                            Model.Actions.View ||
+                                                            Model.Actions.Edit ||
+                                                            Model.Actions.Delete
+                                                    )
+                                            )
+                                            ||
+                                            (
+                                                    Model.InlineEditing &&
+                                                    Model.Columns.Any(x => x.Visible && x.Editable)
+                                            )
+                                            ? 1
+                                            : 0
+                                    ),
 
-            debounceMs: @Model.Search.DebounceMs,
+                            columns = Model.Columns.Select(column => new
+                            {
+                                    field = column.Field,
+                                    title = column.Title,
+                                    type = column.Type.ToString(),
 
-            sorting: {
-                enabled: @Model.Sorting.Enabled.ToString().ToLowerInvariant(),
-                defaultField: "@Model.Sorting.DefaultField",
-                defaultDirection: "@Model.Sorting.DefaultDirection"
-            },
+                                    visible = column.Visible,
+                                    sortable = column.Sortable,
+                                    searchable = column.Searchable,
+                                    exportable = column.Exportable,
+                                    editable = column.Editable,
 
-            inlineEditing: @Model.InlineEditing.ToString().ToLowerInvariant(),
-            inlineUpdateUrl: "@Model.InlineUpdateUrl",
+                                    width = column.Width,
+                                    format = column.Format,
+                                    urlTemplate = column.UrlTemplate,
 
-            columnCount: @(
-                    Model.Columns.Count +
-                    (Model.Rows.Selectable ? 1 : 0) +
-                    (
-                    (
-                    Model.Actions.Enabled &&
-                    (
-                    Model.Actions.View ||
-                    Model.Actions.Edit ||
-                    Model.Actions.Delete
-                    )
-                    )
-                    ||
-                    (
-                    Model.InlineEditing &&
-                    Model.Columns.Any(x => x.Visible && x.Editable)
-                    )
-                    ? 1
-                    : 0
-                    )
-                ),
+                                    emptyText = column.EmptyText,
 
-            columns: [
+                                    alignment = column.Alignment.ToString(),
+                                    cssClass = column.CssClass
+                            }),
 
-                @foreach (var column in Model.Columns)
-                {
-                                <text>
-                                {
-                                    field: "@column.Field",
-                                    title: "@column.Title",
-                                    type: "@column.Type",
-                                    format: "@column.Format",
-                                    visible: @column.Visible.ToString().ToLowerInvariant(),
-                                    sortable: @column.Sortable.ToString().ToLowerInvariant(),
-                                    editable: @column.Editable.ToString().ToLowerInvariant(),
-                                    emptyText: "@column.EmptyText",
-                                    urlTemplate: "@column.UrlTemplate",
-                                },
-                                </text>
-                }
+                            actions = new
+                            {
+                                enabled = Model.Actions.Enabled,
 
-            ],
+                                add = Model.Actions.Add,
+                                view = Model.Actions.View,
+                                edit = Model.Actions.Edit,
+                                delete = Model.Actions.Delete,
+                                bulkDelete = Model.Actions.BulkDelete,
+                                inlineAdd = Model.Actions.InlineAdd,
+                                inlineDelete = Model.Actions.InlineDelete,
 
-            actions: {
-                enabled: @Model.Actions.Enabled.ToString().ToLowerInvariant(),
-                add: @Model.Actions.Add.ToString().ToLowerInvariant(),
-                view: @Model.Actions.View.ToString().ToLowerInvariant(),
-                edit: @Model.Actions.Edit.ToString().ToLowerInvariant(),
-                delete: @Model.Actions.Delete.ToString().ToLowerInvariant(),
+                                addUrl = Model.Actions.AddUrl,
+                                viewUrl = Model.Actions.ViewUrl,
+                                editUrl = Model.Actions.EditUrl,
+                                deleteUrl = Model.Actions.DeleteUrl
+                            },
+                            
+                            filters = new
+                            {
+                                    enabled = Model.Filters.Enabled,
 
-                addUrl: "@Model.Actions.AddUrl",
-                viewUrl: "@Model.Actions.ViewUrl",
-                editUrl: "@Model.Actions.EditUrl",
-                deleteUrl: "@Model.Actions.DeleteUrl"
-            }
+                                    items = Model.Filters.Items.Select(filter => new
+                                    {
+                                            field = filter.Field,
+                                            label = filter.Label,
+                                            type = filter.Type.ToString(),
+                                            placeholder = filter.Placeholder,
+                                            defaultValue = filter.DefaultValue,
 
-        });
+                                            options = filter.Options.Select(option => new
+                                            {
+                                                    value = option.Value,
+                                                    label = option.Label
+                                            })
+                                    })
+                            },
+                    }
+            )
+                )
 
-    });
+    </script>
 
-</script>
-
+</div>
