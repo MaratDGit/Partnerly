@@ -8,10 +8,12 @@ using Partnerly.Helpers;
 using Partnerly.Infrastructure.Interfaces;
 using Partnerly.Infrastructure.Services;
 using Partnerly.Models;
+using Partnerly.Models.DataTable;
 using Partnerly.Models.GridViews;
 using Partnerly.Models.ViewModels;
 using System.Security.Claims;
 using System.Text.Json;
+using System.Threading.Tasks;
 
 namespace Partnerly.Controllers
 {
@@ -19,10 +21,12 @@ namespace Partnerly.Controllers
     public class UsersController : _BaseController
     {
         protected readonly IRoleService _roleService;
-        public UsersController(IEventBus eventBus, IRoleService roleService, IUserService userService, ICurrentUserService currentUser, ILogService logService, IStringLocalizer<SharedResource> localizer, ISystemSettingsService systemSettingsService)
+        private readonly DataTableQueryService _tableService;
+        public UsersController(IEventBus eventBus, IRoleService roleService, IUserService userService, ICurrentUserService currentUser, ILogService logService, IStringLocalizer<SharedResource> localizer, ISystemSettingsService systemSettingsService, DataTableQueryService tableService)
         : base(eventBus, userService, currentUser, logService, localizer, systemSettingsService)
         {
             _roleService = roleService;
+            _tableService = tableService;
         }
 
         #region Index / Create / Edit / Delete
@@ -219,6 +223,7 @@ namespace Partnerly.Controllers
         }
         #endregion
 
+        #region Grid Related
         [HttpGet]
         public async Task<IActionResult> GetLookupList(string fieldName)
         {
@@ -316,7 +321,6 @@ namespace Partnerly.Controllers
             }
         }
 
-
         [HttpPost]
         public async Task<IActionResult> ExportToExcel([FromForm] string selectedIds)
         {
@@ -341,5 +345,281 @@ namespace Partnerly.Controllers
             var users = await _userService.GetAllUsersAsync();
             return await ExportToExcel(users, "users.xlsx");
         }
+        #endregion
+
+
+        public IActionResult DataTableCustom()
+        {
+            var options = CreateTableOptions();
+
+            return View(options);
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> Data([FromQuery] DataTableRequest request)
+        {
+            var options = CreateTableOptions();
+
+            var result = await _tableService.ExecuteAsync(
+               fields => _userService.QueryUsers(fields),
+               request,
+               options);
+
+            return Json(result);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> UpdateInline(
+     [FromBody] DataTableInlineUpdateRequest request)
+        {
+            if (string.IsNullOrWhiteSpace(request.Id))
+            {
+                return BadRequest(new
+                {
+                    success = false,
+                    message = "User ID is required."
+                });
+            }
+
+            if (!Guid.TryParse(request.Id, out var userId))
+            {
+                return BadRequest(new
+                {
+                    success = false,
+                    message = "Invalid user ID."
+                });
+            }
+
+            var user = await _userService.GetUserByIDAsync(userId);
+
+            if (user == null)
+            {
+                return NotFound(new
+                {
+                    success = false,
+                    message = "User not found."
+                });
+            }
+
+            foreach (var field in request.Fields)
+            {
+                switch (field.Key)
+                {
+                    case "FirstName":
+                        user.FirstName = field.Value;
+                        break;
+
+                    case "LastName":
+                        user.LastName = field.Value;
+                        break;
+
+                    case "IsBlocked":
+                        if (bool.TryParse(field.Value, out var boolValue))
+                        {
+                            user.IsBlocked = boolValue;
+                        }
+                        break;
+
+                    case "Balance":
+
+                        if (!decimal.TryParse(
+                            field.Value,
+                            out var balance))
+                        {
+                            return BadRequest(new
+                            {
+                                success = false,
+                                message = "Invalid balance."
+                            });
+                        }
+
+                        user.Balance = balance;
+                        break;
+
+                    default:
+                        return BadRequest(new
+                        {
+                            success = false,
+                            message = "Field is not editable: " +
+                                      field.Key
+                        });
+                }
+            }
+
+            await _userService.UpdateUserAsync(user);
+
+            return Json(new
+            {
+                success = true
+            });
+        }
+
+        private DataTableOptions CreateTableOptions()
+        {
+            return new DataTableOptions
+            {
+                Id = "usersTable",
+                AjaxUrl = "/Users/Data",
+                KeyField = "Id",
+
+                InlineEditing = true,
+                InlineUpdateUrl = "/Users/UpdateInline",
+
+                Columns = new List<DataTableColumn>
+                {
+                    new DataTableColumn
+                    {
+                        Field = "Id",
+                        Title = "ID",
+                        Type = DataTableColumnType.Number,
+                        Visible = false
+                    },
+
+                    new DataTableColumn
+                    {
+                        Field = "FirstName",
+                        Title = "First Name",
+                        Type = DataTableColumnType.Link,
+                        Editable = true,
+                        UrlTemplate = "/Users/Edit/{Id}"
+                    },
+
+                    new DataTableColumn
+                    {
+                        Field = "LastName",
+                        Title = "Last Name",
+                        Type = DataTableColumnType.Text,
+                        Editable = true
+                    },
+
+                    new DataTableColumn
+                    {
+                        Field = "Email",
+                        Title = "Email",
+                        Type = DataTableColumnType.Email
+                    },
+
+                    new DataTableColumn
+                    {
+                        Field = "IsBlocked",
+                        Title = "Is Blocked",
+                        Type = DataTableColumnType.Boolean,
+                        Editable = true,
+                        Alignment = DataTableAlignment.Center,
+                    },
+
+                    new DataTableColumn
+                    {
+                        Field = "Balance",
+                        Title = "Balance",
+                        Type = DataTableColumnType.Currency,
+                        Editable = true
+                    },
+
+                    new DataTableColumn
+                    {
+                        Field = "EmailConfirmed",
+                        Title = "Email Confirmed",
+                        Type = DataTableColumnType.Boolean
+                    },
+
+                    new DataTableColumn
+                    {
+                        Field = "UpdatedDate",
+                        Title = "Updated",
+                        Type = DataTableColumnType.DateTime,
+                        Format = "relative"
+                    },
+
+                    new DataTableColumn
+                    {
+                        Field = "CreatedDate",
+                        Title = "Created",
+                        Type = DataTableColumnType.DateTime,
+                        Format = "dd.MM.yyyy HH:mm"
+                    }
+                },
+
+                Sorting = new DataTableSortOptions
+                {
+                    Enabled = true,
+                    DefaultField = "CreatedDate",
+                    DefaultDirection = "desc"
+                },
+
+                Filters = new DataTableFilterOptions
+                {
+                    Enabled = true,
+                    Items = new List<DataTableFilter>
+                    {
+                        new DataTableFilter
+                        {
+                            Field = "IsBlocked",
+                            Label = "Blocked",
+                            Type = DataTableFilterType.Boolean
+                        },
+                        new DataTableFilter
+                        {
+                            Field = "Email",
+                            Label = "Email",
+                            Type = DataTableFilterType.Text,
+                            Placeholder = "Search email..."
+                        },
+                        new DataTableFilter
+                        {
+                            Field = "Balance",
+                            Label = "Balance",
+                            Type = DataTableFilterType.NumberRange
+                        },
+                        new DataTableFilter
+                        {
+                            Field = "RoleId",
+                            Label = "Role",
+                            Type = DataTableFilterType.MultiSelect,
+                            Options = new List<DataTableFilterOption>
+                            {
+                                new DataTableFilterOption("5DAF66B1-8140-4D48-BC12-431086FA7144", "Admin"),
+                                new DataTableFilterOption("C3120D74-9C4C-44AA-8B0C-A1B2F53BF9A8", "Manager"),
+                                new DataTableFilterOption("52B55F50-A21A-441E-BB59-EFAB24F907AF", "User")
+                            }
+                        },
+
+                        new DataTableFilter
+                        {
+                            Field = "CreatedDate",
+                            Label = "Created",
+                            Type = DataTableFilterType.DateRange
+                        }
+                    }
+                },
+
+                Actions = new DataTableActionOptions
+                {
+                    Enabled = true,
+
+                    Add = true,
+                    AddUrl = "/Users/Create",
+
+                    View = true,
+                    ViewUrl = "/Users/View",
+
+                    Edit = true,
+                    EditUrl = "/Users/Edit",
+
+                    Delete = true,
+                    DeleteUrl = "/Users/Delete"
+                },
+
+                Export = new DataTableExportOptions
+                {
+                    Enabled = true,
+                    Csv = true,
+                    Excel = true,
+                    Print = true
+                }
+            };
+        }
+
     }
 }

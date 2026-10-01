@@ -4,6 +4,7 @@ using Partnerly.Events;
 using Partnerly.Events.BaseEvents;
 using Partnerly.Helpers;
 using Partnerly.Infrastructure.Interfaces;
+using Partnerly.Infrastructure.Repositories;
 using Partnerly.Models;
 
 namespace Partnerly.Infrastructure.Services
@@ -51,6 +52,13 @@ namespace Partnerly.Infrastructure.Services
 
         public async Task<IEnumerable<User?>> GetAllUsersAsync() =>
             await _userRepo.GetAllAsync();
+
+        //public IQueryable<User> QueryUsers() => 
+        //    _userRepo.QueryUsers();
+        public IQueryable<User> QueryUsers(IEnumerable<string> fields)
+        {
+            return _userRepo.QueryUsers(fields);
+        }
 
         public async Task<ServiceResult<User?>> CreateUserAsync(User? user)
         {

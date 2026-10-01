@@ -1,0 +1,17 @@
+﻿@using Partnerly.Models.DataTable
+@model Partnerly.Models.DataTable.DataTableOptions
+
+@{
+    ViewData["Title"] = "Users DataTable";
+}
+
+<div id="@Model.Id" class="data-table-wrapper">
+
+    @await Html.PartialAsync(
+    "~/Views/Shared/DataTable/_DataTable.cshtml",
+        Model)
+
+</div>
+
+
+

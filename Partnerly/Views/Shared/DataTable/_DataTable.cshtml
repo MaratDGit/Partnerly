@@ -1,0 +1,611 @@
+﻿@using Partnerly.Models.DataTable
+@model Partnerly.Models.DataTable.DataTableOptions
+
+
+    @Html.AntiForgeryToken()
+
+    <div class="data-table-toolbar">
+        @if (Model.Actions.Enabled && Model.Actions.Add && !string.IsNullOrWhiteSpace(Model.Actions.AddUrl))
+        {
+            <a href="@Model.Actions.AddUrl"
+               class="btn btn-primary">
+                Add
+            </a>
+        }
+
+        @if (Model.Search.Enabled)
+        {
+            <input type="text"
+                   id="@Model.Id-search"
+                   class="form-control"
+                   placeholder="@Model.Search.Placeholder" />
+        }
+    </div>
+
+    <div class="data-table-grid-actions">
+
+        <div class="data-table-grid-actions-left">
+
+            @* Reload *@
+            @if (Model.ReloadEnabled)
+            {
+                <button type="button"
+                        class="data-table-grid-action"
+                        data-table-reload
+                        title="Reload"
+                        aria-label="Reload">
+
+                    <span class="data-table-grid-action-icon">
+                        <i class="bx bx-refresh"></i>
+                    </span>
+
+                </button>
+            }
+
+            @* Export *@
+            @if (Model.Export.Enabled)
+            {
+                <div class="data-table-grid-action-dropdown">
+
+                    <button type="button"
+                            class="data-table-grid-action"
+                            data-bs-toggle="dropdown"
+                            aria-expanded="false"
+                            title="Export"
+                            aria-label="Export">
+
+                        <span class="data-table-grid-action-icon">
+                            <i class="bx bx-download"></i>
+                        </span>
+
+                    </button>
+
+                    <ul class="dropdown-menu data-table-export-menu">
+
+                        @if (Model.Export.Csv)
+                        {
+                            <li>
+                                <button type="button"
+                                        class="dropdown-item"
+                                        data-table-export="csv">
+
+                                    <i class="bx bx-file"></i>
+
+                                    <span>CSV</span>
+
+                                </button>
+                            </li>
+                        }
+
+                        @if (Model.Export.Excel)
+                        {
+                            <li>
+                                <button type="button"
+                                        class="dropdown-item"
+                                        data-table-export="excel">
+
+                                    <i class="bx bx-spreadsheet"></i>
+
+                                    <span>Excel</span>
+
+                                </button>
+                            </li>
+                        }
+
+                        @if (Model.Export.Print)
+                        {
+                            <li>
+                                <button type="button"
+                                        class="dropdown-item"
+                                        data-table-export="print">
+
+                                    <i class="bx bx-printer"></i>
+
+                                    <span>Print</span>
+
+                                </button>
+                            </li>
+                        }
+
+                    </ul>
+                </div>
+            }
+
+            @* Filters *@
+            @if (Model.Filters.Enabled)
+            {
+                <button type="button"
+                        class="data-table-grid-action"
+                        data-table-filter-button
+                        title="Filters"
+                        aria-label="Filters">
+
+                    <span class="data-table-grid-action-icon">
+                        <i class="bx bx-filter-alt"></i>
+                    </span>
+
+                    <span class="data-table-filter-count"
+                          data-table-filter-count>
+                        0
+                    </span>
+
+                </button>
+            }
+
+        </div>
+
+        <div class="data-table-grid-actions-right">
+        </div>
+
+    </div>
+
+    <div class="table-responsive">
+
+        <table class="table table-striped">
+
+            <thead>
+
+                <tr>
+
+                    @foreach (var column in Model.Columns)
+                    {
+                        if (column.Visible)
+                        {
+                            <th>
+
+                                @if (column.Sortable && Model.Sorting.Enabled)
+                                {
+                                    <button type="button"
+                                            class="data-table-sort"
+                                            data-field="@column.Field">
+
+                                        <span>
+                                            @column.Title
+                                        </span>
+
+                                        <span class="data-table-sort-icon"></span>
+
+                                    </button>
+                                }
+                                else
+                                {
+                                    @column.Title
+                                }
+
+                            </th>
+                        }
+                    }
+
+                    @if (
+                                        (
+                                        Model.Actions.Enabled &&
+                                        (
+                                        Model.Actions.View ||
+                                        Model.Actions.Edit ||
+                                        Model.Actions.Delete
+                                        )
+                                        )
+                                        ||
+                                        (
+                                        Model.InlineEditing &&
+                                        Model.Columns.Any(x => x.Visible && x.Editable)
+                                        )
+                                        )
+                    {
+                        <th>
+                            Actions
+                        </th>
+                    }
+
+                </tr>
+
+            </thead>
+
+            <tbody id="@Model.Id-body">
+
+                <tr>
+                    <td colspan="@Model.Columns.Count">
+                        Loading...
+                    </td>
+                </tr>
+
+            </tbody>
+
+        </table>
+
+    </div>
+
+    <div class="data-table-footer">
+
+        <div id="@Model.Id-info"></div>
+
+        @if (Model.Paging.ShowPageSize)
+        {
+            <div class="data-table-page-size">
+
+                <label for="@Model.Id-page-size">
+                    Page size
+                </label>
+
+                <select id="@Model.Id-page-size"
+                        class="form-select"
+                        style="width: auto; display: inline-block;">
+
+                    @foreach (var size in Model.Paging.PageSizeOptions)
+                    {
+                        <option value="@size"
+                                selected="@(size == Model.Paging.PageSize ? "selected" : null)">
+                            @size
+                        </option>
+                    }
+
+                </select>
+
+            </div>
+        }
+
+        <div id="@Model.Id-pagination"></div>
+
+    </div>
+
+    @if (Model.Filters.Enabled)
+{
+    <div class="modal fade"
+         id="@Model.Id-filter-modal"
+         tabindex="-1"
+         aria-hidden="true">
+
+        <div class="modal-dialog modal-dialog-centered modal-lg">
+
+            <div class="modal-content data-table-filter-modal">
+
+                <div class="modal-header">
+
+                    <div>
+
+                        <div class="data-table-filter-modal-title">
+
+                            <span class="data-table-filter-modal-title-icon">
+                                <i class="bx bx-filter-alt"></i>
+                            </span>
+
+                            <span>
+                                Filters
+                            </span>
+
+                        </div>
+                    </div>
+
+                    <button type="button"
+                            class="btn-close"
+                            data-bs-dismiss="modal"
+                            aria-label="Close">
+                    </button>
+
+                </div>
+
+                <div class="modal-body">
+
+                    <div id="@Model.Id-filter-modal-body"
+                         class="data-table-filter-modal-body">
+
+                        @foreach (var filter in Model.Filters.Items)
+                        {
+                            <div class="data-table-modal-filter"
+                                 data-filter-field="@filter.Field">
+
+                                <label class="data-table-modal-filter-label">
+                                    @filter.Label
+                                </label>
+
+                                @if (filter.Type == DataTableFilterType.Text)
+                                {
+                                    <input type="text"
+                                           class="form-control data-table-modal-filter-control"
+                                           data-field="@filter.Field"
+                                           data-filter-type="text"
+                                           placeholder="@filter.Placeholder" />
+                                }
+
+                                @if (filter.Type == DataTableFilterType.Boolean)
+                                {
+                                    <select class="form-select data-table-modal-filter-control"
+                                            data-field="@filter.Field"
+                                            data-filter-type="boolean">
+
+                                        <option value="">All</option>
+                                        <option value="true">Yes</option>
+                                        <option value="false">No</option>
+
+                                    </select>
+                                }
+
+                                @if (filter.Type == DataTableFilterType.Select)
+                                {
+                                    <select class="form-select data-table-modal-filter-control"
+                                            data-field="@filter.Field"
+                                            data-filter-type="select">
+
+                                        <option value="">All</option>
+
+                                        @foreach (var option in filter.Options)
+                                        {
+                                            <option value="@option.Value">
+                                                @option.Label
+                                            </option>
+                                        }
+
+                                    </select>
+                                }
+
+                                @if (filter.Type == DataTableFilterType.MultiSelect)
+                                {
+                                    <div class="data-table-modal-multiselect"
+                                         data-field="@filter.Field">
+
+                                        <button type="button"
+                                                class="data-table-modal-multiselect-button">
+
+                                            <span class="data-table-modal-multiselect-text">
+                                                All
+                                            </span>
+
+                                            <i class="bx bx-chevron-down"></i>
+
+                                        </button>
+
+                                        <div class="data-table-modal-multiselect-dropdown">
+
+                                            @foreach (var option in filter.Options)
+                                            {
+                                                <label class="data-table-modal-multiselect-option">
+
+                                                    <input type="checkbox"
+                                                           value="@option.Value" />
+
+                                                    <span>
+                                                        @option.Label
+                                                    </span>
+
+                                                </label>
+                                            }
+
+                                        </div>
+
+                                    </div>
+                                }
+
+                                @if (filter.Type == DataTableFilterType.Number)
+                                {
+                                    <input type="number"
+                                           class="form-control data-table-modal-filter-control"
+                                           data-field="@filter.Field"
+                                           data-filter-type="number"
+                                           placeholder="@filter.Placeholder" />
+                                }
+
+                                @if (filter.Type == DataTableFilterType.NumberRange)
+                                {
+                                    <div class="data-table-modal-range">
+
+                                        <div class="data-table-modal-range-item">
+
+                                            @* <span class="data-table-modal-range-label">
+                                                From
+                                            </span> *@
+
+                                            <input type="number"
+                                                   class="form-control data-table-modal-range-control"
+                                                   data-field="@filter.Field"
+                                                   data-range="min" />
+
+                                        </div>
+
+                                        <span class="data-table-modal-range-separator">
+                                            —
+                                        </span>
+
+                                        <div class="data-table-modal-range-item">
+
+                                            @* <span class="data-table-modal-range-label">
+                                                To
+                                            </span> *@
+
+                                            <input type="number"
+                                                   class="form-control data-table-modal-range-control"
+                                                   data-field="@filter.Field"
+                                                   data-range="max" />
+
+                                        </div>
+
+                                    </div>
+                                }
+
+                                @if (filter.Type == DataTableFilterType.Date)
+                                {
+                                    <input type="date"
+                                           class="form-control data-table-modal-filter-control"
+                                           data-field="@filter.Field"
+                                           data-filter-type="date" />
+                                }
+
+                                @if (filter.Type == DataTableFilterType.DateRange)
+                                {
+                                    <div class="data-table-modal-range">
+
+                                        <div class="data-table-modal-range-item">
+
+                                            @* <span class="data-table-modal-range-label">
+                                                From
+                                            </span> *@
+
+                                            <input type="date"
+                                                   class="form-control data-table-modal-range-control"
+                                                   data-field="@filter.Field"
+                                                   data-range="min" />
+
+                                        </div>
+
+                                        <span class="data-table-modal-range-separator">
+                                            —
+                                        </span>
+
+                                        <div class="data-table-modal-range-item">
+
+                                            @* <span class="data-table-modal-range-label">
+                                                To
+                                            </span> *@
+
+                                            <input type="date"
+                                                   class="form-control data-table-modal-range-control"
+                                                   data-field="@filter.Field"
+                                                   data-range="max" />
+
+                                        </div>
+
+                                    </div>
+                                }
+
+                            </div>
+                        }
+
+                    </div>
+
+                </div>
+
+                <div class="modal-footer data-table-filter-modal-footer">
+
+                    <button type="button"
+                            class="btn btn-light"
+                            data-table-filter-reset>
+
+                        <i class="bx bx-undo"></i>
+                        Reset
+
+                    </button>
+
+                    <div class="data-table-filter-modal-footer-right">
+
+                        <button type="button"
+                                class="btn btn-outline-secondary"
+                                data-bs-dismiss="modal">
+
+                            Cancel
+
+                        </button>
+
+                        <button type="button"
+                                class="btn btn-primary"
+                                data-table-filter-apply>
+
+                            <i class="bx bx-check"></i>
+                            Apply filters
+
+                        </button>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+}
+
+
+<script>
+
+    document.addEventListener("DOMContentLoaded", function () {
+
+        DataTable({
+
+            id: "@Model.Id",
+
+            ajaxUrl: "@Model.AjaxUrl",
+
+            keyField: "@Model.KeyField",
+
+            paging: {
+                pageSize: @Model.Paging.PageSize
+            },
+
+            search: {
+                enabled: @Model.Search.Enabled.ToString().ToLowerInvariant(),
+                debounceMs: @Model.Search.DebounceMs
+            },
+
+            debounceMs: @Model.Search.DebounceMs,
+
+            sorting: {
+                enabled: @Model.Sorting.Enabled.ToString().ToLowerInvariant(),
+                defaultField: "@Model.Sorting.DefaultField",
+                defaultDirection: "@Model.Sorting.DefaultDirection"
+            },
+
+            inlineEditing: @Model.InlineEditing.ToString().ToLowerInvariant(),
+            inlineUpdateUrl: "@Model.InlineUpdateUrl",
+
+            columnCount: @(
+                    Model.Columns.Count +
+                    (Model.Rows.Selectable ? 1 : 0) +
+                    (
+                    (
+                    Model.Actions.Enabled &&
+                    (
+                    Model.Actions.View ||
+                    Model.Actions.Edit ||
+                    Model.Actions.Delete
+                    )
+                    )
+                    ||
+                    (
+                    Model.InlineEditing &&
+                    Model.Columns.Any(x => x.Visible && x.Editable)
+                    )
+                    ? 1
+                    : 0
+                    )
+                ),
+
+            columns: [
+
+                @foreach (var column in Model.Columns)
+                {
+                                <text>
+                                {
+                                    field: "@column.Field",
+                                    title: "@column.Title",
+                                    type: "@column.Type",
+                                    format: "@column.Format",
+                                    visible: @column.Visible.ToString().ToLowerInvariant(),
+                                    sortable: @column.Sortable.ToString().ToLowerInvariant(),
+                                    editable: @column.Editable.ToString().ToLowerInvariant(),
+                                    emptyText: "@column.EmptyText",
+                                    urlTemplate: "@column.UrlTemplate",
+                                },
+                                </text>
+                }
+
+            ],
+
+            actions: {
+                enabled: @Model.Actions.Enabled.ToString().ToLowerInvariant(),
+                add: @Model.Actions.Add.ToString().ToLowerInvariant(),
+                view: @Model.Actions.View.ToString().ToLowerInvariant(),
+                edit: @Model.Actions.Edit.ToString().ToLowerInvariant(),
+                delete: @Model.Actions.Delete.ToString().ToLowerInvariant(),
+
+                addUrl: "@Model.Actions.AddUrl",
+                viewUrl: "@Model.Actions.ViewUrl",
+                editUrl: "@Model.Actions.EditUrl",
+                deleteUrl: "@Model.Actions.DeleteUrl"
+            }
+
+        });
+
+    });
+
+</script>
+

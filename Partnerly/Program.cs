@@ -11,6 +11,7 @@ using Partnerly.Infrastructure.Services;
 using Partnerly.Infrastructure.Services.HostedServices;
 using Partnerly.Infrastructure.Services.MiddlewareServices;
 using Partnerly.Models;
+using Partnerly.Models.DataTable;
 using System.Globalization;
 
 
@@ -30,6 +31,9 @@ builder.Services
 builder.Services.AddSignalR();
 
 // Scoped services
+builder.Services.AddScoped<DataTableQueryService>();
+builder.Services.AddScoped<DataTablePropertyResolver>();
+
 builder.Services.AddScoped<IPermissionService, PermissionService>();
 builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<IUserRepository, UserRepository>();
