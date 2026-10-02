@@ -153,11 +153,20 @@
 
                 <tr>
 
+                    @if (Model.Rows.Selectable)
+                    {
+                        <th class="data-table-select-cell">
+                            <input type="checkbox"
+                                   class="data-table-select-all"
+                                   aria-label="Select all rows" />
+                        </th>
+                    }
+
                     @foreach (var column in Model.Columns)
                     {
                         if (column.Visible)
                         {
-                            <th>
+                            <th style="@(string.IsNullOrWhiteSpace(column.Width) ? "" : "width:" + column.Width + ";")" >
 
                                 @if (column.Sortable && Model.Sorting.Enabled)
                                 {
@@ -400,7 +409,8 @@
                                                 <input type="number"
                                                        class="form-control data-table-modal-range-control"
                                                        data-field="@filter.Field"
-                                                       data-range="min" />
+                                                       data-range="min"
+                                                       placeholder="@(filter.Placeholder ?? "From")" />
 
                                             </div>
 
@@ -413,7 +423,8 @@
                                                 <input type="number"
                                                        class="form-control data-table-modal-range-control"
                                                        data-field="@filter.Field"
-                                                       data-range="max" />
+                                                       data-range="max"
+                                                       placeholder="@(filter.Placeholder ?? "To")" />
 
                                             </div>
 
@@ -437,7 +448,8 @@
                                                 <input type="date"
                                                        class="form-control data-table-modal-range-control"
                                                        data-field="@filter.Field"
-                                                       data-range="min" />
+                                                       data-range="min"
+                                                       placeholder="@(filter.Placeholder ?? "From")" />
 
                                             </div>
 
@@ -450,7 +462,8 @@
                                                 <input type="date"
                                                        class="form-control data-table-modal-range-control"
                                                        data-field="@filter.Field"
-                                                       data-range="max" />
+                                                       data-range="max"
+                                                       placeholder="@(filter.Placeholder ?? "To")" />
 
                                             </div>
 
@@ -510,6 +523,7 @@
         DATATABLE CONFIGURATION
         =========================================================
     *@
+
 
     <script type="application/json"
             id="@Model.Id-config">
@@ -600,7 +614,25 @@
                                     emptyText = column.EmptyText,
 
                                     alignment = column.Alignment.ToString(),
-                                    cssClass = column.CssClass
+                                    cssClass = column.CssClass,
+
+                                    conditionalStyles = column.ConditionalStyles == null
+                                    ? null
+                                    : column.ConditionalStyles.Select(x => new
+                                    {
+                                        conditions = x.Conditions == null
+                                        ? null
+                                        : x.Conditions.Select(condition => new
+                                        {
+                                                operatorName = condition.Operator.ToString(),
+                                                value = condition.Value
+                                        }).ToList(),
+
+                                        cssClass = x.CssClass,
+                                        style = x.Style
+
+                                    }).ToList(),
+
                             }),
 
                             actions = new

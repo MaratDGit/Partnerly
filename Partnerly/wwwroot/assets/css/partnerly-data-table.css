@@ -478,11 +478,11 @@
    ROW HOVER
    ========================================================= */
 
-.data-table-wrapper table tbody tr {
+.data-table-wrapper table tbody tr.data-table-row-hover {
     transition: background-color .15s ease;
 }
 
-    .data-table-wrapper table tbody tr:hover td {
+    .data-table-wrapper table tbody tr.data-table-row-hover:hover td {
         background: var(--dt-surface-hover);
     }
 
@@ -1707,4 +1707,16 @@
             .data-table-inline-cancel i {
                 font-size: 16px;
             }
+}
+
+.data-table-wrapper .data-table-align-left {
+    text-align: left;
+}
+
+.data-table-wrapper .data-table-align-center {
+    text-align: center;
+}
+
+.data-table-wrapper .data-table-align-right {
+    text-align: right;
 }

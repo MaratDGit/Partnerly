@@ -476,14 +476,14 @@ namespace Partnerly.Controllers
                     PageSize = 10,
                     PageSizeOptions = new[] { 10, 25, 50, 100 },
                     ShowInfo = true,
-                    ShowPageSize = true,
+                    ShowPageSize = false,
                 },
 
                 Search = new DataTableSearchOptions
                 {
                     Enabled = true,
-                    Placeholder = "Search...",
-                    MinLength = 0,
+                    Placeholder = FieldsDisplayNames.DataTableSearch,
+                    MinLength = 3,
                     DebounceMs = 300,
                 },
 
@@ -553,14 +553,64 @@ namespace Partnerly.Controllers
                         Field = "Balance",
                         Title = "Balance",
                         Type = DataTableColumnType.Currency,
-                        Editable = true
+                        Editable = true,
+                        
+                        ConditionalStyles = new List<DataTableConditionalStyle> 
+                        {
+                            new DataTableConditionalStyle
+                            {
+                                Conditions = new List<DataTableConditionalCondition>
+                                {
+                                    new DataTableConditionalCondition
+                                    {
+                                        Operator = DataTableConditionalOperator.GreaterThanOrEqual,
+                                        Value = "500"
+                                    },
+                                    new DataTableConditionalCondition
+                                    {
+                                        Operator = DataTableConditionalOperator.LessThan,
+                                        Value = "5000"
+                                    }
+                                },
+
+                                CssClass = "badge bg-label-warning fs-tiny rounded-pill ms-auto text-uppercase",
+                            },
+                            new DataTableConditionalStyle
+                            {
+                                Conditions = new List<DataTableConditionalCondition>
+                                {
+                                    new DataTableConditionalCondition
+                                    {
+                                        Operator = DataTableConditionalOperator.LessThanOrEqual,
+                                        Value = "500"
+                                    },
+                                },
+
+                                CssClass = "badge bg-label-danger fs-tiny rounded-pill ms-auto text-uppercase",
+                            },
+                            new DataTableConditionalStyle
+                            {
+                                Conditions = new List<DataTableConditionalCondition>
+                                {
+                                    new DataTableConditionalCondition
+                                    {
+                                        Operator = DataTableConditionalOperator.GreaterThanOrEqual,
+                                        Value = "5000"
+                                    },
+                                },
+
+                                CssClass = "badge bg-label-success fs-tiny rounded-pill ms-auto text-uppercase",
+                            },
+                        },
+                        
                     },
 
                     new DataTableColumn
                     {
                         Field = "EmailConfirmed",
                         Title = "Email Confirmed",
-                        Type = DataTableColumnType.Boolean
+                        Type = DataTableColumnType.Boolean,
+                        Alignment = DataTableAlignment.Center,
                     },
 
                     new DataTableColumn

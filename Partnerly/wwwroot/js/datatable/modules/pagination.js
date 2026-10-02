@@ -19,6 +19,24 @@
                     }
 
 
+                    /*
+                     * =========================================================
+                     * PAGING ENABLED
+                     * =========================================================
+                     */
+
+                    if (
+                        !ctx.options.paging ||
+                        !ctx.options.paging.enabled
+                    ) {
+
+                        ctx.pagination.innerHTML =
+                            "";
+
+                        return;
+                    }
+
+
                     var totalPages =
                         Math.ceil(
                             result.total /
@@ -202,9 +220,38 @@
 
         initialize: function (ctx) {
 
+            /*
+             * =========================================================
+             * PAGE SIZE
+             * =========================================================
+             */
+
             if (
                 !ctx.pageSizeSelect
             ) {
+                return;
+            }
+
+
+            if (
+                !ctx.options.paging ||
+                !ctx.options.paging.enabled
+            ) {
+
+                ctx.pageSizeSelect.style.display =
+                    "none";
+
+                return;
+            }
+
+
+            if (
+                ctx.options.paging.showPageSize === false
+            ) {
+
+                ctx.pageSizeSelect.style.display =
+                    "none";
+
                 return;
             }
 

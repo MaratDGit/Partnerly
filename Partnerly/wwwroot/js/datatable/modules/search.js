@@ -258,6 +258,12 @@
                 return;
             }
 
+            if (
+                !ctx.options.search ||
+                ctx.options.search.enabled === false
+            ) {
+                return;
+            }
 
             ctx.searchInput.addEventListener(
                 "input",
@@ -272,8 +278,28 @@
                         setTimeout(
                             function () {
 
-                                ctx.state.search =
+                                var value =
                                     ctx.searchInput.value.trim();
+
+                                var minLength =
+                                    (
+                                        ctx.options.search &&
+                                        typeof ctx.options.search.minLength === "number"
+                                    )
+                                        ? ctx.options.search.minLength
+                                        : 0;
+
+
+                                if (
+                                    value.length > 0 &&
+                                    value.length < minLength
+                                ) {
+                                    return;
+                                }
+
+
+                                ctx.state.search =
+                                    value;
 
                                 ctx.state.page =
                                     1;

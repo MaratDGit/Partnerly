@@ -1,4 +1,6 @@
-﻿namespace Partnerly.Models.DataTable
+﻿using Partnerly.Models.GridViews;
+
+namespace Partnerly.Models.DataTable
 {
     public class DataTableColumn
     {
@@ -28,6 +30,8 @@
         public DataTableAlignment Alignment { get; set; } = DataTableAlignment.Left;
 
         public string? CssClass { get; set; }
+
+        public List<DataTableConditionalStyle> ConditionalStyles { get; set; }  = new List<DataTableConditionalStyle>();
 
     }
 

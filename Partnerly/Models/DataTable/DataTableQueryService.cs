@@ -42,10 +42,20 @@ namespace Partnerly.Models.DataTable
                 request,
                 options);
 
-            var items = await query
-                .Skip((request.Page - 1) * request.PageSize)
-                .Take(request.PageSize)
-                .ToListAsync();
+            List<T> items;
+
+            if (options.Paging.Enabled)
+            {
+                items = await query
+                    .Skip((request.Page - 1) * request.PageSize)
+                    .Take(request.PageSize)
+                    .ToListAsync();
+            }
+            else
+            {
+                items = await query
+                    .ToListAsync();
+            }
 
             return new DataTableResponse<T>
             {

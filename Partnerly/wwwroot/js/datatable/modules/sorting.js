@@ -71,6 +71,13 @@
 
         initialize: function (ctx) {
 
+            if (
+                !ctx.options.sorting ||
+                ctx.options.sorting.enabled === false
+            ) {
+                return;
+            }
+
             ctx.sortButtons.forEach(
                 function (button) {
 
