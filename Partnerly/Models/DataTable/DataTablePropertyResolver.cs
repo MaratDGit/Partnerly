@@ -1,4 +1,5 @@
-﻿using System.Linq.Expressions;
+﻿using System.ComponentModel.DataAnnotations.Schema;
+using System.Linq.Expressions;
 using System.Reflection;
 
 namespace Partnerly.Models.DataTable
@@ -35,6 +36,17 @@ namespace Partnerly.Models.DataTable
                     BindingFlags.IgnoreCase);
 
                 if (property == null)
+                {
+                    return false;
+                }
+
+                var notMapped =
+                    property.GetCustomAttributes(
+                        typeof(NotMappedAttribute),
+                        true)
+                    .Any();
+
+                if (notMapped)
                 {
                     return false;
                 }

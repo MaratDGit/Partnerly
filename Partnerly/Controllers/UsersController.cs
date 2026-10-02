@@ -455,6 +455,73 @@ namespace Partnerly.Controllers
             });
         }
 
+        [HttpGet]
+        public async Task<IActionResult> Export(
+    [FromQuery] DataTableRequest request,
+    [FromQuery] string format = "csv")
+        {
+            var options =
+                CreateTableOptions();
+
+            var items =
+                await _tableService.ExecuteExportAsync(
+                    fields =>
+                        _userService.QueryUsers(fields),
+                    request,
+                    options
+                );
+
+            if (string.Equals(
+                format,
+                "excel",
+                StringComparison.OrdinalIgnoreCase))
+            {
+                var excelExporter =
+                    new DataTableExcelExporter();
+
+                var bytes =
+                    excelExporter.Export(
+                        items,
+                        options.Columns
+                    );
+
+                var fileName =
+                    "users-" +
+                    DateTime.Now.ToString(
+                        "yyyyMMdd-HHmmss"
+                    ) +
+                    ".xlsx";
+
+                return File(
+                    bytes,
+                    "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+                    fileName
+                );
+            }
+
+            var csvExporter =
+                new DataTableCsvExporter();
+
+            var csvBytes =
+                csvExporter.Export(
+                    items,
+                    options.Columns
+                );
+
+            var csvFileName =
+                "users-" +
+                DateTime.Now.ToString(
+                    "yyyyMMdd-HHmmss"
+                ) +
+                ".csv";
+
+            return File(
+                csvBytes,
+                "text/csv; charset=utf-8",
+                csvFileName
+            );
+        }
+
         private DataTableOptions CreateTableOptions()
         {
             return new DataTableOptions
@@ -463,7 +530,7 @@ namespace Partnerly.Controllers
                 Name = "Users",
                 AjaxUrl = "/Users/Data",
                 KeyField = "Id",
-
+                ExportUrl = "/Users/Export",
                 AutoLoad = true,     
                 ReloadEnabled = true,
                
@@ -503,6 +570,17 @@ namespace Partnerly.Controllers
                         Title = "ID",
                         Type = DataTableColumnType.Number,
                         Visible = false,
+                    },
+
+                    new DataTableColumn
+                    {
+                        Field = "Selected",
+                        Type = DataTableColumnType.Boolean,
+                        Sortable = true,
+                        Searchable = false,
+                        Exportable = false,
+                        Editable = false,
+                        Alignment = DataTableAlignment.Center,
                     },
 
                     new DataTableColumn
@@ -711,7 +789,7 @@ namespace Partnerly.Controllers
                     Enabled = true,
                     Csv = true,
                     Excel = true,
-                    Print = true
+                    Print = false
                 }
             };
         }

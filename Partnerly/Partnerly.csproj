@@ -20,6 +20,7 @@
 
   <ItemGroup>
     <PackageReference Include="BCrypt.Net-Next" Version="4.0.3" />
+    <PackageReference Include="ClosedXML" Version="0.105.1" />
     <PackageReference Include="datatables.net-dt" Version="2.3.4" />
     <PackageReference Include="EPPlus" Version="8.2.0" />
     <PackageReference Include="Handlebars.Net" Version="2.1.6" />

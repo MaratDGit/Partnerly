@@ -31,7 +31,8 @@
                 Search = request.Search?.Trim(),
                 SortField = request.SortField?.Trim(),
                 SortDirection = sortDirection,
-                Filters = request.Filters
+                Filters = request.Filters,
+                SelectedRows = request.SelectedRows
             };
         }
     }

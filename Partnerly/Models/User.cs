@@ -2,6 +2,7 @@
 using Partnerly.Descriptors.Messages;
 using Partnerly.Infrastructure.Interfaces;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Partnerly.Models
 {
@@ -11,7 +12,6 @@ namespace Partnerly.Models
         [Required]
         public Guid Id { get; set; }
         #endregion
-
         #region GoogleId
         public string? GoogleId { get; set; }
         #endregion
@@ -101,6 +101,11 @@ namespace Partnerly.Models
         public Guid? UpdatedBy { get; set; }
         [Required]
         public DateTime? UpdatedDate { get; set; }
+        #endregion
+
+        #region Unbound fields
+        [NotMapped]
+        public bool Selected { get; set; }
         #endregion
 
         public Role? Role { get; set; }

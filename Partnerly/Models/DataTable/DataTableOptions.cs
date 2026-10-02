@@ -6,6 +6,7 @@
         public string Name { get; set; } = "";
         public string AjaxUrl { get; set; } = "";
         public string KeyField { get; set; } = "Id";
+        public string ExportUrl { get; set; } = "";
         public bool ReloadEnabled { get; set; } = true;
         public bool AutoLoad { get; set; } = true;
         public bool RememberState { get; set; } = true;

@@ -153,42 +153,62 @@
 
                 <tr>
 
-                    @if (Model.Rows.Selectable)
-                    {
-                        <th class="data-table-select-cell">
-                            <input type="checkbox"
-                                   class="data-table-select-all"
-                                   aria-label="Select all rows" />
-                        </th>
-                    }
-
                     @foreach (var column in Model.Columns)
                     {
-                        if (column.Visible)
+                        @if (!column.Visible)
                         {
-                            <th style="@(string.IsNullOrWhiteSpace(column.Width) ? "" : "width:" + column.Width + ";")" >
-
-                                @if (column.Sortable && Model.Sorting.Enabled)
-                                {
-                                    <button type="button"
-                                            class="data-table-sort"
-                                            data-field="@column.Field">
-
-                                        <span>
-                                            @column.Title
-                                        </span>
-
-                                        <span class="data-table-sort-icon"></span>
-
-                                    </button>
-                                }
-                                else
-                                {
-                                    @column.Title
-                                }
-
-                            </th>
+                            continue;
                         }
+
+                        <th style="@(string.IsNullOrWhiteSpace(column.Width) ? "" : "width:" + column.Width + ";")">
+
+                            @if (
+                                Model.Rows.Selectable &&
+                                string.Equals(
+                                column.Field,
+                                "Selected",
+                                StringComparison.OrdinalIgnoreCase))
+                            {
+                                <div class="data-table-selected-header">
+
+                                    <input type="checkbox"
+                                           class="data-table-select-all"
+                                           aria-label="Select all rows" />
+
+                                    @if (column.Sortable && Model.Sorting.Enabled)
+                                    {
+                                        <button type="button"
+                                                class="data-table-sort"
+                                                data-field="@column.Field"
+                                                title="Sort by selection">
+
+                                            <span class="data-table-sort-icon"></span>
+
+                                        </button>
+                                    }
+
+                                </div>
+                            }
+                            else if (column.Sortable && Model.Sorting.Enabled)
+                            {
+                                <button type="button"
+                                        class="data-table-sort"
+                                        data-field="@column.Field">
+
+                                    <span>
+                                        @column.Title
+                                    </span>
+
+                                    <span class="data-table-sort-icon"></span>
+
+                                </button>
+                            }
+                            else
+                            {
+                                @column.Title
+                            }
+
+                        </th>
                     }
 
                     @if (
@@ -535,7 +555,7 @@
                             id = Model.Id,
                             ajaxUrl = Model.AjaxUrl,
                             keyField = Model.KeyField,
-
+                            exportUrl = Model.ExportUrl,
                             autoLoad = Model.AutoLoad,
                             rememberState = Model.RememberState,
 
@@ -575,25 +595,26 @@
                             inlineUpdateUrl = Model.InlineUpdateUrl,
 
                             columnCount =
-                                    Model.Columns.Count(x => x.Visible) +
-                                    (Model.Rows.Selectable ? 1 : 0) +
+                                Model.Columns.Count(x => x.Visible) +
+                                (
                                     (
-                                            (
-                                                    Model.Actions.Enabled &&
-                                                    (
-                                                            Model.Actions.View ||
-                                                            Model.Actions.Edit ||
-                                                            Model.Actions.Delete
-                                                    )
-                                            )
-                                            ||
-                                            (
-                                                    Model.InlineEditing &&
-                                                    Model.Columns.Any(x => x.Visible && x.Editable)
-                                            )
-                                            ? 1
-                                            : 0
-                                    ),
+                                        Model.Actions.Enabled &&
+                                        (
+                                                Model.Actions.View ||
+                                                Model.Actions.Edit ||
+                                                Model.Actions.Delete
+                                        )
+                                    )
+                                    ||
+                                    (
+                                        Model.InlineEditing &&
+                                        Model.Columns.Any(x =>
+                                                x.Visible &&
+                                                x.Editable)
+                                    )
+                                    ? 1
+                                    : 0
+                                ),
 
                             columns = Model.Columns.Select(column => new
                             {

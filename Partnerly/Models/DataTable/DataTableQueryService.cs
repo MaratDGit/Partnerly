@@ -14,6 +14,7 @@ namespace Partnerly.Models.DataTable
             _propertyResolver = propertyResolver;
         }
 
+        #region Execute query
         public async Task<DataTableResponse<T>> ExecuteAsync<T>(
             Func<IEnumerable<string>, IQueryable<T>> queryFactory,
             DataTableRequest request,
@@ -65,6 +66,7 @@ namespace Partnerly.Models.DataTable
                 PageSize = request.PageSize
             };
         }
+
 
         // =========================================================
         // SEARCH
@@ -163,6 +165,7 @@ namespace Partnerly.Models.DataTable
             return query.Where(lambda);
         }
 
+
         // =========================================================
         // SORTING
         // =========================================================
@@ -176,7 +179,7 @@ namespace Partnerly.Models.DataTable
             {
                 return query;
             }
-           
+
             var field = request.SortField;
 
             if (string.IsNullOrWhiteSpace(field))
@@ -201,6 +204,31 @@ namespace Partnerly.Models.DataTable
                 return query;
             }
 
+
+            /*
+             * =========================================================
+             * SELECTED
+             * =========================================================
+             */
+
+            if (string.Equals(
+                column.Field,
+                "Selected",
+                StringComparison.OrdinalIgnoreCase))
+            {
+                return ApplySelectedSorting(
+                    query,
+                    request,
+                    options);
+            }
+
+
+            /*
+             * =========================================================
+             * NORMAL SORTING
+             * =========================================================
+             */
+
             var parameter = Expression.Parameter(
                 typeof(T),
                 "x");
@@ -222,7 +250,10 @@ namespace Partnerly.Models.DataTable
                 parameter);
 
             var methodName =
-                request.SortDirection == "desc"
+                string.Equals(
+                    request.SortDirection,
+                    "desc",
+                    StringComparison.OrdinalIgnoreCase)
                     ? "OrderByDescending"
                     : "OrderBy";
 
@@ -238,8 +269,232 @@ namespace Partnerly.Models.DataTable
                 Expression.Quote(lambda));
 
             return query.Provider
-                .CreateQuery<T>(resultExpression);
+                .CreateQuery<T>(
+                    resultExpression);
         }
+
+
+        // =========================================================
+        // SELECTED SORTING
+        // =========================================================
+
+        private IQueryable<T> ApplySelectedSorting<T>(
+     IQueryable<T> query,
+     DataTableRequest request,
+     DataTableOptions options)
+        {
+            var selectedRows =
+                request.SelectedRows ?? Array.Empty<string>();
+
+            var keyField =
+                options.KeyField;
+
+            if (string.IsNullOrWhiteSpace(keyField))
+            {
+                return query;
+            }
+
+            var parameter =
+                Expression.Parameter(
+                    typeof(T),
+                    "x");
+
+            Expression keyExpression;
+            Type keyType;
+
+            if (!_propertyResolver.TryResolve<T>(
+                    parameter,
+                    keyField,
+                    out keyExpression,
+                    out keyType))
+            {
+                return query;
+            }
+
+            var typedValues =
+                CreateTypedSelectedValues(
+                    selectedRows,
+                    keyType);
+
+            if (typedValues == null)
+            {
+                return query;
+            }
+
+            var enumerableType =
+                typeof(IEnumerable<>)
+                    .MakeGenericType(keyType);
+
+            var enumerableExpression =
+                Expression.Convert(
+                    typedValues,
+                    enumerableType);
+
+            var containsMethod =
+                typeof(Enumerable)
+                    .GetMethods()
+                    .Where(x =>
+                        x.Name == nameof(Enumerable.Contains))
+                    .Where(x =>
+                        x.IsGenericMethodDefinition)
+                    .Where(x =>
+                        x.GetParameters().Length == 2)
+                    .Single(x =>
+                        x.GetGenericArguments().Length == 1)
+                    .MakeGenericMethod(keyType);
+
+            var containsExpression =
+                Expression.Call(
+                    containsMethod,
+                    enumerableExpression,
+                    keyExpression);
+
+            var lambda =
+                Expression.Lambda(
+                    containsExpression,
+                    parameter);
+
+            if (string.Equals(
+                request.SortDirection,
+                "desc",
+                StringComparison.OrdinalIgnoreCase))
+            {
+                var orderByDescending =
+                    Expression.Call(
+                        typeof(Queryable),
+                        nameof(Queryable.OrderByDescending),
+                        new[]
+                        {
+                    typeof(T),
+                    typeof(bool)
+                        },
+                        query.Expression,
+                        Expression.Quote(lambda));
+
+                return query.Provider
+                    .CreateQuery<T>(
+                        orderByDescending);
+            }
+
+            var orderBy =
+                Expression.Call(
+                    typeof(Queryable),
+                    nameof(Queryable.OrderBy),
+                    new[]
+                    {
+                typeof(T),
+                typeof(bool)
+                    },
+                    query.Expression,
+                    Expression.Quote(lambda));
+
+            return query.Provider
+                .CreateQuery<T>(
+                    orderBy);
+        }
+
+
+        // =========================================================
+        // CREATE TYPED SELECTED VALUES
+        // =========================================================
+
+        private Expression? CreateTypedSelectedValues(
+            string[] selectedRows,
+            Type targetType)
+        {
+            if (selectedRows.Length == 0)
+            {
+                return null;
+            }
+
+            var values =
+                new List<object>();
+
+            foreach (var value in selectedRows)
+            {
+                if (string.IsNullOrWhiteSpace(value))
+                {
+                    continue;
+                }
+
+                try
+                {
+                    var convertedValue =
+                        ConvertValue(
+                            value,
+                            targetType);
+
+                    if (convertedValue != null)
+                    {
+                        values.Add(
+                            convertedValue);
+                    }
+                }
+                catch
+                {
+                    // Invalid key is ignored.
+                }
+            }
+
+            if (values.Count == 0)
+            {
+                return null;
+            }
+
+
+            /*
+             * Создаём List<T> динамически,
+             * например:
+             *
+             * List<Guid>
+             * List<int>
+             * List<string>
+             */
+
+            var listType =
+                typeof(List<>)
+                    .MakeGenericType(
+                        targetType);
+
+            var typedList =
+                Activator.CreateInstance(
+                    listType);
+
+            if (typedList == null)
+            {
+                return null;
+            }
+
+            var addMethod =
+                listType.GetMethod(
+                    "Add");
+
+            if (addMethod == null)
+            {
+                return null;
+            }
+
+            foreach (var value in values)
+            {
+                addMethod.Invoke(
+                    typedList,
+                    new object[]
+                    {
+                        value
+                    });
+            }
+
+
+            /*
+             * Expression.Constant должен иметь
+             * конкретный тип List<T>.
+             */
+
+            return Expression.Constant(
+                typedList,
+                listType);
+        }
+
 
         // =========================================================
         // FILTERS
@@ -260,8 +515,8 @@ namespace Partnerly.Models.DataTable
                 string[] values;
 
                 if (!request.TryGetFilter(
-                        filter.Field,
-                        out values))
+                    filter.Field,
+                    out values))
                 {
                     continue;
                 }
@@ -340,6 +595,7 @@ namespace Partnerly.Models.DataTable
             }
         }
 
+
         // =========================================================
         // TEXT
         // =========================================================
@@ -397,6 +653,7 @@ namespace Partnerly.Models.DataTable
             return query.Where(lambda);
         }
 
+
         // =========================================================
         // SELECT
         // =========================================================
@@ -416,6 +673,7 @@ namespace Partnerly.Models.DataTable
                 field,
                 values[0]);
         }
+
 
         // =========================================================
         // EQUALITY
@@ -475,6 +733,7 @@ namespace Partnerly.Models.DataTable
 
             return query.Where(lambda);
         }
+
 
         // =========================================================
         // MULTI SELECT
@@ -556,6 +815,7 @@ namespace Partnerly.Models.DataTable
 
             return query.Where(lambda);
         }
+
 
         // =========================================================
         // DATE
@@ -641,6 +901,7 @@ namespace Partnerly.Models.DataTable
 
             return query.Where(lambda);
         }
+
 
         // =========================================================
         // DATE RANGE
@@ -744,6 +1005,7 @@ namespace Partnerly.Models.DataTable
             return query.Where(lambda);
         }
 
+
         // =========================================================
         // BOOLEAN
         // =========================================================
@@ -773,6 +1035,7 @@ namespace Partnerly.Models.DataTable
                 value.ToString());
         }
 
+
         // =========================================================
         // NUMBER
         // =========================================================
@@ -792,6 +1055,7 @@ namespace Partnerly.Models.DataTable
                 field,
                 values[0]);
         }
+
 
         // =========================================================
         // NUMBER RANGE
@@ -884,6 +1148,7 @@ namespace Partnerly.Models.DataTable
             return query.Where(lambda);
         }
 
+
         // =========================================================
         // COMPARISON HELPER
         // =========================================================
@@ -926,6 +1191,7 @@ namespace Partnerly.Models.DataTable
                 property,
                 nullableValue);
         }
+
 
         // =========================================================
         // VALUE CONVERSION
@@ -981,6 +1247,7 @@ namespace Partnerly.Models.DataTable
                 CultureInfo.InvariantCulture);
         }
 
+
         // =========================================================
         // NUMBER CONVERSION
         // =========================================================
@@ -1006,15 +1273,23 @@ namespace Partnerly.Models.DataTable
             }
         }
 
-        private List<string> GetRequiredFields(DataTableOptions options)
+
+        // =========================================================
+        // REQUIRED FIELDS
+        // =========================================================
+
+        private List<string> GetRequiredFields(
+            DataTableOptions options)
         {
             var fields = new HashSet<string>(
                 StringComparer.OrdinalIgnoreCase);
 
             // Key
-            if (!string.IsNullOrWhiteSpace(options.KeyField))
+            if (!string.IsNullOrWhiteSpace(
+                options.KeyField))
             {
-                fields.Add(options.KeyField);
+                fields.Add(
+                    options.KeyField);
             }
 
             // Columns
@@ -1024,16 +1299,19 @@ namespace Partnerly.Models.DataTable
                     column.Searchable ||
                     column.Sortable)
                 {
-                    fields.Add(column.Field);
+                    fields.Add(
+                        column.Field);
                 }
             }
 
             // Filters
             foreach (var filter in options.Filters.Items)
             {
-                if (!string.IsNullOrWhiteSpace(filter.Field))
+                if (!string.IsNullOrWhiteSpace(
+                    filter.Field))
                 {
-                    fields.Add(filter.Field);
+                    fields.Add(
+                        filter.Field);
                 }
             }
 
@@ -1047,5 +1325,55 @@ namespace Partnerly.Models.DataTable
 
             return fields.ToList();
         }
+        #endregion
+
+        #region Execute Export
+        public async Task<List<T>> ExecuteExportAsync<T>(
+            Func<IEnumerable<string>, IQueryable<T>> queryFactory,
+            DataTableRequest request,
+            DataTableOptions options)
+        {
+            request = request.Normalize();
+
+            var fields =
+                GetExportFields(options);
+
+            var query =
+                queryFactory(fields);
+
+            query =
+                ApplySearch(
+                    query,
+                    request,
+                    options);
+
+            query =
+                ApplyFilters(
+                    query,
+                    request,
+                    options);
+
+            query =
+                ApplySorting(
+                    query,
+                    request,
+                    options);
+
+            return await query.ToListAsync();
+        }
+
+        private List<string> GetExportFields(
+        DataTableOptions options)
+        {
+            return options.Columns
+                .Where(x =>
+                    x.Visible &&
+                    x.Exportable &&
+                    !string.IsNullOrWhiteSpace(x.Field))
+                .Select(x => x.Field)
+                .Distinct(StringComparer.OrdinalIgnoreCase)
+                .ToList();
+        }
+        #endregion
     }
 }

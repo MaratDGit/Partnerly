@@ -60,7 +60,8 @@
             modules.filters,
             modules.pagination,
             modules.inline,
-            modules.actions
+            modules.actions,
+            modules.export
         ];
 
         for (

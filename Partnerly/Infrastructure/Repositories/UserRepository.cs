@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Partnerly.Infrastructure.Interfaces;
 using Partnerly.Models;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq.Expressions;
 
 namespace Partnerly.Infrastructure.Repositories
@@ -33,10 +34,6 @@ namespace Partnerly.Infrastructure.Repositories
                 .FirstOrDefaultAsync(u => u.Phone == phone && phone != null);
         }
 
-        //public IQueryable<User> QueryUsers()
-        //{
-        //    return _dbSet.AsNoTracking();
-        //}
         public IQueryable<User> QueryUsers(IEnumerable<string> fields)
         {
             var fieldList = fields
@@ -66,6 +63,17 @@ namespace Partnerly.Infrastructure.Repositories
                             StringComparison.OrdinalIgnoreCase));
 
                 if (property == null)
+                {
+                    continue;
+                }
+
+                var isNotMapped =
+                    property.GetCustomAttributes(
+                        typeof(NotMappedAttribute),
+                        true)
+                    .Any();
+
+                if (isNotMapped)
                 {
                     continue;
                 }

@@ -412,41 +412,6 @@
                                 ) +
                                 '">';
 
-
-                            /*
-                             * =================================================
-                             * ROW SELECT CHECKBOX
-                             * =================================================
-                             */
-
-                            if (
-                                options.rows &&
-                                options.rows.selectable
-                            ) {
-
-                                var isSelected =
-                                    ctx.state.selectedRows.indexOf(
-                                        String(id)
-                                    ) !== -1;
-
-
-                                html +=
-                                    '<td class="data-table-row-select-cell">' +
-                                    '<input type="checkbox" ' +
-                                    'class="data-table-row-select" ' +
-                                    'data-row-id="' +
-                                    ctx.escapeHtml(id) +
-                                    '"' +
-                                    (
-                                        isSelected
-                                            ? ' checked'
-                                            : ''
-                                    ) +
-                                    '>' +
-                                    '</td>';
-                            }
-
-
                             /*
                              * =================================================
                              * COLUMNS
@@ -456,19 +421,61 @@
                             options.columns.forEach(
                                 function (column) {
 
-                                    if (
-                                        !column.visible
-                                    ) {
+                                    if (!column.visible) {
                                         return;
                                     }
 
+                                    /*
+                                     * =================================================
+                                     * SELECTED COLUMN
+                                     * =================================================
+                                     */
+
+                                    if (
+                                        options.rows &&
+                                        options.rows.selectable &&
+                                        column.field.toLowerCase() === "selected"
+                                    ) {
+
+                                        var isSelected =
+                                            ctx.state.selectedRows.indexOf(
+                                                String(id)
+                                            ) !== -1;
+
+                                        html +=
+                                            '<td class="data-table-row-select-cell" ' +
+                                            'data-field="' +
+                                            ctx.escapeHtml(column.field) +
+                                            '">' +
+
+                                            '<input type="checkbox" ' +
+                                            'class="data-table-row-select" ' +
+                                            'data-row-id="' +
+                                            ctx.escapeHtml(id) +
+                                            '"' +
+                                            (
+                                                isSelected
+                                                    ? ' checked'
+                                                    : ''
+                                            ) +
+                                            '>' +
+
+                                            '</td>';
+
+                                        return;
+                                    }
+
+                                    /*
+                                     * =================================================
+                                     * NORMAL COLUMN
+                                     * =================================================
+                                     */
 
                                     var value =
                                         ctx.getValue(
                                             item,
                                             column.field
                                         );
-
 
                                     var formatted =
                                         ctx.formatCellValue(
@@ -481,14 +488,20 @@
                                     var cellClasses = [];
 
                                     var alignmentClass =
-                                        ctx.getColumnAlignmentClass(column);
+                                        ctx.getColumnAlignmentClass(
+                                            column
+                                        );
 
                                     if (alignmentClass) {
-                                        cellClasses.push(alignmentClass);
+                                        cellClasses.push(
+                                            alignmentClass
+                                        );
                                     }
 
                                     if (column.cssClass) {
-                                        cellClasses.push(column.cssClass);
+                                        cellClasses.push(
+                                            column.cssClass
+                                        );
                                     }
 
                                     html +=
