@@ -613,7 +613,7 @@
     <value>Կիրառել</value>
   </data>
   <data name="DataTableReset" xml:space="preserve">
-    <value>Վերականգնել բոլորը</value>
+    <value>Վերականգնել</value>
   </data>
   <data name="DataTableExportExcel" xml:space="preserve">
     <value>Արտահանել Excel</value>
@@ -721,7 +721,7 @@
     <value>հենց հիմա</value>
   </data>
   <data name="MinuteAgo" xml:space="preserve">
-    <value>մեկ րոպե առաջ</value>
+    <value>րոպե առաջ</value>
   </data>
   <data name="MinutesAgo" xml:space="preserve">
     <value>րոպե առաջ</value>
@@ -1304,5 +1304,23 @@
   </data>
   <data name="Security" xml:space="preserve">
     <value>Անվտանգություն</value>
+  </data>
+  <data name="Reload" xml:space="preserve">
+    <value>Վերաբեռնել</value>
+  </data>
+  <data name="Pagesize" xml:space="preserve">
+    <value>Էջի չափս</value>
+  </data>
+  <data name="Admin" xml:space="preserve">
+    <value>Ադմինիստրատոր</value>
+  </data>
+  <data name="Employee" xml:space="preserve">
+    <value>Աշխատակից</value>
+  </data>
+  <data name="Yesterday" xml:space="preserve">
+    <value>երեկ</value>
+  </data>
+  <data name="DaysAgo" xml:space="preserve">
+    <value>օր առաջ</value>
   </data>
 </root>

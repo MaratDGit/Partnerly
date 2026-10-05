@@ -42,6 +42,10 @@
     bool isFooter =
         ViewData["isFooter"] != null &&
         Convert.ToBoolean(ViewData["isFooter"]);
+
+    bool isFlex = 
+        ViewData["isFlex"] != null &&
+        Convert.ToBoolean(ViewData["isFlex"]);
 }
 
 <div class="partnerly-layout-page">
@@ -76,17 +80,17 @@
 
         <!-- Content -->
         <main class="partnerly-layout-content">
-            <div class="@ViewData["container"] @(Convert.ToBoolean(ViewData["isFlex"]) ? "d-flex align-items-stretch flex-grow-1 p-0" : "container-p-y")">
+            @RenderBody()
+            @* <div class="@ViewData["container"] @(Convert.ToBoolean(ViewData["isFlex"]) ? "d-flex align-items-stretch flex-grow-1 p-0" : "container-p-y")">
                 @RenderBody()
-            </div>
+            </div> *@
+            
         </main>
-
+        
         <!-- Footer -->
         @if (isFooter)
         {
             @await Html.PartialAsync("Sections/Footer/_Footer")
         }
-
     </div>
-
 </div>

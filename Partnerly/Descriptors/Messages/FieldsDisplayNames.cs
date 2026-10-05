@@ -57,6 +57,8 @@ namespace Partnerly.Descriptors.Messages
         public static string Method => Messages.Get(nameof(Method));
         public static string LineNumber => Messages.Get(nameof(LineNumber));
 
+        public static string Admin => Messages.Get(nameof(Admin));
+        public static string Employee => Messages.Get(nameof(Employee));
         public static string User => Messages.Get(nameof(User));
 
         public static string Name => Messages.Get(nameof(Name));
@@ -143,5 +145,8 @@ namespace Partnerly.Descriptors.Messages
         public static string IsDeleted => Messages.Get(nameof(IsDeleted));
 
         public static string DataTableSearch => Messages.Get(nameof(DataTableSearch));
+        public static string Users => Messages.Get(nameof(Users));
+
+        public static string View => Messages.Get(nameof(View));
     }
 }

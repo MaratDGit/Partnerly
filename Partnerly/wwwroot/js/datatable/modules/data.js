@@ -162,11 +162,13 @@
                      * =========================================================
                      */
 
-                    ctx.body.innerHTML =
-                        '<tr><td colspan="' +
-                        options.columnCount +
-                        '">Loading...</td></tr>';
+                    const loading = lookupLocalization?.loading ?? "Loading...";
+                    const loadingError = lookupLocalization?.loadError ?? "Error loading data";
 
+                    ctx.body.innerHTML =
+                        `<tr><td colspan="' +
+                        ${options.columnCount} +
+                        '">${loading}</td></tr>`;
 
                     /*
                      * =========================================================
@@ -217,9 +219,9 @@
                                 );
 
                                 ctx.body.innerHTML =
-                                    '<tr><td colspan="' +
-                                    options.columnCount +
-                                    '">Error loading data</td></tr>';
+                                    `<tr><td colspan="' +
+                                    ${options.columnCount} +
+                                    '">${loadingError}</td></tr>`;
                             }
                         );
                 };

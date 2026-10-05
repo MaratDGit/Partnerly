@@ -527,12 +527,15 @@ namespace Partnerly.Controllers
             return new DataTableOptions
             {
                 Id = "usersTable",
-                Name = "Users",
+                Name = FieldsDisplayNames.Users,
+                Icon = "bx bx-group",
+
                 AjaxUrl = "/Users/Data",
                 KeyField = "Id",
                 ExportUrl = "/Users/Export",
                 AutoLoad = true,     
                 ReloadEnabled = true,
+                RememberState = true,
                
                 InlineEditing = true,
                 InlineUpdateUrl = "/Users/UpdateInline",
@@ -540,8 +543,8 @@ namespace Partnerly.Controllers
                 Paging = new DataTablePagingOptions
                 {
                     Enabled = true,
-                    PageSize = 10,
-                    PageSizeOptions = new[] { 10, 25, 50, 100 },
+                    PageSize = 14,
+                    PageSizeOptions = new[] { 14, 25, 50, 100 },
                     ShowInfo = true,
                     ShowPageSize = false,
                 },
@@ -586,7 +589,7 @@ namespace Partnerly.Controllers
                     new DataTableColumn
                     {
                         Field = "FirstName",
-                        Title = "First Name",
+                        Title = FieldsDisplayNames.FirstName,
                         Type = DataTableColumnType.Link,
                         UrlTemplate = "/Users/Edit/{Id}",
 
@@ -600,39 +603,64 @@ namespace Partnerly.Controllers
                         EmptyText = "-",
                         Alignment = DataTableAlignment.Left,
                         CssClass = "",
+                        Resizable = true
                     },
 
                     new DataTableColumn
                     {
                         Field = "LastName",
-                        Title = "Last Name",
+                        Title = FieldsDisplayNames.LastName,
                         Type = DataTableColumnType.Text,
-                        Editable = true
+                        Editable = true,
+                        Resizable = true
                     },
 
                     new DataTableColumn
                     {
                         Field = "Email",
-                        Title = "Email",
-                        Type = DataTableColumnType.Email
+                        Title = FieldsDisplayNames.Email,
+                        Type = DataTableColumnType.Email,
+                        Resizable = true
                     },
 
                     new DataTableColumn
                     {
                         Field = "IsBlocked",
-                        Title = "Is Blocked",
+                        Title = FieldsDisplayNames.IsBlocked,
                         Type = DataTableColumnType.Boolean,
                         Editable = true,
                         Alignment = DataTableAlignment.Center,
+                        Resizable = true
+                    },
+
+                    new DataTableColumn
+                    {
+                        Field = "IsOnlayn",
+                        Title = FieldsDisplayNames.IsOnlayn,
+                        Type = DataTableColumnType.Boolean,
+                        Editable = false,
+                        Alignment = DataTableAlignment.Center,
+                        Resizable = true
+                    },
+
+                    new DataTableColumn
+                    {
+                        Field = "EmailConfirmed",
+                        Title = FieldsDisplayNames.EmailConfirmed,
+                        Type = DataTableColumnType.Boolean,
+                        Alignment = DataTableAlignment.Center,
+                        Resizable = true
                     },
 
                     new DataTableColumn
                     {
                         Field = "Balance",
-                        Title = "Balance",
+                        Title = FieldsDisplayNames.Balance,
                         Type = DataTableColumnType.Currency,
                         Editable = true,
-                        
+                        Resizable = true,
+
+
                         ConditionalStyles = new List<DataTableConditionalStyle> 
                         {
                             new DataTableConditionalStyle
@@ -685,26 +713,20 @@ namespace Partnerly.Controllers
 
                     new DataTableColumn
                     {
-                        Field = "EmailConfirmed",
-                        Title = "Email Confirmed",
-                        Type = DataTableColumnType.Boolean,
-                        Alignment = DataTableAlignment.Center,
-                    },
-
-                    new DataTableColumn
-                    {
-                        Field = "UpdatedDate",
-                        Title = "Updated",
+                        Field = "LastActivity",
+                        Title = FieldsDisplayNames.LastActivity,
                         Type = DataTableColumnType.DateTime,
-                        Format = "relative"
+                        Format = "relative",
+                        Resizable = true
                     },
 
                     new DataTableColumn
                     {
                         Field = "CreatedDate",
-                        Title = "Created",
+                        Title = FieldsDisplayNames.CreatedDate,
                         Type = DataTableColumnType.DateTime,
-                        Format = "dd.MM.yyyy HH:mm"
+                        Format = "dd.MM.yyyy HH:mm",
+                        Resizable = true
                     }
                 },
 
@@ -723,41 +745,47 @@ namespace Partnerly.Controllers
                         new DataTableFilter
                         {
                             Field = "IsBlocked",
-                            Label = "Blocked",
+                            Label = FieldsDisplayNames.IsBlocked,
                             Type = DataTableFilterType.Boolean
                         },
                         new DataTableFilter
                         {
-                            Field = "Email",
-                            Label = "Email",
-                            Type = DataTableFilterType.Text,
-                            Placeholder = "Search email..."
+                            Field = "IsOnlayn",
+                            Label = FieldsDisplayNames.IsOnlayn,
+                            Type = DataTableFilterType.Boolean
                         },
+                        //new DataTableFilter
+                        //{
+                        //    Field = "Email",
+                        //    Label = "Email",
+                        //    Type = DataTableFilterType.Text,
+                        //    Placeholder = "Search email..."
+                        //},
                         new DataTableFilter
                         {
                             Field = "Balance",
-                            Label = "Balance",
+                            Label = FieldsDisplayNames.Balance,
                             Type = DataTableFilterType.NumberRange
                         },
                         new DataTableFilter
                         {
                             Field = "RoleId",
-                            Label = "Role",
+                            Label = FieldsDisplayNames.Role,
                             Type = DataTableFilterType.MultiSelect,
                             Placeholder = "Role Name",
                             DefaultValue = "",
                             Options = new List<DataTableFilterOption>
                             {
-                                new DataTableFilterOption("5DAF66B1-8140-4D48-BC12-431086FA7144", "Admin"),
-                                new DataTableFilterOption("C3120D74-9C4C-44AA-8B0C-A1B2F53BF9A8", "Manager"),
-                                new DataTableFilterOption("52B55F50-A21A-441E-BB59-EFAB24F907AF", "User")
+                                new DataTableFilterOption("5DAF66B1-8140-4D48-BC12-431086FA7144", FieldsDisplayNames.Admin),
+                                new DataTableFilterOption("C3120D74-9C4C-44AA-8B0C-A1B2F53BF9A8", FieldsDisplayNames.Employee),
+                                new DataTableFilterOption("52B55F50-A21A-441E-BB59-EFAB24F907AF", FieldsDisplayNames.User)
                             }
                         },
 
                         new DataTableFilter
                         {
                             Field = "CreatedDate",
-                            Label = "Created",
+                            Label = FieldsDisplayNames.CreatedDate,
                             Type = DataTableFilterType.DateRange
                         }
                     }
@@ -767,21 +795,57 @@ namespace Partnerly.Controllers
                 {
                     Enabled = true,
 
-                    Add = true,
-                    AddUrl = "/Users/Create",
+                    Items = new List<DataTableAction>
+                    {
+                        new DataTableAction
+                        {
+                            Name = "add",
+                            Title = "",
+                            Icon = "bx bx-plus",
+                            Type = DataTableActionType.Link,
+                            Placement = DataTableActionPlacement.Toolbar,
+                            Url = "/Users/Create",
+                            Method = "Get",
+                            CssClass = "data-table-grid-action"
+                        },
 
-                    View = true,
-                    ViewUrl = "/Users/View",
+                        new DataTableAction
+                        {
+                            Name = "view",
+                            Title = FieldsDisplayNames.View,
+                            Icon = "bx bx-show",
+                            Type = DataTableActionType.Link,
+                            Placement = DataTableActionPlacement.Row,
+                            Url = "/Users/Edit/{Id}",
+                            Method = "GET",
+                            //CssClass = "data-table-grid-action"
+                            CssClass = "btn btn-sm btn-outline-secondary"
+                        },
 
-                    Edit = true,
-                    EditUrl = "/Users/Edit",
+                        new DataTableAction
+                        {
+                            Name = "edit",
+                            Title = FieldsDisplayNames.Edit,
+                            Icon = "bx bx-edit",
+                            Type = DataTableActionType.InlineEdit,
+                            Placement = DataTableActionPlacement.Row,
+                            //CssClass = "data-table-grid-action"
+                            CssClass = "btn btn-sm btn-outline-primary"
+                        },
 
-                    Delete = true,
-                    DeleteUrl = "/Users/Delete",
-
-                    BulkDelete = true,
-                    InlineAdd = true,
-                    InlineDelete = true,
+                        new DataTableAction
+                        {
+                            Name = "delete",
+                            Title = FieldsDisplayNames.Delete,
+                            Icon = "bx bx-trash",
+                            Type = DataTableActionType.Link,
+                            Placement = DataTableActionPlacement.Row,
+                            Url = "/Users/Delete/{Id}",
+                            Method = "GET",
+                            //CssClass = "data-table-grid-action"
+                            CssClass = "btn btn-sm btn-outline-danger"
+                        }
+                    }
                 },
 
                 Export = new DataTableExportOptions

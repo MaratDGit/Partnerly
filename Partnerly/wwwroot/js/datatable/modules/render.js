@@ -367,10 +367,10 @@
                     ) {
 
                         ctx.body.innerHTML =
-                            '<tr><td colspan="' +
-                            options.columnCount +
-                            '">No data</td></tr>';
-
+                            `<tr><td colspan="' +
+                            ${options.columnCount} +
+                            '">${lookupLocalization?.noData ?? "No Data"}</td></tr>`;
+                        
                         ctx.updateSelectAllState();
 
                         return;
@@ -533,9 +533,10 @@
 
 
                             /*
-                             * =================================================
+ /*
+                             * =========================================================
                              * ACTIONS
-                             * =================================================
+                             * =========================================================
                              */
 
                             if (
@@ -547,153 +548,317 @@
 
 
                                 /*
-                                 * INLINE EDIT
+                                 * =====================================================
+                                 * DEFAULT INLINE EDIT
+                                 * =====================================================
+                                 *
+                                 * Inline editing является отдельной
+                                 * возможностью таблицы.
+                                 *
+                                 * Если пользователь явно добавил
+                                 * Actions -> InlineEdit, используется
+                                 * именно custom action.
                                  */
 
+                                var rowActions =
+                                    ctx.getRowActions();
+
+
+                                var explicitInlineEditActions =
+                                    rowActions.filter(
+                                        function (action) {
+
+                                            return (
+                                                action &&
+                                                action.type ===
+                                                "InlineEdit"
+                                            );
+                                        }
+                                    );
+
+
                                 if (
+                                    explicitInlineEditActions.length > 0
+                                ) {
+
+                                    explicitInlineEditActions.forEach(
+                                        function (action) {
+
+                                            html +=
+                                                '<button type="button" ' +
+                                                'class="' +
+                                                ctx.escapeHtml(
+                                                    action.cssClass ||
+                                                    "btn btn-sm btn-outline-primary"
+                                                ) +
+                                                ' data-table-inline-edit" ' +
+                                                'data-id="' +
+                                                ctx.escapeHtml(id) +
+                                                '" ' +
+                                                'title="' +
+                                                ctx.escapeHtml(
+                                                    action.title ||
+                                                    "Edit"
+                                                ) +
+                                                '" ' +
+                                                'aria-label="' +
+                                                ctx.escapeHtml(
+                                                    action.title ||
+                                                    "Edit"
+                                                ) +
+                                                '">' +
+
+                                                (
+                                                    action.icon
+                                                        ? '<i class="' +
+                                                        ctx.escapeHtml(
+                                                            action.icon
+                                                        ) +
+                                                        '"></i>'
+                                                        : ctx.escapeHtml(
+                                                            action.title ||
+                                                            "Edit"
+                                                        )
+                                                ) +
+
+                                                "</button>";
+                                        }
+                                    );
+                                }
+                                else if (
                                     options.inlineEditing &&
                                     ctx.hasEditableColumns()
                                 ) {
+
+                                    /*
+                                     * Сохраняем автоматическую кнопку
+                                     * inline edit для InlineEditing=true.
+                                     */
 
                                     html +=
                                         '<button type="button" ' +
                                         'class="btn btn-sm btn-outline-primary data-table-inline-edit" ' +
                                         'data-id="' +
-                                        ctx.escapeHtml(
-                                            id
-                                        ) +
+                                        ctx.escapeHtml(id) +
                                         '" ' +
                                         'title="Edit row" ' +
                                         'aria-label="Edit row">' +
                                         '<i class="bx bx-edit-alt"></i>' +
-                                        '</button>';
+                                        "</button>";
                                 }
 
 
                                 /*
-                                 * VIEW
+                                 * =====================================================
+                                 * CUSTOM ROW ACTIONS
+                                 * =====================================================
                                  */
 
-                                if (
-                                    options.actions &&
-                                    options.actions.enabled &&
-                                    options.actions.view &&
-                                    options.actions.viewUrl
-                                ) {
+                                rowActions.forEach(
+                                    function (action) {
 
-                                    html +=
-                                        '<a href="' +
-                                        ctx.escapeHtml(
-                                            options.actions.viewUrl +
-                                            "/" +
-                                            encodeURIComponent(
-                                                id
-                                            )
-                                        ) +
-                                        '" ' +
-                                        'class="btn btn-sm btn-outline-secondary" ' +
-                                        'title="View" ' +
-                                        'aria-label="View">' +
-                                        '<i class="bx bx-show"></i>' +
-                                        '</a>';
-                                }
+                                        if (
+                                            !action ||
+                                            action.type ===
+                                            "InlineEdit"
+                                        ) {
+                                            return;
+                                        }
 
 
-                                /*
-                                 * EDIT
-                                 */
+                                        /*
+                                         * INLINE DELETE
+                                         */
 
-                                if (
-                                    options.actions &&
-                                    options.actions.enabled &&
-                                    options.actions.edit &&
-                                    options.actions.editUrl
-                                ) {
+                                        if (
+                                            action.type ===
+                                            "InlineDelete"
+                                        ) {
 
-                                    html +=
-                                        '<a href="' +
-                                        ctx.escapeHtml(
-                                            options.actions.editUrl +
-                                            "/" +
-                                            encodeURIComponent(
-                                                id
-                                            )
-                                        ) +
-                                        '" ' +
-                                        'class="btn btn-sm btn-outline-primary" ' +
-                                        'title="Edit" ' +
-                                        'aria-label="Edit">' +
-                                        '<i class="bx bx-edit"></i>' +
-                                        '</a>';
-                                }
+                                            html +=
+                                                '<button type="button" ' +
+                                                'class="' +
+                                                ctx.escapeHtml(
+                                                    action.cssClass ||
+                                                    "btn btn-sm btn-outline-danger"
+                                                ) +
+                                                ' data-table-action-inline-delete" ' +
+                                                'data-action-name="' +
+                                                ctx.escapeHtml(
+                                                    action.name
+                                                ) +
+                                                '" ' +
+                                                'data-id="' +
+                                                ctx.escapeHtml(id) +
+                                                '" ' +
+                                                'title="' +
+                                                ctx.escapeHtml(
+                                                    action.title ||
+                                                    "Delete"
+                                                ) +
+                                                '" ' +
+                                                'aria-label="' +
+                                                ctx.escapeHtml(
+                                                    action.title ||
+                                                    "Delete"
+                                                ) +
+                                                '">' +
+
+                                                (
+                                                    action.icon
+                                                        ? '<i class="' +
+                                                        ctx.escapeHtml(
+                                                            action.icon
+                                                        ) +
+                                                        '"></i>'
+                                                        : ctx.escapeHtml(
+                                                            action.title ||
+                                                            "Delete"
+                                                        )
+                                                ) +
+
+                                                "</button>";
+
+                                            return;
+                                        }
 
 
-                                /*
-                                 * DELETE
-                                 */
+                                        /*
+                                         * AJAX
+                                         */
 
-                                if (
-                                    options.actions &&
-                                    options.actions.enabled &&
-                                    options.actions.delete &&
-                                    options.actions.deleteUrl
-                                ) {
+                                        if (
+                                            action.type ===
+                                            "Ajax"
+                                        ) {
 
-                                    html +=
-                                        '<a href="' +
-                                        ctx.escapeHtml(
-                                            options.actions.deleteUrl +
-                                            "/" +
-                                            encodeURIComponent(
-                                                id
-                                            )
-                                        ) +
-                                        '" ' +
-                                        'class="btn btn-sm btn-outline-danger" ' +
-                                        'title="Delete" ' +
-                                        'aria-label="Delete">' +
-                                        '<i class="bx bx-trash"></i>' +
-                                        '</a>';
-                                }
+                                            html +=
+                                                '<button type="button" ' +
+                                                'class="' +
+                                                ctx.escapeHtml(
+                                                    action.cssClass ||
+                                                    "btn btn-sm btn-outline-secondary"
+                                                ) +
+                                                ' data-table-action-ajax" ' +
+                                                'data-action-name="' +
+                                                ctx.escapeHtml(
+                                                    action.name
+                                                ) +
+                                                '" ' +
+                                                'data-id="' +
+                                                ctx.escapeHtml(id) +
+                                                '" ' +
+                                                'title="' +
+                                                ctx.escapeHtml(
+                                                    action.title ||
+                                                    action.name
+                                                ) +
+                                                '" ' +
+                                                'aria-label="' +
+                                                ctx.escapeHtml(
+                                                    action.title ||
+                                                    action.name
+                                                ) +
+                                                '">' +
+
+                                                (
+                                                    action.icon
+                                                        ? '<i class="' +
+                                                        ctx.escapeHtml(
+                                                            action.icon
+                                                        ) +
+                                                        '"></i>'
+                                                        : ctx.escapeHtml(
+                                                            action.title ||
+                                                            action.name
+                                                        )
+                                                ) +
+
+                                                "</button>";
+
+                                            return;
+                                        }
+
+
+                                        /*
+                                         * LINK
+                                         */
+
+                                        if (
+                                            action.type ===
+                                            "Link"
+                                        ) {
+
+                                            var href =
+                                                ctx.buildActionUrl(
+                                                    action,
+                                                    id
+                                                );
+
+
+                                            if (!href) {
+                                                return;
+                                            }
+
+
+                                            html +=
+                                                '<a href="' +
+                                                ctx.escapeHtml(
+                                                    href
+                                                ) +
+                                                '" ' +
+                                                'class="' +
+                                                ctx.escapeHtml(
+                                                    action.cssClass ||
+                                                    "btn btn-sm btn-outline-secondary"
+                                                ) +
+                                                '" ' +
+                                                'title="' +
+                                                ctx.escapeHtml(
+                                                    action.title ||
+                                                    action.name
+                                                ) +
+                                                '" ' +
+                                                'aria-label="' +
+                                                ctx.escapeHtml(
+                                                    action.title ||
+                                                    action.name
+                                                ) +
+                                                '">' +
+
+                                                (
+                                                    action.icon
+                                                        ? '<i class="' +
+                                                        ctx.escapeHtml(
+                                                            action.icon
+                                                        ) +
+                                                        '"></i>'
+                                                        : ctx.escapeHtml(
+                                                            action.title ||
+                                                            action.name
+                                                        )
+                                                ) +
+
+                                                "</a>";
+                                        }
+                                    }
+                                );
 
 
                                 html +=
                                     "</td>";
                             }
-
-
-                            html +=
-                                "</tr>";
                         }
                     );
-
-
-                    /*
-                     * =========================================================
-                     * INSERT HTML
-                     * =========================================================
-                     */
 
                     ctx.body.innerHTML =
                         html;
 
-
-                    /*
-                     * =========================================================
-                     * UPDATE SELECT ALL
-                     * =========================================================
-                     */
-
                     ctx.updateSelectAllState();
 
-
-                    /*
-                     * =========================================================
-                     * EXISTING BEHAVIOR
-                     * =========================================================
-                     */
-
                     ctx.bindInlineEditButtons();
+
+                    ctx.bindActionButtons();
 
                     ctx.highlightSearchText();
                 };
@@ -725,7 +890,7 @@
                     ) {
 
                         ctx.info.textContent =
-                            "No records";
+                            lookupLocalization?.noData ?? "No Records";
 
                         return;
                     }
@@ -748,13 +913,18 @@
                         );
 
 
-                    ctx.info.textContent =
-                        "Showing " +
-                        start +
-                        "-" +
-                        end +
-                        " of " +
-                        result.total;
+                    //ctx.info.textContent =
+                    //    "Showing " +
+                    //    start +
+                    //    "-" +
+                    //    end +
+                    //    " of " +
+                    //    result.total;
+
+                    ctx.info.textContent = dataTableLocalization.shownRecords
+                        .replace("{0}", start)
+                        .replace("{1}", end)
+                        .replace("{2}", result.total);
                 };
 
 

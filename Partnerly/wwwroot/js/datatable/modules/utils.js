@@ -304,6 +304,32 @@
             ctx.formatRelativeDate =
                 function (date) {
 
+                    var dateLoc =
+                        dateLocalizationDataTable || {};
+
+                    var defaultDateLocalization = {
+                        justNow: "just now",
+                        minuteAgo: "minute ago",
+                        minutesAgo: "minutes ago",
+                        hourAgo: "hour ago",
+                        hoursAgo: "hours ago",
+                        daysAgo: "days ago",
+                        yesterday: "yesterday"
+                    };
+
+                    Object.keys(defaultDateLocalization).forEach(function (key) {
+
+                        if (
+                            !dateLoc[key] ||
+                            typeof dateLoc[key] !== "string" ||
+                            !dateLoc[key].trim()
+                        ) {
+                            dateLoc[key] =
+                                defaultDateLocalization[key];
+                        }
+
+                    });
+
                     var now =
                         new Date();
 
@@ -320,7 +346,7 @@
                         seconds < 0 ||
                         seconds < 60
                     ) {
-                        return "just now";
+                        return dateLoc.justNow;
                     }
 
                     var minutes =
@@ -332,11 +358,11 @@
                         minutes < 60
                     ) {
 
-                        return minutes +
+                        return minutes + " " +
                             (
                                 minutes === 1
-                                    ? " minute ago"
-                                    : " minutes ago"
+                                ? dateLoc.minuteAgo
+                                : dateLoc.minutesAgo
                             );
                     }
 
@@ -349,11 +375,11 @@
                         hours < 24
                     ) {
 
-                        return hours +
+                        return hours + " " +
                             (
                                 hours === 1
-                                    ? " hour ago"
-                                    : " hours ago"
+                                ? dateLoc.hourAgo
+                                : dateLoc.hoursAgo
                             );
                     }
 
@@ -365,14 +391,14 @@
                     if (
                         days === 1
                     ) {
-                        return "yesterday";
+                        return dateLoc.yesterday;
                     }
 
                     if (
                         days < 7
                     ) {
-                        return days +
-                            " days ago";
+                        return days + " " +
+                            dateLoc.daysAgo;
                     }
 
                     return date.toLocaleDateString();

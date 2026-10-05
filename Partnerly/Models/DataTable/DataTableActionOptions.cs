@@ -4,27 +4,51 @@
     {
         public bool Enabled { get; set; } = true;
 
-        public bool Add { get; set; }
-        public string? AddUrl { get; set; }
+        public List<DataTableAction> Items { get; set; }
+            = new List<DataTableAction>();
+    }
 
-        public bool View { get; set; }
+    public class DataTableAction
+    {
+        public string Name { get; set; } = "";
 
-        public bool Edit { get; set; }
+        public string Title { get; set; } = "";
 
-        public bool Delete { get; set; }
-       
+        public string Icon { get; set; } = "";
 
-        public string? ViewUrl { get; set; }
+        public DataTableActionType Type { get; set; }
+            = DataTableActionType.Link;
 
-        public string? EditUrl { get; set; }
+        public DataTableActionPlacement Placement { get; set; }
+            = DataTableActionPlacement.Row;
 
-        public string? DeleteUrl { get; set; }
+        public string? Url { get; set; }
 
-        public bool BulkDelete { get; set; }
+        public string Method { get; set; } = "POST";
 
-        
+        public bool Confirm { get; set; } = false;
 
-        public bool InlineAdd { get; set; } = false;
-        public bool InlineDelete { get; set; } = false;
+        public string? ConfirmMessage { get; set; }
+
+        public string? CssClass { get; set; }
+
+        public bool RequiresSelection { get; set; } = false;
+    }
+
+
+    public enum DataTableActionType
+    {
+        Link,
+        Ajax,
+        InlineEdit,
+        InlineDelete,
+        InlineAdd
+    }
+
+
+    public enum DataTableActionPlacement
+    {
+        Toolbar,
+        Row
     }
 }

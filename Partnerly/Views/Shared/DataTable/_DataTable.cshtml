@@ -1,43 +1,116 @@
 ﻿@using Partnerly.Models.DataTable
 @model Partnerly.Models.DataTable.DataTableOptions
 
+<div class="card">
+
 <div id="@Model.Id"
      class="data-table-wrapper"
      data-datatable="true">
 
-    @Html.AntiForgeryToken()
+@Html.AntiForgeryToken()
 
-    <div class="data-table-toolbar">
+    <div class="data-table-header">
 
-        @if (Model.Actions.Enabled && Model.Actions.Add && !string.IsNullOrWhiteSpace(Model.Actions.AddUrl))
+        @if (
+                !string.IsNullOrWhiteSpace(Model.Name) ||
+                !string.IsNullOrWhiteSpace(Model.Icon)
+                )
         {
-            <a href="@Model.Actions.AddUrl"
-               class="btn btn-primary">
-                Add
-            </a>
+            <div class="data-table-title">
+
+                @if (!string.IsNullOrWhiteSpace(Model.Icon))
+                {
+                    <span class="data-table-title-icon">
+                        <i class="@Model.Icon"></i>
+                    </span>
+                }
+
+                @if (!string.IsNullOrWhiteSpace(Model.Name))
+                {
+                    <span class="data-table-title-text">
+                        @Model.Name
+                    </span>
+                }
+
+            </div>
         }
 
-        @if (Model.Search.Enabled)
-        {
-            <input type="text"
-                   id="@Model.Id-search"
-                   class="form-control"
-                   placeholder="@Model.Search.Placeholder" />
-        }
+        <div class="data-table-toolbar">
 
-    </div>
+        <div class="data-table-toolbar-left">
 
-    <div class="data-table-grid-actions">
+            @* =========================================================
+           CUSTOM TOOLBAR ACTIONS
+           ========================================================= *@
 
-        <div class="data-table-grid-actions-left">
+            @if (Model.Actions.Enabled)
+            {
+                foreach (
+                var action in Model.Actions.Items.Where(
+                x =>
+                x.Placement ==
+                DataTableActionPlacement.Toolbar
+                )
+                )
+                {
+                    if (action.Type == DataTableActionType.Link)
+                    {
+                        <a href="@action.Url"
+                           class="@(string.IsNullOrWhiteSpace(action.CssClass)
+                                                      ? "btn btn-primary"
+                                                      : action.CssClass)"
+               data-table-action="@action.Name">
 
-            @* Reload *@
+                @if (!string.IsNullOrWhiteSpace(action.Icon))
+                            {
+                                <i class="@action.Icon"></i>
+                            }
+
+                            @if (!string.IsNullOrWhiteSpace(action.Title))
+                            {
+                                <span>
+                                    @action.Title
+                                </span>
+                            }
+
+                        </a>
+                    }
+                    else
+                    {
+                        <button type="button"
+                                class="@(string.IsNullOrWhiteSpace(action.CssClass)
+                                                                ? "btn btn-primary"
+                                                                : action.CssClass)"
+                    data-table-action="@action.Name">
+
+                @if (!string.IsNullOrWhiteSpace(action.Icon))
+                            {
+                                <i class="@action.Icon"></i>
+                            }
+
+                            @if (!string.IsNullOrWhiteSpace(action.Title))
+                            {
+                                <span>
+                                    @action.Title
+                                </span>
+                            }
+
+                        </button>
+                    }
+                }
+            }
+
+
+            @* =========================================================
+           RELOAD
+           ========================================================= *@
+
             @if (Model.ReloadEnabled)
             {
                 <button type="button"
                         class="data-table-grid-action"
                         data-table-reload
-                        title="Reload"
+                        title="@Localizer["Reload"]"
                         aria-label="Reload">
 
                     <span class="data-table-grid-action-icon">
@@ -47,7 +120,11 @@
                 </button>
             }
 
-            @* Export *@
+
+            @* =========================================================
+           EXPORT
+           ========================================================= *@
+
             @if (Model.Export.Enabled)
             {
                 <div class="data-table-grid-action-dropdown">
@@ -56,7 +133,7 @@
                             class="data-table-grid-action"
                             data-bs-toggle="dropdown"
                             aria-expanded="false"
-                            title="Export"
+                            title="@Localizer["DataTableExportAll"]"
                             aria-label="Export">
 
                         <span class="data-table-grid-action-icon">
@@ -76,7 +153,9 @@
 
                                     <i class="bx bx-file"></i>
 
-                                    <span>CSV</span>
+                                    <span>
+                                        CSV
+                                    </span>
 
                                 </button>
                             </li>
@@ -91,7 +170,9 @@
 
                                     <i class="bx bx-spreadsheet"></i>
 
-                                    <span>Excel</span>
+                                    <span>
+                                        Excel
+                                    </span>
 
                                 </button>
                             </li>
@@ -106,7 +187,9 @@
 
                                     <i class="bx bx-printer"></i>
 
-                                    <span>Print</span>
+                                    <span>
+                                       @Localizer["Print"]
+                                    </span>
 
                                 </button>
                             </li>
@@ -117,13 +200,17 @@
                 </div>
             }
 
-            @* Filters *@
+
+            @* =========================================================
+           FILTERS
+           ========================================================= *@
+
             @if (Model.Filters.Enabled)
             {
                 <button type="button"
                         class="data-table-grid-action"
                         data-table-filter-button
-                        title="Filters"
+                        title="@Localizer["DataTableFilters"]"
                         aria-label="Filters">
 
                     <span class="data-table-grid-action-icon">
@@ -140,8 +227,40 @@
 
         </div>
 
-        <div class="data-table-grid-actions-right">
-        </div>
+
+        @* =============================================================
+       SEARCH
+       ============================================================= *@
+
+        @if (Model.Search.Enabled)
+        {
+                <div class="data-table-toolbar-search">
+
+                    <div class="data-table-search-wrapper">
+
+                        <input type="text"
+                               id="@Model.Id-search"
+                               class="form-control data-table-search-input"
+                               placeholder="@Model.Search.Placeholder"
+                               autocomplete="off" />
+
+                        <button type="button"
+                                class="data-table-search-clear"
+                                data-table-search-clear
+                                aria-label="Clear search"
+                                title="Clear search"
+                                hidden>
+
+                            <i class="bx bx-x"></i>
+
+                        </button>
+
+                    </div>
+
+                </div>
+        }
+
+    </div>
 
     </div>
 
@@ -160,7 +279,7 @@
                             continue;
                         }
 
-                        <th style="@(string.IsNullOrWhiteSpace(column.Width) ? "" : "width:" + column.Width + ";")">
+                        <th data-field="@column.Field" style="@(string.IsNullOrWhiteSpace(column.Width) ? "" : "width:" + column.Width + ";")">
 
                             @if (
                                 Model.Rows.Selectable &&
@@ -211,24 +330,29 @@
                         </th>
                     }
 
-                    @if (
+                    @if
+                                        (
                                         (
                                         Model.Actions.Enabled &&
-                                        (
-                                        Model.Actions.View ||
-                                        Model.Actions.Edit ||
-                                        Model.Actions.Delete
+                                        Model.Actions.Items.Any(
+                                        x =>
+                                        x.Placement ==
+                                        DataTableActionPlacement.Row
                                         )
                                         )
                                         ||
                                         (
                                         Model.InlineEditing &&
-                                        Model.Columns.Any(x => x.Visible && x.Editable)
+                                        Model.Columns.Any(
+                                        x =>
+                                        x.Visible &&
+                                        x.Editable
+                                        )
                                         )
                                         )
                     {
-                        <th>
-                            Actions
+                        <th data-field="__actions">
+                            @Localizer["DataTableActions"]
                         </th>
                     }
 
@@ -240,7 +364,7 @@
 
                 <tr>
                     <td colspan="@Model.Columns.Count">
-                        Loading...
+                        @Localizer["LookupLoading"]
                     </td>
                 </tr>
 
@@ -259,7 +383,7 @@
             <div class="data-table-page-size">
 
                 <label for="@Model.Id-page-size">
-                    Page size
+                    @Localizer["Pagesize"]
                 </label>
 
                 <select id="@Model.Id-page-size"
@@ -305,7 +429,7 @@
                                 </span>
 
                                 <span>
-                                    Filters
+                                    @Localizer["DataTableFilters"]
                                 </span>
 
                             </div>
@@ -349,9 +473,9 @@
                                                 data-field="@filter.Field"
                                                 data-filter-type="boolean">
 
-                                            <option value="">All</option>
-                                            <option value="true">Yes</option>
-                                            <option value="false">No</option>
+                                            <option value="">@Localizer["DataTableAll"]</option>
+                                            <option value="true">@Localizer["DataTableYes"]</option>
+                                            <option value="false">@Localizer["DataTableNo"]</option>
 
                                         </select>
                                     }
@@ -362,7 +486,7 @@
                                                 data-field="@filter.Field"
                                                 data-filter-type="select">
 
-                                            <option value="">All</option>
+                                            <option value="">@Localizer["DataTableAll"]</option>
 
                                             @foreach (var option in filter.Options)
                                             {
@@ -430,7 +554,7 @@
                                                        class="form-control data-table-modal-range-control"
                                                        data-field="@filter.Field"
                                                        data-range="min"
-                                                       placeholder="@(filter.Placeholder ?? "From")" />
+                                                       placeholder="@(filter.Placeholder ?? Localizer["DataTableFrom"])" />
 
                                             </div>
 
@@ -444,7 +568,7 @@
                                                        class="form-control data-table-modal-range-control"
                                                        data-field="@filter.Field"
                                                        data-range="max"
-                                                       placeholder="@(filter.Placeholder ?? "To")" />
+                                                       placeholder="@(filter.Placeholder ?? Localizer["DataTableTo"])" />
 
                                             </div>
 
@@ -469,7 +593,7 @@
                                                        class="form-control data-table-modal-range-control"
                                                        data-field="@filter.Field"
                                                        data-range="min"
-                                                       placeholder="@(filter.Placeholder ?? "From")" />
+                                                       placeholder="@(filter.Placeholder ?? Localizer["DataTableFrom"])" />
 
                                             </div>
 
@@ -483,7 +607,7 @@
                                                        class="form-control data-table-modal-range-control"
                                                        data-field="@filter.Field"
                                                        data-range="max"
-                                                       placeholder="@(filter.Placeholder ?? "To")" />
+                                                       placeholder="@(filter.Placeholder ?? Localizer["DataTableTo"])" />
 
                                             </div>
 
@@ -504,7 +628,7 @@
                                 data-table-filter-reset>
 
                             <i class="bx bx-undo"></i>
-                            Reset
+                            @Localizer["DataTableReset"]
 
                         </button>
 
@@ -514,7 +638,7 @@
                                     class="btn btn-outline-secondary"
                                     data-bs-dismiss="modal">
 
-                                Cancel
+                                @Localizer["Cancel"]
 
                             </button>
 
@@ -523,7 +647,7 @@
                                     data-table-filter-apply>
 
                                 <i class="bx bx-check"></i>
-                                Apply filters
+                                @Localizer["DataTableApply"]
 
                             </button>
 
@@ -558,6 +682,8 @@
                             exportUrl = Model.ExportUrl,
                             autoLoad = Model.AutoLoad,
                             rememberState = Model.RememberState,
+                            columnResizeEnabled = Model.ColumnResizeEnabled,
+                            columnResizeMinWidth = Model.ColumnResizeMinWidth,
 
                             paging = new
                             {
@@ -599,18 +725,20 @@
                                 (
                                     (
                                         Model.Actions.Enabled &&
-                                        (
-                                                Model.Actions.View ||
-                                                Model.Actions.Edit ||
-                                                Model.Actions.Delete
+                                        Model.Actions.Items.Any(
+                                                x =>
+                                                        x.Placement ==
+                                                        DataTableActionPlacement.Row
                                         )
                                     )
                                     ||
                                     (
                                         Model.InlineEditing &&
-                                        Model.Columns.Any(x =>
-                                                x.Visible &&
-                                                x.Editable)
+                                        Model.Columns.Any(
+                                                x =>
+                                                        x.Visible &&
+                                                        x.Editable
+                                        )
                                     )
                                     ? 1
                                     : 0
@@ -627,7 +755,7 @@
                                     searchable = column.Searchable,
                                     exportable = column.Exportable,
                                     editable = column.Editable,
-
+                                    resizable = column.Resizable,
                                     width = column.Width,
                                     format = column.Format,
                                     urlTemplate = column.UrlTemplate,
@@ -660,18 +788,20 @@
                             {
                                 enabled = Model.Actions.Enabled,
 
-                                add = Model.Actions.Add,
-                                view = Model.Actions.View,
-                                edit = Model.Actions.Edit,
-                                delete = Model.Actions.Delete,
-                                bulkDelete = Model.Actions.BulkDelete,
-                                inlineAdd = Model.Actions.InlineAdd,
-                                inlineDelete = Model.Actions.InlineDelete,
-
-                                addUrl = Model.Actions.AddUrl,
-                                viewUrl = Model.Actions.ViewUrl,
-                                editUrl = Model.Actions.EditUrl,
-                                deleteUrl = Model.Actions.DeleteUrl
+                                items = Model.Actions.Items.Select(action => new
+                                {
+                                        name = action.Name,
+                                        title = action.Title,
+                                        icon = action.Icon,
+                                        type = action.Type.ToString(),
+                                        placement = action.Placement.ToString(),
+                                        url = action.Url,
+                                        method = action.Method,
+                                        confirm = action.Confirm,
+                                        confirmMessage = action.ConfirmMessage,
+                                        cssClass = action.CssClass,
+                                        requiresSelection = action.RequiresSelection
+                                }).ToList(),
                             },
                             
                             filters = new
@@ -699,4 +829,5 @@
 
     </script>
 
+</div>
 </div>

@@ -61,7 +61,8 @@
             modules.pagination,
             modules.inline,
             modules.actions,
-            modules.export
+            modules.export,
+            modules.resize,
         ];
 
         for (

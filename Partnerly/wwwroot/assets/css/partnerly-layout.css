@@ -1,15 +1,15 @@
-﻿/* =========================================================
+﻿
+/* =========================================================
    PARTNERLY LAYOUT
    Sidebar / Navbar / Content / Footer
    ========================================================= */
-
 :root {
     --partnerly-primary: #696cff;
     --partnerly-primary-light: rgba(105, 108, 255, 0.10);
     --partnerly-primary-hover: rgba(105, 108, 255, 0.14);
     --partnerly-sidebar-width: 260px;
     --partnerly-sidebar-collapsed-width: 82px;
-    --partnerly-navbar-height: 72px;
+    --partnerly-navbar-height: 60px;
     --partnerly-text: #566a7f;
     --partnerly-text-dark: #32475c;
     --partnerly-muted: #a1acb8;
@@ -29,7 +29,6 @@ html,
 body {
     margin: 0;
     padding: 0;
-    min-height: 100%;
 }
 
 html {
@@ -53,6 +52,7 @@ body {
     margin-left: var(--partnerly-sidebar-width);
     display: flex;
     flex-direction: row;
+    align-items: stretch;
     transition: margin-left .25s ease;
 }
 
@@ -63,6 +63,7 @@ body {
 
 .partnerly-layout-main {
     min-width: 0;
+    width: 100%;
     min-height: 100vh;
     display: flex;
     flex-direction: column;
@@ -75,9 +76,14 @@ body {
    ========================================================= */
 
 .partnerly-layout-content {
-    flex: 1 0 auto;
     min-width: 0;
     width: 100%;
+    /*
+       Content takes all available vertical space.
+       This pushes the footer to the bottom when
+       the page content is short.
+    */
+    flex: 1 0 auto;
 }
 
 
@@ -139,7 +145,7 @@ body {
     align-items: center;
     justify-content: center;
     border-radius: 11px;
-    background: linear-gradient( 135deg, rgba(105, 108, 255, 0.13), rgba(105, 108, 255, 0.04) );
+    background: linear-gradient(135deg, rgba(105, 108, 255, 0.13), rgba(105, 108, 255, 0.04));
     box-shadow: 0 3px 10px rgba(105, 108, 255, 0.08);
     overflow: hidden;
 }
@@ -261,18 +267,18 @@ body {
 
 .partnerly-menu-section {
     width: 100%;
-    height: 34px;
+    height: 30px;
     display: flex;
     align-items: center;
     justify-content: space-between;
-    padding: 0 12px;
-    margin-top: 9px;
-    margin-bottom: 3px;
+    padding: 0 10px;
+    margin-top: 7px;
+    margin-bottom: 2px;
     border: 0;
     background: transparent;
     color: var(--partnerly-muted);
     font-family: inherit;
-    font-size: 0.68rem;
+    font-size: 0.67rem;
     font-weight: 700;
     letter-spacing: 0.7px;
     text-transform: uppercase;
@@ -300,8 +306,8 @@ body {
 
 .partnerly-menu-section-arrow {
     flex: 0 0 auto;
-    margin-left: 8px;
-    font-size: 16px;
+    margin-left: 6px;
+    font-size: 15px;
     transition: transform .25s ease, color .2s ease;
 }
 
@@ -352,7 +358,7 @@ body {
 
 .partnerly-menu-item {
     position: relative;
-    margin: 2px 0;
+    margin: 1px 0;
     list-style: none;
 }
 
@@ -363,16 +369,16 @@ body {
 
 .partnerly-menu-link {
     position: relative;
-    min-height: 46px;
+    min-height: 40px;
     width: 100%;
     display: flex;
     align-items: center;
-    gap: 11px;
-    padding: 8px 11px;
-    border-radius: 11px;
+    gap: 9px;
+    padding: 6px 10px;
+    border-radius: 10px;
     text-decoration: none !important;
     color: var(--partnerly-text) !important;
-    font-size: 0.9rem;
+    font-size: 0.88rem;
     font-weight: 500;
     white-space: nowrap;
     overflow: hidden;
@@ -392,9 +398,9 @@ body {
    ========================================================= */
 
 .partnerly-menu-icon {
-    width: 40px;
-    min-width: 40px;
-    height: 40px;
+    width: 36px;
+    min-width: 36px;
+    height: 36px;
     display: inline-flex;
     align-items: center;
     justify-content: center;
@@ -406,16 +412,11 @@ body {
 
     .partnerly-menu-icon i {
         display: block;
-        width: 20px;
-        height: 20px;
-        line-height: 20px;
+        width: 19px;
+        height: 19px;
+        line-height: 19px;
         text-align: center;
     }
-
-
-.partnerly-menu-item .bx-support {
-    transform: translateX(1px);
-}
 
 
 /* =========================================================
@@ -437,7 +438,7 @@ body {
 
 .partnerly-menu-item.active .partnerly-menu-link {
     color: var(--partnerly-primary) !important;
-    background: linear-gradient( 90deg, rgba(105, 108, 255, 0.13), rgba(105, 108, 255, 0.055) );
+    background: linear-gradient(90deg, rgba(105, 108, 255, 0.13), rgba(105, 108, 255, 0.055));
     box-shadow: inset 3px 0 0 var(--partnerly-primary);
 }
 
@@ -700,14 +701,13 @@ body.partnerly-sidebar-collapsed
 
 .partnerly-footer {
     width: 100%;
-    flex-shrink: 0;
+    flex: 0 0 auto;
     background: #fff;
     border-top: 1px solid #eeeeef;
 }
 
 
 .partnerly-footer-inner {
-    min-height: 56px;
     display: flex;
     align-items: center;
     justify-content: space-between;
@@ -857,10 +857,6 @@ body.partnerly-mobile-menu-open {
 
 @media (max-width: 1199.98px) {
 
-    /* -----------------------------------------------------
-       Sidebar
-       ----------------------------------------------------- */
-
     .partnerly-sidebar {
         width: var(--partnerly-sidebar-width);
         transform: translateX(-100%);
@@ -883,19 +879,11 @@ body.partnerly-mobile-menu-open {
     }
 
 
-    /* -----------------------------------------------------
-       Main layout
-       ----------------------------------------------------- */
-
     .partnerly-layout-page {
         margin-left: 0 !important;
         min-height: 100vh;
     }
 
-
-    /* -----------------------------------------------------
-       Collapsed desktop state must not affect mobile
-       ----------------------------------------------------- */
 
     body.partnerly-sidebar-collapsed
     .partnerly-sidebar {
@@ -915,10 +903,6 @@ body.partnerly-mobile-menu-open {
         margin-left: 0 !important;
     }
 
-
-    /* -----------------------------------------------------
-       Restore sidebar content on mobile
-       ----------------------------------------------------- */
 
     body.partnerly-sidebar-collapsed
     .partnerly-brand-name,
@@ -958,10 +942,6 @@ body.partnerly-mobile-menu-open {
     }
 
 
-    /* -----------------------------------------------------
-       Restore section headers on mobile
-       ----------------------------------------------------- */
-
     body.partnerly-sidebar-collapsed
     .partnerly-menu-section {
         width: 100%;
@@ -987,10 +967,6 @@ body.partnerly-mobile-menu-open {
     }
 
 
-    /* -----------------------------------------------------
-       Restore menu links
-       ----------------------------------------------------- */
-
     body.partnerly-sidebar-collapsed
     .partnerly-menu-link {
         justify-content: flex-start;
@@ -1005,22 +981,14 @@ body.partnerly-mobile-menu-open {
     }
 
 
-    /* -----------------------------------------------------
-       Footer
-       ----------------------------------------------------- */
-
     body.partnerly-sidebar-collapsed
     .partnerly-sidebar-footer-content {
         justify-content: flex-start;
     }
 
 
-    /* -----------------------------------------------------
-       Navbar
-       ----------------------------------------------------- */
-
     .partnerly-navbar {
-        min-height: 64px;
+        min-height: 60px;
         padding-left: 16px;
         padding-right: 16px;
     }

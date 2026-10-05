@@ -613,7 +613,7 @@
     <value>Применить</value>
   </data>
   <data name="DataTableReset" xml:space="preserve">
-    <value>Сбросить всё</value>
+    <value>Сбросить</value>
   </data>
   <data name="DataTableExportExcel" xml:space="preserve">
     <value>Экспорт в Excel</value>
@@ -1305,5 +1305,23 @@
   </data>
   <data name="Security" xml:space="preserve">
     <value>Безопасность</value>
+  </data>
+  <data name="Reload" xml:space="preserve">
+    <value>Перезагрузить</value>
+  </data>
+  <data name="Pagesize" xml:space="preserve">
+    <value>Размер страницы</value>
+  </data>
+  <data name="Admin" xml:space="preserve">
+    <value>Администратор</value>
+  </data>
+  <data name="Employee" xml:space="preserve">
+    <value>Сотрудник</value>
+  </data>
+  <data name="Yesterday" xml:space="preserve">
+    <value>вчера</value>
+  </data>
+  <data name="DaysAgo" xml:space="preserve">
+    <value>дней назад</value>
   </data>
 </root>

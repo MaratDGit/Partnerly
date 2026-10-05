@@ -258,6 +258,7 @@
                 return;
             }
 
+
             if (
                 !ctx.options.search ||
                 ctx.options.search.enabled === false
@@ -265,9 +266,35 @@
                 return;
             }
 
+
+            var clearButton =
+                ctx.root.querySelector(
+                    "[data-table-search-clear]"
+                );
+
+
+            function updateClearButton() {
+
+                if (!clearButton) {
+                    return;
+                }
+
+                var value =
+                    String(
+                        ctx.searchInput.value || ""
+                    ).trim();
+
+                clearButton.hidden =
+                    value.length === 0;
+            }
+
+
             ctx.searchInput.addEventListener(
                 "input",
                 function () {
+
+                    updateClearButton();
+
 
                     clearTimeout(
                         ctx.searchTimer
@@ -280,6 +307,7 @@
 
                                 var value =
                                     ctx.searchInput.value.trim();
+
 
                                 var minLength =
                                     (
@@ -301,8 +329,10 @@
                                 ctx.state.search =
                                     value;
 
+
                                 ctx.state.page =
                                     1;
+
 
                                 ctx.load();
 
@@ -314,6 +344,44 @@
                         );
                 }
             );
+
+
+            if (clearButton) {
+
+                clearButton.addEventListener(
+                    "click",
+                    function () {
+
+                        clearTimeout(
+                            ctx.searchTimer
+                        );
+
+
+                        ctx.searchInput.value =
+                            "";
+
+
+                        ctx.state.search =
+                            "";
+
+
+                        ctx.state.page =
+                            1;
+
+
+                        updateClearButton();
+
+
+                        ctx.load();
+
+
+                        ctx.searchInput.focus();
+                    }
+                );
+            }
+
+
+            updateClearButton();
         }
     };
 

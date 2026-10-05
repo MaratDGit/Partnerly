@@ -73,7 +73,19 @@
             minuteAgo: '@Localizer["MinuteAgo"]',
             minutesAgo: '@Localizer["MinutesAgo"]',
             hourAgo: '@Localizer["HourAgo"]',
-            hoursAgo: '@Localizer["HoursAgo"]'
+            hoursAgo: '@Localizer["HoursAgo"]',
+            yesterday: '@Localizer["Yesterday"]',
+            daysAgo: '@Localizer["DaysAgo"]',
+        };
+
+        const dateLocalizationDataTable = {
+            justNow: @Html.Raw(Json.Serialize(Localizer["JustNow"].Value)),
+            minuteAgo: @Html.Raw(Json.Serialize(Localizer["MinuteAgo"].Value)),
+            minutesAgo: @Html.Raw(Json.Serialize(Localizer["MinutesAgo"].Value)),
+            hourAgo: @Html.Raw(Json.Serialize(Localizer["HourAgo"].Value)),
+            hoursAgo: @Html.Raw(Json.Serialize(Localizer["HoursAgo"].Value)),
+            yesterday: @Html.Raw(Json.Serialize(Localizer["Yesterday"].Value)),
+            daysAgo: @Html.Raw(Json.Serialize(Localizer["DaysAgo"].Value))
         };
 
         const lookupLocalization = {
@@ -133,6 +145,7 @@
     <script src="~/js/datatable/modules/state.js"></script>
     <script src="~/js/datatable/modules/utils.js"></script>
     <script src="~/js/datatable/modules/columns.js"></script>
+    <script src="~/js/datatable/modules/resize.js"></script>
     <script src="~/js/datatable/modules/render.js"></script>
     <script src="~/js/datatable/modules/data.js"></script>
     <script src="~/js/datatable/modules/search.js"></script>

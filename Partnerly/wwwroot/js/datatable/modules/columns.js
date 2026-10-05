@@ -1080,37 +1080,49 @@
             ctx.hasActionsColumn =
                 function () {
 
+                    /*
+                     * Inline editing автоматически
+                     * требует Actions column.
+                     */
+
                     if (
                         options.inlineEditing &&
                         ctx.hasEditableColumns()
                     ) {
+
                         return true;
                     }
 
+
+                    /*
+                     * Новый Actions API.
+                     *
+                     * Actions column появляется только тогда,
+                     * когда существует хотя бы одно Row action.
+                     */
+
                     if (
-                        !options.actions ||
-                        !options.actions.enabled
+                        options.actions &&
+                        options.actions.enabled &&
+                        Array.isArray(
+                            options.actions.items
+                        )
                     ) {
-                        return false;
+
+                        return options.actions.items.some(
+                            function (action) {
+
+                                return (
+                                    action &&
+                                    action.placement ===
+                                    "Row"
+                                );
+                            }
+                        );
                     }
 
-                    return (
 
-                        (
-                            options.actions.view &&
-                            options.actions.viewUrl
-                        ) ||
-
-                        (
-                            options.actions.edit &&
-                            options.actions.editUrl
-                        ) ||
-
-                        (
-                            options.actions.delete &&
-                            options.actions.deleteUrl
-                        )
-                    );
+                    return false;
                 };
         }
     };

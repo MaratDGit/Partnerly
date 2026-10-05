@@ -19,8 +19,9 @@ namespace Partnerly.Models.DataTable
         public bool Exportable { get; set; } = true;
 
         public bool Editable { get; set; } = false;
+        public bool Resizable { get; set; } = true;
 
-        public string? Width { get; set; }
+        public string? Width { get; set; }       
 
         public string? Format { get; set; }
         public string? UrlTemplate { get; set; }
