@@ -913,13 +913,7 @@
                         );
 
 
-                    //ctx.info.textContent =
-                    //    "Showing " +
-                    //    start +
-                    //    "-" +
-                    //    end +
-                    //    " of " +
-                    //    result.total;
+                 
 
                     ctx.info.textContent = dataTableLocalization.shownRecords
                         .replace("{0}", start)

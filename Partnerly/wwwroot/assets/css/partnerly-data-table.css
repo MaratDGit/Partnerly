@@ -154,8 +154,8 @@
 .data-table-toolbar-search {
     display: flex;
     align-items: center;
-    flex: 0 0 270px;
-    width: 270px;
+    flex: 0 0 200px;
+    width: 200px;
     min-width: 0;
     margin-left: auto;
 }
@@ -1832,4 +1832,122 @@ body.data-table-column-resizing {
         scroll-behavior: auto !important;
         transition-duration: 0.01ms !important;
     }
+}
+
+/* =========================================================
+   PAGINATION
+   ========================================================= */
+
+.data-table-pagination {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+
+/* =========================================================
+   PAGE BUTTON
+   ========================================================= */
+
+.data-table-page-button {
+    width: 32px;
+    height: 32px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0;
+    margin: 0 2px;
+    border: 0;
+    border-radius: 6px;
+    background: transparent;
+    color: #697a8d;
+    cursor: pointer;
+    transition: background-color 0.15s ease, color 0.15s ease, transform 0.15s ease;
+}
+
+
+    .data-table-page-button i {
+        font-size: 20px;
+        line-height: 1;
+    }
+
+
+    /* =========================================================
+   HOVER
+   ========================================================= */
+
+    .data-table-page-button:not(:disabled):hover {
+        background-color: rgba(105, 108, 255, 0.10);
+        color: #696cff;
+    }
+
+
+    /* =========================================================
+   ACTIVE CLICK
+   ========================================================= */
+
+    .data-table-page-button:not(:disabled):active {
+        transform: scale(0.92);
+    }
+
+
+    /* =========================================================
+   DISABLED
+   ========================================================= */
+
+    .data-table-page-button:disabled {
+        color: #c7cdd4;
+        cursor: default;
+        background: transparent;
+    }
+
+
+/* =========================================================
+   PAGE INPUT
+   ========================================================= */
+
+.data-table-page-input {
+    width: 46px;
+    height: 32px;
+    margin: 0 5px;
+    padding: 3px 5px;
+    border: 1px solid #d9dee3;
+    border-radius: 6px;
+    background-color: #fff;
+    color: #566a7f;
+    font-size: 13px;
+    font-weight: 500;
+    text-align: center;
+    outline: none;
+    transition: border-color 0.15s ease, box-shadow 0.15s ease;
+}
+
+
+    /* =========================================================
+   INPUT FOCUS
+   ========================================================= */
+
+    .data-table-page-input:focus {
+        border-color: #696cff;
+        box-shadow: 0 0 0 2px rgba(105, 108, 255, 0.12);
+    }
+
+
+    /* =========================================================
+   REMOVE NUMBER ARROWS
+   ========================================================= */
+
+    /* Chrome / Edge / Safari */
+
+    .data-table-page-input::-webkit-inner-spin-button,
+    .data-table-page-input::-webkit-outer-spin-button {
+        margin: 0;
+        -webkit-appearance: none;
+    }
+
+
+/* Firefox */
+
+.data-table-page-input {
+    -moz-appearance: textfield;
 }

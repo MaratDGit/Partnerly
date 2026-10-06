@@ -4,9 +4,9 @@
     {
         public bool Enabled { get; set; } = true;
 
-        public int PageSize { get; set; } = 10;
+        public int PageSize { get; set; } = 14;
 
-        public int[] PageSizeOptions { get; set; } = new[] { 10, 25, 50, 100 };
+        public int[] PageSizeOptions { get; set; } = new[] { 14, 25, 50, 100 };
 
         public bool ShowInfo { get; set; } = true;
 

@@ -1,0 +1,151 @@
+﻿@using Partnerly.Descriptors.Messages
+@using Partnerly.Infrastructure.Interfaces
+
+@model IAuditableViewModel
+
+<div class="audit-info d-inline-flex align-items-center ms-auto">
+    <button type="button"
+            class="btn btn-sm audit-info-button"
+            data-bs-toggle="popover"
+            data-bs-html="true"
+            data-bs-placement="bottom"
+            data-bs-trigger="click"
+            data-bs-content="
+            <div class='audit-popup'>
+                <div class='audit-popup-row'>
+                    <span class='audit-popup-label'>
+                        @FieldsDisplayNames.CreatorName
+                    </span>
+                    <span class='audit-popup-value'>
+                        @(Model.CreatedByUserName ?? "-")
+                    </span>
+                    
+                    <span class='audit-popup-label'>
+                        @FieldsDisplayNames.CreatedDate
+                    </span>
+                    <span class='audit-popup-value'>
+                        @(Model.CreatedDate?.ToString("dd.MM.yyyy HH:mm") ?? "-")
+                    </span>
+                </div>
+
+                <div class='audit-popup-row'>
+                    <span class='audit-popup-label'>
+                        @FieldsDisplayNames.UpdaterName 
+                    </span>
+                    <span class='audit-popup-value'>
+                        @(Model.UpdatedByUserName ?? "-")
+                    </span>
+
+                     <span class='audit-popup-label'>
+                        @FieldsDisplayNames.UpdatedDate
+                    </span>
+                    <span class='audit-popup-value'>
+                        @(Model.UpdatedDate?.ToString("dd.MM.yyyy HH:mm") ?? "-")
+                    </span>
+                </div>
+            </div>">
+
+    <i class="bx bx-info-circle audit-info-icon"></i>
+</button>
+</div>
+
+<style>
+    .audit-info {
+        position: relative;
+        margin-right: 12px;
+    }
+
+    .audit-info-button {
+        width: 34px;
+        height: 34px;
+        padding: 0;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        border: 0;
+        border-radius: 50%;
+        background: rgba(105, 108, 255, 0.1);
+        color: #696cff;
+        cursor: pointer;
+        transition: all 0.2s ease;
+    }
+
+    .audit-info-button {
+        width: 34px;
+        height: 34px;
+        padding: 0;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        border: none;
+        border-radius: 50%;
+        background: transparent;
+        color: #696cff;
+        cursor: pointer;
+        transition: background-color 0.2s ease, color 0.2s ease, transform 0.2s ease;
+    }
+
+        .audit-info-button:hover {
+            background: rgba(105, 108, 255, 0.1);
+            color: #5f61e6;
+            transform: scale(1.08);
+        }
+
+        .audit-info-button:active {
+            transform: scale(0.95);
+        }
+
+    .audit-info-icon {
+        font-size: 22px;
+        line-height: 1;
+    }
+
+    .audit-popup {
+        min-width: 260px;
+        padding: 4px;
+    }
+
+    .audit-popup-row {
+        display: flex;
+        flex-direction: column;
+        gap: 2px;
+        padding: 8px 0;
+    }
+
+        .audit-popup-row + .audit-popup-row {
+            border-top: 1px solid rgba(0, 0, 0, 0.08);
+        }
+
+    .audit-popup-label {
+        font-size: 11px;
+        font-weight: 600;
+        color: #8a8a8a;
+        text-transform: uppercase;
+    }
+
+    .audit-popup-value {
+        font-size: 13px;
+        font-weight: 500;
+    }
+</style>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+
+        const auditButton = document.querySelector(".audit-info-button");
+
+        if (!auditButton) {
+            console.log("Audit button not found");
+            return;
+        }
+
+        if (typeof bootstrap === "undefined") {
+            console.error("Bootstrap is not loaded");
+            return;
+        }
+
+        new bootstrap.Popover(auditButton);
+
+        console.log("Audit popover initialized");
+    });
+</script>

@@ -220,6 +220,8 @@ namespace Partnerly.Controllers
                 ticketAsView.AssignedToName = $"{assigned?.FirstName} {assigned?.LastName}";
             }
 
+            await PrepareViewModelAsync(ticketAsView);
+
             return View(ticketAsView);
         }
 

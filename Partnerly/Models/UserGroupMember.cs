@@ -11,6 +11,11 @@ namespace Partnerly.Models
         [Key, Column(Order = 1)]
         public Guid GroupId { get; set; }
 
+        #region Unbound fields
+        [NotMapped]
+        public bool Selected { get; set; }
+        #endregion
+
         #region System Columns
         public string? Note { get; set; }
         public bool IsDeleted { get; set; } = false;

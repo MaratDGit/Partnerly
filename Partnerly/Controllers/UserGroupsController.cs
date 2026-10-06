@@ -96,6 +96,8 @@ namespace Partnerly.Controllers
             }
             if (groupAsView == null) return NotFound();
 
+            await PrepareViewModelAsync(groupAsView);
+
             return View(groupAsView);
         }
 

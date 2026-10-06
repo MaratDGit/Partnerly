@@ -81,6 +81,8 @@
             var templatesAsView = await PropertyActionsHelper.CopyPropertiesAsync(template, new EmailTemplateViewModel());
             if (templatesAsView == null) return NotFound();
 
+            await PrepareViewModelAsync(templatesAsView);
+
             return View(templatesAsView);
         }
 

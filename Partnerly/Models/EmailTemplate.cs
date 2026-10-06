@@ -1,5 +1,6 @@
 ﻿using Partnerly.Infrastructure.Interfaces;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Partnerly.Models
 {
@@ -14,6 +15,11 @@ namespace Partnerly.Models
         [Required]
         public string? BodyHtml { get; set; }
         public string? BodyPlain { get; set; }
+
+        #region Unbound fields
+        [NotMapped]
+        public bool Selected { get; set; }
+        #endregion
 
         #region System Columns
         public string? Note { get; set; }

@@ -8,7 +8,6 @@ using Partnerly.Descriptors.Messages;
 using Partnerly.Events.BaseEvents;
 using Partnerly.Helpers;
 using Partnerly.Infrastructure.Interfaces;
-using Partnerly.Infrastructure.Services;
 using Partnerly.Models;
 using Partnerly.Models.GridViews;
 
@@ -35,7 +34,7 @@ namespace Partnerly.Controllers
         }
         public override async Task OnActionExecutionAsync(ActionExecutingContext context, ActionExecutionDelegate next)
         {
-            string message = null;
+            string? message = null;
             if (User.Identity?.IsAuthenticated == true)
             {
                 ViewBag.UserPhotoUrl = _currentUser.UserPhotoUrl;
@@ -44,20 +43,16 @@ namespace Partnerly.Controllers
                 ViewBag.UserRefCode = _currentUser.ReffCode;
                 ViewBag.UserFullName = $"{_currentUser.FirstName} {_currentUser.LastName}";
                 ViewBag.RoleType = _currentUser.RoleType;
-                //var user = await _userService.GetUserByIDAsync(_currentUser.UserId);
-                //if (user != null)
-                //{
-
-                //}
+                
                 SystemSettings? setting = await _systemSettingsService.GetSetupByIDAsync(1);
                 message = setting?.IsMaintenanceMode == true ? Messages.SiteUnderMaintenanceMode : setting?.ScrollingText;
             }
 
             ViewData["ScrollingText"] = message;
 
+            #region every click/action URL is being checked 
             var controllerName = context.RouteData.Values["controller"]?.ToString();
             var actionName = context.RouteData.Values["action"]?.ToString();
-
             string? roleType = null;
             bool unknownAction = false;
             if (!string.IsNullOrEmpty(actionName))
@@ -69,7 +64,6 @@ namespace Partnerly.Controllers
                 else 
                     unknownAction = true;
             }
-
             if (!unknownAction && !HasPermision(roleType))
             {
                 var referer = context.HttpContext.Request.Headers["Referer"].ToString();
@@ -85,6 +79,7 @@ namespace Partnerly.Controllers
                     return;
                 }
             }
+            #endregion
 
             await next();
         }
@@ -100,6 +95,37 @@ namespace Partnerly.Controllers
             if (roleType == RoleTypeAttribute.Delete) return _currentUser?.RoleName == RoleTypeAttribute.Admin;
 
             return false;
+        }
+
+        protected async Task<T> PrepareViewModelAsync<T>(T model)
+        where T : IAuditableViewModel
+        {
+            if (model == null)
+                return model;
+
+            if (model.CreatedBy.HasValue)
+            {
+                var creator = await _userService
+                    .GetUserByIDAsync(model.CreatedBy.Value);
+
+                if (creator != null)
+                {
+                    model.CreatedByUserName = $"{creator.FirstName} {creator.LastName}".Trim();
+                }
+            }
+
+            if (model.UpdatedBy.HasValue)
+            {
+                var updater = await _userService
+                    .GetUserByIDAsync(model.UpdatedBy.Value);
+
+                if (updater != null)
+                {
+                    model.UpdatedByUserName = $"{updater.FirstName} {updater.LastName}".Trim();
+                }
+            }
+
+            return model;
         }
 
         #region Data Grid Related Functions

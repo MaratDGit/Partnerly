@@ -12,9 +12,7 @@
             ctx.renderPagination =
                 function (result) {
 
-                    if (
-                        !ctx.pagination
-                    ) {
+                    if (!ctx.pagination) {
                         return;
                     }
 
@@ -30,8 +28,7 @@
                         !ctx.options.paging.enabled
                     ) {
 
-                        ctx.pagination.innerHTML =
-                            "";
+                        ctx.pagination.innerHTML = "";
 
                         return;
                     }
@@ -44,14 +41,17 @@
                         );
 
 
-                    if (
-                        totalPages <= 1
-                    ) {
+                    /*
+                     * =========================================================
+                     * ONLY ONE PAGE
+                     * =========================================================
+                     *
+                     * Даже если только одна страница,
+                     * показываем pagination с текущей страницей.
+                     */
 
-                        ctx.pagination.innerHTML =
-                            "";
-
-                        return;
+                    if (totalPages < 1) {
+                        totalPages = 1;
                     }
 
 
@@ -59,122 +59,143 @@
                         result.page;
 
 
-                    var html =
-                        "";
+                    /*
+                     * =========================================================
+                     * PAGINATION HTML
+                     * =========================================================
+                     */
 
+                    var html = "";
+
+
+                    /*
+                     * =========================================================
+                     * FIRST PAGE
+                     * =========================================================
+                     */
 
                     html +=
-                        '<button type="button" class="btn btn-sm btn-outline-secondary" ' +
+                        '<button type="button" ' +
+                        'class="data-table-page-button" ' +
                         'data-page="1" ' +
+                        'title="First page" ' +
                         (
-                            currentPage === 1
-                                ? "disabled"
+                            currentPage <= 1
+                                ? " disabled"
                                 : ""
                         ) +
-                        '>&laquo;</button>';
+                        '>' +
+                        '<i class="bx bx-chevrons-left"></i>' +
+                        '</button>';
 
+
+                    /*
+                     * =========================================================
+                     * PREVIOUS PAGE
+                     * =========================================================
+                     */
 
                     html +=
-                        '<button type="button" class="btn btn-sm btn-outline-secondary" ' +
+                        '<button type="button" ' +
+                        'class="data-table-page-button" ' +
                         'data-page="' +
                         (
                             currentPage - 1
                         ) +
                         '" ' +
+                        'title="Previous page" ' +
                         (
-                            currentPage === 1
-                                ? "disabled"
+                            currentPage <= 1
+                                ? " disabled"
                                 : ""
                         ) +
-                        '>&lsaquo;</button>';
+                        '>' +
+                        '<i class="bx bx-chevron-left"></i>' +
+                        '</button>';
 
 
-                    var startPage =
-                        Math.max(
-                            1,
-                            currentPage - 1
-                        );
-
-
-                    var endPage =
-                        Math.min(
-                            totalPages,
-                            startPage + 2
-                        );
-
-
-                    if (
-                        endPage -
-                        startPage < 2
-                    ) {
-
-                        startPage =
-                            Math.max(
-                                1,
-                                endPage - 2
-                            );
-                    }
-
-
-                    for (
-                        var page =
-                            startPage;
-
-                        page <=
-                        endPage;
-
-                        page++
-                    ) {
-
-                        html +=
-                            '<button type="button" class="btn btn-sm ' +
-                            (
-                                page ===
-                                    currentPage
-                                    ? "btn-primary"
-                                    : "btn-outline-secondary"
-                            ) +
-                            '" data-page="' +
-                            page +
-                            '">' +
-                            page +
-                            '</button>';
-                    }
-
+                    /*
+                     * =========================================================
+                     * CURRENT PAGE
+                     * =========================================================
+                     */
 
                     html +=
-                        '<button type="button" class="btn btn-sm btn-outline-secondary" ' +
+                        '<input type="number" ' +
+                        'class="data-table-page-input" ' +
+                        'value="' +
+                        currentPage +
+                        '" ' +
+                        'min="1" ' +
+                        'max="' +
+                        totalPages +
+                        '" ' +
+                        'data-page-input ' +
+                        'aria-label="Current page" ' +
+                        'title="Page ' +
+                        currentPage +
+                        ' of ' +
+                        totalPages +
+                        '" />';
+
+
+                    /*
+                     * =========================================================
+                     * NEXT PAGE
+                     * =========================================================
+                     */
+
+                    html +=
+                        '<button type="button" ' +
+                        'class="data-table-page-button" ' +
                         'data-page="' +
                         (
                             currentPage + 1
                         ) +
                         '" ' +
+                        'title="Next page" ' +
                         (
-                            currentPage ===
-                                totalPages
-                                ? "disabled"
+                            currentPage >= totalPages
+                                ? " disabled"
                                 : ""
                         ) +
-                        '>&rsaquo;</button>';
+                        '>' +
+                        '<i class="bx bx-chevron-right"></i>' +
+                        '</button>';
 
+
+                    /*
+                     * =========================================================
+                     * LAST PAGE
+                     * =========================================================
+                     */
 
                     html +=
-                        '<button type="button" class="btn btn-sm btn-outline-secondary" ' +
+                        '<button type="button" ' +
+                        'class="data-table-page-button" ' +
                         'data-page="' +
                         totalPages +
                         '" ' +
+                        'title="Last page" ' +
                         (
-                            currentPage ===
-                                totalPages
-                                ? "disabled"
+                            currentPage >= totalPages
+                                ? " disabled"
                                 : ""
                         ) +
-                        '>&raquo;</button>';
+                        '>' +
+                        '<i class="bx bx-chevrons-right"></i>' +
+                        '</button>';
 
 
                     ctx.pagination.innerHTML =
                         html;
 
+
+                    /*
+                     * =========================================================
+                     * PAGE BUTTONS
+                     * =========================================================
+                     */
 
                     ctx.pagination
                         .querySelectorAll(
@@ -187,6 +208,13 @@
                                     "click",
                                     function () {
 
+                                        if (
+                                            button.disabled
+                                        ) {
+                                            return;
+                                        }
+
+
                                         var page =
                                             parseInt(
                                                 button.getAttribute(
@@ -198,8 +226,9 @@
 
                                         if (
                                             !page ||
-                                            page ===
-                                            ctx.state.page
+                                            page < 1 ||
+                                            page > totalPages ||
+                                            page === ctx.state.page
                                         ) {
                                             return;
                                         }
@@ -214,6 +243,148 @@
                                 );
                             }
                         );
+
+
+                    /*
+                     * =========================================================
+                     * PAGE INPUT
+                     * =========================================================
+                     */
+
+                    var pageInput =
+                        ctx.pagination.querySelector(
+                            "[data-page-input]"
+                        );
+
+
+                    if (!pageInput) {
+                        return;
+                    }
+
+
+                    /*
+                     * ---------------------------------------------------------
+                     * GO TO PAGE
+                     * ---------------------------------------------------------
+                     */
+
+                    function goToPage() {
+
+                        var value =
+                            parseInt(
+                                pageInput.value,
+                                10
+                            );
+
+
+                        /*
+                         * Если введено не число —
+                         * возвращаем текущую страницу.
+                         */
+
+                        if (isNaN(value)) {
+
+                            pageInput.value =
+                                currentPage;
+
+                            return;
+                        }
+
+
+                        /*
+                         * Ограничиваем диапазон:
+                         *
+                         * 0      -> 1
+                         * -5     -> 1
+                         * 999999 -> totalPages
+                         */
+
+                        value =
+                            Math.max(
+                                1,
+                                Math.min(
+                                    value,
+                                    totalPages
+                                )
+                            );
+
+
+                        pageInput.value =
+                            value;
+
+
+                        /*
+                         * Ничего не делаем,
+                         * если это уже текущая страница.
+                         */
+
+                        if (
+                            value ===
+                            ctx.state.page
+                        ) {
+                            return;
+                        }
+
+
+                        ctx.state.page =
+                            value;
+
+
+                        ctx.load();
+                    }
+
+
+                    /*
+                     * ---------------------------------------------------------
+                     * ENTER
+                     * ---------------------------------------------------------
+                     */
+
+                    pageInput.addEventListener(
+                        "keydown",
+                        function (event) {
+
+                            if (
+                                event.key === "Enter"
+                            ) {
+
+                                event.preventDefault();
+
+                                goToPage();
+                            }
+                        }
+                    );
+
+
+                    /*
+                     * ---------------------------------------------------------
+                     * BLUR
+                     * ---------------------------------------------------------
+                     */
+
+                    pageInput.addEventListener(
+                        "blur",
+                        function () {
+
+                            goToPage();
+                        }
+                    );
+
+
+                    /*
+                     * ---------------------------------------------------------
+                     * SELECT ALL ON FOCUS
+                     * ---------------------------------------------------------
+                     */
+
+                    pageInput.addEventListener(
+                        "focus",
+                        function () {
+
+                            pageInput.select();
+                        }
+                    );
+
                 };
         },
 
@@ -226,9 +397,7 @@
              * =========================================================
              */
 
-            if (
-                !ctx.pageSizeSelect
-            ) {
+            if (!ctx.pageSizeSelect) {
                 return;
             }
 

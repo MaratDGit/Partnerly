@@ -1,6 +1,7 @@
 ﻿using Partnerly.Descriptors.Attributes;
 using Partnerly.Infrastructure.Interfaces;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Partnerly.Models
 {
@@ -21,7 +22,12 @@ namespace Partnerly.Models
         public bool IsRead { get; set; } = false;
         public Guid? TicketID { get; set; }
 
-        public string? Link { get; set; } // куда ведёт уведомление
+        public string? Link { get; set; } 
+
+        #region Unbound fields
+        [NotMapped]
+        public bool Selected { get; set; }
+        #endregion
 
         #region System Columns
         public string? Note { get; set; }

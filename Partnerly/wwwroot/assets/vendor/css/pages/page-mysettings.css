@@ -83,11 +83,11 @@
            ========================================================= */
 
 .settings-actions {
-    padding: 14px 24px;
+    /*padding: 14px 24px;*/
     min-height: 60px;
-    display: flex;
+    /*display: flex;*/
     align-items: center;
-    border-bottom: 1px solid #eeeeef;
+    /*border-bottom: 1px solid #eeeeef;*/
     background: #fff;
 }
 
@@ -98,7 +98,7 @@
 
 .settings-body {
     display: flex;
-    min-height: 580px;
+    min-height: 400px;
 }
 
 

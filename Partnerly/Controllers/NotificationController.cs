@@ -119,6 +119,8 @@ namespace Partnerly.Controllers
             templatesAsView.CreatorName = $"{creator?.FirstName} {creator?.LastName}";
             templatesAsView.OwnerName = $"{owner?.FirstName} {owner?.LastName}";
 
+            await PrepareViewModelAsync(templatesAsView);
+
             return View(templatesAsView);
         }
 

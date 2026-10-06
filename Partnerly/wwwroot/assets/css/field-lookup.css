@@ -115,28 +115,17 @@
     transition: color .2s ease, background-color .2s ease, transform .2s ease;
 }
 
+.lookup-close::before {
+    content: "\00d7";
+    font-size: 24px;
+    font-weight: 400;
+    line-height: 1;
+}
 
-    /* Use the existing × from HTML */
-
-    .lookup-close::before {
-        content: "\00d7";
-        font-size: 24px;
-        font-weight: 400;
-        line-height: 1;
-        transform: translateY(-1px);
-    }
-
-
-    .lookup-close:hover {
-        color: #ff4c51;
-        background: rgba(255, 76, 81, 0.10);
-        transform: rotate(90deg);
-    }
-
-
-    .lookup-close:active {
-        transform: rotate(90deg) scale(.92);
-    }
+.lookup-close:hover {
+    color: #ff4c51;
+    background: rgba(255, 76, 81, 0.10);
+}
 
 
 /* =========================================================

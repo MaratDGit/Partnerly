@@ -439,7 +439,8 @@ body {
 .partnerly-menu-item.active .partnerly-menu-link {
     color: var(--partnerly-primary) !important;
     background: linear-gradient(90deg, rgba(105, 108, 255, 0.13), rgba(105, 108, 255, 0.055));
-    box-shadow: inset 3px 0 0 var(--partnerly-primary);
+/*    box-shadow: inset 3px 0 0 var(--partnerly-primary);
+*/
 }
 
 
@@ -447,6 +448,7 @@ body {
     color: #fff;
     background: var(--partnerly-primary);
     box-shadow: 0 4px 10px rgba(105, 108, 255, 0.22);
+    border-radius: 7px;
 }
 
 
@@ -1066,4 +1068,25 @@ body.partnerly-mobile-menu-open {
         top: 14px;
         right: 12px;
     }
+}
+
+input[type="checkbox"],
+input[type="radio"] {
+    accent-color: var(--partnerly-primary);
+}
+
+    input[type="checkbox"]:checked,
+    input[type="radio"]:checked {
+        accent-color: var(--partnerly-primary);
+    }
+
+
+.form-check-input:checked {
+    background-color: var(--partnerly-primary);
+    border-color: var(--partnerly-primary);
+}
+
+.form-check-input:focus {
+    border-color: var(--partnerly-primary);
+    box-shadow: 0 0 0 0.2rem rgba(105, 108, 255, 0.15);
 }

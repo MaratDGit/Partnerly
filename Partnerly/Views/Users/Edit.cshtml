@@ -7,8 +7,12 @@
 }
 
 <div class="card">
-    <div class="card-header justify-content-between">
-        <h5>@Localizer["EditUser"]</h5>
+    <div class="card-header d-flex align-items-center justify-content-between">
+        <h5 class="mb-0">
+            @Localizer["EditUser"]
+        </h5>
+
+        @await Html.PartialAsync("_AuditInfo", Model)
     </div>
 
     <div class="card-body">
@@ -30,7 +34,7 @@
             <input type="hidden" asp-for="Id" />
             <input type="hidden" id="hiddenNote" asp-for="Note" />
 
-            <div class="form-floating mb-1 max-w-600 position-relative">
+            <div class="form-floating mb-1 max-w-400 position-relative">
                 <input asp-for="FirstName"
                        id="firstName"
                        name="firstName"
@@ -50,28 +54,28 @@
                 <span asp-validation-for="FirstName" class="text-danger"></span>
             </div>
             
-            <div class="form-floating mb-1 max-w-600">
+            <div class="form-floating mb-1 max-w-400">
                <input asp-for="LastName" class="form-control" id="lastName" name="lastName" placeholder=""/>
                <label asp-for="LastName"></label>
                <span asp-validation-for="LastName" class="text-danger"></span>
             </div>
-            <div class="form-floating mb-1 max-w-600">
+            <div class="form-floating mb-1 max-w-400">
                 <input asp-for="Email" class="form-control" id="email" name="email" placeholder=@Localizer["Enteryouremailaddress"] />
                <label asp-for="Email"></label>
                <span asp-validation-for="Email" class="text-danger"></span>
             </div>
-            <div class="form-floating mb-1 max-w-600">
+            <div class="form-floating mb-1 max-w-400">
                <input asp-for="Phone" class="form-control" id="phone" name="phone" placeholder="+37477123456"/>
                <label asp-for="Phone"></label>
                <span asp-validation-for="Phone" class="text-danger"></span>
             </div>
-            <div class="form-floating mb-1 max-w-600">
-               <input asp-for="Balance" class="form-control" id="balance" name="balance" placeholder=""/>
+            <div class="form-floating mb-1 max-w-400">
+               <input asp-for="Balance" class="form-control" id="balance" name="balance"/>
                <label asp-for="Balance"></label>
                <span asp-validation-for="Balance" class="text-danger"></span>
             </div>
-            <div class="form-floating mb-2 max-w-600">
-               <input asp-for="MyReferralCode" class="form-control" id="myReferralCode" name="myReferralCode" readonly placeholder=""/>
+            <div class="form-floating mb-2 max-w-400">
+               <input asp-for="MyReferralCode" class="form-control" id="myReferralCode" name="myReferralCode" readonly/>
                <label asp-for="MyReferralCode"></label>
                <span asp-validation-for="MyReferralCode" class="text-danger"></span>
             </div>

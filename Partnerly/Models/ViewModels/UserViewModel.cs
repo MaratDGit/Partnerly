@@ -1,11 +1,12 @@
 ﻿using Microsoft.AspNetCore.Components.Forms;
 using Partnerly.Descriptors.Attributes.BaseAttributes;
 using Partnerly.Descriptors.Messages;
+using Partnerly.Infrastructure.Interfaces;
 using System.ComponentModel.DataAnnotations;
 
 namespace Partnerly.Models.ViewModels
 {
-    public class UserViewModel
+    public class UserViewModel : IAuditableViewModel
     {
         #region ID
         [Required]
@@ -34,12 +35,12 @@ namespace Partnerly.Models.ViewModels
 
         #region Phone
         [ArmenianPhone(ErrorMessageResourceType = typeof(ErrorMessages), ErrorMessageResourceName = nameof(ErrorMessages.TypeValidPhoneNumber))]
-        //[Required(ErrorMessageResourceType = typeof(ErrorMessages), ErrorMessageResourceName = nameof(ErrorMessages.FieldRequired))]
         [Display(Name = nameof(FieldsDisplayNames.Phone), ResourceType = typeof(FieldsDisplayNames))]
         public string? Phone { get; set; }
         #endregion
 
         #region PhotoUrl
+        [Display(Name = nameof(FieldsDisplayNames.Photo), ResourceType = typeof(FieldsDisplayNames))]
         public string? PhotoUrl { get; set; }
         #endregion
 
@@ -53,7 +54,12 @@ namespace Partnerly.Models.ViewModels
         public Guid? RoleId { get; set; }
         #endregion
 
-        #region MyReferralCode
+        #region RoleName
+        [Display(Name = nameof(FieldsDisplayNames.Role), ResourceType = typeof(FieldsDisplayNames))]
+        public string? RoleName { get; set; }
+        #endregion
+
+        #region ReferralCode
         [Required]
         [Display(Name = nameof(FieldsDisplayNames.ReferrerCode), ResourceType = typeof(FieldsDisplayNames))]
         public string? MyReferralCode { get; set; }
@@ -89,13 +95,19 @@ namespace Partnerly.Models.ViewModels
         #region System Columns
         public string? Note { get; set; }
         public bool IsDeleted { get; set; } = false;
-        //[Required]
+
+        [Display(Name = nameof(FieldsDisplayNames.CreatorName), ResourceType = typeof(FieldsDisplayNames))]
+        public string? CreatedByUserName { get; set; }
         public Guid? CreatedBy { get; set; }
-        //[Required]
+
+        [Display(Name = nameof(FieldsDisplayNames.CreatedDate), ResourceType = typeof(FieldsDisplayNames))]
         public DateTime? CreatedDate { get; set; }
-        //[Required]
+
+        [Display(Name = nameof(FieldsDisplayNames.UpdaterName), ResourceType = typeof(FieldsDisplayNames))]
+        public string? UpdatedByUserName { get; set; }
         public Guid? UpdatedBy { get; set; }
-        //[Required]
+
+        [Display(Name = nameof(FieldsDisplayNames.UpdatedDate), ResourceType = typeof(FieldsDisplayNames))]
         public DateTime? UpdatedDate { get; set; }
         #endregion
     }

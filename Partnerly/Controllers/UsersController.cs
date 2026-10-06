@@ -9,6 +9,7 @@ using Partnerly.Infrastructure.Interfaces;
 using Partnerly.Infrastructure.Services;
 using Partnerly.Models;
 using Partnerly.Models.DataTable;
+using Partnerly.Models.DataTable.ViewModels;
 using Partnerly.Models.GridViews;
 using Partnerly.Models.ViewModels;
 using System.Security.Claims;
@@ -30,9 +31,10 @@ namespace Partnerly.Controllers
         }
 
         #region Index / Create / Edit / Delete
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(UserDataTableViewModel model)
         {
-            return View();
+            model.dataTableUsersMain = CreateTableOptions();
+            return View(model);
         }
 
         [ClaimAuthorize(ClaimTypes.Role, RoleTypeAttribute.Admin)]
@@ -130,6 +132,8 @@ namespace Partnerly.Controllers
             var userAsView = await PropertyActionsHelper.CopyPropertiesAsync(user, new UserViewModel());
             if (userAsView == null) return NotFound();
 
+            await PrepareViewModelAsync(userAsView);
+
             return View(userAsView);
         }
 
@@ -223,7 +227,6 @@ namespace Partnerly.Controllers
         }
         #endregion
 
-        #region Grid Related
         [HttpGet]
         public async Task<IActionResult> GetLookupList(string fieldName)
         {
@@ -247,113 +250,106 @@ namespace Partnerly.Controllers
             return Json(new { });
         }
 
-        [HttpGet]
-        public async Task<JsonResult> GetData(string tableModel)
-        {
-            if (tableModel == nameof(Partnerly.Models.User))
-            {
-                return await GetGridDataAsync<UserGridViewModel, User>("Users");
-            }
-            return Json(new { fields = new object[0], data = new object[0] });
-        }
+        //#region Grid Related
+        //[HttpGet]
+        //public async Task<JsonResult> GetData(string tableModel)
+        //{
+        //    if (tableModel == nameof(Partnerly.Models.User))
+        //    {
+        //        return await GetGridDataAsync<UserGridViewModel, User>("Users");
+        //    }
+        //    return Json(new { fields = new object[0], data = new object[0] });
+        //}
 
-        protected override async Task<IEnumerable<TEntity>> GetEntitiesAsync<TEntity>()
-        {
-            if (typeof(TEntity) == typeof(User))
-            {
-                var viewRole = await _roleService.GetRoleByNameAsync(RoleTypeAttribute.User);
-                var users = await _userService.GetAllUsersAsync();
+        //protected override async Task<IEnumerable<TEntity>> GetEntitiesAsync<TEntity>()
+        //{
+        //    if (typeof(TEntity) == typeof(User))
+        //    {
+        //        var viewRole = await _roleService.GetRoleByNameAsync(RoleTypeAttribute.User);
+        //        var users = await _userService.GetAllUsersAsync();
 
-                if (!base.HasPermision(RoleTypeAttribute.Delete))
-                {
-                    users = users.Where(_ => _.RoleId == viewRole?.Id);
-                }
+        //        if (!base.HasPermision(RoleTypeAttribute.Delete))
+        //        {
+        //            users = users.Where(_ => _.RoleId == viewRole?.Id);
+        //        }
 
-                return (IEnumerable<TEntity>)users;
-            }
+        //        return (IEnumerable<TEntity>)users;
+        //    }
 
-            return Enumerable.Empty<TEntity>();
-        }
+        //    return Enumerable.Empty<TEntity>();
+        //}
 
-        protected override List<GridField> GetFields(object row)
-        {
-            var fields = new List<GridField>();
-            if (row is UserGridViewModel userRow)
-            {
-                return new List<GridField>
-                {
-                    new GridField { FieldName = "select", DisplayName = $"", DefaultValue = false, Type = "checkbox", IsVisible = base.HasPermision(RoleTypeAttribute.Delete)},
-                    new GridField { FieldName = "userName", DisplayName = $"{FieldsDisplayNames.FullName}", LinkTemplate = "/Users/Edit/{id}" },
-                    new GridField { FieldName = "email", DisplayName = FieldsDisplayNames.Email, LinkTemplate = "/Users/Edit/{id}" },
-                    new GridField { FieldName = "myReferralCode", DisplayName = FieldsDisplayNames.ReferrerCode, LinkTemplate = "/Users/Edit/{id}" },
-                    //new GridField { FieldName = "referrerName", DisplayName = FieldsDisplayNames.ReffererName, DefaultValue = "" },
-                    new GridField { FieldName = "phone", DisplayName = FieldsDisplayNames.Phone, Format = "phone:"},
-                    //new GridField { FieldName = "balance", DisplayName = FieldsDisplayNames.Balance, DefaultValue = "0"},
-                    new GridField { FieldName = "lastActivity", DisplayName = FieldsDisplayNames.LastActivity,  IsSortable = true, Format="date:lastActivity" },
-                    new GridField { FieldName = "isOnlayn", DisplayName = FieldsDisplayNames.IsOnlayn, IsFilterable = true, Type = "checkbox", DefaultValue = false},
-                    new GridField { FieldName = "isBlocked", DisplayName = FieldsDisplayNames.IsBlocked, IsFilterable = true, Type = "checkbox"},
-                    new GridField { FieldName = "emailConfirmed", DisplayName = FieldsDisplayNames.EmailConfirmed, IsFilterable = true, Type = "checkbox"},
-                    new GridField { FieldName = "roleName", DisplayName = FieldsDisplayNames.Role, IsFilterable = true},
-                    new GridField { FieldName = "createdDate", DisplayName = FieldsDisplayNames.CreatedDate, IsSortable = true, IsFilterable = true, Format="date:MM/dd/yyyy" }
-                };
-            }
+        //protected override List<GridField> GetFields(object row)
+        //{
+        //    var fields = new List<GridField>();
+        //    if (row is UserGridViewModel userRow)
+        //    {
+        //        return new List<GridField>
+        //        {
+        //            new GridField { FieldName = "select", DisplayName = $"", DefaultValue = false, Type = "checkbox", IsVisible = base.HasPermision(RoleTypeAttribute.Delete)},
+        //            new GridField { FieldName = "userName", DisplayName = $"{FieldsDisplayNames.FullName}", LinkTemplate = "/Users/Edit/{id}" },
+        //            new GridField { FieldName = "email", DisplayName = FieldsDisplayNames.Email, LinkTemplate = "/Users/Edit/{id}" },
+        //            new GridField { FieldName = "myReferralCode", DisplayName = FieldsDisplayNames.ReferrerCode, LinkTemplate = "/Users/Edit/{id}" },
+        //            //new GridField { FieldName = "referrerName", DisplayName = FieldsDisplayNames.ReffererName, DefaultValue = "" },
+        //            new GridField { FieldName = "phone", DisplayName = FieldsDisplayNames.Phone, Format = "phone:"},
+        //            //new GridField { FieldName = "balance", DisplayName = FieldsDisplayNames.Balance, DefaultValue = "0"},
+        //            new GridField { FieldName = "lastActivity", DisplayName = FieldsDisplayNames.LastActivity,  IsSortable = true, Format="date:lastActivity" },
+        //            new GridField { FieldName = "isOnlayn", DisplayName = FieldsDisplayNames.IsOnlayn, IsFilterable = true, Type = "checkbox", DefaultValue = false},
+        //            new GridField { FieldName = "isBlocked", DisplayName = FieldsDisplayNames.IsBlocked, IsFilterable = true, Type = "checkbox"},
+        //            new GridField { FieldName = "emailConfirmed", DisplayName = FieldsDisplayNames.EmailConfirmed, IsFilterable = true, Type = "checkbox"},
+        //            new GridField { FieldName = "roleName", DisplayName = FieldsDisplayNames.Role, IsFilterable = true},
+        //            new GridField { FieldName = "createdDate", DisplayName = FieldsDisplayNames.CreatedDate, IsSortable = true, IsFilterable = true, Format="date:MM/dd/yyyy" }
+        //        };
+        //    }
 
-            return fields;
-        }
+        //    return fields;
+        //}
 
-        protected override async Task CustomizeRowAsync(object row)
-        {
-            if (row is UserGridViewModel userRow)
-            {
-                userRow.UserName = $"{userRow.FirstName} {userRow.LastName}";
+        //protected override async Task CustomizeRowAsync(object row)
+        //{
+        //    if (row is UserGridViewModel userRow)
+        //    {
+        //        userRow.UserName = $"{userRow.FirstName} {userRow.LastName}";
 
-                //if (userRow.ReferrerId != null)
-                //{
-                //    var Referrer = await _userService.GetUserByIDAsync(userRow.ReferrerId);
-                //    userRow.ReferrerName = $"{Referrer?.FirstName} {Referrer?.LastName}";
-                //}
+        //        //if (userRow.ReferrerId != null)
+        //        //{
+        //        //    var Referrer = await _userService.GetUserByIDAsync(userRow.ReferrerId);
+        //        //    userRow.ReferrerName = $"{Referrer?.FirstName} {Referrer?.LastName}";
+        //        //}
 
-                Role? role = await _roleService.GetRoleByIDAsync(userRow.RoleId);
-                userRow.RoleName = role?.Name;
+        //        Role? role = await _roleService.GetRoleByIDAsync(userRow.RoleId);
+        //        userRow.RoleName = role?.Name;
 
-                if (userRow.LastActivity != null)
-                    userRow.LastActivity = userRow.LastActivity.Value.ToLocalTime();
-            }
-        }
+        //        if (userRow.LastActivity != null)
+        //            userRow.LastActivity = userRow.LastActivity.Value.ToLocalTime();
+        //    }
+        //}
 
-        [HttpPost]
-        public async Task<IActionResult> ExportToExcel([FromForm] string selectedIds)
-        {
-            if (!string.IsNullOrWhiteSpace(selectedIds))
-            {
-                var ids = JsonSerializer.Deserialize<List<Guid>>(selectedIds);
-                if (ids.Count > 0)
-                {
-                    var users = await _userService.GetAllUsersAsync();
-                    var data = users.Where(x => ids.Contains(x.Id)).ToList();
+        //[HttpPost]
+        //public async Task<IActionResult> ExportToExcel([FromForm] string selectedIds)
+        //{
+        //    if (!string.IsNullOrWhiteSpace(selectedIds))
+        //    {
+        //        var ids = JsonSerializer.Deserialize<List<Guid>>(selectedIds);
+        //        if (ids.Count > 0)
+        //        {
+        //            var users = await _userService.GetAllUsersAsync();
+        //            var data = users.Where(x => ids.Contains(x.Id)).ToList();
 
-                    return await ExportToExcel(data, "users.xlsx");
-                }
-            }
+        //            return await ExportToExcel(data, "users.xlsx");
+        //        }
+        //    }
 
-            return BadRequest("No users selected.");
-        }
+        //    return BadRequest("No users selected.");
+        //}
 
-        [HttpPost]
-        public async Task<IActionResult> ExportAllToExcel([FromForm] string data)
-        {
-            var users = await _userService.GetAllUsersAsync();
-            return await ExportToExcel(users, "users.xlsx");
-        }
-        #endregion
-
-
-        public IActionResult DataTableCustom()
-        {
-            var options = CreateTableOptions();
-
-            return View(options);
-        }
+        //[HttpPost]
+        //public async Task<IActionResult> ExportAllToExcel([FromForm] string data)
+        //{
+        //    var users = await _userService.GetAllUsersAsync();
+        //    return await ExportToExcel(users, "users.xlsx");
+        //}
+        //#endregion
 
         [HttpGet]
         public async Task<IActionResult> Data([FromQuery] DataTableRequest request)
@@ -371,7 +367,7 @@ namespace Partnerly.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> UpdateInline(
-     [FromBody] DataTableInlineUpdateRequest request)
+        [FromBody] DataTableInlineUpdateRequest request)
         {
             if (string.IsNullOrWhiteSpace(request.Id))
             {
@@ -457,8 +453,8 @@ namespace Partnerly.Controllers
 
         [HttpGet]
         public async Task<IActionResult> Export(
-    [FromQuery] DataTableRequest request,
-    [FromQuery] string format = "csv")
+        [FromQuery] DataTableRequest request,
+        [FromQuery] string format = "csv")
         {
             var options =
                 CreateTableOptions();
@@ -530,9 +526,10 @@ namespace Partnerly.Controllers
                 Name = FieldsDisplayNames.Users,
                 Icon = "bx bx-group",
 
-                AjaxUrl = "/Users/Data",
                 KeyField = "Id",
+                AjaxUrl = "/Users/Data",
                 ExportUrl = "/Users/Export",
+                
                 AutoLoad = true,     
                 ReloadEnabled = true,
                 RememberState = true,
@@ -577,7 +574,7 @@ namespace Partnerly.Controllers
 
                     new DataTableColumn
                     {
-                        Field = "Selected",
+                        Field = nameof(Models.User.Selected),
                         Type = DataTableColumnType.Boolean,
                         Sortable = true,
                         Searchable = false,
@@ -588,7 +585,7 @@ namespace Partnerly.Controllers
 
                     new DataTableColumn
                     {
-                        Field = "FirstName",
+                        Field = nameof(Models.User.FirstName),
                         Title = FieldsDisplayNames.FirstName,
                         Type = DataTableColumnType.Link,
                         UrlTemplate = "/Users/Edit/{Id}",
@@ -608,7 +605,7 @@ namespace Partnerly.Controllers
 
                     new DataTableColumn
                     {
-                        Field = "LastName",
+                        Field = nameof(Models.User.LastName),
                         Title = FieldsDisplayNames.LastName,
                         Type = DataTableColumnType.Text,
                         Editable = true,
@@ -617,7 +614,7 @@ namespace Partnerly.Controllers
 
                     new DataTableColumn
                     {
-                        Field = "Email",
+                        Field = nameof(Models.User.Email),
                         Title = FieldsDisplayNames.Email,
                         Type = DataTableColumnType.Email,
                         Resizable = true
@@ -625,7 +622,7 @@ namespace Partnerly.Controllers
 
                     new DataTableColumn
                     {
-                        Field = "IsBlocked",
+                        Field = nameof(Models.User.IsBlocked),
                         Title = FieldsDisplayNames.IsBlocked,
                         Type = DataTableColumnType.Boolean,
                         Editable = true,
@@ -635,7 +632,7 @@ namespace Partnerly.Controllers
 
                     new DataTableColumn
                     {
-                        Field = "IsOnlayn",
+                        Field = nameof(Models.User.IsOnlayn),
                         Title = FieldsDisplayNames.IsOnlayn,
                         Type = DataTableColumnType.Boolean,
                         Editable = false,
@@ -645,7 +642,7 @@ namespace Partnerly.Controllers
 
                     new DataTableColumn
                     {
-                        Field = "EmailConfirmed",
+                        Field = nameof(Models.User.EmailConfirmed),
                         Title = FieldsDisplayNames.EmailConfirmed,
                         Type = DataTableColumnType.Boolean,
                         Alignment = DataTableAlignment.Center,
@@ -654,12 +651,11 @@ namespace Partnerly.Controllers
 
                     new DataTableColumn
                     {
-                        Field = "Balance",
+                        Field = nameof(Models.User.Balance),
                         Title = FieldsDisplayNames.Balance,
                         Type = DataTableColumnType.Currency,
                         Editable = true,
                         Resizable = true,
-
 
                         ConditionalStyles = new List<DataTableConditionalStyle> 
                         {
@@ -713,7 +709,7 @@ namespace Partnerly.Controllers
 
                     new DataTableColumn
                     {
-                        Field = "LastActivity",
+                        Field = nameof(Models.User.LastActivity),
                         Title = FieldsDisplayNames.LastActivity,
                         Type = DataTableColumnType.DateTime,
                         Format = "relative",
@@ -722,7 +718,7 @@ namespace Partnerly.Controllers
 
                     new DataTableColumn
                     {
-                        Field = "CreatedDate",
+                        Field = nameof(Models.User.CreatedDate),
                         Title = FieldsDisplayNames.CreatedDate,
                         Type = DataTableColumnType.DateTime,
                         Format = "dd.MM.yyyy HH:mm",
@@ -819,7 +815,7 @@ namespace Partnerly.Controllers
                             Url = "/Users/Edit/{Id}",
                             Method = "GET",
                             //CssClass = "data-table-grid-action"
-                            CssClass = "btn btn-sm btn-outline-secondary"
+                           // CssClass = "btn btn-sm btn-outline-secondary"
                         },
 
                         new DataTableAction
@@ -830,7 +826,7 @@ namespace Partnerly.Controllers
                             Type = DataTableActionType.InlineEdit,
                             Placement = DataTableActionPlacement.Row,
                             //CssClass = "data-table-grid-action"
-                            CssClass = "btn btn-sm btn-outline-primary"
+                            //CssClass = "btn btn-sm btn-outline-primary"
                         },
 
                         new DataTableAction
@@ -843,7 +839,7 @@ namespace Partnerly.Controllers
                             Url = "/Users/Delete/{Id}",
                             Method = "GET",
                             //CssClass = "data-table-grid-action"
-                            CssClass = "btn btn-sm btn-outline-danger"
+                            //CssClass = "btn btn-sm btn-outline-danger"
                         }
                     }
                 },

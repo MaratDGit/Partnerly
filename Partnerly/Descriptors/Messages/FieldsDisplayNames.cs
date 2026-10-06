@@ -143,6 +143,7 @@ namespace Partnerly.Descriptors.Messages
         public static string EntityType => Messages.Get(nameof(EntityType));
         public static string Entity => Messages.Get(nameof(Entity));
         public static string IsDeleted => Messages.Get(nameof(IsDeleted));
+        public static string Photo => Messages.Get(nameof(Photo));
 
         public static string DataTableSearch => Messages.Get(nameof(DataTableSearch));
         public static string Users => Messages.Get(nameof(Users));

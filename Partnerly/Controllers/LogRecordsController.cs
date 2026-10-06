@@ -36,6 +36,8 @@ namespace Partnerly.Controllers
             var logAsView = await PropertyActionsHelper.CopyPropertiesAsync(log, new LogsViewModel());
             if (logAsView == null) return NotFound();
 
+            await PrepareViewModelAsync(logAsView);
+
             return View(logAsView);
         }
 

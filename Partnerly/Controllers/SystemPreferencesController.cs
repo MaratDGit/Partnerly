@@ -31,6 +31,8 @@ namespace Partnerly.Controllers
             var settingAsView = await PropertyActionsHelper.CopyPropertiesAsync(setting, new SystemPreferencesViewModel());
             if (settingAsView == null) return NotFound();
 
+            await PrepareViewModelAsync(settingAsView);
+
             return View(settingAsView);
         }
 

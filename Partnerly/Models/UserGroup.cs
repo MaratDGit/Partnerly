@@ -1,5 +1,6 @@
 ﻿using Partnerly.Infrastructure.Interfaces;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Partnerly.Models
 {
@@ -10,6 +11,11 @@ namespace Partnerly.Models
         [Required]
         public string? Name { get; set; }
         public string? Description { get; set; }
+
+        #region Unbound fields
+        [NotMapped]
+        public bool Selected { get; set; }
+        #endregion
 
         public ICollection<UserGroupMember> Members { get; set; } = new List<UserGroupMember>();
 

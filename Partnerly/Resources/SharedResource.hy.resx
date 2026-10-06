@@ -1323,4 +1323,7 @@
   <data name="DaysAgo" xml:space="preserve">
     <value>օր առաջ</value>
   </data>
+  <data name="Photo" xml:space="preserve">
+    <value>Լուսանկար</value>
+  </data>
 </root>

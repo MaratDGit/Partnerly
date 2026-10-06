@@ -18,6 +18,8 @@
 //            ├── pagination.js
 //            ├── inline.js
 //            └── actions.js
+//            ├── export.js
+//            └── resize.js 
 
 (function (window, document) {
 
