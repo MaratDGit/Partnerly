@@ -16,8 +16,8 @@
         public bool InlineEditing { get; set; } = false;
         public string InlineUpdateUrl { get; set; } = "";
 
-        public string InlineCreateUrl { get; set; } = "";
-        public string InlineDeleteUrl { get; set; } = "";
+        //public string InlineCreateUrl { get; set; } = "";
+        //public string InlineDeleteUrl { get; set; } = "";
 
         public bool ColumnResizeEnabled { get; set; } = true;
         public int ColumnResizeMinWidth { get; set; } = 60;

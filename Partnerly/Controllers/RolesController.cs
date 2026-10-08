@@ -7,6 +7,7 @@ using Partnerly.Events.BaseEvents;
 using Partnerly.Infrastructure.Interfaces;
 using Partnerly.Infrastructure.Services;
 using Partnerly.Models;
+using Partnerly.Models.DataTable;
 using Partnerly.Models.GridViews;
 using Partnerly.Models.ViewModels;
 using System.Security.Claims;
@@ -18,8 +19,10 @@ namespace Partnerly.Controllers
     public class RolesController : _BaseController
     {
         protected readonly IRoleService _roleService;
-        public RolesController(IEventBus eventBus, IUserService userService, ICurrentUserService currentUser, ILogService logService, IRoleService roleService, IStringLocalizer<SharedResource> localizer, ISystemSettingsService systemSettingsService)
-        : base(eventBus, userService, currentUser, logService, localizer, systemSettingsService)
+        public RolesController(IEventBus eventBus, IUserService userService, ICurrentUserService currentUser,
+            ILogService logService, IRoleService roleService, IStringLocalizer<SharedResource> localizer, 
+            ISystemSettingsService systemSettingsService, DataTableQueryService tableService, IDataTableRegistry dataTableRegistry)
+        : base(eventBus, userService, currentUser, logService, localizer, systemSettingsService, tableService, dataTableRegistry)
         {
             _roleService = roleService;
         }

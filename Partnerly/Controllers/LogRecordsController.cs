@@ -7,6 +7,7 @@ using Partnerly.Events.BaseEvents;
 using Partnerly.Helpers;
 using Partnerly.Infrastructure.Interfaces;
 using Partnerly.Models;
+using Partnerly.Models.DataTable;
 using Partnerly.Models.GridViews;
 using Partnerly.Models.ViewModels;
 using System.Security.Claims;
@@ -17,8 +18,10 @@ namespace Partnerly.Controllers
     [ClaimAuthorize(ClaimTypes.Role, RoleTypeAttribute.Admin)]
     public class LogRecordsController : _BaseController
     {
-        public LogRecordsController(IEventBus eventBus, IUserService userService, ICurrentUserService currentUser, ILogService logService, IStringLocalizer<SharedResource> localizer, ISystemSettingsService systemSettingsService)
-        : base(eventBus, userService, currentUser, logService, localizer, systemSettingsService)
+        public LogRecordsController(IEventBus eventBus, IUserService userService, ICurrentUserService currentUser, ILogService logService, 
+            IStringLocalizer<SharedResource> localizer, ISystemSettingsService systemSettingsService, 
+            DataTableQueryService tableService, IDataTableRegistry dataTableRegistry)
+        : base(eventBus, userService, currentUser, logService, localizer, systemSettingsService, tableService, dataTableRegistry)
         {
         }
         private static List<User> _users = new List<User>();

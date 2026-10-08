@@ -10,11 +10,8 @@ using Partnerly.Infrastructure.Services;
 using Partnerly.Models;
 using Partnerly.Models.DataTable;
 using Partnerly.Models.DataTable.ViewModels;
-using Partnerly.Models.GridViews;
 using Partnerly.Models.ViewModels;
-using System.Net.Sockets;
 using System.Security.Claims;
-using System.Text.Json;
 
 namespace Partnerly.Controllers
 {
@@ -22,26 +19,27 @@ namespace Partnerly.Controllers
     public class UserGroupsController : _BaseController
     {
         private readonly IUserGroupService _userGroupService;
-        private readonly DataTableQueryService _tableService;
         private readonly IInlineUpdateService _inlineUpdateService;
 
-        public UserGroupsController(IEventBus eventBus, IUserService userService, ICurrentUserService currentUser, ILogService logService, IUserGroupService userGroupService, IStringLocalizer<SharedResource> localizer, ISystemSettingsService systemSettingsService, DataTableQueryService tableService, IInlineUpdateService inlineUpdateService)
-        : base(eventBus, userService, currentUser, logService, localizer, systemSettingsService)
+        public UserGroupsController(
+            IEventBus eventBus, IUserService userService, ICurrentUserService currentUser, ILogService logService, 
+            IUserGroupService userGroupService, IStringLocalizer<SharedResource> localizer, ISystemSettingsService systemSettingsService,
+            IInlineUpdateService inlineUpdateService, DataTableQueryService tableService, IDataTableRegistry dataTableRegistry)
+        : base(eventBus, userService, currentUser, logService, localizer, systemSettingsService, tableService, dataTableRegistry)
         {
             _userGroupService = userGroupService;
-            _tableService = tableService;
             _inlineUpdateService = inlineUpdateService;
         }
 
         #region Index / Create / Edit / Delete
-        public async Task<IActionResult> Index(UserGoupsDataTableViewModel model)
+        public IActionResult Index(UserGoupsDataTableViewModel model)
         {
             model.dataTableUserGroupsMain = CreateTableOptions();
             return View(model);
         }
 
         [ClaimAuthorize(ClaimTypes.Role, RoleTypeAttribute.Admin)]
-        public async Task<IActionResult> Create()
+        public IActionResult Create()
         {
             return View();
         }
@@ -142,6 +140,7 @@ namespace Partnerly.Controllers
                             }
                         }
                     }
+
                     ServiceResult<UserGroup?> result = await _userGroupService.UpdateUserGroupAsync(group, members);
                     if (!result.Success)
                     {
@@ -217,151 +216,11 @@ namespace Partnerly.Controllers
             return Json(new { });
         }
 
-        [HttpGet]
-        public async Task<JsonResult> GetAllUsers()
-        {
-            var users = await _userService.GetAllUsersAsync();
-
-            var result = users.Select(u => new { id = u.Id, name = u.FirstName })
-                .ToList();
-
-            return Json(users);
-        }
-
-        #region Grid Related
-        [HttpGet]
-        public async Task<JsonResult> GetData(string tableModel)
-        {
-            if (tableModel == nameof(Partnerly.Models.UserGroup))
-            {
-                return await GetGridDataAsync<UserGroupGridViewModel, UserGroup>("UserGroups");
-            }
-            else if (tableModel == nameof(Partnerly.Models.User))
-            {
-                List<UserGridViewModel> userList = new List<UserGridViewModel>();
-
-                var members = await _userGroupService.GetAllUsersGroupsAsync();
-                var users = await _userService.GetAllUsersAsync();
-
-                foreach (User? user in users)
-                {
-                    UserGridViewModel row = new UserGridViewModel
-                    {
-                        Id = user.Id,
-                        UserName = $"{user.FirstName} {user.LastName}",
-                        Email = user.Email,
-                        CreatedDate = user.CreatedDate,
-                    };
-                    userList.Add(row);
-                }
-
-                if (userList.Any())
-                {
-                    return Json(new { fields = GetFields(userList.First()), data = userList });
-                }
-            }
-
-            return Json(new { fields = new object[0], data = new object[0] });
-        }
-
-        protected override async Task<IEnumerable<TEntity>> GetEntitiesAsync<TEntity>()
-        {
-            if (typeof(TEntity) == typeof(UserGroup))
-            {
-                return (IEnumerable<TEntity>)await _userGroupService.GetAllUserGroupsAsync();
-            }
-            else if (typeof(TEntity) == typeof(Partnerly.Models.User))
-            {
-
-            }
-
-            return Enumerable.Empty<TEntity>();
-        }
-
-        protected override List<GridAction> GetDefaultActions(object row)
-        {
-            if (row is UserGridViewModel)
-            {
-                return new List<GridAction>
-                {
-                };
-            }
-            else
-            {
-                return base.GetDefaultActions(row);
-            }
-        }
-
-        protected override List<GridField> GetFields(object row)
-        {
-            var fields = new List<GridField>();
-            if (row is UserGroupGridViewModel)
-            {
-                return new List<GridField>
-                {
-                    new GridField { FieldName = "select", DisplayName = $"", DefaultValue = false, Type = "checkbox"},
-                    new GridField { FieldName = "name", DisplayName = FieldsDisplayNames.Name, LinkTemplate = "/UserGroups/Edit/{id}" },
-                    new GridField { FieldName = "description", DisplayName = FieldsDisplayNames.Description, LinkTemplate = "/UserGroups/Edit/{id}" },
-                    new GridField { FieldName = "createdDate", DisplayName = FieldsDisplayNames.CreatedDate, IsSortable = true, IsFilterable = true, Format="date:MM/dd/yyyy" }
-                };
-            }
-            else if(row is UserGridViewModel)
-            {
-                return new List<GridField>
-                {
-                    new GridField { FieldName = "select", DisplayName = $"", DefaultValue = false, Type = "checkbox"},
-                    new GridField { FieldName = "userName", DisplayName = FieldsDisplayNames.User, LinkTemplate = "/Users/Edit/{id}" },
-                    new GridField { FieldName = "email", DisplayName = FieldsDisplayNames.Email },
-                    new GridField { FieldName = "createdDate", DisplayName = FieldsDisplayNames.CreatedDate, IsSortable = true, IsFilterable = true, Format="date:MM/dd/yyyy" }
-                };
-            }
-
-            return fields;
-        }
-
-        protected override async Task CustomizeRowAsync(object row)
-        {
-            if (row is UserGroupGridViewModel userGroupRow)
-            {
-            }
-            if (row is UserGridViewModel userRow)
-            {
-            }
-        }
-
-        #region Export to excel
-        [HttpPost]
-        public async Task<IActionResult> ExportToExcel([FromForm] string selectedIds)
-        {
-            if (!string.IsNullOrWhiteSpace(selectedIds))
-            {
-                var ids = JsonSerializer.Deserialize<List<Guid>>(selectedIds);
-                if (ids.Count > 0)
-                {
-                    var groups = await _userGroupService.GetAllUserGroupsAsync();
-                    var data = groups.Where(x => ids.Contains(x.Id)).ToList();
-
-                    return await ExportToExcel(data, "user-groups.xlsx");
-                }
-            }
-
-            return BadRequest("No users selected.");
-        }
-
-        [HttpPost]
-        public async Task<IActionResult> ExportAllToExcel([FromForm] string data)
-        {
-            var allData = JsonSerializer.Deserialize<List<UserViewModel>>(data);
-            var users = await _userGroupService.GetAllUserGroupsAsync();
-            return await ExportToExcel(users, "user-groups.xlsx");
-        }
-        #endregion
-        #endregion
 
         [HttpGet]
         public async Task<IActionResult> Data([FromQuery] DataTableRequest request)
         {
-            var options = CreateTableOptions();
+            var options = _dataTableRegistry.Get(request.TableID);
 
             var result = await _tableService.ExecuteAsync(
                fields => _userGroupService.QueryEntity(fields),
@@ -405,10 +264,11 @@ namespace Partnerly.Controllers
                 });
             }
 
+            var options = _dataTableRegistry.Get(request.TableID);
             var result = _inlineUpdateService.ApplyChanges(
                 group,
                 request.Fields,
-                CreateTableOptions());
+                options);
 
             if (!result.Success)
             {
@@ -549,77 +409,27 @@ namespace Partnerly.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> Export(
-        [FromQuery] DataTableRequest request,
-        [FromQuery] string format = "csv")
+        public async Task<IActionResult> Export([FromQuery] DataTableRequest request, [FromQuery] string format = "csv")
         {
-            var options =
-                CreateTableOptions();
+            if (string.IsNullOrWhiteSpace(request.TableID))
+                return BadRequest(new
+                {
+                    success = false,
+                    message = "Table ID cannot be found."
+                });
 
-            var items =
-                await _tableService.ExecuteExportAsync(
-                    fields =>
-                        _userGroupService.QueryEntity(fields),
-                    request,
-                    options
-                );
-
-            if (string.Equals(
+            return await ExportTableAsync(
+                request,
                 format,
-                "excel",
-                StringComparison.OrdinalIgnoreCase))
-            {
-                var excelExporter =
-                    new DataTableExcelExporter();
-
-                var bytes =
-                    excelExporter.Export(
-                        items,
-                        options.Columns
-                    );
-
-                var fileName =
-                    "groups-" +
-                    DateTime.Now.ToString(
-                        "yyyyMMdd-HHmmss"
-                    ) +
-                    ".xlsx";
-
-                return File(
-                    bytes,
-                    "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
-                    fileName
-                );
-            }
-
-            var csvExporter =
-                new DataTableCsvExporter();
-
-            var csvBytes =
-                csvExporter.Export(
-                    items,
-                    options.Columns
-                );
-
-            var csvFileName =
-                "groups-" +
-                DateTime.Now.ToString(
-                    "yyyyMMdd-HHmmss"
-                ) +
-                ".csv";
-
-            return File(
-                csvBytes,
-                "text/csv; charset=utf-8",
-                csvFileName
-            );
+                fields => _userGroupService.QueryEntity(fields),
+                "groups");
         }
 
         private DataTableOptions CreateTableOptions()
         {
-            return new DataTableOptions
+            var options = new DataTableOptions
             {
-                Id = "userGroupsTable",
+                Id = DataTableNames.userGroupsTable,
                 Name = FieldsDisplayNames.Users,
                 Icon = "bx bx-group",
 
@@ -634,8 +444,8 @@ namespace Partnerly.Controllers
                 InlineEditing = true,
                 InlineUpdateUrl = "/UserGroups/UpdateInline",
 
-                InlineCreateUrl = "/UserGroups/CreateInline",
-                InlineDeleteUrl = "/UserGroups/DeleteInline",
+                //InlineCreateUrl = "/UserGroups/CreateInline",
+                //InlineDeleteUrl = "/UserGroups/DeleteInline",
 
                 Paging = new DataTablePagingOptions
                 {
@@ -843,6 +653,10 @@ namespace Partnerly.Controllers
                     Print = false
                 }
             };
+
+            _dataTableRegistry.Register(options);
+            
+            return options;
         }
     }
 }

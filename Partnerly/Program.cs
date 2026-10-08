@@ -55,7 +55,9 @@ builder.Services.AddScoped<ISupportTicketService, SupportTicketService>();
 builder.Services.AddScoped<ISupportTicketRepository, SupportTicketRepository>();
 builder.Services.AddScoped<IAttachmentService, AttachmentService>();
 builder.Services.AddScoped<IFileStorageService, FileStorageService>();
+
 builder.Services.AddScoped<IInlineUpdateService, InlineUpdateService>();
+builder.Services.AddSingleton<IDataTableRegistry, DataTableRegistry>();
 
 // Transient services
 builder.Services.AddTransient<IEmailSender, EmailSender>();

@@ -8,6 +8,7 @@ using Partnerly.Helpers;
 using Partnerly.Infrastructure.Interfaces;
 using Partnerly.Infrastructure.Services;
 using Partnerly.Models;
+using Partnerly.Models.DataTable;
 using Partnerly.Models.ViewModels;
 using System.Security.Claims;
 
@@ -17,8 +18,10 @@ namespace Partnerly.Controllers
     public class SystemPreferencesController : _BaseController
     {
         protected readonly ISystemSettingsService _systemSettingsService;
-        public SystemPreferencesController(IEventBus eventBus, ISystemSettingsService systemSettingsService, IUserService userService, ICurrentUserService currentUser, ILogService logService, IStringLocalizer<SharedResource> localizer)
-        : base(eventBus, userService, currentUser, logService, localizer, systemSettingsService)
+        public SystemPreferencesController(IEventBus eventBus, ISystemSettingsService systemSettingsService, 
+            IUserService userService, ICurrentUserService currentUser, ILogService logService, IStringLocalizer<SharedResource> localizer,
+            DataTableQueryService tableService, IDataTableRegistry dataTableRegistry)
+        : base(eventBus, userService, currentUser, logService, localizer, systemSettingsService, tableService, dataTableRegistry)
         {
             _systemSettingsService = systemSettingsService;
         }

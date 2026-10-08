@@ -41,9 +41,13 @@
                         );
 
 
+                    url.searchParams.set(
+                        "TableID",
+                        ctx.options.id
+                    );
+
                     var state =
                         ctx.state;
-
 
                     if (
                         state.search &&

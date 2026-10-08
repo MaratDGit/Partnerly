@@ -6,6 +6,7 @@ using Partnerly.Events.BaseEvents;
 using Partnerly.Infrastructure.Interfaces;
 using Partnerly.Infrastructure.Services;
 using Partnerly.Models;
+using Partnerly.Models.DataTable;
 using Partnerly.Models.ViewModels;
 using System;
 
@@ -15,8 +16,10 @@ namespace Partnerly.Controllers
     {
         private readonly INotificationService _notificationService;
         private readonly ISystemSettingsService _systemSettingsService;
-        public DashboardController(IEventBus eventBus, IUserService userService, ICurrentUserService currentUser, ILogService logService, INotificationService notificationService, ISystemSettingsService systemSettingsService, IStringLocalizer<SharedResource> localizer)
-        : base(eventBus, userService, currentUser, logService, localizer, systemSettingsService)
+        public DashboardController(IEventBus eventBus, IUserService userService, ICurrentUserService currentUser, 
+            ILogService logService, INotificationService notificationService, ISystemSettingsService systemSettingsService, 
+            IStringLocalizer<SharedResource> localizer, DataTableQueryService tableService, IDataTableRegistry dataTableRegistry)
+        : base(eventBus, userService, currentUser, logService, localizer, systemSettingsService, tableService, dataTableRegistry)
         {
             _notificationService = notificationService;
             _systemSettingsService = systemSettingsService;

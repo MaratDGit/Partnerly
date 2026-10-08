@@ -8,6 +8,7 @@ using Partnerly.Helpers;
 using Partnerly.Infrastructure.Interfaces;
 using Partnerly.Infrastructure.Services;
 using Partnerly.Models;
+using Partnerly.Models.DataTable;
 using Partnerly.Models.GridViews;
 using Partnerly.Models.ViewModels;
 using System.Security.Claims;
@@ -18,8 +19,11 @@ namespace Partnerly.Controllers
     public class SupportTicketsController : _BaseController
     {
         protected readonly ISupportTicketService _supportTicketService;
-        public SupportTicketsController(IEventBus eventBus, ISupportTicketService supportTicketService, IUserService userService, ICurrentUserService currentUser, ILogService logService, IStringLocalizer<SharedResource> localizer, ISystemSettingsService systemSettingsService)
-        : base(eventBus, userService, currentUser, logService, localizer, systemSettingsService)
+        public SupportTicketsController(IEventBus eventBus, ISupportTicketService supportTicketService, 
+            IUserService userService, ICurrentUserService currentUser, ILogService logService, 
+            IStringLocalizer<SharedResource> localizer, ISystemSettingsService systemSettingsService,
+            DataTableQueryService tableService, IDataTableRegistry dataTableRegistry)
+        : base(eventBus, userService, currentUser, logService, localizer, systemSettingsService, tableService, dataTableRegistry)
         {
             _supportTicketService = supportTicketService;
         }

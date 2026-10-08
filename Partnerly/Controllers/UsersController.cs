@@ -10,11 +10,8 @@ using Partnerly.Infrastructure.Services;
 using Partnerly.Models;
 using Partnerly.Models.DataTable;
 using Partnerly.Models.DataTable.ViewModels;
-using Partnerly.Models.GridViews;
 using Partnerly.Models.ViewModels;
 using System.Security.Claims;
-using System.Text.Json;
-using System.Threading.Tasks;
 
 namespace Partnerly.Controllers
 {
@@ -22,23 +19,24 @@ namespace Partnerly.Controllers
     public class UsersController : _BaseController
     {
         protected readonly IRoleService _roleService;
-        private readonly DataTableQueryService _tableService;
-        public UsersController(IEventBus eventBus, IRoleService roleService, IUserService userService, ICurrentUserService currentUser, ILogService logService, IStringLocalizer<SharedResource> localizer, ISystemSettingsService systemSettingsService, DataTableQueryService tableService)
-        : base(eventBus, userService, currentUser, logService, localizer, systemSettingsService)
+        
+        public UsersController(IEventBus eventBus, IRoleService roleService, IUserService userService, ICurrentUserService currentUser, 
+            ILogService logService, IStringLocalizer<SharedResource> localizer, ISystemSettingsService systemSettingsService, 
+            DataTableQueryService tableService, IDataTableRegistry dataTableRegistry)
+        : base(eventBus, userService, currentUser, logService, localizer, systemSettingsService, tableService, dataTableRegistry)
         {
             _roleService = roleService;
-            _tableService = tableService;
         }
 
         #region Index / Create / Edit / Delete
-        public async Task<IActionResult> Index(UserDataTableViewModel model)
+        public IActionResult Index(UserDataTableViewModel model)
         {
             model.dataTableUsersMain = CreateTableOptions();
             return View(model);
         }
 
         [ClaimAuthorize(ClaimTypes.Role, RoleTypeAttribute.Admin)]
-        public async Task<IActionResult> Create()
+        public IActionResult Create()
         {
             return View();
         }
@@ -250,111 +248,10 @@ namespace Partnerly.Controllers
             return Json(new { });
         }
 
-        //#region Grid Related
-        //[HttpGet]
-        //public async Task<JsonResult> GetData(string tableModel)
-        //{
-        //    if (tableModel == nameof(Partnerly.Models.User))
-        //    {
-        //        return await GetGridDataAsync<UserGridViewModel, User>("Users");
-        //    }
-        //    return Json(new { fields = new object[0], data = new object[0] });
-        //}
-
-        //protected override async Task<IEnumerable<TEntity>> GetEntitiesAsync<TEntity>()
-        //{
-        //    if (typeof(TEntity) == typeof(User))
-        //    {
-        //        var viewRole = await _roleService.GetRoleByNameAsync(RoleTypeAttribute.User);
-        //        var users = await _userService.GetAllUsersAsync();
-
-        //        if (!base.HasPermision(RoleTypeAttribute.Delete))
-        //        {
-        //            users = users.Where(_ => _.RoleId == viewRole?.Id);
-        //        }
-
-        //        return (IEnumerable<TEntity>)users;
-        //    }
-
-        //    return Enumerable.Empty<TEntity>();
-        //}
-
-        //protected override List<GridField> GetFields(object row)
-        //{
-        //    var fields = new List<GridField>();
-        //    if (row is UserGridViewModel userRow)
-        //    {
-        //        return new List<GridField>
-        //        {
-        //            new GridField { FieldName = "select", DisplayName = $"", DefaultValue = false, Type = "checkbox", IsVisible = base.HasPermision(RoleTypeAttribute.Delete)},
-        //            new GridField { FieldName = "userName", DisplayName = $"{FieldsDisplayNames.FullName}", LinkTemplate = "/Users/Edit/{id}" },
-        //            new GridField { FieldName = "email", DisplayName = FieldsDisplayNames.Email, LinkTemplate = "/Users/Edit/{id}" },
-        //            new GridField { FieldName = "myReferralCode", DisplayName = FieldsDisplayNames.ReferrerCode, LinkTemplate = "/Users/Edit/{id}" },
-        //            //new GridField { FieldName = "referrerName", DisplayName = FieldsDisplayNames.ReffererName, DefaultValue = "" },
-        //            new GridField { FieldName = "phone", DisplayName = FieldsDisplayNames.Phone, Format = "phone:"},
-        //            //new GridField { FieldName = "balance", DisplayName = FieldsDisplayNames.Balance, DefaultValue = "0"},
-        //            new GridField { FieldName = "lastActivity", DisplayName = FieldsDisplayNames.LastActivity,  IsSortable = true, Format="date:lastActivity" },
-        //            new GridField { FieldName = "isOnlayn", DisplayName = FieldsDisplayNames.IsOnlayn, IsFilterable = true, Type = "checkbox", DefaultValue = false},
-        //            new GridField { FieldName = "isBlocked", DisplayName = FieldsDisplayNames.IsBlocked, IsFilterable = true, Type = "checkbox"},
-        //            new GridField { FieldName = "emailConfirmed", DisplayName = FieldsDisplayNames.EmailConfirmed, IsFilterable = true, Type = "checkbox"},
-        //            new GridField { FieldName = "roleName", DisplayName = FieldsDisplayNames.Role, IsFilterable = true},
-        //            new GridField { FieldName = "createdDate", DisplayName = FieldsDisplayNames.CreatedDate, IsSortable = true, IsFilterable = true, Format="date:MM/dd/yyyy" }
-        //        };
-        //    }
-
-        //    return fields;
-        //}
-
-        //protected override async Task CustomizeRowAsync(object row)
-        //{
-        //    if (row is UserGridViewModel userRow)
-        //    {
-        //        userRow.UserName = $"{userRow.FirstName} {userRow.LastName}";
-
-        //        //if (userRow.ReferrerId != null)
-        //        //{
-        //        //    var Referrer = await _userService.GetUserByIDAsync(userRow.ReferrerId);
-        //        //    userRow.ReferrerName = $"{Referrer?.FirstName} {Referrer?.LastName}";
-        //        //}
-
-        //        Role? role = await _roleService.GetRoleByIDAsync(userRow.RoleId);
-        //        userRow.RoleName = role?.Name;
-
-        //        if (userRow.LastActivity != null)
-        //            userRow.LastActivity = userRow.LastActivity.Value.ToLocalTime();
-        //    }
-        //}
-
-        //[HttpPost]
-        //public async Task<IActionResult> ExportToExcel([FromForm] string selectedIds)
-        //{
-        //    if (!string.IsNullOrWhiteSpace(selectedIds))
-        //    {
-        //        var ids = JsonSerializer.Deserialize<List<Guid>>(selectedIds);
-        //        if (ids.Count > 0)
-        //        {
-        //            var users = await _userService.GetAllUsersAsync();
-        //            var data = users.Where(x => ids.Contains(x.Id)).ToList();
-
-        //            return await ExportToExcel(data, "users.xlsx");
-        //        }
-        //    }
-
-        //    return BadRequest("No users selected.");
-        //}
-
-        //[HttpPost]
-        //public async Task<IActionResult> ExportAllToExcel([FromForm] string data)
-        //{
-        //    var users = await _userService.GetAllUsersAsync();
-        //    return await ExportToExcel(users, "users.xlsx");
-        //}
-        //#endregion
-
         [HttpGet]
         public async Task<IActionResult> Data([FromQuery] DataTableRequest request)
         {
-            var options = CreateTableOptions();
+            var options = _dataTableRegistry.Get(request.TableID);
 
             var result = await _tableService.ExecuteAsync(
                fields => _userService.QueryEntity(fields),
@@ -452,77 +349,28 @@ namespace Partnerly.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> Export(
-        [FromQuery] DataTableRequest request,
-        [FromQuery] string format = "csv")
+        public async Task<IActionResult> Export([FromQuery] DataTableRequest request, [FromQuery] string format = "csv")
         {
-            var options =
-                CreateTableOptions();
-
-            var items =
-                await _tableService.ExecuteExportAsync(
-                    fields =>
-                        _userService.QueryEntity(fields),
-                    request,
-                    options
-                );
-
-            if (string.Equals(
+            if (string.IsNullOrWhiteSpace(request.TableID))
+                return BadRequest(new
+                {
+                    success = false,
+                    message = "Table ID cannot be found."
+                });
+            
+            return await ExportTableAsync(
+                request,
                 format,
-                "excel",
-                StringComparison.OrdinalIgnoreCase))
-            {
-                var excelExporter =
-                    new DataTableExcelExporter();
-
-                var bytes =
-                    excelExporter.Export(
-                        items,
-                        options.Columns
-                    );
-
-                var fileName =
-                    "users-" +
-                    DateTime.Now.ToString(
-                        "yyyyMMdd-HHmmss"
-                    ) +
-                    ".xlsx";
-
-                return File(
-                    bytes,
-                    "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
-                    fileName
-                );
-            }
-
-            var csvExporter =
-                new DataTableCsvExporter();
-
-            var csvBytes =
-                csvExporter.Export(
-                    items,
-                    options.Columns
-                );
-
-            var csvFileName =
-                "users-" +
-                DateTime.Now.ToString(
-                    "yyyyMMdd-HHmmss"
-                ) +
-                ".csv";
-
-            return File(
-                csvBytes,
-                "text/csv; charset=utf-8",
-                csvFileName
-            );
+                fields => _userService.QueryEntity(fields),
+                "users");
         }
 
         private DataTableOptions CreateTableOptions()
         {
-            return new DataTableOptions
+            var options = 
+            new DataTableOptions
             {
-                Id = "usersTable",
+                Id = DataTableNames.usersTable,
                 Name = FieldsDisplayNames.Users,
                 Icon = "bx bx-group",
 
@@ -852,7 +700,10 @@ namespace Partnerly.Controllers
                     Print = false
                 }
             };
-        }
 
+            _dataTableRegistry.Register(options);
+
+            return options;
+        }
     }
 }

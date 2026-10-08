@@ -2,6 +2,7 @@
 {
     public sealed class DataTableInlineUpdateRequest
     {
+        public string TableID { get; set; } = "";
         public string Id { get; set; } = "";
 
         public Dictionary<string, string?> Fields { get; set; }
@@ -10,12 +11,14 @@
 
     public class DataTableInlineCreateRequest
     {
+        public string TableID { get; set; } = "";
         public Dictionary<string, string?> Fields { get; set; }
             = new();
     }
 
     public class DataTableInlineDeleteRequest
     {
+        public string TableID { get; set; } = "";
         public string Id { get; set; } = "";
     }
 }

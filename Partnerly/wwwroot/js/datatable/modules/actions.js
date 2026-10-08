@@ -324,7 +324,9 @@
                             "POST"
                         ).toUpperCase();
 
-                    var payload = {};
+                    var payload = {
+                        TableID: ctx.options.id
+                    };
 
 
                     if (
@@ -993,6 +995,7 @@
 
                         body:
                             JSON.stringify({
+                                TableID: ctx.options.id,
                                 fields:
                                     fields
                             })

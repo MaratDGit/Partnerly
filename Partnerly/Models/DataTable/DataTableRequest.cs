@@ -2,6 +2,7 @@
 {
     public sealed class DataTableRequest
     {
+        public string? TableID { get; init; }
         public int Page { get; init; } = 1;
 
         public int PageSize { get; init; } = 10;

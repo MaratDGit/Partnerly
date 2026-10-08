@@ -7,6 +7,7 @@ using Partnerly.Events.BaseEvents;
 using Partnerly.Infrastructure.Interfaces;
 using Partnerly.Infrastructure.Services;
 using Partnerly.Models;
+using Partnerly.Models.DataTable;
 using Partnerly.Models.GridViews;
 
 namespace Partnerly.Controllers
@@ -16,8 +17,8 @@ namespace Partnerly.Controllers
     {
         private readonly IAttachmentService _attachmentService;
 
-        public AttachmentsController(IEventBus eventBus, IUserService userService, ICurrentUserService currentUser, IAttachmentService attachmentService, ILogService logService, IStringLocalizer<SharedResource> localizer, ISystemSettingsService systemSettingsService)
-        : base(eventBus, userService, currentUser, logService, localizer, systemSettingsService)
+        public AttachmentsController(IEventBus eventBus, IUserService userService, ICurrentUserService currentUser, IAttachmentService attachmentService, ILogService logService, IStringLocalizer<SharedResource> localizer, ISystemSettingsService systemSettingsService, DataTableQueryService tableService, IDataTableRegistry dataTableRegistry)
+        : base(eventBus, userService, currentUser, logService, localizer, systemSettingsService, tableService, dataTableRegistry)
         {
             _attachmentService = attachmentService;
         }

@@ -8,6 +8,7 @@ using Partnerly.Helpers;
 using Partnerly.Infrastructure.Interfaces;
 using Partnerly.Infrastructure.Services;
 using Partnerly.Models;
+using Partnerly.Models.DataTable;
 using Partnerly.Models.GridViews;
 using Partnerly.Models.ViewModels;
 using System.Net.Sockets;
@@ -21,8 +22,11 @@ namespace Partnerly.Controllers
         private readonly INotificationService _notificationService;
         private readonly ISupportTicketService _supportTicketService;
 
-        public NotificationController(IEventBus eventBus, IUserService userService, ICurrentUserService currentUser, ILogService logService, INotificationService notificationService, ISupportTicketService supportTicketService, IStringLocalizer<SharedResource> localizer, ISystemSettingsService systemSettingsService)
-        : base(eventBus, userService, currentUser, logService, localizer, systemSettingsService)
+        public NotificationController(IEventBus eventBus, IUserService userService, ICurrentUserService currentUser, 
+            ILogService logService, INotificationService notificationService, ISupportTicketService supportTicketService, 
+            IStringLocalizer<SharedResource> localizer, ISystemSettingsService systemSettingsService, 
+            DataTableQueryService tableService, IDataTableRegistry dataTableRegistry)
+        : base(eventBus, userService, currentUser, logService, localizer, systemSettingsService, tableService, dataTableRegistry)
         {
             _notificationService = notificationService;
             _supportTicketService = supportTicketService;

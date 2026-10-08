@@ -8,7 +8,9 @@ using Partnerly.Descriptors.Messages;
 using Partnerly.Events.BaseEvents;
 using Partnerly.Helpers;
 using Partnerly.Infrastructure.Interfaces;
+using Partnerly.Infrastructure.Services;
 using Partnerly.Models;
+using Partnerly.Models.DataTable;
 using Partnerly.Models.GridViews;
 
 namespace Partnerly.Controllers
@@ -22,8 +24,12 @@ namespace Partnerly.Controllers
         protected readonly ILogService _logService;
         protected readonly IStringLocalizer<SharedResource> _localizer;
         private readonly ISystemSettingsService _systemSettingsService;
+        protected readonly DataTableQueryService _tableService;
+        protected readonly IDataTableRegistry _dataTableRegistry;
 
-        public _BaseController(IEventBus eventBus, IUserService userService, ICurrentUserService currentUser, ILogService logService, IStringLocalizer<SharedResource> localizer, ISystemSettingsService systemSettingsService)
+        public _BaseController(IEventBus eventBus, IUserService userService, 
+            ICurrentUserService currentUser, ILogService logService, IStringLocalizer<SharedResource> localizer, 
+            ISystemSettingsService systemSettingsService, DataTableQueryService tableService, IDataTableRegistry dataTableRegistry)
         {
             _eventBus = eventBus;
             _userService = userService;
@@ -31,6 +37,8 @@ namespace Partnerly.Controllers
             _logService = logService;
             _localizer = localizer;
             _systemSettingsService = systemSettingsService;
+            _tableService = tableService;
+            _dataTableRegistry = dataTableRegistry;
         }
         public override async Task OnActionExecutionAsync(ActionExecutingContext context, ActionExecutionDelegate next)
         {
@@ -128,6 +136,49 @@ namespace Partnerly.Controllers
             return model;
         }
 
+        protected async Task<IActionResult> ExportTableAsync<T>(DataTableRequest request, string format, Func<IEnumerable<string>, IQueryable<T>> queryFactory, string fileName)
+        {
+            var options = _dataTableRegistry.Get(request.TableID);
+
+            var items = await _tableService.ExecuteExportAsync(
+                queryFactory,
+                request,
+                options);
+
+            if (string.Equals(
+                format,
+                "excel",
+                StringComparison.OrdinalIgnoreCase))
+            {
+                var excelExporter = new DataTableExcelExporter();
+
+                var bytes = excelExporter.Export(
+                    items,
+                    options.Columns);
+
+                var excelFileName =
+                    $"{fileName}-{DateTime.Now:yyyyMMdd-HHmmss}.xlsx";
+
+                return File(
+                    bytes,
+                    "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+                    excelFileName);
+            }
+
+            var csvExporter = new DataTableCsvExporter();
+
+            var csvBytes = csvExporter.Export(
+                items,
+                options.Columns);
+
+            var csvFileName =
+                $"{fileName}-{DateTime.Now:yyyyMMdd-HHmmss}.csv";
+
+            return File(
+                csvBytes,
+                "text/csv; charset=utf-8",
+                csvFileName);
+        }
 
         #region Data Grid Related Functions
         #region Default Actions

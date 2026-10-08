@@ -10,6 +10,7 @@
     using Partnerly.Infrastructure.Interfaces;
     using Partnerly.Infrastructure.Services;
     using Partnerly.Models;
+    using Partnerly.Models.DataTable;
     using Partnerly.Models.GridViews;
     using Partnerly.Models.ViewModels;
     using System.Security.Claims;
@@ -20,8 +21,10 @@
     {
         private readonly IEmailTemplateService _emailTemplateService;
 
-        public EmailTemplatesController(IEventBus eventBus, IUserService userService, ICurrentUserService currentUser, IEmailTemplateService emailTemplateService, ILogService logService, IStringLocalizer<SharedResource> localizer, ISystemSettingsService systemSettingsService)
-        : base(eventBus, userService, currentUser, logService, localizer, systemSettingsService)
+        public EmailTemplatesController(IEventBus eventBus, IUserService userService, ICurrentUserService currentUser, 
+            IEmailTemplateService emailTemplateService, ILogService logService, IStringLocalizer<SharedResource> localizer, 
+            ISystemSettingsService systemSettingsService, DataTableQueryService tableService, IDataTableRegistry dataTableRegistry)
+        : base(eventBus, userService, currentUser, logService, localizer, systemSettingsService, tableService, dataTableRegistry)
         {
             _emailTemplateService = emailTemplateService;
         }

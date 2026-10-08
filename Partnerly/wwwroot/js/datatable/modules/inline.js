@@ -237,7 +237,8 @@
 
 
                     var payload = {
-
+                        TableID:
+                            ctx.options.id,
                         id:
                             String(id)
                     };
@@ -766,7 +767,8 @@
 
 
                     var request = {
-
+                        TableID:
+                            ctx.options.id,
                         id:
                             String(id),
 
