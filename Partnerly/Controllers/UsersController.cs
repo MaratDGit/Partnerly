@@ -357,7 +357,7 @@ namespace Partnerly.Controllers
             var options = CreateTableOptions();
 
             var result = await _tableService.ExecuteAsync(
-               fields => _userService.QueryUsers(fields),
+               fields => _userService.QueryEntity(fields),
                request,
                options);
 
@@ -462,7 +462,7 @@ namespace Partnerly.Controllers
             var items =
                 await _tableService.ExecuteExportAsync(
                     fields =>
-                        _userService.QueryUsers(fields),
+                        _userService.QueryEntity(fields),
                     request,
                     options
                 );

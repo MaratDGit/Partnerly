@@ -1,10 +1,11 @@
-﻿@{
+﻿@model Partnerly.Models.DataTable.ViewModels.UserGoupsDataTableViewModel;
+@{
     ViewData["Title"] = "Groups";
     Layout = "_ContentNavbarLayout";
     bool hasAdminRole = ViewBag?.RoleType == Partnerly.Descriptors.Attributes.RoleTypeAttribute.Delete;
 }
 
-@await Html.PartialAsync("_DataTablePartial", null, new ViewDataDictionary(ViewData)
+@* @await Html.PartialAsync("_DataTablePartial", null, new ViewDataDictionary(ViewData)
 {
     { "TableName", Localizer["Groups"] },
     { "TableId", "userGroupsTable" },
@@ -21,4 +22,6 @@
             });
         });
     </script>
-}
+} *@
+
+@await Html.PartialAsync("~/Views/Shared/DataTable/_DataTable.cshtml", Model.dataTableUserGroupsMain)

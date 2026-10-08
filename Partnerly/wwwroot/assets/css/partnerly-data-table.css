@@ -1951,3 +1951,40 @@ body.data-table-column-resizing {
 .data-table-page-input {
     -moz-appearance: textfield;
 }
+
+/* =========================================================
+   DATA TABLE - LONG CONTENT
+   ========================================================= */
+
+.data-table-wrapper table {
+    width: 100%;
+    max-width: 100%;
+}
+
+    .data-table-wrapper table th,
+    .data-table-wrapper table td {
+        max-width: 0;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+
+    /* Normal text inside cells */
+    .data-table-wrapper table td {
+        white-space: normal;
+        overflow-wrap: anywhere;
+        word-break: break-word;
+    }
+
+        /* Keep links inside the cell */
+        .data-table-wrapper table td a {
+            max-width: 100%;
+            overflow-wrap: anywhere;
+            word-break: break-word;
+        }
+
+        /* Keep badges from breaking the table */
+        .data-table-wrapper table td .data-table-badge {
+            max-width: 100%;
+            overflow-wrap: anywhere;
+            word-break: break-word;
+        }

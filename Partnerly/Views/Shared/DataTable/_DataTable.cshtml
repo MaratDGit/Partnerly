@@ -685,6 +685,11 @@
                             columnResizeEnabled = Model.ColumnResizeEnabled,
                             columnResizeMinWidth = Model.ColumnResizeMinWidth,
 
+                            inlineEditing = Model.InlineEditing,
+                            inlineUpdateUrl = Model.InlineUpdateUrl,
+                            inlineCreateUrl = Model.InlineCreateUrl,
+                            inlineDeleteUrl = Model.InlineDeleteUrl,
+
                             paging = new
                             {
                                     enabled = Model.Paging.Enabled,
@@ -717,9 +722,6 @@
                                     defaultDirection = Model.Sorting.DefaultDirection
                             },
 
-                            inlineEditing = Model.InlineEditing,
-                            inlineUpdateUrl = Model.InlineUpdateUrl,
-
                             columnCount =
                                 Model.Columns.Count(x => x.Visible) +
                                 (
@@ -751,6 +753,7 @@
                                     type = column.Type.ToString(),
 
                                     visible = column.Visible,
+                                    required = column.Required,
                                     sortable = column.Sortable,
                                     searchable = column.Searchable,
                                     exportable = column.Exportable,

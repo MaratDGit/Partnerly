@@ -89,29 +89,6 @@
 
             /*
              * =========================================================
-             * ACTION TYPE
-             * =========================================================
-             */
-
-            ctx.hasActionType =
-                function (type) {
-
-                    return ctx.getActions()
-                        .some(
-                            function (action) {
-
-                                return (
-                                    action &&
-                                    action.type ===
-                                    type
-                                );
-                            }
-                        );
-                };
-
-
-            /*
-             * =========================================================
              * FIND ACTION
              * =========================================================
              */
@@ -130,9 +107,7 @@
 
                         if (
                             actions[i] &&
-                            String(
-                                actions[i].name
-                            ) ===
+                            String(actions[i].name) ===
                             String(name)
                         ) {
                             return actions[i];
@@ -169,6 +144,12 @@
                                 );
                             }
                         );
+
+                    if (
+                        ctx.updateSelectAllState
+                    ) {
+                        ctx.updateSelectAllState();
+                    }
                 };
 
 
@@ -264,6 +245,53 @@
 
             /*
              * =========================================================
+             * RESPONSE HANDLER
+             * =========================================================
+             */
+
+            ctx.handleActionResponse =
+                function (response) {
+
+                    return response
+                        .json()
+                        .catch(
+                            function () {
+
+                                return {};
+                            }
+                        )
+                        .then(
+                            function (result) {
+
+                                if (
+                                    !response.ok
+                                ) {
+
+                                    throw new Error(
+                                        result.message ||
+                                        "Action failed."
+                                    );
+                                }
+
+                                if (
+                                    result &&
+                                    result.success === false
+                                ) {
+
+                                    throw new Error(
+                                        result.message ||
+                                        "Action failed."
+                                    );
+                                }
+
+                                return result;
+                            }
+                        );
+                };
+
+
+            /*
+             * =========================================================
              * AJAX ACTION
              * =========================================================
              */
@@ -325,7 +353,8 @@
 
                     var requestOptions = {
 
-                        method: method,
+                        method:
+                            method,
 
                         headers: {
 
@@ -355,50 +384,10 @@
                         requestOptions
                     )
                         .then(
-                            function (response) {
-
-                                return response
-                                    .json()
-                                    .catch(
-                                        function () {
-
-                                            return {};
-                                        }
-                                    )
-                                    .then(
-                                        function (
-                                            result
-                                        ) {
-
-                                            if (
-                                                !response.ok
-                                            ) {
-
-                                                throw new Error(
-                                                    result.message ||
-                                                    "Action failed."
-                                                );
-                                            }
-
-                                            return result;
-                                        }
-                                    );
-                            }
+                            ctx.handleActionResponse
                         )
                         .then(
-                            function (result) {
-
-                                if (
-                                    result &&
-                                    result.success === false
-                                ) {
-
-                                    throw new Error(
-                                        result.message ||
-                                        "Action failed."
-                                    );
-                                }
-
+                            function () {
 
                                 if (
                                     id !== null &&
@@ -409,7 +398,6 @@
                                         id
                                     );
                                 }
-
 
                                 ctx.load();
                             }
@@ -430,30 +418,7 @@
                 };
 
 
-            /*
-             * =========================================================
-             * INLINE DELETE
-             * =========================================================
-             */
-
-            ctx.executeInlineDelete =
-                function (
-                    action,
-                    id
-                ) {
-
-                    if (
-                        !action ||
-                        !id
-                    ) {
-                        return;
-                    }
-
-                    ctx.executeAjaxAction(
-                        action,
-                        id
-                    );
-                };
+            
 
 
             /*
@@ -465,95 +430,150 @@
             ctx.bindActionButtons =
                 function () {
 
+                    if (!ctx.body) {
+                        return;
+                    }
+
+
                     /*
-                     * INLINE DELETE
+                     * IMPORTANT:
+                     *
+                     * Bind only once.
+                     *
+                     * Rows are recreated with innerHTML after every load,
+                     * therefore event delegation is used here.
                      */
 
-                    ctx.body
-                        .querySelectorAll(
-                            "[data-table-action-inline-delete]"
-                        )
-                        .forEach(
-                            function (button) {
+                    if (
+                        ctx.body.dataset.actionEventsBound === "true"
+                    ) {
+                        return;
+                    }
 
-                                button.addEventListener(
-                                    "click",
-                                    function () {
 
-                                        var name =
-                                            button.getAttribute(
-                                                "data-action-name"
-                                            );
+                    ctx.body.dataset.actionEventsBound =
+                        "true";
 
-                                        var id =
-                                            button.getAttribute(
-                                                "data-id"
-                                            );
 
-                                        var action =
-                                            ctx.findAction(
-                                                name
-                                            );
+                    ctx.body.addEventListener(
+                        "click",
+                        function (event) {
 
-                                        if (
-                                            !action ||
-                                            !id
-                                        ) {
-                                            return;
-                                        }
+                            var target =
+                                event.target;
 
-                                        ctx.executeInlineDelete(
-                                            action,
-                                            id
-                                        );
-                                    }
+                            /*
+                             * =====================================================
+                             * AJAX ACTION
+                             * =====================================================
+                             */
+
+                            var ajaxButton =
+                                target.closest(
+                                    "[data-table-action-ajax]"
+                                );
+
+
+                            if (ajaxButton) {
+
+                                event.preventDefault();
+                                event.stopPropagation();
+
+
+                                var name =
+                                    ajaxButton.getAttribute(
+                                        "data-action-name"
+                                    );
+
+                                var id =
+                                    ajaxButton.getAttribute(
+                                        "data-id"
+                                    );
+
+
+                                var action =
+                                    ctx.findAction(
+                                        name
+                                    );
+
+
+                                if (!action) {
+                                    return;
+                                }
+
+
+                                ctx.executeAjaxAction(
+                                    action,
+                                    id
                                 );
                             }
+                        }
+                    );
+                };
+
+
+            /*
+             * =========================================================
+             * CREATE INPUT
+             * =========================================================
+             */
+
+            ctx.createInlineInput =
+                function (column) {
+
+                    var field =
+                        ctx.escapeHtml(
+                            column.field
                         );
 
 
                     /*
-                     * AJAX
+                     * BOOLEAN
                      */
 
-                    ctx.body
-                        .querySelectorAll(
-                            "[data-table-action-ajax]"
-                        )
-                        .forEach(
-                            function (button) {
+                    if (
+                        column.type ===
+                        "Boolean"
+                    ) {
 
-                                button.addEventListener(
-                                    "click",
-                                    function () {
-
-                                        var name =
-                                            button.getAttribute(
-                                                "data-action-name"
-                                            );
-
-                                        var id =
-                                            button.getAttribute(
-                                                "data-id"
-                                            );
-
-                                        var action =
-                                            ctx.findAction(
-                                                name
-                                            );
-
-                                        if (!action) {
-                                            return;
-                                        }
-
-                                        ctx.executeAjaxAction(
-                                            action,
-                                            id
-                                        );
-                                    }
-                                );
-                            }
+                        return (
+                            '<input type="checkbox" ' +
+                            'class="form-check-input data-table-inline-new-input" ' +
+                            'data-field="' +
+                            field +
+                            '">'
                         );
+                    }
+
+
+                    /*
+                     * NUMBER / CURRENCY
+                     */
+
+                    var inputMode =
+                        "";
+
+                    if (
+                        column.type ===
+                        "Number" ||
+                        column.type ===
+                        "Currency"
+                    ) {
+
+                        inputMode =
+                            ' inputmode="decimal" ';
+                    }
+
+
+                    return (
+                        '<input type="text" ' +
+                        'class="form-control form-control-sm data-table-inline-new-input" ' +
+                        'data-field="' +
+                        field +
+                        '"' +
+                        inputMode +
+                        '>'
+                    );
                 };
 
 
@@ -580,8 +600,7 @@
 
 
                     /*
-                     * Не разрешаем несколько
-                     * новых строк одновременно.
+                     * Only one new row.
                      */
 
                     var existing =
@@ -589,13 +608,25 @@
                             ".data-table-inline-new"
                         );
 
+
                     if (existing) {
+
+                        var firstInput =
+                            existing.querySelector(
+                                ".data-table-inline-new-input"
+                            );
+
+                        if (firstInput) {
+                            firstInput.focus();
+                        }
+
                         return;
                     }
 
 
                     var columns =
                         options.columns;
+
 
                     var html =
                         '<tr class="data-table-inline-new">';
@@ -604,79 +635,39 @@
                     columns.forEach(
                         function (column) {
 
-                            if (!column.visible) {
+                            if (
+                                !column.visible
+                            ) {
                                 return;
                             }
 
 
                             /*
-                             * Selected
+                             * SELECTED
                              */
 
                             if (
                                 options.rows &&
                                 options.rows.selectable &&
+                                column.field &&
                                 column.field.toLowerCase() ===
                                 "selected"
                             ) {
 
                                 html +=
-                                    "<td></td>";
+                                    '<td></td>';
 
                                 return;
                             }
 
 
                             /*
-                             * Editable
+                             * EDITABLE
                              */
 
-                            if (column.editable) {
-
-                                var inputType =
-                                    "text";
-
-                                var inputMode =
-                                    "";
-
-
-                                if (
-                                    column.type ===
-                                    "Number" ||
-                                    column.type ===
-                                    "Currency"
-                                ) {
-
-                                    inputMode =
-                                        "numeric";
-                                }
-
-
-                                if (
-                                    column.type ===
-                                    "Boolean"
-                                ) {
-
-                                    html +=
-                                        '<td data-field="' +
-                                        ctx.escapeHtml(
-                                            column.field
-                                        ) +
-                                        '">' +
-
-                                        '<input type="checkbox" ' +
-                                        'class="form-check-input data-table-inline-new-input" ' +
-                                        'data-field="' +
-                                        ctx.escapeHtml(
-                                            column.field
-                                        ) +
-                                        '">' +
-
-                                        "</td>";
-
-                                    return;
-                                }
-
+                            if (
+                                column.editable
+                            ) {
 
                                 html +=
                                     '<td data-field="' +
@@ -685,61 +676,61 @@
                                     ) +
                                     '">' +
 
-                                    '<input type="' +
-                                    inputType +
-                                    '" ' +
-                                    'class="form-control form-control-sm data-table-inline-new-input" ' +
-                                    'data-field="' +
-                                    ctx.escapeHtml(
-                                        column.field
+                                    ctx.createInlineInput(
+                                        column
                                     ) +
-                                    '"' +
-                                    (
-                                        inputMode
-                                            ? ' inputmode="' +
-                                            inputMode +
-                                            '"'
-                                            : ""
-                                    ) +
-                                    ">" +
 
-                                    "</td>";
+                                    '</td>';
 
                                 return;
                             }
 
 
+                            /*
+                             * NON EDITABLE
+                             */
+
                             html +=
-                                "<td>" +
+                                '<td>' +
                                 ctx.escapeHtml(
                                     column.emptyText ||
                                     "—"
                                 ) +
-                                "</td>";
+                                '</td>';
                         }
                     );
 
+
+                    /*
+                     * ACTIONS
+                     */
 
                     html +=
                         '<td class="data-table-actions">' +
 
                         '<button type="button" ' +
                         'class="btn btn-sm btn-success data-table-inline-new-save" ' +
-                        'title="Save" aria-label="Save">' +
+                        'title="Save" ' +
+                        'aria-label="Save">' +
+
                         '<i class="bx bx-check"></i>' +
-                        "</button> " +
+
+                        '</button>' +
 
                         '<button type="button" ' +
                         'class="btn btn-sm btn-outline-secondary data-table-inline-new-cancel" ' +
-                        'title="Cancel" aria-label="Cancel">' +
-                        '<i class="bx bx-x"></i>' +
-                        "</button>" +
+                        'title="Cancel" ' +
+                        'aria-label="Cancel">' +
 
-                        "</td>";
+                        '<i class="bx bx-x"></i>' +
+
+                        '</button>' +
+
+                        '</td>';
 
 
                     html +=
-                        "</tr>";
+                        '</tr>';
 
 
                     ctx.body.insertAdjacentHTML(
@@ -753,6 +744,7 @@
                             ".data-table-inline-new"
                         );
 
+
                     if (!row) {
                         return;
                     }
@@ -763,17 +755,78 @@
                             ".data-table-inline-new-save"
                         );
 
+
                     var cancelButton =
                         row.querySelector(
                             ".data-table-inline-new-cancel"
                         );
 
 
+                    /*
+                     * Numeric validation
+                     */
+
+                    row.querySelectorAll(
+                        ".data-table-inline-new-input"
+                    ).forEach(
+                        function (input) {
+
+                            var field =
+                                input.getAttribute(
+                                    "data-field"
+                                );
+
+                            var column =
+                                columns.find(
+                                    function (x) {
+
+                                        return (
+                                            x.field ===
+                                            field
+                                        );
+                                    }
+                                );
+
+
+                            if (
+                                !column
+                            ) {
+                                return;
+                            }
+
+
+                            if (
+                                column.type ===
+                                "Number" ||
+                                column.type ===
+                                "Currency"
+                            ) {
+
+                                input.addEventListener(
+                                    "input",
+                                    function () {
+
+                                        this.value =
+                                            this.value.replace(
+                                                /[^0-9.-]/g,
+                                                ""
+                                            );
+                                    }
+                                );
+                            }
+                        }
+                    );
+
+
                     if (saveButton) {
 
                         saveButton.addEventListener(
                             "click",
-                            function () {
+                            function (event) {
+
+                                event.preventDefault();
+
+                                event.stopPropagation();
 
                                 ctx.saveInlineNewRow(
                                     row,
@@ -788,11 +841,27 @@
 
                         cancelButton.addEventListener(
                             "click",
-                            function () {
+                            function (event) {
+
+                                event.preventDefault();
+
+                                event.stopPropagation();
 
                                 row.remove();
                             }
                         );
+                    }
+
+
+                    var firstInput =
+                        row.querySelector(
+                            ".data-table-inline-new-input"
+                        );
+
+
+                    if (firstInput) {
+
+                        firstInput.focus();
                     }
                 };
 
@@ -831,6 +900,7 @@
                                     "data-field"
                                 );
 
+
                             if (!field) {
                                 return;
                             }
@@ -856,9 +926,25 @@
                     );
 
 
+                    /*
+                     * Required fields
+                     *
+                     * Сейчас проверяем только
+                     * пустые editable поля.
+                     *
+                     * ASP.NET validation всё равно
+                     * остаётся главным.
+                     */
+
                     var saveButton =
                         row.querySelector(
                             ".data-table-inline-new-save"
+                        );
+
+
+                    var cancelButton =
+                        row.querySelector(
+                            ".data-table-inline-new-cancel"
                         );
 
 
@@ -869,6 +955,18 @@
 
                         saveButton.innerHTML =
                             '<i class="bx bx-loader-alt bx-spin"></i>';
+
+                        saveButton.setAttribute(
+                            "title",
+                            "Saving..."
+                        );
+                    }
+
+
+                    if (cancelButton) {
+
+                        cancelButton.disabled =
+                            true;
                     }
 
 
@@ -879,71 +977,37 @@
                         ).toUpperCase();
 
 
+                    var requestOptions = {
+
+                        method:
+                            method,
+
+                        headers: {
+
+                            "Content-Type":
+                                "application/json",
+
+                            "RequestVerificationToken":
+                                ctx.getAntiForgeryToken()
+                        },
+
+                        body:
+                            JSON.stringify({
+                                fields:
+                                    fields
+                            })
+                    };
+
+
                     fetch(
                         action.url,
-                        {
-
-                            method: method,
-
-                            headers: {
-
-                                "Content-Type":
-                                    "application/json",
-
-                                "RequestVerificationToken":
-                                    ctx.getAntiForgeryToken()
-                            },
-
-                            body:
-                                JSON.stringify({
-                                    fields: fields
-                                })
-                        }
+                        requestOptions
                     )
                         .then(
-                            function (response) {
-
-                                return response
-                                    .json()
-                                    .catch(
-                                        function () {
-
-                                            return {};
-                                        }
-                                    )
-                                    .then(
-                                        function (
-                                            result
-                                        ) {
-
-                                            if (
-                                                !response.ok
-                                            ) {
-
-                                                throw new Error(
-                                                    result.message ||
-                                                    "Create failed."
-                                                );
-                                            }
-
-                                            return result;
-                                        }
-                                    );
-                            }
+                            ctx.handleActionResponse
                         )
                         .then(
-                            function (result) {
-
-                                if (
-                                    result &&
-                                    result.success === false
-                                ) {
-
-                                    throw new Error(
-                                        result.message ||
-                                        "Create failed."
-                                    );
-                                }
+                            function () {
 
                                 ctx.load();
                             }
@@ -968,6 +1032,18 @@
 
                                     saveButton.innerHTML =
                                         '<i class="bx bx-check"></i>';
+
+                                    saveButton.setAttribute(
+                                        "title",
+                                        "Save"
+                                    );
+                                }
+
+
+                                if (cancelButton) {
+
+                                    cancelButton.disabled =
+                                        false;
                                 }
                             }
                         );
@@ -1100,10 +1176,7 @@
                             function (button) {
 
                                 /*
-                                 * Link не перехватываем.
-                                 *
-                                 * Обычный <a href="...">
-                                 * должен работать нативно.
+                                 * LINK
                                  */
 
                                 if (
@@ -1116,7 +1189,16 @@
 
                                 button.addEventListener(
                                     "click",
-                                    function () {
+                                    function (event) {
+
+                                        event.preventDefault();
+
+                                        event.stopPropagation();
+
+
+                                        /*
+                                         * SELECTION
+                                         */
 
                                         if (
                                             action.requiresSelection &&
@@ -1134,6 +1216,10 @@
                                         }
 
 
+                                        /*
+                                         * INLINE ADD
+                                         */
+
                                         if (
                                             action.type ===
                                             "InlineAdd"
@@ -1146,6 +1232,10 @@
                                             return;
                                         }
 
+
+                                        /*
+                                         * AJAX
+                                         */
 
                                         if (
                                             action.type ===

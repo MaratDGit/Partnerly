@@ -11,6 +11,7 @@ namespace Partnerly.Models.DataTable
         public DataTableColumnType Type { get; set; } = DataTableColumnType.Text;
 
         public bool Visible { get; set; } = true;
+        public bool Required { get; set; } = false;
 
         public bool Sortable { get; set; } = true;
 

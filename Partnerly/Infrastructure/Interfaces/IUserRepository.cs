@@ -7,6 +7,5 @@ namespace Partnerly.Infrastructure.Interfaces
         Task<User?> GetByEmailAsync(string? email);
         Task<User?> GetByRefCodeAsync(string? refCode);
         Task<User?> GetByPhoneAsync(string? phone);
-        IQueryable<User> QueryUsers(IEnumerable<string> fields);
     }
 }

@@ -367,9 +367,16 @@
                     ) {
 
                         ctx.body.innerHTML =
-                            `<tr><td colspan="' +
-                            ${options.columnCount} +
-                            '">${lookupLocalization?.noData ?? "No Data"}</td></tr>`;
+                            '<tr>' +
+                            '<td colspan="' +
+                            options.columnCount +
+                            '">' +
+                            (
+                                lookupLocalization?.noData ||
+                                "No Data"
+                            ) +
+                            '</td>' +
+                            '</tr>';
                         
                         ctx.updateSelectAllState();
 
@@ -533,11 +540,10 @@
 
 
                             /*
- /*
-                             * =========================================================
-                             * ACTIONS
-                             * =========================================================
-                             */
+  * =========================================================
+  * ACTIONS
+  * =========================================================
+  */
 
                             if (
                                 ctx.hasActionsColumn()
@@ -549,15 +555,8 @@
 
                                 /*
                                  * =====================================================
-                                 * DEFAULT INLINE EDIT
+                                 * INLINE EDIT
                                  * =====================================================
-                                 *
-                                 * Inline editing является отдельной
-                                 * возможностью таблицы.
-                                 *
-                                 * Если пользователь явно добавил
-                                 * Actions -> InlineEdit, используется
-                                 * именно custom action.
                                  */
 
                                 var rowActions =
@@ -586,21 +585,25 @@
 
                                             html +=
                                                 '<button type="button" ' +
+
                                                 'class="' +
                                                 ctx.escapeHtml(
                                                     action.cssClass ||
                                                     "btn btn-sm btn-outline-primary"
                                                 ) +
                                                 ' data-table-inline-edit" ' +
+
                                                 'data-id="' +
                                                 ctx.escapeHtml(id) +
                                                 '" ' +
+
                                                 'title="' +
                                                 ctx.escapeHtml(
                                                     action.title ||
                                                     "Edit"
                                                 ) +
                                                 '" ' +
+
                                                 'aria-label="' +
                                                 ctx.escapeHtml(
                                                     action.title ||
@@ -610,47 +613,50 @@
 
                                                 (
                                                     action.icon
+
                                                         ? '<i class="' +
                                                         ctx.escapeHtml(
                                                             action.icon
                                                         ) +
                                                         '"></i>'
+
                                                         : ctx.escapeHtml(
                                                             action.title ||
                                                             "Edit"
                                                         )
                                                 ) +
 
-                                                "</button>";
+                                                '</button>';
                                         }
                                     );
+
                                 }
                                 else if (
                                     options.inlineEditing &&
                                     ctx.hasEditableColumns()
                                 ) {
 
-                                    /*
-                                     * Сохраняем автоматическую кнопку
-                                     * inline edit для InlineEditing=true.
-                                     */
-
                                     html +=
                                         '<button type="button" ' +
+
                                         'class="btn btn-sm btn-outline-primary data-table-inline-edit" ' +
+
                                         'data-id="' +
                                         ctx.escapeHtml(id) +
                                         '" ' +
+
                                         'title="Edit row" ' +
                                         'aria-label="Edit row">' +
+
                                         '<i class="bx bx-edit-alt"></i>' +
-                                        "</button>";
+
+                                        '</button>';
                                 }
 
 
                                 /*
                                  * =====================================================
-                                 * CUSTOM ROW ACTIONS
+                                 * OTHER ACTIONS
                                  * =====================================================
                                  */
 
@@ -667,7 +673,9 @@
 
 
                                         /*
+                                         * =================================================
                                          * INLINE DELETE
+                                         * =================================================
                                          */
 
                                         if (
@@ -677,26 +685,31 @@
 
                                             html +=
                                                 '<button type="button" ' +
+
                                                 'class="' +
                                                 ctx.escapeHtml(
                                                     action.cssClass ||
                                                     "btn btn-sm btn-outline-danger"
                                                 ) +
                                                 ' data-table-action-inline-delete" ' +
+
                                                 'data-action-name="' +
                                                 ctx.escapeHtml(
                                                     action.name
                                                 ) +
                                                 '" ' +
+
                                                 'data-id="' +
                                                 ctx.escapeHtml(id) +
                                                 '" ' +
+
                                                 'title="' +
                                                 ctx.escapeHtml(
                                                     action.title ||
                                                     "Delete"
                                                 ) +
                                                 '" ' +
+
                                                 'aria-label="' +
                                                 ctx.escapeHtml(
                                                     action.title ||
@@ -706,25 +719,29 @@
 
                                                 (
                                                     action.icon
+
                                                         ? '<i class="' +
                                                         ctx.escapeHtml(
                                                             action.icon
                                                         ) +
                                                         '"></i>'
+
                                                         : ctx.escapeHtml(
                                                             action.title ||
                                                             "Delete"
                                                         )
                                                 ) +
 
-                                                "</button>";
+                                                '</button>';
 
                                             return;
                                         }
 
 
                                         /*
+                                         * =================================================
                                          * AJAX
+                                         * =================================================
                                          */
 
                                         if (
@@ -734,26 +751,31 @@
 
                                             html +=
                                                 '<button type="button" ' +
+
                                                 'class="' +
                                                 ctx.escapeHtml(
                                                     action.cssClass ||
                                                     "btn btn-sm btn-outline-secondary"
                                                 ) +
                                                 ' data-table-action-ajax" ' +
+
                                                 'data-action-name="' +
                                                 ctx.escapeHtml(
                                                     action.name
                                                 ) +
                                                 '" ' +
+
                                                 'data-id="' +
                                                 ctx.escapeHtml(id) +
                                                 '" ' +
+
                                                 'title="' +
                                                 ctx.escapeHtml(
                                                     action.title ||
                                                     action.name
                                                 ) +
                                                 '" ' +
+
                                                 'aria-label="' +
                                                 ctx.escapeHtml(
                                                     action.title ||
@@ -763,25 +785,29 @@
 
                                                 (
                                                     action.icon
+
                                                         ? '<i class="' +
                                                         ctx.escapeHtml(
                                                             action.icon
                                                         ) +
                                                         '"></i>'
+
                                                         : ctx.escapeHtml(
                                                             action.title ||
                                                             action.name
                                                         )
                                                 ) +
 
-                                                "</button>";
+                                                '</button>';
 
                                             return;
                                         }
 
 
                                         /*
+                                         * =================================================
                                          * LINK
+                                         * =================================================
                                          */
 
                                         if (
@@ -807,18 +833,21 @@
                                                     href
                                                 ) +
                                                 '" ' +
+
                                                 'class="' +
                                                 ctx.escapeHtml(
                                                     action.cssClass ||
                                                     "btn btn-sm btn-outline-secondary"
                                                 ) +
                                                 '" ' +
+
                                                 'title="' +
                                                 ctx.escapeHtml(
                                                     action.title ||
                                                     action.name
                                                 ) +
                                                 '" ' +
+
                                                 'aria-label="' +
                                                 ctx.escapeHtml(
                                                     action.title ||
@@ -828,25 +857,27 @@
 
                                                 (
                                                     action.icon
+
                                                         ? '<i class="' +
                                                         ctx.escapeHtml(
                                                             action.icon
                                                         ) +
                                                         '"></i>'
+
                                                         : ctx.escapeHtml(
                                                             action.title ||
                                                             action.name
                                                         )
                                                 ) +
 
-                                                "</a>";
+                                                '</a>';
                                         }
                                     }
                                 );
 
 
                                 html +=
-                                    "</td>";
+                                    '</td>';
                             }
                         }
                     );
@@ -856,9 +887,17 @@
 
                     ctx.updateSelectAllState();
 
-                    ctx.bindInlineEditButtons();
+                    if (ctx.bindInlineEditButtons) {
+                        ctx.bindInlineEditButtons();
+                    }
 
-                    ctx.bindActionButtons();
+                    if (ctx.bindInlineDeleteButtons) {
+                        ctx.bindInlineDeleteButtons();
+                    }
+
+                    if (ctx.bindActionButtons) {
+                        ctx.bindActionButtons();
+                    }
 
                     ctx.highlightSearchText();
                 };
@@ -927,6 +966,12 @@
              * INITIALIZE SELECTION EVENTS
              * =========================================================
              */
+
+            if (
+                ctx.bindInlineActions
+            ) {
+                ctx.bindInlineActions();
+            }
 
             ctx.bindRowSelection();
 

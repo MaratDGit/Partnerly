@@ -128,6 +128,7 @@ namespace Partnerly.Controllers
             return model;
         }
 
+
         #region Data Grid Related Functions
         #region Default Actions
         protected virtual List<GridAction> GetDefaultActions(object row)
