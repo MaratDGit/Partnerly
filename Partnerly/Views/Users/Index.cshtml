@@ -1,28 +1,8 @@
-﻿@model Partnerly.Models.DataTable.ViewModels.UserDataTableViewModel;
+﻿@model Partnerly.Models.ViewModels.UserViewModel;
 @{
     ViewData["Title"] = "Users";
     Layout = "_ContentNavbarLayout";
     bool hasAdminRole = ViewBag?.RoleType == Partnerly.Descriptors.Attributes.RoleTypeAttribute.Delete;
 }
 
-@* @await Html.PartialAsync("_DataTablePartial", null, new ViewDataDictionary(ViewData)
-{
-    { "TableName", @Localizer["Users"] },
-    { "TableId", "usersTable" },
-    { "NewRecordControler", "Users" }
-})
-
-@section PageScripts {
-    <script>
-        $(document).ready(function () {
-            initUniqueDataTable("usersTable", '@Url.Action("GetData", "Users")', 
-            {
-                getDataParams: { tableModel: "User" },
-                exportAllUrl: '@(hasAdminRole? Url.Action("ExportAllToExcel", "Users"): "")',
-                exportSelectedUrl: '@(hasAdminRole? Url.Action("ExportToExcel", "Users"): "")',
-            });
-        });
-    </script>
-} *@
-
-@await Html.PartialAsync("~/Views/Shared/DataTable/_DataTable.cshtml", Model.dataTableUsersMain)
+@await Html.PartialAsync("~/Views/Shared/DataTable/_DataTable.cshtml", Model.users)

@@ -9,5 +9,6 @@ namespace Partnerly.Infrastructure.Interfaces
         Task<IEnumerable<UserGroupMember?>> GetAllGroupsByUserIDAsync(Guid userId);
         Task<UserGroup?> GetByGroupNameAsync(string groupName);
         Task<IEnumerable<UserGroupMember?>> GetAllUsersGroupsAsync();
+        IQueryable<UserGroupMemberExt> QueryMembersEntity(Guid? groupId = null);
     }
 }

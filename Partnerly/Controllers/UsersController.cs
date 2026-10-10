@@ -9,7 +9,6 @@ using Partnerly.Infrastructure.Interfaces;
 using Partnerly.Infrastructure.Services;
 using Partnerly.Models;
 using Partnerly.Models.DataTable;
-using Partnerly.Models.DataTable.ViewModels;
 using Partnerly.Models.ViewModels;
 using System.Security.Claims;
 
@@ -29,9 +28,19 @@ namespace Partnerly.Controllers
         }
 
         #region Index / Create / Edit / Delete
-        public IActionResult Index(UserDataTableViewModel model)
+        public IActionResult Index()
         {
-            model.dataTableUsersMain = CreateTableOptions();
+            UserViewModel model = new UserViewModel();
+            if (!_dataTableRegistry.Exists(DataTableNames.usersTable))
+            {
+                model.users = UserViewModel.CreateTableOptions(DataTableNames.usersTable, _dataTableRegistry);
+            }
+            else
+            {
+                var options = _dataTableRegistry.Get(DataTableNames.usersTable);
+                model.users = options;
+            }
+            
             return View(model);
         }
 
@@ -251,14 +260,43 @@ namespace Partnerly.Controllers
         [HttpGet]
         public async Task<IActionResult> Data([FromQuery] DataTableRequest request)
         {
+            if (string.IsNullOrWhiteSpace(request.TableID))
+            {
+                return BadRequest(new
+                {
+                    success = false,
+                    message = "Table ID is required."
+                });
+            }
+
             var options = _dataTableRegistry.Get(request.TableID);
 
-            var result = await _tableService.ExecuteAsync(
-               fields => _userService.QueryEntity(fields),
-               request,
-               options);
+            if (options == null)
+            {
+                return BadRequest(new
+                {
+                    success = false,
+                    message = "Unknown table."
+                });
+            }
 
-            return Json(result);
+            if (request.TableID == DataTableNames.usersTable)
+            {
+                var res = await _tableService.ExecuteAsync(
+                   fields => _userService.QueryEntity(fields),
+                   request,
+                   options);
+
+                return Json(res);
+            }
+            else
+            {
+                return BadRequest(new
+                {
+                    success = false,
+                    message = "Unknown table."
+                });
+            }
         }
 
         [HttpPost]
@@ -358,352 +396,22 @@ namespace Partnerly.Controllers
                     message = "Table ID cannot be found."
                 });
             
-            return await ExportTableAsync(
-                request,
-                format,
-                fields => _userService.QueryEntity(fields),
-                "users");
-        }
-
-        private DataTableOptions CreateTableOptions()
-        {
-            var options = 
-            new DataTableOptions
+            if (request.TableID == DataTableNames.usersTable)
             {
-                Id = DataTableNames.usersTable,
-                Name = FieldsDisplayNames.Users,
-                Icon = "bx bx-group",
-
-                KeyField = "Id",
-                AjaxUrl = "/Users/Data",
-                ExportUrl = "/Users/Export",
-                
-                AutoLoad = true,     
-                ReloadEnabled = true,
-                RememberState = true,
-               
-                InlineEditing = true,
-                InlineUpdateUrl = "/Users/UpdateInline",
-
-                Paging = new DataTablePagingOptions
+                return await ExportTableAsync(
+                            request,
+                            format,
+                            fields => _userService.QueryEntity(fields),
+                            "users");
+            }
+            else
+            {
+                return BadRequest(new
                 {
-                    Enabled = true,
-                    PageSize = 14,
-                    PageSizeOptions = new[] { 14, 25, 50, 100 },
-                    ShowInfo = true,
-                    ShowPageSize = false,
-                },
-
-                Search = new DataTableSearchOptions
-                {
-                    Enabled = true,
-                    Placeholder = FieldsDisplayNames.DataTableSearch,
-                    MinLength = 3,
-                    DebounceMs = 300,
-                },
-
-                Rows = new DataTableRowOptions
-                {
-                    Selectable = true,
-                    Clickable = true,
-                    Hover = true,
-                    Striped = false,
-                },
- 
-                Columns = new List<DataTableColumn>
-                {
-                    new DataTableColumn
-                    {
-                        Field = "Id",
-                        Title = "ID",
-                        Type = DataTableColumnType.Number,
-                        Visible = false,
-                    },
-
-                    new DataTableColumn
-                    {
-                        Field = nameof(Models.User.Selected),
-                        Type = DataTableColumnType.Boolean,
-                        Sortable = true,
-                        Searchable = false,
-                        Exportable = false,
-                        Editable = false,
-                        Alignment = DataTableAlignment.Center,
-                    },
-
-                    new DataTableColumn
-                    {
-                        Field = nameof(Models.User.FirstName),
-                        Title = FieldsDisplayNames.FirstName,
-                        Type = DataTableColumnType.Link,
-                        UrlTemplate = "/Users/Edit/{Id}",
-
-                        Editable = true,                  
-                        Visible = true,
-                        Sortable = true,
-                        Searchable = true,
-                        Exportable = true,
-                        Width = "",
-                        Format = "",
-                        EmptyText = "-",
-                        Alignment = DataTableAlignment.Left,
-                        CssClass = "",
-                        Resizable = true
-                    },
-
-                    new DataTableColumn
-                    {
-                        Field = nameof(Models.User.LastName),
-                        Title = FieldsDisplayNames.LastName,
-                        Type = DataTableColumnType.Text,
-                        Editable = true,
-                        Resizable = true
-                    },
-
-                    new DataTableColumn
-                    {
-                        Field = nameof(Models.User.Email),
-                        Title = FieldsDisplayNames.Email,
-                        Type = DataTableColumnType.Email,
-                        Resizable = true
-                    },
-
-                    new DataTableColumn
-                    {
-                        Field = nameof(Models.User.IsBlocked),
-                        Title = FieldsDisplayNames.IsBlocked,
-                        Type = DataTableColumnType.Boolean,
-                        Editable = true,
-                        Alignment = DataTableAlignment.Center,
-                        Resizable = true
-                    },
-
-                    new DataTableColumn
-                    {
-                        Field = nameof(Models.User.IsOnlayn),
-                        Title = FieldsDisplayNames.IsOnlayn,
-                        Type = DataTableColumnType.Boolean,
-                        Editable = false,
-                        Alignment = DataTableAlignment.Center,
-                        Resizable = true
-                    },
-
-                    new DataTableColumn
-                    {
-                        Field = nameof(Models.User.EmailConfirmed),
-                        Title = FieldsDisplayNames.EmailConfirmed,
-                        Type = DataTableColumnType.Boolean,
-                        Alignment = DataTableAlignment.Center,
-                        Resizable = true
-                    },
-
-                    new DataTableColumn
-                    {
-                        Field = nameof(Models.User.Balance),
-                        Title = FieldsDisplayNames.Balance,
-                        Type = DataTableColumnType.Currency,
-                        Editable = true,
-                        Resizable = true,
-
-                        ConditionalStyles = new List<DataTableConditionalStyle> 
-                        {
-                            new DataTableConditionalStyle
-                            {
-                                Conditions = new List<DataTableConditionalCondition>
-                                {
-                                    new DataTableConditionalCondition
-                                    {
-                                        Operator = DataTableConditionalOperator.GreaterThanOrEqual,
-                                        Value = "500"
-                                    },
-                                    new DataTableConditionalCondition
-                                    {
-                                        Operator = DataTableConditionalOperator.LessThan,
-                                        Value = "5000"
-                                    }
-                                },
-
-                                CssClass = "badge bg-label-warning fs-tiny rounded-pill ms-auto text-uppercase",
-                            },
-                            new DataTableConditionalStyle
-                            {
-                                Conditions = new List<DataTableConditionalCondition>
-                                {
-                                    new DataTableConditionalCondition
-                                    {
-                                        Operator = DataTableConditionalOperator.LessThanOrEqual,
-                                        Value = "500"
-                                    },
-                                },
-
-                                CssClass = "badge bg-label-danger fs-tiny rounded-pill ms-auto text-uppercase",
-                            },
-                            new DataTableConditionalStyle
-                            {
-                                Conditions = new List<DataTableConditionalCondition>
-                                {
-                                    new DataTableConditionalCondition
-                                    {
-                                        Operator = DataTableConditionalOperator.GreaterThanOrEqual,
-                                        Value = "5000"
-                                    },
-                                },
-
-                                CssClass = "badge bg-label-success fs-tiny rounded-pill ms-auto text-uppercase",
-                            },
-                        },
-                        
-                    },
-
-                    new DataTableColumn
-                    {
-                        Field = nameof(Models.User.LastActivity),
-                        Title = FieldsDisplayNames.LastActivity,
-                        Type = DataTableColumnType.DateTime,
-                        Format = "relative",
-                        Resizable = true
-                    },
-
-                    new DataTableColumn
-                    {
-                        Field = nameof(Models.User.CreatedDate),
-                        Title = FieldsDisplayNames.CreatedDate,
-                        Type = DataTableColumnType.DateTime,
-                        Format = "dd.MM.yyyy HH:mm",
-                        Resizable = true
-                    }
-                },
-
-                Sorting = new DataTableSortOptions
-                {
-                    Enabled = true,
-                    DefaultField = "CreatedDate",
-                    DefaultDirection = "desc"
-                },
-
-                Filters = new DataTableFilterOptions
-                {
-                    Enabled = true,
-                    Items = new List<DataTableFilter>
-                    {
-                        new DataTableFilter
-                        {
-                            Field = "IsBlocked",
-                            Label = FieldsDisplayNames.IsBlocked,
-                            Type = DataTableFilterType.Boolean
-                        },
-                        new DataTableFilter
-                        {
-                            Field = "IsOnlayn",
-                            Label = FieldsDisplayNames.IsOnlayn,
-                            Type = DataTableFilterType.Boolean
-                        },
-                        //new DataTableFilter
-                        //{
-                        //    Field = "Email",
-                        //    Label = "Email",
-                        //    Type = DataTableFilterType.Text,
-                        //    Placeholder = "Search email..."
-                        //},
-                        new DataTableFilter
-                        {
-                            Field = "Balance",
-                            Label = FieldsDisplayNames.Balance,
-                            Type = DataTableFilterType.NumberRange
-                        },
-                        new DataTableFilter
-                        {
-                            Field = "RoleId",
-                            Label = FieldsDisplayNames.Role,
-                            Type = DataTableFilterType.MultiSelect,
-                            Placeholder = "Role Name",
-                            DefaultValue = "",
-                            Options = new List<DataTableFilterOption>
-                            {
-                                new DataTableFilterOption("5DAF66B1-8140-4D48-BC12-431086FA7144", FieldsDisplayNames.Admin),
-                                new DataTableFilterOption("C3120D74-9C4C-44AA-8B0C-A1B2F53BF9A8", FieldsDisplayNames.Employee),
-                                new DataTableFilterOption("52B55F50-A21A-441E-BB59-EFAB24F907AF", FieldsDisplayNames.User)
-                            }
-                        },
-
-                        new DataTableFilter
-                        {
-                            Field = "CreatedDate",
-                            Label = FieldsDisplayNames.CreatedDate,
-                            Type = DataTableFilterType.DateRange
-                        }
-                    }
-                },
-
-                Actions = new DataTableActionOptions
-                {
-                    Enabled = true,
-
-                    Items = new List<DataTableAction>
-                    {
-                        new DataTableAction
-                        {
-                            Name = "add",
-                            Title = "",
-                            Icon = "bx bx-plus",
-                            Type = DataTableActionType.Link,
-                            Placement = DataTableActionPlacement.Toolbar,
-                            Url = "/Users/Create",
-                            Method = "Get",
-                            CssClass = "data-table-grid-action"
-                        },
-
-                        new DataTableAction
-                        {
-                            Name = "view",
-                            Title = FieldsDisplayNames.View,
-                            Icon = "bx bx-show",
-                            Type = DataTableActionType.Link,
-                            Placement = DataTableActionPlacement.Row,
-                            Url = "/Users/Edit/{Id}",
-                            Method = "GET",
-                            //CssClass = "data-table-grid-action"
-                           // CssClass = "btn btn-sm btn-outline-secondary"
-                        },
-
-                        new DataTableAction
-                        {
-                            Name = "edit",
-                            Title = FieldsDisplayNames.Edit,
-                            Icon = "bx bx-edit",
-                            Type = DataTableActionType.InlineEdit,
-                            Placement = DataTableActionPlacement.Row,
-                            //CssClass = "data-table-grid-action"
-                            //CssClass = "btn btn-sm btn-outline-primary"
-                        },
-
-                        new DataTableAction
-                        {
-                            Name = "delete",
-                            Title = FieldsDisplayNames.Delete,
-                            Icon = "bx bx-trash",
-                            Type = DataTableActionType.Link,
-                            Placement = DataTableActionPlacement.Row,
-                            Url = "/Users/Delete/{Id}",
-                            Method = "GET",
-                            //CssClass = "data-table-grid-action"
-                            //CssClass = "btn btn-sm btn-outline-danger"
-                        }
-                    }
-                },
-
-                Export = new DataTableExportOptions
-                {
-                    Enabled = true,
-                    Csv = true,
-                    Excel = true,
-                    Print = false
-                }
-            };
-
-            _dataTableRegistry.Register(options);
-
-            return options;
+                    success = false,
+                    message = "Unknown table."
+                });
+            }
         }
     }
 }

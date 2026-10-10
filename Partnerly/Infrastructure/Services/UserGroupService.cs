@@ -41,6 +41,9 @@ namespace Partnerly.Infrastructure.Services
         public IQueryable<UserGroup> QueryEntity(IEnumerable<string> fields) =>
             _userGroupRepository.QueryEntity(fields);
 
+        public IQueryable<UserGroupMemberExt> QueryMembersEntity(Guid? groupId = null) =>
+           _userGroupRepository.QueryMembersEntity(groupId);
+
         public async Task<ServiceResult<UserGroup?>> CreateUserGroupAsync(UserGroup? userGroup)
         {
             if (userGroup == null)

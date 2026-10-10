@@ -10,6 +10,6 @@
 
         public bool ShowInfo { get; set; } = true;
 
-        public bool ShowPageSize { get; set; } = true;
+        public bool ShowPageSize { get; set; } = false;
     }
 }

@@ -16,34 +16,23 @@
         public bool InlineEditing { get; set; } = false;
         public string InlineUpdateUrl { get; set; } = "";
 
-        //public string InlineCreateUrl { get; set; } = "";
-        //public string InlineDeleteUrl { get; set; } = "";
-
         public bool ColumnResizeEnabled { get; set; } = true;
         public int ColumnResizeMinWidth { get; set; } = 60;
 
-        public List<DataTableColumn> Columns { get; set; }
-            = new List<DataTableColumn>();
+        public List<DataTableColumn> Columns { get; set; } = new List<DataTableColumn>();
 
-        public DataTableSearchOptions Search { get; set; }
-            = new();
+        public DataTableSearchOptions Search { get; set; } = new();
 
-        public DataTablePagingOptions Paging { get; set; }
-            = new();
+        public DataTablePagingOptions Paging { get; set; } = new();
 
-        public DataTableFilterOptions Filters { get; set; }
-            = new();
+        public DataTableFilterOptions Filters { get; set; } = new();
 
-        public DataTableSortOptions Sorting { get; set; }
-            = new();
+        public DataTableSortOptions Sorting { get; set; } = new();
 
-        public DataTableExportOptions Export { get; set; }
-            = new();
+        public DataTableExportOptions Export { get; set; } = new();
 
-        public DataTableActionOptions Actions { get; set; }
-            = new();
+        public DataTableActionOptions Actions { get; set; } = new();
 
-        public DataTableRowOptions Rows { get; set; }
-            = new();
+        public DataTableRowOptions Rows { get; set; } = new();
     }
 }

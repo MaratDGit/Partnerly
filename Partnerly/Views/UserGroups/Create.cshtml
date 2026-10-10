@@ -59,7 +59,7 @@
                     </ul>
                     <div class="tab-content p-0">
                     <div class="tab-pane fade show active" id="navs-justified-profile" role="tabpanel">
-                        @*Пользователи*@
+                        
                         @await Html.PartialAsync("_DataTablePartial", null, new ViewDataDictionary(ViewData)
                         {
                             { "TableId", "userGroupsMembersTable" },
@@ -87,7 +87,7 @@
 </script>
 
 @section PageScripts {
-    <script>
+    @* <script>
         const tableId = "userGroupsMembersTable";
 
         $(document).ready(function () {
@@ -107,7 +107,7 @@
                 $(this).append(`<input type="hidden" name="MembersGuids" value="${id}" />`);
             }
         });
-    </script>
+    </script> *@
 }
 
 

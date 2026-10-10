@@ -35,7 +35,7 @@
 
             <input type="hidden" id="hiddenNote" asp-for="Note" />
 
-            <div class="form-floating mb-1 max-w-600 position-relative">
+            <div class="form-floating mb-1 max-w-400 position-relative">
                 <input asp-for="Name"
                        id="name"
                        name="name"
@@ -72,12 +72,8 @@
                     </ul>
                     <div class="tab-content p-0">
                     <div class="tab-pane fade show active" id="navs-justified-profile" role="tabpanel">
-                        
-                        @await Html.PartialAsync("_DataTablePartial", null, new ViewDataDictionary(ViewData)
-                        {
-                            { "TableId", "userGroupsMembersTable" },
-                            { "WithoutCard", true }
-                        })
+
+                            @await Html.PartialAsync("~/Views/Shared/DataTable/_DataTable.cshtml", Model.groupMembers)
                     </div>
                     <div class="tab-pane fade" id="navs-justified-home" role="tabpanel">
          
@@ -100,7 +96,7 @@
 </script>
 
 @section PageScripts {
-    <script>
+    @* <script>
         const preselectedIds = @Html.Raw(Json.Serialize(Model.MembersGuids ?? new List<string>()));
         const tableId = "userGroupsMembersTable";
 
@@ -144,5 +140,5 @@
         $(document).on("change", `#${tableId} .row-select-checkbox`, function () {
             $("#userGroupEditForm").trigger("change");
         });
-    </script>
+    </script> *@
 }

@@ -17,5 +17,6 @@ namespace Partnerly.Infrastructure.Interfaces
         Task<ServiceResult<UserGroup?>> DeleteUserGroupAsync(Guid? id);
 
         IQueryable<UserGroup> QueryEntity(IEnumerable<string> fields);
+        IQueryable<UserGroupMemberExt> QueryMembersEntity(Guid? groupId = null);
     }
 }

@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Partnerly.Descriptors.Messages;
 using Partnerly.Infrastructure.Interfaces;
 using Partnerly.Models.DataTable;
 using System.Globalization;
@@ -9,9 +10,9 @@ namespace Partnerly.Infrastructure.Services
     public class InlineUpdateService : IInlineUpdateService
     {
         public InlineUpdateResult ApplyChanges<T>(
-            T entity,
-            IDictionary<string, string?> fields,
-            DataTableOptions tableOptions)
+       T entity,
+       IDictionary<string, string?> fields,
+       DataTableOptions tableOptions)
         {
             if (entity == null)
             {
@@ -30,18 +31,56 @@ namespace Partnerly.Infrastructure.Services
                 return InlineUpdateResult.NotChanged();
             }
 
-            /*
-             * Get only columns which are editable.
-             */
+            return ApplyFields(
+                entity,
+                fields,
+                tableOptions);
+        }
+
+        public InlineCreateResult Create<T>(
+            IDictionary<string, string?> fields,
+            DataTableOptions tableOptions)
+            where T : new()
+        {
+            if (tableOptions == null)
+            {
+                return InlineCreateResult.Error(
+                    "DataTable options cannot be null.");
+            }
+
+            if (fields == null || fields.Count == 0)
+            {
+                return InlineCreateResult.Error(
+                    "No fields were provided.");
+            }
+
+            var entity = new T();
+
+            var result = ApplyFields(
+                entity,
+                fields,
+                tableOptions);
+
+            if (!result.Success)
+            {
+                return InlineCreateResult.Error(
+                    result.ErrorMessage!);
+            }
+
+            return InlineCreateResult.CreatedEntity(entity);
+        }
+
+        private InlineUpdateResult ApplyFields<T>(
+            T entity,
+            IDictionary<string, string?> fields,
+            DataTableOptions tableOptions)
+        {
             var editableColumns = tableOptions.Columns
                 .Where(x => x.Editable)
                 .ToDictionary(
                     x => x.Field,
                     StringComparer.OrdinalIgnoreCase);
 
-            /*
-             * Get entity properties.
-             */
             var properties = typeof(T)
                 .GetProperties(
                     BindingFlags.Public |
@@ -55,9 +94,6 @@ namespace Partnerly.Infrastructure.Services
 
             foreach (var field in fields)
             {
-                /*
-                 * Field must exist in DataTable.
-                 */
                 if (!editableColumns.TryGetValue(
                         field.Key,
                         out var column))
@@ -66,9 +102,6 @@ namespace Partnerly.Infrastructure.Services
                         $"Field is not editable: {field.Key}");
                 }
 
-                /*
-                 * Field must exist on entity.
-                 */
                 if (!properties.TryGetValue(
                         field.Key,
                         out var property))
@@ -77,14 +110,12 @@ namespace Partnerly.Infrastructure.Services
                         $"Field does not exist on entity: {field.Key}");
                 }
 
-                /*
-                 * Required validation.
-                 */
                 if (column.Required &&
                     string.IsNullOrWhiteSpace(field.Value))
                 {
                     return InlineUpdateResult.Error(
-                        $"{GetFieldDisplayName(column)} is required.");
+                        $"'{GetFieldDisplayName(column)}' - " +
+                        $"{ErrorMessages.FieldRequired}.");
                 }
 
                 object? newValue;
@@ -102,21 +133,12 @@ namespace Partnerly.Infrastructure.Services
                         $"'{GetFieldDisplayName(column)}': {ex.Message}");
                 }
 
-                /*
-                 * Additional protection:
-                 *
-                 * Required value must not become null.
-                 */
-                if (column.Required &&
-                    newValue == null)
+                if (column.Required && newValue == null)
                 {
                     return InlineUpdateResult.Error(
                         $"{GetFieldDisplayName(column)} is required.");
                 }
 
-                /*
-                 * Compare old and new value.
-                 */
                 var currentValue =
                     property.GetValue(entity);
 
@@ -125,9 +147,6 @@ namespace Partnerly.Infrastructure.Services
                     continue;
                 }
 
-                /*
-                 * Apply change.
-                 */
                 property.SetValue(
                     entity,
                     newValue);

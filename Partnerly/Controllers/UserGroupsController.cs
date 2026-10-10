@@ -9,7 +9,6 @@ using Partnerly.Infrastructure.Interfaces;
 using Partnerly.Infrastructure.Services;
 using Partnerly.Models;
 using Partnerly.Models.DataTable;
-using Partnerly.Models.DataTable.ViewModels;
 using Partnerly.Models.ViewModels;
 using System.Security.Claims;
 
@@ -32,9 +31,19 @@ namespace Partnerly.Controllers
         }
 
         #region Index / Create / Edit / Delete
-        public IActionResult Index(UserGoupsDataTableViewModel model)
+        public IActionResult Index()
         {
-            model.dataTableUserGroupsMain = CreateTableOptions();
+            UserGroupViewModel model = new UserGroupViewModel();
+            if (!_dataTableRegistry.Exists(DataTableNames.userGroupsTable))
+            {
+                model.groups = UserGroupViewModel.CreateTableOptions(DataTableNames.userGroupsTable, _dataTableRegistry);
+            }
+            else
+            {
+                var options = _dataTableRegistry.Get(DataTableNames.userGroupsTable);
+                model.groups = options;
+            }
+
             return View(model);
         }
 
@@ -60,17 +69,17 @@ namespace Partnerly.Controllers
                 UserGroup group = new UserGroup();
                 group.Name = model.Name;
                 group.Description = model.Description;
-                if (model.MembersGuids.Any())
-                {
-                    foreach (var member in model.MembersGuids)
-                    {
-                        var user = await _userService.GetUserByIDAsync(member);
-                        if (user != null)
-                        {
-                            group.Members.Add(new UserGroupMember { UserId = user.Id });
-                        }
-                    }
-                }
+                //if (model.MembersGuids.Any())
+                //{
+                //    foreach (var member in model.MembersGuids)
+                //    {
+                //        var user = await _userService.GetUserByIDAsync(member);
+                //        if (user != null)
+                //        {
+                //            group.Members.Add(new UserGroupMember { UserId = user.Id });
+                //        }
+                //    }
+                //}
                 var result = await _userGroupService.CreateUserGroupAsync(group);
 
                 if (!result.Success)
@@ -94,12 +103,23 @@ namespace Partnerly.Controllers
             if (group == null) return NotFound();
 
             var groupAsView = await PropertyActionsHelper.CopyPropertiesAsync(group, new UserGroupViewModel());
-            var groupMembers = await _userGroupService.GetAllUsersByGroupIDAsync(group.Id);
-            foreach (var member in groupMembers)
-            {
-                groupAsView.MembersGuids.Add(member.UserId.ToString());
-            }
+            //var groupMembers = await _userGroupService.GetAllUsersByGroupIDAsync(group.Id);
+            //foreach (var member in groupMembers)
+            //{
+            //    groupAsView.MembersGuids.Add(member.UserId.ToString());
+            //}
+
             if (groupAsView == null) return NotFound();
+
+            if (!_dataTableRegistry.Exists(DataTableNames.userGroupsMembersTable))
+            {
+                groupAsView.groupMembers = UserGroupViewModel.CreateTableOptions(DataTableNames.userGroupsMembersTable, _dataTableRegistry);
+            }
+            else
+            {
+                var options = _dataTableRegistry.Get(DataTableNames.userGroupsMembersTable);
+                groupAsView.groupMembers = options;
+            }
 
             await PrepareViewModelAsync(groupAsView);
 
@@ -128,20 +148,22 @@ namespace Partnerly.Controllers
                     group.Description = model.Description;
                     group.Note = model.Note;
 
-                    List<UserGroupMember> members = new List<UserGroupMember>();
-                    if (model.MembersGuids.Any())
-                    {
-                        foreach (var member in model.MembersGuids)
-                        {
-                            var user = await _userService.GetUserByIDAsync(member);
-                            if (user != null)
-                            {
-                                members.Add(new UserGroupMember { UserId = user.Id, GroupId = id });
-                            }
-                        }
-                    }
+                    //List<UserGroupMember> members = new List<UserGroupMember>();
+                    //if (model.MembersGuids.Any())
+                    //{
+                    //    foreach (var member in model.MembersGuids)
+                    //    {
+                    //        var user = await _userService.GetUserByIDAsync(member);
+                    //        if (user != null)
+                    //        {
+                    //            members.Add(new UserGroupMember { UserId = user.Id, GroupId = id });
+                    //        }
+                    //    }
+                    //}
 
-                    ServiceResult<UserGroup?> result = await _userGroupService.UpdateUserGroupAsync(group, members);
+                    //ServiceResult<UserGroup?> result = await _userGroupService.UpdateUserGroupAsync(group, members);
+
+                    ServiceResult<UserGroup?> result = await _userGroupService.UpdateUserGroupAsync(group, new List<UserGroupMember>());
                     if (!result.Success)
                     {
                         foreach (var error in result.Errors)
@@ -216,18 +238,55 @@ namespace Partnerly.Controllers
             return Json(new { });
         }
 
-
         [HttpGet]
         public async Task<IActionResult> Data([FromQuery] DataTableRequest request)
         {
+            if (string.IsNullOrWhiteSpace(request.TableID))
+            {
+                return BadRequest(new
+                {
+                    success = false,
+                    message = "Table ID is required."
+                });
+            }
+
             var options = _dataTableRegistry.Get(request.TableID);
 
-            var result = await _tableService.ExecuteAsync(
-               fields => _userGroupService.QueryEntity(fields),
-               request,
-               options);
+            if (options == null)
+            {
+                return BadRequest(new
+                {
+                    success = false,
+                    message = "Unknown table."
+                });
+            }
 
-            return Json(result);
+            if (request.TableID == DataTableNames.userGroupsMembersTable)
+            {
+                var result = await _tableService.ExecuteAsync(
+                    fields => _userGroupService.QueryMembersEntity(),
+                    request,
+                    options);
+
+                return Json(result);
+            }
+            else if (request.TableID == DataTableNames.userGroupsTable)
+            {
+                var result = await _tableService.ExecuteAsync(
+                fields => _userGroupService.QueryEntity(fields),
+                request,
+                options);
+
+                return Json(result);
+            }
+            else
+            {
+                return BadRequest(new
+                {
+                    success = false,
+                    message = "Unknown table."
+                });
+            }
         }
 
         [HttpPost]
@@ -293,61 +352,52 @@ namespace Partnerly.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> CreateInline(
-        [FromBody] DataTableInlineCreateRequest request)
+        public async Task<IActionResult> CreateInline([FromBody] DataTableInlineCreateRequest request)
         {
-            if (request.Fields == null || request.Fields.Count == 0)
+            var options = _dataTableRegistry.Get(request.TableID);
+
+            if (options == null)
             {
                 return BadRequest(new
                 {
                     success = false,
-                    message = "No fields were provided."
+                    message = "Invalid table."
                 });
             }
 
-            var group = new Models.UserGroup();
-            
-            foreach (var field in request.Fields)
-            {
-                switch (field.Key)
-                {
-                    case nameof(Models.UserGroup.Name):
+            var result =
+                _inlineUpdateService.Create<UserGroup>(
+                    request.Fields,
+                    options);
 
-                        group.Name = field.Value?.Trim() ?? "";
-
-                        break;
-
-                    case nameof(Models.UserGroup.Description):
-
-                        group.Description = field.Value?.Trim() ?? "";
-
-                        break;
-
-                    default:
-
-                        return BadRequest(new
-                        {
-                            success = false,
-                            message = "Field is not allowed: " + field.Key
-                        });
-                }
-            }
-
-            if (string.IsNullOrWhiteSpace(group.Name))
+            if (!result.Success)
             {
                 return BadRequest(new
                 {
                     success = false,
-                    message = "Group name is required."
+                    message = result.ErrorMessage
                 });
             }
 
-            await _userGroupService.CreateUserGroupAsync(group);
+            var createResult =
+                await _userGroupService.CreateUserGroupAsync(
+                    (UserGroup)result.Entity!);
+
+            if (!createResult.Success)
+            {
+                return BadRequest(new
+                {
+                    success = false,
+                    message = string.Join(
+                        " ",
+                        createResult.Errors)
+                });
+            }
 
             return Json(new
             {
                 success = true,
-                id = group.Id
+                id = createResult.Data!.Id
             });
         }
 
@@ -365,13 +415,7 @@ namespace Partnerly.Controllers
                 });
             }
 
-
-            if (
-                !Guid.TryParse(
-                    request.Id,
-                    out var groupId
-                )
-            )
+            if (!Guid.TryParse(request.Id, out var groupId))
             {
                 return BadRequest(new
                 {
@@ -380,12 +424,7 @@ namespace Partnerly.Controllers
                 });
             }
 
-
-            var group =
-                await _userGroupService.GetByIDAsync(
-                    groupId
-                );
-
+            var group = await _userGroupService.GetByIDAsync(groupId);
 
             if (group == null)
             {
@@ -396,11 +435,7 @@ namespace Partnerly.Controllers
                 });
             }
 
-
-            await _userGroupService.DeleteUserGroupAsync(
-                groupId
-            );
-
+            await _userGroupService.DeleteUserGroupAsync(groupId);
 
             return Json(new
             {
@@ -418,245 +453,22 @@ namespace Partnerly.Controllers
                     message = "Table ID cannot be found."
                 });
 
-            return await ExportTableAsync(
+            if (request.TableID == DataTableNames.userGroupsTable)
+            {
+                return await ExportTableAsync(
                 request,
                 format,
                 fields => _userGroupService.QueryEntity(fields),
                 "groups");
-        }
-
-        private DataTableOptions CreateTableOptions()
-        {
-            var options = new DataTableOptions
+            }
+            else
             {
-                Id = DataTableNames.userGroupsTable,
-                Name = FieldsDisplayNames.Users,
-                Icon = "bx bx-group",
-
-                KeyField = "Id",
-                AjaxUrl = "/UserGroups/Data",
-                ExportUrl = "/UserGroups/Export",
-
-                AutoLoad = true,
-                ReloadEnabled = true,
-                RememberState = true,
-
-                InlineEditing = true,
-                InlineUpdateUrl = "/UserGroups/UpdateInline",
-
-                //InlineCreateUrl = "/UserGroups/CreateInline",
-                //InlineDeleteUrl = "/UserGroups/DeleteInline",
-
-                Paging = new DataTablePagingOptions
+                return BadRequest(new
                 {
-                    Enabled = true,
-                    PageSize = 14,
-                    PageSizeOptions = new[] { 14, 25, 50, 100 },
-                    ShowInfo = true,
-                    ShowPageSize = false,
-                },
-
-                Search = new DataTableSearchOptions
-                {
-                    Enabled = true,
-                    Placeholder = FieldsDisplayNames.DataTableSearch,
-                    MinLength = 3,
-                    DebounceMs = 300,
-                },
-
-                Rows = new DataTableRowOptions
-                {
-                    Selectable = true,
-                    Clickable = true,
-                    Hover = true,
-                    Striped = false,
-                },
-
-                Columns = new List<DataTableColumn>
-                {
-                    new DataTableColumn
-                    {
-                        Field = "Id",
-                        Title = "ID",
-                        Type = DataTableColumnType.Number,
-                        Visible = false,
-                        Required = true,
-                    },
-
-                    new DataTableColumn
-                    {
-                        Field = nameof(Models.User.Selected),
-                        Type = DataTableColumnType.Boolean,
-                        Sortable = true,
-                        Searchable = false,
-                        Exportable = false,
-                        Editable = false,
-                        Alignment = DataTableAlignment.Center,
-                    },
-
-                    new DataTableColumn
-                    {
-                        Field = nameof(Models.UserGroup.Name),
-                        Title = FieldsDisplayNames.Name,
-                        Type = DataTableColumnType.Link,
-                        UrlTemplate = "/UserGroups/Edit/{Id}",
-
-                        Editable = true,
-                        Visible = true,
-                        Required = true,
-                        Sortable = true,
-                        Searchable = true,
-                        Exportable = true,
-                        Width = "",
-                        Format = "",
-                        EmptyText = "-",
-                        Alignment = DataTableAlignment.Left,
-                        CssClass = "",
-                        Resizable = true
-                    },
-
-                    new DataTableColumn
-                    {
-                        Field = nameof(Models.UserGroup.Description),
-                        Title = FieldsDisplayNames.Description,
-                        Type = DataTableColumnType.Text,
-                        Editable = true,
-                        Resizable = true
-                    },
-
-                    new DataTableColumn
-                    {
-                        Field = nameof(Models.UserGroup.UpdatedDate),
-                        Title = FieldsDisplayNames.UpdatedDate,
-                        Type = DataTableColumnType.DateTime,
-                        Format = "relative",
-                        Resizable = true
-                    },
-
-                    new DataTableColumn
-                    {
-                        Field = nameof(Models.User.CreatedDate),
-                        Title = FieldsDisplayNames.CreatedDate,
-                        Type = DataTableColumnType.DateTime,
-                        Format = "dd.MM.yyyy HH:mm",
-                        Resizable = true
-                    }
-                },
-
-                Sorting = new DataTableSortOptions
-                {
-                    Enabled = true,
-                    DefaultField = "CreatedDate",
-                    DefaultDirection = "desc"
-                },
-
-                Filters = new DataTableFilterOptions
-                {
-                    Enabled = true,
-                    Items = new List<DataTableFilter>
-                    {
-                        new DataTableFilter
-                        {
-                            Field = nameof(Models.User.CreatedDate),
-                            Label = FieldsDisplayNames.CreatedDate,
-                            Type = DataTableFilterType.DateRange
-                        }
-                    }
-                },
-
-                Actions = new DataTableActionOptions
-                {
-                    Enabled = true,
-
-                    Items = new List<DataTableAction>
-                    {
-                        //new DataTableAction
-                        //{
-                        //    Name = "add",
-                        //    Title = "",
-                        //    Icon = "bx bx-plus",
-                        //    Type = DataTableActionType.Link,
-                        //    Placement = DataTableActionPlacement.Toolbar,
-                        //    Url = "/UserGroups/Create",
-                        //    Method = "Get",
-                        //    CssClass = "data-table-grid-action"
-                        //},
-
-                        new DataTableAction
-                        {
-                            Name = "add",
-                            Title = "",
-                            Icon = "bx bx-plus",
-                            Type = DataTableActionType.InlineAdd,
-                            Url = "/UserGroups/CreateInline",
-                            Placement = DataTableActionPlacement.Toolbar,
-                            CssClass = "data-table-grid-action"
-                        },
-
-                        new DataTableAction
-                        {
-                            Name = "view",
-                            Title = FieldsDisplayNames.View,
-                            Icon = "bx bx-show",
-                            Type = DataTableActionType.Link,
-                            Placement = DataTableActionPlacement.Row,
-                            Url = "/UserGroups/Edit/{Id}",
-                            Method = "GET",
-                            // CssClass = "btn btn-sm btn-outline-secondary"
-                        },
-
-                        new DataTableAction
-                        {
-                            Name = "edit",
-                            Title = FieldsDisplayNames.Edit,
-                            Icon = "bx bx-edit",
-                            Type = DataTableActionType.InlineEdit,
-                            Placement = DataTableActionPlacement.Row,
-                            
-                            //CssClass = "btn btn-sm btn-outline-primary"
-                        },
-
-                        //new DataTableAction
-                        //{
-                        //    Name = "delete",
-                        //    Title = FieldsDisplayNames.Delete,
-                        //    Icon = "bx bx-trash",
-                        //    Type = DataTableActionType.Link,
-                        //    Placement = DataTableActionPlacement.Row,
-                        //    Url = "/UserGroups/Delete/{Id}",
-                        //    Method = "GET",
-                        //    //CssClass = "btn btn-sm btn-outline-danger"
-                        //},
-
-                        new DataTableAction
-                        {
-                            Name = "delete",
-                            Title = FieldsDisplayNames.Delete,
-                            Icon = "bx bx-trash",
-                            Type = DataTableActionType.InlineDelete,
-                            Placement = DataTableActionPlacement.Row,
-                            Url = "/UserGroups/DeleteInline",
-                            Method = "POST",
-                            Confirm = true,
-                            ConfirmMessage =
-                                "Are you sure you want to delete this group?",
-                            CssClass = "btn btn-sm btn-outline-danger"
-                        }
-                    }
-                },
-
-                Export = new DataTableExportOptions
-                {
-                    Enabled = true,
-                    Csv = true,
-                    Excel = true,
-                    Print = false
-                }
-            };
-
-            _dataTableRegistry.Register(options);
-            
-            return options;
+                    success = false,
+                    message = "Unknown table."
+                });
+            }
         }
     }
 }

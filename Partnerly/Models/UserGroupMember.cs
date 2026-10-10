@@ -34,4 +34,12 @@ namespace Partnerly.Models
         [ForeignKey(nameof(GroupId))]
         public UserGroup Group { get; set; } = null!;
     }
+
+    public class UserGroupMemberExt : UserGroupMember
+    {
+        public string? UserEmail { get; set; }
+        public string? UserFirstName { get; set; }
+        public string? UserLastName { get; set; }
+        public string? GroupName { get; set; }
+    }
 }
