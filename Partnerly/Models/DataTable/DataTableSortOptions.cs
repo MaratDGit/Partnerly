@@ -6,6 +6,6 @@
 
         public string? DefaultField { get; set; }
 
-        public string DefaultDirection { get; set; } = "asc";
+        public string DefaultDirection { get; set; } = "desc";
     }
 }

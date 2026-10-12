@@ -5,6 +5,7 @@ namespace Partnerly.Models.DataTable
     public class DataTableColumn
     {
         public string Field { get; set; } = "";
+        public bool IsKey { get; set; } = false;
 
         public string Title { get; set; } = "";
 
@@ -37,7 +38,8 @@ namespace Partnerly.Models.DataTable
         Boolean,
         Badge,
         Email,
-        Link
+        Link,
+        Size
     }
 
     public enum DataTableAlignment

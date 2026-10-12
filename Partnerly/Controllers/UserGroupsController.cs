@@ -34,15 +34,7 @@ namespace Partnerly.Controllers
         public IActionResult Index()
         {
             UserGroupViewModel model = new UserGroupViewModel();
-            if (!_dataTableRegistry.Exists(DataTableNames.userGroupsTable))
-            {
-                model.groups = UserGroupViewModel.CreateTableOptions(DataTableNames.userGroupsTable, _dataTableRegistry);
-            }
-            else
-            {
-                var options = _dataTableRegistry.Get(DataTableNames.userGroupsTable);
-                model.groups = options;
-            }
+            model.groups = UserGroupViewModel.CreateTableOptions(DataTableNames.userGroupsTable, _dataTableRegistry);
 
             return View(model);
         }
@@ -103,23 +95,15 @@ namespace Partnerly.Controllers
             if (group == null) return NotFound();
 
             var groupAsView = await PropertyActionsHelper.CopyPropertiesAsync(group, new UserGroupViewModel());
-            //var groupMembers = await _userGroupService.GetAllUsersByGroupIDAsync(group.Id);
-            //foreach (var member in groupMembers)
-            //{
-            //    groupAsView.MembersGuids.Add(member.UserId.ToString());
-            //}
+            var groupMembers = await _userGroupService.GetAllUsersByGroupIDAsync(group.Id);
+            foreach (var member in groupMembers)
+            {
+                groupAsView.Members.Add(member);
+            }
 
             if (groupAsView == null) return NotFound();
 
-            if (!_dataTableRegistry.Exists(DataTableNames.userGroupsMembersTable))
-            {
-                groupAsView.groupMembers = UserGroupViewModel.CreateTableOptions(DataTableNames.userGroupsMembersTable, _dataTableRegistry);
-            }
-            else
-            {
-                var options = _dataTableRegistry.Get(DataTableNames.userGroupsMembersTable);
-                groupAsView.groupMembers = options;
-            }
+            groupAsView.groupMembers = UserGroupViewModel.CreateTableOptions(DataTableNames.userGroupsMembersTable, _dataTableRegistry);
 
             await PrepareViewModelAsync(groupAsView);
 
@@ -148,22 +132,7 @@ namespace Partnerly.Controllers
                     group.Description = model.Description;
                     group.Note = model.Note;
 
-                    //List<UserGroupMember> members = new List<UserGroupMember>();
-                    //if (model.MembersGuids.Any())
-                    //{
-                    //    foreach (var member in model.MembersGuids)
-                    //    {
-                    //        var user = await _userService.GetUserByIDAsync(member);
-                    //        if (user != null)
-                    //        {
-                    //            members.Add(new UserGroupMember { UserId = user.Id, GroupId = id });
-                    //        }
-                    //    }
-                    //}
-
-                    //ServiceResult<UserGroup?> result = await _userGroupService.UpdateUserGroupAsync(group, members);
-
-                    ServiceResult<UserGroup?> result = await _userGroupService.UpdateUserGroupAsync(group, new List<UserGroupMember>());
+                    ServiceResult<UserGroup?> result = await _userGroupService.UpdateUserGroupAsync(group);
                     if (!result.Success)
                     {
                         foreach (var error in result.Errors)
@@ -263,8 +232,17 @@ namespace Partnerly.Controllers
 
             if (request.TableID == DataTableNames.userGroupsMembersTable)
             {
+                if (!request.ParentKeys.TryGetValue("GroupID", out var groupIdValue) || !Guid.TryParse(groupIdValue, out var groupId))
+                {
+                    return BadRequest(new
+                    {
+                        success = false,
+                        message = "A valid GroupID is required."
+                    });
+                }
+
                 var result = await _tableService.ExecuteAsync(
-                    fields => _userGroupService.QueryMembersEntity(),
+                    fields => _userGroupService.QueryMembersEntity(groupId),
                     request,
                     options);
 
@@ -340,7 +318,7 @@ namespace Partnerly.Controllers
 
             if (result.IsChanged)
             {
-                await _userGroupService.UpdateUserGroupAsync(group, new List<UserGroupMember>());
+                await _userGroupService.UpdateUserGroupAsync(group);
             }
 
             return Ok(new

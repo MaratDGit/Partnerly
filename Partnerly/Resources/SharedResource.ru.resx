@@ -1327,4 +1327,7 @@
   <data name="Photo" xml:space="preserve">
     <value>Фото</value>
   </data>
+  <data name="Add" xml:space="preserve">
+    <value>Добавить</value>
+  </data>
 </root>

@@ -18,6 +18,7 @@
 
         public bool ColumnResizeEnabled { get; set; } = true;
         public int ColumnResizeMinWidth { get; set; } = 60;
+        public List<string> ParentKeyFields { get; set; } = new();
 
         public List<DataTableColumn> Columns { get; set; } = new List<DataTableColumn>();
 

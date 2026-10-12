@@ -1326,4 +1326,7 @@
   <data name="Photo" xml:space="preserve">
     <value>Լուսանկար</value>
   </data>
+  <data name="Add" xml:space="preserve">
+    <value>Ավելացնել</value>
+  </data>
 </root>

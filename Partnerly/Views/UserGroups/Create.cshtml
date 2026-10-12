@@ -21,7 +21,7 @@
                 Save = new Partnerly.Models.ViewModels.ActionSave(visible: true, fromController: "UserGroups", toController: "UserGroups", fromAction: "Create", toAction: "Create"),
             })
 
-            <div class="form-floating mb-1 max-w-600 position-relative">
+            <div class="form-floating mb-1 max-w-400 position-relative">
                 <input asp-for="Name"
                        id="name"
                        name="name"
@@ -46,37 +46,6 @@
                 <label asp-for="Description"></label>
                <span asp-validation-for="Description" class="text-danger"></span>
             </div>
-
-            <div class="card-content">
-                <div class="nav-align-top nav-tabs mb-6">
-                    <ul class="nav nav-tabs nav-fill" role="tablist">
-                        <li class="nav-item">
-                            <button type="button" class="nav-link active" role="tab" data-bs-toggle="tab" data-bs-target="#navs-justified-profile" aria-controls="navs-justified-profile" aria-selected="false"><span class="d-none d-sm-block"><i class="tf-icons bx bx-group bx-sm me-1_5 align-text-bottom"></i> @Localizer["Users"]</span><i class="bx bx-user bx-sm d-sm-none"></i></button>
-                        </li>
-                        <li class="nav-item">
-                            <button type="button" class="nav-link" role="tab" data-bs-toggle="tab" data-bs-target="#navs-justified-home" aria-controls="navs-justified-home" aria-selected="true"><span class="d-none d-sm-block"><i class="tf-icons bx bx-unlink bx-sm me-1_5 align-text-bottom"></i> @Localizer["Connections"] </span><i class="bx bx-unlink bx-sm d-sm-none"></i></button>
-                        </li>
-                    </ul>
-                    <div class="tab-content p-0">
-                    <div class="tab-pane fade show active" id="navs-justified-profile" role="tabpanel">
-                        
-                        @await Html.PartialAsync("_DataTablePartial", null, new ViewDataDictionary(ViewData)
-                        {
-                            { "TableId", "userGroupsMembersTable" },
-                            { "WithoutCard", true }
-                        })
-                    </div>
-                    <div class="tab-pane fade" id="navs-justified-home" role="tabpanel">
-         
-                    </div>
-                    <div class="tab-pane fade" id="navs-justified-messages" role="tabpanel">
-                        <div class="card-body">
-                            
-                        </div>
-                    </div>
-                    </div>
-                </div>
-             </div>
         </form>
     </div>
 </div>
@@ -87,27 +56,6 @@
 </script>
 
 @section PageScripts {
-    @* <script>
-        const tableId = "userGroupsMembersTable";
-
-        $(document).ready(function () {
-            initUniqueDataTable(tableId, '@Url.Action("GetData", "UserGroups")', {
-                getDataParams: { tableModel: "User" },
-            });
-        });
-
-       $("#userGroupCreateForm").on("submit", function () {
-            const selectedIds = Array.from(window[`selectedIds_userGroupsMembersTable`] || []);
-    
-            // Удаляем старые, если есть
-            $("input[name='MembersGuids']").remove();
-    
-            // Добавляем по одному на каждый ID
-            for (const id of selectedIds) {
-                $(this).append(`<input type="hidden" name="MembersGuids" value="${id}" />`);
-            }
-        });
-    </script> *@
 }
 
 

@@ -739,19 +739,21 @@
             }
 
 
-            if (
-                typeof bootstrap !==
-                "undefined" &&
-                bootstrap.Modal
-            ) {
+            if (typeof bootstrap !== "undefined" && bootstrap.Modal) {
+                // Сохраняем исходное положение, чтобы при необходимости
+                // можно было вернуть модальное окно обратно.
+                if (!ctx.filterModal.dataset.originalParent) {
+                    ctx.filterModal.dataset.originalParent = "true";
+                }
+
+                // Перемещаем modal непосредственно в body.
+                if (ctx.filterModal.parentElement !== document.body) {
+                    document.body.appendChild(ctx.filterModal);
+                }
 
                 ctx.filterModalInstance =
-                    bootstrap.Modal.getOrCreateInstance(
-                        ctx.filterModal
-                    );
-            }
-            else {
-
+                    bootstrap.Modal.getOrCreateInstance(ctx.filterModal);
+            } else {
                 console.error(
                     "Bootstrap Modal is not available. Make sure bootstrap.bundle.min.js is loaded."
                 );

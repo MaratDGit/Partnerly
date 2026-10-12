@@ -6,5 +6,6 @@
         public const string userGroupsMembersTable = "userGroupsMembersTable";
 
         public const string usersTable = "usersTable";
+        public const string attachmentsTable = "attachmentsTable";
     }
 }

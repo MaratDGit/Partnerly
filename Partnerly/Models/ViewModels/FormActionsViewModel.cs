@@ -54,7 +54,7 @@ namespace Partnerly.Models.ViewModels
             Id = id;
             Icon = "bx bx-undo";
             Visible = visible ?? false;
-            Title = FieldsDisplayNames.Edit;
+            Title = FieldsDisplayNames.Reload;
             FromController = fromController;
             ToController = toController;
             FromAction = fromAction;
@@ -106,7 +106,7 @@ namespace Partnerly.Models.ViewModels
 
     public class ActionNote : FormActionBase
     {
-        public string Note { get; set; }
+        public string? Note { get; set; }
         public ActionNote(string? note = null, Guid? id = null, bool visible = false)
         {
             Id = id;
@@ -120,7 +120,7 @@ namespace Partnerly.Models.ViewModels
         public string? EntityType { get; set; }
         public Guid? EntityId { get; set; }
 
-        public ActionAttachements(string entityType = null, Guid? entityId = null, bool visible = false)
+        public ActionAttachements(string? entityType = null, Guid? entityId = null, bool visible = false)
         {
             EntityType = entityType;
             EntityId = entityId;

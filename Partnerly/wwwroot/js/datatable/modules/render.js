@@ -410,14 +410,15 @@
                                     ' class="data-table-row-hover"';
                             }
 
+                            var rowKeys = ctx.getKeysFromItem(item);
+
                             html +=
                                 '<tr' +
-                                rowClass +
-                                ' data-row-id="' +
-                                ctx.escapeHtml(
-                                    id
-                                ) +
-                                '">';
+                            rowClass +
+                            ' data-row-id="' + ctx.escapeHtml(id) +
+                            '"' +
+                            ' data-row-keys="' + ctx.escapeHtml(JSON.stringify(rowKeys)) +
+                            '">';
 
                             /*
                              * =================================================

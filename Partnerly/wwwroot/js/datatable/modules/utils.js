@@ -596,18 +596,144 @@
 
             ctx.getAntiForgeryToken =
                 function () {
+                var input = ctx.root.querySelector(
+                    'input[name="__RequestVerificationToken"]'
+                );
 
-                    var input =
-                        ctx.root.querySelector(
-                            'input[name="__RequestVerificationToken"]'
-                        );
+                if (!input) {
+                    input = document.querySelector(
+                        'input[name="__RequestVerificationToken"]'
+                    );
+                }
 
-                    if (!input) {
-                        return "";
-                    }
+                return input ? input.value : "";
+            };
 
-                    return input.value;
+
+            ctx.getConfiguredKeyFields =
+                function () {
+                var columns = ctx.options.columns || [];
+
+                var keyFields = columns
+                    .filter(function (column) {
+                        return column.isKey === true ||
+                            column.IsKey === true;
+                    })
+                    .map(function (column) {
+                        return column.field || column.Field;
+                    })
+                    .filter(function (field) {
+                        return !!field;
+                    });
+
+                // Совместимость со старыми таблицами.
+                if (keyFields.length === 0 && ctx.options.keyField) {
+                    keyFields.push(ctx.options.keyField);
+                }
+
+                return keyFields;
+            };
+
+            ctx.getKeysFromItem =
+                function (item) {
+                var keys = {};
+
+                ctx.getConfiguredKeyFields().forEach(function (field) {
+                    keys[field] = ctx.getValue(item, field);
+                });
+
+                return keys;
+            };
+
+            ctx.getRowKeys =
+                function (row) {
+                if (!row) {
+                    return {};
+                }
+
+                try {
+                    return JSON.parse(row.getAttribute("data-row-keys") || "{}");
+                } catch (error) {
+                    console.error("Unable to read DataTable row keys.", error);
+                    return {};
+                }
                 };
+
+
+            ctx.getParentKeys =
+                function () {
+                var keys = {};
+
+                // Explicit context, if provided on the DataTable element.
+                var rawKeys = ctx.root.getAttribute("data-parent-keys");
+
+                if (rawKeys) {
+                    try {
+                        var parsedKeys = JSON.parse(rawKeys);
+
+                        if (
+                            parsedKeys &&
+                            typeof parsedKeys === "object" &&
+                            !Array.isArray(parsedKeys)
+                        ) {
+                            Object.assign(keys, parsedKeys);
+                        }
+                    } catch (error) {
+                        console.error("Invalid data-parent-keys:", error);
+                    }
+                }
+
+                // Otherwise, discover keys marked on the parent edit form.
+                var form = ctx.root.closest("form");
+
+                if (form) {
+                    form.querySelectorAll("[data-parent-key]").forEach(
+                        function (input) {
+                            var field = input.getAttribute("data-parent-key");
+
+                            if (!field) {
+                                return;
+                            }
+
+                            if (
+                                input.type === "checkbox" &&
+                                !input.checked
+                            ) {
+                                keys[field] = "false";
+                                return;
+                            }
+
+                            keys[field] = input.value;
+                        }
+                    );
+                }
+
+                return keys;
+            };
+
+            ctx.appendParentKeysToUrl =
+                function (url) {
+                var parentKeys = ctx.getParentKeys();
+
+                Object.keys(parentKeys).forEach(function (key) {
+                    var value = parentKeys[key];
+
+                    if (value !== null && value !== undefined) {
+                        url.searchParams.set(
+                            "ParentKeys[" + key + "]",
+                            String(value)
+                        );
+                    }
+                });
+
+                return url;
+            };
+
+            ctx.addParentKeysToPayload =
+                function (payload) {
+                payload.parentKeys = ctx.getParentKeys();
+                return payload;
+            };
         }
     };
 

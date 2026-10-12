@@ -8,15 +8,21 @@ namespace Partnerly.Infrastructure.Services
     {
         private readonly AppDbContext _context;
         private readonly IFileStorageService _fileStorageService;
+        private readonly IAttachmentRepository _attachmentRepository;
 
         public AttachmentService(
             AppDbContext context,
             IFileStorageService fileStorageService,
-            ICurrentUserService currentUserService)
+            ICurrentUserService currentUserService,
+            IAttachmentRepository attachmentRepository)
         {
             _context = context;
             _fileStorageService = fileStorageService;
+            _attachmentRepository = attachmentRepository;
         }
+
+        public IQueryable<Attachment> QueryEntity(IEnumerable<string> fields) =>
+            _attachmentRepository.QueryEntity(fields);
 
         public async Task<Attachment> UploadAsync(
             IFormFile file,

@@ -20,6 +20,8 @@ namespace Partnerly.Infrastructure.Interfaces
 
         Task<Stream?> GetFileAsync(Guid id);
         Task<IEnumerable<Attachment?>> GetAllAsync();
+
+        IQueryable<Attachment> QueryEntity(IEnumerable<string> fields);
     }
 
     public interface IFileStorageService

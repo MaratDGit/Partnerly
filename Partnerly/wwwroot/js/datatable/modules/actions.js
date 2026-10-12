@@ -300,7 +300,8 @@
                 function (
                     action,
                     id,
-                    extraData
+                    extraData,
+                    rowElement
                 ) {
 
                     if (
@@ -329,29 +330,19 @@
                     };
 
 
-                    if (
-                        id !== null &&
-                        id !== undefined
-                    ) {
-
-                        payload.id =
-                            String(id);
+                    if (id !== undefined && id !== null) {
+                        payload.id = String(id);
                     }
 
+                    if (rowElement) {
+                        payload.keys = ctx.getRowKeys(rowElement);
+                    }
 
                     if (extraData) {
-
-                        Object.keys(
-                            extraData
-                        ).forEach(
-                            function (key) {
-
-                                payload[key] =
-                                    extraData[key];
-                            }
-                        );
+                        Object.assign(payload, extraData);
                     }
 
+                    ctx.addParentKeysToPayload(payload);
 
                     var requestOptions = {
 
@@ -503,10 +494,13 @@
                                     return;
                                 }
 
+                                var rowElement = button.closest("tr");
 
                                 ctx.executeAjaxAction(
                                     action,
-                                    id
+                                    id,
+                                    null,
+                                    rowElement
                                 );
                             }
                         }
@@ -993,12 +987,12 @@
                                 ctx.getAntiForgeryToken()
                         },
 
-                        body:
-                            JSON.stringify({
+                        body: JSON.stringify(
+                            ctx.addParentKeysToPayload({
                                 TableID: ctx.options.id,
-                                fields:
-                                    fields
+                                fields: fields
                             })
+                        )
                     };
 
 

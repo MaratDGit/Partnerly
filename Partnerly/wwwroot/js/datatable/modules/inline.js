@@ -235,14 +235,15 @@
                             "POST"
                         ).toUpperCase();
 
+                    var row = button.closest("tr"); 
 
                     var payload = {
-                        TableID:
-                            ctx.options.id,
-                        id:
-                            String(id)
+                        TableID: ctx.options.id,
+                        id: String(id),
+                        keys: ctx.getRowKeys(row),
                     };
 
+                    ctx.addParentKeysToPayload(payload);
 
                     fetch(
                         action.url,
@@ -767,15 +768,13 @@
 
 
                     var request = {
-                        TableID:
-                            ctx.options.id,
-                        id:
-                            String(id),
-
-                        fields:
-                            fields
+                        TableID: ctx.options.id,
+                        id: String(id),
+                        keys: ctx.getRowKeys(row),
+                        fields: fields,
                     };
 
+                    ctx.addParentKeysToPayload(request);
 
                     var saveButton =
                         row.querySelector(

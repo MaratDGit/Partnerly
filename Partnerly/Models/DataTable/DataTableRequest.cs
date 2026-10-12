@@ -12,7 +12,7 @@
         public string? SortField { get; init; }
 
         public string SortDirection { get; init; } = "asc";
-
+        public Dictionary<string, string?> ParentKeys { get; init; } = new();
         public Dictionary<string, string[]> Filters { get; init; } = new Dictionary<string, string[]>();
         public string[] SelectedRows { get; init; } = Array.Empty<string>();
     }

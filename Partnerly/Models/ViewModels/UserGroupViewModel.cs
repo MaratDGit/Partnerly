@@ -21,7 +21,6 @@ namespace Partnerly.Models.ViewModels
         public string? Description { get; set; }
 
         public List<UserGroupMember> Members { get; set; } = new List<UserGroupMember>();
-        //public List<string> MembersGuids { get; set; } = new List<string>();
 
         #region System Columns
         public string? Note { get; set; } 
@@ -70,75 +69,75 @@ namespace Partnerly.Models.ViewModels
                         InlineUpdateUrl = "/UserGroups/UpdateInline",
 
                         Columns = new List<DataTableColumn>
-                    {
-                    new DataTableColumn
-                    {
-                        Field = "Id",
-                        Title = "ID",
-                        Type = DataTableColumnType.Text,
-                        Visible = false,
-                        Required = true,
-                    },
+                            {
+                            new DataTableColumn
+                            {
+                                Field = "Id",
+                                Title = "ID",
+                                Type = DataTableColumnType.Text,
+                                Visible = false,
+                                Required = true,
+                            },
 
-                    new DataTableColumn
-                    {
-                        Field = nameof(Models.User.Selected),
-                        Type = DataTableColumnType.Boolean,
-                        Sortable = true,
-                        Searchable = false,
-                        Exportable = false,
-                        Editable = false,
-                        Alignment = DataTableAlignment.Center,
-                    },
+                            //new DataTableColumn
+                            //{
+                            //    Field = nameof(Models.User.Selected),
+                            //    Type = DataTableColumnType.Boolean,
+                            //    Sortable = true,
+                            //    Searchable = false,
+                            //    Exportable = false,
+                            //    Editable = false,
+                            //    Alignment = DataTableAlignment.Center,
+                            //},
 
-                    new DataTableColumn
-                    {
-                        Field = nameof(Models.UserGroup.Name),
-                        Title = FieldsDisplayNames.Name,
-                        Type = DataTableColumnType.Link,
-                        UrlTemplate = "/UserGroups/Edit/{Id}",
+                            new DataTableColumn
+                            {
+                                Field = nameof(Models.UserGroup.Name),
+                                Title = FieldsDisplayNames.Name,
+                                Type = DataTableColumnType.Link,
+                                UrlTemplate = "/UserGroups/Edit/{Id}",
 
-                        Editable = true,
-                        Visible = true,
-                        Required = true,
-                        Sortable = true,
-                        Searchable = true,
-                        Exportable = true,
-                        Width = "",
-                        Format = "",
-                        EmptyText = "-",
-                        Alignment = DataTableAlignment.Left,
-                        CssClass = "",
-                        Resizable = true
-                    },
+                                Editable = true,
+                                Visible = true,
+                                Required = true,
+                                Sortable = true,
+                                Searchable = true,
+                                Exportable = true,
+                                Width = "",
+                                Format = "",
+                                EmptyText = "-",
+                                Alignment = DataTableAlignment.Left,
+                                CssClass = "",
+                                Resizable = true
+                            },
 
-                    new DataTableColumn
-                    {
-                        Field = nameof(Models.UserGroup.Description),
-                        Title = FieldsDisplayNames.Description,
-                        Type = DataTableColumnType.Text,
-                        Editable = true,
-                        Resizable = true
-                    },
+                            new DataTableColumn
+                            {
+                                Field = nameof(Models.UserGroup.Description),
+                                Title = FieldsDisplayNames.Description,
+                                Type = DataTableColumnType.Text,
+                                Editable = true,
+                                Resizable = true
+                            },
 
-                    new DataTableColumn
-                    {
-                        Field = nameof(Models.UserGroup.UpdatedDate),
-                        Title = FieldsDisplayNames.UpdatedDate,
-                        Type = DataTableColumnType.DateTime,
-                        Format = "relative",
-                        Resizable = true
-                    },
+                            new DataTableColumn
+                            {
+                                Field = nameof(Models.UserGroup.UpdatedDate),
+                                Title = FieldsDisplayNames.UpdatedDate,
+                                Type = DataTableColumnType.DateTime,
+                                Format = "relative",
+                                Resizable = true
+                            },
 
-                    new DataTableColumn
-                    {
-                        Field = nameof(Models.User.CreatedDate),
-                        Title = FieldsDisplayNames.CreatedDate,
-                        Type = DataTableColumnType.DateTime,
-                        Format = "dd.MM.yyyy HH:mm",
-                        Resizable = true
-                    }
-                },
+                            new DataTableColumn
+                            {
+                                Field = nameof(Models.User.CreatedDate),
+                                Title = FieldsDisplayNames.CreatedDate,
+                                Type = DataTableColumnType.DateTime,
+                                Format = "dd.MM.yyyy HH:mm",
+                                Resizable = true
+                            }
+                        },
 
                         Sorting = new DataTableSortOptions
                         {
@@ -166,79 +165,79 @@ namespace Partnerly.Models.ViewModels
                             Enabled = true,
 
                             Items = new List<DataTableAction>
-                    {
-                        //new DataTableAction
-                        //{
-                        //    Name = "add",
-                        //    Title = "",
-                        //    Icon = "bx bx-plus",
-                        //    Type = DataTableActionType.Link,
-                        //    Placement = DataTableActionPlacement.Toolbar,
-                        //    Url = "/UserGroups/Create",
-                        //    Method = "Get",
-                        //    CssClass = "data-table-grid-action"
-                        //},
+                            {
+                                new DataTableAction
+                                {
+                                    Name = "add",
+                                    Title = FieldsDisplayNames.Create,
+                                    Icon = "bx bx-plus",
+                                    Type = DataTableActionType.Link,
+                                    Placement = DataTableActionPlacement.Toolbar,
+                                    Url = "/UserGroups/Create",
+                                    Method = "Get",
+                                    CssClass = "data-table-grid-action"
+                                },
 
-                        new DataTableAction
-                        {
-                            Name = "add",
-                            Title = "",
-                            Icon = "bx bx-plus",
-                            Type = DataTableActionType.InlineAdd,
-                            Url = "/UserGroups/CreateInline",
-                            Placement = DataTableActionPlacement.Toolbar,
-                            CssClass = "data-table-grid-action"
-                        },
+                                //new DataTableAction
+                                //{
+                                //    Name = "add",
+                                //    Title = "",
+                                //    Icon = "bx bx-plus",
+                                //    Type = DataTableActionType.InlineAdd,
+                                //    Url = "/UserGroups/CreateInline",
+                                //    Placement = DataTableActionPlacement.Toolbar,
+                                //    CssClass = "data-table-grid-action"
+                                //},
 
-                        new DataTableAction
-                        {
-                            Name = "view",
-                            Title = FieldsDisplayNames.View,
-                            Icon = "bx bx-show",
-                            Type = DataTableActionType.Link,
-                            Placement = DataTableActionPlacement.Row,
-                            Url = "/UserGroups/Edit/{Id}",
-                            Method = "GET",
-                            // CssClass = "btn btn-sm btn-outline-secondary"
-                        },
+                                new DataTableAction
+                                {
+                                    Name = "view",
+                                    Title = FieldsDisplayNames.View,
+                                    Icon = "bx bx-show",
+                                    Type = DataTableActionType.Link,
+                                    Placement = DataTableActionPlacement.Row,
+                                    Url = "/UserGroups/Edit/{Id}",
+                                    Method = "GET",
+                                    // CssClass = "btn btn-sm btn-outline-secondary"
+                                },
 
-                        new DataTableAction
-                        {
-                            Name = "edit",
-                            Title = FieldsDisplayNames.Edit,
-                            Icon = "bx bx-edit",
-                            Type = DataTableActionType.InlineEdit,
-                            Placement = DataTableActionPlacement.Row,                            
-                            //CssClass = "btn btn-sm btn-outline-primary"
-                        },
+                                new DataTableAction
+                                {
+                                    Name = "edit",
+                                    Title = FieldsDisplayNames.Edit,
+                                    Icon = "bx bx-edit",
+                                    Type = DataTableActionType.InlineEdit,
+                                    Placement = DataTableActionPlacement.Row,                            
+                                    //CssClass = "btn btn-sm btn-outline-primary"
+                                },
 
-                        //new DataTableAction
-                        //{
-                        //    Name = "delete",
-                        //    Title = FieldsDisplayNames.Delete,
-                        //    Icon = "bx bx-trash",
-                        //    Type = DataTableActionType.Link,
-                        //    Placement = DataTableActionPlacement.Row,
-                        //    Url = "/UserGroups/Delete/{Id}",
-                        //    Method = "GET",
-                        //    //CssClass = "btn btn-sm btn-outline-danger"
-                        //},
+                                new DataTableAction
+                                {
+                                    Name = "delete",
+                                    Title = FieldsDisplayNames.Delete,
+                                    Icon = "bx bx-trash",
+                                    Type = DataTableActionType.Link,
+                                    Placement = DataTableActionPlacement.Row,
+                                    Url = "/UserGroups/Delete/{Id}",
+                                    Method = "GET",
+                                    CssClass = "btn btn-sm btn-outline-danger"
+                                },
 
-                        new DataTableAction
-                        {
-                            Name = "delete",
-                            Title = FieldsDisplayNames.Delete,
-                            Icon = "bx bx-trash",
-                            Type = DataTableActionType.InlineDelete,
-                            Placement = DataTableActionPlacement.Row,
-                            Url = "/UserGroups/DeleteInline",
-                            Method = "POST",
-                            Confirm = true,
-                            ConfirmMessage =
-                                "Are you sure you want to delete this group?",
-                            CssClass = "btn btn-sm btn-outline-danger"
-                        }
-                    }
+                                //new DataTableAction
+                                //{
+                                //    Name = "delete",
+                                //    Title = FieldsDisplayNames.Delete,
+                                //    Icon = "bx bx-trash",
+                                //    Type = DataTableActionType.InlineDelete,
+                                //    Placement = DataTableActionPlacement.Row,
+                                //    Url = "/UserGroups/DeleteInline",
+                                //    Method = "POST",
+                                //    Confirm = true,
+                                //    ConfirmMessage =
+                                //        "Are you sure you want to delete this group?",
+                                //    CssClass = "btn btn-sm btn-outline-danger"
+                                //}
+                            }
                         },
 
                         Export = new DataTableExportOptions
@@ -274,6 +273,7 @@ namespace Partnerly.Models.ViewModels
                                 Type = DataTableColumnType.Text,
                                 Visible = false,
                                 Required = true,
+                                IsKey = true,
                             },
 
                             new DataTableColumn
@@ -283,12 +283,13 @@ namespace Partnerly.Models.ViewModels
                                 Type = DataTableColumnType.Text,
                                 Visible = false,
                                 Required = true,
+                                IsKey = true,
                             },
 
                             new DataTableColumn
                             {
                                 Field = nameof(UserGroupMemberExt.UserFirstName),
-                                Title = FieldsDisplayNames.FileName,
+                                Title = FieldsDisplayNames.FirstName,
                                 Type = DataTableColumnType.Text,
                                 Required = true,
                             },
@@ -350,6 +351,11 @@ namespace Partnerly.Models.ViewModels
                             }
                         },
 
+                        Export = new DataTableExportOptions
+                        {
+                            Enabled = false,
+                        },
+
                         Actions = new DataTableActionOptions
                         {
                             Enabled = true,
@@ -358,36 +364,13 @@ namespace Partnerly.Models.ViewModels
                                 new DataTableAction
                                 {
                                     Name = "add",
-                                    Title = "",
+                                    Title = FieldsDisplayNames.Add,
                                     Icon = "bx bx-plus",
                                     Type = DataTableActionType.InlineAdd,
                                     Url = "/UserGroups/CreateInline",
                                     Placement = DataTableActionPlacement.Toolbar,
                                     CssClass = "data-table-grid-action"
                                 },
-
-                                //new DataTableAction
-                                //{
-                                //    Name = "view",
-                                //    Title = FieldsDisplayNames.View,
-                                //    Icon = "bx bx-show",
-                                //    Type = DataTableActionType.Link,
-                                //    Placement = DataTableActionPlacement.Row,
-                                //    Url = "/UserGroups/Edit/{Id}",
-                                //    Method = "GET",
-                                //    // CssClass = "btn btn-sm btn-outline-secondary"
-                                //},
-
-                                new DataTableAction
-                                {
-                                    Name = "edit",
-                                    Title = FieldsDisplayNames.Edit,
-                                    Icon = "bx bx-edit",
-                                    Type = DataTableActionType.InlineEdit,
-                                    Placement = DataTableActionPlacement.Row,                            
-                                    //CssClass = "btn btn-sm btn-outline-primary"
-                                },
-
                                 new DataTableAction
                                 {
                                     Name = "delete",
@@ -397,9 +380,9 @@ namespace Partnerly.Models.ViewModels
                                     Placement = DataTableActionPlacement.Row,
                                     Url = "/UserGroups/DeleteInline",
                                     Method = "POST",
-                                    Confirm = true,
+                                    Confirm = false,
                                     ConfirmMessage =
-                                        "Are you sure you want to delete this group?",
+                                        "Are you sure you want to delete this member?",
                                     CssClass = "btn btn-sm btn-outline-danger"
                                 }
                             }

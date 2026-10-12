@@ -79,7 +79,7 @@ namespace Partnerly.Infrastructure.Services
             return ServiceResult<UserGroup?>.Ok(newuserGroup);
         }
 
-        public async Task<ServiceResult<UserGroup?>> UpdateUserGroupAsync(UserGroup? userGroup, List<UserGroupMember> members)
+        public async Task<ServiceResult<UserGroup?>> UpdateUserGroupAsync(UserGroup? userGroup)
         {
             if (userGroup == null)
             {
@@ -99,21 +99,6 @@ namespace Partnerly.Infrastructure.Services
                 return ServiceResult<UserGroup?>.Fail(new List<string> { ErrorMessages.NoPermissionForThisAction });
             }
 
-            if (members.Any())
-            {
-                var groupMembers = await GetAllUsersByGroupIDAsync(userGroup.Id);
-                foreach (var member in members)
-                {
-                    if (!groupMembers.Any(_ => _.UserId == member.UserId))
-                        userGroup.Members.Add(new UserGroupMember { UserId = member.UserId, GroupId = userGroup.Id });
-                }
-                foreach (var member in groupMembers)
-                {
-                    if (!members.Any(_ => _.UserId == member.UserId))
-                        userGroup.Members.Remove(member);
-                }
-            }
-            
             _userGroupRepository.Update(userGroup);
             await _userGroupRepository.SaveChangesAsync();
 

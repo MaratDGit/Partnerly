@@ -18,29 +18,23 @@ namespace Partnerly.Controllers
     public class UsersController : _BaseController
     {
         protected readonly IRoleService _roleService;
-        
+        private readonly IInlineUpdateService _inlineUpdateService;
+
         public UsersController(IEventBus eventBus, IRoleService roleService, IUserService userService, ICurrentUserService currentUser, 
             ILogService logService, IStringLocalizer<SharedResource> localizer, ISystemSettingsService systemSettingsService, 
-            DataTableQueryService tableService, IDataTableRegistry dataTableRegistry)
+            DataTableQueryService tableService, IDataTableRegistry dataTableRegistry, IInlineUpdateService inlineUpdateService)
         : base(eventBus, userService, currentUser, logService, localizer, systemSettingsService, tableService, dataTableRegistry)
         {
             _roleService = roleService;
+            _inlineUpdateService = inlineUpdateService;
         }
 
         #region Index / Create / Edit / Delete
         public IActionResult Index()
         {
             UserViewModel model = new UserViewModel();
-            if (!_dataTableRegistry.Exists(DataTableNames.usersTable))
-            {
-                model.users = UserViewModel.CreateTableOptions(DataTableNames.usersTable, _dataTableRegistry);
-            }
-            else
-            {
-                var options = _dataTableRegistry.Get(DataTableNames.usersTable);
-                model.users = options;
-            }
-            
+            model.users = UserViewModel.CreateTableOptions(DataTableNames.usersTable, _dataTableRegistry);
+
             return View(model);
         }
 
@@ -333,56 +327,30 @@ namespace Partnerly.Controllers
                 });
             }
 
-            foreach (var field in request.Fields)
+            var options = _dataTableRegistry.Get(request.TableID);
+            var result = _inlineUpdateService.ApplyChanges(
+                user,
+                request.Fields,
+                options);
+
+            if (!result.Success)
             {
-                switch (field.Key)
+                return BadRequest(new
                 {
-                    case "FirstName":
-                        user.FirstName = field.Value;
-                        break;
-
-                    case "LastName":
-                        user.LastName = field.Value;
-                        break;
-
-                    case "IsBlocked":
-                        if (bool.TryParse(field.Value, out var boolValue))
-                        {
-                            user.IsBlocked = boolValue;
-                        }
-                        break;
-
-                    case "Balance":
-
-                        if (!decimal.TryParse(
-                            field.Value,
-                            out var balance))
-                        {
-                            return BadRequest(new
-                            {
-                                success = false,
-                                message = "Invalid balance."
-                            });
-                        }
-
-                        user.Balance = balance;
-                        break;
-
-                    default:
-                        return BadRequest(new
-                        {
-                            success = false,
-                            message = "Field is not editable: " +
-                                      field.Key
-                        });
-                }
+                    success = false,
+                    message = result.ErrorMessage
+                });
             }
 
-            await _userService.UpdateUserAsync(user);
-
-            return Json(new
+            if (result.IsChanged)
             {
-                success = true
+                await _userService.UpdateUserAsync(user);
+            }
+
+            return Ok(new
+            {
+                success = true,
+                changed = result.IsChanged
             });
         }
 

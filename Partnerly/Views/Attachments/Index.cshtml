@@ -1,22 +1,8 @@
-﻿@{
+﻿@model Partnerly.Models.ViewModels.AttachmentViewModel;
+@{
     ViewData["Title"] = "Attachments";
     Layout = "_ContentNavbarLayout";
     bool hasAdminRole = ViewBag?.RoleType == Partnerly.Descriptors.Attributes.RoleTypeAttribute.Delete;
 }
 
-@await Html.PartialAsync("_DataTablePartial", null, new ViewDataDictionary(ViewData)
-{
-    { "TableName", @Localizer["Attachments"] },
-    { "TableId", "attachmentsTable" },
-})
-
-@section PageScripts {
-    <script>
-        $(document).ready(function () {
-            initUniqueDataTable("attachmentsTable", '@Url.Action("GetData", "Attachments")',
-            {
-                getDataParams: { tableModel: "Attachment" },
-            });
-        });
-    </script>
-}
+@await Html.PartialAsync("~/Views/Shared/DataTable/_DataTable.cshtml", Model.attachments)

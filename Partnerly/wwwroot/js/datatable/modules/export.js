@@ -40,11 +40,12 @@
                             window.location.origin
                         );
 
-
                     url.searchParams.set(
                         "TableID",
                         ctx.options.id
                     );
+
+                    ctx.appendParentKeysToUrl(url);
 
                     var state =
                         ctx.state;

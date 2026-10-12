@@ -149,5 +149,8 @@ namespace Partnerly.Descriptors.Messages
         public static string Users => Messages.Get(nameof(Users));
 
         public static string View => Messages.Get(nameof(View));
+        public static string Attachments => Messages.Get(nameof(Attachments));
+        public static string Reload => Messages.Get(nameof(Reload));
+        public static string Add => Messages.Get(nameof(Add));
     }
 }

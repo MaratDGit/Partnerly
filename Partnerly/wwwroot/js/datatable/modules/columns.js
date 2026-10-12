@@ -322,6 +322,64 @@
                 };
 
 
+            ctx.formatFileSize =
+                function (value) {
+
+                if (
+                    value === null ||
+                    value === undefined ||
+                    value === ""
+                ) {
+                    return "";
+                }
+
+                var bytes = Number(value);
+
+                if (
+                    !Number.isFinite(bytes) ||
+                    bytes < 0
+                ) {
+                    return String(value);
+                }
+
+                if (bytes === 0) {
+                    return "0 B";
+                }
+
+                var units = [
+                    "B",
+                    "KB",
+                    "MB",
+                    "GB",
+                    "TB",
+                    "PB"
+                ];
+
+                var unitIndex = 0;
+
+                while (
+                    bytes >= 1024 &&
+                    unitIndex < units.length - 1
+                ) {
+                    bytes /= 1024;
+                    unitIndex++;
+                }
+
+                var decimals = bytes >= 100
+                    ? 0
+                    : bytes >= 10
+                        ? 1
+                        : 2;
+
+                return (
+                    bytes.toFixed(decimals)
+                        .replace(/\.?0+$/, "") +
+                    " " +
+                    units[unitIndex]
+                );
+
+            };
+
             /*
              * =========================================================
              * APPLY CONDITIONAL STYLE
@@ -948,6 +1006,38 @@
                         };
                     }
 
+
+                    /*
+
+                    =========================================================
+                    FILE SIZE FORMATTER
+                    =========================================================
+                    */
+
+                    if (
+                        column.type === "Size"
+                    ) {
+
+                        var fileSizeHtml =
+                            ctx.escapeHtml(
+                                ctx.formatFileSize(value)
+                            );
+
+                        fileSizeHtml =
+                            ctx.applyConditionalStyle(
+                                fileSizeHtml,
+                                value,
+                                column
+                            );
+
+                        return {
+
+                            html: fileSizeHtml,
+
+                            rawValue: String(value)
+                        };
+
+                    }
 
                     /*
                      * =================================================

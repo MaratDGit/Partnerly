@@ -6,6 +6,103 @@
     Layout = "_ContentNavbarLayout";
 }
 
+<style>
+
+    /* =========================================================
+       USER GROUP TABS
+       ========================================================= */
+    .user-group-tabs {
+        width: 100%;
+        min-width: 0;
+    }
+
+    /* Navigation */
+
+    .user-group-tabs > .nav-tabs {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 4px;
+        margin-bottom: 0;
+        padding: 0 12px;
+        border-bottom: 1px solid #eeeeef;
+    }
+
+        .user-group-tabs > .nav-tabs .nav-item {
+            margin-bottom: -1px;
+        }
+
+        .user-group-tabs > .nav-tabs .nav-link {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 9px;
+            min-height: 48px;
+            padding: 13px 18px;
+            border: 0;
+            border-bottom: 2px solid transparent;
+            border-radius: 0;
+            background: transparent;
+            color: #697a8d;
+            font-size: 13px;
+            font-weight: 500;
+            transition: color .2s ease, background .2s ease;
+        }
+
+            .user-group-tabs > .nav-tabs .nav-link i {
+                font-size: 19px;
+            }
+
+            .user-group-tabs > .nav-tabs .nav-link:hover {
+                color: #696cff;
+                background: rgba(105, 108, 255, .04);
+            }
+
+            .user-group-tabs > .nav-tabs .nav-link.active {
+                color: #696cff;
+                background: transparent;
+                border-bottom-color: #696cff;
+                font-weight: 600;
+            }
+
+    /* Content */
+
+    .user-group-tab-content {
+        min-width: 0;
+        padding: 0;
+    }
+
+    .user-group-tab-body {
+        min-width: 0;
+        padding: 22px 20px;
+    }
+
+    /* Responsive */
+
+    @@media (max-width: 576px) {
+        .user-group-tabs > .nav-tabs
+
+    {
+        padding: 0 8px;
+    }
+
+    .user-group-tabs > .nav-tabs .nav-link {
+        gap: 6px;
+        min-height: 44px;
+        padding: 11px 10px;
+        font-size: 12px;
+    }
+
+        .user-group-tabs > .nav-tabs .nav-link i {
+            font-size: 17px;
+        }
+
+    .user-group-tab-body {
+        padding: 14px 10px;
+    }
+
+    }
+
+</style>
 <div class="card">
     <div class="card-header d-flex align-items-center justify-content-between">
         <h5 class="mb-0">
@@ -32,6 +129,11 @@
                         new Partnerly.Models.ViewModels.MenuItemAction(visible: true, icon: "bx bx-envelope-open", displayName: Localizer["Sendanemail"]),
                 }
             })
+
+            <input type="hidden"
+                   name="GroupID"
+                   value="@Model.Id"
+                   data-parent-key="GroupID" />
 
             <input type="hidden" id="hiddenNote" asp-for="Note" />
 
@@ -60,32 +162,108 @@
                <span asp-validation-for="Description" class="text-danger"></span>
             </div>
 
-            <div class="card-content ">
-                <div class="nav-align-top nav-tabs mb-6">
-                    <ul class="nav nav-tabs nav-fill" role="tablist">
-                        <li class="nav-item">
-                            <button type="button" class="nav-link active" role="tab" data-bs-toggle="tab" data-bs-target="#navs-justified-profile" aria-controls="navs-justified-profile" aria-selected="false"><span class="d-none d-sm-block"><i class="tf-icons bx bx-group bx-sm me-1_5 align-text-bottom"></i> @Localizer["Users"]</span><i class="bx bx-user bx-sm d-sm-none"></i></button>
-                        </li>
-                        <li class="nav-item">
-                            <button type="button" class="nav-link" role="tab" data-bs-toggle="tab" data-bs-target="#navs-justified-home" aria-controls="navs-justified-home" aria-selected="true"><span class="d-none d-sm-block"><i class="tf-icons bx bx-unlink bx-sm me-1_5 align-text-bottom"></i> @Localizer["Connections"] </span><i class="bx bx-unlink bx-sm d-sm-none"></i></button>
-                        </li>
-                    </ul>
-                    <div class="tab-content p-0">
-                    <div class="tab-pane fade show active" id="navs-justified-profile" role="tabpanel">
 
-                            @await Html.PartialAsync("~/Views/Shared/DataTable/_DataTable.cshtml", Model.groupMembers)
-                    </div>
-                    <div class="tab-pane fade" id="navs-justified-home" role="tabpanel">
-         
-                    </div>
-                    <div class="tab-pane fade" id="navs-justified-messages" role="tabpanel">
-                        <div class="card-body">
-                            
+            <!-- GROUP TABS -->
+
+            <div class="user-group-tabs mt-4">
+
+                <ul class="nav nav-tabs"
+                    id="userGroupTabs"
+                    role="tablist">
+
+                    <!-- USERS -->
+
+                    <li class="nav-item" role="presentation">
+
+                        <button class="nav-link active"
+                                id="users-tab"
+                                data-bs-toggle="tab"
+                                data-bs-target="#users-tab-pane"
+                                type="button"
+                                role="tab"
+                                aria-controls="users-tab-pane"
+                                aria-selected="true">
+
+                            <i class="bx bx-group"></i>
+
+                            <span>
+                                @Localizer["Users"]
+                            </span>
+
+                        </button>
+
+                    </li>
+
+                    <!-- CONNECTIONS -->
+
+                    <li class="nav-item" role="presentation">
+
+                        <button class="nav-link"
+                                id="connections-tab"
+                                data-bs-toggle="tab"
+                                data-bs-target="#connections-tab-pane"
+                                type="button"
+                                role="tab"
+                                aria-controls="connections-tab-pane"
+                                aria-selected="false">
+
+                            <i class="bx bx-unlink"></i>
+
+                            <span>
+                                @Localizer["Connections"]
+                            </span>
+
+                        </button>
+
+                    </li>
+
+                </ul>
+
+
+                <!-- TAB CONTENT -->
+
+                <div class="tab-content user-group-tab-content"
+                     id="userGroupTabContent">
+
+                    <!-- USERS TAB -->
+
+                    <div class="tab-pane fade show active"
+                         id="users-tab-pane"
+                         role="tabpanel"
+                         aria-labelledby="users-tab"
+                         tabindex="0">
+
+                        <div class="user-group-tab-body">
+
+                            @await Html.PartialAsync(
+                                                        "~/Views/Shared/DataTable/_DataTable.cshtml",
+                                                        Model.groupMembers)
+
                         </div>
+
                     </div>
+
+
+                    <!-- CONNECTIONS TAB -->
+
+                    <div class="tab-pane fade"
+                         id="connections-tab-pane"
+                         role="tabpanel"
+                         aria-labelledby="connections-tab"
+                         tabindex="0">
+
+                        <div class="user-group-tab-body">
+
+                            <!-- Connections content will be added here -->
+
+                        </div>
+
                     </div>
+
                 </div>
-             </div>
+
+            </div>
+
         </form>
     </div>
 </div>
@@ -96,49 +274,5 @@
 </script>
 
 @section PageScripts {
-    @* <script>
-        const preselectedIds = @Html.Raw(Json.Serialize(Model.MembersGuids ?? new List<string>()));
-        const tableId = "userGroupsMembersTable";
-
-        $(document).ready(function () {
-
-            initUniqueDataTable(tableId, '@Url.Action("GetData", "UserGroups")', {
-                getDataParams: { tableModel: "User" },
-            });
-
-            // ждем немного, чтобы таблица отрендерилась
-            setTimeout(() => {
-                if (!window[`selectedIds_${tableId}`]) return;
-
-                preselectedIds.forEach(id => {
-                    // Добавляем в Set выбранных
-                    window[`selectedIds_${tableId}`].add(id);
-
-                    // Ставим checked у соответствующего чекбокса
-                    $(`#${tableId} .row-select-checkbox[data-id='${id}']`).prop("checked", true);
-                });
-
-                // Обновляем "select-all" checkbox
-                const allChecked = $(`#${tableId} .row-select-checkbox`).length === preselectedIds.length;
-                $('#select-all-checkbox').prop("checked", allChecked);
-            }, 300); // можно увеличить, если таблица грузится медленно
-        });
-
-        // submit формы
-        $("#userGroupEditForm").on("submit", function () {
-            const selectedIds = Array.from(window[`selectedIds_${tableId}`] || []);
-
-            // Удаляем старые, если есть
-            $("input[name='MembersGuids']").remove();
-
-            // Добавляем по одному на каждый ID
-            for (const id of selectedIds) {
-                $(this).append(`<input type="hidden" name="MembersGuids" value="${id}" />`);
-            }
-        });
-
-        $(document).on("change", `#${tableId} .row-select-checkbox`, function () {
-            $("#userGroupEditForm").trigger("change");
-        });
-    </script> *@
 }
+

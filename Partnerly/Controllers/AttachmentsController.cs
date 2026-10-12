@@ -1,14 +1,10 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Localization;
-using Partnerly.Descriptors.Attributes;
-using Partnerly.Descriptors.Messages;
 using Partnerly.Events.BaseEvents;
 using Partnerly.Infrastructure.Interfaces;
-using Partnerly.Infrastructure.Services;
-using Partnerly.Models;
 using Partnerly.Models.DataTable;
-using Partnerly.Models.GridViews;
+using Partnerly.Models.ViewModels;
 
 namespace Partnerly.Controllers
 {
@@ -23,9 +19,11 @@ namespace Partnerly.Controllers
             _attachmentService = attachmentService;
         }
 
-        public async Task<IActionResult> Index()
+        public IActionResult Index()
         {
-            return View();
+            AttachmentViewModel model = new AttachmentViewModel();
+            model.attachments = AttachmentViewModel.CreateTableOptions(DataTableNames.attachmentsTable, _dataTableRegistry);
+            return View(model);
         }
 
         [HttpPost]
@@ -134,69 +132,73 @@ namespace Partnerly.Controllers
         }
 
         [HttpGet]
-        public async Task<JsonResult> GetData(string tableModel)
+        public async Task<IActionResult> Data([FromQuery] DataTableRequest request)
         {
-            if (tableModel == nameof(Partnerly.Models.Attachment))
+            if (string.IsNullOrWhiteSpace(request.TableID))
             {
-                return await GetGridDataAsync<AttachmentGridView, Attachment>("Attachments");
-            }
-            return Json(new { fields = new object[0], data = new object[0] });
-        }
-
-        protected override async Task<IEnumerable<TEntity>> GetEntitiesAsync<TEntity>()
-        {
-            if (typeof(TEntity) == typeof(Attachment))
-            {
-                var att = await _attachmentService.GetAllAsync();
-
-                return (IEnumerable<TEntity>)att;
-            }
-
-            return Enumerable.Empty<TEntity>();
-        }
-
-        protected override List<GridField> GetFields(object row)
-        {
-            var fields = new List<GridField>();
-            if (row is AttachmentGridView attRow)
-            {
-                return new List<GridField>
+                return BadRequest(new
                 {
-                    new GridField { FieldName = "fileName", DisplayName = $"{FieldsDisplayNames.FileName}" },
-                    //new GridField { FieldName = "storedFileName", DisplayName = FieldsDisplayNames.StoredFileName, },
-                    new GridField { FieldName = "contentType", DisplayName = FieldsDisplayNames.ContentType, IsFilterable = true, IsSortable = true },
-                    new GridField { FieldName = "fileSize", DisplayName = FieldsDisplayNames.FileSize, Format = "size"},
-                    new GridField { FieldName = "storagePath", DisplayName = FieldsDisplayNames.StoragePath },
-                    new GridField { FieldName = "entityType", DisplayName = FieldsDisplayNames.EntityType, IsFilterable = true, IsSortable = true },
-                    //new GridField { FieldName = "entity", DisplayName = FieldsDisplayNames.Entity, IsFilterable = true, IsSortable = true },
-                    new GridField { FieldName = "createdByUserFullName", DisplayName = FieldsDisplayNames.CreatorName, IsFilterable = true, IsSortable = true },
-                    new GridField { FieldName = "isDeleted", DisplayName = FieldsDisplayNames.IsDeleted, IsFilterable = true, IsSortable = true, Type = "checkbox", DefaultValue = false},
-                    new GridField { FieldName = "createdDate", DisplayName = FieldsDisplayNames.CreatedDate, IsSortable = true, IsFilterable = true, Format="date:MM/dd/yyyy" }
-                };
+                    success = false,
+                    message = "Table ID is required."
+                });
             }
 
-            return fields;
+            var options = _dataTableRegistry.Get(request.TableID);
+
+            if (options == null)
+            {
+                return BadRequest(new
+                {
+                    success = false,
+                    message = "Unknown table."
+                });
+            }
+
+            if (request.TableID == DataTableNames.attachmentsTable)
+            {
+                var res = await _tableService.ExecuteAsync(
+                   fields => _attachmentService.QueryEntity(fields),
+                   request,
+                   options);
+
+                return Json(res);
+            }
+            else
+            {
+                return BadRequest(new
+                {
+                    success = false,
+                    message = "Unknown table."
+                });
+            }
         }
 
-        protected override async Task CustomizeRowAsync(object row)
+        [HttpGet]
+        public async Task<IActionResult> Export([FromQuery] DataTableRequest request, [FromQuery] string format = "csv")
         {
-            if (row is AttachmentGridView attRow)
+            if (string.IsNullOrWhiteSpace(request.TableID))
+                return BadRequest(new
+                {
+                    success = false,
+                    message = "Table ID cannot be found."
+                });
+
+            if (request.TableID == DataTableNames.attachmentsTable)
             {
-                User? user = await _userService.GetUserByIDAsync(attRow.CreatedBy);
-                attRow.CreatedByUserFullName = $"{user?.FirstName} {user?.LastName}";
+                return await ExportTableAsync(
+                            request,
+                            format,
+                            fields => _attachmentService.QueryEntity(fields),
+                            "attachments");
             }
-        }
-
-        protected override List<GridAction> GetDefaultActions(object row)
-        {
-            List<GridAction> actions = base.GetDefaultActions(row);
-
-            if (row is AttachmentGridView)
+            else
             {
-                return new List<GridAction>();
+                return BadRequest(new
+                {
+                    success = false,
+                    message = "Unknown table."
+                });
             }
-
-            return actions;
         }
     }
 }

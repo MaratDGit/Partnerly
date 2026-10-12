@@ -179,6 +179,29 @@ namespace Partnerly.Models.ViewModels
                             },
                             new DataTableColumn
                             {
+                                Field = nameof(Models.User.MyReferralCode),
+                                Title = FieldsDisplayNames.ReferrerCode,
+                                Type = DataTableColumnType.Text,
+                                Alignment = DataTableAlignment.Center,
+                                ConditionalStyles = new List<DataTableConditionalStyle>
+                                {
+                                    new DataTableConditionalStyle
+                                    {
+                                        Conditions = new List<DataTableConditionalCondition>
+                                        {
+                                            new DataTableConditionalCondition
+                                            {
+                                                Operator = DataTableConditionalOperator.NotEquals,
+                                                Value = ""
+                                            },
+                                        },
+
+                                        CssClass = "badge bg-label-secondary fs-7 rounded-pill ms-auto text-uppercase",
+                                    },
+                                },
+                            },
+                            new DataTableColumn
+                            {
                                 Field = nameof(Models.User.IsBlocked),
                                 Title = FieldsDisplayNames.IsBlocked,
                                 Type = DataTableColumnType.Boolean,
@@ -223,7 +246,7 @@ namespace Partnerly.Models.ViewModels
                                                 Value = "5000"
                                             }
                                         },
-                                        CssClass = "badge bg-label-warning fs-tiny rounded-pill ms-auto text-uppercase",
+                                        CssClass = "badge bg-label-warning fs-7 rounded-pill ms-auto text-uppercase",
                                     },
                                     new DataTableConditionalStyle
                                     {
@@ -235,7 +258,7 @@ namespace Partnerly.Models.ViewModels
                                                 Value = "500"
                                             },
                                         },
-                                        CssClass = "badge bg-label-danger fs-tiny rounded-pill ms-auto text-uppercase",
+                                        CssClass = "badge bg-label-danger fs-7 rounded-pill ms-auto text-uppercase",
                                     },
                                     new DataTableConditionalStyle
                                     {
@@ -248,7 +271,7 @@ namespace Partnerly.Models.ViewModels
                                             },
                                         },
 
-                                        CssClass = "badge bg-label-success fs-tiny rounded-pill ms-auto text-uppercase",
+                                        CssClass = "badge bg-label-success fs-7 rounded-pill ms-auto text-uppercase",
                                     },
                                 },
 
@@ -274,6 +297,7 @@ namespace Partnerly.Models.ViewModels
                        Sorting = new DataTableSortOptions
                        {
                            DefaultField = "CreatedDate",
+
                        },
 
                        Filters = new DataTableFilterOptions
@@ -330,7 +354,7 @@ namespace Partnerly.Models.ViewModels
                                 new DataTableAction
                                 {
                                     Name = "add",
-                                    Title = "",
+                                    Title = FieldsDisplayNames.Create,
                                     Icon = "bx bx-plus",
                                     Type = DataTableActionType.Link,
                                     Placement = DataTableActionPlacement.Toolbar,
@@ -368,6 +392,7 @@ namespace Partnerly.Models.ViewModels
                                     Placement = DataTableActionPlacement.Row,
                                     Url = "/Users/Delete/{Id}",
                                     Method = "GET",
+                                    CssClass = "btn btn-sm btn-outline-danger"
                                 }
                             }
                        },

@@ -1,7 +1,6 @@
 ﻿@using Partnerly.Models.DataTable
 @model Partnerly.Models.DataTable.DataTableOptions
 
-<div class="card">
 
 <div id="@Model.Id"
      class="data-table-wrapper"
@@ -45,13 +44,7 @@
 
             @if (Model.Actions.Enabled)
             {
-                foreach (
-                var action in Model.Actions.Items.Where(
-                x =>
-                x.Placement ==
-                DataTableActionPlacement.Toolbar
-                )
-                )
+                foreach (var action in Model.Actions.Items.Where(x => x.Placement == DataTableActionPlacement.Toolbar))
                 {
                     if (action.Type == DataTableActionType.Link)
                     {
@@ -59,14 +52,14 @@
                            class="@(string.IsNullOrWhiteSpace(action.CssClass)
                                                       ? "btn btn-primary"
                                                       : action.CssClass)"
-               data-table-action="@action.Name">
+                            data-table-action="@action.Name"
+                            title="@action.Title">
 
-                @if (!string.IsNullOrWhiteSpace(action.Icon))
+                            @if (!string.IsNullOrWhiteSpace(action.Icon))
                             {
                                 <i class="@action.Icon"></i>
                             }
-
-                            @if (!string.IsNullOrWhiteSpace(action.Title))
+                            else if (!string.IsNullOrWhiteSpace(action.Title))
                             {
                                 <span>
                                     @action.Title
@@ -81,14 +74,14 @@
                                 class="@(string.IsNullOrWhiteSpace(action.CssClass)
                                                                 ? "btn btn-primary"
                                                                 : action.CssClass)"
-                    data-table-action="@action.Name">
+                            data-table-action="@action.Name"
+                            title="@action.Title">
 
-                @if (!string.IsNullOrWhiteSpace(action.Icon))
+                            @if (!string.IsNullOrWhiteSpace(action.Icon))
                             {
                                 <i class="@action.Icon"></i>
                             }
-
-                            @if (!string.IsNullOrWhiteSpace(action.Title))
+                            else if (!string.IsNullOrWhiteSpace(action.Title))
                             {
                                 <span>
                                     @action.Title
@@ -762,6 +755,7 @@
                                     width = column.Width,
                                     format = column.Format,
                                     urlTemplate = column.UrlTemplate,
+                                    isKey = column.IsKey,
 
                                     emptyText = column.EmptyText,
 
@@ -832,5 +826,4 @@
 
     </script>
 
-</div>
 </div>
