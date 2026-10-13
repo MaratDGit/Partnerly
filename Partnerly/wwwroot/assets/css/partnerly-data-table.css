@@ -374,16 +374,28 @@
    TABLE RESPONSIVE
    ========================================================= */
 
+
+/* =========================================================
+   TABLE RESPONSIVE
+   Vertical scroll for table body
+   ========================================================= */
+
 .data-table-wrapper > .table-responsive {
+    --dt-body-max-height: 520px;
+    position: relative;
     width: 100%;
-    overflow-x: auto;
-    overflow-y: visible;
+    /*max-height: var(--dt-body-max-height);*/
+    max-height: calc(100vh - 280px);
+    overflow: auto;
     scrollbar-width: thin;
-    scrollbar-color: rgba(105, 108, 255, 0.22) transparent;
+    scrollbar-color: rgba(105, 108, 255, 0.30) transparent;
 }
 
+    /* Scrollbar */
+
     .data-table-wrapper > .table-responsive::-webkit-scrollbar {
-        height: 6px;
+        width: 7px;
+        height: 7px;
     }
 
     .data-table-wrapper > .table-responsive::-webkit-scrollbar-track {
@@ -391,13 +403,31 @@
     }
 
     .data-table-wrapper > .table-responsive::-webkit-scrollbar-thumb {
-        background: rgba(105, 108, 255, 0.22);
+        background: rgba(105, 108, 255, 0.25);
         border-radius: 20px;
     }
 
         .data-table-wrapper > .table-responsive::-webkit-scrollbar-thumb:hover {
-            background: rgba(105, 108, 255, 0.38);
+            background: rgba(105, 108, 255, 0.45);
         }
+
+    /* Keep table header visible while scrolling */
+
+    .data-table-wrapper > .table-responsive table thead th {
+        position: sticky;
+        top: 0;
+        z-index: 5;
+        background: #f8f8fc;
+    }
+
+    /* Keep the header above body cells */
+
+    .data-table-wrapper > .table-responsive table {
+        margin: 0;
+        border-collapse: separate;
+        border-spacing: 0;
+    }
+
 
 
 /* =========================================================

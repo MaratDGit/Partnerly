@@ -36,9 +36,11 @@ html {
 }
 
 body {
-    min-height: 100vh;
+    height: 100vh;
+    height: 100dvh;
+    min-height: 0;
     background: var(--partnerly-page-background);
-    overflow-x: hidden;
+    overflow: hidden;
 }
 
 
@@ -47,12 +49,16 @@ body {
    ========================================================= */
 
 .partnerly-layout-page {
+    width: auto;
+    height: 100vh;
+    height: 100dvh;
     min-width: 0;
-    min-height: 100vh;
+    min-height: 0;
     margin-left: var(--partnerly-sidebar-width);
     display: flex;
     flex-direction: row;
     align-items: stretch;
+    overflow: hidden;
     transition: margin-left .25s ease;
 }
 
@@ -62,28 +68,43 @@ body {
    ========================================================= */
 
 .partnerly-layout-main {
+    flex: 1 1 auto;
+    width: 0;
     min-width: 0;
-    width: 100%;
-    min-height: 100vh;
+    min-height: 0;
+    height: 100%;
     display: flex;
     flex-direction: column;
-    flex: 1 1 auto;
+    overflow: hidden;
 }
 
+.partnerly-layout-content {
+    flex: 1 1 auto;
+    width: 100%;
+    min-width: 0;
+    min-height: 0;
+    padding: 20px;
+    box-sizing: border-box;
+    overflow-y: auto;
+    overflow-x: hidden;
+    overscroll-behavior-y: contain;
+    scrollbar-gutter: stable;
+}
 
 /* =========================================================
    MAIN CONTENT
    ========================================================= */
-
 .partnerly-layout-content {
-    min-width: 0;
+    flex: 1 1 auto;
     width: 100%;
-    /*
-       Content takes all available vertical space.
-       This pushes the footer to the bottom when
-       the page content is short.
-    */
-    flex: 1 0 auto;
+    min-width: 0;
+    min-height: 0;
+    padding: 10px;
+    box-sizing: border-box;
+    overflow-y: auto;
+    overflow-x: hidden;
+    overscroll-behavior-y: contain;
+    scrollbar-gutter: stable;
 }
 
 
@@ -854,10 +875,24 @@ body.partnerly-mobile-menu-open {
 
 
 /* =========================================================
-   TABLET / MOBILE
-   ========================================================= */
+TABLET / MOBILE
+Preserve natural page scrolling on smaller screens
+========================================================= */
 
 @media (max-width: 1199.98px) {
+
+    html,
+    body {
+        height: auto;
+        min-height: 100%;
+    }
+
+    body {
+        overflow-x: hidden;
+        overflow-y: auto;
+    }
+
+    /* Sidebar */
 
     .partnerly-sidebar {
         width: var(--partnerly-sidebar-width);
@@ -865,87 +900,96 @@ body.partnerly-mobile-menu-open {
         box-shadow: 8px 0 30px rgba(25, 35, 45, 0.12);
     }
 
-
         .partnerly-sidebar.mobile-open {
             transform: translateX(0);
         }
-
 
     .partnerly-sidebar-toggle {
         display: none;
     }
 
-
     .partnerly-sidebar-mobile-close {
         display: inline-flex;
     }
 
+    /* Page must use the full available width.
+   Do not reserve space for the hidden sidebar. */
 
     .partnerly-layout-page {
-        margin-left: 0 !important;
+        width: 100%;
+        height: auto;
         min-height: 100vh;
+        min-height: 100dvh;
+        margin-left: 0 !important;
+        overflow: visible;
+    }
+
+    .partnerly-layout-main {
+        flex: 1 1 auto;
+        width: 100%;
+        min-width: 0;
+        height: auto;
+        min-height: 100vh;
+        min-height: 100dvh;
+        overflow: visible;
+    }
+
+    /* Natural content height and normal page scrolling */
+
+    .partnerly-layout-content {
+        padding: 10px;
+        flex: 1 0 auto;
+        width: 100%;
+        min-width: 0;
+        min-height: 0;
+        overflow: visible;
+        overscroll-behavior-y: auto;
+        scrollbar-gutter: auto;
     }
 
 
-    body.partnerly-sidebar-collapsed
-    .partnerly-sidebar {
+    /* Collapsed sidebar state must not affect mobile layout */
+
+    body.partnerly-sidebar-collapsed .partnerly-sidebar {
         width: var(--partnerly-sidebar-width);
         transform: translateX(-100%);
     }
 
-
-        body.partnerly-sidebar-collapsed
-        .partnerly-sidebar.mobile-open {
+        body.partnerly-sidebar-collapsed .partnerly-sidebar.mobile-open {
             transform: translateX(0);
         }
 
-
-    body.partnerly-sidebar-collapsed
-    .partnerly-layout-page {
+    body.partnerly-sidebar-collapsed .partnerly-layout-page {
         margin-left: 0 !important;
     }
 
-
-    body.partnerly-sidebar-collapsed
-    .partnerly-brand-name,
-    body.partnerly-sidebar-collapsed
-    .partnerly-menu-text,
-    body.partnerly-sidebar-collapsed
-    .partnerly-menu-badge,
-    body.partnerly-sidebar-collapsed
-    .partnerly-menu-external,
-    body.partnerly-sidebar-collapsed
-    .partnerly-sidebar-footer-text {
+    body.partnerly-sidebar-collapsed .partnerly-brand-name,
+    body.partnerly-sidebar-collapsed .partnerly-menu-text,
+    body.partnerly-sidebar-collapsed .partnerly-menu-badge,
+    body.partnerly-sidebar-collapsed .partnerly-menu-external,
+    body.partnerly-sidebar-collapsed .partnerly-sidebar-footer-text {
         width: auto;
         opacity: 1;
         overflow: visible;
     }
 
-
-    body.partnerly-sidebar-collapsed
-    .partnerly-sidebar-header {
+    body.partnerly-sidebar-collapsed .partnerly-sidebar-header {
         justify-content: flex-start;
         padding-left: 16px;
         padding-right: 16px;
     }
 
-
-    body.partnerly-sidebar-collapsed
-    .partnerly-brand {
+    body.partnerly-sidebar-collapsed .partnerly-brand {
         justify-content: flex-start;
     }
 
-
-    body.partnerly-sidebar-collapsed
-    .partnerly-sidebar-toggle {
+    body.partnerly-sidebar-collapsed .partnerly-sidebar-toggle {
         position: static;
         border: 0;
         box-shadow: none;
     }
 
-
-    body.partnerly-sidebar-collapsed
-    .partnerly-menu-section {
+    body.partnerly-sidebar-collapsed .partnerly-menu-section {
         width: 100%;
         height: 34px;
         opacity: 1;
@@ -955,44 +999,39 @@ body.partnerly-mobile-menu-open {
         overflow: visible;
     }
 
-
     body.partnerly-sidebar-collapsed
     .partnerly-menu-section-group:first-child
     .partnerly-menu-section {
         margin-top: 0;
     }
 
-
-    body.partnerly-sidebar-collapsed
-    .partnerly-menu-section-arrow {
+    body.partnerly-sidebar-collapsed .partnerly-menu-section-arrow {
         display: block;
     }
 
-
-    body.partnerly-sidebar-collapsed
-    .partnerly-menu-link {
+    body.partnerly-sidebar-collapsed .partnerly-menu-link {
         justify-content: flex-start;
         padding-left: 11px;
         padding-right: 11px;
     }
 
-
-    body.partnerly-sidebar-collapsed
-    .partnerly-menu-icon {
+    body.partnerly-sidebar-collapsed .partnerly-menu-icon {
         margin: 0;
     }
 
-
-    body.partnerly-sidebar-collapsed
-    .partnerly-sidebar-footer-content {
+    body.partnerly-sidebar-collapsed .partnerly-sidebar-footer-content {
         justify-content: flex-start;
     }
 
+    /* Navbar */
 
     .partnerly-navbar {
+        position: sticky;
+        top: 0;
         min-height: 60px;
         padding-left: 16px;
         padding-right: 16px;
+        flex: 0 0 auto;
     }
 }
 
@@ -1036,6 +1075,10 @@ body.partnerly-mobile-menu-open {
         --partnerly-sidebar-width: min(290px, 86vw);
     }
 
+    .partnerly-layout-page {
+        margin-left: 0 !important;
+        width: 100%;
+    }
 
     .partnerly-navbar {
         padding-left: 12px;
@@ -1089,4 +1132,131 @@ input[type="radio"] {
 .form-check-input:focus {
     border-color: var(--partnerly-primary);
     box-shadow: 0 0 0 0.2rem rgba(105, 108, 255, 0.15);
+}
+
+/* =========================================================
+   RESPONSIVE DESKTOP DENSITY
+   ========================================================= */
+/* Standard desktop / smaller laptops */
+@media (min-width: 1200px) and (max-width: 1599.98px) {
+    : root
+
+{
+    --partnerly-sidebar-width: 240px;
+    --partnerly-sidebar-collapsed-width: 72px;
+    --partnerly-navbar-height: 56px;
+}
+
+.partnerly-navbar {
+    padding-left: 18px;
+    padding-right: 18px;
+}
+
+.partnerly-layout-content {
+    padding: 8px;
+}
+
+.partnerly-menu-link {
+    min-height: 38px;
+    font-size: 0.84rem;
+    gap: 7px;
+    padding: 5px 8px;
+}
+
+.partnerly-menu-icon {
+    width: 32px;
+    min-width: 32px;
+    height: 32px;
+}
+
+.partnerly-brand-logo {
+    width: 36px;
+    height: 36px;
+    flex-basis: 36px;
+}
+
+    .partnerly-brand-logo img {
+        width: 30px;
+        height: 30px;
+    }
+
+.partnerly-sidebar-content {
+    padding: 12px 10px;
+}
+
+}
+
+
+/* Large laptop / Full HD and larger */
+@media (min-width: 1600px) {
+
+    html {
+        font-size: 15px;
+    }
+
+    :root {
+        --partnerly-sidebar-width: 240px;
+        --partnerly-sidebar-collapsed-width: 72px;
+        --partnerly-navbar-height: 56px;
+    }
+
+    .partnerly-navbar {
+        padding-left: 18px;
+        padding-right: 18px;
+    }
+
+    .partnerly-layout-content {
+        padding: 8px;
+    }
+
+    .partnerly-menu-link {
+        min-height: 36px;
+        font-size: 0.82rem;
+        gap: 7px;
+        padding: 4px 8px;
+    }
+
+    .partnerly-menu-icon {
+        width: 32px;
+        min-width: 32px;
+        height: 32px;
+    }
+
+        .partnerly-menu-icon i {
+            width: 17px;
+            height: 17px;
+            line-height: 17px;
+        }
+
+    .partnerly-menu-section {
+        height: 28px;
+        font-size: 0.64rem;
+    }
+
+    .partnerly-brand-logo {
+        width: 36px;
+        height: 36px;
+        flex-basis: 36px;
+    }
+
+        .partnerly-brand-logo img {
+            width: 30px;
+            height: 30px;
+        }
+
+    .partnerly-brand-name {
+        font-size: 1.05rem;
+    }
+
+    .partnerly-sidebar-content {
+        padding: 12px 10px;
+    }
+
+    .partnerly-sidebar-footer {
+        padding: 8px 12px 12px;
+    }
+
+    .partnerly-footer-inner {
+        font-size: 10px;
+    }
 }
