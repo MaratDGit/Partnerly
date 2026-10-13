@@ -29,6 +29,9 @@ namespace Partnerly.Infrastructure.Services
         public async Task<IEnumerable<EmailTemplate?>> GetAllTemplatesAsync() =>
             await _templateRepo.GetAllAsync();
 
+        public IQueryable<EmailTemplate> QueryEntity(IEnumerable<string> fields) =>
+            _templateRepo.QueryEntity(fields);
+
         public async Task<ServiceResult<EmailTemplate?>> CreateTemplateAsync(EmailTemplate? rec)
         {
             if (rec == null)

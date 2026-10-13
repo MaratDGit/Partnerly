@@ -13,5 +13,7 @@ namespace Partnerly.Infrastructure.Interfaces
         Task<ServiceResult<SupportTicket?>> UpdateSupportTicketAsync(SupportTicket? ticket, Guid? oldAssignedTo, string oldStatus);
         Task<ServiceResult<SupportTicket?>> UpdateSupportTicketAsync(SupportTicket? ticket);
         Task<ServiceResult<SupportTicket?>> DeleteSupportTicketAsync(Guid? id);
+
+        IQueryable<SupportTicketExt> QueryEntityExt(IEnumerable<string> fields);
     }
 }

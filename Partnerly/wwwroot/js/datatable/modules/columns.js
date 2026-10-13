@@ -1106,30 +1106,46 @@
 
 
                     /*
-                     * =================================================
-                     * DEFAULT TEXT
-                     * =================================================
+ * =========================================================
+ * DEFAULT TEXT WITH VALUE MAPPING
+ * =========================================================
+ */
+
+                    var displayValue = value;
+
+                    if (
+                        Array.isArray(column.valueMappings) &&
+                        column.valueMappings.length > 0
+                    ) {
+                        var mapping = column.valueMappings.find(
+                            function (item) {
+                                return item &&
+                                    String(item.value) === String(value);
+                            }
+                        );
+
+                        if (mapping) {
+                            displayValue = mapping.label;
+                        }
+                    }
+
+                    var textHtml = ctx.escapeHtml(displayValue);
+
+                    /*
+                     * Conditional styles must use the original database value,
+                     * not the display label.
                      */
-
-                    var textHtml =
-                        ctx.escapeHtml(
-                            value
-                        );
-
-                    textHtml =
-                        ctx.applyConditionalStyle(
-                            textHtml,
-                            value,
-                            column
-                        );
+                    textHtml = ctx.applyConditionalStyle(
+                        textHtml,
+                        value,
+                        column
+                    );
 
                     return {
+                        html: textHtml,
 
-                        html:
-                            textHtml,
-
-                        rawValue:
-                            String(value)
+                        // Preserve the original value for editing and data operations.
+                        rawValue: String(value)
                     };
                 };
 

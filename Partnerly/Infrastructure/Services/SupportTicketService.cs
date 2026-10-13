@@ -41,6 +41,9 @@ namespace Partnerly.Infrastructure.Services
         public async Task<IEnumerable<SupportTicket?>> GetAllSupportTicketAsync() =>
             await _supportTicketRepository.GetAllAsync();
 
+        public IQueryable<SupportTicketExt> QueryEntityExt(IEnumerable<string> fields) =>
+            _supportTicketRepository.QueryEntityExt(fields);
+
         public async Task<ServiceResult<SupportTicket?>> CreateSupportTicketAsync(SupportTicket? ticket)
         {
             if (ticket == null)

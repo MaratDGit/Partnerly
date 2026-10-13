@@ -1,4 +1,5 @@
-﻿using Partnerly.Descriptors.Attributes;
+﻿using DocumentFormat.OpenXml.Spreadsheet;
+using Partnerly.Descriptors.Attributes;
 using Partnerly.Infrastructure.Interfaces;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
@@ -15,10 +16,10 @@ namespace Partnerly.Models
         public string? TicketID { get; set; }
         [Required]
         public string? Subject { get; set; }
-        [Required]
-        [SupportTicketStatus]
+        [Required]    
         public string? Message { get; set; }
         [Required]
+        [SupportTicketStatus]
         public string? Status { get; set; }
         public Guid? AssignedTo { get; set; }
         public bool? IsRead { get; set; } = false;
@@ -40,5 +41,15 @@ namespace Partnerly.Models
         [Required]
         public DateTime? UpdatedDate { get; set; }
         #endregion
+
+        
+        public User Creator { get; set; } = null!;
+        public User Assigned { get; set; } = null!;
+    }
+
+    public class SupportTicketExt : SupportTicket
+    {
+        public string? CreatorName { get; set; }
+        public string? AssignedToName { get; set; }
     }
 }

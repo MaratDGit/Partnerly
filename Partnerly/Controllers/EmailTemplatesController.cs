@@ -11,27 +11,38 @@
     using Partnerly.Infrastructure.Services;
     using Partnerly.Models;
     using Partnerly.Models.DataTable;
-    using Partnerly.Models.GridViews;
     using Partnerly.Models.ViewModels;
     using System.Security.Claims;
-    using System.Text.Json;
 
     [ClaimAuthorize(ClaimTypes.Role, RoleTypeAttribute.Admin)]
     public class EmailTemplatesController : _BaseController
     {
         private readonly IEmailTemplateService _emailTemplateService;
+        private readonly IInlineUpdateService _inlineUpdateService;
 
-        public EmailTemplatesController(IEventBus eventBus, IUserService userService, ICurrentUserService currentUser, 
-            IEmailTemplateService emailTemplateService, ILogService logService, IStringLocalizer<SharedResource> localizer, 
-            ISystemSettingsService systemSettingsService, DataTableQueryService tableService, IDataTableRegistry dataTableRegistry)
+        public EmailTemplatesController(
+            IEventBus eventBus, 
+            IUserService userService, 
+            ICurrentUserService currentUser, 
+            IEmailTemplateService emailTemplateService, 
+            ILogService logService, 
+            IStringLocalizer<SharedResource> localizer, 
+            ISystemSettingsService systemSettingsService, 
+            DataTableQueryService tableService, 
+            IDataTableRegistry dataTableRegistry,
+            IInlineUpdateService inlineUpdateService)
         : base(eventBus, userService, currentUser, logService, localizer, systemSettingsService, tableService, dataTableRegistry)
         {
             _emailTemplateService = emailTemplateService;
+            _inlineUpdateService = inlineUpdateService;
         }
 
-        public async Task<IActionResult> Index()
+        public IActionResult Index()
         {
-            return View();
+            EmailTemplateViewModel model = new EmailTemplateViewModel();
+            model.templates = EmailTemplateViewModel.CreateTableOptions(DataTableNames.emailTemplatesTable, _dataTableRegistry);
+
+            return View(model);
         }
 
         public IActionResult Create()
@@ -126,7 +137,7 @@
             if (template == null) return NotFound();
 
 
-            if (AttributeDropdownHelper.GetValue<EmailTemplateNameAttribute>(template.Name) != null)
+            if (AttributeDropdownHelper.GetValue<EmailTemplateNameAttribute>(template.Name ?? "") != null)
             {
                 var model = new { id = id };
                 TempData["ToastType"] = "error";
@@ -185,66 +196,134 @@
 
         #region Grids 
         [HttpGet]
-        public async Task<JsonResult> GetData(string tableModel)
+        public async Task<IActionResult> Data([FromQuery] DataTableRequest request)
         {
-            if (tableModel == nameof(Partnerly.Models.EmailTemplate))
+            if (string.IsNullOrWhiteSpace(request.TableID))
             {
-                return await GetGridDataAsync<EmailTemplateGridView, EmailTemplate>("EmailTemplates");
-            }
-
-            return Json(new { fields = new object[0], data = new object[0] });
-        }
-
-        protected override async Task<IEnumerable<TEntity>> GetEntitiesAsync<TEntity>()
-        {
-            if (typeof(TEntity) == typeof(EmailTemplate))
-                return (IEnumerable<TEntity>)await _emailTemplateService.GetAllTemplatesAsync();
-
-            return Enumerable.Empty<TEntity>();
-        }
-
-        protected override List<GridField> GetFields(object row)
-        {
-            var fields = new List<GridField>();
-            if (row is EmailTemplateGridView templateRow)
-            {
-                return new List<GridField>
+                return BadRequest(new
                 {
-                    new GridField { FieldName = "select", DisplayName = $"", DefaultValue = false, Type = "checkbox"},
-                    new GridField { FieldName = "subject", DisplayName = FieldsDisplayNames.Subject, LinkTemplate = "/EmailTemplates/Edit/{id}" },
-                    new GridField { FieldName = "createdByUserFullName", DisplayName = FieldsDisplayNames.CreatorName, IsVisible = true },
-                    new GridField { FieldName = "createdDate", DisplayName = FieldsDisplayNames.CreatedDate, IsSortable = true, IsFilterable = true, Format="date:MM/dd/yyyy" }
-                };
+                    success = false,
+                    message = "Table ID is required."
+                });
             }
-            return fields;
-        }
 
-        protected override async Task CustomizeRowAsync(object row)
-        {
-            if (row is EmailTemplateGridView templateRow)
+            var options = _dataTableRegistry.Get(request.TableID);
+
+            if (options == null)
             {
-                var user = await _userService.GetUserByIDAsync(templateRow.CreatedBy);
-                templateRow.CreatedByUserFullName = $"{user?.FirstName} {user?.LastName}";
+                return BadRequest(new
+                {
+                    success = false,
+                    message = "email Templates table."
+                });
+            }
+
+            if (request.TableID == DataTableNames.emailTemplatesTable)
+            {
+                var res = await _tableService.ExecuteAsync(
+                   fields => _emailTemplateService.QueryEntity(fields),
+                   request,
+                   options);
+
+                return Json(res);
+            }
+            else
+            {
+                return BadRequest(new
+                {
+                    success = false,
+                    message = "Unknown table."
+                });
             }
         }
 
         [HttpPost]
-        public async Task<IActionResult> ExportToExcel([FromForm] string selectedIds)
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> UpdateInline(
+        [FromBody] DataTableInlineUpdateRequest request)
         {
-            var ids = JsonSerializer.Deserialize<List<Guid>>(selectedIds);
+            if (string.IsNullOrWhiteSpace(request.Id))
+            {
+                return BadRequest(new
+                {
+                    success = false,
+                    message = "email Template ID is required."
+                });
+            }
 
-            var users = await _emailTemplateService.GetAllTemplatesAsync();
-            var data = users.Where(x => ids.Contains(x.Id)).ToList();
+            if (!Guid.TryParse(request.Id, out var templateId))
+            {
+                return BadRequest(new
+                {
+                    success = false,
+                    message = "Invalid email Template ID."
+                });
+            }
 
-            return await ExportToExcel(data, "emailTemplates.xlsx");
+            var template = await _emailTemplateService.GetTemplateByIDAsync(templateId);
+
+            if (template == null)
+            {
+                return NotFound(new
+                {
+                    success = false,
+                    message = "email Template not found."
+                });
+            }
+
+            var options = _dataTableRegistry.Get(request.TableID);
+            var result = _inlineUpdateService.ApplyChanges(
+                template,
+                request.Fields,
+                options);
+
+            if (!result.Success)
+            {
+                return BadRequest(new
+                {
+                    success = false,
+                    message = result.ErrorMessage
+                });
+            }
+
+            if (result.IsChanged)
+            {
+                await _emailTemplateService.UpdateTemplateAsync(template);
+            }
+
+            return Ok(new
+            {
+                success = true,
+                changed = result.IsChanged
+            });
         }
 
-        [HttpPost]
-        public async Task<IActionResult> ExportAllToExcel([FromForm] string data)
+        [HttpGet]
+        public async Task<IActionResult> Export([FromQuery] DataTableRequest request, [FromQuery] string format = "csv")
         {
-            //var allData = JsonSerializer.Deserialize<List<UserViewModel>>(data);
-            var users = await _emailTemplateService.GetAllTemplatesAsync();
-            return await ExportToExcel(users, "emailTemplates.xlsx");
+            if (string.IsNullOrWhiteSpace(request.TableID))
+                return BadRequest(new
+                {
+                    success = false,
+                    message = "Table ID cannot be found."
+                });
+
+            if (request.TableID == DataTableNames.emailTemplatesTable)
+            {
+                return await ExportTableAsync(
+                            request,
+                            format,
+                            fields => _emailTemplateService.QueryEntity(fields),
+                            "emailTemplates");
+            }
+            else
+            {
+                return BadRequest(new
+                {
+                    success = false,
+                    message = "Unknown table."
+                });
+            }
         }
         #endregion
     }

@@ -19,19 +19,31 @@ namespace Partnerly.Controllers
     public class SupportTicketsController : _BaseController
     {
         protected readonly ISupportTicketService _supportTicketService;
-        public SupportTicketsController(IEventBus eventBus, ISupportTicketService supportTicketService, 
-            IUserService userService, ICurrentUserService currentUser, ILogService logService, 
-            IStringLocalizer<SharedResource> localizer, ISystemSettingsService systemSettingsService,
-            DataTableQueryService tableService, IDataTableRegistry dataTableRegistry)
+        private readonly IInlineUpdateService _inlineUpdateService;
+        public SupportTicketsController(
+            IEventBus eventBus, 
+            ISupportTicketService supportTicketService, 
+            IUserService userService, 
+            ICurrentUserService currentUser, 
+            ILogService logService, 
+            IStringLocalizer<SharedResource> localizer, 
+            ISystemSettingsService systemSettingsService,
+            DataTableQueryService tableService, 
+            IDataTableRegistry dataTableRegistry,
+            IInlineUpdateService inlineUpdateService)
         : base(eventBus, userService, currentUser, logService, localizer, systemSettingsService, tableService, dataTableRegistry)
         {
             _supportTicketService = supportTicketService;
+            _inlineUpdateService = inlineUpdateService;
         }
 
         [ClaimAuthorize(ClaimTypes.Role, RoleTypeAttribute.Admin, RoleTypeAttribute.Employee)]
-        public async Task<IActionResult> Index()
+        public IActionResult Index()
         {
-            return View();
+            SupportTicketViewModel model = new SupportTicketViewModel();
+            model.tickets = SupportTicketViewModel.CreateTableOptions(DataTableNames.supportTicketsTable, _dataTableRegistry);
+
+            return View(model);
         }
 
         public async Task<IActionResult> OpenNewCase()
@@ -329,126 +341,138 @@ namespace Partnerly.Controllers
             return Json(new { });
         }
 
+
+        #region Grids 
         [HttpGet]
-        public async Task<JsonResult> GetData(string tableModel)
+        public async Task<IActionResult> Data([FromQuery] DataTableRequest request)
         {
-            if (tableModel == nameof(Partnerly.Models.SupportTicket))
+            if (string.IsNullOrWhiteSpace(request.TableID))
             {
-                var result = await GetGridDataAsync<SupportTicketGridView, SupportTicket>("SupportTickets");
-                
-                return result;
-            }
-            return Json(new { fields = new object[0], data = new object[0] });
-        }
-
-        protected override async Task<IEnumerable<TEntity>> GetEntitiesAsync<TEntity>()
-        {
-            if (typeof(TEntity) == typeof(SupportTicket))
-            {
-                var result = await _supportTicketService.GetAllSupportTicketAsync();
-                var entities = HasPermision(RoleTypeAttribute.Delete) ? result : result.Where(_ => _.UserId == _currentUser.UserId || _.AssignedTo == _currentUser.UserId);
-
-                return (IEnumerable<TEntity>)entities.OrderByDescending(_ => _.TicketID);
+                return BadRequest(new
+                {
+                    success = false,
+                    message = "Table ID is required."
+                });
             }
 
-            return Enumerable.Empty<TEntity>();
-        }
+            var options = _dataTableRegistry.Get(request.TableID);
 
-        protected override List<GridField> GetFields(object row)
-        {
-            var fields = new List<GridField>();
-            if (row is SupportTicketGridView)
+            if (options == null)
             {
-                return new List<GridField>
+                return BadRequest(new
                 {
-                    new GridField { FieldName = "select", DisplayName = $"", DefaultValue = false, Type = "checkbox"},
-                    new GridField { FieldName = "ticketID", DisplayName = $"{FieldsDisplayNames.TaskNumber}", IsSortable = true, LinkTemplate = HasPermision(RoleTypeAttribute.Delete) ? "/SupportTickets/Edit/{id}" : "/SupportTickets/ViewCase/{id}" },
-                    new GridField { FieldName = "subject", DisplayName = $"{FieldsDisplayNames.Subject}", LinkTemplate = HasPermision(RoleTypeAttribute.Delete) ? "/SupportTickets/Edit/{id}" : "/SupportTickets/ViewCase/{id}" },
-                    new GridField { FieldName = "message", DisplayName = FieldsDisplayNames. Message},
-                    new GridField 
-                    { 
-                        FieldName = "status", DisplayName = FieldsDisplayNames.Status, IsSortable = true, IsFilterable = true,
-
-                        ValueStyles = new Dictionary<string, GridValueStyle>
-                        {
-                            [FieldsDisplayNames.New] = new() {  /*CssClass = "grid-red"*/ CssClass = "badge bg-label-danger fs-tiny rounded-pill ms-auto text-uppercase"},
-                            [FieldsDisplayNames.Closed] = new() { /*CssClass = "grid-green"*/ CssClass = "badge bg-label-success fs-tiny rounded-pill ms-auto text-uppercase" },
-                            [FieldsDisplayNames.InProgress] = new() { /*CssClass = "grid-yellow"*/ CssClass = "badge bg-label-warning fs-tiny rounded-pill ms-auto text-uppercase" },
-                        }
-                    },
-                    new GridField { FieldName = "creatorName", DisplayName = FieldsDisplayNames.CreatorName, IsSortable = true, IsFilterable = true, LinkTemplate = "/Users/Edit/{userId}"},
-                    new GridField { FieldName = "assignedToName", DisplayName = FieldsDisplayNames.AssignedTo, DefaultValue = "", IsSortable = true, IsFilterable = true,  LinkTemplate = "/Users/Edit/{assignedTo}" },
-                    //new GridField { FieldName = "isRead", DisplayName = FieldsDisplayNames.IsRead, Type = "checkbox", IsSortable = true, IsFilterable = true},
-                    new GridField { FieldName = "createdDate", DisplayName = FieldsDisplayNames.CreatedDate, IsSortable = true, IsFilterable = true, Format="date:MM/dd/yyyy"}
-                };
+                    success = false,
+                    message = "Tickets table."
+                });
             }
 
-            return fields;
-        }
-
-        protected override List<GridAction> GetDefaultActions(object row)
-        {
-            List<GridAction> actions = base.GetDefaultActions(row);
-
-            if (row is SupportTicketGridView)
+            if (request.TableID == DataTableNames.supportTicketsTable)
             {
-                GridAction? edit = actions.Where(_ => _.Name == "Edit").FirstOrDefault();
-                if (edit != null)
-                {
-                    edit.IsVisible = HasPermision(RoleTypeAttribute.Delete);
-                }
-                actions.Add(new GridAction { Name = "ViewCase", DisplayName = FieldsDisplayNames.Viewcase, IsVisible = HasPermision(RoleTypeAttribute.Update), UrlTemplate = "/SupportTickets/ViewCase/{id}", CssClass = "dropdown-item", Icon = "bx bx-show me-1" });
+                var res = await _tableService.ExecuteAsync(
+                   fields => _supportTicketService.QueryEntityExt(fields),
+                   request,
+                   options);
+
+                return Json(res);
             }
-
-            return actions;
-        }
-
-        protected override async Task CustomizeRowAsync(object row)
-        {
-            if (row is SupportTicketGridView ticket)
+            else
             {
-                var creator = await _userService.GetUserByIDAsync(ticket.UserId);
-                if (creator != null)
+                return BadRequest(new
                 {
-                    ticket.CreatorName = $"{creator.FirstName} {creator.LastName}";
-                }
-
-                if (ticket.AssignedTo != null)
-                {
-                    var assigned = await _userService.GetUserByIDAsync(ticket.AssignedTo);
-                    if (assigned != null)
-                    {
-                        ticket.AssignedToName = $"{assigned.FirstName} {assigned.LastName}";
-                    }
-                }
-                ticket.Status = AttributeDropdownHelper.GetValue<SupportTicketStatusAttribute>(ticket.Status);
+                    success = false,
+                    message = "Unknown table."
+                });
             }
         }
 
         [HttpPost]
-        public async Task<IActionResult> ExportToExcel([FromForm] string selectedIds)
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> UpdateInline(
+        [FromBody] DataTableInlineUpdateRequest request)
         {
-            if (!string.IsNullOrWhiteSpace(selectedIds))
+            if (string.IsNullOrWhiteSpace(request.Id))
             {
-                var ids = JsonSerializer.Deserialize<List<Guid>>(selectedIds);
-                if (ids.Count > 0)
+                return BadRequest(new
                 {
-                    var tickets = await _supportTicketService.GetAllSupportTicketAsync();
-                    var data = tickets.Where(x => ids.Contains(x.Id)).ToList();
-
-                    return await ExportToExcel(data, "supportTickets.xlsx");
-                }
+                    success = false,
+                    message = "Ticket ID is required."
+                });
             }
-            return BadRequest("No records selected.");
+
+            if (!Guid.TryParse(request.Id, out var templateId))
+            {
+                return BadRequest(new
+                {
+                    success = false,
+                    message = "Invalid Ticket ID."
+                });
+            }
+
+            var template = await _supportTicketService.GetSupportTicketByIDAsync(templateId);
+
+            if (template == null)
+            {
+                return NotFound(new
+                {
+                    success = false,
+                    message = "Ticket not found."
+                });
+            }
+
+            var options = _dataTableRegistry.Get(request.TableID);
+            var result = _inlineUpdateService.ApplyChanges(
+                template,
+                request.Fields,
+                options);
+
+            if (!result.Success)
+            {
+                return BadRequest(new
+                {
+                    success = false,
+                    message = result.ErrorMessage
+                });
+            }
+
+            if (result.IsChanged)
+            {
+                await _supportTicketService.UpdateSupportTicketAsync(template);
+            }
+
+            return Ok(new
+            {
+                success = true,
+                changed = result.IsChanged
+            });
         }
 
-        [HttpPost]
-        public async Task<IActionResult> ExportAllToExcel([FromForm] string data)
+        [HttpGet]
+        public async Task<IActionResult> Export([FromQuery] DataTableRequest request, [FromQuery] string format = "csv")
         {
-            //var allData = JsonSerializer.Deserialize<List<UserViewModel>>(data);
-            var tickets = await _supportTicketService.GetAllSupportTicketAsync();
-            return await ExportToExcel(tickets, "supportTickets.xlsx");
-        }
+            if (string.IsNullOrWhiteSpace(request.TableID))
+                return BadRequest(new
+                {
+                    success = false,
+                    message = "Table ID cannot be found."
+                });
 
+            if (request.TableID == DataTableNames.supportTicketsTable)
+            {
+                return await ExportTableAsync(
+                            request,
+                            format,
+                            fields => _supportTicketService.QueryEntityExt(fields),
+                            "supportTickets");
+            }
+            else
+            {
+                return BadRequest(new
+                {
+                    success = false,
+                    message = "Unknown table."
+                });
+            }
+        }
+        #endregion
     }
 }

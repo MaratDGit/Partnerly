@@ -222,60 +222,60 @@ namespace Partnerly.Models.ViewModels
                                 Type = DataTableColumnType.Boolean,
                                 Alignment = DataTableAlignment.Center,
                             },
-                            new DataTableColumn
-                            {
-                                Field = nameof(Models.User.Balance),
-                                Title = FieldsDisplayNames.Balance,
-                                Type = DataTableColumnType.Currency,
-                                Editable = true,
+                            //new DataTableColumn
+                            //{
+                            //    Field = nameof(Models.User.Balance),
+                            //    Title = FieldsDisplayNames.Balance,
+                            //    Type = DataTableColumnType.Currency,
+                            //    Editable = true,
 
-                                ConditionalStyles = new List<DataTableConditionalStyle>
-                                {
-                                    new DataTableConditionalStyle
-                                    {
-                                        Conditions = new List<DataTableConditionalCondition>
-                                        {
-                                            new DataTableConditionalCondition
-                                            {
-                                                Operator = DataTableConditionalOperator.GreaterThanOrEqual,
-                                                Value = "500"
-                                            },
-                                            new DataTableConditionalCondition
-                                            {
-                                                Operator = DataTableConditionalOperator.LessThan,
-                                                Value = "5000"
-                                            }
-                                        },
-                                        CssClass = "badge bg-label-warning fs-7 rounded-pill ms-auto text-uppercase",
-                                    },
-                                    new DataTableConditionalStyle
-                                    {
-                                        Conditions = new List<DataTableConditionalCondition>
-                                        {
-                                            new DataTableConditionalCondition
-                                            {
-                                                Operator = DataTableConditionalOperator.LessThanOrEqual,
-                                                Value = "500"
-                                            },
-                                        },
-                                        CssClass = "badge bg-label-danger fs-7 rounded-pill ms-auto text-uppercase",
-                                    },
-                                    new DataTableConditionalStyle
-                                    {
-                                        Conditions = new List<DataTableConditionalCondition>
-                                        {
-                                            new DataTableConditionalCondition
-                                            {
-                                                Operator = DataTableConditionalOperator.GreaterThanOrEqual,
-                                                Value = "5000"
-                                            },
-                                        },
+                            //    ConditionalStyles = new List<DataTableConditionalStyle>
+                            //    {
+                            //        new DataTableConditionalStyle
+                            //        {
+                            //            Conditions = new List<DataTableConditionalCondition>
+                            //            {
+                            //                new DataTableConditionalCondition
+                            //                {
+                            //                    Operator = DataTableConditionalOperator.GreaterThanOrEqual,
+                            //                    Value = "500"
+                            //                },
+                            //                new DataTableConditionalCondition
+                            //                {
+                            //                    Operator = DataTableConditionalOperator.LessThan,
+                            //                    Value = "5000"
+                            //                }
+                            //            },
+                            //            CssClass = "badge bg-label-warning fs-7 rounded-pill ms-auto text-uppercase",
+                            //        },
+                            //        new DataTableConditionalStyle
+                            //        {
+                            //            Conditions = new List<DataTableConditionalCondition>
+                            //            {
+                            //                new DataTableConditionalCondition
+                            //                {
+                            //                    Operator = DataTableConditionalOperator.LessThanOrEqual,
+                            //                    Value = "500"
+                            //                },
+                            //            },
+                            //            CssClass = "badge bg-label-danger fs-7 rounded-pill ms-auto text-uppercase",
+                            //        },
+                            //        new DataTableConditionalStyle
+                            //        {
+                            //            Conditions = new List<DataTableConditionalCondition>
+                            //            {
+                            //                new DataTableConditionalCondition
+                            //                {
+                            //                    Operator = DataTableConditionalOperator.GreaterThanOrEqual,
+                            //                    Value = "5000"
+                            //                },
+                            //            },
 
-                                        CssClass = "badge bg-label-success fs-7 rounded-pill ms-auto text-uppercase",
-                                    },
-                                },
+                            //            CssClass = "badge bg-label-success fs-7 rounded-pill ms-auto text-uppercase",
+                            //        },
+                            //    },
 
-                            },
+                            //},
                             new DataTableColumn
                             {
                                 Field = nameof(Models.User.LastActivity),
@@ -305,25 +305,7 @@ namespace Partnerly.Models.ViewModels
                            Enabled = true,
                            Items = new List<DataTableFilter>
                             {
-                                new DataTableFilter
-                                {
-                                    Field = "IsBlocked",
-                                    Label = FieldsDisplayNames.IsBlocked,
-                                    Type = DataTableFilterType.Boolean
-                                },
-                                new DataTableFilter
-                                {
-                                    Field = "IsOnlayn",
-                                    Label = FieldsDisplayNames.IsOnlayn,
-                                    Type = DataTableFilterType.Boolean
-                                },
-                                new DataTableFilter
-                                {
-                                    Field = "Balance",
-                                    Label = FieldsDisplayNames.Balance,
-                                    Type = DataTableFilterType.NumberRange
-                                },
-                                new DataTableFilter
+                               new DataTableFilter
                                 {
                                     Field = "RoleId",
                                     Label = FieldsDisplayNames.Role,
@@ -337,6 +319,26 @@ namespace Partnerly.Models.ViewModels
                                         new DataTableFilterOption("52B55F50-A21A-441E-BB59-EFAB24F907AF", FieldsDisplayNames.User)
                                     }
                                 },
+
+                                new DataTableFilter
+                                {
+                                    Field = "IsBlocked",
+                                    Label = FieldsDisplayNames.IsBlocked,
+                                    Type = DataTableFilterType.Boolean
+                                },
+                                new DataTableFilter
+                                {
+                                    Field = "IsOnlayn",
+                                    Label = FieldsDisplayNames.IsOnlayn,
+                                    Type = DataTableFilterType.Boolean
+                                },
+                                //new DataTableFilter
+                                //{
+                                //    Field = "Balance",
+                                //    Label = FieldsDisplayNames.Balance,
+                                //    Type = DataTableFilterType.NumberRange
+                                //},
+                                
                                 new DataTableFilter
                                 {
                                     Field = "CreatedDate",

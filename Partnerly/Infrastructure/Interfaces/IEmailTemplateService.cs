@@ -12,5 +12,6 @@ namespace Partnerly.Infrastructure.Interfaces
         Task<ServiceResult<EmailTemplate?>> CreateTemplateAsync(EmailTemplate? template);
         Task<ServiceResult<EmailTemplate?>> UpdateTemplateAsync(EmailTemplate? template);
         Task<ServiceResult<EmailTemplate?>> DeleteTemplateAsync(Guid? id);
+        IQueryable<EmailTemplate> QueryEntity(IEnumerable<string> fields);
     }
 }

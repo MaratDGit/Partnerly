@@ -13,7 +13,6 @@
 }
 
 @section PageScripts {
-
     <script>
         document.addEventListener("DOMContentLoaded", function () {
 
@@ -45,7 +44,6 @@
          ===================================================== -->
 
     <div class="partnerly-auth-brand">
-
         <div class="auth-brand-content">
 
             <a asp-controller="Home"
@@ -88,24 +86,7 @@
 
                 </div>
             </div>
-
-
-            <div class="auth-brand-footer">
-
-                @* <span>
-                    <i class="bx bx-shield-check"></i>
-                    Secure account
-                </span>
-
-                <span>
-                    <i class="bx bx-check-circle"></i>
-                    Smart experience
-                </span> *@
-
-            </div>
-
         </div>
-
     </div>
 
 
@@ -133,18 +114,11 @@
                     <span>
                         @TempData.Peek("appName")
                     </span>
-
                 </a>
-
             </div>
 
 
             <div class="auth-form-header">
-
-                <div class="auth-form-icon">
-                    <i class="bx bx-log-in"></i>
-                </div>
-
                 <h2>
                     @Localizer["Login"]
                 </h2>
@@ -196,10 +170,11 @@
 
                         <label asp-for="Password"></label>
 
-                        <span class="input-group-text cursor-pointer">
-
+                        <span class="input-group-text cursor-pointer password-toggle-icon"
+                              role="button"
+                              tabindex="0"
+                              aria-label="Show password">
                             <i class="bx bx-hide"></i>
-
                         </span>
 
                     </div>

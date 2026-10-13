@@ -25,6 +25,7 @@ namespace Partnerly.Models.DataTable
         public DataTableAlignment Alignment { get; set; } = DataTableAlignment.Left;
         public string? CssClass { get; set; }
         public List<DataTableConditionalStyle> ConditionalStyles { get; set; }  = new List<DataTableConditionalStyle>();
+        public List<DataTableColumnValueMapping> ValueMappings { get; set; } = new();
 
     }
 
@@ -47,5 +48,12 @@ namespace Partnerly.Models.DataTable
         Left,
         Center,
         Right
+    }
+
+    public class DataTableColumnValueMapping
+    {
+        public string Value { get; set; } = string.Empty;
+
+        public string Label { get; set; } = string.Empty;
     }
 }

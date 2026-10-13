@@ -69,6 +69,19 @@ namespace Partnerly.Models
                     x.IsDeleted
                 });
 
+            modelBuilder.Entity<SupportTicket>()
+               .HasOne(st => st.Creator)
+               .WithMany()
+               .HasForeignKey(st => st.CreatedBy)
+               .OnDelete(DeleteBehavior.Restrict);
+
+            modelBuilder.Entity<SupportTicket>()
+                .HasOne(st => st.Assigned)
+                .WithMany()
+                .HasForeignKey(st => st.AssignedTo)
+                .OnDelete(DeleteBehavior.Restrict);
+
+
             base.OnModelCreating(modelBuilder);
         }
 

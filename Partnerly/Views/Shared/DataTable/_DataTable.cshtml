@@ -762,6 +762,12 @@
                                     alignment = column.Alignment.ToString(),
                                     cssClass = column.CssClass,
 
+                                    valueMappings = column.ValueMappings.Select(option => new
+                                            {
+                                                    value = option.Value,
+                                                    label = option.Label
+                                            }),
+
                                     conditionalStyles = column.ConditionalStyles == null
                                     ? null
                                     : column.ConditionalStyles.Select(x => new

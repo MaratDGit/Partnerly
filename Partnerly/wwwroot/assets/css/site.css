@@ -26,3 +26,12 @@
     color: #dc3545 !important;
     font-weight: 700;
 }
+
+.password-toggle-icon {
+    cursor: pointer;
+    user-select: none;
+}
+
+.password-toggle-icon i {
+    font-size: 1.1rem;
+}
