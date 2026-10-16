@@ -68,7 +68,6 @@ namespace Partnerly.Models.ViewModels
         #endregion
 
         public DataTableOptions tickets { get; set; } = new DataTableOptions();
-
         public static DataTableOptions CreateTableOptions(string tableID, IDataTableRegistry _dataTableRegistry)
         {
             var options = new DataTableOptions();

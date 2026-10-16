@@ -16,5 +16,6 @@ namespace Partnerly.Infrastructure.Interfaces
         Task<ServiceResult<Notification?>> MarkAllReadAsync(Guid? userID);
         Task SendNotification(string userId, Notification notification);
         Task UpdateUnreadCount(string userId, int count);
+        IQueryable<Notification> QueryEntity(IEnumerable<string> fields);
     }
 }

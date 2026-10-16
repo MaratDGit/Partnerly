@@ -117,6 +117,7 @@
             no: @Html.Raw(Json.Serialize(Localizer["DataTableNo"].Value)),
             actions: @Html.Raw(Json.Serialize(Localizer["DataTableActions"].Value))
         };
+
         const attachementLocalization = {
                 ailedtoloadattachments: @Html.Raw(Json.Serialize(Localizer["Failedtoloadattachments"].Value)),
                 Failedtoloadattachments: @Html.Raw(Json.Serialize(Localizer["Failedtoloadattachments"].Value)),
@@ -133,12 +134,7 @@
     <script src="~/assets/js/field-lookup.js"></script>
     <link rel="stylesheet" href="~/assets/css/field-lookup.css" />
 
-    <!-- DataTables -->
-    <link rel="stylesheet" href="~/lib/jquery/customdatatable/data-table.css" />
-    <script src="~/lib/jquery/customdatatable/data-table.js"></script>
-    <script src="~/lib/jquery/datatables/site-datatable.js"></script>
-
-    <!-- DataTable - 2 -->
+    <!-- DataTable -->
     <link rel="stylesheet" href="~/assets/css/partnerly-data-table.css" />
 
     <script src="~/js/datatable/modules/core.js"></script>

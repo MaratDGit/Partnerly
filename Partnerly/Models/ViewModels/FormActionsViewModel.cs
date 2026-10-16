@@ -1,5 +1,4 @@
-﻿using Microsoft.EntityFrameworkCore.Metadata;
-using Partnerly.Descriptors.Messages;
+﻿using Partnerly.Descriptors.Messages;
 
 namespace Partnerly.Models.ViewModels
 {

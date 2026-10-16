@@ -448,6 +448,7 @@
         max-width: 0;
         overflow: hidden;
         text-overflow: ellipsis;
+        white-space: nowrap;
     }
 
     .data-table-wrapper table thead th {
@@ -493,8 +494,8 @@
     color: var(--dt-text-secondary);
     font-size: 12px;
     text-align: left;
-    white-space: normal;
-    overflow-wrap: anywhere;
+    white-space: nowrap;
+    overflow-wrap: normal;
     word-break: normal;
     vertical-align: middle;
     box-sizing: border-box;

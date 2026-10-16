@@ -2,33 +2,37 @@
 using Microsoft.Extensions.Localization;
 using Partnerly.Descriptors.Attributes;
 using Partnerly.Descriptors.Attributes.BaseAttributes;
-using Partnerly.Descriptors.Messages;
 using Partnerly.Events.BaseEvents;
 using Partnerly.Helpers;
 using Partnerly.Infrastructure.Interfaces;
-using Partnerly.Models;
 using Partnerly.Models.DataTable;
-using Partnerly.Models.GridViews;
 using Partnerly.Models.ViewModels;
 using System.Security.Claims;
-using System.Text.Json;
 
 namespace Partnerly.Controllers
 {
     [ClaimAuthorize(ClaimTypes.Role, RoleTypeAttribute.Admin)]
     public class LogRecordsController : _BaseController
     {
-        public LogRecordsController(IEventBus eventBus, IUserService userService, ICurrentUserService currentUser, ILogService logService, 
-            IStringLocalizer<SharedResource> localizer, ISystemSettingsService systemSettingsService, 
-            DataTableQueryService tableService, IDataTableRegistry dataTableRegistry)
+        public LogRecordsController(
+            IEventBus eventBus, 
+            IUserService userService, 
+            ICurrentUserService currentUser, 
+            ILogService logService, 
+            IStringLocalizer<SharedResource> localizer, 
+            ISystemSettingsService systemSettingsService, 
+            DataTableQueryService tableService, 
+            IDataTableRegistry dataTableRegistry)
         : base(eventBus, userService, currentUser, logService, localizer, systemSettingsService, tableService, dataTableRegistry)
         {
         }
-        private static List<User> _users = new List<User>();
-        public async Task<IActionResult> Index()
+
+        public IActionResult Index()
         {
-            _users = (List<User>)await _userService.GetAllUsersAsync();
-            return View();
+            LogsViewModel model = new LogsViewModel();
+            model.logs = LogsViewModel.CreateTableOptions(DataTableNames.logsTable, _dataTableRegistry);
+
+            return View(model);
         }
 
         public async Task<IActionResult> View(Guid id)
@@ -45,113 +49,73 @@ namespace Partnerly.Controllers
         }
 
         [HttpGet]
-        public async Task<JsonResult> GetData(string tableModel)
+        public async Task<IActionResult> Data([FromQuery] DataTableRequest request)
         {
-            if (tableModel == nameof(Partnerly.Models.Log))
+            if (string.IsNullOrWhiteSpace(request.TableID))
             {
-                return await GetGridDataAsync<LogGridViewModel, Log>("Log");
+                return BadRequest(new
+                {
+                    success = false,
+                    message = "Table ID is required."
+                });
             }
 
-            return Json(new { fields = new object[0], data = new object[0] });
-        }
+            var options = _dataTableRegistry.Get(request.TableID);
 
-        protected override List<GridAction> GetDefaultActions(object row)
-        {
-            if (row is LogGridViewModel logRow)
+            if (options == null)
             {
-                return new List<GridAction> 
+                return BadRequest(new
                 {
-                    new GridAction { Name = "View", DisplayName = FieldsDisplayNames.Details, IsVisible = HasPermision(RoleTypeAttribute.Update), UrlTemplate = "/LogRecords/View/{id}", CssClass = "dropdown-item", Icon = "bx bx-show me-1" },
-                };
+                    success = false,
+                    message = "Unknown table."
+                });
+            }
+
+            if (request.TableID == DataTableNames.logsTable)
+            {
+                var res = await _tableService.ExecuteAsync(
+                   fields => _logService.QueryEntity(fields),
+                   request,
+                   options);
+
+                return Json(res);
             }
             else
             {
-                return base.GetDefaultActions(row);
-            }
-        }
-
-        protected override async Task<IEnumerable<TEntity>> GetEntitiesAsync<TEntity>()
-        {
-            if (typeof(TEntity) == typeof(Log))
-            { 
-                var result = await _logService.GetAllLogsAsync();
-                return (IEnumerable<TEntity>)result.OrderByDescending(_ => _.CreatedDate);
-            }
-
-            return Enumerable.Empty<TEntity>();
-        }
-
-        protected override List<GridField> GetFields(object row)
-        {
-            var fields = new List<GridField>();
-            if (row is LogGridViewModel logRow)
-            {
-                return new List<GridField>
+                return BadRequest(new
                 {
-                    new GridField { FieldName = "select", DisplayName = $"", DefaultValue = false, Type = "checkbox"},
-                    new GridField { FieldName = "actionView", DisplayName = FieldsDisplayNames.Action, LinkTemplate = "/LogRecords/View/{id}" },
-                    new GridField 
-                    { 
-                        FieldName = "typeView", DisplayName = FieldsDisplayNames.Type, IsFilterable = true,
-                        ValueStyles = new Dictionary<string, GridValueStyle>
-                        {
-                            [FieldsDisplayNames.Information] = new() { CssClass = "badge bg-label-success fs-tiny rounded-pill ms-auto text-uppercase"},
-                            [FieldsDisplayNames.Warning] = new() { CssClass = "badge bg-label-warning fs-tiny rounded-pill ms-auto text-uppercase" },
-                            [FieldsDisplayNames.Error] = new() { CssClass = "badge bg-label-warning fs-tiny rounded-pill ms-auto text-uppercase" },
-                            [FieldsDisplayNames.Critical] = new() { CssClass = "badge bg-label-danger fs-tiny rounded-pill ms-auto text-uppercase" },
-                        }
-                    },
-                    new GridField { FieldName = "logMessage", DisplayName = FieldsDisplayNames.Message },
-                    //new GridField { FieldName = "filePath", DisplayName = FieldsDisplayNames.FilePath, DefaultValue = "" },
-                    //new GridField { FieldName = "method", DisplayName = FieldsDisplayNames.Method},
-                    //new GridField { FieldName = "lineNumber", DisplayName = FieldsDisplayNames.LineNumber},
-                    new GridField { FieldName = "creatorUserName", DisplayName = FieldsDisplayNames.CreatorName },
-                    new GridField { FieldName = "createdDate", DisplayName = FieldsDisplayNames.CreatedDate, IsFilterable = true, Format="date:lastActivity"},
-                };
+                    success = false,
+                    message = "Unknown table."
+                });
             }
-
-            return fields;
         }
 
-        protected override async Task CustomizeRowAsync(object row)
+        [HttpGet]
+        public async Task<IActionResult> Export([FromQuery] DataTableRequest request, [FromQuery] string format = "csv")
         {
-            if (row is LogGridViewModel logRow && logRow != null)
-            {
-                if (logRow.CreatedBy != null)
+            if (string.IsNullOrWhiteSpace(request.TableID))
+                return BadRequest(new
                 {
-                    //var creator = await _userService.GetUserByIDAsync(logRow.CreatedBy);
-                    var creator = _users.FirstOrDefault(_ => _.Id == logRow.CreatedBy);
-                    logRow.CreatorUserName = $"{creator?.FirstName} {creator?.LastName}";
-                }
+                    success = false,
+                    message = "Table ID cannot be found."
+                });
 
-                if (logRow.CreatedDate != null)
-                    logRow.CreatedDate = logRow.CreatedDate.Value.ToLocalTime();
-            }
-        }
-
-        [HttpPost]
-        public async Task<IActionResult> ExportToExcel([FromForm] string selectedIds)
-        {
-            if (!string.IsNullOrWhiteSpace(selectedIds))
+            if (request.TableID == DataTableNames.logsTable)
             {
-                var ids = JsonSerializer.Deserialize<List<Guid>>(selectedIds);
-                if (ids.Count > 0)
-                {
-                    var logs = await _logService.GetAllLogsAsync();
-                    var data = logs.Where(x => ids.Contains(x.Id)).ToList();
-
-                    return await ExportToExcel(data, "logs.xlsx");
-                }
+                return await ExportTableAsync(
+                            request,
+                            format,
+                            fields => _logService.QueryEntity(fields),
+                            "logs");
             }
-            return BadRequest("No records selected.");
-        }
-
-        [HttpPost]
-        public async Task<IActionResult> ExportAllToExcel([FromForm] string data)
-        {
-            //var allData = JsonSerializer.Deserialize<List<LoginViewModel>>(data);
-            var logs = await _logService.GetAllLogsAsync();
-            return await ExportToExcel(logs, "logs.xlsx");
+            else
+            {
+                return BadRequest(new
+                {
+                    success = false,
+                    message = "Unknown table."
+                });
+            }
         }
     }
 }

@@ -1260,3 +1260,58 @@ input[type="radio"] {
         font-size: 10px;
     }
 }
+
+
+/* =========================================================
+   PARTNERLY - FULL HEIGHT CARD
+   Fixed Navbar / Sidebar / Footer
+   Scroll inside Card Body
+   ========================================================= */
+
+@media (min-width: 1200px) {
+
+    /* Available content area between navbar and footer */
+    .partnerly-layout-content {
+        display: flex;
+        flex-direction: column;
+        flex: 1 1 0;
+        min-width: 0;
+        min-height: 0;
+        padding: 20px;
+        overflow: hidden;
+        box-sizing: border-box;
+    }
+
+        /* Card fills the available area */
+        .partnerly-layout-content > .card {
+            display: flex;
+            flex: 1 1 0;
+            flex-direction: column;
+            min-width: 0;
+            min-height: 0;
+            width: 100%;
+            margin: 0;
+            overflow: hidden;
+        }
+
+            /* Card header stays visible */
+            .partnerly-layout-content > .card > .card-header {
+                flex: 0 0 auto;
+            }
+
+            /* Scroll only inside the card body */
+            .partnerly-layout-content > .card > .card-body {
+                flex: 1 1 0;
+                min-height: 0;
+                min-width: 0;
+                overflow-y: auto;
+                overflow-x: auto;
+                overscroll-behavior: contain;
+                scrollbar-gutter: stable;
+            }
+
+                /* Allow long forms to define their natural height */
+                .partnerly-layout-content > .card > .card-body > form {
+                    min-width: 0;
+                }
+}

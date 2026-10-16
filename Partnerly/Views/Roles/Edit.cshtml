@@ -15,10 +15,9 @@
         <form id="emailTemplateForm" asp-action="Edit">
             
             @await Html.PartialAsync("_StickyButtons", new Partnerly.Models.ViewModels.FormActionsViewModel {
-                Back = new Partnerly.Models.ViewModels.ActionBack(id: Model.Id, visible: true, fromController: "Roles", toController: "Roles", fromAction: "Edit", toAction: "Index"),
+                Back = new Partnerly.Models.ViewModels.ActionBack(id: Model.Id, visible: true, fromController: "Roles", toController: "Users", fromAction: "Edit", toAction: "Index"),
                 Undo = new Partnerly.Models.ViewModels.ActionUndo(id: Model.Id, visible: true, fromController: "Roles", toController: "Roles", fromAction: "Edit", toAction: "Edit"),
                 Save = new Partnerly.Models.ViewModels.ActionSave(id: Model.Id, visible: true, fromController: "Roles", toController: "Roles", fromAction: "Edit", toAction: "Edit"),
-                Attachements = new Partnerly.Models.ViewModels.ActionAttachements(entityType: "Role", entityId: Model.Id, visible: true),
                 Note = new Partnerly.Models.ViewModels.ActionNote(visible: true, note: Model.Note, id: Model.Id),
                 Menu = new Partnerly.Models.ViewModels.ActionMenu(visible: true),
                 MenuActions = new List<Partnerly.Models.ViewModels.MenuItemAction> {

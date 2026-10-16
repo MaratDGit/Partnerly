@@ -13,7 +13,16 @@ namespace Partnerly.Controllers
     {
         private readonly IAttachmentService _attachmentService;
 
-        public AttachmentsController(IEventBus eventBus, IUserService userService, ICurrentUserService currentUser, IAttachmentService attachmentService, ILogService logService, IStringLocalizer<SharedResource> localizer, ISystemSettingsService systemSettingsService, DataTableQueryService tableService, IDataTableRegistry dataTableRegistry)
+        public AttachmentsController(
+            IEventBus eventBus, 
+            IUserService userService, 
+            ICurrentUserService currentUser, 
+            IAttachmentService attachmentService, 
+            ILogService logService, 
+            IStringLocalizer<SharedResource> localizer, 
+            ISystemSettingsService systemSettingsService, 
+            DataTableQueryService tableService, 
+            IDataTableRegistry dataTableRegistry)
         : base(eventBus, userService, currentUser, logService, localizer, systemSettingsService, tableService, dataTableRegistry)
         {
             _attachmentService = attachmentService;
@@ -23,15 +32,13 @@ namespace Partnerly.Controllers
         {
             AttachmentViewModel model = new AttachmentViewModel();
             model.attachments = AttachmentViewModel.CreateTableOptions(DataTableNames.attachmentsTable, _dataTableRegistry);
+            
             return View(model);
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Upload(
-            List<IFormFile> files,
-            string entityType,
-            Guid entityId)
+        public async Task<IActionResult> Upload(List<IFormFile> files, string entityType, Guid entityId)
         {
             if (files == null || files.Count == 0)
                 return BadRequest("No files were uploaded.");
@@ -49,10 +56,7 @@ namespace Partnerly.Controllers
                 if (file == null || file.Length == 0)
                     continue;
 
-                var attachment = await _attachmentService.UploadAsync(
-                    file,
-                    entityType,
-                    entityId);
+                var attachment = await _attachmentService.UploadAsync(file, entityType, entityId);
 
                 attachments.Add(new
                 {
@@ -71,9 +75,7 @@ namespace Partnerly.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> Get(
-            string entityType,
-            Guid entityId)
+        public async Task<IActionResult> Get(string entityType, Guid entityId)
         {
             if (string.IsNullOrWhiteSpace(entityType))
                 return BadRequest("Entity type is required.");
@@ -81,9 +83,7 @@ namespace Partnerly.Controllers
             if (entityId == Guid.Empty)
                 return BadRequest("Entity ID is required.");
 
-            var attachments = await _attachmentService.GetAsync(
-                entityType,
-                entityId);
+            var attachments = await _attachmentService.GetAsync(entityType, entityId);
 
             return Json(attachments.Select(x => new
             {

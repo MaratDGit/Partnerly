@@ -8,10 +8,8 @@ using Partnerly.Infrastructure.Interfaces;
 using Partnerly.Infrastructure.Services;
 using Partnerly.Models;
 using Partnerly.Models.DataTable;
-using Partnerly.Models.GridViews;
 using Partnerly.Models.ViewModels;
 using System.Security.Claims;
-using System.Text.Json;
 
 namespace Partnerly.Controllers
 {
@@ -19,15 +17,22 @@ namespace Partnerly.Controllers
     public class RolesController : _BaseController
     {
         protected readonly IRoleService _roleService;
-        public RolesController(IEventBus eventBus, IUserService userService, ICurrentUserService currentUser,
-            ILogService logService, IRoleService roleService, IStringLocalizer<SharedResource> localizer, 
-            ISystemSettingsService systemSettingsService, DataTableQueryService tableService, IDataTableRegistry dataTableRegistry)
+        public RolesController(
+            IEventBus eventBus, 
+            IUserService userService, 
+            ICurrentUserService currentUser,
+            ILogService logService, 
+            IRoleService roleService, 
+            IStringLocalizer<SharedResource> localizer, 
+            ISystemSettingsService systemSettingsService, 
+            DataTableQueryService tableService, 
+            IDataTableRegistry dataTableRegistry)
         : base(eventBus, userService, currentUser, logService, localizer, systemSettingsService, tableService, dataTableRegistry)
         {
             _roleService = roleService;
         }
 
-        public async Task<IActionResult> Index()
+        public IActionResult Index()
         {
             return View();
         }
@@ -100,7 +105,7 @@ namespace Partnerly.Controllers
         {
             if (fieldName == "Name")
             {
-                List<UserRolesGridViewModel> userRolesList = new List<UserRolesGridViewModel>();
+                List<UserRolesViewModel> userRolesList = new List<UserRolesViewModel>();
                 var roles = await _roleService.GetAllRolesAsync();
                 var users = await _userService.GetAllUsersAsync();
 
@@ -114,7 +119,7 @@ namespace Partnerly.Controllers
                     }
                     if (roleName != null)
                     {
-                        UserRolesGridViewModel row = new UserRolesGridViewModel
+                        UserRolesViewModel row = new UserRolesViewModel
                         {
                             Id = user.Id,
                             UserName = $"{user.FirstName} {user.LastName}",
@@ -123,7 +128,7 @@ namespace Partnerly.Controllers
                             OldRoleId = user.RoleId,
                             OldRoleName = roleName,
                         };
-                        row.Actions = GetRowActions(row, "Roles");
+                        
                         userRolesList.Add(row);
                     }
                 }
@@ -142,107 +147,6 @@ namespace Partnerly.Controllers
             }
 
             return Json(new { });
-        }
-
-        [HttpGet]
-        public async Task<JsonResult> GetData(string tableModel)
-        {
-            List<UserRolesGridViewModel> userRolesList = new List<UserRolesGridViewModel>();
-
-            if (tableModel == "UserRoles")
-            {
-                var roles = await _roleService.GetAllRolesAsync();
-                var users = await _userService.GetAllUsersAsync();
-                
-                foreach (User? user in users)
-                {
-                    string? roleName = user?.Role?.Name;
-                    if (roleName == null)
-                    {
-                        var role = roles.FirstOrDefault(_ => _.Id == user.RoleId);
-                        roleName = role?.Name;
-                    }
-                    if (roleName != null)
-                    {
-                        UserRolesGridViewModel row = new UserRolesGridViewModel
-                        {
-                            Id = user.Id,
-                            UserName = $"{user.FirstName} {user.LastName}",
-                            Email = user.Email,
-                            Phone = user.Phone,
-                            OldRoleId = user.RoleId,
-                            OldRoleName = roleName,
-                        };
-                        row.Actions = GetRowActions(row, "Roles");
-                        userRolesList.Add(row);
-                    }
-                }
-            }
-
-            if (userRolesList.Any())
-            {
-                return Json(new { fields = GetFields(userRolesList.First()), data = userRolesList });
-            }
-
-            return Json(new {});
-        }
-
-        protected override List<GridField> GetFields(object row)
-        {
-            var fields = new List<GridField>();
-            if (row is UserRolesGridViewModel)
-            {
-                return new List<GridField>
-                {
-                    new GridField { FieldName = "select", DisplayName = $"", DefaultValue = false, Type = "checkbox"},
-                    new GridField { FieldName = "userName", DisplayName = FieldsDisplayNames.User },
-                    new GridField { FieldName = "oldRoleName", DisplayName = FieldsDisplayNames.Role, IsFilterable = true, LinkTemplate = "/Roles/Edit/{id}"},
-                    new GridField { FieldName = "email", DisplayName = FieldsDisplayNames.Email },
-                    new GridField { FieldName = "phone", DisplayName = FieldsDisplayNames.Phone, Format = "phone:"},
-                };
-            }
-
-            return fields;
-        }
-
-        protected override List<GridAction> GetDefaultActions(object row)
-        {
-            if (row is UserRolesGridViewModel logRow)
-            {
-                return new List<GridAction>
-                {
-                   new GridAction { Name = "Edit", DisplayName = FieldsDisplayNames.Edit, IsVisible = HasPermision(RoleTypeAttribute.Update), UrlTemplate = "/Roles/Edit/{id}", CssClass = "dropdown-item", Icon = "bx bx-edit-alt me-1" },
-                };
-            }
-            else
-            {
-                return base.GetDefaultActions(row);
-            }
-        }
-
-        [HttpPost]
-        public async Task<IActionResult> ExportToExcel([FromForm] string selectedIds)
-        {
-            if (!string.IsNullOrWhiteSpace(selectedIds))
-            {
-                var ids = JsonSerializer.Deserialize<List<Guid>>(selectedIds);
-                if (ids.Count > 0)
-                {
-                    var roles = await _roleService.GetAllRolesAsync();
-                    var data = roles.Where(x => ids.Contains(x.Id)).ToList();
-
-                    return await ExportToExcel(data, "roles.xlsx");
-                }
-            }
-            return BadRequest("No records selected.");
-        }
-
-        [HttpPost]
-        public async Task<IActionResult> ExportAllToExcel([FromForm] string data)
-        {
-            //var allData = JsonSerializer.Deserialize<List<UserViewModel>>(data);
-            var roles = await _roleService.GetAllRolesAsync();
-            return await ExportToExcel(roles, "roles.xlsx");
         }
     }
 }

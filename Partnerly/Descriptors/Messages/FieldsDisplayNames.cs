@@ -154,5 +154,6 @@ namespace Partnerly.Descriptors.Messages
         public static string Add => Messages.Get(nameof(Add));
         public static string Templates => Messages.Get(nameof(Templates));
         public static string Tasks => Messages.Get(nameof(Tasks));
+        public static string Notifications => Messages.Get(nameof(Notifications));
     }
 }

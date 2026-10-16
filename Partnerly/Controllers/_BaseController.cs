@@ -2,16 +2,12 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
 using Microsoft.Extensions.Localization;
-using OfficeOpenXml;
 using Partnerly.Descriptors.Attributes;
 using Partnerly.Descriptors.Messages;
 using Partnerly.Events.BaseEvents;
-using Partnerly.Helpers;
 using Partnerly.Infrastructure.Interfaces;
-using Partnerly.Infrastructure.Services;
 using Partnerly.Models;
 using Partnerly.Models.DataTable;
-using Partnerly.Models.GridViews;
 
 namespace Partnerly.Controllers
 {
@@ -23,13 +19,19 @@ namespace Partnerly.Controllers
         protected readonly ICurrentUserService _currentUser;
         protected readonly ILogService _logService;
         protected readonly IStringLocalizer<SharedResource> _localizer;
-        private readonly ISystemSettingsService _systemSettingsService;
         protected readonly DataTableQueryService _tableService;
         protected readonly IDataTableRegistry _dataTableRegistry;
+        protected readonly ISystemSettingsService _systemSettingsService;
 
-        public _BaseController(IEventBus eventBus, IUserService userService, 
-            ICurrentUserService currentUser, ILogService logService, IStringLocalizer<SharedResource> localizer, 
-            ISystemSettingsService systemSettingsService, DataTableQueryService tableService, IDataTableRegistry dataTableRegistry)
+        public _BaseController(
+            IEventBus eventBus, 
+            IUserService userService, 
+            ICurrentUserService currentUser, 
+            ILogService logService, 
+            IStringLocalizer<SharedResource> localizer, 
+            ISystemSettingsService systemSettingsService, 
+            DataTableQueryService tableService, 
+            IDataTableRegistry dataTableRegistry)
         {
             _eventBus = eventBus;
             _userService = userService;
@@ -179,115 +181,5 @@ namespace Partnerly.Controllers
                 "text/csv; charset=utf-8",
                 csvFileName);
         }
-
-        #region Data Grid Related Functions
-        #region Default Actions
-        protected virtual List<GridAction> GetDefaultActions(object row)
-        {
-            return new List<GridAction>
-            {
-                new GridAction { Name = "Edit", DisplayName = FieldsDisplayNames.Edit, IsVisible = HasPermision(RoleTypeAttribute.Update), UrlTemplate = "/{controller}/Edit/{id}", CssClass = "dropdown-item", Icon = "bx bx-edit-alt me-1" },
-                new GridAction { Name = "Delete", DisplayName = FieldsDisplayNames.Delete, IsVisible = HasPermision(RoleTypeAttribute.Delete), UrlTemplate = "/{controller}/Delete/{id}", CssClass = "dropdown-item", Icon = "bx bx-trash me-1" }
-            };
-        }
-        #endregion
-
-        #region Fields
-        protected virtual List<GridField> GetFields(object row)
-        {
-            return new List<GridField>();
-        }
-        #endregion
-
-        #region Entities
-        protected virtual Task<IEnumerable<TEntity>> GetEntitiesAsync<TEntity>() where TEntity : class
-        {
-            return Task.FromResult(Enumerable.Empty<TEntity>());
-        }
-
-        #endregion
-
-        #region Row Actions
-        protected virtual List<GridAction> GetRowActions<TViewModel>(TViewModel row, string controllerName)
-        {
-            return GetDefaultActions(row).Select(a => new GridAction
-            {
-                Name = a.Name,
-                DisplayName = a.DisplayName,
-                IsVisible = a.IsVisible,
-                UrlTemplate = a.UrlTemplate?.Replace("{id}", row.GetType().GetProperty("Id")?.GetValue(row)?.ToString() ?? "")
-                                           .Replace("{controller}", controllerName),
-                CssClass = a.CssClass,
-                Icon = a.Icon,
-                Attr = a.Attr
-            }).ToList();
-        }
-        #endregion
-
-        #region GetGridData
-        protected virtual async Task<JsonResult> GetGridDataAsync<TViewModel, TEntity>(string controllerName)
-            where TViewModel : class, new()
-            where TEntity : class
-        {
-            var entities = await GetEntitiesAsync<TEntity>();
-            var list = new List<TViewModel>();
-
-            if (entities != null && entities.Any())
-            {
-                list = await PropertyActionsHelper.CopyPropertiesListAsync<TEntity, TViewModel>(entities.ToList(), list);
-
-                foreach (var row in list)
-                {
-                    row.GetType().GetProperty("Actions")?.SetValue(row, GetRowActions(row, controllerName));
-                    await CustomizeRowAsync(row);
-                }
-            }
-
-            return Json(new
-            {
-                fields = GetFields(list.FirstOrDefault()),
-                data = list
-            });
-        }
-        protected virtual Task CustomizeRowAsync(object row)
-        {
-            return Task.CompletedTask;
-        }
-        #endregion
-
-        public async Task<IActionResult> ExportToExcel<T>(IEnumerable<T> data, string excelFileName)
-        {
-            ExcelPackage.License.SetNonCommercialOrganization("Branch Armenia");
-
-            using (var package = new ExcelPackage())
-            {
-                var ws = package.Workbook.Worksheets.Add("Export");
-
-                var properties = typeof(T).GetProperties();
-                for (int i = 0; i < properties.Length; i++)
-                {
-                    ws.Cells[1, i + 1].Value = properties[i].Name;
-                    ws.Cells[1, i + 1].Style.Font.Bold = true;
-                }
-
-                int row = 2;
-                foreach (var item in data)
-                {
-                    for (int col = 0; col < properties.Length; col++)
-                    {
-                        ws.Cells[row, col + 1].Value = properties[col].GetValue(item);
-                    }
-                    row++;
-                }
-
-                ws.Cells[ws.Dimension.Address].AutoFitColumns();
-
-                var fileContent = package.GetAsByteArray();
-                return File(fileContent,
-                            "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
-                            excelFileName);
-            }
-        }
-        #endregion
     }
 }

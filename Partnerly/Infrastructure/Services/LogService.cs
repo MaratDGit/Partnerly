@@ -28,6 +28,9 @@ namespace Partnerly.Infrastructure.Services
         public async Task<IEnumerable<Log?>> GetAllLogsAsync() =>
             await _logRepo.GetAllAsync();
 
+        public IQueryable<Log> QueryEntity(IEnumerable<string> fields) =>
+            _logRepo.QueryEntity(fields);
+
         public async Task<Log?> CreateLogAsync(string action, string type, string? message, [CallerMemberName] string member = "", [CallerFilePath] string file = "", [CallerLineNumber] int line = 0)
         {
             using var context = new AppDbContext(_options, _currentUserService);

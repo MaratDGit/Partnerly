@@ -1,6 +1,4 @@
-﻿using Partnerly.Models.GridViews;
-
-namespace Partnerly.Models.DataTable
+﻿namespace Partnerly.Models.DataTable
 {
     public class DataTableColumn
     {

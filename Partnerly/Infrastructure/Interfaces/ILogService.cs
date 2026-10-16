@@ -10,5 +10,6 @@ namespace Partnerly.Infrastructure.Interfaces
         Task<IEnumerable<Log?>> GetAllLogsAsync();
         Task UpdateLogAsync(Log? user);
         Task DeleteLogAsync(Guid? id);
+        IQueryable<Log> QueryEntity(IEnumerable<string> fields);
     }
 }

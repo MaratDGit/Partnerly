@@ -19,9 +19,7 @@ namespace Partnerly.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Ask(
-            [FromBody] AIRequestModel model,
-            CancellationToken cancellationToken)
+        public async Task<IActionResult> Ask([FromBody] AIRequestModel model, CancellationToken cancellationToken)
         {
             if (string.IsNullOrWhiteSpace(model.Message))
             {
@@ -34,9 +32,7 @@ namespace Partnerly.Controllers
 
             try
             {
-                var answer = await _openAIService.AskAsync(
-                    model.Message,
-                    cancellationToken);
+                var answer = await _openAIService.AskAsync(model.Message, cancellationToken);
 
                 return Json(new
                 {
@@ -54,9 +50,7 @@ namespace Partnerly.Controllers
             }
             catch (Exception ex)
             {
-                _logger.LogError(
-                    ex,
-                    "Error while processing AI request.");
+                _logger.LogError(ex, "Error while processing AI request.");
 
                 return StatusCode(500, new
                 {

@@ -36,6 +36,9 @@ namespace Partnerly.Infrastructure.Services
         public async Task<IEnumerable<Notification?>> GetAllNotificationsAsync() =>
             await _notificationRepository.GetAllAsync();
 
+        public IQueryable<Notification> QueryEntity(IEnumerable<string> fields) =>
+           _notificationRepository.QueryEntity(fields);
+
         public async Task<ServiceResult<Notification?>> MarkAsReadAsync(Guid? notificationId)
         {
             if (notificationId == null)

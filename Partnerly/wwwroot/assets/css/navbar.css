@@ -4,7 +4,7 @@
            ========================================================= */
 .partnerly-navbar-inner {
     width: 100%;
-    min-height: 60px;
+    min-height: 50px;
     display: flex;
     align-items: center;
     gap: 14px;
@@ -482,9 +482,9 @@
         display: flex;
     }
 
-    .partnerly-navbar-inner {
-        min-height: 64px;
-    }
+    /*.partnerly-navbar-inner {
+        min-height: 60px;
+    }*/
 
     .partnerly-navbar-page-title {
         display: none;

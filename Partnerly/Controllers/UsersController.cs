@@ -20,9 +20,17 @@ namespace Partnerly.Controllers
         protected readonly IRoleService _roleService;
         private readonly IInlineUpdateService _inlineUpdateService;
 
-        public UsersController(IEventBus eventBus, IRoleService roleService, IUserService userService, ICurrentUserService currentUser, 
-            ILogService logService, IStringLocalizer<SharedResource> localizer, ISystemSettingsService systemSettingsService, 
-            DataTableQueryService tableService, IDataTableRegistry dataTableRegistry, IInlineUpdateService inlineUpdateService)
+        public UsersController(
+            IEventBus eventBus, 
+            IRoleService roleService, 
+            IUserService userService, 
+            ICurrentUserService currentUser, 
+            ILogService logService, 
+            IStringLocalizer<SharedResource> localizer, 
+            ISystemSettingsService systemSettingsService, 
+            DataTableQueryService tableService, 
+            IDataTableRegistry dataTableRegistry, 
+            IInlineUpdateService inlineUpdateService)
         : base(eventBus, userService, currentUser, logService, localizer, systemSettingsService, tableService, dataTableRegistry)
         {
             _roleService = roleService;

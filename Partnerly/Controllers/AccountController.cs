@@ -3,7 +3,6 @@ using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Mvc;
 using Partnerly.Descriptors.Attributes;
 using Partnerly.Descriptors.Messages;
-using Partnerly.Events;
 using Partnerly.Events.BaseEvents;
 using Partnerly.Infrastructure.Interfaces;
 using Partnerly.Models;
@@ -28,7 +27,16 @@ namespace Partnerly.Controllers
         private readonly IWebHostEnvironment _environment;
         #endregion
         #region Constructor
-        public AccountController(IConfiguration config, ILogger<AccountController> logger, IUserService userService, ILogService logService, ICurrentUserService currentUser, IEmailSender emailSender, IEmailConfirmationTokenService tokenService, IEventBus eventBus, IWebHostEnvironment environment)
+        public AccountController(
+            IConfiguration config, 
+            ILogger<AccountController> logger, 
+            IUserService userService, 
+            ILogService logService, 
+            ICurrentUserService currentUser, 
+            IEmailSender emailSender, 
+            IEmailConfirmationTokenService tokenService, 
+            IEventBus eventBus, 
+            IWebHostEnvironment environment)
         {
             _config = config;
             _logger = logger;
@@ -529,44 +537,42 @@ namespace Partnerly.Controllers
 
         private async Task SignInUserAsync(User user, bool rememberMe)
         {
-            if (user.Role == null || user.Email == null)
+            if (user?.Role == null || user.Email == null)
                 throw new InvalidOperationException("User role or email is missing.");
 
             var claims = new List<Claim>
-    {
-        new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
-        new Claim(ClaimTypes.Name, $"{user.FirstName} {user.LastName}"),
-        new Claim(ClaimTypes.Email, user.Email),
-        new Claim(ClaimTypes.Role, user.Role.Name),
+            {
+                new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
+                new Claim(ClaimTypes.Name, $"{user.FirstName} {user.LastName}"),
+                new Claim(ClaimTypes.Email, user.Email),
+                new Claim(ClaimTypes.Role, user.Role.Name ?? RoleTypeAttribute.User),
 
-        new Claim(
-            Constants.ClaimTypeLoginTime,
-            DateTime.UtcNow.ToString("o")),
+                new Claim(
+                    Constants.ClaimTypeLoginTime,
+                    DateTime.UtcNow.ToString("o")),
 
-        new Claim(
-            Constants.ClaimTypeFirstName,
-            user.FirstName ?? ""),
+                new Claim(
+                    Constants.ClaimTypeFirstName,
+                    user.FirstName ?? ""),
 
-        new Claim(
-            Constants.ClaimTypeLastName,
-            user.LastName ?? ""),
+                new Claim(
+                    Constants.ClaimTypeLastName,
+                    user.LastName ?? ""),
 
-        new Claim(
-            Constants.ClaimTypeRoleType,
-            user.Role.Type ?? RoleTypeAttribute.View),
+                new Claim(
+                    Constants.ClaimTypeRoleType,
+                    user.Role.Type ?? RoleTypeAttribute.View),
 
-        new Claim(
-            Constants.ClaimTypeReffCode,
-            user.MyReferralCode ?? ""),
+                new Claim(
+                    Constants.ClaimTypeReffCode,
+                    user.MyReferralCode ?? ""),
 
-        new Claim(
-            Constants.ClaimTypeUserPhotoUrl,
-            user.PhotoUrl ?? Constants.DefaultUserProfilePhotoPath)
-    };
+                new Claim(
+                    Constants.ClaimTypeUserPhotoUrl,
+                    user.PhotoUrl ?? Constants.DefaultUserProfilePhotoPath)
+            };
 
-            var claimsIdentity = new ClaimsIdentity(
-                claims,
-                CookieAuthenticationDefaults.AuthenticationScheme);
+            var claimsIdentity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
 
             var authProperties = new AuthenticationProperties
             {
@@ -624,8 +630,7 @@ namespace Partnerly.Controllers
                 });
             }
 
-            var userId = User.FindFirstValue(
-                ClaimTypes.NameIdentifier);
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
 
             if (string.IsNullOrEmpty(userId))
             {
@@ -634,8 +639,7 @@ namespace Partnerly.Controllers
 
             var extension = Path.GetExtension(photo.FileName);
 
-            var fileName =
-                $"{Guid.NewGuid():N}{extension}";
+            var fileName = $"{Guid.NewGuid():N}{extension}";
 
             var uploadsFolder = Path.Combine(
                 _environment.WebRootPath,
@@ -660,7 +664,8 @@ namespace Partnerly.Controllers
                 $"/uploads/profiles/{fileName}";
 
             var user = await _userService.GetUserByIDAsync(userId);
-            if (user?.IsBlocked != true && user.IsDeleted != true)
+
+            if (user != null && user.IsBlocked != true && user.IsDeleted != true)
             {
                 user.PhotoUrl = photoUrl;
                 var result = await _userService.UpdateUserAsync(user);

@@ -17,13 +17,19 @@ namespace Partnerly.Controllers
     [ClaimAuthorize(ClaimTypes.Role, RoleTypeAttribute.Admin)]
     public class SystemPreferencesController : _BaseController
     {
-        protected readonly ISystemSettingsService _systemSettingsService;
-        public SystemPreferencesController(IEventBus eventBus, ISystemSettingsService systemSettingsService, 
-            IUserService userService, ICurrentUserService currentUser, ILogService logService, IStringLocalizer<SharedResource> localizer,
-            DataTableQueryService tableService, IDataTableRegistry dataTableRegistry)
+       
+        public SystemPreferencesController(
+            IEventBus eventBus, 
+            ISystemSettingsService systemSettingsService, 
+            IUserService userService, 
+            ICurrentUserService currentUser, 
+            ILogService logService, 
+            IStringLocalizer<SharedResource> localizer,
+            DataTableQueryService tableService, 
+            IDataTableRegistry dataTableRegistry)
         : base(eventBus, userService, currentUser, logService, localizer, systemSettingsService, tableService, dataTableRegistry)
         {
-            _systemSettingsService = systemSettingsService;
+            
         }
 
         public async Task<IActionResult> Index()

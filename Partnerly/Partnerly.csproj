@@ -40,7 +40,6 @@
     <Folder Include="wwwroot\assets\vendor\fonts\" />
     <Folder Include="wwwroot\assets\vendor\js\" />
     <Folder Include="wwwroot\assets\vendor\libs\jquery\" />
-    <Folder Include="wwwroot\fonts\iconify\" />
     <Folder Include="wwwroot\uploads\attachments\" />
     <Folder Include="wwwroot\uploads\profiles\" />
   </ItemGroup>

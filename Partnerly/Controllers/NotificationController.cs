@@ -9,11 +9,8 @@ using Partnerly.Infrastructure.Interfaces;
 using Partnerly.Infrastructure.Services;
 using Partnerly.Models;
 using Partnerly.Models.DataTable;
-using Partnerly.Models.GridViews;
 using Partnerly.Models.ViewModels;
-using System.Net.Sockets;
 using System.Security.Claims;
-using System.Text.Json;
 
 namespace Partnerly.Controllers
 {
@@ -22,18 +19,22 @@ namespace Partnerly.Controllers
         private readonly INotificationService _notificationService;
         private readonly ISupportTicketService _supportTicketService;
 
-        public NotificationController(IEventBus eventBus, IUserService userService, ICurrentUserService currentUser, 
-            ILogService logService, INotificationService notificationService, ISupportTicketService supportTicketService, 
-            IStringLocalizer<SharedResource> localizer, ISystemSettingsService systemSettingsService, 
-            DataTableQueryService tableService, IDataTableRegistry dataTableRegistry)
+        public NotificationController(
+            IEventBus eventBus, 
+            IUserService userService, 
+            ICurrentUserService currentUser, 
+            ILogService logService, 
+            INotificationService notificationService, 
+            ISupportTicketService supportTicketService, 
+            IStringLocalizer<SharedResource> localizer, 
+            ISystemSettingsService systemSettingsService, 
+            DataTableQueryService tableService, 
+            IDataTableRegistry dataTableRegistry)
         : base(eventBus, userService, currentUser, logService, localizer, systemSettingsService, tableService, dataTableRegistry)
         {
             _notificationService = notificationService;
             _supportTicketService = supportTicketService;
         }
-
-        private static List<User> _users = new List<User>();
-        private static List<SupportTicket> _supportTicket = new List<SupportTicket>();
 
         [HttpPost]
         public async Task<IActionResult> MarkAsRead(Guid? id)
@@ -58,11 +59,12 @@ namespace Partnerly.Controllers
             return Ok();
         }
 
-        public async Task<IActionResult> Index()
+        public IActionResult Index()
         {
-            _supportTicket = (List<SupportTicket>)await _supportTicketService.GetAllSupportTicketAsync();
-            _users = (List<User>)await _userService.GetAllUsersAsync();
-            return View();
+            NotificationsViewModel model = new NotificationsViewModel();
+            model.notifications = NotificationsViewModel.CreateTableOptions(DataTableNames.notificationsTable, _dataTableRegistry);
+
+            return View(model);
         }
 
         [ClaimAuthorize(ClaimTypes.Role, RoleTypeAttribute.Admin)]
@@ -209,93 +211,75 @@ namespace Partnerly.Controllers
             return Json(new { });
         }
 
-        #region Grids 
+
         [HttpGet]
-        public async Task<JsonResult> GetData(string tableModel)
+        public async Task<IActionResult> Data([FromQuery] DataTableRequest request)
         {
-            if (tableModel == nameof(Partnerly.Models.Notification))
+            if (string.IsNullOrWhiteSpace(request.TableID))
             {
-                return await GetGridDataAsync<NotificationsGridView, Notification>("Notification");
-            }
-
-            return Json(new { fields = new object[0], data = new object[0] });
-        }
-
-        protected override async Task<IEnumerable<TEntity>> GetEntitiesAsync<TEntity>()
-        {
-            if (typeof(TEntity) == typeof(Notification))
-                return (IEnumerable<TEntity>)await _notificationService.GetAllNotificationsAsync();
-
-            return Enumerable.Empty<TEntity>();
-        }
-
-        protected override List<GridField> GetFields(object row)
-        {
-            var fields = new List<GridField>();
-            if (row is NotificationsGridView templateRow)
-            {
-                return new List<GridField>
+                return BadRequest(new
                 {
-                    new GridField { FieldName = "select", DisplayName = $"", DefaultValue = false, Type = "checkbox"},
-                    new GridField { FieldName = "message", DisplayName = FieldsDisplayNames.Message, LinkTemplate = "/Notification/Edit/{id}" },
-                    new GridField
-                    {
-                        FieldName = "type", DisplayName = FieldsDisplayNames.Type, IsSortable = true, IsFilterable = true,
-
-                        ValueStyles = new Dictionary<string, GridValueStyle>
-                        {
-                            [FieldsDisplayNames.Error] = new() { CssClass = "badge bg-label-danger fs-tiny rounded-pill ms-auto text-uppercase"},
-                            [FieldsDisplayNames.Success] = new() { CssClass = "badge bg-label-success fs-tiny rounded-pill ms-auto text-uppercase" },
-                            [FieldsDisplayNames.Information] = new() { CssClass = "badge bg-label-success fs-tiny rounded-pill ms-auto text-uppercase" },
-                            [FieldsDisplayNames.Warning] = new() { CssClass = "badge bg-label-warning fs-tiny rounded-pill ms-auto text-uppercase" },
-                        }
-                    },
-                    new GridField { FieldName = "isRead", DisplayName = FieldsDisplayNames.IsRead, Type = "checkbox", IsSortable = true, IsFilterable = true},
-                    new GridField { FieldName = "createdByUserFullName", DisplayName = FieldsDisplayNames.CreatorName, IsVisible = true, IsSortable = true, IsFilterable = true,  LinkTemplate = "/Users/Edit/{createdBy}" },
-                    new GridField { FieldName = "ownerUserFullName", DisplayName = FieldsDisplayNames.Owner, IsVisible = true, IsFilterable = true, IsSortable = true, LinkTemplate = "/Users/Edit/{userId}" },
-                    new GridField { FieldName = "ticketNumber", DisplayName = FieldsDisplayNames.TaskNumber, IsSortable = true, IsFilterable = true, LinkTemplate = "/SupportTickets/Edit/{ticketID}" },
-                    new GridField { FieldName = "createdDate", DisplayName = FieldsDisplayNames.CreatedDate, IsSortable = true, IsFilterable = true, Format="date:lastActivity" }
-                };
+                    success = false,
+                    message = "Table ID is required."
+                });
             }
-            return fields;
-        }
 
-        protected override async Task CustomizeRowAsync(object row)
-        {
-            if (row is NotificationsGridView templateRow)
+            var options = _dataTableRegistry.Get(request.TableID);
+
+            if (options == null)
             {
-                //var creator = await _userService.GetUserByIDAsync(templateRow.CreatedBy); // ahagin dandaxecnuma 
-                //var owner = await _userService.GetUserByIDAsync(templateRow.UserId);
-                var creator = _users.FirstOrDefault(_ => _.Id == templateRow.CreatedBy);
-                var owner = _users.FirstOrDefault(_ => _.Id == templateRow.UserId);
-                var ticket = _supportTicket.FirstOrDefault(_ => _.Id == templateRow.TicketID);
+                return BadRequest(new
+                {
+                    success = false,
+                    message = "Unknown table."
+                });
+            }
 
-                templateRow.CreatedByUserFullName = $"{creator?.FirstName} {creator?.LastName}";
-                templateRow.OwnerUserFullName = $"{owner?.FirstName} {owner?.LastName}";
-                templateRow.TicketNumber = ticket?.TicketID;
-                templateRow.Type = AttributeDropdownHelper.GetValue<NotificationTypeAttribute>(templateRow.Type);
-                if (templateRow.CreatedDate != null)
-                    templateRow.CreatedDate = templateRow.CreatedDate.Value.ToLocalTime();
+            if (request.TableID == DataTableNames.notificationsTable)
+            {
+                var res = await _tableService.ExecuteAsync(
+                   fields => _notificationService.QueryEntity(fields),
+                   request,
+                   options);
+
+                return Json(res);
+            }
+            else
+            {
+                return BadRequest(new
+                {
+                    success = false,
+                    message = "Unknown table."
+                });
             }
         }
-  
-        [HttpPost]
-        public async Task<IActionResult> ExportToExcel([FromForm] string selectedIds)
+
+        [HttpGet]
+        public async Task<IActionResult> Export([FromQuery] DataTableRequest request, [FromQuery] string format = "csv")
         {
-            var ids = JsonSerializer.Deserialize<List<Guid>>(selectedIds);
+            if (string.IsNullOrWhiteSpace(request.TableID))
+                return BadRequest(new
+                {
+                    success = false,
+                    message = "Table ID cannot be found."
+                });
 
-            var list = await _notificationService.GetAllNotificationsAsync();
-            var data = list.Where(x => ids.Contains(x.Id)).ToList();
-
-            return await ExportToExcel(data, "NotificationsSelected.xlsx");
+            if (request.TableID == DataTableNames.notificationsTable)
+            {
+                return await ExportTableAsync(
+                            request,
+                            format,
+                            fields => _notificationService.QueryEntity(fields),
+                            "notifications");
+            }
+            else
+            {
+                return BadRequest(new
+                {
+                    success = false,
+                    message = "Unknown table."
+                });
+            }
         }
-
-        [HttpPost]
-        public async Task<IActionResult> ExportAllToExcel([FromForm] string data)
-        {
-            var list = await _notificationService.GetAllNotificationsAsync();
-            return await ExportToExcel(list, "Notifications.xlsx");
-        }
-        #endregion
     }
 }

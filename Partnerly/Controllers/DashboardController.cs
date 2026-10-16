@@ -14,18 +14,22 @@ namespace Partnerly.Controllers
 {
     public class DashboardController : _BaseController
     {
-        private readonly INotificationService _notificationService;
-        private readonly ISystemSettingsService _systemSettingsService;
-        public DashboardController(IEventBus eventBus, IUserService userService, ICurrentUserService currentUser, 
-            ILogService logService, INotificationService notificationService, ISystemSettingsService systemSettingsService, 
-            IStringLocalizer<SharedResource> localizer, DataTableQueryService tableService, IDataTableRegistry dataTableRegistry)
+        public DashboardController(
+            IEventBus eventBus, 
+            IUserService userService, 
+            ICurrentUserService currentUser, 
+            ILogService logService, 
+            INotificationService notificationService, 
+            ISystemSettingsService systemSettingsService, 
+            IStringLocalizer<SharedResource> localizer, 
+            DataTableQueryService tableService, 
+            IDataTableRegistry dataTableRegistry)
         : base(eventBus, userService, currentUser, logService, localizer, systemSettingsService, tableService, dataTableRegistry)
         {
-            _notificationService = notificationService;
-            _systemSettingsService = systemSettingsService;
+
         }
 
-        public async Task<IActionResult> Index()
+        public IActionResult Index()
         {
             var model = new DashboardViewModel
             {
@@ -146,6 +150,7 @@ namespace Partnerly.Controllers
             { 
                 var user = await _userService.GetUserByIDAsync(_currentUser.UserId);
                 var users = await _userService.GetAllUsersAsync();
+
                 if (user != null)
                 {
                     var referrer = await _userService.GetUserByIDAsync(user.ReferrerId);
@@ -159,7 +164,7 @@ namespace Partnerly.Controllers
                     model.ReferrerName = $"{referrer?.FirstName} {referrer?.LastName}";
                     model.CreatedDate = user.CreatedDate;
 
-                    foreach (var referral in users.Where(_ => _.ReferrerId == user.Id))
+                    foreach (var referral in users.Where(_ => _ != null && _.ReferrerId == user.Id))
                     {
                         model.Refferals.Add(new UserViewModel { FirstName = referral.FirstName, LastName = referral.LastName, PhotoUrl = referral.PhotoUrl, Id = referral.Id, CreatedDate = referral.CreatedDate, Phone = referral.Phone });
                     }
@@ -262,11 +267,6 @@ namespace Partnerly.Controllers
                 }
             }
             return View(model);
-        }
-
-        public async Task<IActionResult> Payments()
-        {
-            return View();
         }
     }
 }

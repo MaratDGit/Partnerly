@@ -21,9 +21,16 @@ namespace Partnerly.Controllers
         private readonly IInlineUpdateService _inlineUpdateService;
 
         public UserGroupsController(
-            IEventBus eventBus, IUserService userService, ICurrentUserService currentUser, ILogService logService, 
-            IUserGroupService userGroupService, IStringLocalizer<SharedResource> localizer, ISystemSettingsService systemSettingsService,
-            IInlineUpdateService inlineUpdateService, DataTableQueryService tableService, IDataTableRegistry dataTableRegistry)
+            IEventBus eventBus, 
+            IUserService userService, 
+            ICurrentUserService currentUser, 
+            ILogService logService, 
+            IUserGroupService userGroupService, 
+            IStringLocalizer<SharedResource> localizer, 
+            ISystemSettingsService systemSettingsService,
+            IInlineUpdateService inlineUpdateService, 
+            DataTableQueryService tableService, 
+            IDataTableRegistry dataTableRegistry)
         : base(eventBus, userService, currentUser, logService, localizer, systemSettingsService, tableService, dataTableRegistry)
         {
             _userGroupService = userGroupService;
