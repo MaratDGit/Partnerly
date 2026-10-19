@@ -25,6 +25,10 @@
         public List<DataTableConditionalStyle> ConditionalStyles { get; set; }  = new List<DataTableConditionalStyle>();
         public List<DataTableColumnValueMapping> ValueMappings { get; set; } = new();
 
+        public string? LookupUrl { get; set; }
+        public string? LookupIdField { get; set; }
+        public string? LookupTitle { get; set; }
+        public string? LookupSearchPlaceholder { get; set; }
     }
 
     public enum DataTableColumnType

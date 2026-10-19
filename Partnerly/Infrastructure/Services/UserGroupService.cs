@@ -131,5 +131,49 @@ namespace Partnerly.Infrastructure.Services
 
             return ServiceResult<UserGroup?>.Ok(userGroup);
         }
+
+        public async Task<ServiceResult<UserGroupMember?>> AddMemberAsync(Guid groupId, Guid userId)
+        {
+            var group = await _userGroupRepository.GetByIdAsync(groupId);
+
+            if (group == null)
+            {
+                return ServiceResult<UserGroupMember?>.Fail(new List<string> { "User group not found." });
+            }
+
+            var existing = await _userGroupRepository.GetMemberAsync(groupId, userId);
+
+            if (existing != null)
+            {
+                return ServiceResult<UserGroupMember?>.Fail(new List<string> { "User is already a member of this group." });
+            }
+
+            var member = new UserGroupMember
+            {
+                GroupId = groupId,
+                UserId = userId,
+                IsDeleted = false
+            };
+
+            await _userGroupRepository.AddMemberAsync(member);
+            await _userGroupRepository.SaveChangesAsync();
+
+            return ServiceResult<UserGroupMember?>.Ok(member);
+        }
+
+        public async Task<ServiceResult<UserGroupMember?>> DeleteMemberAsync(Guid groupId, Guid userId)
+        {
+            var member = await _userGroupRepository.GetMemberAsync(groupId, userId);
+
+            if (member == null)
+            {
+                return ServiceResult<UserGroupMember?>.Fail(new List<string> { "Group member not found." });
+            }
+
+            _userGroupRepository.DeleteMember(member);
+            await _userGroupRepository.SaveChangesAsync();
+
+            return ServiceResult<UserGroupMember?>.Ok(member);
+        }
     }
 }

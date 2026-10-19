@@ -107,16 +107,14 @@ namespace Partnerly.Controllers
             return false;
         }
 
-        protected async Task<T> PrepareViewModelAsync<T>(T model)
-        where T : IAuditableViewModel
+        protected async Task<T> PrepareViewModelAsync<T>(T model) where T : IAuditableViewModel
         {
             if (model == null)
                 return model;
 
             if (model.CreatedBy.HasValue)
             {
-                var creator = await _userService
-                    .GetUserByIDAsync(model.CreatedBy.Value);
+                var creator = await _userService.GetUserByIDAsync(model.CreatedBy.Value);
 
                 if (creator != null)
                 {
@@ -126,8 +124,7 @@ namespace Partnerly.Controllers
 
             if (model.UpdatedBy.HasValue)
             {
-                var updater = await _userService
-                    .GetUserByIDAsync(model.UpdatedBy.Value);
+                var updater = await _userService.GetUserByIDAsync(model.UpdatedBy.Value);
 
                 if (updater != null)
                 {
@@ -142,24 +139,15 @@ namespace Partnerly.Controllers
         {
             var options = _dataTableRegistry.Get(request.TableID);
 
-            var items = await _tableService.ExecuteExportAsync(
-                queryFactory,
-                request,
-                options);
+            var items = await _tableService.ExecuteExportAsync(queryFactory, request, options);
 
-            if (string.Equals(
-                format,
-                "excel",
-                StringComparison.OrdinalIgnoreCase))
+            if (string.Equals(format, "excel", StringComparison.OrdinalIgnoreCase))
             {
                 var excelExporter = new DataTableExcelExporter();
 
-                var bytes = excelExporter.Export(
-                    items,
-                    options.Columns);
+                var bytes = excelExporter.Export(items, options.Columns);
 
-                var excelFileName =
-                    $"{fileName}-{DateTime.Now:yyyyMMdd-HHmmss}.xlsx";
+                var excelFileName = $"{fileName}-{DateTime.Now:yyyyMMdd-HHmmss}.xlsx";
 
                 return File(
                     bytes,
@@ -169,12 +157,9 @@ namespace Partnerly.Controllers
 
             var csvExporter = new DataTableCsvExporter();
 
-            var csvBytes = csvExporter.Export(
-                items,
-                options.Columns);
+            var csvBytes = csvExporter.Export(items, options.Columns);
 
-            var csvFileName =
-                $"{fileName}-{DateTime.Now:yyyyMMdd-HHmmss}.csv";
+            var csvFileName = $"{fileName}-{DateTime.Now:yyyyMMdd-HHmmss}.csv";
 
             return File(
                 csvBytes,

@@ -173,9 +173,9 @@ namespace Partnerly.Controllers
         }
 
         [ClaimAuthorize(ClaimTypes.Role, RoleTypeAttribute.Admin)]
-        public async Task<IActionResult> Create()
+        public IActionResult Create()
         {
-            SupportTicketViewModel model = new SupportTicketViewModel() { UserId = _currentUser.UserId, Status = SupportTicketStatusAttribute.New,};    
+            SupportTicketViewModel model = new SupportTicketViewModel() { UserId = _currentUser.UserId, Status = SupportTicketStatusAttribute.New, };
             return View(model);
         }
 
@@ -184,7 +184,7 @@ namespace Partnerly.Controllers
         [ClaimAuthorize(ClaimTypes.Role, RoleTypeAttribute.Admin)]
         public async Task<IActionResult> Create(SupportTicketViewModel model)
         {
-            if (ModelState.IsValid)
+            if (ModelState.IsValid && model != null)
             {
                 User? user = await _userService.GetUserByIDAsync(model.UserId);
                 if (user == null)
@@ -194,11 +194,11 @@ namespace Partnerly.Controllers
                 }
 
                 SupportTicket newTicket = new SupportTicket();
-                newTicket.Subject = model?.Subject;
-                newTicket.Message = model?.Message;
+                newTicket.Subject = model.Subject;
+                newTicket.Message = model.Message;
                 newTicket.UserId = model.UserId;
-                newTicket.Status = model?.Status;
-                newTicket.AssignedTo = model?.AssignedTo;
+                newTicket.Status = model.Status;
+                newTicket.AssignedTo = model.AssignedTo;
 
                 var result = await _supportTicketService.CreateSupportTicketAsync(newTicket);
                 if (!result.Success)
@@ -209,9 +209,11 @@ namespace Partnerly.Controllers
                     }
                     return View(model);
                 }
-
-                TempData["ToastMessage"] = Messages.RecordSaved;
-                return RedirectToAction("Edit", new { id = result.Data.Id });
+                else if (result.Data != null)
+                {
+                    TempData["ToastMessage"] = Messages.RecordSaved;
+                    return RedirectToAction("Edit", new { id = result.Data.Id });
+                }
             }
             return View(model);
         }
@@ -251,7 +253,7 @@ namespace Partnerly.Controllers
                 SupportTicket? ticket = await _supportTicketService.GetSupportTicketByIDAsync(model.Id);
                 if (ticket != null)
                 {
-                    string oldStatus = ticket.Status;
+                    string? oldStatus = ticket.Status;
                     Guid? oldAssignedTo = ticket.AssignedTo;
 
                     ticket.Subject = model.Subject;
@@ -272,7 +274,7 @@ namespace Partnerly.Controllers
                         
                         return View(model);
                     }
-
+                    
                     TempData["ToastMessage"] = Messages.RecordSaved;
                     return RedirectToAction("Edit", new { id = model.Id });
                 }
@@ -373,14 +375,12 @@ namespace Partnerly.Controllers
 
                 return Json(res);
             }
-            else
+
+            return BadRequest(new
             {
-                return BadRequest(new
-                {
-                    success = false,
-                    message = "Unknown table."
-                });
-            }
+                success = false,
+                message = "Unknown table."
+            });
         }
 
         [HttpPost]
@@ -418,10 +418,7 @@ namespace Partnerly.Controllers
             }
 
             var options = _dataTableRegistry.Get(request.TableID);
-            var result = _inlineUpdateService.ApplyChanges(
-                template,
-                request.Fields,
-                options);
+            var result = _inlineUpdateService.ApplyChanges(template, request.Fields, options);
 
             if (!result.Success)
             {

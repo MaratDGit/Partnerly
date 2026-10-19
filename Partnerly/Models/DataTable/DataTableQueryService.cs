@@ -8,8 +8,7 @@ namespace Partnerly.Models.DataTable
     {
         private readonly DataTablePropertyResolver _propertyResolver;
 
-        public DataTableQueryService(
-            DataTablePropertyResolver propertyResolver)
+        public DataTableQueryService(DataTablePropertyResolver propertyResolver)
         {
             _propertyResolver = propertyResolver;
         }

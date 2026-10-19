@@ -1,8 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Partnerly.Infrastructure.Interfaces;
 using Partnerly.Models;
-using System.ComponentModel.DataAnnotations.Schema;
-using System.Linq.Expressions;
+using System.Linq;
 
 namespace Partnerly.Infrastructure.Repositories
 {
@@ -32,6 +31,15 @@ namespace Partnerly.Infrastructure.Repositories
                 .Include(u => u.Role)
                 .Include(u => u.Referrer)
                 .FirstOrDefaultAsync(u => u.Phone == phone && phone != null);
+        }
+
+        public async Task<IEnumerable<User?>> GetReferralsAsync(Guid? userID)
+        {
+            return await _dbSet
+                .Where(u => u.ReferrerId == userID && userID != null)
+                .Include(u => u.Role)
+                .Include(u => u.Referrer)
+                .ToListAsync();
         }
     }
 }

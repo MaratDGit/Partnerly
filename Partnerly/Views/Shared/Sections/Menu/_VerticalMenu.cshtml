@@ -352,28 +352,6 @@
 
                             </li>
 
-
-                            <!-- Logs -->
-
-                            <li class="partnerly-menu-item @(currentPage.StartsWith("/LogRecords") ? "active" : "")">
-
-                                <a asp-controller="LogRecords"
-                                   asp-action="Index"
-                                   class="partnerly-menu-link">
-
-                                    <span class="partnerly-menu-icon">
-                                        <i class="bx bx-file-find"></i>
-                                    </span>
-
-                                    <span class="partnerly-menu-text">
-                                        @Localizer["Logs"]
-                                    </span>
-
-                                </a>
-
-                            </li>
-
-
                             <!-- Notifications -->
 
                             <li class="partnerly-menu-item @(currentPage.StartsWith("/Notification") ? "active" : "")">
@@ -394,6 +372,25 @@
 
                             </li>
 
+                            <!-- Logs -->
+
+                            <li class="partnerly-menu-item @(currentPage.StartsWith("/LogRecords") ? "active" : "")">
+
+                                <a asp-controller="LogRecords"
+                                   asp-action="Index"
+                                   class="partnerly-menu-link">
+
+                                    <span class="partnerly-menu-icon">
+                                        <i class="bx bx-file-find"></i>
+                                    </span>
+
+                                    <span class="partnerly-menu-text">
+                                        @Localizer["Logs"]
+                                    </span>
+
+                                </a>
+
+                            </li>
 
                             <!-- Attachments -->
 
@@ -438,7 +435,7 @@
             <span class="partnerly-sidebar-status"></span>
 
             <span class="partnerly-sidebar-footer-text">
-                Partnerly Academy
+                @TempData.Peek("authorName")
             </span>
 
         </div>

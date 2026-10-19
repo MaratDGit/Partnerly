@@ -3,12 +3,12 @@ using System.ComponentModel.DataAnnotations;
 
 namespace Partnerly.Descriptors.Attributes.BaseAttributes
 {
-    public class CusromStringLenghtAttribute : StringLengthAttribute
+    public class CustomStringLenghtAttribute : StringLengthAttribute
     {
         public int Min { get; }
         public int Max { get; }
 
-        public CusromStringLenghtAttribute(int min = 0, int max = int.MaxValue) : base(max)
+        public CustomStringLenghtAttribute(int min = 0, int max = int.MaxValue) : base(max)
         {
             Min = min;
             Max = max;

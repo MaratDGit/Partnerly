@@ -14,14 +14,14 @@ namespace Partnerly.Models.ViewModels
         #endregion
 
         #region FirstName
-        [CusromStringLenght(min: 4, max: 20)]
+        [CustomStringLenght(min: 4, max: 20)]
         [Required(ErrorMessageResourceType = typeof(ErrorMessages), ErrorMessageResourceName = nameof(ErrorMessages.FieldRequired))]
         [Display(Name = nameof(FieldsDisplayNames.FirstName), ResourceType = typeof(FieldsDisplayNames))]
         public string? FirstName { get; set; }
         #endregion
 
         #region LastName
-        [CusromStringLenght(min: 4, max: 20)]
+        [CustomStringLenght(min: 4, max: 20)]
         [Required(ErrorMessageResourceType = typeof(ErrorMessages), ErrorMessageResourceName = nameof(ErrorMessages.FieldRequired))]
         [Display(Name = nameof(FieldsDisplayNames.LastName), ResourceType = typeof(FieldsDisplayNames))]
         public string? LastName { get; set; }

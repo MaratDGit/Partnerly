@@ -33,6 +33,22 @@ namespace Partnerly.Infrastructure.Repositories
             return await _context.UserGroupMembers.ToListAsync();
         }
 
+        public async Task<UserGroupMember?> GetMemberAsync(Guid groupId, Guid userId)
+        {
+            return await _context.Set<UserGroupMember>()
+                .FirstOrDefaultAsync(x =>x.GroupId == groupId && x.UserId == userId);
+        }
+
+        public async Task AddMemberAsync(UserGroupMember member)
+        {
+            await _context.Set<UserGroupMember>().AddAsync(member);
+        }
+
+        public void DeleteMember(UserGroupMember member)
+        {
+            _context.Set<UserGroupMember>().Remove(member);
+        }
+
         public IQueryable<UserGroupMemberExt> QueryMembersEntity(Guid? groupId = null)
         {
             if (groupId != null)

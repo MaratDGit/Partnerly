@@ -11,12 +11,12 @@ namespace Partnerly.Models.ViewModels
 
         public Guid Id { get; set; }
 
-        [CusromStringLenght(min: 2, max: 15)]
+        [CustomStringLenght(min: 2, max: 15)]
         [Required(ErrorMessageResourceType = typeof(ErrorMessages), ErrorMessageResourceName = nameof(ErrorMessages.FieldRequired))]
         [Display(Name = nameof(FieldsDisplayNames.Name), ResourceType = typeof(FieldsDisplayNames))]
         public string? Name { get; set; }
 
-        [CusromStringLenght(max: 100)]
+        [CustomStringLenght(max: 100)]
         [Display(Name = nameof(FieldsDisplayNames.Description), ResourceType = typeof(FieldsDisplayNames))]
         public string? Description { get; set; }
 
@@ -78,17 +78,6 @@ namespace Partnerly.Models.ViewModels
                                 Visible = false,
                                 Required = true,
                             },
-
-                            //new DataTableColumn
-                            //{
-                            //    Field = nameof(Models.User.Selected),
-                            //    Type = DataTableColumnType.Boolean,
-                            //    Sortable = true,
-                            //    Searchable = false,
-                            //    Exportable = false,
-                            //    Editable = false,
-                            //    Alignment = DataTableAlignment.Center,
-                            //},
 
                             new DataTableColumn
                             {
@@ -222,21 +211,6 @@ namespace Partnerly.Models.ViewModels
                                     Method = "GET",
                                     CssClass = "btn btn-sm btn-outline-danger"
                                 },
-
-                                //new DataTableAction
-                                //{
-                                //    Name = "delete",
-                                //    Title = FieldsDisplayNames.Delete,
-                                //    Icon = "bx bx-trash",
-                                //    Type = DataTableActionType.InlineDelete,
-                                //    Placement = DataTableActionPlacement.Row,
-                                //    Url = "/UserGroups/DeleteInline",
-                                //    Method = "POST",
-                                //    Confirm = true,
-                                //    ConfirmMessage =
-                                //        "Are you sure you want to delete this group?",
-                                //    CssClass = "btn btn-sm btn-outline-danger"
-                                //}
                             }
                         },
 
@@ -261,8 +235,8 @@ namespace Partnerly.Models.ViewModels
                         ReloadEnabled = true,
                         RememberState = true,
 
-                        InlineEditing = true,
-                        InlineUpdateUrl = "/UserGroups/UpdateInline",
+                        InlineEditing = false,
+                        InlineUpdateUrl = "",
 
                         Columns = new List<DataTableColumn>
                         {
@@ -288,10 +262,27 @@ namespace Partnerly.Models.ViewModels
 
                             new DataTableColumn
                             {
+                                Field = nameof(Models.UserGroupMemberExt.Selected),
+                                Type = DataTableColumnType.Boolean,
+                                Sortable = true,
+                                Searchable = false,
+                                Exportable = false,
+                                Editable = false,
+                                Alignment = DataTableAlignment.Center,
+                            },
+
+                            new DataTableColumn
+                            {
                                 Field = nameof(UserGroupMemberExt.UserFirstName),
                                 Title = FieldsDisplayNames.FirstName,
                                 Type = DataTableColumnType.Text,
                                 Required = true,
+                                Editable = true,
+
+                                LookupUrl = "/UserGroups/LookupUsers",
+                                LookupIdField = nameof(UserGroupMemberExt.UserId),
+                                LookupTitle = FieldsDisplayNames.Users,
+                                LookupSearchPlaceholder = FieldsDisplayNames.DataTableSearch
                             },
                             new DataTableColumn
                             {
@@ -380,9 +371,8 @@ namespace Partnerly.Models.ViewModels
                                     Placement = DataTableActionPlacement.Row,
                                     Url = "/UserGroups/DeleteInline",
                                     Method = "POST",
-                                    Confirm = false,
-                                    ConfirmMessage =
-                                        "Are you sure you want to delete this member?",
+                                    Confirm = true,
+                                    ConfirmMessage = ErrorMessages.Areyousureyouwanttodeletethisfile,
                                     CssClass = "btn btn-sm btn-outline-danger"
                                 }
                             }

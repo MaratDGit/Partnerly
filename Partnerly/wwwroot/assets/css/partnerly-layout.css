@@ -92,23 +92,6 @@ body {
 }
 
 /* =========================================================
-   MAIN CONTENT
-   ========================================================= */
-.partnerly-layout-content {
-    flex: 1 1 auto;
-    width: 100%;
-    min-width: 0;
-    min-height: 0;
-    padding: 10px;
-    box-sizing: border-box;
-    overflow-y: auto;
-    overflow-x: hidden;
-    overscroll-behavior-y: contain;
-    scrollbar-gutter: stable;
-}
-
-
-/* =========================================================
    SIDEBAR
    ========================================================= */
 
@@ -1118,10 +1101,10 @@ input[type="radio"] {
     accent-color: var(--partnerly-primary);
 }
 
-    input[type="checkbox"]:checked,
-    input[type="radio"]:checked {
-        accent-color: var(--partnerly-primary);
-    }
+input[type="checkbox"]:checked,
+input[type="radio"]:checked {
+    accent-color: var(--partnerly-primary);
+}
 
 
 .form-check-input:checked {
@@ -1139,50 +1122,48 @@ input[type="radio"] {
    ========================================================= */
 /* Standard desktop / smaller laptops */
 @media (min-width: 1200px) and (max-width: 1599.98px) {
-    : root
+    :root {
+        --partnerly-sidebar-width: 240px;
+        --partnerly-sidebar-collapsed-width: 72px;
+        --partnerly-navbar-height: 56px;
+    }
 
-{
-    --partnerly-sidebar-width: 240px;
-    --partnerly-sidebar-collapsed-width: 72px;
-    --partnerly-navbar-height: 56px;
-}
+    .partnerly-navbar {
+        padding-left: 18px;
+        padding-right: 18px;
+    }
 
-.partnerly-navbar {
-    padding-left: 18px;
-    padding-right: 18px;
-}
+    .partnerly-layout-content {
+        padding: 8px;
+    }
 
-.partnerly-layout-content {
-    padding: 8px;
-}
+    .partnerly-menu-link {
+        min-height: 38px;
+        font-size: 0.84rem;
+        gap: 7px;
+        padding: 5px 8px;
+    }
 
-.partnerly-menu-link {
-    min-height: 38px;
-    font-size: 0.84rem;
-    gap: 7px;
-    padding: 5px 8px;
-}
+    .partnerly-menu-icon {
+        width: 32px;
+        min-width: 32px;
+        height: 32px;
+    }
 
-.partnerly-menu-icon {
-    width: 32px;
-    min-width: 32px;
-    height: 32px;
-}
-
-.partnerly-brand-logo {
-    width: 36px;
-    height: 36px;
-    flex-basis: 36px;
-}
+    .partnerly-brand-logo {
+        width: 36px;
+        height: 36px;
+        flex-basis: 36px;
+    }
 
     .partnerly-brand-logo img {
         width: 30px;
         height: 30px;
     }
 
-.partnerly-sidebar-content {
-    padding: 12px 10px;
-}
+    .partnerly-sidebar-content {
+        padding: 12px 10px;
+    }
 
 }
 
@@ -1222,11 +1203,11 @@ input[type="radio"] {
         height: 32px;
     }
 
-        .partnerly-menu-icon i {
-            width: 17px;
-            height: 17px;
-            line-height: 17px;
-        }
+    .partnerly-menu-icon i {
+        width: 17px;
+        height: 17px;
+        line-height: 17px;
+    }
 
     .partnerly-menu-section {
         height: 28px;
@@ -1239,10 +1220,10 @@ input[type="radio"] {
         flex-basis: 36px;
     }
 
-        .partnerly-brand-logo img {
-            width: 30px;
-            height: 30px;
-        }
+    .partnerly-brand-logo img {
+        width: 30px;
+        height: 30px;
+    }
 
     .partnerly-brand-name {
         font-size: 1.05rem;
@@ -1282,36 +1263,37 @@ input[type="radio"] {
         box-sizing: border-box;
     }
 
-        /* Card fills the available area */
-        .partnerly-layout-content > .card {
-            display: flex;
-            flex: 1 1 0;
-            flex-direction: column;
-            min-width: 0;
-            min-height: 0;
-            width: 100%;
-            margin: 0;
-            overflow: hidden;
-        }
+    /* Card fills the available area */
+    .partnerly-layout-content > .card {
+        display: flex;
+        flex: 1 1 0;
+        flex-direction: column;
+        min-width: 0;
+        min-height: 0;
+        width: 100%;
+        margin: 0;
+        overflow: hidden;
+    }
 
-            /* Card header stays visible */
-            .partnerly-layout-content > .card > .card-header {
-                flex: 0 0 auto;
-            }
+    /* Card header stays visible */
+    .partnerly-layout-content > .card > .card-header {
+        flex: 0 0 auto;
+    }
 
-            /* Scroll only inside the card body */
-            .partnerly-layout-content > .card > .card-body {
-                flex: 1 1 0;
-                min-height: 0;
-                min-width: 0;
-                overflow-y: auto;
-                overflow-x: auto;
-                overscroll-behavior: contain;
-                scrollbar-gutter: stable;
-            }
+    /* Scroll only inside the card body */
+    .partnerly-layout-content > .card > .card-body {
+        flex: 1 1 0;
+        min-height: 0;
+        min-width: 0;
+        overflow-y: auto;
+        overflow-x: auto;
+        overscroll-behavior: contain;
+        scrollbar-gutter: stable;
+    }
 
-                /* Allow long forms to define their natural height */
-                .partnerly-layout-content > .card > .card-body > form {
-                    min-width: 0;
-                }
+    /* Allow long forms to define their natural height */
+    .partnerly-layout-content > .card > .card-body > form {
+        min-width: 0;
+    }
+
 }

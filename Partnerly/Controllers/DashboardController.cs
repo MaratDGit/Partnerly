@@ -1,5 +1,4 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using Microsoft.Extensions.Localization;
 using Partnerly.Descriptors.Messages;
 using Partnerly.Events.BaseEvents;
@@ -8,7 +7,6 @@ using Partnerly.Infrastructure.Services;
 using Partnerly.Models;
 using Partnerly.Models.DataTable;
 using Partnerly.Models.ViewModels;
-using System;
 
 namespace Partnerly.Controllers
 {
@@ -149,7 +147,7 @@ namespace Partnerly.Controllers
             if (_currentUser.UserId != null)
             { 
                 var user = await _userService.GetUserByIDAsync(_currentUser.UserId);
-                var users = await _userService.GetAllUsersAsync();
+                var referrals = await _userService.GetReferralsAsync(user?.Id);
 
                 if (user != null)
                 {
@@ -164,9 +162,12 @@ namespace Partnerly.Controllers
                     model.ReferrerName = $"{referrer?.FirstName} {referrer?.LastName}";
                     model.CreatedDate = user.CreatedDate;
 
-                    foreach (var referral in users.Where(_ => _ != null && _.ReferrerId == user.Id))
+                    if (referrals != null && referrals.Count() > 0)
                     {
-                        model.Refferals.Add(new UserViewModel { FirstName = referral.FirstName, LastName = referral.LastName, PhotoUrl = referral.PhotoUrl, Id = referral.Id, CreatedDate = referral.CreatedDate, Phone = referral.Phone });
+                        foreach (var referral in referrals)
+                        {
+                            model.Refferals.Add(new UserViewModel { FirstName = referral.FirstName, LastName = referral.LastName, PhotoUrl = referral.PhotoUrl, Id = referral.Id, CreatedDate = referral.CreatedDate, Phone = referral.Phone });
+                        }
                     }
                 }
             }

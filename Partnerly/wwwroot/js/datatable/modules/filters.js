@@ -299,7 +299,7 @@
                                 if (text) {
 
                                     text.textContent =
-                                        "All";
+                                        text.textContent = container.dataset.allText || "";
                                 }
 
 
@@ -375,7 +375,7 @@
                     ) {
 
                         text.textContent =
-                            "All";
+                            text.textContent = container.dataset.allText || "";
                     }
                     else if (
                         labels.length <= 2

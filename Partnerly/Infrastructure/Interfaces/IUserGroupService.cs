@@ -7,7 +7,6 @@ namespace Partnerly.Infrastructure.Interfaces
     {
         Task<IEnumerable<UserGroupMember?>> GetAllUsersByGroupIDAsync(Guid groupId);
         Task<IEnumerable<UserGroupMember?>> GetAllGroupsByUserIDAsync(Guid userId);
-        
         Task<IEnumerable<UserGroup?>> GetAllUserGroupsAsync();
         Task<UserGroup?> GetByIDAsync(Guid id);
         Task<UserGroup?> GetByGroupNameAsync(string groupName);
@@ -15,6 +14,9 @@ namespace Partnerly.Infrastructure.Interfaces
         Task<ServiceResult<UserGroup?>> CreateUserGroupAsync(UserGroup? group);
         Task<ServiceResult<UserGroup?>> UpdateUserGroupAsync(UserGroup? group);
         Task<ServiceResult<UserGroup?>> DeleteUserGroupAsync(Guid? id);
+        
+        Task<ServiceResult<UserGroupMember?>> AddMemberAsync(Guid groupId, Guid userId);
+        Task<ServiceResult<UserGroupMember?>> DeleteMemberAsync(Guid groupId, Guid userId);
 
         IQueryable<UserGroup> QueryEntity(IEnumerable<string> fields);
         IQueryable<UserGroupMemberExt> QueryMembersEntity(Guid? groupId = null);

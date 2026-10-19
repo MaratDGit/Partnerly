@@ -17,7 +17,7 @@ namespace Partnerly.Descriptors.Messages
         #endregion
 
         #region Views errors
-     
+        public static string Areyousureyouwanttodeletethisfile => Messages.Get(nameof(Areyousureyouwanttodeletethisfile));
         public static string ReferrerUserCannotBeFoundOrInactive => Messages.Get(nameof(ReferrerUserCannotBeFoundOrInactive));
         public static string IncorectPasswordOrUsername => Messages.Get(nameof(IncorectPasswordOrUsername));
         public static string IncorectPassword => Messages.Get(nameof(IncorectPassword));

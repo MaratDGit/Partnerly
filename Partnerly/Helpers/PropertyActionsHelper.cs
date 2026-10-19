@@ -2,10 +2,7 @@
 {
     public class PropertyActionsHelper
     {
-        public static async Task<TDestination> CopyPropertiesAsync<TSource, TDestination>(
-     TSource source,
-     TDestination destination
- ) where TDestination : new()
+        public static async Task<TDestination> CopyPropertiesAsync<TSource, TDestination>(TSource source, TDestination destination) where TDestination : new()
         {
             if (destination == null) destination = new TDestination();
             if (source == null) return destination;
@@ -34,10 +31,9 @@
             });
         }
 
-
         public static async Task<List<TDestination>> CopyPropertiesListAsync<TSource, TDestination>(
-        List<TSource> source,
-        List<TDestination> destination
+            List<TSource> source, 
+            List<TDestination> destination
         ) where TDestination : new()
         {
             if (destination == null) destination = new List<TDestination>();
@@ -82,8 +78,5 @@
                 return destination;
             });
         }
-
-
-
     }
 }

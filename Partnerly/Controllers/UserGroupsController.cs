@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Localization;
 using Partnerly.Descriptors.Attributes;
 using Partnerly.Descriptors.Attributes.BaseAttributes;
@@ -215,6 +216,49 @@ namespace Partnerly.Controllers
         }
 
         [HttpGet]
+        public async Task<IActionResult> LookupUsers(Guid groupId, string? search = null)
+        {
+            var users = await _userService.GetAllUsersAsync();
+
+            var members = (await _userGroupService
+                .QueryMembersEntity(groupId)
+                .Select(x => x.UserId)
+                .ToListAsync())
+                .ToHashSet();
+
+            var query = users.Where(u => !members.Contains(u.Id));
+
+            if (!string.IsNullOrWhiteSpace(search))
+            {
+                var term = search.Trim();
+
+                query = query.Where(u =>
+                    (u.FirstName ?? "").Contains(
+                        term, StringComparison.OrdinalIgnoreCase) ||
+                    (u.LastName ?? "").Contains(
+                        term, StringComparison.OrdinalIgnoreCase) ||
+                    (u.Email ?? "").Contains(
+                        term, StringComparison.OrdinalIgnoreCase));
+            }
+
+            var result = query
+                .OrderBy(u => u.FirstName)
+                .ThenBy(u => u.LastName)
+                //.Take(20)
+                .Select(u => new
+                {
+                    id = u.Id,
+                    firstName = u.FirstName,
+                    lastName = u.LastName,
+                    name = $"{u.FirstName} {u.LastName}".Trim(),
+                    email = u.Email
+                })
+                .ToList();
+
+            return Json(result);
+        }
+
+        [HttpGet]
         public async Task<IActionResult> Data([FromQuery] DataTableRequest request)
         {
             if (string.IsNullOrWhiteSpace(request.TableID))
@@ -339,6 +383,46 @@ namespace Partnerly.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> CreateInline([FromBody] DataTableInlineCreateRequest request)
         {
+            if (request.TableID == DataTableNames.userGroupsMembersTable)
+            {
+                if (!request.ParentKeys.
+                    TryGetValue("GroupID", out var groupIdValue) || !Guid.TryParse(groupIdValue, out var groupId))
+                {
+                    return BadRequest(new
+                    {
+                        success = false,
+                        message = "A valid GroupID is required."
+                    });
+                }
+
+                if (!request.Fields.TryGetValue(
+                    nameof(UserGroupMember.UserId), out var userIdValue) || !Guid.TryParse(userIdValue, out var userId))
+                {
+                    return BadRequest(new
+                    {
+                        success = false,
+                        message = "A valid UserId is required."
+                    });
+                }
+
+                var memberResult = await _userGroupService.AddMemberAsync(groupId, userId);
+
+                if (!memberResult.Success)
+                {
+                    return BadRequest(new
+                    {
+                        success = false,
+                        message = string.Join(" ", memberResult.Errors)
+                    });
+                }
+
+                return Json(new
+                {
+                    success = true,
+                    id = userId
+                });
+            }
+
             var options = _dataTableRegistry.Get(request.TableID);
 
             if (options == null)
@@ -350,10 +434,7 @@ namespace Partnerly.Controllers
                 });
             }
 
-            var result =
-                _inlineUpdateService.Create<UserGroup>(
-                    request.Fields,
-                    options);
+            var result = _inlineUpdateService.Create<UserGroup>(request.Fields, options);
 
             if (!result.Success)
             {
@@ -364,9 +445,7 @@ namespace Partnerly.Controllers
                 });
             }
 
-            var createResult =
-                await _userGroupService.CreateUserGroupAsync(
-                    (UserGroup)result.Entity!);
+            var createResult = await _userGroupService.CreateUserGroupAsync((UserGroup)result.Entity!);
 
             if (!createResult.Success)
             {
@@ -388,9 +467,47 @@ namespace Partnerly.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteInline(
-        [FromBody] DataTableInlineDeleteRequest request)
+        public async Task<IActionResult> DeleteInline([FromBody] DataTableInlineDeleteRequest request)
         {
+            if (request.TableID == DataTableNames.userGroupsMembersTable)
+            {
+                if (!request.Keys.TryGetValue(
+                        nameof(UserGroupMember.GroupId), out var groupIdValue) || !Guid.TryParse(groupIdValue, out var memberGroupId))
+                {
+                    return BadRequest(new
+                    {
+                        success = false,
+                        message = "A valid GroupID is required."
+                    });
+                }
+
+                if (!request.Keys.TryGetValue
+                    (nameof(UserGroupMember.UserId), out var userIdValue) || !Guid.TryParse(userIdValue, out var userId))
+                {
+                    return BadRequest(new
+                    {
+                        success = false,
+                        message = "A valid UserId is required."
+                    });
+                }
+
+                var memberResult = await _userGroupService.DeleteMemberAsync(memberGroupId, userId);
+
+                if (!memberResult.Success)
+                {
+                    return BadRequest(new
+                    {
+                        success = false,
+                        message = string.Join(" ", memberResult.Errors)
+                    });
+                }
+
+                return Json(new
+                {
+                    success = true
+                });
+            }
+
             if (string.IsNullOrWhiteSpace(request.Id))
             {
                 return BadRequest(new

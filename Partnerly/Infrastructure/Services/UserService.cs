@@ -4,7 +4,6 @@ using Partnerly.Events;
 using Partnerly.Events.BaseEvents;
 using Partnerly.Helpers;
 using Partnerly.Infrastructure.Interfaces;
-using Partnerly.Infrastructure.Repositories;
 using Partnerly.Models;
 
 namespace Partnerly.Infrastructure.Services
@@ -18,7 +17,13 @@ namespace Partnerly.Infrastructure.Services
         private readonly ILogService _logService;
         private readonly IEventBus _eventBus;
 
-        public UserService(IUserRepository userRepo, IRoleService roleService, IPermissionService permissionService, ICurrentUserService currentUserService, ILogService logService, IEventBus eventBus)
+        public UserService(
+            IUserRepository userRepo, 
+            IRoleService roleService, 
+            IPermissionService permissionService, 
+            ICurrentUserService currentUserService, 
+            ILogService logService, 
+            IEventBus eventBus)
         {
             _userRepo = userRepo;
             _roleService = roleService;
@@ -52,6 +57,9 @@ namespace Partnerly.Infrastructure.Services
 
         public async Task<IEnumerable<User?>> GetAllUsersAsync() =>
             await _userRepo.GetAllAsync();
+
+        public async Task<IEnumerable<User?>> GetReferralsAsync(Guid? userID) =>
+            await _userRepo.GetReferralsAsync(userID);
 
         public IQueryable<User> QueryEntity(IEnumerable<string> fields) =>
             _userRepo.QueryEntity(fields);

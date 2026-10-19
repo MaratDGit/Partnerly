@@ -120,7 +120,6 @@
                     <div class="landing-language-menu">
 
                         <!-- English -->
-
                         <form asp-controller="Language"
                               asp-action="SetLanguage"
                               method="post">
@@ -146,9 +145,7 @@
 
                         </form>
 
-
                         <!-- Russian -->
-
                         <form asp-controller="Language"
                               asp-action="SetLanguage"
                               method="post">
@@ -174,9 +171,7 @@
 
                         </form>
 
-
                         <!-- Armenian -->
-
                         <form asp-controller="Language"
                               asp-action="SetLanguage"
                               method="post">
@@ -209,12 +204,8 @@
 
                 <!-- Login -->
 
-                <a asp-controller="Account"
-                   asp-action="Login"
-                   class="btn-outline">
-
+                <a asp-controller="Account" asp-action="Login" class="btn-outline">
                     @Localizer["Login"]
-
                 </a>
 
             </nav>
@@ -267,11 +258,8 @@
 
             <nav>
 
-                <a asp-controller="Home"
-                   asp-action="Privacy">
-
+                <a asp-controller="Home" asp-action="Privacy">
                     @Localizer["Policy"]
-
                 </a>
 
             </nav>
@@ -287,12 +275,6 @@
          ========================================================= -->
 
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
-
-   @*  <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
-
-    <script src="~/js/site.js"
-            asp-append-version="true"></script> *@
-
 
     <script>
 

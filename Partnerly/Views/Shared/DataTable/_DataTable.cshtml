@@ -494,7 +494,8 @@
                                     @if (filter.Type == DataTableFilterType.MultiSelect)
                                     {
                                         <div class="data-table-modal-multiselect"
-                                             data-field="@filter.Field">
+                                             data-field="@filter.Field"
+                                             data-all-text="@Localizer["DataTableAll"]">
 
                                             <button type="button"
                                                     class="data-table-modal-multiselect-button">
@@ -756,11 +757,14 @@
                                     format = column.Format,
                                     urlTemplate = column.UrlTemplate,
                                     isKey = column.IsKey,
-
                                     emptyText = column.EmptyText,
-
                                     alignment = column.Alignment.ToString(),
                                     cssClass = column.CssClass,
+
+                                    lookupUrl = column.LookupUrl,
+                                    lookupIdField = column.LookupIdField,
+                                    lookupTitle = column.LookupTitle,
+                                    lookupSearchPlaceholder = column.LookupSearchPlaceholder,
 
                                     valueMappings = column.ValueMappings.Select(option => new
                                             {

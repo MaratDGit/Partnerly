@@ -23,7 +23,7 @@ namespace Partnerly.Models.ViewModels
         [Display(Name = nameof(FieldsDisplayNames.TaskNumber), ResourceType = typeof(FieldsDisplayNames))]
         public string? TicketID { get; set; }
 
-        [CusromStringLenght(max:50)]
+        [CustomStringLenght(max:50)]
         [Required(ErrorMessageResourceType = typeof(ErrorMessages), ErrorMessageResourceName = nameof(ErrorMessages.FieldRequired))]
         [Display(Name = nameof(FieldsDisplayNames.Subject), ResourceType = typeof(FieldsDisplayNames))]
         public string? Subject { get; set; }

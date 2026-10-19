@@ -59,6 +59,7 @@ namespace Partnerly.Controllers
             return Ok();
         }
 
+        [ClaimAuthorize(ClaimTypes.Role, RoleTypeAttribute.Admin)]
         public IActionResult Index()
         {
             NotificationsViewModel model = new NotificationsViewModel();

@@ -89,12 +89,12 @@ namespace Partnerly.Controllers
             }
 
             var user = await _userService.GetUserByEmailAsync(model.Email);
+
             if (user == null || !BCrypt.Net.BCrypt.Verify(model.Password, user.PasswordHash) || user.IsDeleted)
             {
                 ModelState.AddModelError("Password", ErrorMessages.IncorectPasswordOrUsername);
                 return View(model);
             }
-
 
             if (user.Role == null || user.IsBlocked == true)
             {

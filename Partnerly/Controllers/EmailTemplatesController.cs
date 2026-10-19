@@ -1,19 +1,19 @@
-﻿namespace Partnerly.Controllers
-{
-    using Microsoft.AspNetCore.Mvc;
-    using Microsoft.Extensions.Localization;
-    using Partnerly.Descriptors.Attributes;
-    using Partnerly.Descriptors.Attributes.BaseAttributes;
-    using Partnerly.Descriptors.Messages;
-    using Partnerly.Events.BaseEvents;
-    using Partnerly.Helpers;
-    using Partnerly.Infrastructure.Interfaces;
-    using Partnerly.Infrastructure.Services;
-    using Partnerly.Models;
-    using Partnerly.Models.DataTable;
-    using Partnerly.Models.ViewModels;
-    using System.Security.Claims;
+﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Localization;
+using Partnerly.Descriptors.Attributes;
+using Partnerly.Descriptors.Attributes.BaseAttributes;
+using Partnerly.Descriptors.Messages;
+using Partnerly.Events.BaseEvents;
+using Partnerly.Helpers;
+using Partnerly.Infrastructure.Interfaces;
+using Partnerly.Infrastructure.Services;
+using Partnerly.Models;
+using Partnerly.Models.DataTable;
+using Partnerly.Models.ViewModels;
+using System.Security.Claims;
 
+namespace Partnerly.Controllers
+{
     [ClaimAuthorize(ClaimTypes.Role, RoleTypeAttribute.Admin)]
     public class EmailTemplatesController : _BaseController
     {
@@ -48,6 +48,7 @@
         public IActionResult Create()
         {
             EmailTemplateViewModel model = new EmailTemplateViewModel { Id = Guid.NewGuid() };
+
             return View(model);
         }
 
@@ -69,6 +70,7 @@
                 newTemp.Subject = model.Subject;
                 newTemp.BodyHtml = model.BodyHtml;
                 newTemp.BodyPlain = model.BodyPlain;
+
                 var result = await _emailTemplateService.CreateTemplateAsync(newTemp);
 
                 if (!result.Success)
@@ -120,7 +122,7 @@
                     {
                         foreach (var error in result.Errors)
                         {
-                            ModelState.AddModelError("", error);
+                            ModelState.AddModelError("Subject", error);
                         }
                     }
 

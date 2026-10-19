@@ -8,11 +8,6 @@
 
     <div class="hero-content">
 
-        <div class="hero-badge">
-            <span class="hero-badge-dot"></span>
-            @Localizer["YourSmartBeloteAssistant"]
-        </div>
-
         <h1 class="landing-title">
             @Localizer["PlaySmarter"]
             <span>@Localizer["WinwithConfidence"]</span>
@@ -59,8 +54,7 @@
 
             <div class="hero-card-header">
                 <div>
-                    <span class="hero-card-label">Partnerly</span>
-                    <h4>Belote Assistant</h4>
+                    <h4>Blote Assistant</h4>
                 </div>
 
                 <div class="hero-card-icon">
@@ -154,11 +148,6 @@
 
     <div class="section-header">
 
-        <div class="section-badge">
-            <i class="bx bx-sparkles"></i>
-            Partnerly
-        </div>
-
         <h2 class="section-title">
             @Localizer["PlaySmarter"]
         </h2>
@@ -229,7 +218,7 @@
 
         <div class="section-badge">
             <i class="bx bx-play-circle"></i>
-            Partnerly Academy
+            @TempData.Peek("authorName")
         </div>
 
         <h2 class="section-title">
@@ -342,39 +331,6 @@
             </div>
 
         </div>
-
-    </div>
-
-</section>
-
-
-<!-- CTA -->
-
-<section class="landing-cta">
-
-    <div class="cta-glow"></div>
-
-    <div class="cta-content">
-
-        <div class="section-badge">
-            <i class="bx bx-rocket"></i>
-            Partnerly
-        </div>
-
-        <h2>
-            @Localizer["PlaySmarter"]
-        </h2>
-
-        <p>
-            @Localizer["YourSmartBeloteAssistant"]
-        </p>
-
-        <a asp-controller="Account"
-           asp-action="Register"
-           class="btn landing-btn-primary">
-            @Localizer["Join"]
-            <i class="bx bx-right-arrow-alt"></i>
-        </a>
 
     </div>
 
