@@ -216,9 +216,11 @@ namespace Partnerly.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> LookupUsers(Guid groupId, string? search = null)
+        public async Task<IActionResult> LookupUsers(string? search = null)
         {
             var users = await _userService.GetAllUsersAsync();
+            var groupIdText = Request.Query["groupId"].ToString();
+            Guid.TryParse(groupIdText, out var groupId);
 
             var members = (await _userGroupService
                 .QueryMembersEntity(groupId)
@@ -233,12 +235,9 @@ namespace Partnerly.Controllers
                 var term = search.Trim();
 
                 query = query.Where(u =>
-                    (u.FirstName ?? "").Contains(
-                        term, StringComparison.OrdinalIgnoreCase) ||
-                    (u.LastName ?? "").Contains(
-                        term, StringComparison.OrdinalIgnoreCase) ||
-                    (u.Email ?? "").Contains(
-                        term, StringComparison.OrdinalIgnoreCase));
+                    (u.FirstName ?? "").Contains(term, StringComparison.OrdinalIgnoreCase) ||
+                    (u.LastName ?? "").Contains(term, StringComparison.OrdinalIgnoreCase) ||
+                    (u.Email ?? "").Contains(term, StringComparison.OrdinalIgnoreCase));
             }
 
             var result = query
@@ -251,7 +250,8 @@ namespace Partnerly.Controllers
                     firstName = u.FirstName,
                     lastName = u.LastName,
                     name = $"{u.FirstName} {u.LastName}".Trim(),
-                    email = u.Email
+                    email = u.Email,
+                    isBlocked = u.IsBlocked ?? false
                 })
                 .ToList();
 

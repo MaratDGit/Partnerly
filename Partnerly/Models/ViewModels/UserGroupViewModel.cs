@@ -279,10 +279,63 @@ namespace Partnerly.Models.ViewModels
                                 Required = true,
                                 Editable = true,
 
-                                LookupUrl = "/UserGroups/LookupUsers",
-                                LookupIdField = nameof(UserGroupMemberExt.UserId),
-                                LookupTitle = FieldsDisplayNames.Users,
-                                LookupSearchPlaceholder = FieldsDisplayNames.DataTableSearch
+                                Lookup = new DataTableLookupOptions
+                                {
+                                    Url = "/UserGroups/LookupUsers",
+                                    IdField = nameof(UserGroupMemberExt.UserId),
+
+                                    DisplayField = "name",
+                                    SecondaryField = "email",
+
+                                    Title = FieldsDisplayNames.Users,
+                                    SearchPlaceholder = FieldsDisplayNames.DataTableSearch,
+
+                                    SearchParameter = "search",
+
+                                    ParentKeyParameters = new Dictionary<string, string>
+                                    {
+                                        ["groupId"] = "GroupID"
+                                    },
+
+                                    Columns = new List<DataTableLookupColumn>
+                                    {
+                                        new()
+                                        {
+                                            Field = "name",
+                                            Title = FieldsDisplayNames.User,
+                                            Width = "160px"
+                                        },
+                                        new()
+                                        {
+                                            Field = "email",
+                                            Title = FieldsDisplayNames.Email,
+                                            Width = "240px"
+                                        },
+                                        new()
+                                        {
+                                            Field = "isBlocked",
+                                            Title = FieldsDisplayNames.IsBlocked,
+                                            Width = "50px",
+                                            DisplayAsCheckbox = true
+                                        },
+                                    },
+
+                                    Mappings = new List<DataTableLookupMapping>
+                                    {
+                                        new()
+                                        {
+                                            SourceField = "lastName",
+                                            TargetField = nameof(UserGroupMemberExt.UserLastName)
+                                        },
+                                        new()
+                                        {
+                                            SourceField = "email",
+                                            TargetField = nameof(UserGroupMemberExt.UserEmail)
+                                        }
+                                    }
+                                }
+
+
                             },
                             new DataTableColumn
                             {

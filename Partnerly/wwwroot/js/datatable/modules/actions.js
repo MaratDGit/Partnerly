@@ -523,18 +523,18 @@
                      * LOOKUP field
                      */
 
-                    if (column.lookupUrl) {
+                    var lookup = column.lookup;
 
-                        var idField = ctx.escapeHtml(
-                            column.lookupIdField || "UserId"
-                        );
+                    if (lookup && lookup.url && lookup.idField) {
+                        var idField = ctx.escapeHtml(lookup.idField);
 
                         return (
                             '<button type="button" ' +
                             'class="btn btn-outline-primary btn-sm data-table-lookup-select" ' +
-                            'data-lookup-column="' + field + '">' +
+                            'data-lookup-column="' + field + '" ' +
+                            'data-lookup-id-field="' + idField + '">' +
                             '<i class="bx bx-search me-1"></i>' +
-                            ctx.escapeHtml(column.lookupTitle || "Lookup") +
+                            ctx.escapeHtml(lookup.title || "Lookup") +
                             '</button>' +
                             '<input type="hidden" ' +
                             'class="data-table-inline-new-input" ' +
@@ -766,22 +766,18 @@
 
                     row.querySelectorAll(".data-table-lookup-select")
                         .forEach(function (button) {
-
                             button.addEventListener("click", function (event) {
-
                                 event.preventDefault();
                                 event.stopPropagation();
 
-                                var field = button.getAttribute(
-                                    "data-lookup-column"
-                                );
+                                const field = button.getAttribute("data-lookup-column");
 
-                                var column = columns.find(function (item) {
+                                const column = columns.find(function (item) {
                                     return item.field === field;
                                 });
 
-                                if (column) {
-                                    ctx.openUserLookup(row, column);
+                                if (column && column.lookup) {
+                                    ctx.openLookup(row, column);
                                 }
                             });
                         });
@@ -971,23 +967,23 @@
                         }
                     );
 
-                    var lookupButton = row.querySelector(
-                        ".data-table-lookup-select"
-                    );
+                    var lookupButton = row.querySelector(".data-table-lookup-select");
 
                     if (lookupButton) {
+                        var idField = lookupButton.getAttribute("data-lookup-id-field");
 
-                        var userIdInput = row.querySelector(
-                            '.data-table-inline-new-input[data-field="UserId"]'
+                        var idInput = row.querySelector(
+                            '.data-table-inline-new-input[data-field="' +
+                            CSS.escape(idField) + '"]'
                         );
 
-                        if (!userIdInput || !userIdInput.value) {
-                            alert("Please select a user first.");
+                        if (!idInput || !idInput.value) {
+                            alert("Please select a record first.");
                             return;
                         }
 
-                        fields.UserId = userIdInput.value;
-                    };
+                        fields[idField] = idInput.value;
+                    }
 
                     /*
                      * Required fields
@@ -1187,249 +1183,88 @@
                 };
 
             /*
-            * =========================================================
-            * USER LOOKUP
-            * =========================================================
-            */
+             * =========================================================
+             * GENERIC LOOKUP
+             * =========================================================
+             */
 
-            ctx.openUserLookup =
+            ctx.openLookup =
                 function (row, column) {
+                const lookup = column.lookup;
 
-                var lookupUrl = column.lookupUrl;
-
-                if (!lookupUrl || !row) {
+                if (!lookup || !lookup.url) {
                     return;
                 }
 
-                function getGroupId() {
-                    var payload = ctx.addParentKeysToPayload({}) || {};
+                const payload = typeof ctx.addParentKeysToPayload === "function"
+                    ? ctx.addParentKeysToPayload({})
+                    : {};
 
-                    var parentKeys =
-                        payload.ParentKeys ||
-                        payload.parentKeys ||
-                        {};
+                const parentKeys = payload.parentKeys || payload.ParentKeys || {};
+                const parameters = {};
 
-                    return (
-                        parentKeys.GroupID ||
-                        parentKeys.GroupId ||
-                        parentKeys.groupId ||
-                        parentKeys.groupID ||
-                        ""
-                    );
-                }
-
-                var groupId = getGroupId();
-
-                if (!groupId) {
-                    alert("Unable to determine the current group.");
-                    return;
-                }
-
-                var overlay = document.createElement("div");
-                overlay.className = "data-table-lookup-overlay";
-
-                overlay.innerHTML =
-                    '<div class="data-table-lookup-modal" role="dialog" aria-modal="true">' +
-                    '<div class="data-table-lookup-header">' +
-                    '<h5>' +
-                    ctx.escapeHtml(column.lookupTitle || "Select user") +
-                    '</h5>' +
-                    '<button type="button" class="data-table-lookup-close" aria-label="Close">&times;</button>' +
-                    '</div>' +
-                    '<div class="data-table-lookup-search">' +
-                    '<input type="search" class="form-control" ' +
-                    'placeholder="' +
-                    ctx.escapeHtml(column.lookupSearchPlaceholder || "Search users...") +
-                    '" autocomplete="off">' +
-                    '</div>' +
-                    '<div class="data-table-lookup-results">' +
-                    '<div class="data-table-lookup-message">Enter a name or email to search.</div>' +
-                    '</div>' +
-                    '</div>';
-
-                document.body.appendChild(overlay);
-
-                var searchInput =
-                    overlay.querySelector("input[type=search]");
-
-                var results =
-                    overlay.querySelector(".data-table-lookup-results");
-
-                var closeButton =
-                    overlay.querySelector(".data-table-lookup-close");
-
-                var closed = false;
-                var requestNumber = 0;
-
-                function closeLookup() {
-                    if (closed) return;
-
-                    closed = true;
-                    document.removeEventListener("keydown", onKeyDown);
-                    overlay.remove();
-                }
-
-                function onKeyDown(event) {
-                    if (event.key === "Escape") {
-                        closeLookup();
-                    }
-                }
-
-                closeButton.addEventListener("click", closeLookup);
-
-                overlay.addEventListener("click", function (event) {
-                    if (event.target === overlay) {
-                        closeLookup();
-                    }
-                });
-
-                document.addEventListener("keydown", onKeyDown);
-
-                function showMessage(message) {
-                    results.innerHTML =
-                        '<div class="data-table-lookup-message">' +
-                        ctx.escapeHtml(message) +
-                        '</div>';
-                }
-
-                function selectUser(user) {
-
-                    var userIdInput =
-                        row.querySelector(
-                            '.data-table-inline-new-input[data-field="' +
-                            CSS.escape(column.lookupIdField || "UserId") +
-                            '"]'
+                Object.entries(lookup.parentKeyParameters || {})
+                    .forEach(function ([queryName, parentKeyName]) {
+                        const key = Object.keys(parentKeys).find(
+                            key => key.toLowerCase() === parentKeyName.toLowerCase()
                         );
 
-                    if (!userIdInput) {
-                        alert("The UserId field is missing from the new row.");
-                        return;
-                    }
+                        if (key && parentKeys[key] != null) {
+                            parameters[queryName] = parentKeys[key];
+                        }
+                    });
 
-                    userIdInput.value = user.id;
+                openDataTableLookup({
+                    url: lookup.url,
+                    title: lookup.title,
+                    searchPlaceholder: lookup.searchPlaceholder,
+                    columns: lookup.columns,
+                    parameters: parameters,
 
-                    var nameButton =
-                        row.querySelector(".data-table-lookup-select");
+                    onSelect: function (record) {
+                        const idField = lookup.idField;
+                        const idValue = record[lookup.recordIdField || "id"];
 
-                    if (nameButton) {
-                        nameButton.innerHTML =
-                            '<i class="bx bx-search me-1"></i>' +
-                            ctx.escapeHtml(
-                                user.firstName ||
-                                ((user.name || "")).trim()
+                        const hiddenInput = row.querySelector(
+                            '.data-table-inline-new-input[data-field="' +
+                            CSS.escape(idField) + '"]'
+                        );
+
+                        if (!hiddenInput || idValue == null) {
+                            console.error("Lookup ID field or input is missing.");
+                            return;
+                        }
+
+                        hiddenInput.value = idValue;
+                        hiddenInput.dispatchEvent(
+                            new Event("change", { bubbles: true })
+                        );
+
+                        const button = row.querySelector(
+                            '.data-table-lookup-select[data-lookup-column="' +
+                            CSS.escape(column.field) + '"]'
+                        );
+
+                        if (button) {
+                            button.textContent =
+                                record[lookup.displayField] ?? String(idValue);
+                            button.classList.add("has-selection");
+                        }
+
+                        (lookup.mappings || []).forEach(function (mapping) {
+                            const target = row.querySelector(
+                                '[data-field="' +
+                                CSS.escape(mapping.targetField) + '"]'
                             );
 
-                        nameButton.classList.add("has-selection");
-                    }
-
-                    var lastNameCell =
-                        row.querySelector('[data-field="UserLastName"]');
-
-                    var emailCell =
-                        row.querySelector('[data-field="UserEmail"]');
-
-                    if (lastNameCell) {
-                        lastNameCell.textContent = user.lastName || "";
-                    }
-
-                    if (emailCell) {
-                        emailCell.textContent = user.email || "";
-                    }
-
-                    closeLookup();
-                }
-
-                function renderUsers(users) {
-
-                    results.innerHTML = "";
-
-                    if (!users.length) {
-                        showMessage("No users found.");
-                        return;
-                    }
-
-                    users.forEach(function (user) {
-
-                        var item = document.createElement("button");
-                        item.type = "button";
-                        item.className = "data-table-lookup-result";
-
-                        var details = document.createElement("span");
-                        details.className = "data-table-lookup-result-details";
-
-                        var name = document.createElement("strong");
-                        name.textContent = user.name || "";
-
-                        var email = document.createElement("small");
-                        email.textContent = user.email || "";
-
-                        details.appendChild(name);
-                        details.appendChild(email);
-
-                        var icon = document.createElement("span");
-                        icon.className = "data-table-lookup-result-icon";
-                        icon.innerHTML = '<i class="bx bx-plus-circle"></i>';
-
-                        item.appendChild(details);
-                        item.appendChild(icon);
-
-                        item.addEventListener("click", function () {
-                            selectUser(user);
-                        });
-
-                        results.appendChild(item);
-                    });
-                }
-
-                function searchUsers() {
-                    var currentRequest = ++requestNumber;
-                    var term = searchInput.value.trim();
-
-                    showMessage("Loading users...");
-
-                    var url = new URL(lookupUrl, window.location.origin);
-                    url.searchParams.set("groupId", groupId);
-                    url.searchParams.set("search", term);
-
-                    fetch(url.toString(), {
-                        method: "GET",
-                        headers: {
-                            "Accept": "application/json"
-                        }
-                    })
-                        .then(function (response) {
-                            if (!response.ok) {
-                                throw new Error("Unable to search users.");
-                            }
-
-                            return response.json();
-                        })
-                        .then(function (users) {
-                            if (currentRequest !== requestNumber || closed) {
+                            if (!target || (button && target.contains(button))) {
                                 return;
                             }
 
-                            renderUsers(Array.isArray(users) ? users : []);
-                        })
-                        .catch(function (error) {
-                            if (currentRequest !== requestNumber || closed) {
-                                return;
-                            }
-
-                            console.error("User lookup error:", error);
-                            showMessage(error.message || "Unable to load users.");
+                            target.textContent = record[mapping.sourceField] ?? "";
                         });
-                }
-
-                var searchTimer;
-
-                searchInput.addEventListener("input", function () {
-                    window.clearTimeout(searchTimer);
-                    searchTimer = window.setTimeout(searchUsers, 300);
+                    }
                 });
-
-                searchInput.focus();
-                searchUsers();
             };
         },
 

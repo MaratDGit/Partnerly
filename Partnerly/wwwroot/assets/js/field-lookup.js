@@ -177,3 +177,174 @@ function truncateText(value, maxLength = 25) {
         ? text.substring(0, maxLength) + "..."
         : text;
 }
+
+
+/**
+ * Opens the existing Lookup modal for DataTable.
+ * Reuses #lookupModal and the existing Lookup CSS.
+ */
+function openDataTableLookup(options) {
+    initLookupModal();
+
+    const modal = document.getElementById("lookupModal");
+    const title = document.getElementById("lookupTitle");
+    const search = document.getElementById("lookupSearch");
+    const thead = document.getElementById("lookupHead");
+    const tbody = document.getElementById("lookupBody");
+
+    if (!modal || !title || !search || !thead || !tbody) {
+        console.error("Lookup modal elements were not found.");
+        return;
+    }
+
+    const columns = options.columns || [];
+
+    title.textContent = options.title || lookupLocalization.selectRecord;
+    search.placeholder =
+        options.searchPlaceholder || lookupLocalization.search;
+    search.value = "";
+
+    thead.replaceChildren();
+    tbody.replaceChildren();
+
+    columns.forEach(function (column) {
+        const th = document.createElement("th");
+        th.textContent = column.title || column.field;
+
+        if (column.width) {
+            th.style.width = column.width;
+        }
+
+        thead.appendChild(th);
+    });
+
+    modal.style.display = "flex";
+
+    const loadingRow = document.createElement("tr");
+    const loadingCell = document.createElement("td");
+    loadingCell.colSpan = Math.max(columns.length, 1);
+    loadingCell.textContent = lookupLocalization.loading;
+    loadingRow.appendChild(loadingCell);
+    tbody.appendChild(loadingRow);
+
+    let records = [];
+
+    function renderRows(items) {
+        tbody.replaceChildren();
+
+        if (!items.length) {
+            const tr = document.createElement("tr");
+            const td = document.createElement("td");
+
+            td.colSpan = Math.max(columns.length, 1);
+            td.className = "text-muted";
+            td.textContent = lookupLocalization.noData;
+
+            tr.appendChild(td);
+            tbody.appendChild(tr);
+            return;
+        }
+
+        items.forEach(function (item) {
+            const tr = document.createElement("tr");
+
+            columns.forEach(function (column) {
+                const td = document.createElement("td");
+                const value = item[column.field];
+
+                if (
+                    column.displayAsCheckbox ||
+                    typeof value === "boolean" ||
+                    value === "true" ||
+                    value === "false"
+                ) {
+                    const checkbox = document.createElement("input");
+                    checkbox.type = "checkbox";
+                    checkbox.disabled = true;
+                    checkbox.checked = value === true || value === "true";
+
+                    td.classList.add("text-center");
+                    td.appendChild(checkbox);
+                } else {
+                    const text = value == null ? "" : String(value);
+                    td.textContent = text;
+                    td.title = text;
+                }
+
+                tr.appendChild(td);
+            });
+
+            tr.addEventListener("click", function () {
+                modal.style.display = "none";
+
+                if (typeof options.onSelect === "function") {
+                    options.onSelect(item);
+                }
+            });
+
+            tbody.appendChild(tr);
+        });
+    }
+
+    function filterRows() {
+        const term = search.value.trim().toLowerCase();
+
+        renderRows(records.filter(function (item) {
+            return columns.some(function (column) {
+                const value = item[column.field];
+
+                return value != null &&
+                    String(value).toLowerCase().includes(term);
+            });
+        }));
+    }
+
+    // Replace the existing search handler while this Lookup is active.
+    search.oninput = filterRows;
+
+    const url = new URL(options.url, window.location.origin);
+
+    Object.entries(options.parameters || {}).forEach(
+        function ([key, value]) {
+            if (value != null && value !== "") {
+                url.searchParams.set(key, value);
+            }
+        }
+    );
+
+    fetch(url.toString(), {
+        headers: {
+            "X-Requested-With": "XMLHttpRequest"
+        }
+    })
+        .then(function (response) {
+            if (!response.ok) {
+                throw new Error("Lookup request failed.");
+            }
+
+            return response.json();
+        })
+        .then(function (data) {
+            if (!Array.isArray(data)) {
+                throw new Error("Lookup response must be an array.");
+            }
+
+            records = data;
+            filterRows();
+        })
+        .catch(function (error) {
+            console.error(error);
+
+            tbody.replaceChildren();
+
+            const tr = document.createElement("tr");
+            const td = document.createElement("td");
+
+            td.colSpan = Math.max(columns.length, 1);
+            td.className = "text-danger";
+            td.textContent = lookupLocalization.loadError;
+
+            tr.appendChild(td);
+            tbody.appendChild(tr);
+        });
+}

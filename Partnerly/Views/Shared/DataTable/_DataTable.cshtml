@@ -761,10 +761,37 @@
                                     alignment = column.Alignment.ToString(),
                                     cssClass = column.CssClass,
 
-                                    lookupUrl = column.LookupUrl,
-                                    lookupIdField = column.LookupIdField,
-                                    lookupTitle = column.LookupTitle,
-                                    lookupSearchPlaceholder = column.LookupSearchPlaceholder,
+                                    lookup = column.Lookup == null
+                                            ? null
+                                            : new
+                                        {
+                                            url = column.Lookup.Url,
+                                            idField = column.Lookup.IdField,
+                                            recordIdField = column.Lookup.RecordIdField,
+                                            displayField = column.Lookup.DisplayField,
+                                            secondaryField = column.Lookup.SecondaryField,
+
+                                            title = column.Lookup.Title,
+                                            searchPlaceholder = column.Lookup.SearchPlaceholder,
+                                            searchParameter = column.Lookup.SearchParameter,
+
+                                            parentKeyParameters = column.Lookup.ParentKeyParameters,
+
+                                            columns = column.Lookup.Columns.Select(lookupColumn => new
+                                            {
+                                                field = lookupColumn.Field,
+                                                title = lookupColumn.Title,
+                                                width = lookupColumn.Width,
+                                                displayAsCheckbox = lookupColumn.DisplayAsCheckbox
+                                            }).ToList(),
+
+                                            mappings = column.Lookup.Mappings.Select(mapping => new
+                                            {
+                                                sourceField = mapping.SourceField,
+                                                targetField = mapping.TargetField
+                                            }).ToList()
+                                        },
+
 
                                     valueMappings = column.ValueMappings.Select(option => new
                                             {
