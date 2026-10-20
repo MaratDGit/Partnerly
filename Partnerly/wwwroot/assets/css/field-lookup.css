@@ -540,3 +540,162 @@
         max-height: 76vh;
     }
 }
+
+
+
+/* =========================================================
+   PARTNERLY — FIELD LOOKUP DARK THEME
+   ========================================================= */
+
+html[data-theme="dark"] .lookup-modal {
+    background: rgba(3, 7, 18, 0.72);
+}
+
+html[data-theme="dark"] .lookup-content {
+    color: var(--partnerly-text);
+    background: var(--partnerly-background);
+    border-color: var(--partnerly-border);
+    box-shadow: 0 20px 55px rgba(0, 0, 0, 0.38), 0 0 25px rgba(105, 108, 255, 0.08);
+}
+
+/* Header */
+
+html[data-theme="dark"] .lookup-header {
+    background: var(--partnerly-background);
+    border-bottom-color: var(--partnerly-border);
+}
+
+    html[data-theme="dark"] .lookup-header h5 {
+        color: var(--partnerly-text-dark);
+    }
+
+        html[data-theme="dark"] .lookup-header h5::before {
+            background: rgba(129, 133, 255, 0.15);
+            color: var(--partnerly-accent-purple);
+        }
+
+/* Close button */
+
+html[data-theme="dark"] .lookup-close {
+    background: var(--partnerly-control-background);
+    color: var(--partnerly-text);
+}
+
+    html[data-theme="dark"] .lookup-close:hover {
+        background: rgba(255, 76, 81, 0.14);
+        color: #ff686d;
+    }
+
+/* Modal body */
+
+html[data-theme="dark"] .lookup-body {
+    background: var(--partnerly-background);
+}
+
+/* Search input */
+
+html[data-theme="dark"] #lookupSearch {
+    color: var(--partnerly-text-dark);
+    background: var(--partnerly-control-background);
+    border-color: var(--partnerly-border);
+}
+
+    html[data-theme="dark"] #lookupSearch::placeholder {
+        color: var(--partnerly-muted);
+    }
+
+    html[data-theme="dark"] #lookupSearch:hover {
+        border-color: rgba(129, 133, 255, 0.4);
+    }
+
+    html[data-theme="dark"] #lookupSearch:focus {
+        background: var(--partnerly-control-background);
+        border-color: var(--partnerly-primary);
+        box-shadow: 0 0 0 3px var(--partnerly-glow);
+    }
+
+/* Table container */
+
+html[data-theme="dark"] .table-container {
+    border-color: var(--partnerly-border);
+    scrollbar-color: rgba(129, 133, 255, 0.4) transparent;
+}
+
+    html[data-theme="dark"] .table-container::-webkit-scrollbar-thumb {
+        background: rgba(129, 133, 255, 0.35);
+    }
+
+        html[data-theme="dark"] .table-container::-webkit-scrollbar-thumb:hover {
+            background: rgba(129, 133, 255, 0.55);
+        }
+
+/* Table */
+
+html[data-theme="dark"] #lookupTable {
+    color: var(--partnerly-text);
+    background: var(--partnerly-background);
+}
+
+    html[data-theme="dark"] #lookupTable thead th {
+        color: var(--partnerly-text-dark);
+        background: #1b2538;
+        border-bottom-color: var(--partnerly-border);
+        border-right-color: var(--partnerly-border);
+    }
+
+    html[data-theme="dark"] #lookupTable tbody td {
+        color: var(--partnerly-text);
+        background: var(--partnerly-background);
+        border-bottom-color: rgba(137, 150, 176, 0.13);
+    }
+
+    html[data-theme="dark"] #lookupTable tbody tr:hover td {
+        color: var(--partnerly-text-dark);
+        background: var(--partnerly-surface-hover);
+    }
+
+        html[data-theme="dark"] #lookupTable tbody tr:hover td:first-child {
+            box-shadow: inset 3px 0 0 var(--partnerly-accent-blue);
+        }
+
+    html[data-theme="dark"] #lookupTable input[type="checkbox"] {
+        accent-color: var(--partnerly-primary);
+    }
+
+    html[data-theme="dark"] #lookupTable tbody td.text-muted {
+        color: var(--partnerly-muted) !important;
+    }
+
+    html[data-theme="dark"] #lookupTable tbody td.text-danger {
+        color: #ff686d !important;
+    }
+
+/* Lookup icon in forms */
+
+html[data-theme="dark"] .lookup-icon {
+    color: var(--partnerly-muted);
+}
+
+    html[data-theme="dark"] .lookup-icon:hover {
+        color: var(--partnerly-accent-blue);
+        background: var(--partnerly-primary-light);
+    }
+
+    /* Keyboard focus */
+
+    html[data-theme="dark"] .lookup-close:focus-visible,
+    html[data-theme="dark"] .lookup-icon:focus-visible {
+        outline: 2px solid var(--partnerly-primary);
+        outline-offset: 3px;
+    }
+
+/* Reduced motion */
+
+@media (prefers-reduced-motion: reduce) {
+    html[data-theme="dark"] .lookup-content,
+    html[data-theme="dark"] .lookup-close,
+    html[data-theme="dark"] .lookup-icon {
+        animation: none;
+        transition: none;
+    }
+}

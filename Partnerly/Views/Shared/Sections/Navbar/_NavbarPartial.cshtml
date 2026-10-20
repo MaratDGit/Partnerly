@@ -59,6 +59,7 @@
 
     <div class="partnerly-navbar-actions">
 
+        
 
         <!-- =================================================
              LANGUAGE
@@ -176,6 +177,53 @@
 
             </ul>
 
+        </div>
+
+        <!-- =================================================
+            THEME
+            ================================================= -->
+
+        <div class="dropdown partnerly-theme-dropdown">
+
+            <button type="button"
+                    class="partnerly-navbar-action partnerly-theme-button"
+                    id="partnerlyThemeButton"
+                    data-bs-toggle="dropdown"
+                    aria-expanded="false"
+                    aria-label="Change theme"
+                    title="Change theme">
+
+                <i class="bx bx-moon" id="partnerlyThemeIcon"></i>
+
+            </button>
+
+            <ul class="dropdown-menu dropdown-menu-end partnerly-theme-menu"
+                aria-labelledby="partnerlyThemeButton">
+
+                <li>
+                    <button type="button"
+                            class="dropdown-item partnerly-theme-option"
+                            data-theme-value="light">
+
+                        <i class="bx bx-sun"></i>
+                        <span>@Localizer["Lighttheme"]</span>
+                        <i class="bx bx-check partnerly-theme-check"></i>
+
+                    </button>
+                </li>
+
+                <li>
+                    <button type="button"
+                            class="dropdown-item partnerly-theme-option"
+                            data-theme-value="dark">
+
+                        <i class="bx bx-moon"></i>
+                        <span>@Localizer["Darktheme"]</span>
+                        <i class="bx bx-check partnerly-theme-check"></i>
+
+                    </button>
+                </li>
+            </ul>
         </div>
 
 

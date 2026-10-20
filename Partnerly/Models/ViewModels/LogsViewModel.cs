@@ -72,7 +72,7 @@ namespace Partnerly.Models.ViewModels
                     new DataTableOptions
                     {
                         Id = tableID,
-                        Name = FieldsDisplayNames.Tasks,
+                        Name = FieldsDisplayNames.Logs,
                         Icon = "bx bx-task",
 
                         KeyField = "Id",

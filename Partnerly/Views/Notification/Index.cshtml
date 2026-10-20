@@ -1,7 +1,0 @@
-﻿@model Partnerly.Models.ViewModels.NotificationsViewModel;
-@{
-    ViewData["Title"] = "Notifications";
-    Layout = "_ContentNavbarLayout";
-}
-
-@await Html.PartialAsync("~/Views/Shared/DataTable/_DataTable.cshtml", Model.notifications)

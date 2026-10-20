@@ -32,8 +32,8 @@ namespace Partnerly.Controllers
         {
             AttachmentViewModel model = new AttachmentViewModel();
             model.attachments = AttachmentViewModel.CreateTableOptions(DataTableNames.attachmentsTable, _dataTableRegistry);
-            
-            return View(model);
+
+            return View("~/Views/Shared/DataTable/_DataTablePartial.cshtml", model.attachments);
         }
 
         [HttpPost]

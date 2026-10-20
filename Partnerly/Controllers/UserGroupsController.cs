@@ -43,8 +43,8 @@ namespace Partnerly.Controllers
         {
             UserGroupViewModel model = new UserGroupViewModel();
             model.groups = UserGroupViewModel.CreateTableOptions(DataTableNames.userGroupsTable, _dataTableRegistry);
-
-            return View(model);
+            
+            return View("~/Views/Shared/DataTable/_DataTablePartial.cshtml", model.groups);
         }
 
         [ClaimAuthorize(ClaimTypes.Role, RoleTypeAttribute.Admin)]
@@ -163,11 +163,18 @@ namespace Partnerly.Controllers
             var group = await _userGroupService.GetByIDAsync(id);
             if (group == null) return NotFound();
 
-            var model = new UserGroupViewModel
+            var deleteModel = new DeleteConfirmationViewModel
             {
-                Id = group.Id
+                Id = group.Id,
+                Title = ErrorMessages.Deletegroup,
+                Message = ErrorMessages.Areyousureyouwanttodeletethisfile,
+                DeleteAction = "DeleteConfirmed",
+                DeleteController = "UserGroups",
+                CancelAction = "Index",
+                CancelController = "UserGroups"
             };
-            return View(model);
+
+            return View("~/Views/Shared/_DeleteConfirmation.cshtml", deleteModel);
         }
 
         [HttpPost, ActionName("DeleteConfirmed")]

@@ -31,7 +31,6 @@ document.addEventListener('DOMContentLoaded', function () {
 
 
     function setDesktopCollapsed(collapsed) {
-
         if (window.innerWidth <= 1199.98) {
             return;
         }
@@ -41,21 +40,29 @@ document.addEventListener('DOMContentLoaded', function () {
             collapsed
         );
 
-        localStorage.setItem(
-            SIDEBAR_STATE_KEY,
-            collapsed ? 'true' : 'false'
-        );
+        try {
+            localStorage.setItem(
+                SIDEBAR_STATE_KEY,
+                String(collapsed)
+            );
+        } catch (error) {
+            // Sidebar still works if storage is unavailable.
+        }
     }
 
-
     function restoreDesktopSidebarState() {
-
         if (window.innerWidth <= 1199.98) {
             return;
         }
 
-        const collapsed =
-            localStorage.getItem(SIDEBAR_STATE_KEY) === 'true';
+        let collapsed = false;
+
+        try {
+            collapsed =
+                localStorage.getItem(SIDEBAR_STATE_KEY) === 'true';
+        } catch (error) {
+            // Use the expanded sidebar as the default.
+        }
 
         body.classList.toggle(
             'partnerly-sidebar-collapsed',

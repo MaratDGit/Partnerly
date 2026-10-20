@@ -33,3 +33,23 @@
         transform: translateX(-100%);
     }
 }
+
+
+
+/* =========================================================
+   PARTNERLY — DARK GLOW TICKER
+   ========================================================= */
+
+html[data-theme="dark"] .navbar-marquee {
+    background: linear-gradient( 100deg, #5558d9 0%, #696cff 48%, #586fe8 100% );
+    color: #fff;
+    box-shadow: 0 3px 14px rgba(105, 108, 255, 0.20), 0 0 20px rgba(66, 165, 255, 0.08);
+}
+
+html[data-theme="dark"] .navbar-marquee-content {
+    text-shadow: 0 0 10px rgba(255, 255, 255, 0.12);
+}
+
+    html[data-theme="dark"] .navbar-marquee-content i {
+        color: #dce8ff;
+    }

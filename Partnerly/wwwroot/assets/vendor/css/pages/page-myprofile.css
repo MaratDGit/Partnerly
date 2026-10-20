@@ -1616,3 +1616,297 @@
         font-size: 11px;
     }
 }
+
+
+/* =========================================================
+   DARK THEME — PROFILE PAGE
+   Append at the end of my-profile.css
+   ========================================================= */
+
+/* Profile header and cover */
+
+html[data-theme="dark"] .profile-header-card,
+html[data-theme="dark"] .profile-info-card,
+html[data-theme="dark"] .profile-activity-card,
+html[data-theme="dark"] .profile-team-card,
+html[data-theme="dark"] .team-members-card {
+    border-color: #29354b;
+    background: #151c2c;
+    box-shadow: 0 4px 22px rgba(0,0,0,.18), 0 0 18px rgba(105,108,255,.035);
+}
+
+html[data-theme="dark"] .profile-cover {
+    background: radial-gradient(circle at 75% 20%, rgba(85,183,255,.35), transparent 32%), linear-gradient(120deg, #4548a8, #373274 55%, #252849);
+}
+
+html[data-theme="dark"] .profile-avatar {
+    border-color: #151c2c;
+    background: #202a40;
+    box-shadow: 0 5px 22px rgba(0,0,0,.35), 0 0 14px rgba(105,108,255,.10);
+}
+
+html[data-theme="dark"] .profile-avatar-placeholder {
+    color: #a3b0c7;
+}
+
+html[data-theme="dark"] .profile-avatar-camera {
+    border-color: #151c2c;
+    background: #696cff;
+    box-shadow: 0 0 14px rgba(105,108,255,.30);
+}
+
+/* Photo upload panel */
+
+html[data-theme="dark"] .photo-upload-panel {
+    border-color: rgba(129,133,255,.24);
+    background: rgba(105,108,255,.07);
+    box-shadow: 0 4px 18px rgba(0,0,0,.12);
+}
+
+html[data-theme="dark"] .photo-upload-header strong,
+html[data-theme="dark"] .photo-upload-info strong {
+    color: #e5ecfb;
+}
+
+html[data-theme="dark"] .photo-upload-header span,
+html[data-theme="dark"] .photo-upload-format,
+html[data-theme="dark"] .photo-upload-info span {
+    color: #96a4bd;
+}
+
+html[data-theme="dark"] .photo-upload-close {
+    border-color: #354159;
+    background: #202a40;
+    color: #b8c4d9;
+    box-shadow: none;
+}
+
+    html[data-theme="dark"] .photo-upload-close:hover {
+        border-color: #8185ff;
+        background: rgba(105,108,255,.16);
+        color: #b1b3ff;
+    }
+
+/* Cropper work area intentionally stays dark */
+
+html[data-theme="dark"] .photo-crop-container {
+    background: #111827;
+    box-shadow: inset 0 0 0 1px rgba(129,133,255,.12), 0 5px 20px rgba(0,0,0,.25);
+}
+
+html[data-theme="dark"] .photo-upload-preview-image {
+    background: #202a40;
+    color: #a3a6ff;
+}
+
+html[data-theme="dark"] .photo-crop-controls .btn {
+    border-color: #354159;
+}
+
+/* Profile name and metadata */
+
+html[data-theme="dark"] .profile-name,
+html[data-theme="dark"] .profile-section-title h5,
+html[data-theme="dark"] .profile-info-content strong,
+html[data-theme="dark"] .team-stat-content strong,
+html[data-theme="dark"] .team-member-info strong,
+html[data-theme="dark"] .team-member-referrals strong,
+html[data-theme="dark"] .team-members-header h5,
+html[data-theme="dark"] .profile-empty-state h5 {
+    color: #edf2ff;
+}
+
+html[data-theme="dark"] .profile-meta,
+html[data-theme="dark"] .profile-section-title span,
+html[data-theme="dark"] .profile-info-label,
+html[data-theme="dark"] .profile-empty-state p,
+html[data-theme="dark"] .team-stat-content span,
+html[data-theme="dark"] .team-members-header > div > span {
+    color: #96a4bd;
+}
+
+html[data-theme="dark"] .profile-referral-btn {
+    box-shadow: 0 4px 16px rgba(105,108,255,.22);
+}
+
+/* Tabs */
+
+html[data-theme="dark"] .profile-tabs .nav-link {
+    color: #a6b3ca;
+}
+
+    html[data-theme="dark"] .profile-tabs .nav-link:hover {
+        color: #b1b3ff;
+        background: rgba(105,108,255,.13);
+    }
+
+    html[data-theme="dark"] .profile-tabs .nav-link.active {
+        color: #fff;
+        background: linear-gradient(110deg, #696cff, #795cf5);
+        box-shadow: 0 4px 14px rgba(105,108,255,.28), 0 0 12px rgba(105,108,255,.10);
+    }
+
+/* Card headers and separators */
+
+html[data-theme="dark"] .profile-card-header,
+html[data-theme="dark"] .team-members-header {
+    border-bottom-color: #29354b;
+    background: #151c2c;
+}
+
+html[data-theme="dark"] .profile-divider {
+    background: #29354b;
+}
+
+/* Information icons */
+
+html[data-theme="dark"] .profile-section-icon,
+html[data-theme="dark"] .profile-icon-primary,
+html[data-theme="dark"] .team-stat-icon-purple {
+    background: rgba(105,108,255,.17);
+    color: #a3a6ff;
+}
+
+html[data-theme="dark"] .profile-section-icon-green,
+html[data-theme="dark"] .team-stat-icon-green {
+    background: rgba(40,199,111,.14);
+    color: #54df91;
+}
+
+html[data-theme="dark"] .profile-section-icon-purple {
+    background: rgba(167,139,250,.16);
+    color: #c0a8ff;
+}
+
+html[data-theme="dark"] .profile-icon-warning {
+    background: rgba(255,159,67,.14);
+    color: #ffb56b;
+}
+
+html[data-theme="dark"] .profile-icon-success {
+    background: rgba(40,199,111,.14);
+    color: #54df91;
+}
+
+html[data-theme="dark"] .profile-icon-info,
+html[data-theme="dark"] .team-stat-icon-blue {
+    background: rgba(0,207,232,.13);
+    color: #53d9ec;
+}
+
+html[data-theme="dark"] .profile-icon-danger {
+    background: rgba(255,76,81,.14);
+    color: #ff777c;
+}
+
+/* Empty state */
+
+html[data-theme="dark"] .profile-empty-icon {
+    background: rgba(105,108,255,.16);
+    color: #a3a6ff;
+    box-shadow: 0 0 22px rgba(105,108,255,.08);
+}
+
+/* Team statistics */
+
+html[data-theme="dark"] .team-stat-card {
+    border-color: #29354b;
+    background: #151c2c;
+    box-shadow: 0 3px 16px rgba(0,0,0,.15);
+}
+
+    html[data-theme="dark"] .team-stat-card:hover {
+        border-color: rgba(129,133,255,.40);
+        box-shadow: 0 7px 24px rgba(0,0,0,.24), 0 0 18px rgba(105,108,255,.09);
+    }
+
+/* Referral list */
+
+html[data-theme="dark"] .team-members-count {
+    background: rgba(105,108,255,.17);
+    color: #b1b3ff !important;
+}
+
+html[data-theme="dark"] .team-member-list-header {
+    border-bottom-color: #29354b;
+    background: #111827;
+    color: #91a0ba;
+}
+
+html[data-theme="dark"] .team-member-row:not(.team-member-list-header) {
+    border-bottom-color: #263147;
+    background: #151c2c;
+}
+
+    html[data-theme="dark"] .team-member-row:not(.team-member-list-header):hover {
+        background: #1c2740;
+    }
+
+html[data-theme="dark"] .team-member-info span {
+    color: #96a4bd;
+}
+
+html[data-theme="dark"] .team-member-date {
+    color: #a6b3ca;
+}
+
+    html[data-theme="dark"] .team-member-date i {
+        color: #8494b0;
+    }
+
+html[data-theme="dark"] .team-member-referrals {
+    color: #a6b3ca;
+}
+
+    html[data-theme="dark"] .team-member-referrals i {
+        color: #a3a6ff;
+    }
+
+html[data-theme="dark"] .team-member-avatar {
+    background: rgba(105,108,255,.17);
+    color: #b1b3ff;
+}
+
+html[data-theme="dark"] .team-member-actions .btn {
+    color: #9ba9c2;
+}
+
+    html[data-theme="dark"] .team-member-actions .btn:hover {
+        color: #b1b3ff;
+        background: rgba(105,108,255,.15);
+    }
+
+/* Referral scrollbar */
+
+html[data-theme="dark"] .team-members-scroll {
+    scrollbar-color: rgba(129,133,255,.50) transparent;
+}
+
+    html[data-theme="dark"] .team-members-scroll::-webkit-scrollbar-thumb {
+        background: rgba(129,133,255,.40);
+    }
+
+        html[data-theme="dark"] .team-members-scroll::-webkit-scrollbar-thumb:hover {
+            background: rgba(129,133,255,.65);
+        }
+
+/* Toast */
+
+html[data-theme="dark"] .referral-toast {
+    border: 1px solid #354159;
+    background: #202a40;
+    box-shadow: 0 8px 28px rgba(0,0,0,.30), 0 0 14px rgba(105,108,255,.08);
+}
+
+    html[data-theme="dark"] .referral-toast .toast-body {
+        color: #edf2ff;
+    }
+
+/* Focus visibility */
+
+html[data-theme="dark"] .profile-tabs .nav-link:focus-visible,
+html[data-theme="dark"] .photo-upload-close:focus-visible,
+html[data-theme="dark"] .team-member-actions .btn:focus-visible {
+    outline: 2px solid #8185ff;
+    outline-offset: 3px;
+}

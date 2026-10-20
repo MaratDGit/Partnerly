@@ -18,6 +18,11 @@ namespace Partnerly.Descriptors.Messages
 
         #region Views errors
         public static string Areyousureyouwanttodeletethisfile => Messages.Get(nameof(Areyousureyouwanttodeletethisfile));
+        public static string Deletingthenotification => Messages.Get(nameof(Deletingthenotification));
+        public static string Deletingthetemplate => Messages.Get(nameof(Deletingthetemplate));
+        public static string Deletetask => Messages.Get(nameof(Deletetask));
+        public static string Deletegroup => Messages.Get(nameof(Deletegroup));
+        public static string DeleteUser => Messages.Get(nameof(DeleteUser)); 
         public static string ReferrerUserCannotBeFoundOrInactive => Messages.Get(nameof(ReferrerUserCannotBeFoundOrInactive));
         public static string IncorectPasswordOrUsername => Messages.Get(nameof(IncorectPasswordOrUsername));
         public static string IncorectPassword => Messages.Get(nameof(IncorectPassword));

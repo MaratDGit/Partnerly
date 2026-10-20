@@ -349,4 +349,136 @@
         }
 
     }
+
+    /* =========================================================
+       PARTNERLY — LOG DETAILS DARK THEME
+       Append at the end of the existing <style>
+       ========================================================= */
+
+    html[data-theme="dark"] .log-details-card {
+        background: #151c2c;
+        border-color: #29344a;
+        box-shadow: 0 8px 28px rgba(0, 0, 0, 0.2), 0 0 18px rgba(105, 108, 255, 0.045);
+    }
+
+    /* Header */
+
+    html[data-theme="dark"] .log-details-header {
+        background: linear-gradient( 115deg, rgba(105, 108, 255, 0.09), rgba(180, 154, 255, 0.035) 55%, transparent );
+        border-bottom-color: #29344a;
+    }
+
+    html[data-theme="dark"] .log-details-title-icon {
+        background: rgba(105, 108, 255, 0.16);
+        color: #8185ff;
+        box-shadow: 0 0 16px rgba(105, 108, 255, 0.1);
+    }
+
+    html[data-theme="dark"] .log-details-title h5 {
+        color: #edf2ff;
+    }
+
+    html[data-theme="dark"] .log-details-title span {
+        color: #8996b0;
+    }
+
+    /* Body and sticky buttons */
+
+    html[data-theme="dark"] .log-details-body {
+        color: #c5cee0;
+    }
+
+        html[data-theme="dark"] .log-details-body .sticky-buttons {
+            background: #151c2c;
+            border-bottom-color: #29344a;
+        }
+
+    /* Sections */
+
+    html[data-theme="dark"] .log-section-title {
+        color: #c5cee0;
+    }
+
+        html[data-theme="dark"] .log-section-title i {
+            color: #8185ff;
+            filter: drop-shadow(0 0 5px rgba(105, 108, 255, 0.28));
+        }
+
+    /* Read-only fields */
+
+    html[data-theme="dark"] .log-field .form-control {
+        background: #111a2b;
+        border-color: #29344a;
+        color: #c5cee0;
+        caret-color: transparent;
+        -webkit-text-fill-color: #c5cee0;
+        opacity: 1;
+    }
+
+        html[data-theme="dark"] .log-field .form-control:focus {
+            background: #111a2b;
+            border-color: rgba(129, 133, 255, 0.4);
+            box-shadow: 0 0 0 3px rgba(105, 108, 255, 0.08);
+        }
+
+    html[data-theme="dark"] .log-field label {
+        color: #8996b0;
+    }
+
+    /* Log message */
+
+    html[data-theme="dark"] .log-message {
+        background: #0f1727;
+        border-color: #29344a;
+        color: #c5cee0;
+        -webkit-text-fill-color: #c5cee0;
+        caret-color: transparent;
+        opacity: 1;
+        scrollbar-color: #465574 #111a2b;
+    }
+
+        html[data-theme="dark"] .log-message:focus {
+            background: #0f1727;
+            border-color: rgba(129, 133, 255, 0.4);
+            box-shadow: 0 0 0 3px rgba(105, 108, 255, 0.08);
+        }
+
+        html[data-theme="dark"] .log-message::selection,
+        html[data-theme="dark"] .log-field .form-control::selection {
+            background: rgba(105, 108, 255, 0.35);
+            color: #ffffff;
+        }
+
+        /* Floating labels */
+
+        html[data-theme="dark"] .log-field .form-control:focus ~ label,
+        html[data-theme="dark"] .log-field .form-control:not(:placeholder-shown) ~ label,
+        html[data-theme="dark"] .log-message:focus ~ label,
+        html[data-theme="dark"] .log-message:not(:placeholder-shown) ~ label {
+            color: #8996b0;
+        }
+
+    /* Responsive refinements */
+
+@@media (max-width: 767.98px) {
+        html [data-theme="dark"] .log-details-card
+
+    {
+        border-radius: 12px;
+    }
+
+    html[data-theme="dark"] .log-field .form-control {
+        min-height: 50px;
+    }
+
+    }
+
+@@media (prefers-reduced-motion: reduce) {
+        html [data-theme="dark"] .log-details-card, html[data-theme="dark"] .log-details-title-icon
+
+    {
+        transition: none;
+    }
+
+    }
 </style>

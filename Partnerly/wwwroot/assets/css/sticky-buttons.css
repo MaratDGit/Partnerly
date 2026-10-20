@@ -1170,3 +1170,231 @@
         transition: none !important;
     }
 }
+
+
+
+/* =========================================================
+   PARTNERLY — DARK DOCUMENT ACTION BAR
+   ========================================================= */
+
+html[data-theme="dark"] .sticky-buttons {
+    --action-primary: #8185ff;
+    --action-primary-hover: #9699ff;
+    --action-text: #c5cee0;
+    --action-muted: #8996b0;
+    --action-border: rgba(145, 162, 195, 0.18);
+    background: rgba(17, 26, 43, 0.86);
+    border-color: var(--action-border);
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.16), 0 0 18px rgba(105, 108, 255, 0.07);
+}
+
+    html[data-theme="dark"] .sticky-buttons:hover {
+        border-color: rgba(129, 133, 255, 0.38);
+        box-shadow: 0 5px 18px rgba(0, 0, 0, 0.20), 0 0 22px rgba(105, 108, 255, 0.12);
+    }
+
+    html[data-theme="dark"] .sticky-buttons .right-buttons {
+        border-left-color: var(--action-border);
+    }
+
+    /* Standard action buttons */
+
+    html[data-theme="dark"] .sticky-buttons .left-buttons > .btn,
+    html[data-theme="dark"] .sticky-buttons .left-buttons > .btn-group > .btn,
+    html[data-theme="dark"] .sticky-buttons .btn-note,
+    html[data-theme="dark"] .sticky-buttons .btn-attachement {
+        color: var(--action-text);
+    }
+
+        html[data-theme="dark"] .sticky-buttons .left-buttons > .btn:hover,
+        html[data-theme="dark"] .sticky-buttons .left-buttons > .btn-group > .btn:hover,
+        html[data-theme="dark"] .sticky-buttons .btn-note:hover,
+        html[data-theme="dark"] .sticky-buttons .btn-attachement:hover {
+            color: #aeb1ff;
+            background: rgba(129, 133, 255, 0.13);
+            border-color: rgba(129, 133, 255, 0.24) !important;
+            box-shadow: 0 0 12px rgba(105, 108, 255, 0.10);
+        }
+
+    /* Save button */
+
+    html[data-theme="dark"] .sticky-buttons .left-buttons > #btnSave {
+        color: #fff !important;
+        background: linear-gradient(135deg, #696cff, #8185ff) !important;
+        border-color: #8185ff !important;
+        box-shadow: 0 3px 10px rgba(105, 108, 255, 0.24), 0 0 14px rgba(105, 108, 255, 0.12);
+    }
+
+        html[data-theme="dark"] .sticky-buttons .left-buttons > #btnSave:hover {
+            background: linear-gradient(135deg, #777aff, #9699ff) !important;
+            border-color: #9699ff !important;
+            box-shadow: 0 4px 14px rgba(105, 108, 255, 0.32), 0 0 20px rgba(105, 108, 255, 0.16);
+        }
+
+    /* Note button */
+
+    html[data-theme="dark"] .sticky-buttons .btn-note.active {
+        color: #ffc266;
+        background: rgba(255, 171, 0, 0.12);
+        border-color: rgba(255, 194, 102, 0.22) !important;
+    }
+
+        html[data-theme="dark"] .sticky-buttons .btn-note.active:hover {
+            color: #ffd38b;
+            background: rgba(255, 171, 0, 0.18);
+        }
+
+    /* Attachment button */
+
+    html[data-theme="dark"] .sticky-buttons .btn-attachement.active {
+        color: #aeb1ff;
+        background: rgba(129, 133, 255, 0.15);
+        border-color: rgba(129, 133, 255, 0.28) !important;
+    }
+
+        html[data-theme="dark"] .sticky-buttons .btn-attachement.active:hover {
+            background: rgba(129, 133, 255, 0.22);
+        }
+
+    /* Dropdown menu */
+
+    html[data-theme="dark"] .sticky-buttons .left-buttons .dropdown-menu {
+        background: #151c2c;
+        border-color: #29344a;
+        box-shadow: 0 12px 28px rgba(0, 0, 0, 0.30), 0 0 16px rgba(105, 108, 255, 0.08);
+    }
+
+    html[data-theme="dark"] .sticky-buttons .left-buttons .dropdown-item {
+        color: #c5cee0;
+    }
+
+        html[data-theme="dark"] .sticky-buttons .left-buttons .dropdown-item i {
+            color: #8996b0;
+        }
+
+        html[data-theme="dark"] .sticky-buttons .left-buttons .dropdown-item:hover {
+            color: #aeb1ff;
+            background: rgba(129, 133, 255, 0.13);
+        }
+
+            html[data-theme="dark"] .sticky-buttons .left-buttons .dropdown-item:hover i {
+                color: #aeb1ff;
+            }
+
+/* Note and attachment modals */
+
+html[data-theme="dark"] #noteModal .modal-content,
+html[data-theme="dark"] #attachmentsModal .modal-content {
+    color: #c5cee0;
+    background: #151c2c;
+    border-color: #29344a;
+    box-shadow: 0 18px 48px rgba(0, 0, 0, 0.32), 0 0 22px rgba(105, 108, 255, 0.08);
+}
+
+html[data-theme="dark"] #noteModal .modal-header,
+html[data-theme="dark"] #noteModal .modal-body,
+html[data-theme="dark"] #noteModal .modal-footer,
+html[data-theme="dark"] #attachmentsModal .modal-header,
+html[data-theme="dark"] #attachmentsModal .modal-body,
+html[data-theme="dark"] #attachmentsModal .modal-footer {
+    color: #c5cee0;
+    background: #151c2c;
+    border-color: #29344a;
+}
+
+html[data-theme="dark"] #noteModal .modal-title,
+html[data-theme="dark"] #attachmentsModal .modal-title {
+    color: #edf2ff;
+}
+
+    html[data-theme="dark"] #noteModal .note-modal-icon,
+    html[data-theme="dark"] #attachmentsModal .modal-title i {
+        color: #aeb1ff;
+        background: rgba(129, 133, 255, 0.15);
+        box-shadow: 0 0 12px rgba(105, 108, 255, 0.08);
+    }
+
+html[data-theme="dark"] #noteModal #noteText,
+html[data-theme="dark"] #attachmentsModal #attachmentFiles {
+    color: #edf2ff;
+    background-color: #111a2b;
+    border-color: #35425b;
+}
+
+    html[data-theme="dark"] #noteModal #noteText::placeholder {
+        color: #8996b0;
+    }
+
+    html[data-theme="dark"] #noteModal #noteText:focus,
+    html[data-theme="dark"] #attachmentsModal #attachmentFiles:focus {
+        border-color: #8185ff;
+        box-shadow: 0 0 0 3px rgba(129, 133, 255, 0.14), 0 0 14px rgba(105, 108, 255, 0.08);
+    }
+
+/* Modal close buttons */
+
+html[data-theme="dark"] #noteModal .modal-header .btn-close,
+html[data-theme="dark"] #attachmentsModal .btn-close {
+    color: #c5cee0;
+    background: #202a40;
+    background-image: none;
+}
+
+    html[data-theme="dark"] #noteModal .modal-header .btn-close:hover,
+    html[data-theme="dark"] #attachmentsModal .btn-close:hover {
+        color: #ff6268;
+        background: rgba(255, 76, 81, 0.13);
+    }
+
+/* Clear note button */
+
+html[data-theme="dark"] #noteModal #clearNoteBtn {
+    color: #c5cee0;
+    border-color: #35425b;
+    background: #111a2b;
+}
+
+    html[data-theme="dark"] #noteModal #clearNoteBtn:hover {
+        color: #edf2ff;
+        background: #202a40;
+    }
+
+/* Attachments list */
+
+html[data-theme="dark"] #attachmentsModal #attachmentsList .list-group-item {
+    color: #c5cee0;
+    background: #111a2b;
+    border-color: #29344a;
+}
+
+    html[data-theme="dark"] #attachmentsModal #attachmentsList .list-group-item:hover {
+        background: rgba(129, 133, 255, 0.09);
+        border-color: rgba(129, 133, 255, 0.35);
+        box-shadow: 0 3px 12px rgba(0, 0, 0, 0.15);
+    }
+
+html[data-theme="dark"] #attachmentsModal #attachmentsList .fw-semibold {
+    color: #edf2ff;
+}
+
+html[data-theme="dark"] #attachmentsModal #attachmentsModalEmpty,
+html[data-theme="dark"] #attachmentsModal #attachmentsEmpty {
+    color: #8996b0;
+}
+
+html[data-theme="dark"] #attachmentsModal hr {
+    border-top-color: #29344a;
+}
+
+html[data-theme="dark"] #attachmentsModal #attachmentsLoading .spinner-border {
+    color: #8185ff;
+}
+
+/* Preserve accessibility */
+
+html[data-theme="dark"] .sticky-buttons .left-buttons > .btn:focus-visible,
+html[data-theme="dark"] .sticky-buttons .left-buttons > .btn-group > .btn:focus-visible,
+html[data-theme="dark"] .sticky-buttons .btn-note:focus-visible,
+html[data-theme="dark"] .sticky-buttons .btn-attachement:focus-visible {
+    box-shadow: 0 0 0 3px rgba(129, 133, 255, 0.24);
+}

@@ -41,7 +41,7 @@ namespace Partnerly.Controllers
             SupportTicketViewModel model = new SupportTicketViewModel();
             model.tickets = SupportTicketViewModel.CreateTableOptions(DataTableNames.supportTicketsTable, _dataTableRegistry);
 
-            return View(model);
+            return View("~/Views/Shared/DataTable/_DataTablePartial.cshtml", model.tickets);
         }
 
         public async Task<IActionResult> OpenNewCase()
@@ -288,11 +288,18 @@ namespace Partnerly.Controllers
             var ticket = await _supportTicketService.GetSupportTicketByIDAsync(id);
             if (ticket == null) return NotFound();
 
-            var model = new SupportTicketViewModel
+            var deleteModel = new DeleteConfirmationViewModel
             {
-                Id = ticket.Id
+                Id = ticket.Id,
+                Title = ErrorMessages.Deletetask,
+                Message = ErrorMessages.Areyousureyouwanttodeletethisfile,
+                DeleteAction = "DeleteConfirmed",
+                DeleteController = "SupportTickets",
+                CancelAction = "Index",
+                CancelController = "SupportTickets"
             };
-            return View(model);
+
+            return View("~/Views/Shared/_DeleteConfirmation.cshtml", deleteModel);
         }
 
         [HttpPost, ActionName("DeleteConfirmed")]

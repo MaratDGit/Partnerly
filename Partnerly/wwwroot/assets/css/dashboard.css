@@ -580,3 +580,137 @@
         transform: rotate(360deg);
     }
 }
+
+
+
+/* =========================================================
+   PARTNERLY DASHBOARD — DARK THEME
+   ========================================================= */
+
+html[data-theme="dark"] .dashboard-stat-card,
+html[data-theme="dark"] .dashboard-card {
+    background: var(--partnerly-background);
+    border-color: var(--partnerly-border);
+    box-shadow: 0 5px 22px rgba(0, 0, 0, 0.14), 0 0 0 1px rgba(129, 133, 255, 0.025);
+}
+
+    html[data-theme="dark"] .dashboard-stat-card:hover,
+    html[data-theme="dark"] .dashboard-card:hover {
+        border-color: rgba(129, 133, 255, 0.25);
+        box-shadow: 0 12px 30px rgba(0, 0, 0, 0.20), 0 0 20px rgba(105, 108, 255, 0.07);
+    }
+
+/* Text */
+
+html[data-theme="dark"] .stat-label {
+    color: var(--partnerly-text);
+}
+
+html[data-theme="dark"] .stat-value,
+html[data-theme="dark"] .dashboard-card-header h5,
+html[data-theme="dark"] .summary-item strong {
+    color: var(--partnerly-text-dark);
+}
+
+html[data-theme="dark"] .stat-description,
+html[data-theme="dark"] .dashboard-card-subtitle,
+html[data-theme="dark"] .summary-label {
+    color: var(--partnerly-muted);
+}
+
+/* Stat icons */
+
+html[data-theme="dark"] .games-card .stat-icon {
+    color: #9295ff;
+    background: rgba(129, 133, 255, 0.16);
+    box-shadow: 0 0 18px rgba(105, 108, 255, 0.08);
+}
+
+html[data-theme="dark"] .victories-card .stat-icon {
+    background: rgba(40, 199, 111, 0.14);
+}
+
+html[data-theme="dark"] .defeats-card .stat-icon {
+    background: rgba(255, 76, 81, 0.14);
+}
+
+html[data-theme="dark"] .rate-card .stat-icon {
+    background: rgba(255, 159, 67, 0.14);
+}
+
+/* Chart title icon */
+
+html[data-theme="dark"] .dashboard-card-header h5 i {
+    color: var(--partnerly-accent-purple);
+}
+
+/* Chart scrollbar */
+
+html[data-theme="dark"] .chart-scroll::-webkit-scrollbar-track {
+    background: rgba(255, 255, 255, 0.035);
+}
+
+html[data-theme="dark"] .chart-scroll::-webkit-scrollbar-thumb {
+    background: rgba(129, 133, 255, 0.32);
+}
+
+    html[data-theme="dark"] .chart-scroll::-webkit-scrollbar-thumb:hover {
+        background: rgba(129, 133, 255, 0.52);
+    }
+
+/* Chart filter */
+
+html[data-theme="dark"] .chart-menu .btn {
+    color: var(--partnerly-text);
+    background: var(--partnerly-control-background);
+    border: 1px solid var(--partnerly-border);
+}
+
+    html[data-theme="dark"] .chart-menu .btn:hover {
+        color: var(--partnerly-accent-blue);
+        background: var(--partnerly-surface-hover);
+    }
+
+/* Refresh button */
+
+html[data-theme="dark"] .dashboard-card-refresh {
+    color: var(--partnerly-muted);
+}
+
+    html[data-theme="dark"] .dashboard-card-refresh:hover {
+        color: var(--partnerly-accent-blue);
+        background: var(--partnerly-primary-light);
+        box-shadow: 0 0 14px var(--partnerly-glow);
+    }
+
+/* Loading overlay */
+
+html[data-theme="dark"] .dashboard-refresh-overlay {
+    background: rgba(13, 19, 33, 0.48);
+}
+
+html[data-theme="dark"] .dashboard-refresh-spinner {
+    border-color: rgba(129, 133, 255, 0.22);
+    border-top-color: var(--partnerly-accent-blue);
+    filter: drop-shadow(0 0 5px rgba(85, 183, 255, 0.22));
+}
+
+html[data-theme="dark"] .dashboard-card-refresh.is-loading {
+    color: var(--partnerly-accent-blue);
+}
+
+/* Respect reduced-motion settings */
+
+@media (prefers-reduced-motion: reduce) {
+    .dashboard-stat-card,
+    .dashboard-card,
+    .dashboard-card-refresh,
+    .dashboard-refresh-overlay {
+        transition: none !important;
+    }
+
+        .dashboard-refresh-spinner,
+        .dashboard-card-refresh.is-loading i {
+            animation-duration: 1.5s;
+        }
+}

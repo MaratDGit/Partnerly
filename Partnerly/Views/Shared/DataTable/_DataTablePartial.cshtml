@@ -1,0 +1,8 @@
+﻿@using Partnerly.Models.DataTable
+@model Partnerly.Models.DataTable.DataTableOptions
+@{
+    ViewData["Title"] = Model.Name;
+    Layout = "_ContentNavbarLayout";
+}
+
+@await Html.PartialAsync("~/Views/Shared/DataTable/_DataTable.cshtml", Model)

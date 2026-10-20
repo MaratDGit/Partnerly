@@ -1329,4 +1329,10 @@
   <data name="Add" xml:space="preserve">
     <value>Ավելացնել</value>
   </data>
+  <data name="Darktheme" xml:space="preserve">
+    <value>Մուգ թեմա</value>
+  </data>
+  <data name="Lighttheme" xml:space="preserve">
+    <value>Բաց թեմա</value>
+  </data>
 </root>

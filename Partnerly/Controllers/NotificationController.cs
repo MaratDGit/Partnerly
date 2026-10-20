@@ -65,7 +65,7 @@ namespace Partnerly.Controllers
             NotificationsViewModel model = new NotificationsViewModel();
             model.notifications = NotificationsViewModel.CreateTableOptions(DataTableNames.notificationsTable, _dataTableRegistry);
 
-            return View(model);
+            return View("~/Views/Shared/DataTable/_DataTablePartial.cshtml", model.notifications);
         }
 
         [ClaimAuthorize(ClaimTypes.Role, RoleTypeAttribute.Admin)]
@@ -172,11 +172,18 @@ namespace Partnerly.Controllers
             var template = await _notificationService.GetNotificationByIDAsync(id);
             if (template == null) return NotFound();
 
-            var model = new NotificationsViewModel
+            var deleteModel = new DeleteConfirmationViewModel
             {
-                Id = template.Id
+                Id = template.Id,
+                Title = ErrorMessages.Deletingthenotification,
+                Message = ErrorMessages.Areyousureyouwanttodeletethisfile,
+                DeleteAction = "DeleteConfirmed",
+                DeleteController = "Notification",
+                CancelAction = "Index",
+                CancelController = "Notification"
             };
-            return View(model);
+
+            return View("~/Views/Shared/_DeleteConfirmation.cshtml", deleteModel);
         }
 
         [HttpPost, ActionName("DeleteConfirmed")]

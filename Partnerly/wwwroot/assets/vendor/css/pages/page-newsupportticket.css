@@ -410,3 +410,200 @@
         width: 100%;
     }
 }
+
+
+/* =========================================================
+   DARK THEME — SUPPORT / NEW TICKET
+   ========================================================= */
+
+html[data-theme="dark"] .support-header {
+    background: linear-gradient( 135deg, rgba(105, 108, 255, 0.17), rgba(85, 183, 255, 0.045) );
+    border-color: rgba(129, 133, 255, 0.22);
+    box-shadow: 0 0 24px rgba(105, 108, 255, 0.07);
+}
+
+    html[data-theme="dark"] .support-header::after {
+        background: rgba(105, 108, 255, 0.13);
+        box-shadow: 0 0 55px rgba(105, 108, 255, 0.12);
+    }
+
+    html[data-theme="dark"] .support-header h4,
+    html[data-theme="dark"] .support-info-top h5,
+    html[data-theme="dark"] .support-info-item h6,
+    html[data-theme="dark"] .support-form-header h5 {
+        color: var(--partnerly-text-dark, #edf2ff);
+    }
+
+    html[data-theme="dark"] .support-header p,
+    html[data-theme="dark"] .support-info-top p {
+        color: var(--partnerly-muted, #8996b0);
+    }
+
+html[data-theme="dark"] .support-icon {
+    background: linear-gradient(135deg, #696cff, #8b5cf6);
+    box-shadow: 0 0 22px rgba(105, 108, 255, 0.3);
+}
+
+/* Alerts */
+
+html[data-theme="dark"] .support-alert-success {
+    background: rgba(113, 221, 55, 0.09);
+    border-color: rgba(113, 221, 55, 0.22);
+    color: #a6eb82;
+}
+
+    html[data-theme="dark"] .support-alert-success .support-alert-icon {
+        background: rgba(113, 221, 55, 0.14);
+        color: #a6eb82;
+    }
+
+html[data-theme="dark"] .support-alert-danger {
+    background: rgba(255, 76, 81, 0.09);
+    border-color: rgba(255, 76, 81, 0.22);
+    color: #ff9296;
+}
+
+    html[data-theme="dark"] .support-alert-danger .support-alert-icon {
+        background: rgba(255, 76, 81, 0.14);
+        color: #ff9296;
+    }
+
+/* Information card */
+
+html[data-theme="dark"] .support-info-card,
+html[data-theme="dark"] .support-form-card {
+    background: var(--partnerly-background, #151c2c);
+    border-color: var(--partnerly-border, #29344a);
+    box-shadow: 0 6px 24px rgba(0, 0, 0, 0.16), 0 0 18px rgba(105, 108, 255, 0.035);
+}
+
+html[data-theme="dark"] .support-info-icon,
+html[data-theme="dark"] .support-form-header-icon {
+    background: rgba(105, 108, 255, 0.15);
+    color: var(--partnerly-primary, #8185ff);
+    box-shadow: inset 0 0 12px rgba(105, 108, 255, 0.035);
+}
+
+html[data-theme="dark"] .support-item-icon {
+    background: rgba(105, 108, 255, 0.12);
+    color: var(--partnerly-primary, #8185ff);
+}
+
+html[data-theme="dark"] .support-info-item h6 {
+    color: var(--partnerly-text, #c5cee0);
+}
+
+html[data-theme="dark"] .support-info-item span {
+    color: var(--partnerly-muted, #8996b0);
+}
+
+html[data-theme="dark"] .support-info-footer {
+    background: rgba(105, 108, 255, 0.07);
+    color: var(--partnerly-muted, #8996b0);
+    border: 1px solid rgba(105, 108, 255, 0.1);
+}
+
+    html[data-theme="dark"] .support-info-footer i {
+        color: var(--partnerly-primary, #8185ff);
+    }
+
+/* Form header */
+
+html[data-theme="dark"] .support-form-header {
+    border-bottom-color: var(--partnerly-border, #29344a);
+}
+
+    html[data-theme="dark"] .support-form-header p {
+        color: var(--partnerly-muted, #8996b0);
+    }
+
+/* Inputs */
+
+html[data-theme="dark"] .support-form .form-label {
+    color: var(--partnerly-text, #c5cee0);
+}
+
+html[data-theme="dark"] .support-input-wrapper > i,
+html[data-theme="dark"] .support-textarea-wrapper > i {
+    color: #8996b0;
+}
+
+html[data-theme="dark"] .support-form .form-control {
+    background-color: var(--partnerly-control-background, #111a2b);
+    color: var(--partnerly-text-dark, #edf2ff);
+    border-color: var(--partnerly-border, #29344a);
+    caret-color: var(--partnerly-primary, #8185ff);
+}
+
+    html[data-theme="dark"] .support-form .form-control::placeholder {
+        color: #71809a;
+        opacity: 1;
+    }
+
+    html[data-theme="dark"] .support-form .form-control:hover {
+        border-color: rgba(129, 133, 255, 0.45);
+    }
+
+    html[data-theme="dark"] .support-form .form-control:focus {
+        background-color: var(--partnerly-control-background, #111a2b);
+        color: var(--partnerly-text-dark, #edf2ff);
+        border-color: var(--partnerly-primary, #8185ff);
+        box-shadow: 0 0 0 3px rgba(105, 108, 255, 0.13), 0 0 14px rgba(105, 108, 255, 0.07);
+    }
+
+    html[data-theme="dark"] .support-form .form-control[readonly] {
+        background: rgba(255, 255, 255, 0.025);
+        color: var(--partnerly-muted, #8996b0);
+        border-color: var(--partnerly-border, #29344a);
+    }
+
+    html[data-theme="dark"] .support-form .form-control:disabled {
+        background: rgba(255, 255, 255, 0.025);
+        color: var(--partnerly-muted, #8996b0);
+    }
+
+    /* Autofill */
+
+    html[data-theme="dark"] .support-form .form-control:-webkit-autofill,
+    html[data-theme="dark"] .support-form .form-control:-webkit-autofill:hover,
+    html[data-theme="dark"] .support-form .form-control:-webkit-autofill:focus {
+        -webkit-text-fill-color: var(--partnerly-text-dark, #edf2ff);
+        caret-color: var(--partnerly-text-dark, #edf2ff);
+        -webkit-box-shadow: 0 0 0 1000px #111a2b inset;
+        transition: background-color 9999s ease-out;
+    }
+
+/* Footer */
+
+html[data-theme="dark"] .support-form-footer {
+    border-top-color: var(--partnerly-border, #29344a);
+}
+
+html[data-theme="dark"] .support-security {
+    color: var(--partnerly-muted, #8996b0);
+}
+
+    html[data-theme="dark"] .support-security i {
+        color: #71dd37;
+    }
+
+html[data-theme="dark"] .support-submit-btn {
+    box-shadow: 0 4px 14px rgba(105, 108, 255, 0.24), 0 0 16px rgba(105, 108, 255, 0.08);
+    transition: transform .2s ease, box-shadow .2s ease;
+}
+
+    html[data-theme="dark"] .support-submit-btn:hover {
+        transform: translateY(-1px);
+        box-shadow: 0 6px 20px rgba(105, 108, 255, 0.32), 0 0 22px rgba(105, 108, 255, 0.12);
+    }
+
+/* Validation */
+
+html[data-theme="dark"] .support-form .input-validation-error {
+    border-color: #ff6b72;
+}
+
+    html[data-theme="dark"] .support-form .input-validation-error:focus {
+        border-color: #ff6b72;
+        box-shadow: 0 0 0 3px rgba(255, 76, 81, 0.13);
+    }

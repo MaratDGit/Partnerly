@@ -32,7 +32,7 @@ namespace Partnerly.Controllers
             LogsViewModel model = new LogsViewModel();
             model.logs = LogsViewModel.CreateTableOptions(DataTableNames.logsTable, _dataTableRegistry);
 
-            return View(model);
+            return View("~/Views/Shared/DataTable/_DataTablePartial.cshtml", model.logs);
         }
 
         public async Task<IActionResult> View(Guid id)

@@ -42,7 +42,7 @@ namespace Partnerly.Controllers
             EmailTemplateViewModel model = new EmailTemplateViewModel();
             model.templates = EmailTemplateViewModel.CreateTableOptions(DataTableNames.emailTemplatesTable, _dataTableRegistry);
 
-            return View(model);
+            return View("~/Views/Shared/DataTable/_DataTablePartial.cshtml", model.templates);
         }
 
         public IActionResult Create()
@@ -144,13 +144,23 @@ namespace Partnerly.Controllers
                 var model = new { id = id };
                 TempData["ToastType"] = "error";
                 TempData["ToastMessage"] = ErrorMessages.CannotDeleteSystemRecords;
+
                 return RedirectToAction("Edit", model);
             };
 
-            return View(new EmailTemplateViewModel
+            var deleteModel = new DeleteConfirmationViewModel
             {
                 Id = template.Id,
-            });
+                Title = ErrorMessages.Deletingthetemplate,
+                Message = ErrorMessages.Areyousureyouwanttodeletethisfile,
+                DeleteAction = "DeleteConfirmed",
+                DeleteController = "EmailTemplates",
+                CancelAction = "Index",
+                CancelController = "EmailTemplates"
+            };
+
+
+            return View("~/Views/Shared/_DeleteConfirmation.cshtml", deleteModel);
         }
 
         [HttpPost, ActionName("DeleteConfirmed")]

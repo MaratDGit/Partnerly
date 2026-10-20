@@ -127,25 +127,126 @@
         font-size: 13px;
         font-weight: 500;
     }
+
+    /* =========================================================
+       PARTNERLY — AUDIT INFO DARK THEME
+       Append at the end of the existing <style>
+       ========================================================= */
+
+    html[data-theme="dark"] .audit-info-button {
+        color: var(--partnerly-primary, #8185ff);
+        background: rgba(105, 108, 255, 0.09);
+        border: 1px solid rgba(129, 133, 255, 0.16);
+        box-shadow: 0 0 10px rgba(105, 108, 255, 0.06);
+    }
+
+        html[data-theme="dark"] .audit-info-button:hover {
+            color: #ffffff;
+            background: rgba(105, 108, 255, 0.2);
+            border-color: rgba(129, 133, 255, 0.4);
+            box-shadow: 0 0 12px rgba(105, 108, 255, 0.2), 0 0 24px rgba(105, 108, 255, 0.08);
+            transform: scale(1.08);
+        }
+
+        html[data-theme="dark"] .audit-info-button:active {
+            transform: scale(0.95);
+        }
+
+        html[data-theme="dark"] .audit-info-button:focus-visible {
+            outline: 2px solid var(--partnerly-primary, #8185ff);
+            outline-offset: 3px;
+        }
+
+    /* Bootstrap Popover */
+
+    html[data-theme="dark"] .popover {
+        --bs-popover-bg: #151e30;
+        --bs-popover-border-color: #34415b;
+        --bs-popover-header-bg: #19243a;
+        --bs-popover-header-color: #edf2ff;
+        --bs-popover-body-color: #c5cee0;
+        --bs-popover-max-width: 340px;
+        border: 1px solid var(--bs-popover-border-color);
+        border-radius: 12px;
+        box-shadow: 0 12px 35px rgba(0, 0, 0, 0.32), 0 0 18px rgba(105, 108, 255, 0.1);
+        backdrop-filter: blur(14px);
+    }
+
+        html[data-theme="dark"] .popover .popover-arrow::before {
+            border-bottom-color: #34415b;
+            border-top-color: #34415b;
+        }
+
+        html[data-theme="dark"] .popover .popover-arrow::after {
+            border-bottom-color: #151e30;
+            border-top-color: #151e30;
+        }
+
+        html[data-theme="dark"] .popover .popover-body {
+            padding: 12px 14px;
+            color: #c5cee0;
+        }
+
+    /* Audit content */
+
+    html[data-theme="dark"] .audit-popup {
+        min-width: 260px;
+        color: #c5cee0;
+    }
+
+    html[data-theme="dark"] .audit-popup-row {
+        gap: 4px;
+        padding: 10px 2px;
+    }
+
+        html[data-theme="dark"] .audit-popup-row + .audit-popup-row {
+            border-top: 1px solid rgba(137, 150, 176, 0.2);
+        }
+
+    html[data-theme="dark"] .audit-popup-label {
+        color: #8996b0;
+        font-size: 10px;
+        letter-spacing: 0.55px;
+    }
+
+    html[data-theme="dark"] .audit-popup-value {
+        color: #edf2ff;
+        font-size: 13px;
+        font-weight: 500;
+        overflow-wrap: anywhere;
+    }
+
+    /* Small screens */
+
+@@media (max-width: 480px) {
+        html [data-theme="dark"] .popover
+
+    {
+        --bs-popover-max-width: min(320px, calc(100vw - 32px));
+    }
+
+    html[data-theme="dark"] .audit-popup {
+        min-width: 0;
+    }
+
+    }
 </style>
 
 <script>
     document.addEventListener("DOMContentLoaded", function () {
-
-        const auditButton = document.querySelector(".audit-info-button");
-
-        if (!auditButton) {
-            console.log("Audit button not found");
-            return;
-        }
-
         if (typeof bootstrap === "undefined") {
             console.error("Bootstrap is not loaded");
             return;
         }
 
-        new bootstrap.Popover(auditButton);
-
-        console.log("Audit popover initialized");
+        document.querySelectorAll(".audit-info-button").forEach(function (button) {
+            bootstrap.Popover.getOrCreateInstance(button, {
+                container: "body",
+                html: true,
+                sanitize: true,
+                trigger: "click",
+                placement: "bottom"
+            });
+        });
     });
 </script>

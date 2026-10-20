@@ -49,32 +49,32 @@
 
                 @await Html.PartialAsync(
                 "_StickyButtons",
-                                new Partnerly.Models.ViewModels.FormActionsViewModel
-                                {
-                                    Back = new Partnerly.Models.ViewModels.ActionBack(
-                                visible: true,
-                                fromController: "Dashboard",
-                                toController: "Home",
-                                fromAction: "Settings",
-                                toAction: "Index"
-                                ),
+                new Partnerly.Models.ViewModels.FormActionsViewModel
+                {
+                    Back = new Partnerly.Models.ViewModels.ActionBack(
+                        visible: true,
+                        fromController: "Dashboard",
+                        toController: "Home",
+                        fromAction: "Settings",
+                        toAction: "Index"
+                    ),
 
-                                    Undo = new Partnerly.Models.ViewModels.ActionUndo(
-                                visible: true,
-                                fromController: "Dashboard",
-                                toController: "Dashboard",
-                                fromAction: "Settings",
-                                toAction: "Settings"
-                                ),
+                    Undo = new Partnerly.Models.ViewModels.ActionUndo(
+                        visible: true,
+                        fromController: "Dashboard",
+                        toController: "Dashboard",
+                        fromAction: "Settings",
+                        toAction: "Settings"
+                    ),
 
-                                    Save = new Partnerly.Models.ViewModels.ActionSave(
-                                visible: true,
-                                fromController: "Dashboard",
-                                toController: "Dashboard",
-                                fromAction: "Settings",
-                                toAction: "Settings"
-                                ),
-                                })
+                    Save = new Partnerly.Models.ViewModels.ActionSave(
+                        visible: true,
+                        fromController: "Dashboard",
+                        toController: "Dashboard",
+                        fromAction: "Settings",
+                        toAction: "Settings"
+                    ),
+                })
             </div>
 
 

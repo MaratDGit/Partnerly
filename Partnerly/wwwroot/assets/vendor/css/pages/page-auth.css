@@ -970,3 +970,278 @@
             font-size: 14px;
         }
 }
+
+/* =========================================================
+   DARK THEME — AUTH PAGES
+   Append at the end of page-auth.css
+   ========================================================= */
+
+html[data-theme="dark"] {
+    --auth-primary: #8185ff;
+    --auth-primary-dark: #696cff;
+    --auth-text: #edf2ff;
+    --auth-muted: #9aa8c0;
+    --auth-border: #303b52;
+    --auth-bg: #0d1321;
+}
+
+    /* Auth page backgrounds */
+
+    html[data-theme="dark"] .partnerly-auth-page {
+        background: var(--partnerly-page-background, #0d1321);
+    }
+
+    html[data-theme="dark"] .partnerly-auth-form {
+        background: radial-gradient(circle at 90% 10%, rgba(105,108,255,.08), transparent 32%), var(--partnerly-page-background, #0d1321);
+    }
+
+    html[data-theme="dark"] .partnerly-auth-brand {
+        background: radial-gradient(circle at 80% 15%, rgba(85,183,255,.22), transparent 30%), radial-gradient(circle at 10% 85%, rgba(180,154,255,.18), transparent 32%), linear-gradient(145deg, #29275f 0%, #24234f 48%, #171b39 100%);
+    }
+
+        html[data-theme="dark"] .partnerly-auth-brand::before {
+            border-color: rgba(130,150,255,.22);
+        }
+
+        html[data-theme="dark"] .partnerly-auth-brand::after {
+            border-color: rgba(85,183,255,.18);
+        }
+
+    /* Brand decorations */
+
+    html[data-theme="dark"] .auth-logo-icon {
+        background: #202a40;
+        box-shadow: 0 0 22px rgba(105,108,255,.22);
+    }
+
+    html[data-theme="dark"] .auth-brand-card,
+    html[data-theme="dark"] .auth-brand-badge {
+        border-color: rgba(180,190,255,.20);
+        background: rgba(17,24,45,.36);
+    }
+
+    html[data-theme="dark"] .auth-brand-card-icon,
+    html[data-theme="dark"] .auth-benefit-icon {
+        border: 1px solid rgba(180,190,255,.15);
+        background: rgba(105,108,255,.16);
+    }
+
+    html[data-theme="dark"] .auth-brand-main h1 strong {
+        color: rgba(220,226,255,.78);
+    }
+
+    /* Mobile logo */
+
+    html[data-theme="dark"] .auth-mobile-logo .auth-logo {
+        color: var(--auth-text);
+    }
+
+    html[data-theme="dark"] .auth-mobile-logo .auth-logo-icon {
+        background: #202a40;
+    }
+
+    /* Form headings and fields */
+
+    html[data-theme="dark"] .auth-form-header h2 {
+        color: var(--auth-text);
+    }
+
+    html[data-theme="dark"] .auth-form-header p {
+        color: var(--auth-muted);
+    }
+
+    html[data-theme="dark"] .auth-form-icon {
+        background: rgba(105,108,255,.17);
+        color: #a3a6ff;
+        box-shadow: 0 0 22px rgba(105,108,255,.10);
+    }
+
+    html[data-theme="dark"] .auth-form .form-control {
+        border-color: var(--auth-border);
+        background-color: #111a2b;
+        color: #edf2ff;
+    }
+
+        html[data-theme="dark"] .auth-form .form-control::placeholder {
+            color: #7887a1;
+        }
+
+        html[data-theme="dark"] .auth-form .form-control:focus {
+            border-color: #8185ff;
+            background-color: #141e32;
+            box-shadow: 0 0 0 3px rgba(105,108,255,.16), 0 0 18px rgba(105,108,255,.08);
+        }
+
+    html[data-theme="dark"] .auth-form .form-floating > label {
+        color: #98a5bc;
+    }
+
+    html[data-theme="dark"] .auth-form .input-group-text {
+        border-color: var(--auth-border);
+        background: #1a2438;
+        color: #98a5bc;
+    }
+
+    html[data-theme="dark"] .auth-form .input-group:focus-within .input-group-text {
+        border-color: #8185ff;
+        color: #a3a6ff;
+    }
+
+    html[data-theme="dark"] .auth-options .form-check-label,
+    html[data-theme="dark"] .auth-terms .form-check-label {
+        color: #a6b1c7;
+    }
+
+    html[data-theme="dark"] .auth-options a,
+    html[data-theme="dark"] .auth-terms a,
+    html[data-theme="dark"] .auth-bottom-text a {
+        color: #a3a6ff;
+    }
+
+    /* Checkboxes */
+
+    html[data-theme="dark"] .auth-form .form-check-input,
+    html[data-theme="dark"] .auth-terms .form-check-input {
+        border-color: #53617b;
+        background-color: #111a2b;
+    }
+
+        html[data-theme="dark"] .auth-form .form-check-input:checked,
+        html[data-theme="dark"] .auth-terms .form-check-input:checked {
+            border-color: #8185ff;
+            background-color: #696cff;
+        }
+
+        html[data-theme="dark"] .auth-form .form-check-input:focus,
+        html[data-theme="dark"] .auth-terms .form-check-input:focus {
+            border-color: #8185ff;
+            box-shadow: 0 0 0 3px rgba(105,108,255,.17);
+        }
+
+    /* Primary button */
+
+    html[data-theme="dark"] .auth-primary-btn {
+        background: linear-gradient(110deg, #696cff, #805bfa);
+        box-shadow: 0 6px 22px rgba(105,108,255,.28), 0 0 16px rgba(105,108,255,.12);
+    }
+
+        html[data-theme="dark"] .auth-primary-btn:hover {
+            background: linear-gradient(110deg, #8185ff, #936fff);
+            box-shadow: 0 9px 28px rgba(105,108,255,.38), 0 0 22px rgba(105,108,255,.18);
+        }
+
+    /* Divider and Google sign-in */
+
+    html[data-theme="dark"] .auth-divider::before {
+        background: #303b52;
+    }
+
+    html[data-theme="dark"] .auth-divider span {
+        background: #0d1321;
+        color: #8996b0;
+    }
+
+    html[data-theme="dark"] .auth-google-btn {
+        border-color: #354159;
+        background: #151e30;
+        color: #e1e8f7;
+    }
+
+        html[data-theme="dark"] .auth-google-btn:hover {
+            border-color: #6976a0;
+            background: #202b42;
+            color: #fff;
+        }
+
+    /* Supporting text */
+
+    html[data-theme="dark"] .auth-bottom-text {
+        color: #98a5bc;
+    }
+
+    /* Modal */
+
+    html[data-theme="dark"] .auth-modal {
+        border: 1px solid #303b52;
+        background: #151e30;
+        box-shadow: 0 25px 70px rgba(0,0,0,.42), 0 0 24px rgba(105,108,255,.08);
+    }
+
+        html[data-theme="dark"] .auth-modal .modal-header,
+        html[data-theme="dark"] .auth-modal .modal-footer {
+            border-color: #303b52;
+        }
+
+        html[data-theme="dark"] .auth-modal .modal-title {
+            color: #edf2ff;
+        }
+
+        html[data-theme="dark"] .auth-modal .modal-body {
+            color: #b1bdd2;
+        }
+
+    html[data-theme="dark"] .auth-modal-icon {
+        background: rgba(255,76,81,.14);
+        color: #ff737a;
+    }
+
+    /* Result and single-auth pages */
+
+    html[data-theme="dark"] .partnerly-auth-page-single {
+        background: radial-gradient(circle at 10% 20%, rgba(105,108,255,.15), transparent 30%), radial-gradient(circle at 90% 80%, rgba(85,183,255,.09), transparent 30%), #0d1321;
+    }
+
+    html[data-theme="dark"] .auth-result-container {
+        border-color: #303b52;
+        background: rgba(21,28,44,.96);
+        box-shadow: 0 20px 60px rgba(0,0,0,.30), 0 0 30px rgba(105,108,255,.09);
+    }
+
+    html[data-theme="dark"] .auth-result-icon {
+        background: rgba(105,108,255,.17);
+        color: #a3a6ff;
+        box-shadow: 0 0 25px rgba(105,108,255,.10);
+    }
+
+        html[data-theme="dark"] .auth-result-icon.success {
+            background: rgba(40,199,111,.14);
+            color: #54df91;
+        }
+
+    html[data-theme="dark"] .auth-result-footer {
+        color: #98a5bc;
+    }
+
+        html[data-theme="dark"] .auth-result-footer i {
+            color: #a3a6ff;
+        }
+
+    /* Google registration account card */
+
+    html[data-theme="dark"] .google-register-icon {
+        background: #202a40;
+        color: #75a7ff;
+    }
+
+    html[data-theme="dark"] .google-account-card {
+        border-color: #303b52;
+        background: #111a2b;
+    }
+
+    html[data-theme="dark"] .google-account-info strong {
+        color: #e1e8f7;
+    }
+
+    html[data-theme="dark"] .google-account-info > span {
+        color: #98a5bc;
+    }
+
+    /* Native browser autofill */
+
+    html[data-theme="dark"] .auth-form .form-control:-webkit-autofill,
+    html[data-theme="dark"] .auth-form .form-control:-webkit-autofill:hover,
+    html[data-theme="dark"] .auth-form .form-control:-webkit-autofill:focus {
+        -webkit-text-fill-color: #edf2ff;
+        -webkit-box-shadow: 0 0 0 1000px #111a2b inset;
+        caret-color: #edf2ff;
+    }

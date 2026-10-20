@@ -1329,4 +1329,10 @@
   <data name="Add" xml:space="preserve">
     <value>Add</value>
   </data>
+  <data name="Darktheme" xml:space="preserve">
+    <value>Dark theme</value>
+  </data>
+  <data name="Lighttheme" xml:space="preserve">
+    <value>Light theme</value>
+  </data>
 </root>

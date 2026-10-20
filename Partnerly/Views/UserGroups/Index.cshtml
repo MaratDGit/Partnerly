@@ -1,8 +1,0 @@
-﻿@model Partnerly.Models.ViewModels.UserGroupViewModel;
-@{
-    ViewData["Title"] = "Groups";
-    Layout = "_ContentNavbarLayout";
-    bool hasAdminRole = ViewBag?.RoleType == Partnerly.Descriptors.Attributes.RoleTypeAttribute.Delete;
-}
-
-@await Html.PartialAsync("~/Views/Shared/DataTable/_DataTable.cshtml", Model.groups)

@@ -43,7 +43,7 @@ namespace Partnerly.Controllers
             UserViewModel model = new UserViewModel();
             model.users = UserViewModel.CreateTableOptions(DataTableNames.usersTable, _dataTableRegistry);
 
-            return View(model);
+            return View("~/Views/Shared/DataTable/_DataTablePartial.cshtml", model.users);
         }
 
         [ClaimAuthorize(ClaimTypes.Role, RoleTypeAttribute.Admin)]
@@ -207,11 +207,18 @@ namespace Partnerly.Controllers
             if (template == null) return NotFound();
 
 
-            var model = new UserViewModel
+            var deleteModel = new DeleteConfirmationViewModel
             {
-                Id = template.Id
+                Id = template.Id,
+                Title = ErrorMessages.DeleteUser,
+                Message = ErrorMessages.Areyousureyouwanttodeletethisfile,
+                DeleteAction = "DeleteConfirmed",
+                DeleteController = "Users",
+                CancelAction = "Index",
+                CancelController = "Users"
             };
-            return View(model);
+
+            return View("~/Views/Shared/_DeleteConfirmation.cshtml", deleteModel);
         }
 
         [HttpPost, ActionName("DeleteConfirmed")]

@@ -437,3 +437,212 @@
         display: none;
     }
 }
+
+
+
+/* =========================================================
+   PARTNERLY AI — DARK THEME
+   Electric Blue + Purple Glow
+   ========================================================= */
+
+html[data-theme="dark"] .partnerly-ai-panel {
+    color: #c5cee0;
+    background: #151c2c;
+    border-color: #29344a;
+    box-shadow: 0 18px 55px rgba(0, 0, 0, .38), 0 0 26px rgba(105, 108, 255, .10);
+}
+
+/* Header */
+
+html[data-theme="dark"] .partnerly-ai-header {
+    background: #151c2c;
+    border-bottom-color: #29344a;
+}
+
+html[data-theme="dark"] .partnerly-ai-icon,
+html[data-theme="dark"] .partnerly-ai-welcome-icon {
+    color: #a9acff;
+    background: rgba(129, 133, 255, .16);
+    box-shadow: 0 0 18px rgba(105, 108, 255, .08);
+}
+
+html[data-theme="dark"] .partnerly-ai-title {
+    color: #edf2ff;
+}
+
+html[data-theme="dark"] .partnerly-ai-status {
+    color: #8996b0;
+}
+
+html[data-theme="dark"] .partnerly-ai-status-dot {
+    box-shadow: 0 0 9px rgba(40, 199, 111, .35);
+}
+
+html[data-theme="dark"] .partnerly-ai-header-button {
+    color: #a3aec4;
+}
+
+    html[data-theme="dark"] .partnerly-ai-header-button:hover {
+        color: #8dafff;
+        background: rgba(105, 108, 255, .15);
+        box-shadow: 0 0 12px rgba(105, 108, 255, .08);
+    }
+
+/* Welcome */
+
+html[data-theme="dark"] .partnerly-ai-welcome h5 {
+    color: #edf2ff;
+}
+
+html[data-theme="dark"] .partnerly-ai-welcome p {
+    color: #a3aec4;
+}
+
+/* Suggestions */
+
+html[data-theme="dark"] .partnerly-ai-suggestion {
+    color: #c5cee0;
+    background: #111a2b;
+    border-color: #29344a;
+}
+
+    html[data-theme="dark"] .partnerly-ai-suggestion:hover {
+        color: #edf2ff;
+        background: rgba(105, 108, 255, .12);
+        border-color: rgba(129, 133, 255, .48);
+        box-shadow: 0 0 15px rgba(105, 108, 255, .08);
+    }
+
+    html[data-theme="dark"] .partnerly-ai-suggestion i {
+        color: #a9acff;
+    }
+
+/* Messages */
+
+html[data-theme="dark"] .partnerly-ai-message-avatar {
+    color: #a9acff;
+    background: rgba(129, 133, 255, .16);
+}
+
+html[data-theme="dark"] .partnerly-ai-message.user
+.partnerly-ai-message-avatar {
+    color: #fff;
+    background: linear-gradient(135deg, #696cff, #805ff2);
+}
+
+html[data-theme="dark"] .partnerly-ai-message-name {
+    color: #8996b0;
+}
+
+html[data-theme="dark"] .partnerly-ai-message-text {
+    color: #c5cee0;
+    background: #202a40;
+}
+
+html[data-theme="dark"] .partnerly-ai-message.user
+.partnerly-ai-message-text {
+    color: #fff;
+    background: linear-gradient(135deg, #696cff, #765ce8);
+    box-shadow: 0 4px 14px rgba(105, 108, 255, .15);
+}
+
+/* Typing indicator */
+
+html[data-theme="dark"] .partnerly-ai-typing {
+    background: #202a40;
+}
+
+    html[data-theme="dark"] .partnerly-ai-typing span {
+        background: #8dafff;
+    }
+
+/* Input area */
+
+html[data-theme="dark"] .partnerly-ai-input-wrapper {
+    background: #151c2c;
+    border-top-color: #29344a;
+}
+
+html[data-theme="dark"] .partnerly-ai-input-box {
+    background: #111a2b;
+    border-color: #35415a;
+}
+
+    html[data-theme="dark"] .partnerly-ai-input-box:focus-within {
+        border-color: #8185ff;
+        box-shadow: 0 0 0 3px rgba(105, 108, 255, .13), 0 0 18px rgba(105, 108, 255, .07);
+    }
+
+    html[data-theme="dark"] .partnerly-ai-input-box textarea {
+        color: #edf2ff;
+    }
+
+        html[data-theme="dark"] .partnerly-ai-input-box textarea::placeholder {
+            color: #8996b0;
+        }
+
+html[data-theme="dark"] .partnerly-ai-send {
+    background: linear-gradient(135deg, #696cff, #805ff2);
+    box-shadow: 0 3px 12px rgba(105, 108, 255, .22);
+    transition: box-shadow .2s ease, filter .2s ease;
+}
+
+    html[data-theme="dark"] .partnerly-ai-send:hover:not(:disabled) {
+        filter: brightness(1.12);
+        box-shadow: 0 0 17px rgba(105, 108, 255, .32);
+    }
+
+    html[data-theme="dark"] .partnerly-ai-send:disabled {
+        box-shadow: none;
+    }
+
+html[data-theme="dark"] .partnerly-ai-input-footer {
+    color: #8996b0;
+}
+
+/* Scrollbar */
+
+html[data-theme="dark"] .partnerly-ai-chat {
+    scrollbar-width: thin;
+    scrollbar-color: rgba(129, 133, 255, .35) transparent;
+}
+
+    html[data-theme="dark"] .partnerly-ai-chat::-webkit-scrollbar {
+        width: 6px;
+    }
+
+    html[data-theme="dark"] .partnerly-ai-chat::-webkit-scrollbar-track {
+        background: transparent;
+    }
+
+    html[data-theme="dark"] .partnerly-ai-chat::-webkit-scrollbar-thumb {
+        border-radius: 10px;
+        background: rgba(129, 133, 255, .32);
+    }
+
+        html[data-theme="dark"] .partnerly-ai-chat::-webkit-scrollbar-thumb:hover {
+            background: rgba(129, 133, 255, .55);
+        }
+
+/* Accessibility */
+
+html[data-theme="dark"] .partnerly-ai-header-button:focus-visible,
+html[data-theme="dark"] .partnerly-ai-suggestion:focus-visible,
+html[data-theme="dark"] .partnerly-ai-send:focus-visible {
+    outline: 2px solid #8185ff;
+    outline-offset: 3px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .partnerly-ai-button i,
+    .partnerly-ai-panel,
+    .partnerly-ai-header-button,
+    .partnerly-ai-suggestion,
+    .partnerly-ai-send {
+        transition: none !important;
+    }
+
+    .partnerly-ai-typing span {
+        animation: none !important;
+    }
+}

@@ -25,6 +25,7 @@
             victories: @Html.Raw(Json.Serialize(Localizer["Victories"].Value)),
             defeats: @Html.Raw(Json.Serialize(Localizer["Defeats"].Value))
         };
+
         window.dashboardDateTranslations = {
         days: [
             @Html.Raw(Json.Serialize(Localizer["Monday"].Value)),

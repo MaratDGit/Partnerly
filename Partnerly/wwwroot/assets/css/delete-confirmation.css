@@ -105,3 +105,49 @@
         }
 }
 
+
+
+/* =========================================================
+   PARTNERLY — DELETE CONFIRMATION DARK THEME
+   ========================================================= */
+
+html[data-theme="dark"] .delete-confirmation-card {
+    background: var(--partnerly-background);
+    border-color: var(--partnerly-border);
+    box-shadow: 0 12px 36px rgba(0, 0, 0, 0.22), 0 0 20px rgba(105, 108, 255, 0.05);
+}
+
+html[data-theme="dark"] .delete-confirmation-header {
+    background: var(--partnerly-background);
+    border-bottom-color: var(--partnerly-border);
+}
+
+    html[data-theme="dark"] .delete-confirmation-header h5 {
+        color: var(--partnerly-text-dark);
+    }
+
+        html[data-theme="dark"] .delete-confirmation-header h5 i,
+        html[data-theme="dark"] .delete-confirmation-icon {
+            background: rgba(255, 76, 81, 0.14);
+            color: #ff686d;
+        }
+
+html[data-theme="dark"] .delete-confirmation-message p {
+    color: var(--partnerly-text);
+}
+
+html[data-theme="dark"] .delete-confirmation-actions .btn {
+    transition: background-color .2s ease, border-color .2s ease, box-shadow .2s ease;
+}
+
+    html[data-theme="dark"] .delete-confirmation-actions .btn:focus-visible {
+        outline: 2px solid var(--partnerly-primary);
+        outline-offset: 3px;
+        box-shadow: 0 0 16px var(--partnerly-glow);
+    }
+
+@media (prefers-reduced-motion: reduce) {
+    html[data-theme="dark"] .delete-confirmation-actions .btn {
+        transition: none;
+    }
+}

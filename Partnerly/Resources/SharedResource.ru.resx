@@ -1330,4 +1330,10 @@
   <data name="Add" xml:space="preserve">
     <value>Добавить</value>
   </data>
+  <data name="Darktheme" xml:space="preserve">
+    <value>Тёмная тема</value>
+  </data>
+  <data name="Lighttheme" xml:space="preserve">
+    <value>Светлая тема</value>
+  </data>
 </root>
