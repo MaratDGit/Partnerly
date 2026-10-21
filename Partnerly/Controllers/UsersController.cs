@@ -49,13 +49,25 @@ namespace Partnerly.Controllers
         [ClaimAuthorize(ClaimTypes.Role, RoleTypeAttribute.Admin)]
         public IActionResult Create()
         {
-            return View();
+            var model = new UserFormViewModel { Title = FieldsDisplayNames.UserCreated };
+            return View("Form", model);
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create(RegisterViewModel model)
+        public async Task<IActionResult> Create(UserFormViewModel viewModel)
         {
+            ModelState.Remove("EditModel");
+
+            foreach (var key in ModelState.Keys
+                         .Where(k => k.StartsWith("EditModel."))
+                         .ToList())
+            {
+                ModelState.Remove(key);
+            }
+
+            RegisterViewModel model = viewModel.CreateModel;
+
             if (ModelState.IsValid)
             {
                 User? referrer = null;
@@ -64,8 +76,8 @@ namespace Partnerly.Controllers
                     referrer = await _userService.GetUserByRefCodeAsync(model?.ReferrerCode);
                     if (referrer == null)
                     {
-                        ModelState.AddModelError("ReferrerCode", ErrorMessages.InvalidRefferalCode);
-                        return View(model);
+                        ModelState.AddModelError("CreateModel.ReferrerCode", ErrorMessages.InvalidRefferalCode);
+                        return View("Form", viewModel);
                     }
                 }
 
@@ -73,15 +85,15 @@ namespace Partnerly.Controllers
                 existingUser = await _userService.GetUserByEmailAsync(model?.Email);
                 if (existingUser != null)
                 {
-                    ModelState.AddModelError("Email", ErrorMessages.UserWithEmailArleadyExist);
-                    return View(model);
+                    ModelState.AddModelError("CreateModel.Email", ErrorMessages.UserWithEmailArleadyExist);
+                    return View("Form", viewModel);
                 }
 
                 existingUser = await _userService.GetUserByPhoneAsync(model?.Phone);
                 if (existingUser != null)
                 {
-                    ModelState.AddModelError("Phone", ErrorMessages.UserWithPhoneArleadyExist);
-                    return View(model);
+                    ModelState.AddModelError("CreateModel.Phone", ErrorMessages.UserWithPhoneArleadyExist);
+                    return View("Form", viewModel);
                 }
 
                 string? fullName = model?.FullName?.Trim();
@@ -99,13 +111,13 @@ namespace Partnerly.Controllers
 
                 if (string.IsNullOrEmpty(firstName))
                 {
-                    ModelState.AddModelError("FullName", $"{FieldsDisplayNames.FirstName} {ErrorMessages.FieldRequired}");
-                    return View(model);
+                    ModelState.AddModelError("CreateModel.FullName", $"{FieldsDisplayNames.FirstName} {ErrorMessages.FieldRequired}");
+                    return View("Form", viewModel);
                 }
                 if (string.IsNullOrEmpty(lastName))
                 {
-                    ModelState.AddModelError("FullName", $"{FieldsDisplayNames.LastName} {ErrorMessages.FieldRequired}");
-                    return View(model);
+                    ModelState.AddModelError("CreateModel.FullName", $"{FieldsDisplayNames.LastName} {ErrorMessages.FieldRequired}");
+                    return View("Form", viewModel);
                 }
 
                 Partnerly.Models.User newUser = new Partnerly.Models.User();
@@ -122,15 +134,16 @@ namespace Partnerly.Controllers
                 {
                     foreach (var error in result.Errors)
                     {
-                        ModelState.AddModelError("TermsConditions", error);
+                        ModelState.AddModelError("CreateModel.TermsConditions", error);
                     }
-                    return View(model);
+                    return View("Form", viewModel);
                 }
 
                 TempData["ToastMessage"] = Messages.RecordSaved;
                 return RedirectToAction("Edit", new { id = result?.Data?.Id });
             }
-            return View(model);
+
+            return View("Form", viewModel);
         }
 
         public async Task<IActionResult> Edit(Guid id)
@@ -143,13 +156,29 @@ namespace Partnerly.Controllers
 
             await PrepareViewModelAsync(userAsView);
 
-            return View(userAsView);
+            var model = new UserFormViewModel
+            {
+                Title = FieldsDisplayNames.UserUpdated,
+                EditModel = userAsView
+            };
+
+            return View("Form", model);
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(Guid id, UserViewModel model)
+        public async Task<IActionResult> Edit(Guid id, UserFormViewModel viewModel)
         {
+            foreach (var key in ModelState.Keys
+                 .Where(k => k == "CreateModel" ||
+                             k.StartsWith("CreateModel."))
+                 .ToList())
+            {
+                ModelState.Remove(key);
+            }
+
+            UserViewModel model = viewModel.EditModel;
+
             if (id != model.Id) return NotFound();
 
             if (ModelState.IsValid)
@@ -160,16 +189,16 @@ namespace Partnerly.Controllers
                     User? userSameEmail = await _userService.GetUserByEmailAsync(model.Email);
                     if (userSameEmail != null && userSameEmail.Id != user.Id)
                     {
-                        ModelState.AddModelError("Email", ErrorMessages.UserWithEmailArleadyExist);
-                        return View(model);
+                        ModelState.AddModelError("EditModel.Email", ErrorMessages.UserWithEmailArleadyExist);
+                        return View("Form", viewModel);
                     }
                     else
                     {
                         User? userSamePhone = await _userService.GetUserByPhoneAsync(model?.Phone);
                         if (userSamePhone != null && userSamePhone.Id != user.Id)
                         {
-                            ModelState.AddModelError("Phone", ErrorMessages.UserWithPhoneArleadyExist);
-                            return View(model);
+                            ModelState.AddModelError("EditModel.Phone", ErrorMessages.UserWithPhoneArleadyExist);
+                            return View("Form", viewModel);
                         }
                     }
 
@@ -190,14 +219,15 @@ namespace Partnerly.Controllers
                         {
                             ModelState.AddModelError("", error);
                         }
-                        return View(model);
+                        return View("Form", viewModel);
                     }
 
                     TempData["ToastMessage"] = Messages.RecordSaved;
                     return RedirectToAction("Edit", new { id = model.Id });
                 }
             }
-            return View(model);
+
+            return View("Form", viewModel);
         }
 
         [ClaimAuthorize(ClaimTypes.Role, RoleTypeAttribute.Admin)]

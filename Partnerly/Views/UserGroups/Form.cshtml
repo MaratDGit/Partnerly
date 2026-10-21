@@ -1,0 +1,379 @@
+﻿@model Partnerly.Models.ViewModels.UserGroupViewModel
+@await Html.PartialAsync("_Toast")
+
+@{
+    bool isEdit = Model.Id != Guid.Empty;
+
+    ViewData["Title"] = Model.Title;
+    Layout = "_ContentNavbarLayout";
+}
+
+
+<style>
+
+    /* =========================================================
+           USER GROUP TABS
+           ========================================================= */
+    .user-group-tabs {
+        width: 100%;
+        min-width: 0;
+    }
+
+        /* Navigation */
+
+        .user-group-tabs > .nav-tabs {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 4px;
+            margin-bottom: 0;
+            padding: 0 12px;
+            border-bottom: 1px solid #eeeeef;
+        }
+
+            .user-group-tabs > .nav-tabs .nav-item {
+                margin-bottom: -1px;
+            }
+
+            .user-group-tabs > .nav-tabs .nav-link {
+                display: inline-flex;
+                align-items: center;
+                justify-content: center;
+                gap: 9px;
+                min-height: 48px;
+                padding: 13px 18px;
+                border: 0;
+                border-bottom: 2px solid transparent;
+                border-radius: 0;
+                background: transparent;
+                color: #697a8d;
+                font-size: 13px;
+                font-weight: 500;
+                transition: color .2s ease, background .2s ease;
+            }
+
+                .user-group-tabs > .nav-tabs .nav-link i {
+                    font-size: 19px;
+                }
+
+                .user-group-tabs > .nav-tabs .nav-link:hover {
+                    color: #696cff;
+                    background: rgba(105, 108, 255, .04);
+                }
+
+                .user-group-tabs > .nav-tabs .nav-link.active {
+                    color: #696cff;
+                    background: transparent;
+                    border-bottom-color: #696cff;
+                    font-weight: 600;
+                }
+
+    /* Content */
+
+    .user-group-tab-content {
+        min-width: 0;
+        padding: 0;
+    }
+
+    .user-group-tab-body {
+        min-width: 0;
+        padding: 22px 20px;
+    }
+
+    /* Responsive */
+
+    @@media (max-width: 576px) {
+        .user-group-tabs > .nav-tabs {
+            padding: 0 8px;
+        }
+
+            .user-group-tabs > .nav-tabs .nav-link {
+                gap: 6px;
+                min-height: 44px;
+                padding: 11px 10px;
+                font-size: 12px;
+            }
+
+                .user-group-tabs > .nav-tabs .nav-link i {
+                    font-size: 17px;
+                }
+
+        .user-group-tab-body {
+            padding: 14px 10px;
+        }
+    }
+
+    /* =========================================================
+           PARTNERLY — USER GROUP TABS DARK THEME
+           Append at the end of the existing <style>
+           ========================================================= */
+
+    html[data-theme="dark"] .user-group-tabs {
+        color: var(--partnerly-text, #c5cee0);
+    }
+
+        /* Tabs navigation */
+
+        html[data-theme="dark"] .user-group-tabs > .nav-tabs {
+            border-bottom-color: var(--partnerly-border, #29344a);
+        }
+
+            html[data-theme="dark"] .user-group-tabs > .nav-tabs .nav-link {
+                color: var(--partnerly-muted, #8996b0);
+                background: transparent;
+                border-bottom-color: transparent;
+            }
+
+                html[data-theme="dark"] .user-group-tabs > .nav-tabs .nav-link i {
+                    color: inherit;
+                    transition: color 0.2s ease, filter 0.2s ease;
+                }
+
+                html[data-theme="dark"] .user-group-tabs > .nav-tabs .nav-link:hover {
+                    color: var(--partnerly-primary, #8185ff);
+                    background: rgba(105, 108, 255, 0.07);
+                }
+
+                    html[data-theme="dark"] .user-group-tabs > .nav-tabs .nav-link:hover i {
+                        filter: drop-shadow(0 0 5px rgba(105, 108, 255, 0.25));
+                    }
+
+                html[data-theme="dark"] .user-group-tabs > .nav-tabs .nav-link.active {
+                    color: var(--partnerly-primary, #8185ff);
+                    background: linear-gradient( to bottom, rgba(105, 108, 255, 0.07), transparent );
+                    border-bottom: 2px solid var(--partnerly-primary, #8185ff);
+                    box-shadow: 0 4px 12px -9px rgba(105, 108, 255, 0.8);
+                }
+
+                    html[data-theme="dark"] .user-group-tabs > .nav-tabs .nav-link.active i {
+                        color: var(--partnerly-primary, #8185ff);
+                        filter: drop-shadow(0 0 5px rgba(105, 108, 255, 0.3));
+                    }
+
+                /* Keyboard accessibility */
+
+                html[data-theme="dark"] .user-group-tabs > .nav-tabs .nav-link:focus-visible {
+                    outline: 2px solid var(--partnerly-primary, #8185ff);
+                    outline-offset: -3px;
+                    border-radius: 5px;
+                }
+
+    /* Tab content */
+
+    html[data-theme="dark"] .user-group-tab-content {
+        color: var(--partnerly-text, #c5cee0);
+    }
+
+    html[data-theme="dark"] .user-group-tab-body {
+        color: var(--partnerly-text, #c5cee0);
+    }
+
+    /* Parent card */
+
+    html[data-theme="dark"] .card:has(.user-group-tabs) {
+        background: var(--partnerly-background, #151c2c);
+        border-color: var(--partnerly-border, #29344a);
+        box-shadow: 0 8px 28px rgba(0, 0, 0, 0.16);
+    }
+
+        html[data-theme="dark"] .card:has(.user-group-tabs) > .card-header {
+            background: linear-gradient( 110deg, rgba(105, 108, 255, 0.07), transparent 70% );
+            border-bottom-color: var(--partnerly-border, #29344a);
+            color: var(--partnerly-text-dark, #edf2ff);
+        }
+
+            html[data-theme="dark"] .card:has(.user-group-tabs) > .card-header h5 {
+                color: var(--partnerly-text-dark, #edf2ff);
+            }
+
+        html[data-theme="dark"] .card:has(.user-group-tabs) > .card-body {
+            background: transparent;
+            color: var(--partnerly-text, #c5cee0);
+        }
+
+        /* Form fields */
+
+        html[data-theme="dark"] .card:has(.user-group-tabs) .form-floating > .form-control {
+            background-color: var(--partnerly-control-background, #111a2b);
+            border-color: var(--partnerly-border, #29344a);
+            color: var(--partnerly-text-dark, #edf2ff);
+        }
+
+            html[data-theme="dark"] .card:has(.user-group-tabs) .form-floating > .form-control:focus {
+                border-color: var(--partnerly-primary, #8185ff);
+                box-shadow: 0 0 0 3px rgba(105, 108, 255, 0.1);
+            }
+
+        html[data-theme="dark"] .card:has(.user-group-tabs) .form-floating > label {
+            color: var(--partnerly-muted, #8996b0);
+        }
+
+        html[data-theme="dark"] .card:has(.user-group-tabs) .lookup-icon {
+            color: var(--partnerly-primary, #8185ff);
+        }
+
+    /* Responsive */
+
+    @@media (max-width: 576px) {
+        html [data-theme="dark"] .user-group-tabs > .nav-tabs {
+            gap: 2px;
+            padding-right: 8px;
+            padding-left: 8px;
+        }
+
+            html[data-theme="dark"] .user-group-tabs > .nav-tabs .nav-link {
+                padding-right: 10px;
+                padding-left: 10px;
+            }
+
+        html[data-theme="dark"] .user-group-tab-body {
+            padding: 14px 10px;
+        }
+    }
+
+    @@media (prefers-reduced-motion: reduce) {
+        html [data-theme="dark"] .user-group-tabs > .nav-tabs .nav-link, html[data-theme="dark"] .user-group-tabs > .nav-tabs .nav-link i {
+            transition: none;
+        }
+    }
+
+</style>
+
+<div class="card">
+    <div class="card-header d-flex align-items-center justify-content-between">
+        <h5 class="mb-0">
+            @(isEdit
+                        ? Localizer["Editgroup"]
+                        : Localizer["Createagroup"])
+        </h5>
+
+        @if (isEdit)
+        {
+            @await Html.PartialAsync("_AuditInfo", Model)
+        }
+    </div>
+
+    <div class="card-body">
+        <form id="userGroupForm"
+              asp-action="@(isEdit ? "Edit" : "Create")"
+              method="post">
+
+            @await Html.PartialAsync("_StickyButtons", Model.StickyButtons)
+
+            @if (isEdit)
+            {
+                <input type="hidden"
+                       name="GroupID"
+                       value="@Model.Id"
+                       data-parent-key="GroupID" />
+
+                <input type="hidden" asp-for="Note" />
+            }
+
+            <div class="form-floating mb-1 max-w-400 position-relative">
+                <input asp-for="Name"
+                       id="name"
+                       class="form-control lookup-input pe-5"
+                       placeholder=" "
+                       data-lookup="true"
+                       data-lookup-source="/UserGroups/GetLookupList"
+                       data-lookup-title="@Localizer["Groups"]"
+                       data-edit-url-base="/UserGroups/Edit/"
+                       data-lookup-column-names="name:@Localizer["Name"],description:@Localizer["Description"]"
+                       data-lookup-display-field="Name"
+                       data-lookup-param="fieldName"
+                       data-lookup-param-value="Name" />
+
+                <label asp-for="Name"></label>
+
+                <i class="bx bx-search lookup-icon"></i>
+
+                <span asp-validation-for="Name"
+                      class="text-danger"></span>
+            </div>
+
+            <div class="form-floating mb-1 max-w-600">
+                <input asp-for="Description"
+                       id="description"
+                       class="form-control"
+                       placeholder=" " />
+
+                <label asp-for="Description"></label>
+
+                <span asp-validation-for="Description"
+                      class="text-danger"></span>
+            </div>
+
+            @if (isEdit)
+            {
+                <div class="user-group-tabs mt-4">
+                    <ul class="nav nav-tabs"
+                        id="userGroupTabs"
+                        role="tablist">
+
+                        <li class="nav-item" role="presentation">
+                            <button class="nav-link active"
+                                    id="users-tab"
+                                    data-bs-toggle="tab"
+                                    data-bs-target="#users-tab-pane"
+                                    type="button"
+                                    role="tab"
+                                    aria-controls="users-tab-pane"
+                                    aria-selected="true">
+                                <i class="bx bx-group"></i>
+                                <span>@Localizer["Users"]</span>
+                            </button>
+                        </li>
+
+                        <li class="nav-item" role="presentation">
+                            <button class="nav-link"
+                                    id="connections-tab"
+                                    data-bs-toggle="tab"
+                                    data-bs-target="#connections-tab-pane"
+                                    type="button"
+                                    role="tab"
+                                    aria-controls="connections-tab-pane"
+                                    aria-selected="false">
+                                <i class="bx bx-unlink"></i>
+                                <span>@Localizer["Connections"]</span>
+                            </button>
+                        </li>
+                    </ul>
+
+                    <div class="tab-content user-group-tab-content"
+                         id="userGroupTabContent">
+
+                        <div class="tab-pane fade show active"
+                             id="users-tab-pane"
+                             role="tabpanel"
+                             aria-labelledby="users-tab"
+                             tabindex="0">
+
+                            <div class="user-group-tab-body">
+                                @await Html.PartialAsync(
+                                "~/Views/Shared/DataTable/_DataTable.cshtml",
+                                                        Model.groupMembers)
+                        </div>
+                    </div>
+
+                    <div class="tab-pane fade"
+                         id="connections-tab-pane"
+                         role="tabpanel"
+                         aria-labelledby="connections-tab"
+                         tabindex="0">
+
+                        <div class="user-group-tab-body">
+                            @* Connections content will be added here. *@
+                        </div>
+                    </div>
+                </div>
+                </div>
+            }
+        </form>
+    </div>
+</div>
+
+<script src="~/assets/js/form-change-tracker.js"></script>
+
+<script>
+    enableSaveOnChange("#userGroupForm", "#btnSave");
+</script>

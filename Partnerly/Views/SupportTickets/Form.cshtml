@@ -1,0 +1,159 @@
+﻿@model Partnerly.Models.ViewModels.SupportTicketViewModel
+@await Html.PartialAsync("_Toast")
+
+@{
+    bool isEdit = Model.Id != Guid.Empty;
+
+    ViewData["Title"] = Model.Title;
+    Layout = "_ContentNavbarLayout";
+}
+
+<div class="card">
+    <div class="card-header d-flex align-items-center justify-content-between">
+        <h5 class="mb-0">
+            @(isEdit
+                        ? Localizer["Edittask"]
+                        : Localizer["Createatask"])
+        </h5>
+
+        @if (isEdit)
+        {
+            @await Html.PartialAsync("_AuditInfo", Model)
+        }
+    </div>
+
+    <div class="card-body">
+        <form id="supportTicketForm"
+              asp-action="@(isEdit ? "Edit" : "Create")"
+              method="post">
+
+            @await Html.PartialAsync("_StickyButtons", Model.StickyButtons)
+
+            @if (TempData.Peek("FormToast") != null)
+            {
+                <div class="alert alert-danger">
+                    @TempData["FormToast"]
+                </div>
+
+                TempData.Remove("FormToast");
+            }
+
+            <input type="hidden" asp-for="Id" />
+            <input type="hidden" asp-for="UserId" />
+            <input type="hidden" asp-for="AssignedTo" id="assignedTo" />
+
+            @if (isEdit)
+            {
+                <input type="hidden" asp-for="Note" />
+            }
+
+            @if (!isEdit)
+            {
+                <input type="hidden" asp-for="Status" id="status" />
+            }
+
+            @if (isEdit)
+            {
+                <div class="form-floating mb-1 max-w-600">
+                    <input asp-for="TicketID"
+                           id="ticketID"
+                           class="form-control"
+                           readonly />
+
+                    <label asp-for="TicketID"></label>
+                </div>
+            }
+
+            <div class="form-floating mb-1 max-w-600 position-relative">
+                <input asp-for="Subject"
+                       id="subject"
+                       class="form-control lookup-input pe-5"
+                       placeholder=" "
+                       data-lookup="true"
+                       data-lookup-source="/SupportTickets/GetLookupList"
+                       data-lookup-title="@Localizer["Tasks"]"
+                       data-edit-url-base="/SupportTickets/Edit/"
+                       data-lookup-column-names="ticketID:@Localizer["Number"],subject:@Localizer["Subject"],status:@Localizer["Status"],isRead:@Localizer["IsRead"]"
+                       data-lookup-display-field="Subject"
+                       data-lookup-param="fieldName"
+                       data-lookup-param-value="Subject" />
+
+                <label asp-for="Subject"></label>
+
+                <i class="bx bx-search lookup-icon"></i>
+
+                <span asp-validation-for="Subject"
+                      class="text-danger"></span>
+            </div>
+
+            @if (isEdit)
+            {
+                <div class="form-floating mb-1 max-w-600">
+                    <input asp-for="CreatorName"
+                           id="creatorName"
+                           class="form-control"
+                           readonly />
+
+                    <label asp-for="CreatorName"></label>
+                </div>
+
+                <div class="form-floating mb-1 max-w-600">
+                    <select asp-for="Status"
+                            asp-items="Model.TicketStatuses"
+                            class="form-select"
+                            id="status">
+                        <option value=""></option>
+                    </select>
+
+                    <label asp-for="Status"></label>
+
+                    <span asp-validation-for="Status"
+                          class="text-danger"></span>
+                </div>
+            }
+
+            <div class="form-floating mb-1 max-w-600 position-relative">
+                <input asp-for="AssignedToName"
+                       id="assignedToName"
+                       class="form-control lookup-input pe-5"
+                       placeholder=" "
+                       data-lookup="true"
+                       data-lookup-source="/Users/GetLookupList"
+                       data-lookup-title="@Localizer["Users"]"
+                       data-edit-url-base=""
+                       data-lookup-column-names="name:@Localizer["Name"],email:@Localizer["Email"]"
+                       data-lookup-display-field="AssignedToName"
+                       data-lookup-param="fieldName"
+                       data-lookup-param-value="Name"
+                       data-lookup-target-id="assignedTo"
+                       readonly />
+
+                <label asp-for="AssignedToName"></label>
+
+                <i class="bx bx-search lookup-icon"></i>
+
+                <span asp-validation-for="AssignedTo"
+                      class="text-danger"></span>
+            </div>
+
+            <div class="form-floating mb-1 max-w-600">
+                <textarea asp-for="Message"
+                          id="message"
+                          class="form-control"
+                          style="height: 200px"
+                          rows="10"></textarea>
+
+                <label asp-for="Message"></label>
+
+                <span asp-validation-for="Message"
+                      class="text-danger"></span>
+            </div>
+        </form>
+    </div>
+</div>
+
+<script src="~/assets/js/form-change-tracker.js"></script>
+
+<script>
+    enableSaveOnChange("#supportTicketForm", "#btnSave");
+</script>

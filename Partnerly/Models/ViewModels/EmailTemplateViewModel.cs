@@ -3,12 +3,15 @@ using Partnerly.Descriptors.Messages;
 using Partnerly.Helpers;
 using Partnerly.Infrastructure.Interfaces;
 using Partnerly.Models.DataTable;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
 namespace Partnerly.Models.ViewModels
 {
     public class EmailTemplateViewModel : IAuditableViewModel
     {
+        public string? Title { get; set; } = "Email Templaete";
+
         [Required]
         public Guid Id { get; set; }
 
@@ -45,6 +48,129 @@ namespace Partnerly.Models.ViewModels
         [Display(Name = nameof(FieldsDisplayNames.UpdatedDate), ResourceType = typeof(FieldsDisplayNames))]
         public DateTime? UpdatedDate { get; set; }
         #endregion
+
+        public FormActionsViewModel StickyButtons
+        {
+            get
+            {
+                bool IsEdit = Id != Guid.Empty;
+
+                if (IsEdit)
+                {
+                    return new Partnerly.Models.ViewModels.FormActionsViewModel
+                    {
+                        Back = new Partnerly.Models.ViewModels.ActionBack(
+                        id: Id,
+                        visible: true,
+                        fromController: "EmailTemplates",
+                        toController: "EmailTemplates",
+                        fromAction: "Edit",
+                        toAction: "Index"),
+
+                        Undo = new Partnerly.Models.ViewModels.ActionUndo(
+                        id: Id,
+                        visible: true,
+                        fromController: "EmailTemplates",
+                        toController: "EmailTemplates",
+                        fromAction: "Edit",
+                        toAction: "Edit"),
+
+                        Save = new Partnerly.Models.ViewModels.ActionSave(
+                        id: Id,
+                        visible: true,
+                        fromController: "EmailTemplates",
+                        toController: "EmailTemplates",
+                        fromAction: "Edit",
+                        toAction: "Edit"),
+
+                        Create = new Partnerly.Models.ViewModels.ActionCreate(
+                        id: Id,
+                        visible: true,
+                        fromController: "EmailTemplates",
+                        toController: "EmailTemplates",
+                        fromAction: "Edit",
+                        toAction: "Create"),
+
+                        Delete = new Partnerly.Models.ViewModels.ActionDelete(
+                        id: Id,
+                        visible: true,
+                        fromController: "EmailTemplates",
+                        toController: "EmailTemplates",
+                        fromAction: "Edit",
+                        toAction: "Delete"),
+
+                        Note = new Partnerly.Models.ViewModels.ActionNote(
+                        visible: true,
+                        note: Note,
+                        id: Id),
+
+                        Attachements = new Partnerly.Models.ViewModels.ActionAttachements(
+                        entityType: "EmailTemplate",
+                        entityId: Id,
+                        visible: true),
+
+                        Menu = new Partnerly.Models.ViewModels.ActionMenu(
+                        visible: true),
+
+                        MenuActions = new List<Partnerly.Models.ViewModels.MenuItemAction>
+                        {
+                            new Partnerly.Models.ViewModels.MenuItemAction(
+                                visible: true,
+                                icon: "bx bx-show",
+                                displayName: FieldsDisplayNames.Preview,
+                                toController: "EmailTemplates",
+                                //toAction: isEdit ? "Edit" : "Create",
+                                isModal: true,
+                                modalTarget: "#previewModal",
+                                onClick: "showPreview()")
+                        }
+                    };
+                }
+
+                return new Partnerly.Models.ViewModels.FormActionsViewModel
+                {
+                    Back = new Partnerly.Models.ViewModels.ActionBack(
+                        id: Id,
+                        visible: true,
+                        fromController: "EmailTemplates",
+                        toController: "EmailTemplates",
+                        fromAction: "Create",
+                        toAction: "Index"),
+
+                    Undo = new Partnerly.Models.ViewModels.ActionUndo(
+                        id: Id,
+                        visible: true,
+                        fromController: "EmailTemplates",
+                        toController: "EmailTemplates",
+                        fromAction: "Create",
+                        toAction: "Create"),
+
+                    Save = new Partnerly.Models.ViewModels.ActionSave(
+                        id: Id,
+                        visible: true,
+                        fromController: "EmailTemplates",
+                        toController: "EmailTemplates",
+                        fromAction: "Create",
+                        toAction: "Create"),
+
+                    Menu = new Partnerly.Models.ViewModels.ActionMenu(
+                        visible: true),
+
+                    MenuActions = new List<Partnerly.Models.ViewModels.MenuItemAction>
+                        {
+                            new Partnerly.Models.ViewModels.MenuItemAction(
+                                visible: true,
+                                icon: "bx bx-show",
+                                displayName: FieldsDisplayNames.Preview,
+                                toController: "EmailTemplates",
+                                //toAction: isEdit ? "Edit" : "Create",
+                                isModal: true,
+                                modalTarget: "#previewModal",
+                                onClick: "showPreview()")
+                        }
+                };
+            }
+        }
 
         public DataTableOptions templates { get; set; } = new DataTableOptions();
 

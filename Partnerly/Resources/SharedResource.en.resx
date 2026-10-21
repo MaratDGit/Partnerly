@@ -844,7 +844,7 @@
     <value>User Update</value>
   </data>
   <data name="RoleCreated" xml:space="preserve">
-    <value>Role Created</value>
+    <value>Role Creation</value>
   </data>
   <data name="RoleDeleted" xml:space="preserve">
     <value>Role Deleted</value>
@@ -859,10 +859,10 @@
     <value>Payment Deleted</value>
   </data>
   <data name="PaymentUpdated" xml:space="preserve">
-    <value>Payment Updated</value>
+    <value>Payment Updating</value>
   </data>
   <data name="SystemSettingsCreated" xml:space="preserve">
-    <value>System Settings Created</value>
+    <value>System Settings Creation</value>
   </data>
   <data name="SystemSettingsDeleted" xml:space="preserve">
     <value>System Settings Deleted</value>
@@ -871,43 +871,43 @@
     <value>System Settings Updated</value>
   </data>
   <data name="EmailConfirmationTokenCreated" xml:space="preserve">
-    <value>Email Confirmation Token Created</value>
+    <value>Email Confirmation Token Creation</value>
   </data>
   <data name="EmailConfirmationTokenDeleted" xml:space="preserve">
     <value>Email Confirmation Token Deleted</value>
   </data>
   <data name="EmailConfirmationTokenUpdated" xml:space="preserve">
-    <value>Email Confirmation Token Updated</value>
+    <value>Email Confirmation Token Updating</value>
   </data>
   <data name="EmailTemplateCreated" xml:space="preserve">
-    <value>Email Template Created</value>
+    <value>Email Template Creation</value>
   </data>
   <data name="EmailTemplateDeleted" xml:space="preserve">
     <value>Email Template Deleted</value>
   </data>
   <data name="EmailTemplateUpdated" xml:space="preserve">
-    <value>Email Template Updated</value>
+    <value>Email Template Updating</value>
   </data>
   <data name="NotificationCreated" xml:space="preserve">
-    <value>Notification Created</value>
+    <value>Notification Creation</value>
   </data>
   <data name="NotificationDeleted" xml:space="preserve">
     <value>Notification Deleted</value>
   </data>
   <data name="NotificationUpdated" xml:space="preserve">
-    <value>Notification Updated</value>
+    <value>Notification Updating</value>
   </data>
   <data name="UserGroupCreated" xml:space="preserve">
-    <value>User Group Created</value>
+    <value>User Group Creation</value>
   </data>
   <data name="UserGroupDeleted" xml:space="preserve">
     <value>User Group Deleted</value>
   </data>
   <data name="UserGroupUpdated" xml:space="preserve">
-    <value>User Group Updated</value>
+    <value>User Group Updating</value>
   </data>
   <data name="SupportTicketCreated" xml:space="preserve">
-    <value>Support Ticket Created</value>
+    <value>Support Ticket Creation</value>
   </data>
   <data name="SupportTicketDeleted" xml:space="preserve">
     <value>Support Ticket Deleted</value>

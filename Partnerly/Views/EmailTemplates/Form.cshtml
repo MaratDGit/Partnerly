@@ -1,0 +1,165 @@
+﻿@model Partnerly.Models.ViewModels.EmailTemplateViewModel
+@await Html.PartialAsync("_Toast")
+
+@{
+    bool isEdit = Model.Id != Guid.Empty;
+
+    ViewData["Title"] = Model.Title;
+    Layout = "_ContentNavbarLayout";
+}
+
+<div class="card">
+    <div class="card-header d-flex align-items-center justify-content-between">
+        <h5 class="mb-0">
+            @(isEdit
+                        ? Localizer["Edittemplate"]
+                        : Localizer["Createatemplate"])
+        </h5>
+
+        @if (isEdit)
+        {
+            @await Html.PartialAsync("_AuditInfo", Model)
+        }
+    </div>
+
+    <div class="card-body">
+        <form id="emailTemplateForm"
+              asp-action="@(isEdit ? "Edit" : "Create")"
+              method="post">
+
+            @await Html.PartialAsync("_StickyButtons", Model.StickyButtons)
+
+            @if (isEdit)
+            {
+                <input type="hidden" asp-for="Id" />
+                <input type="hidden" asp-for="Name" />
+                <input type="hidden" asp-for="Note" />
+            }
+
+            <div class="form-floating mb-1 max-w-600 position-relative">
+                @if (isEdit)
+                {
+                    <input asp-for="NameView"
+                           id="name"
+                           class="form-control lookup-input pe-5"
+                           placeholder=" "
+                           data-lookup="true"
+                           data-lookup-source="/EmailTemplates/GetLookupList"
+                           data-lookup-title="@Localizer["Templates"]"
+                           data-edit-url-base="/EmailTemplates/Edit/"
+                           data-lookup-column-names="name:@Localizer["Name"],subject:@Localizer["Topic"]"
+                           data-lookup-display-field="Name"
+                           data-lookup-param="fieldName"
+                           data-lookup-param-value="Name"
+                           readonly />
+
+                    <label asp-for="NameView"></label>
+                }
+                else
+                {
+                    <input asp-for="Name"
+                           id="name"
+                           class="form-control lookup-input pe-5"
+                           placeholder=" "
+                           data-lookup="true"
+                           data-lookup-source="/EmailTemplates/GetLookupList"
+                           data-lookup-title="@Localizer["Templates"]"
+                           data-edit-url-base="/EmailTemplates/Edit/"
+                           data-lookup-column-names="name:@Localizer["Name"],subject:@Localizer["Topic"]"
+                           data-lookup-display-field="Name"
+                           data-lookup-param="fieldName"
+                           data-lookup-param-value="Name" />
+
+                    <label asp-for="Name"></label>
+
+                    <span asp-validation-for="Name"
+                          class="text-danger"></span>
+                }
+
+                <i class="bx bx-search lookup-icon"></i>
+            </div>
+
+            <div class="form-floating mb-1 max-w-600">
+                <input asp-for="Subject"
+                       id="subject"
+                       class="form-control" />
+
+                <label asp-for="Subject"></label>
+
+                <span asp-validation-for="Subject"
+                      class="text-danger"></span>
+            </div>
+
+            <div class="form-floating mb-1">
+                <textarea asp-for="BodyHtml"
+                          id="bodyHtml"
+                          class="form-control"
+                          style="height: 300px"
+                          rows="10"></textarea>
+
+                <label asp-for="BodyHtml"></label>
+
+                <span asp-validation-for="BodyHtml"
+                      class="text-danger"></span>
+            </div>
+        </form>
+    </div>
+</div>
+
+<div class="modal fade"
+     id="previewModal"
+     tabindex="-1"
+     aria-labelledby="previewModalLabel"
+     aria-hidden="true">
+
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="previewModalLabel">
+                    @Localizer["Emailpreview"]
+                </h5>
+
+                <button type="button"
+                        class="btn-close"
+                        data-bs-dismiss="modal"
+                        aria-label="@Localizer["Close"]">
+                </button>
+            </div>
+
+            <div class="modal-body">
+                <h4 id="previewSubject"></h4>
+                <hr />
+
+                <iframe id="previewFrame"
+                        title="Email template preview"
+                        sandbox=""
+                        style="width: 100%; min-height: 400px; border: 0;">
+                </iframe>
+            </div>
+
+            <div class="modal-footer">
+                <button type="button"
+                        class="btn btn-secondary"
+                        data-bs-dismiss="modal">
+                    @Localizer["Close"]
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="~/assets/js/form-change-tracker.js"></script>
+
+<script>
+    enableSaveOnChange("#emailTemplateForm", "#btnSave");
+
+    function showPreview() {
+        const subject = document.getElementById("subject").value;
+        const bodyHtml = document.getElementById("bodyHtml").value;
+
+        document.getElementById("previewSubject").innerText = subject;
+
+        // Keep the HTML preview isolated from the main application page.
+        document.getElementById("previewFrame").srcdoc = bodyHtml;
+    }
+</script>

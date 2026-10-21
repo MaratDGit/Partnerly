@@ -44,40 +44,7 @@
             <form id="systemPreferencesForm"
                   asp-action="Edit">
 
-                @await Html.PartialAsync(
-                "_StickyButtons",
-                                new Partnerly.Models.ViewModels.FormActionsViewModel
-                                {
-                                    Back = new Partnerly.Models.ViewModels.ActionBack(
-                                visible: true,
-                                fromController: "SystemPreferences",
-                                toController: "Home",
-                                fromAction: "Index",
-                                toAction: "Index"
-                                ),
-
-                                    Undo = new Partnerly.Models.ViewModels.ActionUndo(
-                                visible: true,
-                                fromController: "SystemPreferences",
-                                toController: "SystemPreferences",
-                                fromAction: "Index",
-                                toAction: "Index"
-                                ),
-
-                                    Save = new Partnerly.Models.ViewModels.ActionSave(
-                                visible: true,
-                                fromController: "SystemPreferences",
-                                toController: "SystemPreferences",
-                                fromAction: "Index",
-                                toAction: "Index"
-                                ),
-
-                                    Note = new Partnerly.Models.ViewModels.ActionNote(
-                                visible: true,
-                                note: Model.Note
-                                ),
-                                }
-                                )
+                @await Html.PartialAsync("_StickyButtons", Model.StickyButtons)
 
                 <input type="hidden"
                        asp-for="Id" />

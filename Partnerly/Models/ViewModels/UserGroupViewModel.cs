@@ -1,14 +1,16 @@
-﻿using Partnerly.Descriptors.Attributes.BaseAttributes;
+﻿using DocumentFormat.OpenXml.Spreadsheet;
+using Partnerly.Descriptors.Attributes.BaseAttributes;
 using Partnerly.Descriptors.Messages;
 using Partnerly.Infrastructure.Interfaces;
 using Partnerly.Models.DataTable;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
 namespace Partnerly.Models.ViewModels
 {
     public class UserGroupViewModel : IAuditableViewModel
     {
-
+        public string? Title { get; set; } = " User Group";
         public Guid Id { get; set; }
 
         [CustomStringLenght(min: 2, max: 15)]
@@ -40,6 +42,110 @@ namespace Partnerly.Models.ViewModels
         [Display(Name = nameof(FieldsDisplayNames.UpdatedDate), ResourceType = typeof(FieldsDisplayNames))]
         public DateTime? UpdatedDate { get; set; }
         #endregion
+
+        public FormActionsViewModel StickyButtons
+        {
+            get
+            {
+                bool IsEdit = Id != Guid.Empty;
+
+                if (IsEdit)
+                {
+                    return new Partnerly.Models.ViewModels.FormActionsViewModel
+                    {
+                        Back = new Partnerly.Models.ViewModels.ActionBack(
+                        id: Id,
+                        visible: true,
+                        fromController: "UserGroups",
+                        toController: "UserGroups",
+                        fromAction: "Edit",
+                        toAction: "Index"),
+
+                        Undo = new Partnerly.Models.ViewModels.ActionUndo(
+                        id: Id,
+                        visible: true,
+                        fromController: "UserGroups",
+                        toController: "UserGroups",
+                        fromAction: "Edit",
+                        toAction: "Edit"),
+
+                        Save = new Partnerly.Models.ViewModels.ActionSave(
+                        id: Id,
+                        visible: true,
+                        fromController: "UserGroups",
+                        toController: "UserGroups",
+                        fromAction: "Edit",
+                        toAction: "Edit"),
+
+                        Create = new Partnerly.Models.ViewModels.ActionCreate(
+                        id: Id,
+                        visible: true,
+                        fromController: "UserGroups",
+                        toController: "UserGroups",
+                        fromAction: "Edit",
+                        toAction: "Create"),
+
+                        Delete = new Partnerly.Models.ViewModels.ActionDelete(
+                        id: Id,
+                        visible: true,
+                        fromController: "UserGroups",
+                        toController: "UserGroups",
+                        fromAction: "Edit",
+                        toAction: "Delete"),
+
+                        Attachements = new Partnerly.Models.ViewModels.ActionAttachements(
+                        entityType: "UserGroup",
+                        entityId: Id,
+                        visible: true),
+
+                        Note = new Partnerly.Models.ViewModels.ActionNote(
+                        visible: true,
+                        note: Note,
+                        id: Id),
+
+                        Menu = new Partnerly.Models.ViewModels.ActionMenu(
+                        visible: true),
+
+                        MenuActions = new List<MenuItemAction>
+                        {
+                            new Partnerly.Models.ViewModels.MenuItemAction(
+                                visible: true,
+                                icon: "bx bx-bell",
+                                displayName: FieldsDisplayNames.Sendnotification),
+
+                            new Partnerly.Models.ViewModels.MenuItemAction(
+                                visible: true,
+                                icon: "bx bx-envelope-open",
+                                displayName: FieldsDisplayNames.Sendanemail)
+                        }
+                    };      
+                }
+
+                return new Partnerly.Models.ViewModels.FormActionsViewModel
+                {
+                    Back = new Partnerly.Models.ViewModels.ActionBack(
+                        visible: true,
+                        fromController: "UserGroups",
+                        toController: "UserGroups",
+                        fromAction: "Create",
+                        toAction: "Index"),
+
+                    Undo = new Partnerly.Models.ViewModels.ActionUndo(
+                        visible: true,
+                        fromController: "UserGroups",
+                        toController: "UserGroups",
+                        fromAction: "Create",
+                        toAction: "Create"),
+
+                    Save = new Partnerly.Models.ViewModels.ActionSave(
+                        visible: true,
+                        fromController: "UserGroups",
+                        toController: "UserGroups",
+                        fromAction: "Create",
+                        toAction: "Create")
+                };
+            }
+        }
 
         public DataTableOptions groups { get; set; } = new DataTableOptions();
         public DataTableOptions groupMembers { get; set; } = new DataTableOptions();

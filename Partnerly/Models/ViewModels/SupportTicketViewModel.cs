@@ -11,6 +11,8 @@ namespace Partnerly.Models.ViewModels
 {
     public class SupportTicketViewModel : IAuditableViewModel
     {
+        public string? Title { get; set; } = " Task";
+
         [Required]
         public Guid Id { get; set; }
 
@@ -66,6 +68,97 @@ namespace Partnerly.Models.ViewModels
         [Display(Name = nameof(FieldsDisplayNames.UpdatedDate), ResourceType = typeof(FieldsDisplayNames))]
         public DateTime? UpdatedDate { get; set; }
         #endregion
+
+        public FormActionsViewModel StickyButtons
+        {
+            get
+            {
+                bool IsEdit = Id != Guid.Empty;
+
+                if (IsEdit)
+                {
+                    return new Partnerly.Models.ViewModels.FormActionsViewModel
+                    {
+                        Back = new Partnerly.Models.ViewModels.ActionBack(
+                        id: Id,
+                        visible: true,
+                        fromController: "SupportTickets",
+                        toController: "SupportTickets",
+                        fromAction: "Edit",
+                        toAction: "Index"),
+
+                        Undo = new Partnerly.Models.ViewModels.ActionUndo(
+                        id: Id,
+                        visible: true,
+                        fromController: "SupportTickets",
+                        toController: "SupportTickets",
+                        fromAction: "Edit",
+                        toAction: "Edit"),
+
+                        Save = new Partnerly.Models.ViewModels.ActionSave(
+                        id: Id,
+                        visible: true,
+                        fromController: "SupportTickets",
+                        toController: "SupportTickets",
+                        fromAction: "Edit",
+                        toAction: "Edit"),
+
+                        Create = new Partnerly.Models.ViewModels.ActionCreate(
+                        id: Id,
+                        visible: true,
+                        fromController: "SupportTickets",
+                        toController: "SupportTickets",
+                        fromAction: "Edit",
+                        toAction: "Create"),
+
+                        Delete = new Partnerly.Models.ViewModels.ActionDelete(
+                        id: Id,
+                        visible: true,
+                        fromController: "SupportTickets",
+                        toController: "SupportTickets",
+                        fromAction: "Edit",
+                        toAction: "Delete"),
+
+                        Attachements = new Partnerly.Models.ViewModels.ActionAttachements(
+                        visible: true,
+                        entityType: "SupportTicket",
+                        entityId: Id),
+
+                        Note = new Partnerly.Models.ViewModels.ActionNote(
+                        visible: true,
+                        note: Note,
+                        id: Id)
+                    };
+                }
+
+                return new Partnerly.Models.ViewModels.FormActionsViewModel
+                {
+                    Back = new Partnerly.Models.ViewModels.ActionBack(
+                        id: Id,
+                        visible: true,
+                        fromController: "SupportTickets",
+                        toController: "SupportTickets",
+                        fromAction: "Create",
+                        toAction: "Index"),
+
+                    Undo = new Partnerly.Models.ViewModels.ActionUndo(
+                        id: Id,
+                        visible: true,
+                        fromController: "SupportTickets",
+                        toController: "SupportTickets",
+                        fromAction: "Create",
+                        toAction: "Create"),
+
+                    Save = new Partnerly.Models.ViewModels.ActionSave(
+                        id: Id,
+                        visible: true,
+                        fromController: "SupportTickets",
+                        toController: "SupportTickets",
+                        fromAction: "Create",
+                        toAction: "Edit")
+                };
+            }
+        }
 
         public DataTableOptions tickets { get; set; } = new DataTableOptions();
         public static DataTableOptions CreateTableOptions(string tableID, IDataTableRegistry _dataTableRegistry)

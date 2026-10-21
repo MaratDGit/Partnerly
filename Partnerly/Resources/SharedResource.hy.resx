@@ -880,13 +880,13 @@
     <value>Էլեկտրոնային փոստի հաստատման տոկենի թարմացում</value>
   </data>
   <data name="EmailTemplateCreated" xml:space="preserve">
-    <value>Էլեկտրոնային փոստի ձևանմուշի ստեղծում</value>
+    <value>Էլ. փոստի ձևանմուշի ստեղծում</value>
   </data>
   <data name="EmailTemplateDeleted" xml:space="preserve">
     <value>Էլեկտրոնային փոստի ձևանմուշի ջնջում</value>
   </data>
   <data name="EmailTemplateUpdated" xml:space="preserve">
-    <value>Էլեկտրոնային փոստի ձևանմուշի թարմացում</value>
+    <value>Էլ. փոստի ձևանմուշի թարմացում</value>
   </data>
   <data name="NotificationCreated" xml:space="preserve">
     <value>Ծանուցման ստեղծում</value>

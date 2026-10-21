@@ -175,8 +175,13 @@ namespace Partnerly.Controllers
         [ClaimAuthorize(ClaimTypes.Role, RoleTypeAttribute.Admin)]
         public IActionResult Create()
         {
-            SupportTicketViewModel model = new SupportTicketViewModel() { UserId = _currentUser.UserId, Status = SupportTicketStatusAttribute.New, };
-            return View(model);
+            SupportTicketViewModel model = new SupportTicketViewModel() 
+            { 
+                Title = FieldsDisplayNames.SupportTicketCreated,
+                UserId = _currentUser.UserId, 
+                Status = SupportTicketStatusAttribute.New, 
+            };
+            return View("Form", model);
         }
 
         [HttpPost]
@@ -190,7 +195,7 @@ namespace Partnerly.Controllers
                 if (user == null)
                 {
                     ModelState.AddModelError("Subject", "Error");
-                    return View(model);
+                    return View("Form", model);
                 }
 
                 SupportTicket newTicket = new SupportTicket();
@@ -207,7 +212,7 @@ namespace Partnerly.Controllers
                     {
                         TempData["FormToast"] = error;
                     }
-                    return View(model);
+                    return View("Form", model);
                 }
                 else if (result.Data != null)
                 {
@@ -215,7 +220,7 @@ namespace Partnerly.Controllers
                     return RedirectToAction("Edit", new { id = result.Data.Id });
                 }
             }
-            return View(model);
+            return View("Form", model);
         }
 
         [ClaimAuthorize(ClaimTypes.Role, RoleTypeAttribute.Admin)]
@@ -238,7 +243,8 @@ namespace Partnerly.Controllers
 
             await PrepareViewModelAsync(ticketAsView);
 
-            return View(ticketAsView);
+            ticketAsView.Title = FieldsDisplayNames.SupportTicketUpdated;
+            return View("Form", ticketAsView);
         }
 
         [HttpPost]

@@ -60,6 +60,24 @@ namespace Partnerly.Models.ViewModels
         public DateTime? UpdatedDate { get; set; }
         #endregion
 
+        public FormActionsViewModel StickyButtons
+        {
+            get
+            {
+                return new Partnerly.Models.ViewModels.FormActionsViewModel
+                {
+                    Back = new Partnerly.Models.ViewModels.ActionBack(
+                        id: Id,
+                        visible: true,
+                        fromController: "LogRecords",
+                        toController: "LogRecords",
+                        fromAction: "View",
+                        toAction: "Index"
+                    ),
+                };
+            }
+        }
+
         public DataTableOptions logs { get; set; } = new DataTableOptions();
 
         public static DataTableOptions CreateTableOptions(string tableID, IDataTableRegistry _dataTableRegistry)

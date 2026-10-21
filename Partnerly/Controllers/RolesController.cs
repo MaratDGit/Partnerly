@@ -64,6 +64,7 @@ namespace Partnerly.Controllers
 
             if (modelAsView == null) return NotFound();
 
+            modelAsView.Title = FieldsDisplayNames.RoleUpdated;
             return View(modelAsView);
         }
 

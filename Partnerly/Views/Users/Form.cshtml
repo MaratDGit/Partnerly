@@ -1,0 +1,252 @@
+﻿@model Partnerly.Models.ViewModels.UserFormViewModel
+@await Html.PartialAsync("_Toast")
+
+@{
+    ViewData["Title"] = Model.Title;
+    Layout = "_ContentNavbarLayout";
+
+    bool isEdit = Model.IsEdit;
+    var user = Model.EditModel;
+    var register = Model.CreateModel;
+}
+
+<div class="card">
+    <div class="card-header d-flex align-items-center justify-content-between">
+        <h5 class="mb-0">
+            @(isEdit
+            ? Localizer["EditUser"]
+            : Localizer["CreateUser"])
+        </h5>
+
+        @if (isEdit)
+        {
+            @await Html.PartialAsync("_AuditInfo", user)
+        }
+    </div>
+
+    <div class="card-body">
+        <form id="userForm"
+              asp-controller="Users"
+              asp-action="@(isEdit ? "Edit" : "Create")"
+              asp-route-id="@(isEdit ? Model.EditModel.Id : (Guid?)null)" method="post">
+
+            @await Html.PartialAsync("_StickyButtons", Model.StickyButtons)
+
+            @if (TempData.Peek("FormToast") != null)
+            {
+                <div class="alert alert-danger">
+                    @TempData["FormToast"]
+                </div>
+
+                TempData.Remove("FormToast");
+            }
+
+            @if (isEdit)
+            {
+                <input type="hidden" asp-for="EditModel.Id" />
+                <input type="hidden" asp-for="EditModel.Note" />
+
+                <div class="form-floating mb-1 max-w-400 position-relative">
+                    <input asp-for="EditModel.FirstName"
+                           id="firstName"
+                           class="form-control lookup-input pe-5"
+                           placeholder=" "
+                           data-lookup="true"
+                           data-lookup-source="/Users/GetLookupList"
+                           data-lookup-title="@Localizer["Users"]"
+                           data-edit-url-base="/Users/Edit/"
+                           data-lookup-column-names="name:@Localizer["Name"],email:@Localizer["Email"]"
+                           data-lookup-display-field="FirstName"
+                           data-lookup-param="fieldName"
+                           data-lookup-param-value="Name" />
+
+                    <label asp-for="EditModel.FirstName"></label>
+                    <i class="bx bx-search lookup-icon"></i>
+
+                    <span asp-validation-for="EditModel.FirstName" class="text-danger"></span>
+                </div>
+
+                <div class="form-floating mb-1 max-w-400">
+                    <input asp-for="EditModel.LastName"
+                           id="lastName"
+                           class="form-control"
+                           placeholder=" " />
+
+                    <label asp-for="EditModel.LastName"></label>
+
+                    <span asp-validation-for="EditModel.LastName"
+                          class="text-danger"></span>
+                </div>
+
+                <div class="form-floating mb-1 max-w-400">
+                    <input asp-for="EditModel.Email"
+                           id="email"
+                           class="form-control"
+                           placeholder="@Localizer["Enteryouremailaddress"]" />
+
+                    <label asp-for="EditModel.Email"></label>
+
+                    <span asp-validation-for="EditModel.Email"
+                          class="text-danger"></span>
+                </div>
+
+                <div class="form-floating mb-1 max-w-400">
+                    <input asp-for="EditModel.Phone"
+                           id="phone"
+                           class="form-control"
+                           placeholder="+37477123456" />
+
+                    <label asp-for="EditModel.Phone"></label>
+
+                    <span asp-validation-for="EditModel.Phone"
+                          class="text-danger"></span>
+                </div>
+
+                <div class="form-floating mb-1 max-w-400">
+                    <input asp-for="EditModel.Balance"
+                           id="balance"
+                           class="form-control" />
+
+                    <label asp-for="EditModel.Balance"></label>
+
+                    <span asp-validation-for="EditModel.Balance"
+                          class="text-danger"></span>
+                </div>
+
+                <div class="form-floating mb-2 max-w-400">
+                    <input asp-for="EditModel.MyReferralCode"
+                           id="myReferralCode"
+                           class="form-control"
+                           readonly />
+
+                    <label asp-for="EditModel.MyReferralCode"></label>
+
+                    <span asp-validation-for="EditModel.MyReferralCode"
+                          class="text-danger"></span>
+                </div>
+
+                <div class="form-check form-switch mb-2">
+                    <input asp-for="EditModel.EmailConfirmedBool"
+                           class="form-check-input"
+                           type="checkbox"
+                           id="emailConfirmed" />
+
+                    <label class="form-check-label"
+                           asp-for="EditModel.EmailConfirmed"></label>
+                </div>
+
+                <div class="form-check form-switch mb-2">
+                    <input asp-for="EditModel.IsBlockedBool"
+                           class="form-check-input"
+                           type="checkbox"
+                           id="isBlocked" />
+
+                    <label class="form-check-label" asp-for="EditModel.IsBlocked" for="isBlocked"></label>
+                </div>
+            }
+            else
+            {
+                <div class="form-floating mb-1 max-w-600 position-relative">
+                    <input asp-for="CreateModel.FullName"
+                           id="fullName"
+                           class="form-control lookup-input pe-5"
+                           placeholder=" "
+                           data-lookup="true"
+                           data-lookup-source="/Users/GetLookupList"
+                           data-lookup-title="@Localizer["Users"]"
+                           data-edit-url-base="/Users/Edit/"
+                           data-lookup-column-names="name:@Localizer["Name"],email:@Localizer["Email"]"
+                           data-lookup-display-field="FullName"
+                           data-lookup-param="fieldName"
+                           data-lookup-param-value="Name" />
+
+                    <label asp-for="CreateModel.FullName"></label>
+                    <i class="bx bx-search lookup-icon"></i>
+
+                    <span asp-validation-for="CreateModel.FullName"
+                          class="text-danger"></span>
+                </div>
+
+                <div class="form-floating mb-1 max-w-600">
+                    <input asp-for="CreateModel.ReferrerCode"
+                           id="referrerCode"
+                           class="form-control"
+                           placeholder="@Localizer["Referrersreferralcode"]" />
+
+                    <label asp-for="CreateModel.ReferrerCode"></label>
+
+                    <span asp-validation-for="CreateModel.ReferrerCode"
+                          class="text-danger"></span>
+                </div>
+
+                <div class="form-floating mb-1 max-w-600">
+                    <input asp-for="CreateModel.Email"
+                           id="email"
+                           class="form-control"
+                           placeholder="@Localizer["Enteryouremailaddress"]" />
+
+                    <label asp-for="CreateModel.Email"></label>
+
+                    <span asp-validation-for="CreateModel.Email"
+                          class="text-danger"></span>
+                </div>
+
+                <div class="form-floating mb-1 max-w-600">
+                    <input asp-for="CreateModel.Phone"
+                           id="phone"
+                           class="form-control"
+                           placeholder="+37477123456" />
+
+                    <label asp-for="CreateModel.Phone"></label>
+
+                    <span asp-validation-for="CreateModel.Phone"
+                          class="text-danger"></span>
+                </div>
+
+                <div class="mb-1 form-password-toggle max-w-600">
+                    <div class="form-floating input-group input-group-merge">
+                        <input asp-for="CreateModel.Password"
+                               type="password"
+                               id="password"
+                               class="form-control"
+                               placeholder=" " />
+
+                        <label asp-for="CreateModel.Password"></label>
+
+                        <span class="input-group-text cursor-pointer">
+                            <i class="bx bx-hide"></i>
+                        </span>
+                    </div>
+
+                    <span asp-validation-for="CreateModel.Password"
+                          class="text-danger"></span>
+                </div>
+
+                <div class="mb-1 form-password-toggle max-w-600">
+                    <div class="form-floating input-group input-group-merge">
+                        <input asp-for="CreateModel.ConfirmPassword"
+                               type="password"
+                               id="confirmPassword"
+                               class="form-control"
+                               placeholder=" " />
+
+                        <label asp-for="CreateModel.ConfirmPassword"></label>
+
+                        <span class="input-group-text cursor-pointer">
+                            <i class="bx bx-hide"></i>
+                        </span>
+                    </div>
+
+                    <span asp-validation-for="CreateModel.ConfirmPassword"
+                          class="text-danger"></span>
+                </div>
+            }
+        </form>
+    </div>
+</div>
+
+<script src="~/assets/js/form-change-tracker.js"></script>
+
+<script>
+    enableSaveOnChange("#userForm", "#btnSave");
+</script>

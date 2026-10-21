@@ -9,6 +9,8 @@ namespace Partnerly.Models.ViewModels
 {
     public class UserRolesViewModel : IAuditableViewModel
     {
+        public string? Title { get; set; } = " User Role";
+
         #region ID
         [Required]
         public Guid Id { get; set; }
@@ -63,5 +65,23 @@ namespace Partnerly.Models.ViewModels
         [Display(Name = nameof(FieldsDisplayNames.UpdatedDate), ResourceType = typeof(FieldsDisplayNames))]
         public DateTime? UpdatedDate { get; set; }
         #endregion
+
+        public FormActionsViewModel StickyButtons
+        {
+            get
+            {
+                return new Partnerly.Models.ViewModels.FormActionsViewModel
+                {
+                    Back = new Partnerly.Models.ViewModels.ActionBack(id: Id, visible: true, fromController: "Roles", toController: "Users", fromAction: "Edit", toAction: "Index"),
+                    Undo = new Partnerly.Models.ViewModels.ActionUndo(id: Id, visible: true, fromController: "Roles", toController: "Roles", fromAction: "Edit", toAction: "Edit"),
+                    Save = new Partnerly.Models.ViewModels.ActionSave(id: Id, visible: true, fromController: "Roles", toController: "Roles", fromAction: "Edit", toAction: "Edit"),
+                    Note = new Partnerly.Models.ViewModels.ActionNote(visible: true, note: Note, id: Id),
+                    Menu = new Partnerly.Models.ViewModels.ActionMenu(visible: true),
+                    MenuActions = new List<Partnerly.Models.ViewModels.MenuItemAction> {
+                        new Partnerly.Models.ViewModels.MenuItemAction(visible: true, icon: "bx bx-show", displayName: FieldsDisplayNames.Viewuser, toController: "Users", toAction: "Edit", routID: Id),
+                    }
+                };
+            }
+        }
     }
 }

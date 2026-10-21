@@ -25,16 +25,7 @@
 
             <form id="logViewForm" asp-action="">
 
-                @await Html.PartialAsync("_StickyButtons", new Partnerly.Models.ViewModels.FormActionsViewModel {
-                Back = new Partnerly.Models.ViewModels.ActionBack(
-                id: Model.Id,
-                visible: true,
-                fromController: "LogRecords",
-                toController: "LogRecords",
-                fromAction: "View",
-                toAction: "Index"
-                ),
-                                })
+                @await Html.PartialAsync("_StickyButtons", Model.StickyButtons)
 
                 <input type="hidden" asp-for="Id" />
 

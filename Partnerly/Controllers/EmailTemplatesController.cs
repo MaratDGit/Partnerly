@@ -47,9 +47,7 @@ namespace Partnerly.Controllers
 
         public IActionResult Create()
         {
-            EmailTemplateViewModel model = new EmailTemplateViewModel { Id = Guid.NewGuid() };
-
-            return View(model);
+            return View("Form", new EmailTemplateViewModel { Title = FieldsDisplayNames.EmailTemplateCreated });
         }
 
         [HttpPost]
@@ -62,7 +60,7 @@ namespace Partnerly.Controllers
                 if (template != null)
                 {
                     ModelState.AddModelError("Name", $"{FieldsDisplayNames.TemplateType} {ErrorMessages.UniqueValue}");
-                    return View(model);
+                    return View("Form", model);
                 }
 
                 EmailTemplate newTemp = new EmailTemplate();
@@ -79,14 +77,14 @@ namespace Partnerly.Controllers
                     {
                         ModelState.AddModelError("Name", error);
                     }
-                    return View(model);
+                    return View("Form", model);
                 }
 
                 TempData["ToastMessage"] = Messages.RecordSaved;
                 return RedirectToAction("Edit", new { id = result?.Data?.Id });
             }
 
-            return View(model);
+            return View("Form", model);
         }
 
         public async Task<IActionResult> Edit(Guid id)
@@ -99,7 +97,9 @@ namespace Partnerly.Controllers
 
             await PrepareViewModelAsync(templatesAsView);
 
-            return View(templatesAsView);
+            templatesAsView.Title = FieldsDisplayNames.EmailTemplateUpdated;
+            return View("Form", templatesAsView);
+           
         }
 
         [HttpPost]
@@ -124,13 +124,14 @@ namespace Partnerly.Controllers
                         {
                             ModelState.AddModelError("Subject", error);
                         }
+                        return View("Form", model);
                     }
 
                     TempData["ToastMessage"] = Messages.RecordSaved;
                     return RedirectToAction("Edit", new { id = model.Id });
                 }
             }
-            return View(model);
+            return View("Form", model);
         }
 
         public async Task<IActionResult> Delete(Guid id)

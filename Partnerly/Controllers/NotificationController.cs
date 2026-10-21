@@ -71,8 +71,8 @@ namespace Partnerly.Controllers
         [ClaimAuthorize(ClaimTypes.Role, RoleTypeAttribute.Admin)]
         public IActionResult Create()
         {
-            NotificationsViewModel model = new NotificationsViewModel { Id = Guid.NewGuid() };
-            return View(model);
+            var model = new NotificationsViewModel { Title = FieldsDisplayNames.NotificationCreated };
+            return View("Form", model);
         }
 
         [HttpPost]
@@ -86,7 +86,7 @@ namespace Partnerly.Controllers
                 if (user == null)
                 {
                     ModelState.AddModelError("OwnerName", Messages.Usercannotbefound);
-                    return View(model);
+                    return View("Form", model);
                 }
 
                 Notification newTemp = new Notification();
@@ -102,14 +102,14 @@ namespace Partnerly.Controllers
                     {
                         ModelState.AddModelError("Message", error);
                     }
-                    return View(model);
+                    return View("Form", model);
                 }
 
                 TempData["ToastMessage"] = Messages.RecordSaved;
                 return RedirectToAction("Edit", new { id = result?.Data?.Id });
             }
 
-            return View(model);
+            return View("Form", model);
         }
 
         [ClaimAuthorize(ClaimTypes.Role, RoleTypeAttribute.Admin)]
@@ -128,7 +128,8 @@ namespace Partnerly.Controllers
 
             await PrepareViewModelAsync(templatesAsView);
 
-            return View(templatesAsView);
+            templatesAsView.Title = FieldsDisplayNames.NotificationUpdated;
+            return View("Form", templatesAsView);
         }
 
         [HttpPost]
@@ -156,14 +157,14 @@ namespace Partnerly.Controllers
                         {
                             ModelState.AddModelError("", error);
                         }
-                        return View(model);
+                        return View("Form", model);
                     }
 
                     TempData["ToastMessage"] = Messages.RecordSaved;
                     return RedirectToAction("Edit", new { id = model.Id });
                 }
             }
-            return View(model);
+            return View("Form", model);
         }
 
         [ClaimAuthorize(ClaimTypes.Role, RoleTypeAttribute.Admin)]

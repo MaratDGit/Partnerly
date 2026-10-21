@@ -881,13 +881,13 @@
     <value>Обновление токена подтверждения электронной почты</value>
   </data>
   <data name="EmailTemplateCreated" xml:space="preserve">
-    <value>Создание шаблона электронной почты</value>
+    <value>Создание шаблона эл. почты</value>
   </data>
   <data name="EmailTemplateDeleted" xml:space="preserve">
     <value>Удаление шаблона электронной почты</value>
   </data>
   <data name="EmailTemplateUpdated" xml:space="preserve">
-    <value>Обновление шаблона электронной почты</value>
+    <value>Обновление шаблона эл. почты</value>
   </data>
   <data name="NotificationCreated" xml:space="preserve">
     <value>Создание уведомления</value>

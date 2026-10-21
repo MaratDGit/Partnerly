@@ -6,6 +6,117 @@ using System.ComponentModel.DataAnnotations;
 
 namespace Partnerly.Models.ViewModels
 {
+    public class UserFormViewModel
+    {
+        public string? Title { get; set; } = " User";
+        public RegisterViewModel CreateModel { get; set; } = new();
+
+        public UserViewModel EditModel { get; set; } = new();
+
+        public bool IsEdit => EditModel.Id != Guid.Empty;
+
+        public FormActionsViewModel StickyButtons
+        {
+            get
+            {
+                var userId = EditModel.Id;
+
+                if (!IsEdit)
+                {
+                    return new FormActionsViewModel
+                    {
+                        Back = new ActionBack(
+                            visible: true,
+                            fromController: "Users",
+                            toController: "Users",
+                            fromAction: "Create",
+                            toAction: "Index"),
+
+                        Undo = new ActionUndo(
+                            visible: true,
+                            fromController: "Users",
+                            toController: "Users",
+                            fromAction: "Create",
+                            toAction: "Create"),
+
+                        Save = new ActionSave(
+                            visible: true,
+                            fromController: "Users",
+                            toController: "Users",
+                            fromAction: "Create",
+                            toAction: "Edit")
+                    };
+                }
+
+                return new FormActionsViewModel
+                {
+                    Back = new ActionBack(
+                        id: userId,
+                        visible: true,
+                        fromController: "Users",
+                        toController: "Users",
+                        fromAction: "Edit",
+                        toAction: "Index"),
+
+                    Undo = new ActionUndo(
+                        id: userId,
+                        visible: true,
+                        fromController: "Users",
+                        toController: "Users",
+                        fromAction: "Edit",
+                        toAction: "Edit"),
+
+                    Save = new ActionSave(
+                        id: userId,
+                        visible: true,
+                        fromController: "Users",
+                        toController: "Users",
+                        fromAction: "Edit",
+                        toAction: "Edit"),
+
+                    Create = new ActionCreate(
+                        id: userId,
+                        visible: true,
+                        fromController: "Users",
+                        toController: "Users",
+                        fromAction: "Edit",
+                        toAction: "Create"),
+
+                    Delete = new ActionDelete(
+                        id: userId,
+                        visible: true,
+                        fromController: "Users",
+                        toController: "Users",
+                        fromAction: "Edit",
+                        toAction: "Delete"),
+
+                    Attachements = new ActionAttachements(
+                        visible: true,
+                        entityType: "User",
+                        entityId: userId),
+
+                    Note = new ActionNote(
+                        visible: true,
+                        note: EditModel.Note,
+                        id: userId),
+
+                    Menu = new ActionMenu(visible: true),
+
+                    MenuActions = new List<MenuItemAction>
+                    {
+                        new MenuItemAction(
+                            visible: true,
+                            icon: "bx bx-key",
+                            displayName: FieldsDisplayNames.EditRole,
+                            toController: "Roles",
+                            toAction: "Edit",
+                            routID: userId)
+                    }
+                };
+            }
+        }
+    }
+
     public class UserViewModel : IAuditableViewModel
     {
         #region ID

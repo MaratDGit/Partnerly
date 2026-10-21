@@ -133,5 +133,38 @@ namespace Partnerly.Models.ViewModels
         //[Required]
         public DateTime? UpdatedDate { get; set; }
         #endregion
+
+        public FormActionsViewModel StickyButtons
+        {
+            get
+            {
+                return new Partnerly.Models.ViewModels.FormActionsViewModel
+                {
+                    Back = new Partnerly.Models.ViewModels.ActionBack(
+                        visible: true,
+                        fromController: "Dashboard",
+                        toController: "Home",
+                        fromAction: "Settings",
+                        toAction: "Index"
+                    ),
+
+                    Undo = new Partnerly.Models.ViewModels.ActionUndo(
+                        visible: true,
+                        fromController: "Dashboard",
+                        toController: "Dashboard",
+                        fromAction: "Settings",
+                        toAction: "Settings"
+                    ),
+
+                    Save = new Partnerly.Models.ViewModels.ActionSave(
+                        visible: true,
+                        fromController: "Dashboard",
+                        toController: "Dashboard",
+                        fromAction: "Settings",
+                        toAction: "Settings"
+                    ),
+                };
+            }
+        }
     }
 }

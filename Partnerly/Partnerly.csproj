@@ -37,7 +37,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Views\Attachments\" />
     <Folder Include="wwwroot\assets\vendor\fonts\" />
     <Folder Include="wwwroot\assets\vendor\js\" />
     <Folder Include="wwwroot\assets\vendor\libs\jquery\" />

@@ -50,7 +50,8 @@ namespace Partnerly.Controllers
         [ClaimAuthorize(ClaimTypes.Role, RoleTypeAttribute.Admin)]
         public IActionResult Create()
         {
-            return View();
+            var model = new UserGroupViewModel { Title = FieldsDisplayNames.UserGroupCreated };
+            return View("Form", model);
         }
 
         [HttpPost]
@@ -63,23 +64,13 @@ namespace Partnerly.Controllers
                 if (existing != null)
                 {
                     ModelState.AddModelError("Name", $"{FieldsDisplayNames.Group} {ErrorMessages.UniqueValue}");
-                    return View(model);
+                    return View("Form", model);
                 }
 
                 UserGroup group = new UserGroup();
                 group.Name = model.Name;
                 group.Description = model.Description;
-                //if (model.MembersGuids.Any())
-                //{
-                //    foreach (var member in model.MembersGuids)
-                //    {
-                //        var user = await _userService.GetUserByIDAsync(member);
-                //        if (user != null)
-                //        {
-                //            group.Members.Add(new UserGroupMember { UserId = user.Id });
-                //        }
-                //    }
-                //}
+                
                 var result = await _userGroupService.CreateUserGroupAsync(group);
 
                 if (!result.Success)
@@ -88,13 +79,13 @@ namespace Partnerly.Controllers
                     {
                         ModelState.AddModelError("", error);
                     }
-                    return View(model);
+                    return View("Form", model);
                 }
 
                 TempData["ToastMessage"] = Messages.RecordSaved;
                 return RedirectToAction("Edit", new { id = result?.Data?.Id });
             }
-            return View(model);
+            return View("Form", model);
         }
 
         public async Task<IActionResult> Edit(Guid id)
@@ -115,7 +106,8 @@ namespace Partnerly.Controllers
 
             await PrepareViewModelAsync(groupAsView);
 
-            return View(groupAsView);
+            groupAsView.Title = FieldsDisplayNames.UserGroupUpdated;
+            return View("Form", groupAsView);
         }
 
         [HttpPost]
@@ -133,7 +125,7 @@ namespace Partnerly.Controllers
                     if (existing != null && existing.Id != group.Id)
                     {
                         ModelState.AddModelError("Name", $"{FieldsDisplayNames.Group} {ErrorMessages.UniqueValue}");
-                        return View(model);
+                        return View("Form", model);
                     }
 
                     group.Name = model.Name;
@@ -147,14 +139,14 @@ namespace Partnerly.Controllers
                         {
                             ModelState.AddModelError("", error);
                         }
-                        return View();
+                        return View("Form", model);
                     }
                 }
 
                 TempData["ToastMessage"] = Messages.RecordSaved;
                 return RedirectToAction("Edit", new { id = model.Id });
             }
-            return View(model);
+            return View("Form", model);
         }
 
         [ClaimAuthorize(ClaimTypes.Role, RoleTypeAttribute.Admin)]

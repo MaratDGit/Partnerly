@@ -10,6 +10,8 @@ namespace Partnerly.Models.ViewModels
 {
     public class NotificationsViewModel : IAuditableViewModel
     {
+        public string? Title { get; set; } = " Notifications";
+
         [Required]
         public Guid Id { get; set; }
 
@@ -60,6 +62,92 @@ namespace Partnerly.Models.ViewModels
         [Display(Name = nameof(FieldsDisplayNames.UpdatedDate), ResourceType = typeof(FieldsDisplayNames))]
         public DateTime? UpdatedDate { get; set; }
         #endregion
+
+        public FormActionsViewModel StickyButtons
+        {
+            get
+            {
+                bool IsEdit = Id != Guid.Empty;
+
+                if (IsEdit)
+                {
+                    return new Partnerly.Models.ViewModels.FormActionsViewModel
+                    {
+                        Back = new Partnerly.Models.ViewModels.ActionBack(
+                        id: Id,
+                        visible: true,
+                        fromController: "Notification",
+                        toController: "Notification",
+                        fromAction: "Edit",
+                        toAction: "Index"),
+
+                        Undo = new Partnerly.Models.ViewModels.ActionUndo(
+                        id: Id,
+                        visible: true,
+                        fromController: "Notification",
+                        toController: "Notification",
+                        fromAction: "Edit",
+                        toAction: "Edit"),
+
+                        Save = new Partnerly.Models.ViewModels.ActionSave(
+                        id: Id,
+                        visible: true,
+                        fromController: "Notification",
+                        toController: "Notification",
+                        fromAction: "Edit",
+                        toAction: "Edit"),
+
+                        Create = new Partnerly.Models.ViewModels.ActionCreate(
+                        id: Id,
+                        visible: true,
+                        fromController: "Notification",
+                        toController: "Notification",
+                        fromAction: "Edit",
+                        toAction: "Create"),
+
+                        Delete = new Partnerly.Models.ViewModels.ActionDelete(
+                        id: Id,
+                        visible: true,
+                        fromController: "Notification",
+                        toController: "Notification",
+                        fromAction: "Edit",
+                        toAction: "Delete"),
+
+                        Note = new Partnerly.Models.ViewModels.ActionNote(
+                        visible: true,
+                        note: Note,
+                        id: Id)
+                    };
+                }
+
+                return new Partnerly.Models.ViewModels.FormActionsViewModel
+                {
+                    Back = new Partnerly.Models.ViewModels.ActionBack(
+                        id: Id,
+                        visible: true,
+                        fromController: "Notification",
+                        toController: "Notification",
+                        fromAction: "Create",
+                        toAction: "Index"),
+
+                    Undo = new Partnerly.Models.ViewModels.ActionUndo(
+                        id: Id,
+                        visible: true,
+                        fromController: "Notification",
+                        toController: "Notification",
+                        fromAction: "Create",
+                        toAction: "Create"),
+
+                    Save = new Partnerly.Models.ViewModels.ActionSave(
+                        id: Id,
+                        visible: true,
+                        fromController: "Notification",
+                        toController: "Notification",
+                        fromAction: "Create",
+                        toAction: "Create")
+                };
+            }
+        }
 
         public DataTableOptions notifications { get; set; } = new DataTableOptions();
 
