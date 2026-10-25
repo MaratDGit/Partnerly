@@ -8,15 +8,11 @@ namespace Partnerly.Infrastructure.Services
     public class EmailTemplateService : IEmailTemplateService
     {
         private readonly IEmailTemplateRepository _templateRepo;
-        private readonly IPermissionService _permissionService;
-        private readonly ICurrentUserService _currentUserService;
         private readonly ILogService _logService;
 
-        public EmailTemplateService(IEmailTemplateRepository templateRepo, IPermissionService permissionService, ICurrentUserService currentUserService, ILogService logService)
+        public EmailTemplateService(IEmailTemplateRepository templateRepo, ILogService logService)
         {
             _templateRepo = templateRepo;
-            _permissionService = permissionService;
-            _currentUserService = currentUserService;
             _logService = logService;
         }
 
@@ -69,12 +65,6 @@ namespace Partnerly.Infrastructure.Services
                 return ServiceResult<EmailTemplate?>.Fail(new List<string> { String.Format(ErrorMessages.Cannotbefound, "EmailTemplate") });
             }
 
-            //if (!await _permissionService.CanUpdateAsync(_currentUserService.UserId, rec))
-            //{
-            //    await _logService.CreateLogAsync(LogActionsAttribute.EmailTemplateUpdated, LogTypeAttribute.Critical, ErrorMessages.NoPermissionForThisAction);
-            //    return ServiceResult<EmailTemplate?>.Fail(new List<string> { ErrorMessages.NoPermissionForThisAction });
-            //}
-
             _templateRepo.Update(rec);
             await _templateRepo.SaveChangesAsync();
 
@@ -95,12 +85,6 @@ namespace Partnerly.Infrastructure.Services
                 await _logService.CreateLogAsync(LogActionsAttribute.EmailTemplateDeleted, LogTypeAttribute.Error, String.Format(ErrorMessages.Cannotbefound, "EmailTemplate"));
                 return ServiceResult<EmailTemplate?>.Fail(new List<string> { String.Format(ErrorMessages.Cannotbefound, "EmailTemplate") });
             }
-
-            //if (!await _permissionService.CanDeleteAsync(_currentUserService.UserId, rec))
-            //{
-            //    await _logService.CreateLogAsync(LogActionsAttribute.EmailTemplateDeleted, LogTypeAttribute.Critical, ErrorMessages.NoPermissionForThisAction);
-            //    return ServiceResult<EmailTemplate?>.Fail(new List<string> { ErrorMessages.NoPermissionForThisAction });
-            //}
 
             _templateRepo.Delete(rec);
             await _templateRepo.SaveChangesAsync();

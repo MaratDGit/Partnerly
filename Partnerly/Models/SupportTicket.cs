@@ -1,5 +1,4 @@
-﻿using DocumentFormat.OpenXml.Spreadsheet;
-using Partnerly.Descriptors.Attributes;
+﻿using Partnerly.Descriptors.Attributes;
 using Partnerly.Infrastructure.Interfaces;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;

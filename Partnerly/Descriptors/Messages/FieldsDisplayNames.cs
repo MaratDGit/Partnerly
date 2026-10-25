@@ -15,13 +15,13 @@ namespace Partnerly.Descriptors.Messages
         public static string LastName => Messages.Get(nameof(LastName));
         public static string FullName => Messages.Get(nameof(FullName));
         public static string ReferrerCode => Messages.Get(nameof(ReferrerCode));
-        public static string ReffererName => Messages.Get(nameof(ReffererName));
+        public static string ReferrerName => Messages.Get(nameof(ReferrerName));
         public static string TermsConditions => Messages.Get(nameof(TermsConditions));
         public static string Subject => Messages.Get(nameof(Subject));
         public static string BodyHTML => Messages.Get(nameof(BodyHTML));
         public static string Balance => Messages.Get(nameof(Balance));
         public static string LastActivity => Messages.Get(nameof(LastActivity));
-        public static string IsOnlayn => Messages.Get(nameof(IsOnlayn));
+        public static string IsOnline => Messages.Get(nameof(IsOnline));
         public static string IsBlocked => Messages.Get(nameof(IsBlocked));
         public static string EmailConfirmed => Messages.Get(nameof(EmailConfirmed));
         public static string Role => Messages.Get(nameof(Role));
@@ -78,7 +78,7 @@ namespace Partnerly.Descriptors.Messages
 
         public static string Open => Messages.Get(nameof(Open));
         public static string Pending => Messages.Get(nameof(Pending));
-        public static string Payed => Messages.Get(nameof(Payed));
+        public static string Paid => Messages.Get(nameof(Paid));
         public static string Canceled => Messages.Get(nameof(Canceled));
         public static string Rejected => Messages.Get(nameof(Rejected));
 

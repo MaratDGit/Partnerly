@@ -364,3 +364,12 @@ FodyWeavers.xsd
 
 # Local secrets (API keys, OAuth)
 **/secrets.json
+
+# Visual Studio user settings
+*.csproj.user
+
+# Uploaded user files (keep folders locally, do not commit contents)
+Partnerly/wwwroot/uploads/profiles/*
+Partnerly/wwwroot/uploads/attachments/**
+!Partnerly/wwwroot/uploads/profiles/.gitkeep
+!Partnerly/wwwroot/uploads/attachments/.gitkeep

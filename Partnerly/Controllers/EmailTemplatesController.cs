@@ -10,11 +10,9 @@ using Partnerly.Infrastructure.Services;
 using Partnerly.Models;
 using Partnerly.Models.DataTable;
 using Partnerly.Models.ViewModels;
-using System.Security.Claims;
 
 namespace Partnerly.Controllers
 {
-    //[ClaimAuthorize(ClaimTypes.Role, RoleTypeAttribute.Admin)]
     public class EmailTemplatesController : _BaseController
     {
         private readonly IEmailTemplateService _emailTemplateService;
@@ -153,7 +151,7 @@ namespace Partnerly.Controllers
             {
                 Id = template.Id,
                 Title = ErrorMessages.Deletingthetemplate,
-                Message = ErrorMessages.Areyousureyouwanttodeletethisfile,
+                Message = ErrorMessages.ConfirmDelete,
                 DeleteAction = "DeleteConfirmed",
                 DeleteController = "EmailTemplates",
                 CancelAction = "Index",

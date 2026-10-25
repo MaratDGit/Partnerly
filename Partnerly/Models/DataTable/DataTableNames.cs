@@ -8,7 +8,7 @@
         public const string usersTable = "usersTable";
         public const string attachmentsTable = "attachmentsTable";
         public const string emailTemplatesTable = "emailTemplatesTable";
-        public const string supportTicketsTable = "emailTemplatesTable";
+        public const string supportTicketsTable = "supportTicketsTable";
         public const string logsTable = "logsTable";
         public const string notificationsTable = "notificationsTable";
 

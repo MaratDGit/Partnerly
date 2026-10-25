@@ -213,7 +213,7 @@ namespace Partnerly.Controllers
                     {
                         if (!BCrypt.Net.BCrypt.Verify(model.OldPassword, user.PasswordHash) || user.IsDeleted)
                         {
-                            ModelState.AddModelError("OldPassword", ErrorMessages.IncorectPassword);
+                            ModelState.AddModelError("OldPassword", ErrorMessages.IncorrectPassword);
                             return View(model);
                         }
                     }
@@ -221,7 +221,7 @@ namespace Partnerly.Controllers
                     User? userSameEmail = await _userService.GetUserByEmailAsync(model.Email);
                     if (userSameEmail != null && userSameEmail.Id != user.Id)
                     {
-                        ModelState.AddModelError("Email", ErrorMessages.UserWithEmailArleadyExist);
+                        ModelState.AddModelError("Email", ErrorMessages.UserWithEmailAlreadyExists);
                         return View(model);
                     }
                     else if (!string.IsNullOrEmpty(model.Phone))
@@ -229,7 +229,7 @@ namespace Partnerly.Controllers
                         User? userSamePhone = await _userService.GetUserByPhoneAsync(model?.Phone);
                         if (userSamePhone != null && userSamePhone.Id != user.Id)
                         {
-                            ModelState.AddModelError("Phone", ErrorMessages.UserWithPhoneArleadyExist);
+                            ModelState.AddModelError("Phone", ErrorMessages.UserWithPhoneAlreadyExists);
                             return View(model);
                         }
 

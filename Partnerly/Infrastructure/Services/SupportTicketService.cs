@@ -11,22 +11,16 @@ namespace Partnerly.Infrastructure.Services
     {
         private readonly ISupportTicketRepository _supportTicketRepository;
         private readonly IUserRepository _userRepo;
-        private readonly IRoleService _roleService;
-        private readonly IPermissionService _permissionService;
-        private readonly ICurrentUserService _currentUserService;
         private readonly ILogService _logService;
         private readonly IEventBus _eventBus;
         private readonly ISystemSettingsRepository _systemSettingsRepository;
         private readonly INotificationService _notificationService;
 
-        public SupportTicketService(ISupportTicketRepository supportTicketRepository, IUserRepository userRepo, ISystemSettingsRepository systemSettingsRepository, IRoleService roleService, IPermissionService permissionService, ICurrentUserService currentUserService, ILogService logService, IEventBus eventBus, INotificationService notificationService)
+        public SupportTicketService(ISupportTicketRepository supportTicketRepository, IUserRepository userRepo, ISystemSettingsRepository systemSettingsRepository, ILogService logService, IEventBus eventBus, INotificationService notificationService)
         {
             _supportTicketRepository = supportTicketRepository;
             _userRepo = userRepo;
             _systemSettingsRepository = systemSettingsRepository;
-            _roleService = roleService;
-            _permissionService = permissionService;
-            _currentUserService = currentUserService;
             _logService = logService;
             _eventBus = eventBus;
             _notificationService = notificationService;
@@ -117,12 +111,6 @@ namespace Partnerly.Infrastructure.Services
                 return ServiceResult<SupportTicket?>.Fail(new List<string> { String.Format(ErrorMessages.Cannotbefound, "SupportTicket Id") });
             }
 
-            //if (!await _permissionService.CanUpdateAsync(_currentUserService.UserId, ticket))
-            //{
-            //    await _logService.CreateLogAsync(LogActionsAttribute.SupportTicketUpdated, LogTypeAttribute.Critical, ErrorMessages.NoPermissionForThisAction);
-            //    return ServiceResult<SupportTicket?>.Fail(new List<string> { ErrorMessages.NoPermissionForThisAction });
-            //}
-
             try
             {
                 _supportTicketRepository.Update(ticket);
@@ -162,12 +150,6 @@ namespace Partnerly.Infrastructure.Services
                 await _logService.CreateLogAsync(LogActionsAttribute.SupportTicketDeleted, LogTypeAttribute.Error, String.Format(ErrorMessages.Cannotbefound, "SupportTicket"));
                 return ServiceResult<SupportTicket?>.Fail(new List<string> { String.Format(ErrorMessages.Cannotbefound, "SupportTicket") });
             }
-
-            //if (!await _permissionService.CanDeleteAsync(_currentUserService.UserId, ticket))
-            //{
-            //    await _logService.CreateLogAsync(LogActionsAttribute.SupportTicketDeleted, LogTypeAttribute.Critical, ErrorMessages.NoPermissionForThisAction);
-            //    return ServiceResult<SupportTicket?>.Fail(new List<string> { ErrorMessages.NoPermissionForThisAction });
-            //}
 
             var notification = await _notificationService.GetNotificationByTicketIDAsync(id);
             if (notification != null)

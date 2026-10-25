@@ -16,12 +16,6 @@ namespace Partnerly.Models
         [Display(Name = "Name")]
         public string? Name { get; set; }
         #endregion
-        //#region Type
-        //[Required]
-        //[Display(Name = "Type")]
-        //[RoleType]
-        //public string? Type { get; set; }
-        //#endregion
 
         public bool IsActive { get; set; } = true;
 

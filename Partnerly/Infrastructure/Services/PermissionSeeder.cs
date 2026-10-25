@@ -1,6 +1,4 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using Microsoft.VisualBasic;
-using Partnerly.Descriptors.Attributes;
 using Partnerly.Models;
 using Partnerly.Models.Authorization;
 

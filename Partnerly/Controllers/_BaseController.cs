@@ -2,7 +2,6 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
 using Microsoft.Extensions.Localization;
-using Partnerly.Descriptors.Attributes;
 using Partnerly.Descriptors.Messages;
 using Partnerly.Events.BaseEvents;
 using Partnerly.Infrastructure.Interfaces;
@@ -53,7 +52,6 @@ namespace Partnerly.Controllers
                 ViewBag.UserLastName = _currentUser.LastName;
                 ViewBag.UserRefCode = _currentUser.ReffCode;
                 ViewBag.UserFullName = $"{_currentUser.FirstName} {_currentUser.LastName}";
-                ViewBag.RoleType = _currentUser.RoleType;
                 
                 SystemSettings? setting = await _systemSettingsService.GetSetupByIDAsync(1);
                 message = setting?.IsMaintenanceMode == true ? Messages.SiteUnderMaintenanceMode : setting?.ScrollingText;
@@ -61,53 +59,7 @@ namespace Partnerly.Controllers
 
             ViewData["ScrollingText"] = message;
 
-            //#region every click/action URL is being checked 
-            //var controllerName = context.RouteData.Values["controller"]?.ToString();
-            //var actionName = context.RouteData.Values["action"]?.ToString();
-            //string? roleType = null;
-            //bool unknownAction = false;
-            //if (!string.IsNullOrEmpty(actionName))
-            //{
-            //    if (actionName.ToLower() == Constants.Edit.ToLower() || actionName.ToLower() == Constants.Create.ToLower()) 
-            //        roleType = RoleTypeAttribute.Update;
-            //    else if (actionName.ToLower() == Constants.Delete.ToLower() || actionName.ToLower() == Constants.DeleteConfirmed.ToLower()) 
-            //        roleType = RoleTypeAttribute.Delete;
-            //    else 
-            //        unknownAction = true;
-            //}
-
-            //if (!unknownAction && !HasPermision(roleType))
-            //{
-            //    var referer = context.HttpContext.Request.Headers["Referer"].ToString();
-
-            //    if (!string.IsNullOrEmpty(referer))
-            //    {
-            //        context.Result = new RedirectResult(referer);
-            //        return;
-            //    }
-            //    else
-            //    {
-            //        context.Result = new RedirectToActionResult("Index", "Home", null);
-            //        return;
-            //    }
-            //}
-            //#endregion
-
             await next();
-        }
-
-        protected bool HasPermision(string? roleType)
-        {
-            //bool retval = false;
-            //if (string.IsNullOrEmpty(roleType))
-            //    return retval;
-
-            //if (roleType == RoleTypeAttribute.View) return _currentUser?.RoleName == RoleTypeAttribute.Admin || _currentUser?.RoleName == RoleTypeAttribute.Employee || _currentUser?.RoleName == RoleTypeAttribute.User;
-            //if (roleType == RoleTypeAttribute.Update) return _currentUser?.RoleName == RoleTypeAttribute.Admin || _currentUser?.RoleName == RoleTypeAttribute.Employee;
-            //if (roleType == RoleTypeAttribute.Delete) return _currentUser?.RoleName == RoleTypeAttribute.Admin;
-
-            //return false
-            return true;
         }
 
         protected virtual bool IsSuperRole(Role? role)

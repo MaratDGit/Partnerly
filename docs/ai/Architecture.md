@@ -33,7 +33,7 @@ Controller  →  I*Service  →  I*Repository : Repository<T>  →  AppDbContext
 - `OnActionExecutionAsync` заполняет ViewBag (фото, имя, рефкод, RoleType) и текст тикера / maintenance.
 - `PrepareViewModelAsync` подставляет имена авторов.
 - `ExportTableAsync` — Excel/CSV.
-- `HasPermision` **всегда возвращает true**; старая проверка RoleType закомментирована.
+- Старый `HasPermision` / RoleType удалён (2026-10-25). Права — через политики `Permission:`.
 
 Контроллеры **без** `_BaseController`: `AccountController`, `HomeController`, `AIController` (`[Authorize]`), `LanguageController`.
 
@@ -60,7 +60,7 @@ Controller  →  I*Service  →  I*Repository : Repository<T>  →  AppDbContext
 - Inline-правка: `IInlineUpdateService`.
 - Экспорт: `DataTableExcelExporter`, `DataTableCsvExporter`.
 
-**Подтверждённый дефект:** `DataTableNames.supportTicketsTable` равен `"emailTemplatesTable"` — тот же id, что у шаблонов писем. См. `KNOWN_ISSUES.md`.
+Идентификаторы таблиц должны быть уникальны (`DataTableNames`). Конфликт тикетов и email-шаблонов исправлен 2026-10-25.
 
 ## Авторизация и права
 
@@ -111,7 +111,7 @@ Controller  →  I*Service  →  I*Repository : Repository<T>  →  AppDbContext
 
 - `_ViewStart.cshtml`: layout `_ContentNavbarLayout`.
 - Другие layout: `_CommonMasterLayout`, `_BlankLayout`, `_LandingLayout`.
-- Повторяемые части: `_Toast`, `_DeleteConfirmation`, `_AuditInfo`, `_StickyButtons`, `_ValidationScriptsPartial`, секции в `Views/Shared/Sections/`.
+- Повторяемые части: `_Toast`, `_DeleteConfirmation`, `_AuditInfo`, `_StickyButtons`, секции в `Views/Shared/Sections/`.
 - Локализация: `AddLocalization` + `Resources/SharedResource.{en,ru,hy}.resx`, культуры `en`, `ru`, `hy`, default `en`.
 - `RequiredLabelTagHelper` — обязательные поля в формах.
 - Тема / vendor CSS: `wwwroot/assets` (шаблон админки). Свой код: `wwwroot/assets/css/site.css`, `wwwroot/js/datatable`.

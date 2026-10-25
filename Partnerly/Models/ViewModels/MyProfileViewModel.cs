@@ -40,7 +40,7 @@ namespace Partnerly.Models.ViewModels
         #endregion
 
         #region ReferrerName
-        [Display(Name = nameof(FieldsDisplayNames.ReffererName), ResourceType = typeof(FieldsDisplayNames))]
+        [Display(Name = nameof(FieldsDisplayNames.ReferrerName), ResourceType = typeof(FieldsDisplayNames))]
         public string? ReferrerName { get; set; }
         #endregion
         public DateTime? CreatedDate { get; set; }

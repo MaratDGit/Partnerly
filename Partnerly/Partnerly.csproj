@@ -8,21 +8,8 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Content Remove="C:\Users\IIG\.nuget\packages\datatables.net-dt\2.3.4\contentFiles\any\any\wwwroot\css\dataTables.dataTables.css" />
-    <Content Remove="C:\Users\IIG\.nuget\packages\datatables.net-dt\2.3.4\contentFiles\any\any\wwwroot\css\dataTables.dataTables.min.css" />
-    <Content Remove="C:\Users\IIG\.nuget\packages\datatables.net-dt\2.3.4\contentFiles\any\any\wwwroot\js\dataTables.dataTables.js" />
-    <Content Remove="C:\Users\IIG\.nuget\packages\datatables.net-dt\2.3.4\contentFiles\any\any\wwwroot\js\dataTables.dataTables.min.js" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <None Remove="Views\Shared\_CommonMasterLayout.cshtml~RF65ba5cc9.TMP" />
-  </ItemGroup>
-
-  <ItemGroup>
     <PackageReference Include="BCrypt.Net-Next" Version="4.0.3" />
     <PackageReference Include="ClosedXML" Version="0.105.1" />
-    <PackageReference Include="datatables.net-dt" Version="2.3.4" />
-    <PackageReference Include="EPPlus" Version="8.2.0" />
     <PackageReference Include="Handlebars.Net" Version="2.1.6" />
     <PackageReference Include="Microsoft.AspNetCore.Authentication.Google" Version="6.0.36" />
     <PackageReference Include="Microsoft.EntityFrameworkCore" Version="6.0.0" />

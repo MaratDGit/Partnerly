@@ -57,7 +57,7 @@ namespace Partnerly.Events
                     //var appUrl = _config["AppSettings:BaseUrl"];
                     //var confirmationLink = $"{appUrl}/SupportTickets/ViewCase/{@event.NewTicket.Id}";
                     var confirmationLink = $"/SupportTickets/ViewCase/{@event.NewTicket.Id}";
-                    var message = string.Format(Messages.NewTickedToEmployeeNotification, @event.NewTicket.TicketID);
+                    var message = string.Format(Messages.NewTicketToEmployeeNotification, @event.NewTicket.TicketID);
 
                     if (@event.Type == SupportTickedCreatedEvent.EventType.Created)
                     {

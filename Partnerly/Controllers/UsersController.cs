@@ -11,11 +11,9 @@ using Partnerly.Infrastructure.Services;
 using Partnerly.Models;
 using Partnerly.Models.DataTable;
 using Partnerly.Models.ViewModels;
-using System.Security.Claims;
 
 namespace Partnerly.Controllers
 {
-    //[ClaimAuthorize(ClaimTypes.Role, RoleTypeAttribute.Admin, RoleTypeAttribute.Employee)]
     public class UsersController : _BaseController
     {
         protected readonly IRoleService _roleService;
@@ -48,7 +46,6 @@ namespace Partnerly.Controllers
             return View("~/Views/Shared/DataTable/_DataTablePartial.cshtml", model.users);
         }
 
-        //[ClaimAuthorize(ClaimTypes.Role, RoleTypeAttribute.Admin)]
         [Authorize(Policy = "Permission:users.create")]
         public IActionResult Create()
         {
@@ -79,7 +76,7 @@ namespace Partnerly.Controllers
                     referrer = await _userService.GetUserByRefCodeAsync(model?.ReferrerCode);
                     if (referrer == null)
                     {
-                        ModelState.AddModelError("CreateModel.ReferrerCode", ErrorMessages.InvalidRefferalCode);
+                        ModelState.AddModelError("CreateModel.ReferrerCode", ErrorMessages.InvalidReferralCode);
                         return View("Form", viewModel);
                     }
                 }
@@ -88,14 +85,14 @@ namespace Partnerly.Controllers
                 existingUser = await _userService.GetUserByEmailAsync(model?.Email);
                 if (existingUser != null)
                 {
-                    ModelState.AddModelError("CreateModel.Email", ErrorMessages.UserWithEmailArleadyExist);
+                    ModelState.AddModelError("CreateModel.Email", ErrorMessages.UserWithEmailAlreadyExists);
                     return View("Form", viewModel);
                 }
 
                 existingUser = await _userService.GetUserByPhoneAsync(model?.Phone);
                 if (existingUser != null)
                 {
-                    ModelState.AddModelError("CreateModel.Phone", ErrorMessages.UserWithPhoneArleadyExist);
+                    ModelState.AddModelError("CreateModel.Phone", ErrorMessages.UserWithPhoneAlreadyExists);
                     return View("Form", viewModel);
                 }
 
@@ -194,7 +191,7 @@ namespace Partnerly.Controllers
                     User? userSameEmail = await _userService.GetUserByEmailAsync(model.Email);
                     if (userSameEmail != null && userSameEmail.Id != user.Id)
                     {
-                        ModelState.AddModelError("EditModel.Email", ErrorMessages.UserWithEmailArleadyExist);
+                        ModelState.AddModelError("EditModel.Email", ErrorMessages.UserWithEmailAlreadyExists);
                         return View("Form", viewModel);
                     }
                     else
@@ -202,7 +199,7 @@ namespace Partnerly.Controllers
                         User? userSamePhone = await _userService.GetUserByPhoneAsync(model?.Phone);
                         if (userSamePhone != null && userSamePhone.Id != user.Id)
                         {
-                            ModelState.AddModelError("EditModel.Phone", ErrorMessages.UserWithPhoneArleadyExist);
+                            ModelState.AddModelError("EditModel.Phone", ErrorMessages.UserWithPhoneAlreadyExists);
                             return View("Form", viewModel);
                         }
                     }
@@ -246,7 +243,7 @@ namespace Partnerly.Controllers
             {
                 Id = template.Id,
                 Title = ErrorMessages.DeleteUser,
-                Message = ErrorMessages.Areyousureyouwanttodeletethisfile,
+                Message = ErrorMessages.ConfirmDelete,
                 DeleteAction = "DeleteConfirmed",
                 DeleteController = "Users",
                 CancelAction = "Index",

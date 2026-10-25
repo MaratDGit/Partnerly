@@ -100,7 +100,7 @@ namespace Partnerly.Controllers
 
             if (user == null || !BCrypt.Net.BCrypt.Verify(model.Password, user.PasswordHash) || user.IsDeleted)
             {
-                ModelState.AddModelError("Password", ErrorMessages.IncorectPasswordOrUsername);
+                ModelState.AddModelError("Password", ErrorMessages.InvalidEmailOrPassword);
                 return View(model);
             }
 
@@ -143,7 +143,7 @@ namespace Partnerly.Controllers
                 referrer = await _userService.GetUserByRefCodeAsync(model?.ReferrerCode);
                 if (referrer == null)
                 {
-                    ModelState.AddModelError("ReferrerCode", ErrorMessages.InvalidRefferalCode);
+                    ModelState.AddModelError("ReferrerCode", ErrorMessages.InvalidReferralCode);
                     return View(model);
                 }
             }
@@ -152,14 +152,14 @@ namespace Partnerly.Controllers
             existingUser = await _userService.GetUserByEmailAsync(model?.Email);
             if (existingUser != null)
             {
-                ModelState.AddModelError("Email", ErrorMessages.UserWithEmailArleadyExist);
+                ModelState.AddModelError("Email", ErrorMessages.UserWithEmailAlreadyExists);
                 return View(model);
             }
 
             existingUser = await _userService.GetUserByPhoneAsync(model?.Phone);
             if (existingUser != null)
             {
-                ModelState.AddModelError("Phone", ErrorMessages.UserWithPhoneArleadyExist);
+                ModelState.AddModelError("Phone", ErrorMessages.UserWithPhoneAlreadyExists);
                 return View(model);
             }
 
@@ -226,7 +226,7 @@ namespace Partnerly.Controllers
             var user = await _userService.GetUserByEmailAsync(model.Email);
             if (user == null || user.IsDeleted)
             {
-                ModelState.AddModelError("Email", ErrorMessages.IncorectEmail);
+                ModelState.AddModelError("Email", ErrorMessages.InvalidEmail);
                 return View(model);
             }
 
@@ -320,7 +320,7 @@ namespace Partnerly.Controllers
             var user = await _userService.GetUserByEmailAsync(model.Email);
             if (user == null || user.IsDeleted)
             {
-                ModelState.AddModelError("Email", ErrorMessages.IncorectEmail);
+                ModelState.AddModelError("Email", ErrorMessages.InvalidEmail);
                 return View("ConfirmForgotPassword");
             }
 
@@ -509,7 +509,7 @@ namespace Partnerly.Controllers
 
             if (existingUser != null)
             {
-                ModelState.AddModelError("Email", ErrorMessages.UserWithEmailArleadyExist);
+                ModelState.AddModelError("Email", ErrorMessages.UserWithEmailAlreadyExists);
                 return View(model);
             }
 
@@ -568,10 +568,6 @@ namespace Partnerly.Controllers
                     Constants.ClaimTypeLastName,
                     user.LastName ?? ""),
 
-                //new Claim(
-                //    Constants.ClaimTypeRoleType,
-                //    user.Role.Type ?? RoleTypeAttribute.View),
-
                 new Claim(
                     Constants.ClaimTypeReffCode,
                     user.MyReferralCode ?? ""),
@@ -607,7 +603,7 @@ namespace Partnerly.Controllers
                 return BadRequest(new
                 {
                     success = false,
-                    message = ErrorMessages.Photowasnotselected
+                    message = ErrorMessages.PhotoWasNotSelected
                 });
             }
 
@@ -623,7 +619,7 @@ namespace Partnerly.Controllers
                 return BadRequest(new
                 {
                     success = false,
-                    message = ErrorMessages.Invalidimageformat
+                    message = ErrorMessages.InvalidImageFormat
                 });
             }
 

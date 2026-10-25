@@ -17,7 +17,7 @@ namespace Partnerly.Descriptors.Messages
         #endregion
 
         #region Views errors
-        public static string Areyousureyouwanttodeletethisfile => Messages.Get(nameof(Areyousureyouwanttodeletethisfile));
+        public static string ConfirmDelete => Messages.Get(nameof(ConfirmDelete));
         public static string Deletingthenotification => Messages.Get(nameof(Deletingthenotification));
         public static string Deletingthetemplate => Messages.Get(nameof(Deletingthetemplate));
         public static string Deletetask => Messages.Get(nameof(Deletetask));
@@ -25,18 +25,18 @@ namespace Partnerly.Descriptors.Messages
         public static string DeleteUser => Messages.Get(nameof(DeleteUser)); 
         public static string DeleteRole => Messages.Get(nameof(DeleteRole)); 
         public static string ReferrerUserCannotBeFoundOrInactive => Messages.Get(nameof(ReferrerUserCannotBeFoundOrInactive));
-        public static string IncorectPasswordOrUsername => Messages.Get(nameof(IncorectPasswordOrUsername));
-        public static string IncorectPassword => Messages.Get(nameof(IncorectPassword));
-        public static string IncorectEmail => Messages.Get(nameof(IncorectEmail));
+        public static string InvalidEmailOrPassword => Messages.Get(nameof(InvalidEmailOrPassword));
+        public static string IncorrectPassword => Messages.Get(nameof(IncorrectPassword));
+        public static string InvalidEmail => Messages.Get(nameof(InvalidEmail));
         public static string UserAccessDenied => Messages.Get(nameof(UserAccessDenied));
         public static string FieldRequired => Messages.Get(nameof(FieldRequired));
         public static string UniqueValue => Messages.Get(nameof(UniqueValue));
         public static string CannotDeleteSystemRecords => Messages.Get(nameof(CannotDeleteSystemRecords));
         public static string NotFound => Messages.Get(nameof(NotFound));
         public static string TypeValidPhoneNumber => Messages.Get(nameof(TypeValidPhoneNumber));
-        public static string InvalidRefferalCode => Messages.Get(nameof(InvalidRefferalCode));
-        public static string UserWithEmailArleadyExist => Messages.Get(nameof(UserWithEmailArleadyExist));
-        public static string UserWithPhoneArleadyExist => Messages.Get(nameof(UserWithPhoneArleadyExist));
+        public static string InvalidReferralCode => Messages.Get(nameof(InvalidReferralCode));
+        public static string UserWithEmailAlreadyExists => Messages.Get(nameof(UserWithEmailAlreadyExists));
+        public static string UserWithPhoneAlreadyExists => Messages.Get(nameof(UserWithPhoneAlreadyExists));
         public static string ReadPolicyAndTerms => Messages.Get(nameof(ReadPolicyAndTerms));
         public static string StringMaxLength => Messages.Get(nameof(StringMaxLength));
         public static string StringMinMaxLength => Messages.Get(nameof(StringMinMaxLength));
@@ -52,8 +52,8 @@ namespace Partnerly.Descriptors.Messages
         public static string LinkIsExpired => Messages.Get(nameof(LinkIsExpired));
         public static string LinkExpiredDetail => Messages.Get(nameof(LinkExpiredDetail));
 
-        public static string Photowasnotselected => Messages.Get(nameof(Photowasnotselected));
-        public static string Invalidimageformat => Messages.Get(nameof(Invalidimageformat));
+        public static string PhotoWasNotSelected => Messages.Get(nameof(PhotoWasNotSelected));
+        public static string InvalidImageFormat => Messages.Get(nameof(InvalidImageFormat));
         public static string Maximumfilesizeis => Messages.Get(nameof(Maximumfilesizeis));
         public static string Photosavedsuccessfully => Messages.Get(nameof(Photosavedsuccessfully));
         #endregion

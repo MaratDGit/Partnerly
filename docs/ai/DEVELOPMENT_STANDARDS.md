@@ -45,7 +45,7 @@
 - Data Annotations на сущностях и ViewModels (`[Required]`, `[Display]`, кастомные `*Attribute` из `Descriptors/Attributes`).
 - Справочники значений: наследники `StringListAttribute` (статусы и т.п.).
 - Серверная проверка required при SaveChanges.
-- Клиент: `_ValidationScriptsPartial`, jquery-validation в `wwwroot/lib`.
+- Клиентская валидация форм — по месту в Views; отдельный `_ValidationScriptsPartial` удалён как неиспользуемый.
 
 ## Логирование и ошибки
 

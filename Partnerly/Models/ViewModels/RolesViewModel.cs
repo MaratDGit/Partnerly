@@ -490,7 +490,7 @@ namespace Partnerly.Models.ViewModels
                                     Url = "/Roles/DeleteInline",
                                     Method = "POST",
                                     Confirm = true,
-                                    ConfirmMessage = ErrorMessages.Areyousureyouwanttodeletethisfile,
+                                    ConfirmMessage = ErrorMessages.ConfirmDelete,
                                     CssClass = "btn btn-sm btn-outline-danger"
                                 }
                             }

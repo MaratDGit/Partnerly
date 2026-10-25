@@ -10,17 +10,13 @@ namespace Partnerly.Infrastructure.Services
     {
         private readonly IEmailConfirmationTokenRepository _tokenRepo;
         private readonly IRoleRepository _roleRepo;
-        private readonly IPermissionService _permissionService;
-        private readonly ICurrentUserService _currentUserService;
         private readonly ISystemSettingsService _setupServoce;
         private readonly ILogService _logService;
 
-        public EmailConfirmationTokenService(IEmailConfirmationTokenRepository tokenRepo, IRoleRepository roleRepo, IPermissionService permissionService, ICurrentUserService currentUserService, ISystemSettingsService setupServoce, ILogService logService)
+        public EmailConfirmationTokenService(IEmailConfirmationTokenRepository tokenRepo, IRoleRepository roleRepo, ISystemSettingsService setupServoce, ILogService logService)
         {
             _tokenRepo = tokenRepo;
             _roleRepo = roleRepo;
-            _permissionService = permissionService;
-            _currentUserService = currentUserService;
             _setupServoce = setupServoce;
             _logService = logService;
         }
@@ -93,12 +89,6 @@ namespace Partnerly.Infrastructure.Services
                 return ServiceResult<EmailConfirmationToken?>.Fail(new List<string> { });
             }
 
-            //if (!await _permissionService.CanUpdateAsync(userID ?? _currentUserService.UserId, token))
-            //{
-            //    await _logService.CreateLogAsync(LogActionsAttribute.EmailConfirmationTokenUpdated, LogTypeAttribute.Critical, ErrorMessages.NoPermissionForThisAction);
-            //    return ServiceResult<EmailConfirmationToken?>.Fail(new List<string> { });
-            //}
-
             _tokenRepo.Update(token);
             await _tokenRepo.SaveChangesAsync();
 
@@ -119,12 +109,6 @@ namespace Partnerly.Infrastructure.Services
                 await _logService.CreateLogAsync(LogActionsAttribute.EmailConfirmationTokenDeleted, LogTypeAttribute.Error, String.Format(ErrorMessages.Cannotbefound, "EmailConfirmationToken"));
                 return ServiceResult<EmailConfirmationToken?>.Fail(new List<string> { });
             }
-
-            //if (!await _permissionService.CanDeleteAsync(_currentUserService.UserId, tokenRec))
-            //{
-            //    await _logService.CreateLogAsync(LogActionsAttribute.EmailConfirmationTokenDeleted, LogTypeAttribute.Critical, ErrorMessages.NoPermissionForThisAction);
-            //    return ServiceResult<EmailConfirmationToken?>.Fail(new List<string> { });
-            //}
 
             _tokenRepo.Delete(tokenRec);
             await _roleRepo.SaveChangesAsync();

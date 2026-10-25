@@ -1,5 +1,4 @@
-﻿using DocumentFormat.OpenXml.Spreadsheet;
-using Microsoft.AspNetCore.Authorization;
+﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Localization;
@@ -15,13 +14,10 @@ using Partnerly.Models.Authorization;
 using Partnerly.Models.DataTable;
 using Partnerly.Models.ViewModels;
 using System.Diagnostics;
-using System.Reflection.Metadata;
-using System.Security.Claims;
 using System.Linq;
 
 namespace Partnerly.Controllers
 {
-    //[ClaimAuthorize(ClaimTypes.Role, RoleTypeAttribute.Admin)]
     public class RolesController : _BaseController
     {
         protected readonly IRoleService _roleService;
@@ -187,7 +183,7 @@ namespace Partnerly.Controllers
             {
                 Id = role.Id,
                 Title = ErrorMessages.DeleteRole,
-                Message = ErrorMessages.Areyousureyouwanttodeletethisfile,
+                Message = ErrorMessages.ConfirmDelete,
                 DeleteAction = "DeleteConfirmed",
                 DeleteController = "Roles",
                 CancelAction = "Index",

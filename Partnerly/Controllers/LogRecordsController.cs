@@ -7,11 +7,9 @@ using Partnerly.Helpers;
 using Partnerly.Infrastructure.Interfaces;
 using Partnerly.Models.DataTable;
 using Partnerly.Models.ViewModels;
-using System.Security.Claims;
 
 namespace Partnerly.Controllers
 {
-   // [ClaimAuthorize(ClaimTypes.Role, RoleTypeAttribute.Admin)]
     public class LogRecordsController : _BaseController
     {
         public LogRecordsController(

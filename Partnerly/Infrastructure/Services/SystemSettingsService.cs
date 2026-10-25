@@ -8,15 +8,11 @@ namespace Partnerly.Infrastructure.Services
     public class SystemSettingsService : ISystemSettingsService
     {
         private readonly ISystemSettingsRepository _setupRepo;
-        private readonly IPermissionService _permissionService;
-        private readonly ICurrentUserService _currentUserService;
         private readonly ILogService _logService;
 
-        public SystemSettingsService(ISystemSettingsRepository setupRepo, IPermissionService permissionService, ICurrentUserService currentUserService, ILogService logService)
+        public SystemSettingsService(ISystemSettingsRepository setupRepo, ILogService logService)
         {
             _setupRepo = setupRepo;
-            _permissionService = permissionService;
-            _currentUserService = currentUserService;
             _logService = logService;
         }
 
@@ -58,12 +54,6 @@ namespace Partnerly.Infrastructure.Services
                 return ServiceResult<SystemSettings?>.Fail(new List<string> { });
             }
 
-            //if (!await _permissionService.CanUpdateAsync(_currentUserService.UserId, rec))
-            //{
-            //    await _logService.CreateLogAsync(LogActionsAttribute.SystemSettingsUpdated, LogTypeAttribute.Critical, ErrorMessages.NoPermissionForThisAction);
-            //    return ServiceResult<SystemSettings?>.Fail(new List<string> { });
-            //}
-
             _setupRepo.Update(rec);
             await _setupRepo.SaveChangesAsync();
 
@@ -84,12 +74,6 @@ namespace Partnerly.Infrastructure.Services
                 await _logService.CreateLogAsync(LogActionsAttribute.SystemSettingsDeleted, LogTypeAttribute.Error, String.Format(ErrorMessages.Cannotbefound, "Settings"));
                 return ServiceResult<SystemSettings?>.Fail(new List<string> { });
             }
-
-            //if (!await _permissionService.CanDeleteAsync(_currentUserService.UserId, setup))
-            //{
-            //    await _logService.CreateLogAsync(LogActionsAttribute.SystemSettingsDeleted, LogTypeAttribute.Critical, ErrorMessages.NoPermissionForThisAction);
-            //    return ServiceResult<SystemSettings?>.Fail(new List<string> { });
-            //}
 
             await _logService.CreateLogAsync(LogActionsAttribute.SystemSettingsDeleted, LogTypeAttribute.Critical, ErrorMessages.NoPermissionForThisAction);
             

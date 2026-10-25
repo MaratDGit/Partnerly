@@ -55,19 +55,13 @@
 
 ## KI-006 — `_BaseController.HasPermision` всегда true
 
-- **Статус:** открыто (мертвый код / ложная защита, если кто-то вызовет)
-- **Компоненты:** `_BaseController`
-- **Журнал:** —
+- **Статус:** закрыто (2026-10-25) — метод и закомментированная проверка RoleType удалены.
 
 ---
 
 ## KI-007 — Столкновение id DataTable тикетов и шаблонов писем
 
-- **Статус:** открыто
-- **Суть:** `DataTableNames.supportTicketsTable = "emailTemplatesTable"` — то же значение, что `emailTemplatesTable`.
-- **Воспроизведение:** открыть списки Support Tickets и Email Templates в одном приложении (singleton registry перезапишет опции). В браузере в этой сессии не проверялось.
-- **Компоненты:** `DataTableNames`, `SupportTicketsController`, `EmailTemplatesController`, `DataTableRegistry`
-- **Журнал:** —
+- **Статус:** закрыто (2026-10-25) — `supportTicketsTable` теперь `"supportTicketsTable"`. В браузере после правки не проверялось.
 
 ---
 

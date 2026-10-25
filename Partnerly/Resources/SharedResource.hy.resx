@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <root>
   <!-- 
     Microsoft ResX Schema 
@@ -120,1258 +120,1665 @@
   <data name="Cancel" xml:space="preserve">
     <value>Չեղարկել</value>
   </data>
+
   <data name="CaseCreationLimit" xml:space="preserve">
-    <value>Դուք այսօր այլևս չեք կարող գործ բացել։</value>
+    <value>Այսօր այլևս չեք կարող աջակցության հայտ բացել։</value>
   </data>
+
   <data name="CompareConfirmPassword" xml:space="preserve">
     <value>Գաղտնաբառերը չեն համընկնում</value>
   </data>
+
   <data name="ConnectedToNotificationHub" xml:space="preserve">
-    <value>ConnectedToNotificationHub</value>
+    <value>Միացված է ծանուցումներին</value>
   </data>
+
   <data name="Delete" xml:space="preserve">
     <value>Ջնջել</value>
   </data>
+
   <data name="Details" xml:space="preserve">
     <value>Մանրամասներ</value>
   </data>
+
   <data name="Documentation" xml:space="preserve">
     <value>Փաստաթղթեր</value>
   </data>
+
   <data name="Edit" xml:space="preserve">
     <value>Խմբագրել</value>
   </data>
+
   <data name="EmailRequired" xml:space="preserve">
-    <value>Էլ․ հասցեն պարտադիր լրացման դաշտ է</value>
+    <value>Էլ․ հասցեն պարտադիր է։</value>
   </data>
+
   <data name="ErrorConnectionSignalR" xml:space="preserve">
-    <value>ErrorConnectionSignalR</value>
+    <value>Չհաջողվեց միանալ ծանուցումներին</value>
   </data>
+
   <data name="FieldRequired" xml:space="preserve">
-    <value>պարտադիր դաշտ է</value>
+    <value>պարտադիր է։</value>
   </data>
+
   <data name="Groups" xml:space="preserve">
     <value>Խմբեր</value>
   </data>
+
   <data name="Hide" xml:space="preserve">
     <value>Թաքցնել</value>
   </data>
-  <data name="IncorectEmail" xml:space="preserve">
-    <value>Անվավեր էլ․ հասցե</value>
-  </data>
-  <data name="IncorectPassword" xml:space="preserve">
-    <value>Սխալ գաղտնաբառ</value>
-  </data>
-  <data name="IncorectPasswordOrUsername" xml:space="preserve">
-    <value>Սխալ էլ․ հասցե կամ գաղտնաբառ</value>
-  </data>
-  <data name="InvalidRefferalCode" xml:space="preserve">
-    <value>Այս հղման կոդը գոյություն չունի։</value>
-  </data>
+
   <data name="LinkExpiredDetail" xml:space="preserve">
-    <value>Այս հղումը, կարծես, ժամկետանց է։ Էլ․ հասցեի հաստատումն ավարտելու համար, խնդրում ենք ձեռք բերել նոր հղում։</value>
+    <value>Այս հղումը, կարծես, ժամկետանց է։ Էլ․ հասցեն հաստատելու համար ստացեք նոր հղում։</value>
   </data>
+
   <data name="LinkIsExpired" xml:space="preserve">
     <value>Հղումն այլևս վավեր չէ։</value>
   </data>
+
   <data name="LoginEmailConfirmationMessage" xml:space="preserve">
-    <value>Մուտք գործելու համար խնդրում ենք հաստատել ձեր էլեկտրոնային փոստի հասցեն: Մենք հրահանգներով էլեկտրոնային նամակ ենք ուղարկել ձեր տրամադրած հասցեին: Ստուգեք ձեր էլեկտրոնային փոստը և հետևեք հաստատման հղմանը:</value>
+    <value>Մուտք գործելու համար հաստատեք էլ․ հասցեն։ Մենք հրահանգներով նամակ ենք ուղարկել նշված հասցեին։ Ստուգեք փոստը և սեղմեք հաստատման հղումը։</value>
   </data>
+
   <data name="Logout" xml:space="preserve">
     <value>Ելք</value>
   </data>
+
   <data name="Logs" xml:space="preserve">
-    <value>Ժուրնալներ</value>
+    <value>Մատյան</value>
   </data>
+
   <data name="Markallasread" xml:space="preserve">
     <value>Նշել բոլորը որպես կարդացված</value>
   </data>
+
   <data name="Miscellaneous" xml:space="preserve">
     <value>Բազմազան</value>
   </data>
+
   <data name="Myprofile" xml:space="preserve">
     <value>Իմ պրոֆիլը</value>
   </data>
-  <data name="NewTickedToEmployeeNotification" xml:space="preserve">
-    <value>Դուք ունեք նոր աջակցության տոմս։ {0}</value>
-  </data>
+
   <data name="NoNewNotifications" xml:space="preserve">
     <value>Նոր ծանուցումներ չկան</value>
   </data>
+
   <data name="PasswordRequired" xml:space="preserve">
-    <value>Գաղտնաբառը պարտադիր լրացման դաշտ է</value>
+    <value>Գաղտնաբառը պարտադիր է։</value>
   </data>
+
   <data name="PasswordRequireDigit" xml:space="preserve">
     <value>Գաղտնաբառը պետք է պարունակի առնվազն մեկ թիվ։</value>
   </data>
+
   <data name="PasswordRequireLowercase" xml:space="preserve">
-    <value>Գաղտնաբառը պետք է պարունակի առնվազն մեկ փոքրատառ տառ</value>
+    <value>Գաղտնաբառը պետք է պարունակի առնվազն մեկ փոքրատառ։</value>
   </data>
+
   <data name="PasswordRequireSpecial" xml:space="preserve">
     <value>Գաղտնաբառը պետք է պարունակի առնվազն մեկ հատուկ նիշ։</value>
   </data>
+
   <data name="PasswordRequireUppercase" xml:space="preserve">
-    <value>Գաղտնաբառը պետք է պարունակի առնվազն մեկ մեծատառ</value>
+    <value>Գաղտնաբառը պետք է պարունակի առնվազն մեկ մեծատառ։</value>
   </data>
+
   <data name="ReadPolicyAndTerms" xml:space="preserve">
-    <value>Դուք պետք է համաձայնեք օգտագործման պայմաններին և դրույթներին</value>
+    <value>Պետք է համաձայնել պայմաններին։</value>
   </data>
+
   <data name="RecordSaved" xml:space="preserve">
     <value>Գրառումը հաջողությամբ պահպանվել է։</value>
   </data>
+
   <data name="ReferrerUserCannotBeFoundOrInactive" xml:space="preserve">
-    <value>Հղող օգտատերը չի գտնվել կամ անգործուն է եղել։</value>
+    <value>Հրավիրողը չի գտնվել կամ ակտիվ չէ։</value>
   </data>
+
   <data name="Save" xml:space="preserve">
     <value>Պահպանել</value>
   </data>
+
   <data name="Settings" xml:space="preserve">
     <value>Կարգավորումներ</value>
   </data>
+
   <data name="SiteUnderMaintenanceMode" xml:space="preserve">
-    <value>Կայքը գտնվում է սպասարկման ռեժիմում։</value>
+    <value>Կայքը սպասարկման ռեժիմում է։</value>
   </data>
+
   <data name="Statistics" xml:space="preserve">
     <value>Վիճակագրություն</value>
   </data>
+
   <data name="StringMaxLength" xml:space="preserve">
     <value>Տողի երկարությունը պետք է լինի մինչև {0} նիշ։</value>
   </data>
+
   <data name="StringMinMaxLength" xml:space="preserve">
-    <value>Տողի երկարությունը պետք է լինի {0}-ից {1} նիշերի միջև։</value>
+    <value>Երկարությունը պետք է լինի {0}-ից {1} նիշ։</value>
   </data>
+
   <data name="Support" xml:space="preserve">
     <value>Աջակցություն</value>
   </data>
+
   <data name="SupportSuccess" xml:space="preserve">
-    <value>Ձեր հաղորդագրությունը ուղարկված է։ Մենք շուտով կկապնվենք ձեզ հետ։</value>
+    <value>Ձեր հաղորդագրությունն ուղարկված է։ Շուտով կկապնվենք ձեզ հետ։</value>
   </data>
-  <data name="Systemsettings" xml:space="preserve">
-    <value>Կարգավորումներ</value>
-  </data>
+
   <data name="Tasks" xml:space="preserve">
     <value>Առաջադրանքներ</value>
   </data>
-  <data name="TickedClosedNotification" xml:space="preserve">
-    <value>Ձեր հարցումը փակվել է։ {0}</value>
-  </data>
-  <data name="TickedReopenedNotification" xml:space="preserve">
-    <value>Ձեր հարցումը վերաբացվել է։ {0}</value>
-  </data>
-  <data name="TickedStartedNotification" xml:space="preserve">
-    <value>Մենք սկսել ենք Ձեր հարցումը դիտարկել։ {0}</value>
-  </data>
+
   <data name="TypeValidPhoneNumber" xml:space="preserve">
-    <value>Խնդրում ենք մուտքագրել ճիշտ համարը +374 XX XXXXXX ձևաչափով</value>
+    <value>Մուտքագրեք համարը +374 XX XXXXXX ձևաչափով</value>
   </data>
+
   <data name="UniqueValue" xml:space="preserve">
-    <value>այդ անունով արդեն գոյություն ունի</value>
+    <value>այդ անունով արդեն գոյություն ունի։</value>
   </data>
+
   <data name="UserAccessDenied" xml:space="preserve">
-    <value>օգտատերը մուտք չունի</value>
+    <value>Օգտատերը մուտք չունի։</value>
   </data>
+
   <data name="UserIsBlocked" xml:space="preserve">
     <value>Օգտատերը արգելափակվել է</value>
   </data>
+
   <data name="UserRegistrationNotification" xml:space="preserve">
-    <value>Բարի գալուստ, {0}! 🎉 Ուրախ ենք տեսնել ձեզ մեր կայքում։</value>
+    <value>Բարի գալուստ, {0}։ Ուրախ ենք տեսնել ձեզ մեր կայքում։</value>
   </data>
+
   <data name="Userroles" xml:space="preserve">
-    <value>Օգտատիրոջ դերեր</value>
+    <value>Օգտատերերի դերեր</value>
   </data>
+
   <data name="Users" xml:space="preserve">
     <value>Օգտատերեր</value>
   </data>
-  <data name="UserWithEmailArleadyExist" xml:space="preserve">
-    <value>Այս էլ․ հասցեով օգտատեր արդեն գոյություն ունի։</value>
-  </data>
-  <data name="UserWithPhoneArleadyExist" xml:space="preserve">
-    <value>Այս համարով օգտատեր արդեն գոյություն ունի։</value>
-  </data>
+
   <data name="View" xml:space="preserve">
-    <value>Նայեք</value>
+    <value>Դիտել</value>
   </data>
+
   <data name="CannotDeleteSystemRecords" xml:space="preserve">
-    <value>Դուք չեք կարող ջնջել համակարգի գրառումները։</value>
+    <value>Համակարգային գրառումները չի կարելի ջնջել։</value>
   </data>
+
   <data name="Emailtemplates" xml:space="preserve">
-    <value>Էլփոստի ձևանմուշներ</value>
+    <value>Էլ․ փոստի ձևանմուշներ</value>
   </data>
+
   <data name="FirstName" xml:space="preserve">
     <value>Անուն</value>
   </data>
+
   <data name="Email" xml:space="preserve">
     <value>Էլ․ փոստ</value>
   </data>
+
   <data name="Password" xml:space="preserve">
     <value>Գաղտնաբառ</value>
   </data>
+
   <data name="NewPassword" xml:space="preserve">
     <value>Նոր գաղտնաբառ</value>
   </data>
+
   <data name="ConfirmPassword" xml:space="preserve">
     <value>Հաստատել գաղտնաբառը</value>
   </data>
+
   <data name="RememberMe" xml:space="preserve">
-    <value>Հիշիր ինձ</value>
+    <value>Հիշել ինձ</value>
   </data>
+
   <data name="Phone" xml:space="preserve">
     <value>Հեռախոսահամար</value>
   </data>
+
   <data name="LastName" xml:space="preserve">
     <value>Ազգանուն</value>
   </data>
+
   <data name="ReferrerCode" xml:space="preserve">
     <value>Ուղղորդման կոդ</value>
   </data>
-  <data name="ReffererName" xml:space="preserve">
-    <value>Հղողի անունը</value>
-  </data>
+
   <data name="TermsConditions" xml:space="preserve">
-    <value>Գաղտնիության քաղաքականություն և պայմաններ</value>
+    <value>Օգտագործման պայմաններ</value>
   </data>
+
   <data name="Subject" xml:space="preserve">
-    <value>Վերնագիր</value>
+    <value>Նամակի թեմա</value>
   </data>
+
   <data name="BodyHTML" xml:space="preserve">
-    <value>HTML տեքստ</value>
+    <value>HTML բովանդակություն</value>
   </data>
+
   <data name="Balance" xml:space="preserve">
     <value>Մնացորդ</value>
   </data>
+
   <data name="LastActivity" xml:space="preserve">
-    <value>Վերջին ակտիվությունը</value>
+    <value>Վերջին ակտիվություն</value>
   </data>
-  <data name="IsOnlayn" xml:space="preserve">
-    <value>Առցանց</value>
-  </data>
+
   <data name="IsBlocked" xml:space="preserve">
-    <value>Արգելափակված է</value>
+    <value>Արգելափակված</value>
   </data>
+
   <data name="EmailConfirmed" xml:space="preserve">
     <value>Էլ․ հասցեն հաստատված է</value>
   </data>
+
   <data name="Role" xml:space="preserve">
     <value>Դեր</value>
   </data>
+
   <data name="NewRole" xml:space="preserve">
     <value>Նոր դեր</value>
   </data>
+
   <data name="TemplateType" xml:space="preserve">
-    <value>Շաբլոնի տեսակը</value>
+    <value>Ձևանմուշի տեսակը</value>
   </data>
+
   <data name="AllowSendNotifications" xml:space="preserve">
-    <value>Ծանուցումներ</value>
+    <value>Ծանուցումներ հավելվածում</value>
   </data>
+
   <data name="AllowSendEmails" xml:space="preserve">
-    <value>Էլ․ փոստով Ծանուցումներ</value>
+    <value>Ծանուցումներ էլ․ փոստով</value>
   </data>
+
   <data name="CreatedDate" xml:space="preserve">
     <value>Ստեղծման ամսաթիվը</value>
   </data>
+
   <data name="CreatorName" xml:space="preserve">
-    <value>Ստեղծվել է</value>
+    <value>Ստեղծող</value>
   </data>
+
   <data name="UpdatedDate" xml:space="preserve">
     <value>Թարմացման ամսաթիվը</value>
   </data>
+
   <data name="UpdaterName" xml:space="preserve">
-    <value>Թարմացված է</value>
+    <value>Թարմացնող</value>
   </data>
+
   <data name="MaintenanceMode" xml:space="preserve">
     <value>Սպասարկման ռեժիմ</value>
   </data>
+
   <data name="EmailConfirmationTokenHours" xml:space="preserve">
-    <value>Հաստատել էլ. փոստի տոկենը (ժամերով)</value>
+    <value>Փոստի հաստատման հղման ժամկետ (ժամ)</value>
   </data>
+
   <data name="ForgotPasswordTokenExpiredAtHours" xml:space="preserve">
-    <value>Տոկեն Մոռացել եմ գաղտնաբառը (ժամ)</value>
+    <value>Գաղտնաբառի վերականգնման հղման ժամկետ (ժամ)</value>
   </data>
+
   <data name="Automaticonlinestatusupdate" xml:space="preserve">
-    <value>առցանց կարգավիճակ (րոպե)</value>
+    <value>Առցանց կարգավիճակի միջակայք (րոպե)</value>
   </data>
+
   <data name="ScrollingText" xml:space="preserve">
-    <value>Տիկ-գիծ</value>
+    <value>Վազող տող</value>
   </data>
+
   <data name="Create" xml:space="preserve">
     <value>Ստեղծել</value>
   </data>
+
   <data name="More" xml:space="preserve">
     <value>Ավելին</value>
   </data>
+
   <data name="Back" xml:space="preserve">
     <value>Հետ</value>
   </data>
+
   <data name="Action" xml:space="preserve">
     <value>Գործողություն </value>
   </data>
+
   <data name="Type" xml:space="preserve">
     <value>Տեսակ</value>
   </data>
+
   <data name="Message" xml:space="preserve">
     <value>Հաղորդագրություն</value>
   </data>
+
   <data name="FilePath" xml:space="preserve">
     <value>Ֆայլի ուղի</value>
   </data>
+
   <data name="Method" xml:space="preserve">
     <value>Մեթոդ </value>
   </data>
+
   <data name="LineNumber" xml:space="preserve">
-    <value>Line համարը</value>
+    <value>Տողի համարը</value>
   </data>
+
   <data name="User" xml:space="preserve">
     <value>Օգտատեր</value>
   </data>
+
   <data name="Name" xml:space="preserve">
     <value>Անուն</value>
   </data>
+
   <data name="Description" xml:space="preserve">
     <value>Նկարագրություն</value>
   </data>
+
   <data name="Group" xml:space="preserve">
     <value>Խումբ</value>
   </data>
+
   <data name="IsRead" xml:space="preserve">
     <value>Կարդացված</value>
   </data>
+
   <data name="Status" xml:space="preserve">
     <value>Կարգավիճակ</value>
   </data>
+
   <data name="AssignedTo" xml:space="preserve">
-    <value>Նշանակված</value>
+    <value>Կատարող</value>
   </data>
+
   <data name="TaskNumber" xml:space="preserve">
     <value>Առաջադրանքի համարը</value>
   </data>
+
   <data name="Viewcase" xml:space="preserve">
-    <value>Դիտել գործը</value>
+    <value>Դիտել հայտը</value>
   </data>
+
   <data name="FullName" xml:space="preserve">
     <value>Անուն Ազգանուն</value>
   </data>
+
   <data name="LookupSelectRecord" xml:space="preserve">
     <value>Ընտրեք գրառումը</value>
   </data>
-  <data name="LookupSearch" xml:space="preserve">
-    <value>Որոնում...</value>
-  </data>
+
   <data name="LookupLoading" xml:space="preserve">
     <value>Բեռնում...</value>
   </data>
+
   <data name="LookupNoData" xml:space="preserve">
     <value>Տվյալներ չկան</value>
   </data>
+
   <data name="LookupLoadError" xml:space="preserve">
     <value>Բեռնման սխալ</value>
   </data>
+
   <data name="EditUser" xml:space="preserve">
     <value>Խմբագրել օգտատիրոջը</value>
   </data>
+
   <data name="EditRole" xml:space="preserve">
     <value>Փոխել դերը</value>
   </data>
+
   <data name="Enteryouremailaddress" xml:space="preserve">
-    <value>Մուտքագրեք ձեր էլ․ հասցեն</value>
+    <value>Մուտքագրեք էլ․ հասցեն</value>
   </data>
+
   <data name="DeleteUser" xml:space="preserve">
-    <value>Օգտատիրոջ ջնջում</value>
+    <value>Ջնջել օգտատիրոջը</value>
   </data>
+
   <data name="Confirm" xml:space="preserve">
     <value>Հաստատել</value>
   </data>
+
   <data name="CreateUser" xml:space="preserve">
     <value>Ստեղծել օգտատեր</value>
   </data>
+
   <data name="Referrersreferralcode" xml:space="preserve">
-    <value>Հրավիրողի հղման կոդը</value>
+    <value>Հրավիրողի ուղղորդման կոդը</value>
   </data>
+
   <data name="Addanote" xml:space="preserve">
-    <value>Նշում</value>
+    <value>Ավելացնել նշում</value>
   </data>
+
   <data name="Notetothedocument" xml:space="preserve">
     <value>Նշում փաստաթղթին</value>
   </data>
+
   <data name="Close" xml:space="preserve">
     <value>Փակել</value>
   </data>
+
   <data name="Enteranote" xml:space="preserve">
     <value>Նշում ավելացրեք...</value>
   </data>
+
   <data name="Clear" xml:space="preserve">
     <value>Մաքրել</value>
   </data>
+
   <data name="OK" xml:space="preserve">
     <value>Լավ</value>
   </data>
+
   <data name="Error" xml:space="preserve">
     <value>Սխալ</value>
   </data>
+
   <data name="Youdonothavepermissionviewpage" xml:space="preserve">
-    <value>Դուք չունեք այս էջը դիտելու թույլտվություն։ Եթե կարծում եք, որ սա սխալ է, խնդրում ենք կապվել ադմինիստրատորի հետ։</value>
+    <value>Դուք չունեք այս էջը դիտելու թույլտվություն։ Եթե կարծում եք, որ սա սխալ է, դիմեք ադմինիստրատորին։</value>
   </data>
+
   <data name="License" xml:space="preserve">
     <value>Լիցենզիա</value>
   </data>
+
   <data name="madefrom" xml:space="preserve">
     <value>պատրաստված է</value>
   </data>
+
   <data name="Theemailverificationtokenhasexpired" xml:space="preserve">
-    <value>Էլ․ փոստի հաստատման տոկենի ժամկետը լրացել է։</value>
+    <value>Էլ․ փոստի հաստատման հղման ժամկետը լրացել է։</value>
   </data>
+
   <data name="ThetokenForgotpasswordhasexpired" xml:space="preserve">
-    <value>Մոռացել եք գաղտնաբառը Թոքենի ժամկետը  լրացել է</value>
+    <value>Գաղտնաբառի վերականգնման հղման ժամկետը լրացել է։</value>
   </data>
+
   <data name="Onlinestatusautoupdateinterval" xml:space="preserve">
-    <value>(րոպե) ավտոմատ առցանց կարգավիճակի թարմացում</value>
+    <value>Առցանց կարգավիճակի միջակայք (րոպե)</value>
   </data>
+
   <data name="Start" xml:space="preserve">
     <value>Սկսել</value>
   </data>
+
   <data name="Assignto" xml:space="preserve">
     <value>Նշանակել</value>
   </data>
+
   <data name="From" xml:space="preserve">
     <value>Ումից</value>
   </data>
+
   <data name="To" xml:space="preserve">
     <value>Ում</value>
   </data>
+
   <data name="Closed" xml:space="preserve">
-    <value>Փակ է</value>
+    <value>Փակված</value>
   </data>
+
   <data name="New" xml:space="preserve">
     <value>Նոր</value>
   </data>
+
   <data name="InProgress" xml:space="preserve">
-    <value>Ընթացքի մեջ է</value>
+    <value>Ընթացքում</value>
   </data>
+
   <data name="Contactsupport" xml:space="preserve">
-    <value>Կապվեք աջակցության ծառայության հետ</value>
+    <value>Կապվել աջակցության հետ</value>
   </data>
+
   <data name="Send" xml:space="preserve">
     <value>Ուղարկել</value>
   </data>
+
   <data name="Edittask" xml:space="preserve">
     <value>Խմբագրել առաջադրանքը</value>
   </data>
+
   <data name="Number" xml:space="preserve">
     <value>Համար</value>
   </data>
+
   <data name="Deletetask" xml:space="preserve">
     <value>Ջնջել առաջադրանքը</value>
   </data>
+
   <data name="Createatask" xml:space="preserve">
     <value>Ստեղծել առաջադրանք</value>
   </data>
-  <data name="Changerole" xml:space="preserve">
-    <value>Փոխել դերը</value>
-  </data>
+
   <data name="Viewuser" xml:space="preserve">
     <value>Դիտել օգտատիրոջը</value>
   </data>
+
   <data name="Selectarole" xml:space="preserve">
     <value>Ընտրեք դեր</value>
   </data>
+
   <data name="Edittemplate" xml:space="preserve">
     <value>Խմբագրել ձևանմուշը</value>
   </data>
+
   <data name="Preview" xml:space="preserve">
     <value>Նախադիտում</value>
   </data>
+
   <data name="Templates" xml:space="preserve">
-    <value>Շաբլոններ</value>
+    <value>Ձևանմուշներ</value>
   </data>
+
   <data name="Topic" xml:space="preserve">
     <value>Թեմա</value>
   </data>
+
   <data name="Emailpreview" xml:space="preserve">
     <value>Նամակի նախադիտում</value>
   </data>
+
   <data name="Deletingthetemplate" xml:space="preserve">
-    <value>Շաբլոնի ջնջում</value>
+    <value>Ջնջել ձևանմուշը</value>
   </data>
+
   <data name="Createatemplate" xml:space="preserve">
-    <value>Ստեղծեք ձևանմուշ</value>
+    <value>Ստեղծել ձևանմուշ</value>
   </data>
+
   <data name="Profile" xml:space="preserve">
     <value>Պրոֆիլ</value>
   </data>
+
   <data name="Changepassword" xml:space="preserve">
     <value>Փոխել գաղտնաբառը</value>
   </data>
+
   <data name="Notifications" xml:space="preserve">
     <value>Ծանուցումներ</value>
   </data>
+
   <data name="Youwillreceiveimportantnotifications" xml:space="preserve">
-    <value>Դուք կստանաք կարևոր ծանուցումներ</value>
+    <value>Դուք հավելվածում ծանուցումներ չեք ստանա։</value>
   </data>
+
   <data name="DataTableFilters" xml:space="preserve">
     <value>Ֆիլտրեր</value>
   </data>
+
   <data name="DataTableApply" xml:space="preserve">
     <value>Կիրառել</value>
   </data>
+
   <data name="DataTableReset" xml:space="preserve">
-    <value>Վերականգնել</value>
+    <value>Զրոյացնել</value>
   </data>
+
   <data name="DataTableExportExcel" xml:space="preserve">
     <value>Արտահանել Excel</value>
   </data>
+
   <data name="DataTableExportAll" xml:space="preserve">
     <value>Արտահանել բոլորը</value>
   </data>
+
   <data name="DataTableExportSelected" xml:space="preserve">
     <value>Արտահանել ընտրվածները</value>
   </data>
+
   <data name="DataTableSearch" xml:space="preserve">
     <value>Որոնում...</value>
   </data>
+
   <data name="DataTableFilteredRecords" xml:space="preserve">
     <value>Ֆիլտրված գրառումներ՝ {0}՝ {1}-ից</value>
   </data>
+
   <data name="DataTableTotalRecords" xml:space="preserve">
     <value>Ընդամենը գրառումներ՝ {0}</value>
   </data>
+
   <data name="DataTableShownRecords" xml:space="preserve">
     <value>Ցուցադրված է {0}–{1}՝ {2}-ից</value>
   </data>
+
   <data name="DataTableFilterActive" xml:space="preserve">
-    <value>Ֆիլտրը ակտիվ է</value>
+    <value>Ֆիլտրը միացված է</value>
   </data>
+
   <data name="DataTableFrom" xml:space="preserve">
     <value>Սկսած</value>
   </data>
+
   <data name="DataTableTo" xml:space="preserve">
     <value>Մինչև</value>
   </data>
+
   <data name="DataTableAll" xml:space="preserve">
     <value>Բոլորը</value>
   </data>
+
   <data name="DataTableYes" xml:space="preserve">
     <value>Այո</value>
   </data>
+
   <data name="DataTableNo" xml:space="preserve">
     <value>Ոչ</value>
   </data>
+
   <data name="DataTableActions" xml:space="preserve">
     <value>Գործողություններ</value>
   </data>
+
   <data name="Rates" xml:space="preserve">
     <value>Սակագներ</value>
   </data>
+
   <data name="Educationalvideos" xml:space="preserve">
     <value>Ուսումնական տեսանյութեր</value>
   </data>
+
   <data name="Allrightsreserved" xml:space="preserve">
     <value>Բոլոր իրավունքները պաշտպանված են</value>
   </data>
+
   <data name="Policy" xml:space="preserve">
     <value>Քաղաքականություն</value>
   </data>
+
   <data name="Login" xml:space="preserve">
     <value>Մուտք</value>
   </data>
+
   <data name="Youremailsuccessfullyverified" xml:space="preserve">
-    <value>Ձեր էլ․ հասցեն հաջողությամբ հաստատվել է։</value>
+    <value>Էլ․ հասցեն հաջողությամբ հաստատվել է։</value>
   </data>
+
   <data name="Younowloginusingyourcredentials" xml:space="preserve">
-    <value>Այժմ կարող եք մուտք գործել՝ օգտագործելով ձեր մուտքի տվյալները։</value>
+    <value>Այժմ կարող եք մուտք գործել ձեր տվյալներով։</value>
   </data>
+
   <data name="Enternewpasswordconfirm" xml:space="preserve">
-    <value>Մուտքագրեք ձեր հաշվի նոր գաղտնաբառը և հաստատեք այն։ Պահպանելուց հետո դուք կկարողանաք մուտք գործել նոր գաղտնաբառով։</value>
+    <value>Մուտքագրեք հաշվի նոր գաղտնաբառը և հաստատեք այն։ Պահպանելուց հետո կկարողանաք մուտք գործել նոր գաղտնաբառով։</value>
   </data>
+
   <data name="EnteryouremailaddressandclickGet" xml:space="preserve">
-    <value>Մուտքագրեք ձեր էլ. փոստի հասցեն և սեղմեք «Ստանալ»</value>
+    <value>Մուտքագրեք էլ․ հասցեն և սեղմեք «Ուղարկել հղումը»</value>
   </data>
+
   <data name="Get" xml:space="preserve">
-    <value>Ստանալ</value>
+    <value>Ուղարկել հղումը</value>
   </data>
+
   <data name="Doyoualreadhaveanaccount" xml:space="preserve">
-    <value>Դուք արդեն ունե՞ք հաշիվ։</value>
+    <value>Արդեն ունե՞ք հաշիվ։</value>
   </data>
+
   <data name="Wehavesentemailwithinstructionsresetyourpassword" xml:space="preserve">
-    <value>Մենք ձեզ էլ.փոստ ենք ուղարկել գաղտնաբառի վերականգնման հրահանգներով: Խնդրում ենք հետևել էլ.փոստում նշված հղմանը՝ նոր գաղտնաբառ սահմանելու համար:</value>
+    <value>Մենք ուղարկել ենք նամակ գաղտնաբառի վերականգնման հրահանգներով։ Սեղմեք նամակի հղումը՝ նոր գաղտնաբառ սահմանելու համար։</value>
   </data>
+
   <data name="Forgotyourpassword" xml:space="preserve">
     <value>Մոռացե՞լ եք գաղտնաբառը։</value>
   </data>
+
   <data name="Newtoourplatform" xml:space="preserve">
-    <value>Նորեկ եք մեր հարթակում՞</value>
+    <value>Նոր եք մեր հարթակում՞</value>
   </data>
+
   <data name="Createanaccount" xml:space="preserve">
-    <value>Ստեղծեք հաշիվ</value>
+    <value>Ստեղծել հաշիվ</value>
   </data>
+
   <data name="PrivacyPolicyandTerms" xml:space="preserve">
     <value>Գաղտնիության քաղաքականություն և պայմաններ</value>
   </data>
+
   <data name="Iagreewith" xml:space="preserve">
     <value>Ես համաձայն եմ</value>
   </data>
+
   <data name="Signup" xml:space="preserve">
     <value>Գրանցվել</value>
   </data>
+
   <data name="Registrationwassuccessful" xml:space="preserve">
     <value>Գրանցումը հաջող էր։</value>
   </data>
+
   <data name="Youraccounthasbeensuccessfullycreated" xml:space="preserve">
-    <value>Ձեր հաշիվը հաջողությամբ ստեղծվել է։ Մուտք գործելու համար, խնդրում ենք հաստատել ձեր էլեկտրոնային փոստի հասցեն։ Ձեր էլեկտրոնային փոստի հասցեին ուղարկվել է հրահանգներով էլեկտրոնային նամակ։</value>
+    <value>Հաշիվը ստեղծվել է։ Մուտք գործելու համար հաստատեք էլ․ հասցեն։ Ձեզ ուղարկվել է հրահանգներով նամակ։</value>
   </data>
+
   <data name="JustNow" xml:space="preserve">
     <value>հենց հիմա</value>
   </data>
+
   <data name="MinuteAgo" xml:space="preserve">
-    <value>րոպե առաջ</value>
+    <value>մեկ րոպե առաջ</value>
   </data>
+
   <data name="MinutesAgo" xml:space="preserve">
     <value>րոպե առաջ</value>
   </data>
+
   <data name="HourAgo" xml:space="preserve">
     <value>մեկ ժամ առաջ</value>
   </data>
+
   <data name="HoursAgo" xml:space="preserve">
     <value>ժամ առաջ</value>
   </data>
+
   <data name="Join" xml:space="preserve">
     <value>Միանալ</value>
   </data>
+
   <data name="YourSmartBeloteAssistant" xml:space="preserve">
-    <value>Ձեր խելացի Բելոտի օգնականը:</value>
+    <value>Ձեր խելացի բելոտի օգնականը։</value>
   </data>
+
   <data name="PlaySmarter" xml:space="preserve">
-    <value>Խաղացեք ավելի խելացի</value>
+    <value>Խաղացեք խելացի</value>
   </data>
+
   <data name="WinwithConfidence" xml:space="preserve">
     <value>Հաղթե՛ք վստահությամբ</value>
   </data>
+
   <data name="Undermaintenance" xml:space="preserve">
     <value>Սպասարկման փուլում</value>
   </data>
+
   <data name="Technicalmaintenanceunderway" xml:space="preserve">
-    <value>Ներողություն ենք խնդրում անհարմարության համար, այս պահին մենք տեխնիկական սպասարկման աշխատանքներ ենք իրականացնում։</value>
+    <value>Ներողություն անհարմարության համար․ այս պահին կատարվում են տեխնիկական աշխատանքներ։</value>
   </data>
+
   <data name="Seehowourplatformworks" xml:space="preserve">
     <value>Տեսեք, թե ինչպես է աշխատում մեր հարթակը</value>
   </data>
+
   <data name="Howtoregisterandgetstarted" xml:space="preserve">
     <value>Ինչպես գրանցվել և սկսել</value>
   </data>
+
   <data name="Invitefriendsandearn" xml:space="preserve">
-    <value>Հրավիրեք ընկերներին և վաստակեք գումար</value>
+    <value>Հրավիրեք ընկերներին և վաստակեք</value>
   </data>
+
   <data name="Ratesandbonuslevels" xml:space="preserve">
     <value>Սակագներ և բոնուսային մակարդակներ</value>
   </data>
+
   <data name="Gamesplayed" xml:space="preserve">
     <value>Խաղացված խաղեր</value>
   </data>
+
   <data name="Victories" xml:space="preserve">
     <value>Հաղթանակներ</value>
   </data>
+
   <data name="Defeats" xml:space="preserve">
     <value>Պարտություններ</value>
   </data>
+
   <data name="WinRate" xml:space="preserve">
-    <value>Հաղթանակի ցուցանիշ</value>
+    <value>Հաղթանակների տոկոս</value>
   </data>
+
   <data name="Gamesbyday" xml:space="preserve">
-    <value>Օրվա խաղեր</value>
+    <value>Խաղերն ըստ օրերի</value>
   </data>
+
   <data name="WinsLosses" xml:space="preserve">
     <value>Հաղթանակներ / պարտություններ</value>
   </data>
+
   <data name="Sendnotification" xml:space="preserve">
     <value>Ուղարկել ծանուցում</value>
   </data>
+
   <data name="Sendanemail" xml:space="preserve">
-    <value>Ուղարկել էլ. նամակ</value>
+    <value>Ուղարկել էլ․ նամակ</value>
   </data>
+
   <data name="Connections" xml:space="preserve">
     <value>Կապեր</value>
   </data>
+
   <data name="Editgroup" xml:space="preserve">
     <value>Խմբագրել խումբը</value>
   </data>
+
   <data name="Deletegroup" xml:space="preserve">
-    <value>Խումբի ջնջում</value>
+    <value>Ջնջել խումբը</value>
   </data>
+
   <data name="Createagroup" xml:space="preserve">
     <value>Ստեղծել խումբ</value>
   </data>
+
   <data name="ContinuewithGoogle" xml:space="preserve">
-    <value>Շարունակել Google-ի միջոցով</value>
+    <value>Շարունակել Google-ով</value>
   </data>
+
   <data name="Or" xml:space="preserve">
     <value>Կամ</value>
   </data>
+
   <data name="Completeregistration" xml:space="preserve">
     <value>Ավարտել գրանցումը</value>
   </data>
+
   <data name="Completeyourregistration" xml:space="preserve">
     <value>Ավարտեք գրանցումը</value>
   </data>
+
   <data name="WereceivedyourdataviaGoogle" xml:space="preserve">
-    <value>Մենք ձեր տվյալները ստացել ենք Google-ից։</value>
+    <value>Ձեր տվյալները ստացել ենք Google-ից։</value>
   </data>
+
   <data name="Open" xml:space="preserve">
     <value>Բաց</value>
   </data>
+
   <data name="Pending" xml:space="preserve">
-    <value>Սպասման մեջ</value>
+    <value>Սպասում</value>
   </data>
-  <data name="Payed" xml:space="preserve">
-    <value>Վճարված</value>
-  </data>
+
   <data name="Canceled" xml:space="preserve">
     <value>Չեղարկված</value>
   </data>
+
   <data name="Rejected" xml:space="preserve">
     <value>Մերժված</value>
   </data>
+
   <data name="UserSignIn" xml:space="preserve">
-    <value>Մուտք օգտվողի կողմից</value>
+    <value>Օգտատիրոջ մուտք</value>
   </data>
+
   <data name="UserSignOut" xml:space="preserve">
-    <value>Ելք օգտվողի կողմից</value>
+    <value>Օգտատիրոջ ելք</value>
   </data>
+
   <data name="UserCreated" xml:space="preserve">
-    <value>Օգտվողի ստեղծում</value>
+    <value>Օգտատիրոջ ստեղծում</value>
   </data>
+
   <data name="UserDeleted" xml:space="preserve">
-    <value>Օգտվողի ջնջում</value>
+    <value>Օգտատիրոջ ջնջում</value>
   </data>
+
   <data name="UserUpdated" xml:space="preserve">
-    <value>Օգտվողի թարմացում</value>
+    <value>Օգտատիրոջ թարմացում</value>
   </data>
+
   <data name="RoleCreated" xml:space="preserve">
     <value>Դերի ստեղծում</value>
   </data>
+
   <data name="RoleDeleted" xml:space="preserve">
     <value>Դերի ջնջում</value>
   </data>
+
   <data name="RoleUpdated" xml:space="preserve">
     <value>Դերի թարմացում</value>
   </data>
+
   <data name="PaymentCreated" xml:space="preserve">
     <value>Վճարման ստեղծում</value>
   </data>
+
   <data name="PaymentDeleted" xml:space="preserve">
     <value>Վճարման ջնջում</value>
   </data>
+
   <data name="PaymentUpdated" xml:space="preserve">
     <value>Վճարման թարմացում</value>
   </data>
+
   <data name="SystemSettingsCreated" xml:space="preserve">
     <value>Համակարգի կարգավորումների ստեղծում</value>
   </data>
+
   <data name="SystemSettingsDeleted" xml:space="preserve">
     <value>Համակարգի կարգավորումների ջնջում</value>
   </data>
+
   <data name="SystemSettingsUpdated" xml:space="preserve">
     <value>Համակարգի կարգավորումների թարմացում</value>
   </data>
+
   <data name="EmailConfirmationTokenCreated" xml:space="preserve">
     <value>Էլեկտրոնային փոստի հաստատման տոկենի ստեղծում</value>
   </data>
+
   <data name="EmailConfirmationTokenDeleted" xml:space="preserve">
     <value>Էլեկտրոնային փոստի հաստատման տոկենի ջնջում</value>
   </data>
+
   <data name="EmailConfirmationTokenUpdated" xml:space="preserve">
     <value>Էլեկտրոնային փոստի հաստատման տոկենի թարմացում</value>
   </data>
+
   <data name="EmailTemplateCreated" xml:space="preserve">
-    <value>Էլ. փոստի ձևանմուշի ստեղծում</value>
+    <value>Էլ․ փոստի ձևանմուշի ստեղծում</value>
   </data>
+
   <data name="EmailTemplateDeleted" xml:space="preserve">
-    <value>Էլեկտրոնային փոստի ձևանմուշի ջնջում</value>
+    <value>Էլ․ փոստի ձևանմուշի ջնջում</value>
   </data>
+
   <data name="EmailTemplateUpdated" xml:space="preserve">
-    <value>Էլ. փոստի ձևանմուշի թարմացում</value>
+    <value>Էլ․ փոստի ձևանմուշի թարմացում</value>
   </data>
+
   <data name="NotificationCreated" xml:space="preserve">
     <value>Ծանուցման ստեղծում</value>
   </data>
+
   <data name="NotificationDeleted" xml:space="preserve">
     <value>Ծանուցման ջնջում</value>
   </data>
+
   <data name="NotificationUpdated" xml:space="preserve">
     <value>Ծանուցման թարմացում</value>
   </data>
+
   <data name="UserGroupCreated" xml:space="preserve">
     <value>Օգտվողների խմբի ստեղծում</value>
   </data>
+
   <data name="UserGroupDeleted" xml:space="preserve">
     <value>Օգտվողների խմբի ջնջում</value>
   </data>
+
   <data name="UserGroupUpdated" xml:space="preserve">
     <value>Օգտվողների խմբի թարմացում</value>
   </data>
+
   <data name="SupportTicketCreated" xml:space="preserve">
-    <value>Աջակցության տոմսի ստեղծում</value>
+    <value>Աջակցության հայտի ստեղծում</value>
   </data>
+
   <data name="SupportTicketDeleted" xml:space="preserve">
-    <value>Աջակցության տոմսի ջնջում</value>
+    <value>Աջակցության հայտի ջնջում</value>
   </data>
+
   <data name="SupportTicketUpdated" xml:space="preserve">
-    <value>Աջակցության տոմսի թարմացում</value>
+    <value>Աջակցության հայտի թարմացում</value>
   </data>
+
   <data name="EmailSending" xml:space="preserve">
     <value>Էլեկտրոնային փոստի ուղարկում</value>
   </data>
+
   <data name="Information" xml:space="preserve">
     <value>Տեղեկություն</value>
   </data>
+
   <data name="Warning" xml:space="preserve">
     <value>Զգուշացում</value>
   </data>
+
   <data name="Critical" xml:space="preserve">
     <value>Կրիտիկական</value>
   </data>
+
   <data name="Success" xml:space="preserve">
-    <value>Հաջողությամբ</value>
+    <value>Հաջող է</value>
   </data>
+
   <data name="EmailConfirmation" xml:space="preserve">
     <value>Էլեկտրոնային փոստի հաստատում</value>
   </data>
+
   <data name="Registration" xml:space="preserve">
     <value>Գրանցում</value>
   </data>
+
   <data name="ForgotPassword" xml:space="preserve">
-    <value>Մոռացված գաղտնաբառ</value>
+    <value>Մոռացե՞լ եք գաղտնաբառը</value>
   </data>
+
   <data name="CriticalError" xml:space="preserve">
     <value>Կրիտիկական սխալ</value>
   </data>
+
   <data name="Joinedin" xml:space="preserve">
-    <value>Միացել է</value>
+    <value>Գրանցման ամսաթիվ</value>
   </data>
+
   <data name="Copyreferrallink" xml:space="preserve">
-    <value>Պատճենեք հղման հղումը</value>
+    <value>Պատճենել ուղղորդման հղումը</value>
   </data>
+
   <data name="Linkcopied" xml:space="preserve">
     <value>Հղումը պատճենվեց։</value>
   </data>
+
   <data name="Copyerror" xml:space="preserve">
     <value>Պատճենման սխալ՝</value>
   </data>
+
   <data name="Noinformationonactivity" xml:space="preserve">
-    <value>Գործունեության մասին տեղեկատվություն չկա...</value>
+    <value>Ակտիվության մասին տվյալներ չկան...</value>
   </data>
+
   <data name="Chronologyofactivities" xml:space="preserve">
-    <value>Գործունեության ժամանակագրություն</value>
+    <value>Գործողությունների ժամանակագրություն</value>
   </data>
+
+  <data name="InvalidEmail" xml:space="preserve">
+    <value>Անվավեր էլ․ հասցե</value>
+  </data>
+
+  <data name="IncorrectPassword" xml:space="preserve">
+    <value>Սխալ գաղտնաբառ</value>
+  </data>
+
+  <data name="InvalidEmailOrPassword" xml:space="preserve">
+    <value>Սխալ էլ. հասցե կամ գաղտնաբառ</value>
+  </data>
+
+  <data name="InvalidReferralCode" xml:space="preserve">
+    <value>Այս ուղղորդման կոդը գոյություն չունի։</value>
+  </data>
+
+  <data name="NewTicketToEmployeeNotification" xml:space="preserve">
+    <value>Դուք ունեք նոր աջակցության հայտ։ {0}</value>
+  </data>
+
+  <data name="TicketClosedNotification" xml:space="preserve">
+    <value>Ձեր հայտը փակվել է։ {0}</value>
+  </data>
+
+  <data name="TicketReopenedNotification" xml:space="preserve">
+    <value>Ձեր հայտը վերաբացվել է։ {0}</value>
+  </data>
+
+  <data name="TicketStartedNotification" xml:space="preserve">
+    <value>Մենք սկսել ենք դիտարկել ձեր հայտը։ {0}</value>
+  </data>
+
+  <data name="UserWithEmailAlreadyExists" xml:space="preserve">
+    <value>Այս էլ․ հասցեով օգտատեր արդեն կա։</value>
+  </data>
+
+  <data name="UserWithPhoneAlreadyExists" xml:space="preserve">
+    <value>Այս հեռախոսահամարով օգտատեր արդեն կա։</value>
+  </data>
+
+  <data name="ReferrerName" xml:space="preserve">
+    <value>Հրավիրողի անունը</value>
+  </data>
+
+  <data name="IsOnline" xml:space="preserve">
+    <value>Առցանց</value>
+  </data>
+
+  <data name="Paid" xml:space="preserve">
+    <value>Վճարված</value>
+  </data>
+
   <data name="AboutMe" xml:space="preserve">
     <value>Իմ մասին</value>
   </data>
+
   <data name="Myteam" xml:space="preserve">
     <value>Իմ թիմը</value>
   </data>
+
   <data name="Contacts" xml:space="preserve">
     <value>Կոնտակտներ</value>
   </data>
+
   <data name="Link" xml:space="preserve">
     <value>Հղում</value>
   </data>
+
   <data name="Owner" xml:space="preserve">
     <value>Սեփականատեր</value>
   </data>
+
   <data name="Editnotification" xml:space="preserve">
     <value>Խմբագրել ծանուցումը</value>
   </data>
+
   <data name="Select" xml:space="preserve">
     <value>Ընտրել</value>
   </data>
+
   <data name="Deletingthenotification" xml:space="preserve">
-    <value>Ծանուցման ջնջում</value>
+    <value>Ջնջել ծանուցումը</value>
   </data>
+
   <data name="Createanotification" xml:space="preserve">
     <value>Ստեղծել ծանուցում</value>
   </data>
-  <data name="Usercannotbefound" xml:space="preserve">
+
+  <data name="UserCannotBeFound" xml:space="preserve">
     <value>Օգտատերը չի գտնվել</value>
   </data>
+
   <data name="Attachments" xml:space="preserve">
-    <value>Կցվածքներ</value>
+    <value>Կցված ֆայլեր</value>
   </data>
+
   <data name="Selectfiles" xml:space="preserve">
     <value>Ընտրել ֆայլեր</value>
   </data>
+
   <data name="Upload" xml:space="preserve">
     <value>Վերբեռնել</value>
   </data>
+
   <data name="Noattachments" xml:space="preserve">
     <value>Կցված ֆայլեր չկան</value>
   </data>
+
   <data name="Failedtoloadattachments" xml:space="preserve">
     <value>Չհաջողվեց բեռնել կցված ֆայլերը։</value>
   </data>
+
   <data name="Pleaseselectatleastonefile" xml:space="preserve">
-    <value>Խնդրում ենք ընտրել առնվազն մեկ ֆայլ</value>
+    <value>Ընտրեք առնվազն մեկ ֆայլ</value>
   </data>
+
   <data name="Uploadfailed" xml:space="preserve">
-    <value>Վերբեռնումը ձախողվեց</value>
+    <value>Վերբեռնումը չհաջողվեց</value>
   </data>
+
   <data name="Faileduploadingfiles" xml:space="preserve">
-    <value>Ֆայլերի վերբեռնումը ձախողվեց</value>
+    <value>Ֆայլերի վերբեռնումը չհաջողվեց</value>
   </data>
-  <data name="Areyousureyouwanttodeletethisfile" xml:space="preserve">
-    <value>Վստա՞հ եք, որ ցանկանում եք ջնջել ։</value>
+
+  <data name="ConfirmDelete" xml:space="preserve">
+    <value>Վստա՞հ եք, որ ցանկանում եք սա ջնջել։</value>
   </data>
+
   <data name="Deletefailed" xml:space="preserve">
-    <value>Ջնջումը ձախողվեց։</value>
+    <value>Ջնջումը չհաջողվեց։</value>
   </data>
+
   <data name="Failedtodeletethefile" xml:space="preserve">
     <value>Չհաջողվեց ջնջել ֆայլը</value>
   </data>
+
   <data name="FileName" xml:space="preserve">
     <value>Ֆայլի անունը</value>
   </data>
+
   <data name="StoredFileName" xml:space="preserve">
     <value>Պահպանված ֆայլի անունը</value>
   </data>
+
   <data name="ContentType" xml:space="preserve">
     <value>Բովանդակության տեսակ</value>
   </data>
+
   <data name="FileSize" xml:space="preserve">
     <value>Ֆայլի չափսը</value>
   </data>
+
   <data name="StoragePath" xml:space="preserve">
     <value>Պահպանման ուղի</value>
   </data>
+
   <data name="EntityType" xml:space="preserve">
-    <value>Կազմակերպության տեսակ</value>
+    <value>Օբյեկտի տեսակ</value>
   </data>
+
   <data name="Entity" xml:space="preserve">
-    <value>Կազմակերպություն</value>
+    <value>Օբյեկտ</value>
   </data>
+
   <data name="IsDeleted" xml:space="preserve">
-    <value>Ջնջված է</value>
+    <value>Ջնջված</value>
   </data>
+
   <data name="VsLastMonth" xml:space="preserve">
     <value>նախորդ ամսվա համեմատ</value>
   </data>
+
   <data name="OverallGameResults" xml:space="preserve">
     <value>Խաղերի ընդհանուր արդյունքները</value>
   </data>
+
   <data name="GameActivityLast7Days" xml:space="preserve">
     <value>Խաղային ակտիվությունը վերջին 7 օրվա ընթացքում</value>
   </data>
+
   <data name="Last7Days" xml:space="preserve">
     <value>Վերջին 7 օրը</value>
   </data>
+
   <data name="ThisYear" xml:space="preserve">
     <value>Այս տարի</value>
   </data>
+
   <data name="Last3Months" xml:space="preserve">
-    <value>Վերջին 3 ամիսները</value>
+    <value>Վերջին 3 ամիսը</value>
   </data>
+
   <data name="Last30Days" xml:space="preserve">
-    <value>Վերջին 30 օրերը</value>
+    <value>Վերջին 30 օրը</value>
   </data>
+
   <data name="Monday" xml:space="preserve">
     <value>Երկուշաբթի</value>
   </data>
+
   <data name="Tuesday" xml:space="preserve">
     <value>Երեքշաբթի</value>
   </data>
+
   <data name="Wednesday" xml:space="preserve">
     <value>Չորեքշաբթի</value>
   </data>
+
   <data name="Thursday" xml:space="preserve">
     <value>Հինգշաբթի</value>
   </data>
+
   <data name="Friday" xml:space="preserve">
     <value>Ուրբաթ</value>
   </data>
+
   <data name="Saturday" xml:space="preserve">
     <value>Շաբաթ</value>
   </data>
+
   <data name="Sunday" xml:space="preserve">
     <value>Կիրակի</value>
   </data>
+
   <data name="January" xml:space="preserve">
     <value>Հունվար</value>
   </data>
+
   <data name="February" xml:space="preserve">
     <value>Փետրվար</value>
   </data>
+
   <data name="March" xml:space="preserve">
-    <value>March</value>
+    <value>Մարտ</value>
   </data>
+
   <data name="April" xml:space="preserve">
     <value>Ապրիլ</value>
   </data>
+
   <data name="May" xml:space="preserve">
     <value>Մայիս</value>
   </data>
+
   <data name="June" xml:space="preserve">
     <value>Հունիս</value>
   </data>
+
   <data name="July" xml:space="preserve">
     <value>Հուլիս</value>
   </data>
+
   <data name="August" xml:space="preserve">
     <value>Օգոստոս</value>
   </data>
+
   <data name="September" xml:space="preserve">
     <value>Սեպտեմբեր</value>
   </data>
+
   <data name="October" xml:space="preserve">
     <value>Հոկտեմբեր</value>
   </data>
+
   <data name="November" xml:space="preserve">
     <value>Նոյեմբեր</value>
   </data>
+
   <data name="December" xml:space="preserve">
     <value>Դեկտեմբեր</value>
   </data>
+
   <data name="Gamesbymonth" xml:space="preserve">
     <value>Խաղերն ըստ ամիսների</value>
   </data>
+
   <data name="Refresh" xml:space="preserve">
     <value>Թարմացնել</value>
   </data>
-  <data name="Photowasnotselected" xml:space="preserve">
-    <value>Լուսանկարը չի ընտրվել</value>
+
+  <data name="PhotoWasNotSelected" xml:space="preserve">
+    <value>Լուսանկար չի ընտրվել</value>
   </data>
-  <data name="Invalidimageformat" xml:space="preserve">
+
+  <data name="InvalidImageFormat" xml:space="preserve">
     <value>Պատկերի անվավեր ձևաչափ</value>
   </data>
+
   <data name="Maximumfilesizeis" xml:space="preserve">
-    <value>Ֆայլի առավելագույն չափսը՝ </value>
+    <value>Ֆայլի առավելագույն չափը՝ </value>
   </data>
+
   <data name="Photosavedsuccessfully" xml:space="preserve">
     <value>Լուսանկարը հաջողությամբ պահպանվել է</value>
   </data>
+
   <data name="Active" xml:space="preserve">
     <value>Ակտիվ</value>
   </data>
+
   <data name="RecentActivity" xml:space="preserve">
-    <value>Վերջին ակտիվությունը</value>
+    <value>Վերջին գործողություններ</value>
   </data>
+
   <data name="TotalMembers" xml:space="preserve">
     <value>Մասնակիցների ընդհանուր թիվը</value>
   </data>
+
   <data name="ActiveMembers" xml:space="preserve">
     <value>Ակտիվ մասնակիցներ</value>
   </data>
+
   <data name="DirectReferrals" xml:space="preserve">
-    <value>Ուղղակի ուղղորդումներ</value>
+    <value>Ուղիղ ուղղորդվածներ</value>
   </data>
+
   <data name="Myreferrals" xml:space="preserve">
     <value>Իմ ուղղորդվածները</value>
   </data>
+
   <data name="Member" xml:space="preserve">
     <value>Մասնակից</value>
   </data>
+
   <data name="Referrals" xml:space="preserve">
     <value>Ուղղորդվածներ</value>
   </data>
+
   <data name="Noinformation" xml:space="preserve">
-    <value>Տեղեկություն չկա</value>
+    <value>Տվյալներ չկան</value>
   </data>
+
   <data name="Noreferals" xml:space="preserve">
-    <value>Դեռևս ուղղորդվածներ չկան</value>
+    <value>Ուղղորդվածներ դեռ չկան</value>
   </data>
+
   <data name="Referrer" xml:space="preserve">
-    <value>Ուղղորդող</value>
+    <value>Հրավիրող</value>
   </data>
+
   <data name="Manageyourprofilepasswordandnotificationpreferences" xml:space="preserve">
-    <value>Կառավարեք ձեր պրոֆիլը, գաղտնաբառը և ծանուցումների կարգավորումները։</value>
+    <value>Կառավարեք պրոֆիլը, գաղտնաբառը և ծանուցումների կարգավորումները։</value>
   </data>
+
   <data name="Manageyouraccount" xml:space="preserve">
-    <value>Կառավարեք ձեր հաշիվը</value>
+    <value>Կառավարել հաշիվը</value>
   </data>
+
   <data name="Personalinformation" xml:space="preserve">
     <value>Անձնական տվյալներ</value>
   </data>
+
   <data name="Updateyourpassword" xml:space="preserve">
-    <value>Թարմացրեք ձեր գաղտնաբառը</value>
+    <value>Թարմացրեք գաղտնաբառը</value>
   </data>
+
   <data name="Notificationpreferences" xml:space="preserve">
     <value>Ծանուցումների կարգավորումներ</value>
   </data>
+
   <data name="Updateyourpersonalinformation" xml:space="preserve">
-    <value>Թարմացրեք ձեր անձնական տվյալները։</value>
+    <value>Թարմացրեք անձնական տվյալները։</value>
   </data>
+
   <data name="Keepsyouraccountsecurewithastrongpassword" xml:space="preserve">
-    <value>Պաշտպանեք ձեր հաշիվը ուժեղ գաղտնաբառով։</value>
+    <value>Պաշտպանեք հաշիվը ուժեղ գաղտնաբառով։</value>
   </data>
+
   <data name="Yourpasswordprotectsyouraccount" xml:space="preserve">
-    <value>Ձեր գաղտնաբառը պաշտպանում է ձեր հաշիվը</value>
+    <value>Գաղտնաբառը պաշտպանում է ձեր հաշիվը</value>
   </data>
+
   <data name="Useauniquepasswordthatyoudontuseanywhereelse" xml:space="preserve">
-    <value>Օգտագործեք եզակի գաղտնաբառ, որը չեք օգտագործում այլ վայրերում։</value>
+    <value>Օգտագործեք եզակի գաղտնաբառ, որը այլ տեղ չեք օգտագործում։</value>
   </data>
+
   <data name="Choosehowyouwanttoreceivenotifications" xml:space="preserve">
-    <value>Ընտրեք, թե ինչպես եք ցանկանում ստանալ ծանուցումները։</value>
+    <value>Ընտրեք, թե ինչպես ստանալ ծանուցումները։</value>
   </data>
+
   <data name="Receiveimportantupdatesandmessagesbyemail" xml:space="preserve">
     <value>Ստացեք կարևոր թարմացումներ և հաղորդագրություններ էլ․ փոստով։</value>
   </data>
+
   <data name="ReceiveNotificationsDirectlyInPartnerly" xml:space="preserve">
-    <value>Ստացեք ծանուցումները անմիջապես։</value>
+    <value>Ստացեք ծանուցումները հավելվածում։</value>
   </data>
+
   <data name="Supportheaderdescription" xml:space="preserve">
     <value>Մենք այստեղ ենք օգնելու համար։ Ուղարկեք մեզ հաղորդագրություն, և մեր աջակցության թիմը հնարավորինս շուտ կապ կհաստատի ձեզ հետ։</value>
   </data>
+
   <data name="Howcanwehelp" xml:space="preserve">
     <value>Ինչպե՞ս կարող ենք օգնել։</value>
   </data>
+
   <data name="Supportintrodescription" xml:space="preserve">
     <value>Ունե՞ք հարց, խնդիր եք հայտնաբերե՞լ կամ օգնության կարիք ունե՞ք։ Պատմեք մեզ, թե ինչ է տեղի ունեցել, և մենք կօգնենք լուծել խնդիրը։</value>
   </data>
+
   <data name="Describeyourissue" xml:space="preserve">
-    <value>Նկարագրեք ձեր խնդիրը</value>
+    <value>Նկարագրեք խնդիրը</value>
   </data>
+
   <data name="Describeyourissuedescription" xml:space="preserve">
     <value>Տրամադրեք մեզ հնարավորինս շատ տեղեկություն։</value>
   </data>
+
   <data name="Wellreviewyourcase" xml:space="preserve">
-    <value>Մենք կքննարկենք ձեր հարցումը</value>
+    <value>Մենք կքննարկենք ձեր հայտը</value>
   </data>
+
   <data name="Wellreviewyourcasedescription" xml:space="preserve">
-    <value>Մեր աջակցության թիմը կուսումնասիրի ձեր հարցումը։</value>
+    <value>Մեր աջակցության թիմը կուսումնասիրի ձեր հայտը։</value>
   </data>
+
   <data name="Getassistance" xml:space="preserve">
-    <value>Ստացեք օգնություն</value>
+    <value>Ստանալ օգնություն</value>
   </data>
+
   <data name="Getassistancedescription" xml:space="preserve">
     <value>Մենք կապ կհաստատենք ձեզ հետ և կներկայացնենք հաջորդ քայլերը։</value>
   </data>
+
   <data name="Supportsecuritywarning" xml:space="preserve">
     <value>Խնդրում ենք հաղորդագրության մեջ չնշել գաղտնաբառեր կամ այլ զգայուն տեղեկություններ։</value>
   </data>
+
   <data name="Openasupportcase" xml:space="preserve">
-    <value>Ստեղծել աջակցության հարցում</value>
+    <value>Բացել աջակցության հայտ</value>
   </data>
+
   <data name="Supportformdescription" xml:space="preserve">
-    <value>Լրացրեք ստորև նշված տեղեկությունները և ուղարկեք ձեր հարցումը։</value>
+    <value>Լրացրեք ստորև նշված դաշտերը և ուղարկեք հայտը։</value>
   </data>
+
   <data name="Brieflydescribeyourissue" xml:space="preserve">
-    <value>Համառոտ նկարագրեք ձեր խնդիրը</value>
+    <value>Համառոտ նկարագրեք խնդիրը</value>
   </data>
+
   <data name="Describeissueindetail" xml:space="preserve">
-    <value>Մանրամասն նկարագրեք ձեր խնդիրը...</value>
+    <value>Մանրամասն նկարագրեք խնդիրը...</value>
   </data>
+
   <data name="Yourinformationissecure" xml:space="preserve">
-    <value>Ձեր տեղեկությունները պաշտպանված են</value>
+    <value>Ձեր տվյալները պաշտպանված են</value>
   </data>
+
   <data name="Resetpassword" xml:space="preserve">
-    <value>Գաղտնաբառի վերականգնում</value>
+    <value>Վերականգնել գաղտնաբառը</value>
   </data>
+
   <data name="EmailSent" xml:space="preserve">
     <value>Նամակը ուղարկված է</value>
   </data>
+
   <data name="Checkyourinbox" xml:space="preserve">
-    <value>Ստուգեք ձեր մուտքային նամակները</value>
+    <value>Ստուգեք մուտքային նամակները</value>
   </data>
+
   <data name="VerifiedwithGoogle" xml:space="preserve">
     <value>Հաստատված է Google-ի միջոցով</value>
   </data>
+
   <data name="Smartexperience" xml:space="preserve">
-    <value>Խելացի փորձառություն</value>
+    <value>Խելացի մոտեցում</value>
   </data>
+
   <data name="Buildyourteam" xml:space="preserve">
-    <value>Ձևավորե՛ք ձեր թիմը</value>
+    <value>Կազմեք ձեր թիմը</value>
   </data>
+
   <data name="Connectwithyourteamnetwork" xml:space="preserve">
     <value>Կապ հաստատեք ձեր թիմային ցանցի հետ։</value>
   </data>
+
   <data name="Secureaccount" xml:space="preserve">
-    <value>Ապահով հաշիվ</value>
+    <value>Անվտանգ հաշիվ</value>
   </data>
+
   <data name="Yourinformationstaysprotected" xml:space="preserve">
-    <value>Ձեր տեղեկատվությունը պաշտպանված է մնում։</value>
+    <value>Ձեր տվյալները մնում են պաշտպանված։</value>
   </data>
+
   <data name="Youraccountisready" xml:space="preserve">
-    <value>Ձեր հաշիվը պատրաստ է</value>
+    <value>Հաշիվը պատրաստ է</value>
   </data>
+
   <data name="Main" xml:space="preserve">
     <value>Գլխավոր</value>
   </data>
+
   <data name="Changephoto" xml:space="preserve">
     <value>Փոխել լուսանկարը</value>
   </data>
+
   <data name="Moveandresizeyourphoto" xml:space="preserve">
     <value>Տեղափոխեք և փոխեք լուսանկարի չափսը</value>
   </data>
+
   <data name="ScrollingTextDescription" xml:space="preserve">
-    <value>Սա տեղեկատվական տող է։</value>
+    <value>Այս տեքստը ցուցադրվում է կայքի վերնագրի վազող տողում։</value>
   </data>
+
   <data name="System" xml:space="preserve">
     <value>Համակարգ</value>
   </data>
+
   <data name="Security" xml:space="preserve">
     <value>Անվտանգություն</value>
   </data>
+
   <data name="Reload" xml:space="preserve">
-    <value>Վերաբեռնել</value>
+    <value>Թարմացնել</value>
   </data>
+
   <data name="Pagesize" xml:space="preserve">
     <value>Էջի չափս</value>
   </data>
+
   <data name="Admin" xml:space="preserve">
     <value>Ադմինիստրատոր</value>
   </data>
+
   <data name="Employee" xml:space="preserve">
     <value>Աշխատակից</value>
   </data>
+
   <data name="Yesterday" xml:space="preserve">
     <value>երեկ</value>
   </data>
+
   <data name="DaysAgo" xml:space="preserve">
     <value>օր առաջ</value>
   </data>
+
   <data name="Photo" xml:space="preserve">
     <value>Լուսանկար</value>
   </data>
+
   <data name="Add" xml:space="preserve">
     <value>Ավելացնել</value>
   </data>
+
   <data name="Darktheme" xml:space="preserve">
     <value>Մուգ թեմա</value>
   </data>
+
   <data name="Lighttheme" xml:space="preserve">
     <value>Բաց թեմա</value>
   </data>
+
   <data name="Roles" xml:space="preserve">
     <value>Դերեր</value>
   </data>
+
   <data name="IsActive" xml:space="preserve">
-    <value>Ակտիվ է</value>
+    <value>Ակտիվ</value>
   </data>
+
   <data name="DeleteRole" xml:space="preserve">
     <value>Ջնջել դերը</value>
   </data>
+
   <data name="NotFound" xml:space="preserve">
     <value>Չի գտնվել</value>
   </data>
+
   <data name="Permissions" xml:space="preserve">
-    <value>Թույլտվություններ</value>
+    <value>Իրավունքներ</value>
   </data>
+
   <data name="UserRole" xml:space="preserve">
     <value>Օգտատիրոջ դեր</value>
   </data>
+
   <data name="Permission" xml:space="preserve">
-    <value>Թույլտվություն</value>
+    <value>Իրավունք</value>
   </data>
+
   <data name="Module" xml:space="preserve">
     <value>Մոդուլ</value>
   </data>
+
   <data name="AccessDenied" xml:space="preserve">
     <value>Մուտքն արգելված է</value>
   </data>
+
   <data name="AccessDeniedDescription" xml:space="preserve">
-    <value>Դուք չունեք այս էջը դիտելու համար անհրաժեշտ թույլտվությունները։ Եթե կարծում եք, որ սա սխալ է, դիմեք համակարգի ադմինիստրատորին։</value>
+    <value>Դուք չունեք այս էջը դիտելու թույլտվություն։ Եթե կարծում եք, որ սա սխալ է, դիմեք ադմինիստրատորին։</value>
   </data>
+
   <data name="GoBack" xml:space="preserve">
     <value>Վերադառնալ</value>
   </data>
+
   <data name="BackToHome" xml:space="preserve">
     <value>Գլխավոր էջ</value>
   </data>
+
   <data name="AccessDeniedFooter" xml:space="preserve">
     <value>Այս էջը պաշտպանված է մուտքի վերահսկման համակարգով</value>
   </data>
+
 </root>

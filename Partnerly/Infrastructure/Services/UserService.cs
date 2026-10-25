@@ -12,23 +12,17 @@ namespace Partnerly.Infrastructure.Services
     {
         private readonly IUserRepository _userRepo;
         private readonly IRoleService _roleService;
-        private readonly IPermissionService _permissionService;
-        private readonly ICurrentUserService _currentUserService;
         private readonly ILogService _logService;
         private readonly IEventBus _eventBus;
 
         public UserService(
             IUserRepository userRepo, 
             IRoleService roleService, 
-            IPermissionService permissionService, 
-            ICurrentUserService currentUserService, 
             ILogService logService, 
             IEventBus eventBus)
         {
             _userRepo = userRepo;
             _roleService = roleService;
-            _permissionService = permissionService;
-            _currentUserService = currentUserService;
             _logService = logService;
             _eventBus = eventBus;
         }
@@ -168,12 +162,6 @@ namespace Partnerly.Infrastructure.Services
                 return ServiceResult<User?>.Fail(new List<string> { String.Format(ErrorMessages.Cannotbefound, "User") });
             }
 
-            //if (!await _permissionService.CanUpdateAsync(currentUserId ?? _currentUserService.UserId, user))
-            //{
-            //    await _logService.CreateLogAsync(LogActionsAttribute.UserUpdated, LogTypeAttribute.Critical, ErrorMessages.NoPermissionForThisAction);
-            //    return ServiceResult<User?>.Fail(new List<string> { ErrorMessages.NoPermissionForThisAction });
-            //}
-
             try
             {
                 _userRepo.Update(user);
@@ -203,12 +191,6 @@ namespace Partnerly.Infrastructure.Services
                 await _logService.CreateLogAsync(LogActionsAttribute.UserDeleted, LogTypeAttribute.Error, String.Format(ErrorMessages.Cannotbefound, "User"));
                 return ServiceResult<User?>.Fail(new List<string> { });
             }
-
-            //if (!await _permissionService.CanDeleteAsync(_currentUserService.UserId, user))
-            //{
-            //    await _logService.CreateLogAsync(LogActionsAttribute.UserDeleted, LogTypeAttribute.Critical, ErrorMessages.NoPermissionForThisAction);
-            //    return ServiceResult<User?>.Fail(new List<string> { ErrorMessages.NoPermissionForThisAction });
-            //}
 
             try
             {

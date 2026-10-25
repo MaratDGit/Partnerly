@@ -322,7 +322,7 @@ namespace Partnerly.Models.ViewModels
                             new DataTableColumn
                             {
                                 Field = nameof(Models.User.IsOnlayn),
-                                Title = FieldsDisplayNames.IsOnlayn,
+                                Title = FieldsDisplayNames.IsOnline,
                                 Type = DataTableColumnType.Boolean,
                                 Alignment = DataTableAlignment.Center,
                             },
@@ -440,7 +440,7 @@ namespace Partnerly.Models.ViewModels
                                 new DataTableFilter
                                 {
                                     Field = "IsOnlayn",
-                                    Label = FieldsDisplayNames.IsOnlayn,
+                                    Label = FieldsDisplayNames.IsOnline,
                                     Type = DataTableFilterType.Boolean
                                 },
                                 

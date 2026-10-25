@@ -9,15 +9,11 @@ namespace Partnerly.Infrastructure.Services
     public class RoleService : IRoleService
     {
         private readonly IRoleRepository _roleRepo;
-        private readonly IPermissionService _permissionService;
-        private readonly ICurrentUserService _currentUserService;
         private readonly ILogService _logService;
 
-        public RoleService(IRoleRepository roleRepo, IPermissionService permissionService, ICurrentUserService currentUserService, ILogService logService)
+        public RoleService(IRoleRepository roleRepo, ILogService logService)
         {
             _roleRepo = roleRepo;
-            _permissionService = permissionService;
-            _currentUserService = currentUserService;
             _logService = logService;
         }
 
@@ -40,12 +36,6 @@ namespace Partnerly.Infrastructure.Services
             {
                 return ServiceResult<RolePermission?>.Fail(new List<string> { String.Format(ErrorMessages.Cannotbefound, "Role") });
             }
-
-            //var permission = await _permissionService.GetByIdAsync(roleId);
-            //if (permission == null || permission.IsDeleted || permission.IsActive != true)
-            //{
-            //    return ServiceResult<RolePermission?>.Fail(new List<string> { String.Format(ErrorMessages.Cannotbefound, "Role") });
-            //}
 
             RolePermission per = new RolePermission
             {
@@ -115,12 +105,6 @@ namespace Partnerly.Infrastructure.Services
                 return ServiceResult<Role?>.Fail(new List<string> { });
             }
 
-            //if (!await _permissionService.CanUpdateAsync(_currentUserService.UserId, role))
-            //{
-            //    await _logService.CreateLogAsync(LogActionsAttribute.RoleUpdated, LogTypeAttribute.Critical, ErrorMessages.NoPermissionForThisAction);
-            //    return ServiceResult<Role?>.Fail(new List<string> { });
-            //}
-                
             _roleRepo.Update(role);
             await _roleRepo.SaveChangesAsync();
 
@@ -141,12 +125,6 @@ namespace Partnerly.Infrastructure.Services
                 await _logService.CreateLogAsync(LogActionsAttribute.RoleDeleted, LogTypeAttribute.Error, String.Format(ErrorMessages.Cannotbefound, "Role"));
                 return ServiceResult<Role?>.Fail(new List<string> { });
             }
-
-            //if (!await _permissionService.CanDeleteAsync(_currentUserService.UserId, role))
-            //{
-            //    await _logService.CreateLogAsync(LogActionsAttribute.RoleDeleted, LogTypeAttribute.Critical, ErrorMessages.NoPermissionForThisAction);
-            //    return ServiceResult<Role?>.Fail(new List<string> { });
-            //}
 
             //_roleRepo.Delete(role);
             role.IsDeleted = true;

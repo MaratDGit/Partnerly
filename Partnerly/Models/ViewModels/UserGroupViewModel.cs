@@ -1,5 +1,4 @@
-﻿using DocumentFormat.OpenXml.Spreadsheet;
-using Partnerly.Descriptors.Attributes.BaseAttributes;
+﻿using Partnerly.Descriptors.Attributes.BaseAttributes;
 using Partnerly.Descriptors.Messages;
 using Partnerly.Infrastructure.Interfaces;
 using Partnerly.Models.DataTable;
@@ -531,7 +530,7 @@ namespace Partnerly.Models.ViewModels
                                     Url = "/UserGroups/DeleteInline",
                                     Method = "POST",
                                     Confirm = true,
-                                    ConfirmMessage = ErrorMessages.Areyousureyouwanttodeletethisfile,
+                                    ConfirmMessage = ErrorMessages.ConfirmDelete,
                                     CssClass = "btn btn-sm btn-outline-danger"
                                 }
                             }

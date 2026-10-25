@@ -79,9 +79,9 @@ namespace Partnerly.Descriptors.Attributes
                 NotificationDeleted, FieldsDisplayNames.NotificationDeleted,
                 NotificationUpdated, FieldsDisplayNames.NotificationUpdated,
 
-                UserGroupCreated, FieldsDisplayNames.NotificationCreated,
-                UserGroupDeleted, FieldsDisplayNames.NotificationDeleted,
-                UserGroupUpdated, FieldsDisplayNames.NotificationUpdated,
+                UserGroupCreated, FieldsDisplayNames.UserGroupCreated,
+                UserGroupDeleted, FieldsDisplayNames.UserGroupDeleted,
+                UserGroupUpdated, FieldsDisplayNames.UserGroupUpdated,
 
                 SupportTicketCreated, FieldsDisplayNames.SupportTicketCreated,
                 SupportTicketDeleted, FieldsDisplayNames.SupportTicketDeleted,

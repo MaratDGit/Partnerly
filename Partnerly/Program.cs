@@ -30,7 +30,6 @@ builder.Services
     .AddControllersWithViews()
     .AddViewLocalization()
     .AddDataAnnotationsLocalization();
-//builder.Services.AddControllersWithViews();
 builder.Services.AddSignalR();
 
 // Scoped services

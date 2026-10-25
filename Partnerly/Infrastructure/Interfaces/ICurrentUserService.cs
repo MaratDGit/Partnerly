@@ -5,7 +5,6 @@
         Guid? UserId { get; }
         Guid? RoleId { get; }
         string? RoleName { get; }
-        string? RoleType { get; }
         string? Email { get; }
         string? FirstName { get; }
         string? LastName { get; }

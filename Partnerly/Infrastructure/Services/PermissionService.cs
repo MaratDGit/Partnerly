@@ -85,34 +85,6 @@ namespace Partnerly.Infrastructure.Services
                     rp.PermissionId == permission.Id);
         }
 
-        //public async Task<bool> CanUpdateAsync<T>(
-        //    Guid? userID,
-        //    T entity)
-        //    where T : class, IAuditableEntity
-        //{
-        //    if (userID == null)
-        //        return false;
-
-        //    if (await HasPermissionAsync(userID, "records.edit"))
-        //        return true;
-
-        //    return entity.CreatedBy == userID.Value;
-        //}
-
-        //public async Task<bool> CanDeleteAsync<T>(
-        //    Guid? userID,
-        //    T entity)
-        //    where T : class, IAuditableEntity
-        //{
-        //    if (userID == null)
-        //        return false;
-
-        //    if (await HasPermissionAsync(userID, "records.delete"))
-        //        return true;
-
-        //    return entity.CreatedBy == userID.Value;
-        //}
-
         public IQueryable<RolePermissionExt> QueryRolePermissionsExt(Guid? roleId = null)
         {
             if (roleId != null)
@@ -146,71 +118,8 @@ namespace Partnerly.Infrastructure.Services
                    PermissionName = x.Permission.Name,
                    Module = x.Permission.Module,
                    IsActive = x.Permission.IsActive,
-                   IsDeleted = x.Permission.IsDeleted
+                    IsDeleted = x.Permission.IsDeleted
                });
         }
-
-        //public async Task<bool> CanUpdateAsync<T>(Guid? userID, T entity) where T : class, IAuditableEntity
-        //{
-        //    bool retVal = false;
-
-        //    if (userID == null || _context?.Users == null)
-        //        return retVal;
-
-        //    User? currUser = await _context.Users.FindAsync((Guid)userID);
-
-        //    if (currUser == null) 
-        //        return retVal;
-
-        //    if (await HasPermision(currUser, RoleTypeAttribute.Update))
-        //        return true;
-
-        //    retVal = entity.CreatedBy == currUser.Id;
-
-        //    return retVal;
-        //}
-
-        //public async Task<bool> CanDeleteAsync<T>(Guid? userID, T entity) where T : class, IAuditableEntity
-        //{
-        //    bool retVal = false;
-
-        //    if (userID == null || _context?.Users == null)
-        //        return retVal;
-
-        //    User? currUser = await _context.Users.FindAsync((Guid)userID);
-
-        //    if (currUser == null)
-        //        return retVal;
-
-        //    if (await HasPermision(currUser, RoleTypeAttribute.Delete))
-        //        return true;
-
-        //    retVal = entity.CreatedBy == currUser.Id;
-
-        //    return retVal;
-        //}
-
-        //private async Task<bool> HasPermision(User user, string roleType)
-        //{
-        //    bool retval = false;
-
-        //    if (_context?.Roles == null)
-        //        return retval;
-
-        //    var role = await _context.Roles.FindAsync(user.RoleId);
-
-        //    if (role != null && roleType != null)
-        //    {
-        //        switch (role.Type)
-        //        {
-        //            case RoleTypeAttribute.View: return role.Type == roleType;
-        //            case RoleTypeAttribute.Update: return role.Type == roleType;
-        //            case RoleTypeAttribute.Delete: return true;
-        //            default: return false;
-        //        }
-        //    }
-
-        //    return retval;
-        //}
     }
 }

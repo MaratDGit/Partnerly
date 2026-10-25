@@ -11,16 +11,12 @@ namespace Partnerly.Infrastructure.Services
     {
         private readonly INotificationRepository _notificationRepository;
         private readonly IHubContext<NotificationHub> _hub;
-        private readonly IPermissionService _permissionService;
-        private readonly ICurrentUserService _currentUserService;
         private readonly ILogService _logService;
 
-        public NotificationService(INotificationRepository notificationRepository, IHubContext<NotificationHub> hub, IPermissionService permissionService, ICurrentUserService currentUserService, ILogService logService)
+        public NotificationService(INotificationRepository notificationRepository, IHubContext<NotificationHub> hub, ILogService logService)
         {
             _notificationRepository = notificationRepository;
             _hub = hub;
-            _permissionService = permissionService;
-            _currentUserService = currentUserService;
             _logService = logService;
         }
 
@@ -118,12 +114,6 @@ namespace Partnerly.Infrastructure.Services
                 return ServiceResult<Notification?>.Fail(new List<string> { });
             }
 
-            //if ((!fromMarkAsRead || _currentUserService.UserId != notification.UserId) && !await _permissionService.CanUpdateAsync(_currentUserService.UserId, notification))
-            //{
-            //    await _logService.CreateLogAsync(LogActionsAttribute.NotificationUpdated, LogTypeAttribute.Critical, ErrorMessages.NoPermissionForThisAction);
-            //    return ServiceResult<Notification?>.Fail(new List<string> { });
-            //}
-
             _notificationRepository.Update(notification);
             await _notificationRepository.SaveChangesAsync();
 
@@ -153,12 +143,6 @@ namespace Partnerly.Infrastructure.Services
                 await _logService.CreateLogAsync(LogActionsAttribute.NotificationDeleted, LogTypeAttribute.Error, String.Format(ErrorMessages.Cannotbefound, "Notification"));
                 return ServiceResult<Notification?>.Fail(new List<string> { });
             }
-
-            //if (!await _permissionService.CanDeleteAsync(_currentUserService.UserId, Notification))
-            //{
-            //    await _logService.CreateLogAsync(LogActionsAttribute.NotificationDeleted, LogTypeAttribute.Critical, ErrorMessages.NoPermissionForThisAction);
-            //    return ServiceResult<Notification?>.Fail(new List<string> { });
-            //}
 
             _notificationRepository.Delete(Notification);
             await _notificationRepository.SaveChangesAsync();

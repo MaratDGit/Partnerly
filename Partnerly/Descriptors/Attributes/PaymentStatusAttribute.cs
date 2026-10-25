@@ -16,7 +16,7 @@ namespace Partnerly.Descriptors.Attributes
             : base(
                 Open, FieldsDisplayNames.Open,
                 Pending, FieldsDisplayNames.Pending,
-                Payed, FieldsDisplayNames.Payed,
+                Payed, FieldsDisplayNames.Paid,
                 Closed, FieldsDisplayNames.Closed,
                 Canceled, FieldsDisplayNames.Canceled,
                 Rejected, FieldsDisplayNames.Rejected)

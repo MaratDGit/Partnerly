@@ -19,8 +19,6 @@ namespace Partnerly.Infrastructure.Services
             Guid.TryParse(_httpContextAccessor.HttpContext?.User?.FindFirst(Constants.ClaimTypeRoleId)?.Value, out var id) ? id : null;
         public string? RoleName =>
             _httpContextAccessor.HttpContext?.User?.FindFirst(ClaimTypes.Role)?.Value;
-        public string? RoleType =>
-           _httpContextAccessor.HttpContext?.User?.FindFirst(Constants.ClaimTypeRoleType)?.Value;
         public string? Email =>
            _httpContextAccessor.HttpContext?.User?.FindFirst(ClaimTypes.Email)?.Value;
         public string? FirstName =>

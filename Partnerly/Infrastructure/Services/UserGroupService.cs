@@ -8,15 +8,11 @@ namespace Partnerly.Infrastructure.Services
     public class UserGroupService : IUserGroupService
     {
         private readonly IUserGroupRepository _userGroupRepository;
-        private readonly IPermissionService _permissionService;
-        private readonly ICurrentUserService _currentUserService;
         private readonly ILogService _logService;
 
-        public UserGroupService(IUserGroupRepository userGroupRepository, IPermissionService permissionService, ICurrentUserService currentUserService, ILogService logService)
+        public UserGroupService(IUserGroupRepository userGroupRepository, ILogService logService)
         {
             _userGroupRepository = userGroupRepository;
-            _permissionService = permissionService;
-            _currentUserService = currentUserService;
             _logService = logService;
         }
 
@@ -93,12 +89,6 @@ namespace Partnerly.Infrastructure.Services
                 return ServiceResult<UserGroup?>.Fail(new List<string> { String.Format(ErrorMessages.Cannotbefound, "userGroup") });
             }
 
-            //if (!await _permissionService.CanUpdateAsync(_currentUserService.UserId, userGroup))
-            //{
-            //    await _logService.CreateLogAsync(LogActionsAttribute.UserGroupUpdated, LogTypeAttribute.Critical, ErrorMessages.NoPermissionForThisAction);
-            //    return ServiceResult<UserGroup?>.Fail(new List<string> { ErrorMessages.NoPermissionForThisAction });
-            //}
-
             _userGroupRepository.Update(userGroup);
             await _userGroupRepository.SaveChangesAsync();
 
@@ -119,12 +109,6 @@ namespace Partnerly.Infrastructure.Services
                 await _logService.CreateLogAsync(LogActionsAttribute.UserGroupDeleted, LogTypeAttribute.Error, String.Format(ErrorMessages.Cannotbefound, "UserGroup"));
                 return ServiceResult<UserGroup?>.Fail(new List<string> { String.Format(ErrorMessages.Cannotbefound, "UserGroup") });
             }
-
-            //if (!await _permissionService.CanDeleteAsync(_currentUserService.UserId, userGroup))
-            //{
-            //    await _logService.CreateLogAsync(LogActionsAttribute.UserGroupDeleted, LogTypeAttribute.Critical, ErrorMessages.NoPermissionForThisAction);
-            //    return ServiceResult<UserGroup?>.Fail(new List<string> { ErrorMessages.NoPermissionForThisAction });
-            //}
 
             _userGroupRepository.Delete(userGroup);
             await _userGroupRepository.SaveChangesAsync();

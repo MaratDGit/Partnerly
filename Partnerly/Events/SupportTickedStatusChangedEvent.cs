@@ -51,15 +51,15 @@ namespace Partnerly.Events
                     string? message = null;
                     if (status == SupportTicketStatusAttribute.New)
                     {
-                        message = string.Format(Messages.TickedReopenedNotification, @event.Ticket.TicketID);
+                        message = string.Format(Messages.TicketReopenedNotification, @event.Ticket.TicketID);
                     }
                     else if (status == SupportTicketStatusAttribute.InProgress)
                     {
-                        message = string.Format(Messages.TickedStartedNotification, @event.Ticket.TicketID);
+                        message = string.Format(Messages.TicketStartedNotification, @event.Ticket.TicketID);
                     }
                     else if (status == SupportTicketStatusAttribute.Closed)
                     {
-                        message = string.Format(Messages.TickedClosedNotification, @event.Ticket.TicketID);
+                        message = string.Format(Messages.TicketClosedNotification, @event.Ticket.TicketID);
                     }
 
                     if (message != null)

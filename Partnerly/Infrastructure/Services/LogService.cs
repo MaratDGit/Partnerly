@@ -11,14 +11,12 @@ namespace Partnerly.Infrastructure.Services
     {
         private readonly DbContextOptions<AppDbContext> _options;
         private readonly ILogRepository _logRepo;
-        private readonly IPermissionService _permissionService;
         private readonly ICurrentUserService _currentUserService;
 
-        public LogService(DbContextOptions<AppDbContext> options, ILogRepository logRepo, IPermissionService permissionService, ICurrentUserService currentUser)
+        public LogService(DbContextOptions<AppDbContext> options, ILogRepository logRepo, ICurrentUserService currentUser)
         {
             _options = options;
             _logRepo = logRepo;
-            _permissionService = permissionService;
             _currentUserService = currentUser;
         }
 
@@ -57,9 +55,6 @@ namespace Partnerly.Infrastructure.Services
 
             if (await GetLogByIDAsync(log.Id) != null)
             {
-                //if (!await _permissionService.CanUpdateAsync(_currentUserService.UserId, log))
-                //    throw new UnauthorizedAccessException(ErrorMessages.NoPermissionForThisAction);
-
                 _logRepo.Update(log);
                 await _logRepo.SaveChangesAsync();
             }
@@ -71,9 +66,6 @@ namespace Partnerly.Infrastructure.Services
                 var log = await _logRepo.GetByIdAsync((Guid)id);
                 if (log != null)
                 {
-                    //if (!await _permissionService.CanDeleteAsync(_currentUserService.UserId, log))
-                    //    throw new UnauthorizedAccessException(ErrorMessages.NoPermissionForThisAction);
-
                     _logRepo.Delete(log);
                     await _logRepo.SaveChangesAsync();
                 }

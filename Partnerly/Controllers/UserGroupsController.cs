@@ -11,11 +11,9 @@ using Partnerly.Infrastructure.Services;
 using Partnerly.Models;
 using Partnerly.Models.DataTable;
 using Partnerly.Models.ViewModels;
-using System.Security.Claims;
 
 namespace Partnerly.Controllers
 {
-    //[ClaimAuthorize(ClaimTypes.Role, RoleTypeAttribute.Admin, RoleTypeAttribute.Employee)]
     public class UserGroupsController : _BaseController
     {
         private readonly IUserGroupService _userGroupService;
@@ -47,7 +45,6 @@ namespace Partnerly.Controllers
             return View("~/Views/Shared/DataTable/_DataTablePartial.cshtml", model.groups);
         }
 
-        //[ClaimAuthorize(ClaimTypes.Role, RoleTypeAttribute.Admin)]
         public IActionResult Create()
         {
             var model = new UserGroupViewModel { Title = FieldsDisplayNames.UserGroupCreated };
@@ -149,7 +146,6 @@ namespace Partnerly.Controllers
             return View("Form", model);
         }
 
-        //[ClaimAuthorize(ClaimTypes.Role, RoleTypeAttribute.Admin)]
         public async Task<IActionResult> Delete(Guid id)
         {
             var group = await _userGroupService.GetByIDAsync(id);
@@ -159,7 +155,7 @@ namespace Partnerly.Controllers
             {
                 Id = group.Id,
                 Title = ErrorMessages.Deletegroup,
-                Message = ErrorMessages.Areyousureyouwanttodeletethisfile,
+                Message = ErrorMessages.ConfirmDelete,
                 DeleteAction = "DeleteConfirmed",
                 DeleteController = "UserGroups",
                 CancelAction = "Index",
@@ -171,7 +167,6 @@ namespace Partnerly.Controllers
 
         [HttpPost, ActionName("DeleteConfirmed")]
         [ValidateAntiForgeryToken]
-        //[ClaimAuthorize(ClaimTypes.Role, RoleTypeAttribute.Admin)]
         public async Task<IActionResult> DeleteConfirmed(Guid id)
         {
             var group = await _userGroupService.GetByIDAsync(id);
