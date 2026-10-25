@@ -18,6 +18,7 @@ using System.Globalization;
 
 
 var builder = WebApplication.CreateBuilder(args);
+builder.Configuration.AddJsonFile("secrets.json", optional: true, reloadOnChange: true);
 
 // -------------------- SERVICES --------------------
 builder.Services.AddLocalization(options =>
