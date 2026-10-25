@@ -14,7 +14,7 @@ using System.Security.Claims;
 
 namespace Partnerly.Controllers
 {
-    [ClaimAuthorize(ClaimTypes.Role, RoleTypeAttribute.Admin)]
+    //[ClaimAuthorize(ClaimTypes.Role, RoleTypeAttribute.Admin)]
     public class EmailTemplatesController : _BaseController
     {
         private readonly IEmailTemplateService _emailTemplateService;

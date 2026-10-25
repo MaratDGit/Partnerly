@@ -1,8 +1,7 @@
 ﻿@model  Partnerly.Models.ViewModels.FormActionsViewModel;
 
 @{
-    bool hasRole = ViewBag?.RoleType == Partnerly.Descriptors.Attributes.RoleTypeAttribute.Delete || ViewBag?.RoleType == Partnerly.Descriptors.Attributes.RoleTypeAttribute.Update;
-    bool hasAdminRole = ViewBag?.RoleType == Partnerly.Descriptors.Attributes.RoleTypeAttribute.Delete;
+    
 }
 
 <div class="sticky-buttons mb-6">
@@ -25,13 +24,13 @@
                 <i class="@Model.Save.Icon me-1 fs-3"></i>
             </button>
         }
-        @if (Model?.Create?.Visible == true && hasAdminRole)
+        @if (Model?.Create?.Visible == true)
         {   
             <a asp-action="@Model.Create.ToAction" asp-controller="@Model.Create.ToController" class="btn btn-link p-0" title="@Model.Create.Title">
                 <i class="@Model.Create.Icon me-1 fs-3"></i>
             </a>
         }
-        @if (Model?.Delete?.Visible == true && hasAdminRole)
+        @if (Model?.Delete?.Visible == true)
         {   
             <a asp-action="@Model.Delete.ToAction" asp-controller="@Model.Delete.ToController" asp-route-id="@Model.Delete.Id" class="btn btn-link p-0" title="@Model.Delete.Title">
                 <i class="@Model.Delete.Icon me-1 fs-3"></i>

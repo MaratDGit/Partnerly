@@ -1,10 +1,12 @@
 ﻿using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Localization;
 using Microsoft.AspNetCore.SignalR;
 using Microsoft.EntityFrameworkCore;
 using Partnerly.Events;
 using Partnerly.Events.BaseEvents;
 using Partnerly.Hubs;
+using Partnerly.Infrastructure.Authorization;
 using Partnerly.Infrastructure.Interfaces;
 using Partnerly.Infrastructure.Repositories;
 using Partnerly.Infrastructure.Services;
@@ -56,6 +58,7 @@ builder.Services.AddScoped<ISupportTicketRepository, SupportTicketRepository>();
 builder.Services.AddScoped<IAttachmentService, AttachmentService>();
 builder.Services.AddScoped<IAttachmentRepository, AttachmentRepository>();
 builder.Services.AddScoped<IFileStorageService, FileStorageService>();
+builder.Services.AddScoped<IAccessControlService, AccessControlService>();
 
 builder.Services.AddScoped<IInlineUpdateService, InlineUpdateService>();
 builder.Services.AddSingleton<IDataTableRegistry, DataTableRegistry>();
@@ -103,6 +106,10 @@ builder.Services
 builder.Services.AddSingleton<IEventBus, EventBus>();
 builder.Services.AddSingleton<IUserIdProvider, CustomUserIdProvider>();
 
+builder.Services.AddAuthorization();
+builder.Services.AddSingleton<IAuthorizationPolicyProvider, PermissionPolicyProvider>();
+builder.Services.AddScoped<IAuthorizationHandler, PermissionAuthorizationHandler>();
+
 var app = builder.Build();
 
 var supportedCultures = new[]
@@ -129,6 +136,8 @@ using (var scope = app.Services.CreateScope())
     // 1. Initialize database
     var context = services.GetRequiredService<AppDbContext>();
     DbInitializer.Initialize(context);
+
+    await PermissionSeeder.SeedAsync(context);
 
     // 2. follow to event
     var eventBus = services.GetRequiredService<IEventBus>();

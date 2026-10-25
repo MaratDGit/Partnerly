@@ -1,4 +1,5 @@
-﻿using Partnerly.Descriptors.Attributes;
+﻿using Microsoft.VisualBasic;
+using Partnerly.Descriptors.Attributes;
 using Partnerly.Models;
 
 namespace Partnerly.Infrastructure.Services.MiddlewareServices
@@ -23,7 +24,9 @@ namespace Partnerly.Infrastructure.Services.MiddlewareServices
                 {
                     var path = context.Request.Path.Value?.ToLower();
 
-                    if (path != null && !context.User.IsInRole(RoleTypeAttribute.Admin))
+                    if (path != null && 
+                        !context.User.IsInRole(Descriptors.Messages.Constants.Admin) && 
+                        !context.User.IsInRole(Descriptors.Messages.Constants.SuperRoleName))
                     {
                         if (!path.StartsWith("/home/maintenance"))
                         {

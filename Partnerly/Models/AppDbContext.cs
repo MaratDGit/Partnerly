@@ -2,6 +2,7 @@
 using Partnerly.Descriptors.Messages;
 using Partnerly.Helpers;
 using Partnerly.Infrastructure.Interfaces;
+using Partnerly.Models.Authorization;
 using System.ComponentModel.DataAnnotations;
 
 namespace Partnerly.Models
@@ -31,7 +32,12 @@ namespace Partnerly.Models
         public DbSet<UserGroup>? UserGroups { get; set; }
         public DbSet<UserGroupMember>? UserGroupMembers { get; set; }
         public DbSet<SupportTicket>? SupportTickets { get; set; }
-        public DbSet<Attachment> Attachments { get; set; }
+        public DbSet<Attachment>? Attachments { get; set; }
+        
+        public DbSet<Permission> Permissions => Set<Permission>();
+        public DbSet<RolePermission> RolePermissions => Set<RolePermission>();
+        public DbSet<UserPermission> UserPermissions => Set<UserPermission>();
+        public DbSet<AccessControlAuditLog> AccessControlAuditLogs => Set<AccessControlAuditLog>();
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -80,6 +86,82 @@ namespace Partnerly.Models
                 .WithMany()
                 .HasForeignKey(st => st.AssignedTo)
                 .OnDelete(DeleteBehavior.Restrict);
+
+            // Permission
+            modelBuilder.Entity<Permission>()
+                .HasIndex(p => p.Code)
+                .IsUnique();
+
+            modelBuilder.Entity<Permission>()
+                .Property(p => p.Code)
+                .IsRequired()
+                .HasMaxLength(150);
+
+            modelBuilder.Entity<Permission>()
+                .Property(p => p.Module)
+                .IsRequired()
+                .HasMaxLength(100);
+
+            // RolePermission
+            modelBuilder.Entity<RolePermission>()
+                .HasIndex(rp => new
+                {
+                    rp.RoleId,
+                    rp.PermissionId
+                })
+                .IsUnique();
+
+            modelBuilder.Entity<RolePermission>()
+                .HasOne(rp => rp.Role)
+                .WithMany(r => r.RolePermissions)
+                .HasForeignKey(rp => rp.RoleId)
+                .OnDelete(DeleteBehavior.Cascade);
+
+            modelBuilder.Entity<RolePermission>()
+                .HasOne(rp => rp.Permission)
+                .WithMany(p => p.RolePermissions)
+                .HasForeignKey(rp => rp.PermissionId)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            // UserPermission
+            modelBuilder.Entity<UserPermission>()
+                .HasIndex(up => new
+                {
+                    up.UserId,
+                    up.PermissionId
+                })
+                .IsUnique();
+
+            modelBuilder.Entity<UserPermission>()
+                .HasOne(up => up.User)
+                .WithMany(u => u.UserPermissions)
+                .HasForeignKey(up => up.UserId)
+                .OnDelete(DeleteBehavior.Cascade);
+
+            modelBuilder.Entity<UserPermission>()
+                .HasOne(up => up.Permission)
+                .WithMany(p => p.UserPermissions)
+                .HasForeignKey(up => up.PermissionId)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            modelBuilder.Entity<AccessControlAuditLog>()
+                .HasIndex(x => new
+                {
+                    x.TargetUserId,
+                    x.CreatedDateUtc
+                });
+
+            modelBuilder.Entity<AccessControlAuditLog>()
+                .HasIndex(x => new
+                {
+                    x.TargetRoleId,
+                    x.CreatedDateUtc
+                });
+
+            modelBuilder.Entity<AccessControlAuditLog>()
+                .Property(x => x.Action)
+                .HasMaxLength(100)
+                .IsRequired();
 
 
             base.OnModelCreating(modelBuilder);

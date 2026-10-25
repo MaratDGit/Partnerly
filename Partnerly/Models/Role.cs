@@ -1,5 +1,5 @@
-﻿using Partnerly.Descriptors.Attributes;
-using Partnerly.Infrastructure.Interfaces;
+﻿using Partnerly.Infrastructure.Interfaces;
+using Partnerly.Models.Authorization;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
@@ -16,12 +16,14 @@ namespace Partnerly.Models
         [Display(Name = "Name")]
         public string? Name { get; set; }
         #endregion
-        #region Type
-        [Required]
-        [Display(Name = "Type")]
-        [RoleType]
-        public string? Type { get; set; }
-        #endregion
+        //#region Type
+        //[Required]
+        //[Display(Name = "Type")]
+        //[RoleType]
+        //public string? Type { get; set; }
+        //#endregion
+
+        public bool IsActive { get; set; } = true;
 
         #region Unbound fields
         [NotMapped]
@@ -42,5 +44,7 @@ namespace Partnerly.Models
         #endregion
 
         public ICollection<User>? Users { get; set; }
+
+        public ICollection<RolePermission> RolePermissions { get; set; } = new List<RolePermission>();
     }
 }

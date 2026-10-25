@@ -541,10 +541,29 @@
 
 
                             /*
-  * =========================================================
-  * ACTIONS
-  * =========================================================
-  */
+                              * =========================================================
+                              * ACTIONS
+                              * =========================================================
+                              */
+
+                            function getActionContent(action, defaultText) {
+                                if (action.text) {
+                                    return ctx.escapeHtml(action.text);
+                                }
+
+                                if (action.icon) {
+                                    return '<i class="' +
+                                        ctx.escapeHtml(action.icon) +
+                                        '"></i>';
+                                }
+
+                                return ctx.escapeHtml(
+                                    action.title ||
+                                    defaultText ||
+                                    action.name ||
+                                    ""
+                                );
+                            }
 
                             if (
                                 ctx.hasActionsColumn()
@@ -612,20 +631,7 @@
                                                 ) +
                                                 '">' +
 
-                                                (
-                                                    action.icon
-
-                                                        ? '<i class="' +
-                                                        ctx.escapeHtml(
-                                                            action.icon
-                                                        ) +
-                                                        '"></i>'
-
-                                                        : ctx.escapeHtml(
-                                                            action.title ||
-                                                            "Edit"
-                                                        )
-                                                ) +
+                                            getActionContent(action, "Edit") +
 
                                                 '</button>';
                                         }
@@ -718,20 +724,7 @@
                                                 ) +
                                                 '">' +
 
-                                                (
-                                                    action.icon
-
-                                                        ? '<i class="' +
-                                                        ctx.escapeHtml(
-                                                            action.icon
-                                                        ) +
-                                                        '"></i>'
-
-                                                        : ctx.escapeHtml(
-                                                            action.title ||
-                                                            "Delete"
-                                                        )
-                                                ) +
+                                            getActionContent(action, "Delete") +
 
                                                 '</button>';
 
@@ -784,20 +777,7 @@
                                                 ) +
                                                 '">' +
 
-                                                (
-                                                    action.icon
-
-                                                        ? '<i class="' +
-                                                        ctx.escapeHtml(
-                                                            action.icon
-                                                        ) +
-                                                        '"></i>'
-
-                                                        : ctx.escapeHtml(
-                                                            action.title ||
-                                                            action.name
-                                                        )
-                                                ) +
+                                            getActionContent(action, action.name) +
 
                                                 '</button>';
 
@@ -856,20 +836,7 @@
                                                 ) +
                                                 '">' +
 
-                                                (
-                                                    action.icon
-
-                                                        ? '<i class="' +
-                                                        ctx.escapeHtml(
-                                                            action.icon
-                                                        ) +
-                                                        '"></i>'
-
-                                                        : ctx.escapeHtml(
-                                                            action.title ||
-                                                            action.name
-                                                        )
-                                                ) +
+                                            getActionContent(action, action.name) +
 
                                                 '</a>';
                                         }

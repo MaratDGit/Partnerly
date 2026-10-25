@@ -2,15 +2,6 @@
     TempData.Keep();
 
     string currentPage = ViewContext.HttpContext.Request.Path.ToString();
-
-    bool isAdmin =
-        ViewBag?.RoleType == Partnerly.Descriptors.Attributes.RoleTypeAttribute.Delete;
-
-    bool isManager =
-        ViewBag?.RoleType == Partnerly.Descriptors.Attributes.RoleTypeAttribute.Update;
-
-    bool canAccessSystem =
-        isAdmin || isManager;
 }
 
 <aside id="partnerlySidebar" class="partnerly-sidebar">
@@ -199,8 +190,7 @@
             <!-- ================================================= -->
             <!-- SYSTEM SETTINGS -->
             <!-- ================================================= -->
-            @if (canAccessSystem)
-            {
+            
                 <li class="partnerly-menu-section-group"
                     data-menu-section-group="system">
 
@@ -223,8 +213,7 @@
 
 
                         <!-- Settings -->
-                        @if (isAdmin)
-                        {
+                        
                             <li class="partnerly-menu-item @(currentPage.StartsWith("/SystemPreferences") ? "active" : "")">
 
                                 <a asp-controller="SystemPreferences"
@@ -243,8 +232,7 @@
 
                             </li>
 
-
-                            @* <!-- Roles -->
+                            <!-- Roles -->
 
                             <li class="partnerly-menu-item @(currentPage.StartsWith("/Roles") ? "active" : "")">
 
@@ -257,14 +245,13 @@
                                     </span>
 
                                     <span class="partnerly-menu-text">
-                                        @Localizer["Userroles"]
+                                        @Localizer["Roles"]
                                     </span>
 
                                 </a>
 
-                            </li> *@
-                        }
-
+                            </li>
+                        
 
                         <!-- Users -->
 
@@ -329,8 +316,7 @@
                         </li>
 
 
-                        @if (isAdmin)
-                        {
+                       
 
                             <!-- Email Templates -->
 
@@ -412,12 +398,12 @@
 
                             </li>
 
-                        }
+                        
 
                     </ul>
 
                 </li>
-            }
+            
 
         </ul>
 

@@ -8,6 +8,7 @@ using Partnerly.Events.BaseEvents;
 using Partnerly.Infrastructure.Interfaces;
 using Partnerly.Models;
 using Partnerly.Models.DataTable;
+using System.Threading.Tasks;
 
 namespace Partnerly.Controllers
 {
@@ -60,51 +61,76 @@ namespace Partnerly.Controllers
 
             ViewData["ScrollingText"] = message;
 
-            #region every click/action URL is being checked 
-            var controllerName = context.RouteData.Values["controller"]?.ToString();
-            var actionName = context.RouteData.Values["action"]?.ToString();
-            string? roleType = null;
-            bool unknownAction = false;
-            if (!string.IsNullOrEmpty(actionName))
-            {
-                if (actionName.ToLower() == Constants.Edit.ToLower() || actionName.ToLower() == Constants.Create.ToLower()) 
-                    roleType = RoleTypeAttribute.Update;
-                else if (actionName.ToLower() == Constants.Delete.ToLower() || actionName.ToLower() == Constants.DeleteConfirmed.ToLower()) 
-                    roleType = RoleTypeAttribute.Delete;
-                else 
-                    unknownAction = true;
-            }
-            if (!unknownAction && !HasPermision(roleType))
-            {
-                var referer = context.HttpContext.Request.Headers["Referer"].ToString();
+            //#region every click/action URL is being checked 
+            //var controllerName = context.RouteData.Values["controller"]?.ToString();
+            //var actionName = context.RouteData.Values["action"]?.ToString();
+            //string? roleType = null;
+            //bool unknownAction = false;
+            //if (!string.IsNullOrEmpty(actionName))
+            //{
+            //    if (actionName.ToLower() == Constants.Edit.ToLower() || actionName.ToLower() == Constants.Create.ToLower()) 
+            //        roleType = RoleTypeAttribute.Update;
+            //    else if (actionName.ToLower() == Constants.Delete.ToLower() || actionName.ToLower() == Constants.DeleteConfirmed.ToLower()) 
+            //        roleType = RoleTypeAttribute.Delete;
+            //    else 
+            //        unknownAction = true;
+            //}
 
-                if (!string.IsNullOrEmpty(referer))
-                {
-                    context.Result = new RedirectResult(referer);
-                    return;
-                }
-                else
-                {
-                    context.Result = new RedirectToActionResult("Index", "Home", null);
-                    return;
-                }
-            }
-            #endregion
+            //if (!unknownAction && !HasPermision(roleType))
+            //{
+            //    var referer = context.HttpContext.Request.Headers["Referer"].ToString();
+
+            //    if (!string.IsNullOrEmpty(referer))
+            //    {
+            //        context.Result = new RedirectResult(referer);
+            //        return;
+            //    }
+            //    else
+            //    {
+            //        context.Result = new RedirectToActionResult("Index", "Home", null);
+            //        return;
+            //    }
+            //}
+            //#endregion
 
             await next();
         }
 
         protected bool HasPermision(string? roleType)
         {
-            bool retval = false;
-            if (string.IsNullOrEmpty(roleType))
-                return retval;
+            //bool retval = false;
+            //if (string.IsNullOrEmpty(roleType))
+            //    return retval;
 
-            if (roleType == RoleTypeAttribute.View) return _currentUser?.RoleName == RoleTypeAttribute.Admin || _currentUser?.RoleName == RoleTypeAttribute.Employee || _currentUser?.RoleName == RoleTypeAttribute.User;
-            if (roleType == RoleTypeAttribute.Update) return _currentUser?.RoleName == RoleTypeAttribute.Admin || _currentUser?.RoleName == RoleTypeAttribute.Employee;
-            if (roleType == RoleTypeAttribute.Delete) return _currentUser?.RoleName == RoleTypeAttribute.Admin;
+            //if (roleType == RoleTypeAttribute.View) return _currentUser?.RoleName == RoleTypeAttribute.Admin || _currentUser?.RoleName == RoleTypeAttribute.Employee || _currentUser?.RoleName == RoleTypeAttribute.User;
+            //if (roleType == RoleTypeAttribute.Update) return _currentUser?.RoleName == RoleTypeAttribute.Admin || _currentUser?.RoleName == RoleTypeAttribute.Employee;
+            //if (roleType == RoleTypeAttribute.Delete) return _currentUser?.RoleName == RoleTypeAttribute.Admin;
 
-            return false;
+            //return false
+            return true;
+        }
+
+        protected virtual bool IsSuperRole(Role? role)
+        {
+            return string.Equals(role?.Name?.Trim(), Constants.SuperRoleName, StringComparison.OrdinalIgnoreCase);
+        }
+        protected virtual bool IsSystemRole(string roleName)
+        {
+            return string.Equals(roleName.Trim(), Constants.Admin, StringComparison.OrdinalIgnoreCase) ||
+                    string.Equals(roleName.Trim(), Constants.Employee, StringComparison.OrdinalIgnoreCase) ||
+                        string.Equals(roleName.Trim(), Constants.User, StringComparison.OrdinalIgnoreCase);
+        }
+        protected virtual async Task<bool> IsSuperUser(User? user = null)
+        {
+            if (user == null)
+            {
+                user = await _userService.GetUserByIDAsync(_currentUser.UserId);
+            }
+
+            return string.Equals(
+                user?.Email?.Trim(),
+                Constants.SuperUserEmail,
+                StringComparison.OrdinalIgnoreCase);
         }
 
         protected async Task<T> PrepareViewModelAsync<T>(T model) where T : IAuditableViewModel

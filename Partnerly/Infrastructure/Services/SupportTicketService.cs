@@ -117,11 +117,11 @@ namespace Partnerly.Infrastructure.Services
                 return ServiceResult<SupportTicket?>.Fail(new List<string> { String.Format(ErrorMessages.Cannotbefound, "SupportTicket Id") });
             }
 
-            if (!await _permissionService.CanUpdateAsync(_currentUserService.UserId, ticket))
-            {
-                await _logService.CreateLogAsync(LogActionsAttribute.SupportTicketUpdated, LogTypeAttribute.Critical, ErrorMessages.NoPermissionForThisAction);
-                return ServiceResult<SupportTicket?>.Fail(new List<string> { ErrorMessages.NoPermissionForThisAction });
-            }
+            //if (!await _permissionService.CanUpdateAsync(_currentUserService.UserId, ticket))
+            //{
+            //    await _logService.CreateLogAsync(LogActionsAttribute.SupportTicketUpdated, LogTypeAttribute.Critical, ErrorMessages.NoPermissionForThisAction);
+            //    return ServiceResult<SupportTicket?>.Fail(new List<string> { ErrorMessages.NoPermissionForThisAction });
+            //}
 
             try
             {
@@ -163,11 +163,11 @@ namespace Partnerly.Infrastructure.Services
                 return ServiceResult<SupportTicket?>.Fail(new List<string> { String.Format(ErrorMessages.Cannotbefound, "SupportTicket") });
             }
 
-            if (!await _permissionService.CanDeleteAsync(_currentUserService.UserId, ticket))
-            {
-                await _logService.CreateLogAsync(LogActionsAttribute.SupportTicketDeleted, LogTypeAttribute.Critical, ErrorMessages.NoPermissionForThisAction);
-                return ServiceResult<SupportTicket?>.Fail(new List<string> { ErrorMessages.NoPermissionForThisAction });
-            }
+            //if (!await _permissionService.CanDeleteAsync(_currentUserService.UserId, ticket))
+            //{
+            //    await _logService.CreateLogAsync(LogActionsAttribute.SupportTicketDeleted, LogTypeAttribute.Critical, ErrorMessages.NoPermissionForThisAction);
+            //    return ServiceResult<SupportTicket?>.Fail(new List<string> { ErrorMessages.NoPermissionForThisAction });
+            //}
 
             var notification = await _notificationService.GetNotificationByTicketIDAsync(id);
             if (notification != null)

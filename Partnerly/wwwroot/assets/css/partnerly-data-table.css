@@ -642,115 +642,6 @@
 }
 
 
-/* =========================================================
-   15. ROW ACTIONS
-   ========================================================= */
-
-.data-table-actions {
-    display: table-cell;
-    min-width: 116px;
-    padding-right: 16px !important;
-    white-space: nowrap;
-    text-align: right;
-}
-
-    .data-table-actions .btn,
-    .data-table-inline-edit,
-    .data-table-inline-save,
-    .data-table-inline-cancel {
-        position: relative;
-        display: inline-flex;
-        align-items: center;
-        justify-content: center;
-        width: 30px;
-        min-width: 30px;
-        height: 30px;
-        min-height: 30px;
-        margin: 0 2px 0 0;
-        padding: 0;
-        border-radius: 7px;
-        font-size: 0;
-        line-height: 1;
-        text-decoration: none;
-        box-shadow: none;
-        transition: color .15s ease, background-color .15s ease, border-color .15s ease, box-shadow .15s ease, transform .15s ease;
-    }
-
-        .data-table-actions .btn i,
-        .data-table-inline-edit i,
-        .data-table-inline-save i,
-        .data-table-inline-cancel i {
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            width: 16px;
-            height: 16px;
-            margin: 0 !important;
-            font-size: 15px;
-            line-height: 1;
-        }
-
-        .data-table-actions .btn::after,
-        .data-table-inline-edit::after,
-        .data-table-inline-save::after,
-        .data-table-inline-cancel::after {
-            display: none;
-        }
-
-
-    /* View */
-
-    .data-table-actions .btn-outline-secondary {
-        border: 1px solid var(--dt-border);
-        background: #fff;
-        color: #697a8d;
-    }
-
-        .data-table-actions .btn-outline-secondary:hover {
-            border-color: rgba(105, 108, 255, .25);
-            background: var(--dt-primary-soft);
-            color: var(--dt-primary);
-            transform: translateY(-1px);
-            box-shadow: 0 3px 8px rgba(105, 108, 255, .08);
-        }
-
-
-    /* Edit */
-
-    .data-table-actions .btn-outline-primary,
-    .data-table-inline-edit {
-        border: 1px solid rgba(105, 108, 255, .20);
-        background: var(--dt-primary-soft);
-        color: var(--dt-primary);
-    }
-
-        .data-table-actions .btn-outline-primary:hover,
-        .data-table-inline-edit:hover {
-            border-color: rgba(105, 108, 255, .35);
-            background: var(--dt-primary-soft-2);
-            color: var(--dt-primary-hover);
-            transform: translateY(-1px);
-            box-shadow: 0 3px 8px rgba(105, 108, 255, .10);
-        }
-
-
-    /* Delete */
-
-    .data-table-actions .btn-outline-danger {
-        border: 1px solid rgba(255, 76, 81, .18);
-        background: var(--dt-danger-soft);
-        color: var(--dt-danger);
-    }
-
-        .data-table-actions .btn-outline-danger:hover {
-            border-color: rgba(255, 76, 81, .32);
-            background: rgba(255, 76, 81, .12);
-            color: #e94449;
-            transform: translateY(-1px);
-            box-shadow: 0 3px 8px rgba(255, 76, 81, .10);
-        }
-
-
 /* Save */
 
 .data-table-inline-save {
@@ -1689,29 +1580,6 @@ body.data-table-column-resizing * {
             padding-right: 11px;
         }
 
-    /* Row actions */
-
-    .data-table-actions {
-        min-width: 106px;
-    }
-
-        .data-table-actions .btn,
-        .data-table-inline-edit,
-        .data-table-inline-save,
-        .data-table-inline-cancel {
-            width: 28px;
-            min-width: 28px;
-            height: 28px;
-            min-height: 28px;
-            margin-right: 2px;
-        }
-
-            .data-table-actions .btn i,
-            .data-table-inline-edit i,
-            .data-table-inline-save i,
-            .data-table-inline-cancel i {
-                font-size: 14px;
-            }
 
     /* Footer */
 
@@ -1837,10 +1705,6 @@ body.data-table-column-resizing * {
         .data-table-filter-modal-footer-right .btn {
             flex: 1;
         }
-
-    .data-table-actions {
-        min-width: 106px;
-    }
 
     .data-table-footer > [id$="-pagination"] button {
         width: 30px;
@@ -2097,48 +1961,6 @@ html[data-theme="dark"] .data-table-search-highlight {
     background: rgba(255, 189, 74, .22);
 }
 
-/* Row action buttons */
-
-html[data-theme="dark"] .data-table-actions .btn-outline-secondary,
-html[data-theme="dark"] .data-table-inline-cancel {
-    color: #c5cee0;
-    background: #1b2538;
-    border-color: var(--dt-border);
-}
-
-    html[data-theme="dark"] .data-table-actions .btn-outline-secondary:hover,
-    html[data-theme="dark"] .data-table-inline-cancel:hover {
-        color: #edf2ff;
-        background: #263149;
-        border-color: rgba(129, 133, 255, .30);
-    }
-
-html[data-theme="dark"] .data-table-actions .btn-outline-primary,
-html[data-theme="dark"] .data-table-inline-edit {
-    color: #a9acff;
-    background: rgba(129, 133, 255, .13);
-    border-color: rgba(129, 133, 255, .24);
-}
-
-    html[data-theme="dark"] .data-table-actions .btn-outline-primary:hover,
-    html[data-theme="dark"] .data-table-inline-edit:hover {
-        color: #c0c1ff;
-        background: rgba(129, 133, 255, .22);
-        border-color: rgba(129, 133, 255, .42);
-        box-shadow: 0 0 12px rgba(105, 108, 255, .10);
-    }
-
-html[data-theme="dark"] .data-table-actions .btn-outline-danger {
-    color: #ff8589;
-    background: rgba(255, 104, 109, .10);
-    border-color: rgba(255, 104, 109, .22);
-}
-
-    html[data-theme="dark"] .data-table-actions .btn-outline-danger:hover {
-        color: #ff9b9f;
-        background: rgba(255, 104, 109, .18);
-        border-color: rgba(255, 104, 109, .40);
-    }
 
 html[data-theme="dark"] .data-table-inline-save {
     color: #fff;
@@ -2431,3 +2253,257 @@ html[data-theme="dark"] .data-table-wrapper select:focus-visible {
         animation-iteration-count: 1 !important;
     }
 }
+
+
+/* =========================================================
+   DATA TABLE ACTIONS
+   Icon buttons + text buttons + responsive layout
+   ========================================================= */
+
+.data-table-actions {
+    min-width: 116px;
+    padding-right: 12px !important;
+    text-align: right;
+    white-space: nowrap;
+}
+
+    /* Base action buttons: icon buttons */
+
+    .data-table-actions .btn,
+    .data-table-inline-edit,
+    .data-table-inline-save,
+    .data-table-inline-cancel {
+        position: relative;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        flex: 0 0 auto;
+        width: 30px;
+        min-width: 30px;
+        height: 30px;
+        min-height: 30px;
+        margin: 2px 3px 2px 0;
+        padding: 0;
+        border-radius: 7px;
+        font-size: 0;
+        line-height: 1;
+        text-decoration: none;
+        vertical-align: middle;
+        box-shadow: none;
+        transition: color .15s ease, background .15s ease, border-color .15s ease, box-shadow .15s ease;
+    }
+
+        /* Icons */
+
+        .data-table-actions .btn i,
+        .data-table-inline-edit i,
+        .data-table-inline-save i,
+        .data-table-inline-cancel i {
+            display: inline-block;
+            font-size: 14px;
+            line-height: 1;
+        }
+
+        /* Text action buttons: Permissions, Edit, Delete */
+
+        .data-table-actions .data-table-action-text,
+        .data-table-actions .btn.data-table-action-text {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            flex: 0 0 auto;
+            width: auto;
+            min-width: 0;
+            max-width: 100%;
+            height: auto;
+            min-height: 30px;
+            margin: 2px 4px 2px 0;
+            padding: 5px 10px;
+            overflow: visible;
+            font-size: 12px;
+            font-weight: 500;
+            line-height: 1.35;
+            text-indent: 0;
+            white-space: nowrap;
+            text-decoration: none;
+            border-radius: 7px;
+            vertical-align: middle;
+        }
+
+            /* Optional icon inside a text button */
+
+            .data-table-actions .data-table-action-text i {
+                margin-right: 5px;
+                font-size: 12px;
+            }
+
+    /* Secondary / Cancel */
+
+    .data-table-actions .btn-outline-secondary,
+    .data-table-inline-cancel {
+        color: #697a8d;
+        background: #fff;
+        border-color: #d9dee3;
+    }
+
+        .data-table-actions .btn-outline-secondary:hover,
+        .data-table-inline-cancel:hover {
+            color: #435971;
+            background: #f5f6f8;
+            border-color: #c4cbd2;
+        }
+
+    /* Primary / Edit */
+
+    .data-table-actions .btn-outline-primary,
+    .data-table-inline-edit {
+        color: #696cff;
+        background: rgba(105, 108, 255, .07);
+        border-color: rgba(105, 108, 255, .22);
+    }
+
+        .data-table-actions .btn-outline-primary:hover,
+        .data-table-inline-edit:hover {
+            color: #5153d8;
+            background: rgba(105, 108, 255, .14);
+            border-color: rgba(105, 108, 255, .4);
+        }
+
+    /* Danger / Delete */
+
+    .data-table-actions .btn-outline-danger {
+        color: #ff4c51;
+        background: rgba(255, 76, 81, .06);
+        border-color: rgba(255, 76, 81, .2);
+    }
+
+        .data-table-actions .btn-outline-danger:hover {
+            color: #e63940;
+            background: rgba(255, 76, 81, .13);
+            border-color: rgba(255, 76, 81, .4);
+        }
+
+/* Save */
+
+.data-table-inline-save {
+    color: #fff;
+    background: #28c76f;
+    border-color: #28c76f;
+}
+
+    .data-table-inline-save:hover {
+        color: #fff;
+        background: #22b765;
+        border-color: #22b765;
+    }
+
+/* =========================================================
+   DARK THEME
+   ========================================================= */
+
+html[data-theme="dark"] .data-table-actions .btn-outline-secondary,
+html[data-theme="dark"] .data-table-inline-cancel {
+    color: #c5cee0;
+    background: #1b2538;
+    border-color: rgba(137, 150, 176, .2);
+}
+
+    html[data-theme="dark"] .data-table-actions .btn-outline-secondary:hover,
+    html[data-theme="dark"] .data-table-inline-cancel:hover {
+        color: #edf2ff;
+        background: #263149;
+        border-color: rgba(129, 133, 255, .3);
+    }
+
+html[data-theme="dark"] .data-table-actions .btn-outline-primary,
+html[data-theme="dark"] .data-table-inline-edit {
+    color: #a9acff;
+    background: rgba(129, 133, 255, .13);
+    border-color: rgba(129, 133, 255, .24);
+}
+
+    html[data-theme="dark"] .data-table-actions .btn-outline-primary:hover,
+    html[data-theme="dark"] .data-table-inline-edit:hover {
+        color: #c0c1ff;
+        background: rgba(129, 133, 255, .22);
+        border-color: rgba(129, 133, 255, .42);
+        box-shadow: 0 0 12px rgba(105, 108, 255, .1);
+    }
+
+html[data-theme="dark"] .data-table-actions .btn-outline-danger {
+    color: #ff8589;
+    background: rgba(255, 104, 109, .1);
+    border-color: rgba(255, 104, 109, .22);
+}
+
+    html[data-theme="dark"] .data-table-actions .btn-outline-danger:hover {
+        color: #ff9b9f;
+        background: rgba(255, 104, 109, .18);
+        border-color: rgba(255, 104, 109, .4);
+    }
+
+html[data-theme="dark"] .data-table-inline-save {
+    color: #fff;
+    background: #22b96b;
+    border-color: #22b96b;
+}
+
+    html[data-theme="dark"] .data-table-inline-save:hover {
+        color: #fff;
+        background: #2bc77a;
+        border-color: #2bc77a;
+    }
+
+/* =========================================================
+   MOBILE
+   ========================================================= */
+
+@media (max-width: 767.98px) {
+    .data-table-actions {
+        min-width: 0;
+        padding-right: 8px !important;
+        white-space: normal;
+    }
+
+        /* Icon buttons only */
+
+        .data-table-actions .btn:not(.data-table-action-text),
+        .data-table-inline-edit,
+        .data-table-inline-save,
+        .data-table-inline-cancel {
+            width: 28px;
+            min-width: 28px;
+            height: 28px;
+            min-height: 28px;
+            margin-right: 2px;
+        }
+
+            .data-table-actions .btn:not(.data-table-action-text) i,
+            .data-table-inline-edit i,
+            .data-table-inline-save i,
+            .data-table-inline-cancel i {
+                font-size: 14px;
+            }
+
+        /* Text buttons remain readable */
+
+        .data-table-actions .data-table-action-text,
+        .data-table-actions .btn.data-table-action-text {
+            width: auto;
+            min-width: 0;
+            max-width: 100%;
+            height: auto;
+            min-height: 28px;
+            margin: 2px 3px 2px 0;
+            padding: 5px 7px;
+            font-size: 11px;
+            line-height: 1.25;
+            white-space: normal;
+            overflow-wrap: anywhere;
+        }
+
+            .data-table-actions .data-table-action-text i {
+                font-size: 11px;
+            }
+}
+

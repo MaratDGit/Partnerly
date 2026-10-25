@@ -102,7 +102,7 @@ namespace Partnerly.Infrastructure.Services
             Guid? roleID = user.RoleId;
             if (roleID == null)
             {
-                Role? role = await _roleService.GetRoleByNameAsync(RoleTypeAttribute.User);
+                Role? role = await _roleService.GetRoleByNameAsync(Constants.User);
                 roleID = role?.Id;
             }
 
@@ -168,11 +168,11 @@ namespace Partnerly.Infrastructure.Services
                 return ServiceResult<User?>.Fail(new List<string> { String.Format(ErrorMessages.Cannotbefound, "User") });
             }
 
-            if (!await _permissionService.CanUpdateAsync(currentUserId ?? _currentUserService.UserId, user))
-            {
-                await _logService.CreateLogAsync(LogActionsAttribute.UserUpdated, LogTypeAttribute.Critical, ErrorMessages.NoPermissionForThisAction);
-                return ServiceResult<User?>.Fail(new List<string> { ErrorMessages.NoPermissionForThisAction });
-            }
+            //if (!await _permissionService.CanUpdateAsync(currentUserId ?? _currentUserService.UserId, user))
+            //{
+            //    await _logService.CreateLogAsync(LogActionsAttribute.UserUpdated, LogTypeAttribute.Critical, ErrorMessages.NoPermissionForThisAction);
+            //    return ServiceResult<User?>.Fail(new List<string> { ErrorMessages.NoPermissionForThisAction });
+            //}
 
             try
             {
@@ -204,18 +204,19 @@ namespace Partnerly.Infrastructure.Services
                 return ServiceResult<User?>.Fail(new List<string> { });
             }
 
-            if (!await _permissionService.CanDeleteAsync(_currentUserService.UserId, user))
-            {
-                await _logService.CreateLogAsync(LogActionsAttribute.UserDeleted, LogTypeAttribute.Critical, ErrorMessages.NoPermissionForThisAction);
-                return ServiceResult<User?>.Fail(new List<string> { ErrorMessages.NoPermissionForThisAction });
-            }
+            //if (!await _permissionService.CanDeleteAsync(_currentUserService.UserId, user))
+            //{
+            //    await _logService.CreateLogAsync(LogActionsAttribute.UserDeleted, LogTypeAttribute.Critical, ErrorMessages.NoPermissionForThisAction);
+            //    return ServiceResult<User?>.Fail(new List<string> { ErrorMessages.NoPermissionForThisAction });
+            //}
 
             try
             {
                 //_userRepo.Delete(user);
                 //await _userRepo.SaveChangesAsync();
                 user.IsDeleted = true;
-                await UpdateUserAsync(user);
+                _userRepo.Update(user);
+                await _userRepo.SaveChangesAsync();
             }
             catch (Exception ex)
             {

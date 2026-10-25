@@ -48,7 +48,6 @@ namespace Partnerly.Models.ViewModels
         #endregion
 
         public string? Note { get; set; }
-        public List<SelectListItem> RoleNamesList { get => AttributeDropdownHelper.ToSelectedList(RoleTypeAttribute.RoleNames); }
 
         #region Audit fields
         [Display(Name = nameof(FieldsDisplayNames.CreatorName), ResourceType = typeof(FieldsDisplayNames))]
@@ -72,9 +71,9 @@ namespace Partnerly.Models.ViewModels
             {
                 return new Partnerly.Models.ViewModels.FormActionsViewModel
                 {
-                    Back = new Partnerly.Models.ViewModels.ActionBack(id: Id, visible: true, fromController: "Roles", toController: "Users", fromAction: "Edit", toAction: "Index"),
-                    Undo = new Partnerly.Models.ViewModels.ActionUndo(id: Id, visible: true, fromController: "Roles", toController: "Roles", fromAction: "Edit", toAction: "Edit"),
-                    Save = new Partnerly.Models.ViewModels.ActionSave(id: Id, visible: true, fromController: "Roles", toController: "Roles", fromAction: "Edit", toAction: "Edit"),
+                    Back = new Partnerly.Models.ViewModels.ActionBack(id: Id, visible: true, fromController: "Roles", toController: "Users", fromAction: "UserRoleEdit", toAction: "Index"),
+                    Undo = new Partnerly.Models.ViewModels.ActionUndo(id: Id, visible: true, fromController: "Roles", toController: "Roles", fromAction: "UserRoleEdit", toAction: "UserRoleEdit"),
+                    Save = new Partnerly.Models.ViewModels.ActionSave(id: Id, visible: true, fromController: "Roles", toController: "Roles", fromAction: "UserRoleEdit", toAction: "UserRoleEdit"),
                     Note = new Partnerly.Models.ViewModels.ActionNote(visible: true, note: Note, id: Id),
                     Menu = new Partnerly.Models.ViewModels.ActionMenu(visible: true),
                     MenuActions = new List<Partnerly.Models.ViewModels.MenuItemAction> {

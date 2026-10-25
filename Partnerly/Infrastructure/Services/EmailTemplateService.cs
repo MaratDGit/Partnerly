@@ -69,11 +69,11 @@ namespace Partnerly.Infrastructure.Services
                 return ServiceResult<EmailTemplate?>.Fail(new List<string> { String.Format(ErrorMessages.Cannotbefound, "EmailTemplate") });
             }
 
-            if (!await _permissionService.CanUpdateAsync(_currentUserService.UserId, rec))
-            {
-                await _logService.CreateLogAsync(LogActionsAttribute.EmailTemplateUpdated, LogTypeAttribute.Critical, ErrorMessages.NoPermissionForThisAction);
-                return ServiceResult<EmailTemplate?>.Fail(new List<string> { ErrorMessages.NoPermissionForThisAction });
-            }
+            //if (!await _permissionService.CanUpdateAsync(_currentUserService.UserId, rec))
+            //{
+            //    await _logService.CreateLogAsync(LogActionsAttribute.EmailTemplateUpdated, LogTypeAttribute.Critical, ErrorMessages.NoPermissionForThisAction);
+            //    return ServiceResult<EmailTemplate?>.Fail(new List<string> { ErrorMessages.NoPermissionForThisAction });
+            //}
 
             _templateRepo.Update(rec);
             await _templateRepo.SaveChangesAsync();
@@ -96,11 +96,11 @@ namespace Partnerly.Infrastructure.Services
                 return ServiceResult<EmailTemplate?>.Fail(new List<string> { String.Format(ErrorMessages.Cannotbefound, "EmailTemplate") });
             }
 
-            if (!await _permissionService.CanDeleteAsync(_currentUserService.UserId, rec))
-            {
-                await _logService.CreateLogAsync(LogActionsAttribute.EmailTemplateDeleted, LogTypeAttribute.Critical, ErrorMessages.NoPermissionForThisAction);
-                return ServiceResult<EmailTemplate?>.Fail(new List<string> { ErrorMessages.NoPermissionForThisAction });
-            }
+            //if (!await _permissionService.CanDeleteAsync(_currentUserService.UserId, rec))
+            //{
+            //    await _logService.CreateLogAsync(LogActionsAttribute.EmailTemplateDeleted, LogTypeAttribute.Critical, ErrorMessages.NoPermissionForThisAction);
+            //    return ServiceResult<EmailTemplate?>.Fail(new List<string> { ErrorMessages.NoPermissionForThisAction });
+            //}
 
             _templateRepo.Delete(rec);
             await _templateRepo.SaveChangesAsync();

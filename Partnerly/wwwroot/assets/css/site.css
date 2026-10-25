@@ -20,6 +20,18 @@
     max-width: 600px;
 }
 
+.mt-6 {
+    margin-top: 64px !important;
+}
+
+.mt-7 {
+    margin-top: 80px !important;
+}
+
+.mt-8 {
+    margin-top: 96px !important;
+}
+
 
 .form-floating > label.required::after {
     content: " *";

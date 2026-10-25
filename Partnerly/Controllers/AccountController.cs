@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Partnerly.Descriptors.Attributes;
 using Partnerly.Descriptors.Messages;
@@ -49,6 +50,13 @@ namespace Partnerly.Controllers
             _environment = environment;
         }
         #endregion
+
+        [AllowAnonymous]
+        [HttpGet]
+        public IActionResult AccessDenied()
+        {
+            return View();
+        }
 
         [HttpGet]
         public IActionResult Login(string? returnUrl = null)
@@ -543,9 +551,10 @@ namespace Partnerly.Controllers
             var claims = new List<Claim>
             {
                 new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
+                new Claim(Constants.ClaimTypeRoleId, user.RoleId.ToString()),
                 new Claim(ClaimTypes.Name, $"{user.FirstName} {user.LastName}"),
                 new Claim(ClaimTypes.Email, user.Email),
-                new Claim(ClaimTypes.Role, user.Role.Name ?? RoleTypeAttribute.User),
+                new Claim(ClaimTypes.Role, user.Role.Name ?? Constants.User),
 
                 new Claim(
                     Constants.ClaimTypeLoginTime,
@@ -559,9 +568,9 @@ namespace Partnerly.Controllers
                     Constants.ClaimTypeLastName,
                     user.LastName ?? ""),
 
-                new Claim(
-                    Constants.ClaimTypeRoleType,
-                    user.Role.Type ?? RoleTypeAttribute.View),
+                //new Claim(
+                //    Constants.ClaimTypeRoleType,
+                //    user.Role.Type ?? RoleTypeAttribute.View),
 
                 new Claim(
                     Constants.ClaimTypeReffCode,

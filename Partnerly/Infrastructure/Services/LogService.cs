@@ -57,8 +57,8 @@ namespace Partnerly.Infrastructure.Services
 
             if (await GetLogByIDAsync(log.Id) != null)
             {
-                if (!await _permissionService.CanUpdateAsync(_currentUserService.UserId, log))
-                    throw new UnauthorizedAccessException(ErrorMessages.NoPermissionForThisAction);
+                //if (!await _permissionService.CanUpdateAsync(_currentUserService.UserId, log))
+                //    throw new UnauthorizedAccessException(ErrorMessages.NoPermissionForThisAction);
 
                 _logRepo.Update(log);
                 await _logRepo.SaveChangesAsync();
@@ -71,8 +71,8 @@ namespace Partnerly.Infrastructure.Services
                 var log = await _logRepo.GetByIdAsync((Guid)id);
                 if (log != null)
                 {
-                    if (!await _permissionService.CanDeleteAsync(_currentUserService.UserId, log))
-                        throw new UnauthorizedAccessException(ErrorMessages.NoPermissionForThisAction);
+                    //if (!await _permissionService.CanDeleteAsync(_currentUserService.UserId, log))
+                    //    throw new UnauthorizedAccessException(ErrorMessages.NoPermissionForThisAction);
 
                     _logRepo.Delete(log);
                     await _logRepo.SaveChangesAsync();

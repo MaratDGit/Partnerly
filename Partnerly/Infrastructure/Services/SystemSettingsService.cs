@@ -58,11 +58,11 @@ namespace Partnerly.Infrastructure.Services
                 return ServiceResult<SystemSettings?>.Fail(new List<string> { });
             }
 
-            if (!await _permissionService.CanUpdateAsync(_currentUserService.UserId, rec))
-            {
-                await _logService.CreateLogAsync(LogActionsAttribute.SystemSettingsUpdated, LogTypeAttribute.Critical, ErrorMessages.NoPermissionForThisAction);
-                return ServiceResult<SystemSettings?>.Fail(new List<string> { });
-            }
+            //if (!await _permissionService.CanUpdateAsync(_currentUserService.UserId, rec))
+            //{
+            //    await _logService.CreateLogAsync(LogActionsAttribute.SystemSettingsUpdated, LogTypeAttribute.Critical, ErrorMessages.NoPermissionForThisAction);
+            //    return ServiceResult<SystemSettings?>.Fail(new List<string> { });
+            //}
 
             _setupRepo.Update(rec);
             await _setupRepo.SaveChangesAsync();
@@ -85,14 +85,16 @@ namespace Partnerly.Infrastructure.Services
                 return ServiceResult<SystemSettings?>.Fail(new List<string> { });
             }
 
-            if (!await _permissionService.CanDeleteAsync(_currentUserService.UserId, setup))
-            {
-                await _logService.CreateLogAsync(LogActionsAttribute.SystemSettingsDeleted, LogTypeAttribute.Critical, ErrorMessages.NoPermissionForThisAction);
-                return ServiceResult<SystemSettings?>.Fail(new List<string> { });
-            }
+            //if (!await _permissionService.CanDeleteAsync(_currentUserService.UserId, setup))
+            //{
+            //    await _logService.CreateLogAsync(LogActionsAttribute.SystemSettingsDeleted, LogTypeAttribute.Critical, ErrorMessages.NoPermissionForThisAction);
+            //    return ServiceResult<SystemSettings?>.Fail(new List<string> { });
+            //}
 
+            await _logService.CreateLogAsync(LogActionsAttribute.SystemSettingsDeleted, LogTypeAttribute.Critical, ErrorMessages.NoPermissionForThisAction);
+            
             //_setupRepo.Delete(setup);
-            await _setupRepo.SaveChangesAsync();
+            //await _setupRepo.SaveChangesAsync();
 
             return ServiceResult<SystemSettings?>.Ok(setup);
         }

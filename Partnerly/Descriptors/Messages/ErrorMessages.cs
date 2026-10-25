@@ -23,6 +23,7 @@ namespace Partnerly.Descriptors.Messages
         public static string Deletetask => Messages.Get(nameof(Deletetask));
         public static string Deletegroup => Messages.Get(nameof(Deletegroup));
         public static string DeleteUser => Messages.Get(nameof(DeleteUser)); 
+        public static string DeleteRole => Messages.Get(nameof(DeleteRole)); 
         public static string ReferrerUserCannotBeFoundOrInactive => Messages.Get(nameof(ReferrerUserCannotBeFoundOrInactive));
         public static string IncorectPasswordOrUsername => Messages.Get(nameof(IncorectPasswordOrUsername));
         public static string IncorectPassword => Messages.Get(nameof(IncorectPassword));
@@ -31,6 +32,7 @@ namespace Partnerly.Descriptors.Messages
         public static string FieldRequired => Messages.Get(nameof(FieldRequired));
         public static string UniqueValue => Messages.Get(nameof(UniqueValue));
         public static string CannotDeleteSystemRecords => Messages.Get(nameof(CannotDeleteSystemRecords));
+        public static string NotFound => Messages.Get(nameof(NotFound));
         public static string TypeValidPhoneNumber => Messages.Get(nameof(TypeValidPhoneNumber));
         public static string InvalidRefferalCode => Messages.Get(nameof(InvalidRefferalCode));
         public static string UserWithEmailArleadyExist => Messages.Get(nameof(UserWithEmailArleadyExist));

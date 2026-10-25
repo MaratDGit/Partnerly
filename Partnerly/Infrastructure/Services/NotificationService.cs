@@ -118,11 +118,11 @@ namespace Partnerly.Infrastructure.Services
                 return ServiceResult<Notification?>.Fail(new List<string> { });
             }
 
-            if ((!fromMarkAsRead || _currentUserService.UserId != notification.UserId) && !await _permissionService.CanUpdateAsync(_currentUserService.UserId, notification))
-            {
-                await _logService.CreateLogAsync(LogActionsAttribute.NotificationUpdated, LogTypeAttribute.Critical, ErrorMessages.NoPermissionForThisAction);
-                return ServiceResult<Notification?>.Fail(new List<string> { });
-            }
+            //if ((!fromMarkAsRead || _currentUserService.UserId != notification.UserId) && !await _permissionService.CanUpdateAsync(_currentUserService.UserId, notification))
+            //{
+            //    await _logService.CreateLogAsync(LogActionsAttribute.NotificationUpdated, LogTypeAttribute.Critical, ErrorMessages.NoPermissionForThisAction);
+            //    return ServiceResult<Notification?>.Fail(new List<string> { });
+            //}
 
             _notificationRepository.Update(notification);
             await _notificationRepository.SaveChangesAsync();
@@ -154,11 +154,11 @@ namespace Partnerly.Infrastructure.Services
                 return ServiceResult<Notification?>.Fail(new List<string> { });
             }
 
-            if (!await _permissionService.CanDeleteAsync(_currentUserService.UserId, Notification))
-            {
-                await _logService.CreateLogAsync(LogActionsAttribute.NotificationDeleted, LogTypeAttribute.Critical, ErrorMessages.NoPermissionForThisAction);
-                return ServiceResult<Notification?>.Fail(new List<string> { });
-            }
+            //if (!await _permissionService.CanDeleteAsync(_currentUserService.UserId, Notification))
+            //{
+            //    await _logService.CreateLogAsync(LogActionsAttribute.NotificationDeleted, LogTypeAttribute.Critical, ErrorMessages.NoPermissionForThisAction);
+            //    return ServiceResult<Notification?>.Fail(new List<string> { });
+            //}
 
             _notificationRepository.Delete(Notification);
             await _notificationRepository.SaveChangesAsync();

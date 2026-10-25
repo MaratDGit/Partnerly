@@ -1,6 +1,7 @@
 ﻿using Partnerly.Descriptors.Attributes.BaseAttributes;
 using Partnerly.Descriptors.Messages;
 using Partnerly.Infrastructure.Interfaces;
+using Partnerly.Models.Authorization;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
@@ -113,5 +114,7 @@ namespace Partnerly.Models
         public ICollection<User>? Referrals { get; set; }
         public ICollection<Transaction>? Transactions { get; set; }
         public ICollection<Payment>? Payments { get; set; }
+
+        public ICollection<UserPermission> UserPermissions { get; set; } = new List<UserPermission>();
     }
 }

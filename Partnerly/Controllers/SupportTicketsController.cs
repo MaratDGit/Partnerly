@@ -35,7 +35,7 @@ namespace Partnerly.Controllers
             _inlineUpdateService = inlineUpdateService;
         }
 
-        [ClaimAuthorize(ClaimTypes.Role, RoleTypeAttribute.Admin, RoleTypeAttribute.Employee)]
+        //[ClaimAuthorize(ClaimTypes.Role, RoleTypeAttribute.Admin, RoleTypeAttribute.Employee)]
         public IActionResult Index()
         {
             SupportTicketViewModel model = new SupportTicketViewModel();
@@ -57,7 +57,7 @@ namespace Partnerly.Controllers
             return View(model);
         }
 
-        [ClaimAuthorize(ClaimTypes.Role, RoleTypeAttribute.Admin, RoleTypeAttribute.Employee)]
+        //[ClaimAuthorize(ClaimTypes.Role, RoleTypeAttribute.Admin, RoleTypeAttribute.Employee)]
         public async Task<IActionResult> StartCase(Guid? id)
         {
             if (id != null)
@@ -75,7 +75,7 @@ namespace Partnerly.Controllers
             return RedirectToAction(nameof(ViewCase), new { id = id });
         }
 
-        [ClaimAuthorize(ClaimTypes.Role, RoleTypeAttribute.Admin, RoleTypeAttribute.Employee)]
+        //[ClaimAuthorize(ClaimTypes.Role, RoleTypeAttribute.Admin, RoleTypeAttribute.Employee)]
         public async Task<IActionResult> CloseCase(Guid? id)
         {
             if (id != null)
@@ -136,7 +136,7 @@ namespace Partnerly.Controllers
         public async Task<bool> HasLimitExpired(Guid? userID)
         {
             bool retval = false;
-            if (_currentUser.RoleName == RoleTypeAttribute.User)
+            if (_currentUser.RoleName == Constants.User)
             {
                 var cases = await _supportTicketService.GetUserSupportTicketsAsync(userID);
 
@@ -172,7 +172,7 @@ namespace Partnerly.Controllers
             return View(ticketAsView);
         }
 
-        [ClaimAuthorize(ClaimTypes.Role, RoleTypeAttribute.Admin)]
+        //[ClaimAuthorize(ClaimTypes.Role, RoleTypeAttribute.Admin)]
         public IActionResult Create()
         {
             SupportTicketViewModel model = new SupportTicketViewModel() 
@@ -186,7 +186,7 @@ namespace Partnerly.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        [ClaimAuthorize(ClaimTypes.Role, RoleTypeAttribute.Admin)]
+        //[ClaimAuthorize(ClaimTypes.Role, RoleTypeAttribute.Admin)]
         public async Task<IActionResult> Create(SupportTicketViewModel model)
         {
             if (ModelState.IsValid && model != null)
@@ -223,7 +223,7 @@ namespace Partnerly.Controllers
             return View("Form", model);
         }
 
-        [ClaimAuthorize(ClaimTypes.Role, RoleTypeAttribute.Admin)]
+        //[ClaimAuthorize(ClaimTypes.Role, RoleTypeAttribute.Admin)]
         public async Task<IActionResult> Edit(Guid id)
         {
             var ticket = await _supportTicketService.GetSupportTicketByIDAsync(id);
@@ -249,7 +249,7 @@ namespace Partnerly.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        [ClaimAuthorize(ClaimTypes.Role, RoleTypeAttribute.Admin)]
+        //[ClaimAuthorize(ClaimTypes.Role, RoleTypeAttribute.Admin)]
         public async Task<IActionResult> Edit(Guid id, SupportTicketViewModel model)
         {
             if (id != model.Id) return NotFound();
@@ -288,7 +288,7 @@ namespace Partnerly.Controllers
             return View(model);
         }
 
-        [ClaimAuthorize(ClaimTypes.Role, RoleTypeAttribute.Admin)]
+        //[ClaimAuthorize(ClaimTypes.Role, RoleTypeAttribute.Admin)]
         public async Task<IActionResult> Delete(Guid id)
         {
             var ticket = await _supportTicketService.GetSupportTicketByIDAsync(id);
@@ -310,7 +310,7 @@ namespace Partnerly.Controllers
 
         [HttpPost, ActionName("DeleteConfirmed")]
         [ValidateAntiForgeryToken]
-        [ClaimAuthorize(ClaimTypes.Role, RoleTypeAttribute.Admin)]
+        //[ClaimAuthorize(ClaimTypes.Role, RoleTypeAttribute.Admin)]
         public async Task<IActionResult> DeleteConfirmed(Guid id)
         {
             var ticket = await _supportTicketService.GetSupportTicketByIDAsync(id);

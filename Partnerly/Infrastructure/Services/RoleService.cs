@@ -2,6 +2,7 @@
 using Partnerly.Descriptors.Messages;
 using Partnerly.Infrastructure.Interfaces;
 using Partnerly.Models;
+using Partnerly.Models.Authorization;
 
 namespace Partnerly.Infrastructure.Services
 {
@@ -29,6 +30,56 @@ namespace Partnerly.Infrastructure.Services
         public async Task<IEnumerable<Role?>> GetAllRolesAsync() =>
             await _roleRepo.GetAllAsync();
 
+        public IQueryable<Role> QueryEntity(IEnumerable<string> fields) =>
+            _roleRepo.QueryEntity(fields);
+
+        public async Task<ServiceResult<RolePermission?>> AddPermissionAsync(Guid roleId, Guid permissionId)
+        {
+            var role = await _roleRepo.GetByIdAsync(roleId);
+            if (role == null || role.IsDeleted || role.IsActive != true)
+            {
+                return ServiceResult<RolePermission?>.Fail(new List<string> { String.Format(ErrorMessages.Cannotbefound, "Role") });
+            }
+
+            //var permission = await _permissionService.GetByIdAsync(roleId);
+            //if (permission == null || permission.IsDeleted || permission.IsActive != true)
+            //{
+            //    return ServiceResult<RolePermission?>.Fail(new List<string> { String.Format(ErrorMessages.Cannotbefound, "Role") });
+            //}
+
+            RolePermission per = new RolePermission
+            {
+                RoleId = (Guid)roleId,
+                PermissionId = (Guid)permissionId
+            };
+
+            await _roleRepo.AddRolePermissionAsync(per);
+            await _roleRepo.SaveChangesAsync();
+
+            return ServiceResult<RolePermission?>.Ok(per);
+        }
+
+        public async Task<ServiceResult<RolePermission?>> DeletePermissionAsync(Guid roleId, Guid permissionId)
+        {
+            var role = await _roleRepo.GetByIdAsync(roleId);
+            if (role == null || role.IsDeleted || role.IsActive != true)
+            {
+                return ServiceResult<RolePermission?>.Fail(new List<string> { String.Format(ErrorMessages.Cannotbefound, "Role") });
+            }
+
+            RolePermission? permission = await _roleRepo.GetPermissionAsync(roleId, permissionId);
+            if (permission == null)
+            {
+                return ServiceResult<RolePermission?>.Fail(new List<string> { String.Format(ErrorMessages.Cannotbefound, "Role Permission") });
+            }
+
+            _roleRepo.DeleteRolePermission(permission);
+
+            await _roleRepo.SaveChangesAsync();
+
+            return ServiceResult<RolePermission?>.Ok(permission);
+        }
+
         public async Task<ServiceResult<Role?>> CreateRoleAsync(Role? role)
         {
             if (role == null)
@@ -40,8 +91,8 @@ namespace Partnerly.Infrastructure.Services
             var newRole = new Role { Id = Guid.NewGuid() };
 
             newRole.Name = role.Name;
-            newRole.Type = role.Type;
             newRole.IsDeleted = false;
+            newRole.IsActive = role.IsActive;
             newRole.Note = role.Note;
 
             await _roleRepo.AddAsync(newRole);
@@ -64,11 +115,11 @@ namespace Partnerly.Infrastructure.Services
                 return ServiceResult<Role?>.Fail(new List<string> { });
             }
 
-            if (!await _permissionService.CanUpdateAsync(_currentUserService.UserId, role))
-            {
-                await _logService.CreateLogAsync(LogActionsAttribute.RoleUpdated, LogTypeAttribute.Critical, ErrorMessages.NoPermissionForThisAction);
-                return ServiceResult<Role?>.Fail(new List<string> { });
-            }
+            //if (!await _permissionService.CanUpdateAsync(_currentUserService.UserId, role))
+            //{
+            //    await _logService.CreateLogAsync(LogActionsAttribute.RoleUpdated, LogTypeAttribute.Critical, ErrorMessages.NoPermissionForThisAction);
+            //    return ServiceResult<Role?>.Fail(new List<string> { });
+            //}
                 
             _roleRepo.Update(role);
             await _roleRepo.SaveChangesAsync();
@@ -91,13 +142,15 @@ namespace Partnerly.Infrastructure.Services
                 return ServiceResult<Role?>.Fail(new List<string> { });
             }
 
-            if (!await _permissionService.CanDeleteAsync(_currentUserService.UserId, role))
-            {
-                await _logService.CreateLogAsync(LogActionsAttribute.RoleDeleted, LogTypeAttribute.Critical, ErrorMessages.NoPermissionForThisAction);
-                return ServiceResult<Role?>.Fail(new List<string> { });
-            }
-                
+            //if (!await _permissionService.CanDeleteAsync(_currentUserService.UserId, role))
+            //{
+            //    await _logService.CreateLogAsync(LogActionsAttribute.RoleDeleted, LogTypeAttribute.Critical, ErrorMessages.NoPermissionForThisAction);
+            //    return ServiceResult<Role?>.Fail(new List<string> { });
+            //}
+
             //_roleRepo.Delete(role);
+            role.IsDeleted = true;
+            _roleRepo.Update(role);
             await _roleRepo.SaveChangesAsync();
 
             return ServiceResult<Role?>.Ok(role);

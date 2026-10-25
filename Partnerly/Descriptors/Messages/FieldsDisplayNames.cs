@@ -25,8 +25,10 @@ namespace Partnerly.Descriptors.Messages
         public static string IsBlocked => Messages.Get(nameof(IsBlocked));
         public static string EmailConfirmed => Messages.Get(nameof(EmailConfirmed));
         public static string Role => Messages.Get(nameof(Role));
+        public static string Roles => Messages.Get(nameof(Roles));
         public static string NewRole => Messages.Get(nameof(NewRole));
         public static string EditRole => Messages.Get(nameof(EditRole));
+        public static string UserRole => Messages.Get(nameof(UserRole)); 
         public static string TemplateType => Messages.Get(nameof(TemplateType));
         public static string AllowSendNotifications => Messages.Get(nameof(AllowSendNotifications));
         public static string AllowSendEmails => Messages.Get(nameof(AllowSendEmails));
@@ -160,6 +162,10 @@ namespace Partnerly.Descriptors.Messages
         public static string Sendanemail => Messages.Get(nameof(Sendanemail));
         public static string Sendnotification => Messages.Get(nameof(Sendnotification));
         public static string Viewuser => Messages.Get(nameof(Viewuser));
-        public static string Preview => Messages.Get(nameof(Preview)); 
+        public static string Preview => Messages.Get(nameof(Preview));
+        public static string IsActive => Messages.Get(nameof(IsActive));
+        public static string Permissions => Messages.Get(nameof(Permissions));
+        public static string Permission => Messages.Get(nameof(Permission));
+        public static string Module => Messages.Get(nameof(Module));
     }
 }

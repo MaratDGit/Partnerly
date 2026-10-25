@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Localization;
 using Partnerly.Descriptors.Attributes;
 using Partnerly.Descriptors.Attributes.BaseAttributes;
@@ -14,7 +15,7 @@ using System.Security.Claims;
 
 namespace Partnerly.Controllers
 {
-    [ClaimAuthorize(ClaimTypes.Role, RoleTypeAttribute.Admin, RoleTypeAttribute.Employee)]
+    //[ClaimAuthorize(ClaimTypes.Role, RoleTypeAttribute.Admin, RoleTypeAttribute.Employee)]
     public class UsersController : _BaseController
     {
         protected readonly IRoleService _roleService;
@@ -38,6 +39,7 @@ namespace Partnerly.Controllers
         }
 
         #region Index / Create / Edit / Delete
+
         public IActionResult Index()
         {
             UserViewModel model = new UserViewModel();
@@ -46,7 +48,8 @@ namespace Partnerly.Controllers
             return View("~/Views/Shared/DataTable/_DataTablePartial.cshtml", model.users);
         }
 
-        [ClaimAuthorize(ClaimTypes.Role, RoleTypeAttribute.Admin)]
+        //[ClaimAuthorize(ClaimTypes.Role, RoleTypeAttribute.Admin)]
+        [Authorize(Policy = "Permission:users.create")]
         public IActionResult Create()
         {
             var model = new UserFormViewModel { Title = FieldsDisplayNames.UserCreated };
@@ -146,6 +149,7 @@ namespace Partnerly.Controllers
             return View("Form", viewModel);
         }
 
+        [Authorize(Policy = "Permission:users.edit")]
         public async Task<IActionResult> Edit(Guid id)
         {
             var user = await _userService.GetUserByIDAsync(id);
@@ -167,6 +171,7 @@ namespace Partnerly.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Policy = "Permission:users.edit")]
         public async Task<IActionResult> Edit(Guid id, UserFormViewModel viewModel)
         {
             foreach (var key in ModelState.Keys
@@ -230,7 +235,7 @@ namespace Partnerly.Controllers
             return View("Form", viewModel);
         }
 
-        [ClaimAuthorize(ClaimTypes.Role, RoleTypeAttribute.Admin)]
+        [Authorize(Policy = "Permission:users.delete")]
         public async Task<IActionResult> Delete(Guid id)
         {
             var template = await _userService.GetUserByIDAsync(id);
@@ -253,7 +258,7 @@ namespace Partnerly.Controllers
 
         [HttpPost, ActionName("DeleteConfirmed")]
         [ValidateAntiForgeryToken]
-        [ClaimAuthorize(ClaimTypes.Role, RoleTypeAttribute.Admin)]
+        [Authorize(Policy = "Permission:users.delete")]
         public async Task<IActionResult> DeleteConfirmed(Guid id)
         {
             var user = await _userService.GetUserByIDAsync(id);

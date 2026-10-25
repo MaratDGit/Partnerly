@@ -1335,4 +1335,43 @@
   <data name="Lighttheme" xml:space="preserve">
     <value>Բաց թեմա</value>
   </data>
+  <data name="Roles" xml:space="preserve">
+    <value>Դերեր</value>
+  </data>
+  <data name="IsActive" xml:space="preserve">
+    <value>Ակտիվ է</value>
+  </data>
+  <data name="DeleteRole" xml:space="preserve">
+    <value>Ջնջել դերը</value>
+  </data>
+  <data name="NotFound" xml:space="preserve">
+    <value>Չի գտնվել</value>
+  </data>
+  <data name="Permissions" xml:space="preserve">
+    <value>Թույլտվություններ</value>
+  </data>
+  <data name="UserRole" xml:space="preserve">
+    <value>Օգտատիրոջ դեր</value>
+  </data>
+  <data name="Permission" xml:space="preserve">
+    <value>Թույլտվություն</value>
+  </data>
+  <data name="Module" xml:space="preserve">
+    <value>Մոդուլ</value>
+  </data>
+  <data name="AccessDenied" xml:space="preserve">
+    <value>Մուտքն արգելված է</value>
+  </data>
+  <data name="AccessDeniedDescription" xml:space="preserve">
+    <value>Դուք չունեք այս էջը դիտելու համար անհրաժեշտ թույլտվությունները։ Եթե կարծում եք, որ սա սխալ է, դիմեք համակարգի ադմինիստրատորին։</value>
+  </data>
+  <data name="GoBack" xml:space="preserve">
+    <value>Վերադառնալ</value>
+  </data>
+  <data name="BackToHome" xml:space="preserve">
+    <value>Գլխավոր էջ</value>
+  </data>
+  <data name="AccessDeniedFooter" xml:space="preserve">
+    <value>Այս էջը պաշտպանված է մուտքի վերահսկման համակարգով</value>
+  </data>
 </root>

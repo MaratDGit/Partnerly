@@ -1,0 +1,92 @@
+﻿@model Partnerly.Controllers.UserPermissionsViewModel
+
+@{
+    ViewData["Title"] = "User Permissions";
+    Layout = "_ContentNavbarLayout";
+}
+
+<div class="container-fluid py-4">
+    <h2>User Permissions</h2>
+    <p class="text-muted">@Model.Email</p>
+
+    <div asp-validation-summary="All"
+         class="text-danger mb-3"></div>
+
+    @if (TempData["Success"] != null)
+    {
+        <div class="alert alert-success">
+            @TempData["Success"]
+        </div>
+    }
+
+    @if (TempData["Error"] != null)
+    {
+        <div class="alert alert-danger">
+            @TempData["Error"]
+        </div>
+    }
+
+    <form asp-action="SaveUserPermissions"
+          asp-route-id="@Model.UserId"
+          method="post">
+
+        @Html.AntiForgeryToken()
+
+        <input asp-for="UserId" type="hidden" />
+        <input asp-for="Email" type="hidden" />
+
+        @for (var i = 0; i < Model.Permissions.Count; i++)
+        {
+            <input asp-for="Permissions[i].PermissionId"
+                   type="hidden" />
+
+            <input asp-for="Permissions[i].Code"
+                   type="hidden" />
+
+            <input asp-for="Permissions[i].Module"
+                   type="hidden" />
+        }
+
+        <div class="table-responsive">
+            <table class="table table-hover align-middle">
+                <thead>
+                    <tr>
+                        <th>Permission</th>
+                        <th>Override</th>
+                        <th>Effect</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @for (var i = 0; i < Model.Permissions.Count; i++)
+                    {
+                        <tr>
+                            <td>
+                                @Model.Permissions[i].Code
+                            </td>
+
+                            <td>
+                                <select class="form-select"
+                                        asp-for="Permissions[i].HasOverride">
+                                    <option value="false">Inherit from role</option>
+                                    <option value="true">Override role</option>
+                                </select>
+                            </td>
+
+                            <td>
+                                <select class="form-select"
+                                        asp-for="Permissions[i].IsGranted">
+                                    <option value="true">Allow</option>
+                                    <option value="false">Deny</option>
+                                </select>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+
+        <button type="submit" class="btn btn-primary">
+            Save user permissions
+        </button>
+    </form>
+</div>

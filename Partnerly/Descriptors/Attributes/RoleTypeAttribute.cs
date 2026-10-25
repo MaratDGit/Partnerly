@@ -5,20 +5,17 @@ namespace Partnerly.Descriptors.Attributes
 {
     public class RoleTypeAttribute : StringListAttribute
     {
-        public const string Admin = "Administrator";
-        public const string Employee = "Employee";
-        public const string User = "User";
-        public static List<string> RoleNames = new List<string> { Admin, Employee, User };
+        //public static List<string> RoleNames = new List<string> { Admin, Employee, User };
 
-        public const string View = "V";
-        public const string Update = "U";
-        public const string Delete = "D";
+        //public const string View = "V";
+        //public const string Update = "U";
+        //public const string Delete = "D";
 
-        public RoleTypeAttribute()
-            : base(
-                View, Constants.View,
-                Update, Constants.Update,
-                Delete, Constants.Delete)
-        { }
+        //public RoleTypeAttribute()
+        //    : base(
+        //        View, Constants.View,
+        //        Update, Constants.Update,
+        //        Delete, Constants.Delete)
+        //{ }
     }
 }

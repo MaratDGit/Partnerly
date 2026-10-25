@@ -14,7 +14,7 @@ using System.Security.Claims;
 
 namespace Partnerly.Controllers
 {
-    [ClaimAuthorize(ClaimTypes.Role, RoleTypeAttribute.Admin)]
+   // [ClaimAuthorize(ClaimTypes.Role, RoleTypeAttribute.Admin)]
     public class SystemPreferencesController : _BaseController
     {
        

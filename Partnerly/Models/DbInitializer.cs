@@ -11,6 +11,24 @@ namespace Partnerly.Models
 
             var adminUserId = Guid.NewGuid();
             var adminRoleId = Guid.NewGuid();
+            if (context.Roles != null && !context.Roles.Any(u => u.Name == Constants.SuperRoleName))
+            {
+                var guid = Guid.NewGuid();
+                context.Roles.Add(new Role
+                {
+                    Id = guid,
+                    Name = Constants.SuperRoleName,
+                    IsDeleted = false,
+                    IsActive = true,
+                    CreatedBy = guid,
+                    CreatedDate = DateTime.UtcNow,
+                    UpdatedBy = guid,
+                    UpdatedDate = DateTime.UtcNow,
+                });
+
+                context.SaveChanges();
+            }
+
             if (context.Users != null && context.Users.Count() == 0 && !context.Users.Any(u => u.Email == Constants.SuperUserEmail))
             {
                 context.Users.Add(new User
@@ -39,9 +57,9 @@ namespace Partnerly.Models
                     context.Roles.Add(new Role
                     {
                         Id = adminRoleId,
-                        Name = RoleTypeAttribute.Admin,
-                        Type = RoleTypeAttribute.Delete,
+                        Name = Constants.Admin,             
                         IsDeleted = false,
+                        IsActive = true,
                         CreatedBy = adminUserId,
                         CreatedDate = DateTime.UtcNow,
                         UpdatedBy = adminUserId,
@@ -50,9 +68,9 @@ namespace Partnerly.Models
                     context.Roles.Add(new Role
                     {
                         Id = Guid.NewGuid(),
-                        Name = RoleTypeAttribute.Employee,
-                        Type = RoleTypeAttribute.Update,
+                        Name = Constants.Employee,
                         IsDeleted = false,
+                        IsActive = true,
                         CreatedBy = adminUserId,
                         CreatedDate = DateTime.UtcNow,
                         UpdatedBy = adminUserId,
@@ -61,9 +79,9 @@ namespace Partnerly.Models
                     context.Roles.Add(new Role
                     {
                         Id = Guid.NewGuid(),
-                        Name = RoleTypeAttribute.User,
-                        Type = RoleTypeAttribute.View,
+                        Name = Constants.User,
                         IsDeleted = false,
+                        IsActive = true,
                         CreatedBy = adminUserId,
                         CreatedDate = DateTime.UtcNow,
                         UpdatedBy = adminUserId,

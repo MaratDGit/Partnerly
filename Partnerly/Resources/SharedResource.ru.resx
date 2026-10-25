@@ -1336,4 +1336,43 @@
   <data name="Lighttheme" xml:space="preserve">
     <value>Светлая тема</value>
   </data>
+  <data name="Roles" xml:space="preserve">
+    <value>Роли</value>
+  </data>
+  <data name="IsActive" xml:space="preserve">
+    <value>Активен</value>
+  </data>
+  <data name="DeleteRole" xml:space="preserve">
+    <value>Удалить роль</value>
+  </data>
+  <data name="NotFound" xml:space="preserve">
+    <value>Не найдено</value>
+  </data>
+  <data name="Permissions" xml:space="preserve">
+    <value>Разрешения</value>
+  </data>
+  <data name="UserRole" xml:space="preserve">
+    <value>Роль пользователя</value>
+  </data>
+  <data name="Permission" xml:space="preserve">
+    <value>Разрешение</value>
+  </data>
+  <data name="Module" xml:space="preserve">
+    <value>Модуль</value>
+  </data>
+  <data name="AccessDenied" xml:space="preserve">
+    <value>Доступ запрещён</value>
+  </data>
+  <data name="AccessDeniedDescription" xml:space="preserve">
+    <value>У вас нет необходимых прав для просмотра этой страницы. Если вы считаете, что это ошибка, обратитесь к администратору.</value>
+  </data>
+  <data name="GoBack" xml:space="preserve">
+    <value>Вернуться назад</value>
+  </data>
+  <data name="BackToHome" xml:space="preserve">
+    <value>На главную</value>
+  </data>
+  <data name="AccessDeniedFooter" xml:space="preserve">
+    <value>Эта страница защищена системой контроля доступа</value>
+  </data>
 </root>

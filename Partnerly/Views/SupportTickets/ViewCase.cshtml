@@ -5,11 +5,6 @@
     ViewData["Title"] = "View Case";
     Layout = "_ContentNavbarLayout";
 
-    bool hasRole = ViewBag?.RoleType == Partnerly.Descriptors.Attributes.RoleTypeAttribute.Delete
-                || ViewBag?.RoleType == Partnerly.Descriptors.Attributes.RoleTypeAttribute.Update;
-
-    bool hasAdminRole = ViewBag?.RoleType == Partnerly.Descriptors.Attributes.RoleTypeAttribute.Delete;
-
     bool isInProgress = Model.Status == Partnerly.Descriptors.Attributes.SupportTicketStatusAttribute.InProgress;
     bool isClosed = Model.Status == Partnerly.Descriptors.Attributes.SupportTicketStatusAttribute.Closed;
 }
@@ -716,23 +711,23 @@
         <div class="support-ticket-body">
 
             @await Html.PartialAsync("_StickyButtons", new Partnerly.Models.ViewModels.FormActionsViewModel {
-            Back = new Partnerly.Models.ViewModels.ActionBack(
-            id: Model.Id,
-            visible: true,
-            fromController: "SupportTickets",
-            toController: "SupportTickets",
-            fromAction: "ViewCase",
-            toAction: "Index"
-            ),
+                        Back = new Partnerly.Models.ViewModels.ActionBack(
+                        id: Model.Id,
+                        visible: true,
+                        fromController: "SupportTickets",
+                        toController: "SupportTickets",
+                        fromAction: "ViewCase",
+                        toAction: "Index"
+                        ),
 
                         Menu = new Partnerly.Models.ViewModels.ActionMenu(
-                        visible: hasRole
+                        visible: true
                         ),
 
                         MenuActions = new List<Partnerly.Models.ViewModels.MenuItemAction> {
 
                         new Partnerly.Models.ViewModels.MenuItemAction(
-                        visible: hasRole,
+                        visible: true,
                         icon: "bx bx-fast-forward",
                         displayName: Localizer["Start"],
                         fromController: "SupportTickets",
@@ -743,7 +738,7 @@
                         ),
 
                         new Partnerly.Models.ViewModels.MenuItemAction(
-                        visible: hasRole,
+                        visible: true,
                         icon: "bx bx-x",
                         displayName: Localizer["Close"],
                         fromController: "SupportTickets",
@@ -754,7 +749,7 @@
                         ),
 
                         new Partnerly.Models.ViewModels.MenuItemAction(
-                        visible: hasAdminRole,
+                        visible: true,
                         icon: "bx bx-reply",
                         displayName: Localizer["Assignto"],
                         fromController: "SupportTickets",

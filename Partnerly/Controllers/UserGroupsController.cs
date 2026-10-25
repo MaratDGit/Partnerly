@@ -15,7 +15,7 @@ using System.Security.Claims;
 
 namespace Partnerly.Controllers
 {
-    [ClaimAuthorize(ClaimTypes.Role, RoleTypeAttribute.Admin, RoleTypeAttribute.Employee)]
+    //[ClaimAuthorize(ClaimTypes.Role, RoleTypeAttribute.Admin, RoleTypeAttribute.Employee)]
     public class UserGroupsController : _BaseController
     {
         private readonly IUserGroupService _userGroupService;
@@ -47,7 +47,7 @@ namespace Partnerly.Controllers
             return View("~/Views/Shared/DataTable/_DataTablePartial.cshtml", model.groups);
         }
 
-        [ClaimAuthorize(ClaimTypes.Role, RoleTypeAttribute.Admin)]
+        //[ClaimAuthorize(ClaimTypes.Role, RoleTypeAttribute.Admin)]
         public IActionResult Create()
         {
             var model = new UserGroupViewModel { Title = FieldsDisplayNames.UserGroupCreated };
@@ -149,7 +149,7 @@ namespace Partnerly.Controllers
             return View("Form", model);
         }
 
-        [ClaimAuthorize(ClaimTypes.Role, RoleTypeAttribute.Admin)]
+        //[ClaimAuthorize(ClaimTypes.Role, RoleTypeAttribute.Admin)]
         public async Task<IActionResult> Delete(Guid id)
         {
             var group = await _userGroupService.GetByIDAsync(id);
@@ -171,7 +171,7 @@ namespace Partnerly.Controllers
 
         [HttpPost, ActionName("DeleteConfirmed")]
         [ValidateAntiForgeryToken]
-        [ClaimAuthorize(ClaimTypes.Role, RoleTypeAttribute.Admin)]
+        //[ClaimAuthorize(ClaimTypes.Role, RoleTypeAttribute.Admin)]
         public async Task<IActionResult> DeleteConfirmed(Guid id)
         {
             var group = await _userGroupService.GetByIDAsync(id);
@@ -228,16 +228,6 @@ namespace Partnerly.Controllers
                 .ToHashSet();
 
             var query = users.Where(u => !members.Contains(u.Id));
-
-            if (!string.IsNullOrWhiteSpace(search))
-            {
-                var term = search.Trim();
-
-                query = query.Where(u =>
-                    (u.FirstName ?? "").Contains(term, StringComparison.OrdinalIgnoreCase) ||
-                    (u.LastName ?? "").Contains(term, StringComparison.OrdinalIgnoreCase) ||
-                    (u.Email ?? "").Contains(term, StringComparison.OrdinalIgnoreCase));
-            }
 
             var result = query
                 .OrderBy(u => u.FirstName)

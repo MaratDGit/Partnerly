@@ -109,7 +109,7 @@ namespace Partnerly.Models.ViewModels
                             icon: "bx bx-key",
                             displayName: FieldsDisplayNames.EditRole,
                             toController: "Roles",
-                            toAction: "Edit",
+                            toAction: "UserRoleEdit",
                             routID: userId)
                     }
                 };
@@ -416,20 +416,20 @@ namespace Partnerly.Models.ViewModels
                            Enabled = true,
                            Items = new List<DataTableFilter>
                             {
-                               new DataTableFilter
-                                {
-                                    Field = "RoleId",
-                                    Label = FieldsDisplayNames.Role,
-                                    Type = DataTableFilterType.MultiSelect,
-                                    Placeholder = "Role Name",
-                                    DefaultValue = "",
-                                    Options = new List<DataTableFilterOption>
-                                    {
-                                        new DataTableFilterOption("5DAF66B1-8140-4D48-BC12-431086FA7144", FieldsDisplayNames.Admin),
-                                        new DataTableFilterOption("C3120D74-9C4C-44AA-8B0C-A1B2F53BF9A8", FieldsDisplayNames.Employee),
-                                        new DataTableFilterOption("52B55F50-A21A-441E-BB59-EFAB24F907AF", FieldsDisplayNames.User)
-                                    }
-                                },
+                               //new DataTableFilter
+                               // {
+                               //     Field = "RoleId",
+                               //     Label = FieldsDisplayNames.Role,
+                               //     Type = DataTableFilterType.MultiSelect,
+                               //     Placeholder = "Role Name",
+                               //     DefaultValue = "",
+                               //     Options = new List<DataTableFilterOption>
+                               //     {
+                               //         new DataTableFilterOption("5DAF66B1-8140-4D48-BC12-431086FA7144", FieldsDisplayNames.Admin),
+                               //         new DataTableFilterOption("C3120D74-9C4C-44AA-8B0C-A1B2F53BF9A8", FieldsDisplayNames.Employee),
+                               //         new DataTableFilterOption("52B55F50-A21A-441E-BB59-EFAB24F907AF", FieldsDisplayNames.User)
+                               //     }
+                               // },
 
                                 new DataTableFilter
                                 {
@@ -443,6 +443,7 @@ namespace Partnerly.Models.ViewModels
                                     Label = FieldsDisplayNames.IsOnlayn,
                                     Type = DataTableFilterType.Boolean
                                 },
+                                
                                 //new DataTableFilter
                                 //{
                                 //    Field = "Balance",
@@ -512,6 +513,18 @@ namespace Partnerly.Models.ViewModels
                                     Url = "/Users/Delete/{Id}",
                                     Method = "GET",
                                     CssClass = "btn btn-sm btn-outline-danger"
+                                },
+
+                                new DataTableAction
+                                {
+                                    Name = "userPermissions",
+                                    Title = FieldsDisplayNames.Permissions,
+                                    Icon = "bx bx-shield-quarter",
+                                    Type = DataTableActionType.Link,
+                                    Placement = DataTableActionPlacement.Row,
+                                    Url = "/Roles/UserRoleEdit/{Id}",
+                                    Method = "GET",
+                                    //CssClass = "btn btn-sm btn-outline-danger"
                                 }
                             }
                        },

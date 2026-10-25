@@ -1,0 +1,80 @@
+﻿@model Partnerly.Models.ViewModels.RolesViewModel
+@await Html.PartialAsync("_Toast")
+
+@{
+    bool isEdit = Model.Id != Guid.Empty;
+
+    ViewData["Title"] = Model.Title;
+    Layout = "_ContentNavbarLayout";
+}
+
+<div class="card">
+    <div class="card-header d-flex align-items-center justify-content-between">
+        <h5 class="mb-0">
+            @(isEdit
+                        ? Localizer["EditRole"]
+                        : Localizer["RoleCreated"])
+        </h5>
+
+        @if (isEdit)
+        {
+            @await Html.PartialAsync("_AuditInfo", Model)
+        }
+    </div>
+
+    <div class="card-body">
+        <form id="rolesForm"
+              asp-action="@(isEdit ? "Edit" : "Create")"
+              method="post">
+
+            @await Html.PartialAsync("_StickyButtons", Model.StickyButtons)
+
+            @if (isEdit)
+            {
+                <input type="hidden"
+                       name="RoleId"
+                       value="@Model.Id"
+                       data-parent-key="RoleId" />
+
+                <input type="hidden" asp-for="Note" />
+            }
+
+            <div class="form-floating mb-1 max-w-400 position-relative">
+                <input asp-for="Name"
+                       id="name"
+                       class="form-control lookup-input pe-5"
+                       placeholder=" "
+                       data-lookup="true"
+                       data-lookup-source="/Roles/GetLookupList"
+                       data-lookup-title="@Localizer["Roles"]"
+                       data-edit-url-base="/Roles/Edit/"
+                       data-lookup-column-names="name:@Localizer["Name"],isActive:@Localizer["IsActive"]"
+                       data-lookup-display-field="Name"
+                       data-lookup-param="fieldName"
+                       data-lookup-param-value="RoleName" />
+
+                <label asp-for="Name"></label>
+
+                <i class="bx bx-search lookup-icon"></i>
+
+                <span asp-validation-for="Name"
+                      class="text-danger"></span>
+            </div>
+
+            @if (isEdit)
+            {
+                <div class="mt-8">
+                    @await Html.PartialAsync(
+                    "~/Views/Shared/DataTable/_DataTable.cshtml",
+                                Model.rolePermissions)
+                </div>
+            }
+        </form>
+    </div>
+</div>
+
+<script src="~/assets/js/form-change-tracker.js"></script>
+
+<script>
+    enableSaveOnChange("#rolesForm", "#btnSave");
+</script>

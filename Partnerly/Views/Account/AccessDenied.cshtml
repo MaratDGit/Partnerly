@@ -1,0 +1,197 @@
+﻿@{
+    ViewData["Title"] = Localizer["AccessDenied"];
+    Layout = "_ContentNavbarLayout";
+}
+
+<style>
+    .access-denied-page {
+        min-height: 65vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 40px 20px;
+    }
+
+    .access-denied-card {
+        position: relative;
+        width: 100%;
+        max-width: 560px;
+        padding: 48px 36px;
+        text-align: center;
+        border: 1px solid rgba(105, 108, 255, 0.25);
+        border-radius: 20px;
+        background: var(--bs-card-bg, #1e1e2d);
+        box-shadow: 0 0 35px rgba(105, 108, 255, 0.09);
+        overflow: hidden;
+    }
+
+        .access-denied-card::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 15%;
+            width: 70%;
+            height: 2px;
+            background: linear-gradient( 90deg, transparent, #696cff, #a855f7, transparent );
+        }
+
+    .access-denied-icon {
+        width: 100px;
+        height: 100px;
+        margin: 0 auto 26px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 28px;
+        color: #a5a7ff;
+        font-size: 52px;
+        background: linear-gradient( 135deg, rgba(105, 108, 255, 0.18), rgba(168, 85, 247, 0.12) );
+        border: 1px solid rgba(105, 108, 255, 0.3);
+        box-shadow: 0 0 30px rgba(105, 108, 255, 0.12);
+    }
+
+    .access-denied-code {
+        display: inline-block;
+        margin-bottom: 14px;
+        padding: 6px 13px;
+        border-radius: 8px;
+        font-size: 12px;
+        font-weight: 700;
+        letter-spacing: 2px;
+        color: #a5a7ff;
+        background: rgba(105, 108, 255, 0.12);
+    }
+
+    .access-denied-title {
+        margin-bottom: 14px;
+        font-size: clamp(25px, 4vw, 34px);
+        font-weight: 700;
+        letter-spacing: -0.5px;
+    }
+
+    .access-denied-description {
+        max-width: 410px;
+        margin: 0 auto 28px;
+        color: var(--bs-secondary-color, #a1a1b5);
+        font-size: 15px;
+        line-height: 1.8;
+    }
+
+    .access-denied-actions {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        flex-wrap: wrap;
+        gap: 12px;
+    }
+
+        .access-denied-actions .btn {
+            min-height: 44px;
+            padding: 11px 20px;
+            border-radius: 10px;
+            font-weight: 600;
+            transition: transform .2s ease, box-shadow .2s ease;
+        }
+
+            .access-denied-actions .btn:hover {
+                transform: translateY(-2px);
+            }
+
+    .access-denied-primary {
+        color: #fff;
+        border: none;
+        background: linear-gradient(135deg, #696cff, #8b5cf6);
+        box-shadow: 0 5px 18px rgba(105, 108, 255, 0.25);
+    }
+
+        .access-denied-primary:hover {
+            color: #fff;
+            box-shadow: 0 7px 24px rgba(105, 108, 255, 0.4);
+        }
+
+    .access-denied-secondary {
+        color: var(--bs-body-color);
+        border: 1px solid var(--bs-border-color, rgba(255,255,255,.15));
+        background: transparent;
+    }
+
+        .access-denied-secondary:hover {
+            color: var(--bs-body-color);
+            border-color: #696cff;
+        }
+
+    .access-denied-footer {
+        margin-top: 28px;
+        font-size: 12px;
+        color: var(--bs-secondary-color, #a1a1b5);
+    }
+
+        .access-denied-footer i {
+            margin-right: 5px;
+            color: #696cff;
+        }
+
+    @@media (max-width: 576px) {
+        .access-denied-card {
+            padding: 36px 22px;
+        }
+
+        .access-denied-icon {
+            width: 82px;
+            height: 82px;
+            font-size: 42px;
+            border-radius: 23px;
+        }
+
+        .access-denied-actions {
+            flex-direction: column;
+        }
+
+            .access-denied-actions .btn {
+                width: 100%;
+            }
+    }
+</style>
+
+<div class="access-denied-page">
+    <div class="access-denied-card">
+
+        <div class="access-denied-icon">
+            <i class="bx bx-shield-x"></i>
+        </div>
+
+        <div class="access-denied-code">
+            ERROR 403
+        </div>
+
+        <h1 class="access-denied-title">
+            @Localizer["AccessDenied"]
+        </h1>
+
+        <p class="access-denied-description">
+            @Localizer["AccessDeniedDescription"]
+        </p>
+
+        <div class="access-denied-actions">
+            <button type="button"
+                    class="btn access-denied-primary"
+                    onclick="history.back()">
+                <i class="bx bx-arrow-back me-1"></i>
+                @Localizer["GoBack"]
+            </button>
+
+            <a asp-controller="Home"
+               asp-action="Index"
+               class="btn access-denied-secondary">
+                <i class="bx bx-home-alt me-1"></i>
+                @Localizer["BackToHome"]
+            </a>
+        </div>
+
+        <div class="access-denied-footer">
+            <i class="bx bx-lock-alt"></i>
+            @Localizer["AccessDeniedFooter"]
+        </div>
+
+    </div>
+</div>

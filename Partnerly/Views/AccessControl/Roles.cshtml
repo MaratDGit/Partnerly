@@ -1,0 +1,53 @@
+﻿@* @model IReadOnlyList<Partnerly.Controllers.RoleListItemViewModel>
+
+@{
+    ViewData["Title"] = "Role Management";
+    Layout = "_ContentNavbarLayout";
+}
+
+<div class="container-fluid py-4">
+    <h2>Role Management</h2>
+
+    <p class="text-muted">
+        Manage roles and their assigned permissions.
+    </p>
+
+    <div class="table-responsive">
+        <table class="table table-hover align-middle">
+            <thead>
+                <tr>
+                    <th>Role</th>
+                    <th>Status</th>
+                    <th>Permissions</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var role in Model)
+                {
+                    <tr>
+                        <td>@role.Name</td>
+                        <td>
+                            @(role.IsActive ? "Active" : "Inactive")
+                        </td>
+                        <td>@role.PermissionCount</td>
+                        <td class="text-end">
+                            <a asp-action="RolePermissions"
+                               asp-route-id="@role.Id"
+                               class="btn btn-primary btn-sm">
+                                Manage permissions
+                            </a>
+                        </td>
+                        <td class="text-end">
+                            <a asp-action="UserPermissions"
+                               asp-route-id="@role.Id"
+                               class="btn btn-primary btn-sm">
+                                User permissions
+                            </a>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div> *@

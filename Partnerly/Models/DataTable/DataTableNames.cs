@@ -11,5 +11,9 @@
         public const string supportTicketsTable = "emailTemplatesTable";
         public const string logsTable = "logsTable";
         public const string notificationsTable = "notificationsTable";
+
+        public const string rolesTable = "rolesTable";
+        public const string rolePermissionsTable = "rolePermissionsTable";
+        public const string userPermissionsTable = "userPermissionsTable";
     }
 }

@@ -59,7 +59,7 @@ namespace Partnerly.Controllers
             return Ok();
         }
 
-        [ClaimAuthorize(ClaimTypes.Role, RoleTypeAttribute.Admin)]
+       // [ClaimAuthorize(ClaimTypes.Role, RoleTypeAttribute.Admin)]
         public IActionResult Index()
         {
             NotificationsViewModel model = new NotificationsViewModel();
@@ -68,7 +68,7 @@ namespace Partnerly.Controllers
             return View("~/Views/Shared/DataTable/_DataTablePartial.cshtml", model.notifications);
         }
 
-        [ClaimAuthorize(ClaimTypes.Role, RoleTypeAttribute.Admin)]
+       // [ClaimAuthorize(ClaimTypes.Role, RoleTypeAttribute.Admin)]
         public IActionResult Create()
         {
             var model = new NotificationsViewModel { Title = FieldsDisplayNames.NotificationCreated };
@@ -77,7 +77,7 @@ namespace Partnerly.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        [ClaimAuthorize(ClaimTypes.Role, RoleTypeAttribute.Admin)]
+       // [ClaimAuthorize(ClaimTypes.Role, RoleTypeAttribute.Admin)]
         public async Task<IActionResult> Create(NotificationsViewModel model)
         {
             if (ModelState.IsValid)
@@ -112,7 +112,7 @@ namespace Partnerly.Controllers
             return View("Form", model);
         }
 
-        [ClaimAuthorize(ClaimTypes.Role, RoleTypeAttribute.Admin)]
+       // [ClaimAuthorize(ClaimTypes.Role, RoleTypeAttribute.Admin)]
         public async Task<IActionResult> Edit(Guid id)
         {
             var template = await _notificationService.GetNotificationByIDAsync(id);
@@ -134,7 +134,7 @@ namespace Partnerly.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        [ClaimAuthorize(ClaimTypes.Role, RoleTypeAttribute.Admin)]
+        //[ClaimAuthorize(ClaimTypes.Role, RoleTypeAttribute.Admin)]
         public async Task<IActionResult> Edit(Guid id, NotificationsViewModel model)
         {
             if (id != model.Id) return NotFound();
@@ -167,7 +167,7 @@ namespace Partnerly.Controllers
             return View("Form", model);
         }
 
-        [ClaimAuthorize(ClaimTypes.Role, RoleTypeAttribute.Admin)]
+       // [ClaimAuthorize(ClaimTypes.Role, RoleTypeAttribute.Admin)]
         public async Task<IActionResult> Delete(Guid id)
         {
             var template = await _notificationService.GetNotificationByIDAsync(id);
@@ -189,7 +189,7 @@ namespace Partnerly.Controllers
 
         [HttpPost, ActionName("DeleteConfirmed")]
         [ValidateAntiForgeryToken]
-        [ClaimAuthorize(ClaimTypes.Role, RoleTypeAttribute.Admin)]
+      //  [ClaimAuthorize(ClaimTypes.Role, RoleTypeAttribute.Admin)]
         public async Task<IActionResult> DeleteConfirmed(Guid id)
         {
             var template = await _notificationService.GetNotificationByIDAsync(id);

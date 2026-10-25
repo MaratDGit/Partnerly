@@ -93,11 +93,11 @@ namespace Partnerly.Infrastructure.Services
                 return ServiceResult<EmailConfirmationToken?>.Fail(new List<string> { });
             }
 
-            if (!await _permissionService.CanUpdateAsync(userID ?? _currentUserService.UserId, token))
-            {
-                await _logService.CreateLogAsync(LogActionsAttribute.EmailConfirmationTokenUpdated, LogTypeAttribute.Critical, ErrorMessages.NoPermissionForThisAction);
-                return ServiceResult<EmailConfirmationToken?>.Fail(new List<string> { });
-            }
+            //if (!await _permissionService.CanUpdateAsync(userID ?? _currentUserService.UserId, token))
+            //{
+            //    await _logService.CreateLogAsync(LogActionsAttribute.EmailConfirmationTokenUpdated, LogTypeAttribute.Critical, ErrorMessages.NoPermissionForThisAction);
+            //    return ServiceResult<EmailConfirmationToken?>.Fail(new List<string> { });
+            //}
 
             _tokenRepo.Update(token);
             await _tokenRepo.SaveChangesAsync();
@@ -120,11 +120,11 @@ namespace Partnerly.Infrastructure.Services
                 return ServiceResult<EmailConfirmationToken?>.Fail(new List<string> { });
             }
 
-            if (!await _permissionService.CanDeleteAsync(_currentUserService.UserId, tokenRec))
-            {
-                await _logService.CreateLogAsync(LogActionsAttribute.EmailConfirmationTokenDeleted, LogTypeAttribute.Critical, ErrorMessages.NoPermissionForThisAction);
-                return ServiceResult<EmailConfirmationToken?>.Fail(new List<string> { });
-            }
+            //if (!await _permissionService.CanDeleteAsync(_currentUserService.UserId, tokenRec))
+            //{
+            //    await _logService.CreateLogAsync(LogActionsAttribute.EmailConfirmationTokenDeleted, LogTypeAttribute.Critical, ErrorMessages.NoPermissionForThisAction);
+            //    return ServiceResult<EmailConfirmationToken?>.Fail(new List<string> { });
+            //}
 
             _tokenRepo.Delete(tokenRec);
             await _roleRepo.SaveChangesAsync();
