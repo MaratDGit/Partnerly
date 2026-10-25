@@ -1,52 +1,71 @@
-﻿@model  Partnerly.Models.ViewModels.FormActionsViewModel;
+﻿@using Partnerly.Models.Authorization
+@using Partnerly.Models.ViewModels
+@model FormActionsViewModel
 
 @{
-    
+    var stickyPermissions = ViewData["Permissions"] as HashSet<string>
+        ?? new HashSet<string>(StringComparer.OrdinalIgnoreCase);
+
+    bool CanSticky(string? code) =>
+        string.IsNullOrWhiteSpace(code) || stickyPermissions.Contains(code);
+
+    bool ShowSticky(FormActionBase? action) =>
+        action?.Visible == true && CanSticky(action.Permission);
+
+    var visibleMenuActions = (Model?.MenuActions ?? new List<MenuItemAction>())
+        .Where(action => action.Visible == true && CanSticky(action.Permission))
+        .ToList();
+
+    var showMenu = ShowSticky(Model?.Menu) && visibleMenuActions.Count > 0;
+    var showAttachments = ShowSticky(Model?.Attachements);
+    var canUploadAttachments = showAttachments && CanSticky(Model?.Attachements?.UploadPermission);
+    var canDeleteAttachments = showAttachments && CanSticky(
+        string.IsNullOrWhiteSpace(Model?.Attachements?.DeletePermission)
+            ? PermissionCodes.AttachmentsManage
+            : Model!.Attachements.DeletePermission);
 }
 
 <div class="sticky-buttons mb-6">
     <div class="left-buttons">
-        @if (Model?.Back?.Visible == true)
+        @if (ShowSticky(Model?.Back))
         {   
             <a asp-action="@Model.Back.ToAction" asp-controller="@Model.Back.ToController" class="btn btn-link p-0" title="@Model.Back.Title">
                 <i class="@Model.Back.Icon me-1 fs-3"></i>
             </a>
         }
-        @if (Model?.Undo?.Visible == true)
+        @if (ShowSticky(Model?.Undo))
         {   
             <a asp-action="@Model.Undo.ToAction" asp-controller="@Model.Undo.ToController" class="btn btn-link p-0" title="@Model.Undo.Title">
                 <i class="@Model.Undo.Icon me-1 fs-3"></i>
             </a>
         }
-        @if (Model?.Save?.Visible == true)
+        @if (ShowSticky(Model?.Save))
         {   
             <button type="submit" id="btnSave" class="btn btn-link p-0" title="@Model.Save.Title">
                 <i class="@Model.Save.Icon me-1 fs-3"></i>
             </button>
         }
-        @if (Model?.Create?.Visible == true)
+        @if (ShowSticky(Model?.Create))
         {   
             <a asp-action="@Model.Create.ToAction" asp-controller="@Model.Create.ToController" class="btn btn-link p-0" title="@Model.Create.Title">
                 <i class="@Model.Create.Icon me-1 fs-3"></i>
             </a>
         }
-        @if (Model?.Delete?.Visible == true)
+        @if (ShowSticky(Model?.Delete))
         {   
             <a asp-action="@Model.Delete.ToAction" asp-controller="@Model.Delete.ToController" asp-route-id="@Model.Delete.Id" class="btn btn-link p-0" title="@Model.Delete.Title">
                 <i class="@Model.Delete.Icon me-1 fs-3"></i>
             </a>
         }
-        @if (Model?.Menu?.Visible == true)
+        @if (showMenu)
         {   
             <div class="btn-group">
                 <button type="button" class="btn btn-link p-0" data-bs-toggle="dropdown" title="@Model.Menu.Title">
                     <i class="@Model.Menu.Icon fs-3"></i>
                 </button>
                 <ul class="dropdown-menu dropdown-menu-end">
-                    @foreach (var action in Model.MenuActions)
+                    @foreach (var action in visibleMenuActions)
                     {
-                        @if(action.Visible == true)
-                        {
                             <li>
                                 @if (action.IsModal == true)
                                 {
@@ -64,14 +83,13 @@
                                     </a>
                                 }
                             </li>
-                        }
                     }
                 </ul>
             </div>
         }
     </div>
     <div class="right-buttons">
-        @if (Model?.Attachements?.Visible == true)
+        @if (showAttachments)
         {
             <button type="button"
                     id="attachmentsBtn"
@@ -83,7 +101,7 @@
                 <i class="bx bx-paperclip me-1"></i>
             </button>
         }
-        @if (Model?.Note?.Visible == true)
+        @if (ShowSticky(Model?.Note))
         {
             <button type="button" class="btn btn-note" title=@Localizer["Addanote"]
                     data-bs-toggle="modal" data-bs-target="#noteModal">
@@ -93,6 +111,8 @@
     </div>
 </div>
 
+@if (ShowSticky(Model?.Note))
+{
 <div class="modal fade" id="noteModal" tabindex="-1" aria-labelledby="noteModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content rounded-3 shadow-lg">
@@ -150,13 +170,17 @@
         </div>
     </div>
 </div>
+}
 
-
+@if (showAttachments)
+{
 <div class="modal fade"
      id="attachmentsModal"
      tabindex="-1"
      aria-labelledby="attachmentsModalLabel"
-     aria-hidden="true">
+     aria-hidden="true"
+     data-can-upload="@canUploadAttachments.ToString().ToLowerInvariant()"
+     data-can-delete="@canDeleteAttachments.ToString().ToLowerInvariant()">
 
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
@@ -190,6 +214,8 @@
                            id="attachmentEntityId"
                            value="@Model.Attachements.EntityId" />
 
+                    @if (canUploadAttachments)
+                    {
                     <div class="mb-3">
 
                         <label for="attachmentFiles"
@@ -204,7 +230,10 @@
                                multiple />
 
                     </div>
+                    }
 
+                    @if (canUploadAttachments)
+                    {
                     <div class="d-flex justify-content-end">
 
                         <button type="button"
@@ -218,6 +247,7 @@
                         </button>
 
                     </div>
+                    }
 
                 </div>
 
@@ -260,7 +290,7 @@
         </div>
     </div>
 </div>
-
+}
 
 <script>
 
@@ -270,6 +300,11 @@ document.addEventListener('DOMContentLoaded', function () {
     const saveNoteBtn = document.getElementById('saveNoteBtn');
     const cancelNoteBtn = document.getElementById('cancelNoteBtn');
     const noteBtn = document.querySelector('.btn-note');
+
+    if (!noteText || !noteBtn) {
+        updateAttachmentsButton();
+        return;
+    }
 
     let lastSavedNote = noteText.value.trim();
 
@@ -486,7 +521,12 @@ function createAttachmentElement(attachment) {
 
 
     actions.appendChild(downloadButton);
-    actions.appendChild(deleteButton);
+
+    const attachmentsModal = document.getElementById("attachmentsModal");
+    const canDelete = attachmentsModal?.dataset?.canDelete === "true";
+    if (canDelete) {
+        actions.appendChild(deleteButton);
+    }
 
     item.appendChild(fileName);
     item.appendChild(actions);
@@ -504,7 +544,7 @@ async function uploadAttachments() {
         document.getElementById("uploadAttachmentsBtn");
 
 
-    if (!fileInput.files.length) {
+    if (!fileInput || !fileInput.files.length) {
 
         alert(
             attachementLocalization.Pleaseselectatleastonefile

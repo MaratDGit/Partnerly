@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Localization;
 using Partnerly.Descriptors.Attributes;
@@ -37,6 +38,7 @@ namespace Partnerly.Controllers
         }
 
         #region Index / Create / Edit / Delete
+        [Authorize(Policy = "Permission:user_groups.view")]
         public IActionResult Index()
         {
             UserGroupViewModel model = new UserGroupViewModel();
@@ -45,6 +47,7 @@ namespace Partnerly.Controllers
             return View("~/Views/Shared/DataTable/_DataTablePartial.cshtml", model.groups);
         }
 
+        [Authorize(Policy = "Permission:user_groups.create")]
         public IActionResult Create()
         {
             var model = new UserGroupViewModel { Title = FieldsDisplayNames.UserGroupCreated };
@@ -53,6 +56,7 @@ namespace Partnerly.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Policy = "Permission:user_groups.create")]
         public async Task<IActionResult> Create(UserGroupViewModel model)
         {
             if (ModelState.IsValid)
@@ -85,6 +89,7 @@ namespace Partnerly.Controllers
             return View("Form", model);
         }
 
+        [Authorize(Policy = "Permission:user_groups.edit")]
         public async Task<IActionResult> Edit(Guid id)
         {
             var group = await _userGroupService.GetByIDAsync(id);
@@ -109,6 +114,7 @@ namespace Partnerly.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Policy = "Permission:user_groups.edit")]
         public async Task<IActionResult> Edit(Guid id, UserGroupViewModel model)
         {
             if (id != model.Id) return NotFound();
@@ -146,6 +152,7 @@ namespace Partnerly.Controllers
             return View("Form", model);
         }
 
+        [Authorize(Policy = "Permission:user_groups.delete")]
         public async Task<IActionResult> Delete(Guid id)
         {
             var group = await _userGroupService.GetByIDAsync(id);
@@ -167,6 +174,7 @@ namespace Partnerly.Controllers
 
         [HttpPost, ActionName("DeleteConfirmed")]
         [ValidateAntiForgeryToken]
+        [Authorize(Policy = "Permission:user_groups.delete")]
         public async Task<IActionResult> DeleteConfirmed(Guid id)
         {
             var group = await _userGroupService.GetByIDAsync(id);
@@ -187,6 +195,7 @@ namespace Partnerly.Controllers
         #endregion
 
         [HttpGet]
+        [Authorize(Policy = "Permission:user_groups.view")]
         public async Task<IActionResult> GetLookupList(string fieldName)
         {
             if (fieldName == "Name")
@@ -210,9 +219,10 @@ namespace Partnerly.Controllers
         }
 
         [HttpGet]
+        [Authorize(Policy = "Permission:user_groups.edit")]
         public async Task<IActionResult> LookupUsers(string? search = null)
         {
-            var users = await _userService.GetAllUsersAsync();
+            var users = await UserVisibility.FilterUsersAsync(await _userService.GetAllUsersAsync());
             var groupIdText = Request.Query["groupId"].ToString();
             Guid.TryParse(groupIdText, out var groupId);
 
@@ -243,6 +253,7 @@ namespace Partnerly.Controllers
         }
 
         [HttpGet]
+        [Authorize(Policy = "Permission:user_groups.view")]
         public async Task<IActionResult> Data([FromQuery] DataTableRequest request)
         {
             if (string.IsNullOrWhiteSpace(request.TableID))
@@ -304,6 +315,7 @@ namespace Partnerly.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Policy = "Permission:user_groups.edit")]
         public async Task<IActionResult> UpdateInline(
         [FromBody] DataTableInlineUpdateRequest request)
         {
@@ -365,6 +377,7 @@ namespace Partnerly.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Policy = "Permission:user_groups.edit")]
         public async Task<IActionResult> CreateInline([FromBody] DataTableInlineCreateRequest request)
         {
             if (request.TableID == DataTableNames.userGroupsMembersTable)
@@ -388,6 +401,9 @@ namespace Partnerly.Controllers
                         message = "A valid UserId is required."
                     });
                 }
+
+                if (!await CanViewUserAsync(userId))
+                    return Forbid();
 
                 var memberResult = await _userGroupService.AddMemberAsync(groupId, userId);
 
@@ -451,6 +467,7 @@ namespace Partnerly.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Policy = "Permission:user_groups.edit")]
         public async Task<IActionResult> DeleteInline([FromBody] DataTableInlineDeleteRequest request)
         {
             if (request.TableID == DataTableNames.userGroupsMembersTable)
@@ -530,6 +547,7 @@ namespace Partnerly.Controllers
         }
 
         [HttpGet]
+        [Authorize(Policy = "Permission:user_groups.view")]
         public async Task<IActionResult> Export([FromQuery] DataTableRequest request, [FromQuery] string format = "csv")
         {
             if (string.IsNullOrWhiteSpace(request.TableID))

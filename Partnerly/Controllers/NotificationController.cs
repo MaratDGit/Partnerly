@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Localization;
 using Partnerly.Descriptors.Attributes;
 using Partnerly.Descriptors.Attributes.BaseAttributes;
@@ -41,8 +42,10 @@ namespace Partnerly.Controllers
             if (id != null)
             {
                 var note = await _notificationService.GetNotificationByIDAsync(id);
+                if (note == null || note.UserId != _currentUser.UserId)
+                    return Forbid();
 
-                if (note?.Type == NotificationTypeAttribute.Information)
+                if (note.Type == NotificationTypeAttribute.Information)
                     await _notificationService.MarkAsReadAsync(id);
             }
             return Ok();
@@ -58,6 +61,7 @@ namespace Partnerly.Controllers
             return Ok();
         }
 
+        [Authorize(Policy = "Permission:notifications.view")]
         public IActionResult Index()
         {
             NotificationsViewModel model = new NotificationsViewModel();
@@ -66,6 +70,7 @@ namespace Partnerly.Controllers
             return View("~/Views/Shared/DataTable/_DataTablePartial.cshtml", model.notifications);
         }
 
+        [Authorize(Policy = "Permission:notifications.create")]
         public IActionResult Create()
         {
             var model = new NotificationsViewModel { Title = FieldsDisplayNames.NotificationCreated };
@@ -74,6 +79,7 @@ namespace Partnerly.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Policy = "Permission:notifications.create")]
         public async Task<IActionResult> Create(NotificationsViewModel model)
         {
             if (ModelState.IsValid)
@@ -84,6 +90,9 @@ namespace Partnerly.Controllers
                     ModelState.AddModelError("OwnerName", Messages.UserCannotBeFound);
                     return View("Form", model);
                 }
+
+                if (!await CanViewUserAsync(user.Id))
+                    return Forbid();
 
                 Notification newTemp = new Notification();
                 newTemp.UserId = model.UserId;
@@ -108,10 +117,12 @@ namespace Partnerly.Controllers
             return View("Form", model);
         }
 
+        [Authorize(Policy = "Permission:notifications.edit")]
         public async Task<IActionResult> Edit(Guid id)
         {
             var template = await _notificationService.GetNotificationByIDAsync(id);
             if (template == null) return NotFound();
+            if (!await CanViewUserAsync(template.UserId)) return Forbid();
 
             var templatesAsView = await PropertyActionsHelper.CopyPropertiesAsync(template, new NotificationsViewModel());
             if (templatesAsView == null) return NotFound();
@@ -129,6 +140,7 @@ namespace Partnerly.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Policy = "Permission:notifications.edit")]
         public async Task<IActionResult> Edit(Guid id, NotificationsViewModel model)
         {
             if (id != model.Id) return NotFound();
@@ -138,6 +150,7 @@ namespace Partnerly.Controllers
                 Notification? template = await _notificationService.GetNotificationByIDAsync(model.Id);
                 if (template != null)
                 {
+                    if (!await CanViewUserAsync(template.UserId)) return Forbid();
                     template.Message = model.Message;
                     template.IsRead = model.IsRead;
                     template.Link = model.Link;
@@ -161,10 +174,12 @@ namespace Partnerly.Controllers
             return View("Form", model);
         }
 
+        [Authorize(Policy = "Permission:notifications.delete")]
         public async Task<IActionResult> Delete(Guid id)
         {
             var template = await _notificationService.GetNotificationByIDAsync(id);
             if (template == null) return NotFound();
+            if (!await CanViewUserAsync(template.UserId)) return Forbid();
 
             var deleteModel = new DeleteConfirmationViewModel
             {
@@ -182,11 +197,13 @@ namespace Partnerly.Controllers
 
         [HttpPost, ActionName("DeleteConfirmed")]
         [ValidateAntiForgeryToken]
+        [Authorize(Policy = "Permission:notifications.delete")]
         public async Task<IActionResult> DeleteConfirmed(Guid id)
         {
             var template = await _notificationService.GetNotificationByIDAsync(id);
             if (template != null)
             {
+                if (!await CanViewUserAsync(template.UserId)) return Forbid();
                 ServiceResult<Notification?> result = await _notificationService.DeleteNotificationAsync(id);
                 if (!result.Success)
                 {
@@ -202,6 +219,7 @@ namespace Partnerly.Controllers
         }
 
         [HttpGet]
+        [Authorize(Policy = "Permission:notifications.view")]
         public async Task<IActionResult> GetLookupList(string fieldName)
         {
             if (fieldName == "Owner")
@@ -214,6 +232,7 @@ namespace Partnerly.Controllers
 
 
         [HttpGet]
+        [Authorize(Policy = "Permission:notifications.view")]
         public async Task<IActionResult> Data([FromQuery] DataTableRequest request)
         {
             if (string.IsNullOrWhiteSpace(request.TableID))
@@ -238,8 +257,10 @@ namespace Partnerly.Controllers
 
             if (request.TableID == DataTableNames.notificationsTable)
             {
+                var visibleUserIds = UserVisibility.VisibleUserIds();
                 var res = await _tableService.ExecuteAsync(
-                   fields => _notificationService.QueryEntity(fields),
+                   fields => _notificationService.QueryEntity(WithQueryFields(fields, nameof(Notification.UserId)))
+                       .Where(n => visibleUserIds.Contains(n.UserId)),
                    request,
                    options);
 
@@ -256,6 +277,7 @@ namespace Partnerly.Controllers
         }
 
         [HttpGet]
+        [Authorize(Policy = "Permission:notifications.view")]
         public async Task<IActionResult> Export([FromQuery] DataTableRequest request, [FromQuery] string format = "csv")
         {
             if (string.IsNullOrWhiteSpace(request.TableID))
@@ -267,10 +289,12 @@ namespace Partnerly.Controllers
 
             if (request.TableID == DataTableNames.notificationsTable)
             {
+                var visibleUserIds = UserVisibility.VisibleUserIds();
                 return await ExportTableAsync(
                             request,
                             format,
-                            fields => _notificationService.QueryEntity(fields),
+                            fields => _notificationService.QueryEntity(WithQueryFields(fields, nameof(Notification.UserId)))
+                                .Where(n => visibleUserIds.Contains(n.UserId)),
                             "notifications");
             }
             else

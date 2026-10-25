@@ -2,6 +2,7 @@
 using Partnerly.Descriptors.Messages;
 using Partnerly.Helpers;
 using Partnerly.Infrastructure.Interfaces;
+using Partnerly.Models.Authorization;
 using Partnerly.Models.DataTable;
 using System.ComponentModel.DataAnnotations;
 
@@ -73,7 +74,7 @@ namespace Partnerly.Models.ViewModels
                         toController: "LogRecords",
                         fromAction: "View",
                         toAction: "Index"
-                    ),
+                    ) { Permission = PermissionCodes.LogsView },
                 };
             }
         }
@@ -96,6 +97,11 @@ namespace Partnerly.Models.ViewModels
                         KeyField = "Id",
                         AjaxUrl = "/LogRecords/Data",
                         ExportUrl = "/LogRecords/Export",
+                        Export = new DataTableExportOptions
+                        {
+                            Enabled = true,
+                            Permission = PermissionCodes.LogsView
+                        },
 
                         AutoLoad = true,
                         ReloadEnabled = true,
@@ -117,6 +123,7 @@ namespace Partnerly.Models.ViewModels
                                 Title = FieldsDisplayNames.Action,
                                 Type = DataTableColumnType.Text,
                                 UrlTemplate = "/LogRecords/View/{Id}",
+                                Permission = PermissionCodes.LogsView,
 
                                 ValueMappings = new List<DataTableColumnValueMapping>
                                 {
@@ -307,6 +314,7 @@ namespace Partnerly.Models.ViewModels
                                     Placement = DataTableActionPlacement.Row,
                                     Url = "/LogRecords/View/{Id}",
                                     Method = "GET",
+                                    Permission = PermissionCodes.LogsView
                                 },
                             }
                         },

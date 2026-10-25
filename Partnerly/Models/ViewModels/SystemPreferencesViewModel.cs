@@ -1,5 +1,6 @@
 ﻿using Partnerly.Descriptors.Messages;
 using Partnerly.Infrastructure.Interfaces;
+using Partnerly.Models.Authorization;
 using System.ComponentModel.DataAnnotations;
 
 namespace Partnerly.Models.ViewModels
@@ -68,7 +69,7 @@ namespace Partnerly.Models.ViewModels
                                 toController: "Home",
                                 fromAction: "Index",
                                 toAction: "Index"
-                                ),
+                                ) { Permission = PermissionCodes.SystemSettingsView },
 
                     Undo = new Partnerly.Models.ViewModels.ActionUndo(
                                 visible: true,
@@ -76,7 +77,7 @@ namespace Partnerly.Models.ViewModels
                                 toController: "SystemPreferences",
                                 fromAction: "Index",
                                 toAction: "Index"
-                                ),
+                                ) { Permission = PermissionCodes.SystemSettingsView },
 
                     Save = new Partnerly.Models.ViewModels.ActionSave(
                                 visible: true,
@@ -84,12 +85,12 @@ namespace Partnerly.Models.ViewModels
                                 toController: "SystemPreferences",
                                 fromAction: "Index",
                                 toAction: "Index"
-                                ),
+                                ) { Permission = PermissionCodes.SystemSettingsEdit },
 
                     Note = new Partnerly.Models.ViewModels.ActionNote(
                                 visible: true,
                                 note: Note
-                                ),
+                                ) { Permission = PermissionCodes.SystemSettingsEdit },
                 };
             }
         }

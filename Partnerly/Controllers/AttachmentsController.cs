@@ -3,6 +3,8 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Localization;
 using Partnerly.Events.BaseEvents;
 using Partnerly.Infrastructure.Interfaces;
+using Partnerly.Models;
+using Partnerly.Models.Authorization;
 using Partnerly.Models.DataTable;
 using Partnerly.Models.ViewModels;
 
@@ -12,12 +14,16 @@ namespace Partnerly.Controllers
     public class AttachmentsController : _BaseController
     {
         private readonly IAttachmentService _attachmentService;
+        private readonly ISupportTicketService _supportTicketService;
+        private readonly IPermissionService _permissionService;
 
         public AttachmentsController(
             IEventBus eventBus, 
             IUserService userService, 
             ICurrentUserService currentUser, 
-            IAttachmentService attachmentService, 
+            IAttachmentService attachmentService,
+            ISupportTicketService supportTicketService,
+            IPermissionService permissionService,
             ILogService logService, 
             IStringLocalizer<SharedResource> localizer, 
             ISystemSettingsService systemSettingsService, 
@@ -26,8 +32,11 @@ namespace Partnerly.Controllers
         : base(eventBus, userService, currentUser, logService, localizer, systemSettingsService, tableService, dataTableRegistry)
         {
             _attachmentService = attachmentService;
+            _supportTicketService = supportTicketService;
+            _permissionService = permissionService;
         }
 
+        [Authorize(Policy = "Permission:attachments.view")]
         public IActionResult Index()
         {
             AttachmentViewModel model = new AttachmentViewModel();
@@ -48,6 +57,9 @@ namespace Partnerly.Controllers
 
             if (entityId == Guid.Empty)
                 return BadRequest("Entity ID is required.");
+
+            if (!await CanAccessEntityAttachmentsAsync(entityType, entityId))
+                return Forbid();
 
             var attachments = new List<object>();
 
@@ -83,6 +95,9 @@ namespace Partnerly.Controllers
             if (entityId == Guid.Empty)
                 return BadRequest("Entity ID is required.");
 
+            if (!await CanAccessEntityAttachmentsAsync(entityType, entityId))
+                return Forbid();
+
             var attachments = await _attachmentService.GetAsync(entityType, entityId);
 
             return Json(attachments.Select(x => new
@@ -103,6 +118,9 @@ namespace Partnerly.Controllers
             if (attachment == null)
                 return NotFound();
 
+            if (!await CanAccessEntityAttachmentsAsync(attachment.EntityType, attachment.EntityId))
+                return Forbid();
+
             var stream = await _attachmentService.GetFileAsync(id);
 
             if (stream == null)
@@ -116,12 +134,16 @@ namespace Partnerly.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Policy = "Permission:attachments.manage")]
         public async Task<IActionResult> Delete(Guid id)
         {
             var attachment = await _attachmentService.GetByIdAsync(id);
 
             if (attachment == null)
                 return NotFound();
+
+            if (!await CanAccessEntityAttachmentsAsync(attachment.EntityType, attachment.EntityId))
+                return Forbid();
 
             await _attachmentService.DeleteAsync(id);
 
@@ -132,6 +154,7 @@ namespace Partnerly.Controllers
         }
 
         [HttpGet]
+        [Authorize(Policy = "Permission:attachments.view")]
         public async Task<IActionResult> Data([FromQuery] DataTableRequest request)
         {
             if (string.IsNullOrWhiteSpace(request.TableID))
@@ -156,8 +179,10 @@ namespace Partnerly.Controllers
 
             if (request.TableID == DataTableNames.attachmentsTable)
             {
+                var visibleUserIds = UserVisibility.VisibleUserIds();
                 var res = await _tableService.ExecuteAsync(
-                   fields => _attachmentService.QueryEntity(fields),
+                   fields => _attachmentService.QueryEntity(WithQueryFields(fields, nameof(Attachment.CreatedBy)))
+                       .Where(a => a.CreatedBy != null && visibleUserIds.Contains(a.CreatedBy.Value)),
                    request,
                    options);
 
@@ -174,6 +199,7 @@ namespace Partnerly.Controllers
         }
 
         [HttpGet]
+        [Authorize(Policy = "Permission:attachments.view")]
         public async Task<IActionResult> Export([FromQuery] DataTableRequest request, [FromQuery] string format = "csv")
         {
             if (string.IsNullOrWhiteSpace(request.TableID))
@@ -185,10 +211,12 @@ namespace Partnerly.Controllers
 
             if (request.TableID == DataTableNames.attachmentsTable)
             {
+                var visibleUserIds = UserVisibility.VisibleUserIds();
                 return await ExportTableAsync(
                             request,
                             format,
-                            fields => _attachmentService.QueryEntity(fields),
+                            fields => _attachmentService.QueryEntity(WithQueryFields(fields, nameof(Attachment.CreatedBy)))
+                                .Where(a => a.CreatedBy != null && visibleUserIds.Contains(a.CreatedBy.Value)),
                             "attachments");
             }
             else
@@ -199,6 +227,20 @@ namespace Partnerly.Controllers
                     message = "Unknown table."
                 });
             }
+        }
+
+        private async Task<bool> CanAccessEntityAttachmentsAsync(string entityType, Guid entityId)
+        {
+            if (string.Equals(entityType, "SupportTicket", StringComparison.OrdinalIgnoreCase))
+            {
+                var ticket = await _supportTicketService.GetSupportTicketByIDAsync(entityId);
+                return ticket != null && await CanViewUserAsync(ticket.UserId);
+            }
+
+            if (string.Equals(entityType, "User", StringComparison.OrdinalIgnoreCase))
+                return await CanViewUserAsync(entityId);
+
+            return await _permissionService.HasPermissionAsync(_currentUser.UserId, PermissionCodes.AttachmentsView);
         }
     }
 }

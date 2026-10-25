@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Localization;
 using Partnerly.Descriptors.Attributes;
 using Partnerly.Descriptors.Attributes.BaseAttributes;
@@ -35,6 +36,7 @@ namespace Partnerly.Controllers
             _inlineUpdateService = inlineUpdateService;
         }
 
+        [Authorize(Policy = "Permission:email_templates.view")]
         public IActionResult Index()
         {
             EmailTemplateViewModel model = new EmailTemplateViewModel();
@@ -43,6 +45,7 @@ namespace Partnerly.Controllers
             return View("~/Views/Shared/DataTable/_DataTablePartial.cshtml", model.templates);
         }
 
+        [Authorize(Policy = "Permission:email_templates.create")]
         public IActionResult Create()
         {
             return View("Form", new EmailTemplateViewModel { Title = FieldsDisplayNames.EmailTemplateCreated });
@@ -50,6 +53,7 @@ namespace Partnerly.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Policy = "Permission:email_templates.create")]
         public async Task<IActionResult> Create(EmailTemplateViewModel model)
         {
             if (ModelState.IsValid)
@@ -85,6 +89,7 @@ namespace Partnerly.Controllers
             return View("Form", model);
         }
 
+        [Authorize(Policy = "Permission:email_templates.edit")]
         public async Task<IActionResult> Edit(Guid id)
         {
             var template = await _emailTemplateService.GetTemplateByIDAsync(id);
@@ -102,6 +107,7 @@ namespace Partnerly.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Policy = "Permission:email_templates.edit")]
         public async Task<IActionResult> Edit(Guid id, EmailTemplateViewModel model)
         {
             if (id != model.Id) return NotFound();
@@ -132,6 +138,7 @@ namespace Partnerly.Controllers
             return View("Form", model);
         }
 
+        [Authorize(Policy = "Permission:email_templates.delete")]
         public async Task<IActionResult> Delete(Guid id)
         {
             var template = await _emailTemplateService.GetTemplateByIDAsync(id);
@@ -164,6 +171,7 @@ namespace Partnerly.Controllers
 
         [HttpPost, ActionName("DeleteConfirmed")]
         [ValidateAntiForgeryToken]
+        [Authorize(Policy = "Permission:email_templates.delete")]
         public async Task<IActionResult> DeleteConfirmed(Guid id)
         {
             var template = await _emailTemplateService.GetTemplateByIDAsync(id);
@@ -183,6 +191,7 @@ namespace Partnerly.Controllers
         }
 
         [HttpGet]
+        [Authorize(Policy = "Permission:email_templates.view")]
         public async Task<IActionResult> GetLookupList(string fieldName)
         {
             if (fieldName == "Name")
@@ -207,6 +216,7 @@ namespace Partnerly.Controllers
 
         #region Grids 
         [HttpGet]
+        [Authorize(Policy = "Permission:email_templates.view")]
         public async Task<IActionResult> Data([FromQuery] DataTableRequest request)
         {
             if (string.IsNullOrWhiteSpace(request.TableID))
@@ -250,6 +260,7 @@ namespace Partnerly.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Policy = "Permission:email_templates.edit")]
         public async Task<IActionResult> UpdateInline(
         [FromBody] DataTableInlineUpdateRequest request)
         {
@@ -310,6 +321,7 @@ namespace Partnerly.Controllers
         }
 
         [HttpGet]
+        [Authorize(Policy = "Permission:email_templates.view")]
         public async Task<IActionResult> Export([FromQuery] DataTableRequest request, [FromQuery] string format = "csv")
         {
             if (string.IsNullOrWhiteSpace(request.TableID))

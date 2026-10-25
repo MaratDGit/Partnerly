@@ -1,10 +1,12 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Localization;
 using Partnerly.Descriptors.Attributes;
 using Partnerly.Descriptors.Attributes.BaseAttributes;
 using Partnerly.Events.BaseEvents;
 using Partnerly.Helpers;
 using Partnerly.Infrastructure.Interfaces;
+using Partnerly.Models;
 using Partnerly.Models.DataTable;
 using Partnerly.Models.ViewModels;
 
@@ -25,6 +27,7 @@ namespace Partnerly.Controllers
         {
         }
 
+        [Authorize(Policy = "Permission:logs.view")]
         public IActionResult Index()
         {
             LogsViewModel model = new LogsViewModel();
@@ -33,10 +36,13 @@ namespace Partnerly.Controllers
             return View("~/Views/Shared/DataTable/_DataTablePartial.cshtml", model.logs);
         }
 
+        [Authorize(Policy = "Permission:logs.view")]
         public async Task<IActionResult> View(Guid id)
         {
             var log = await _logService.GetLogByIDAsync(id);
             if (log == null) return NotFound();
+            if (log.CreatedBy != null && !await CanViewUserAsync(log.CreatedBy))
+                return Forbid();
 
             var logAsView = await PropertyActionsHelper.CopyPropertiesAsync(log, new LogsViewModel());
             if (logAsView == null) return NotFound();
@@ -47,6 +53,7 @@ namespace Partnerly.Controllers
         }
 
         [HttpGet]
+        [Authorize(Policy = "Permission:logs.view")]
         public async Task<IActionResult> Data([FromQuery] DataTableRequest request)
         {
             if (string.IsNullOrWhiteSpace(request.TableID))
@@ -71,8 +78,10 @@ namespace Partnerly.Controllers
 
             if (request.TableID == DataTableNames.logsTable)
             {
+                var visibleUserIds = UserVisibility.VisibleUserIds();
                 var res = await _tableService.ExecuteAsync(
-                   fields => _logService.QueryEntity(fields),
+                   fields => _logService.QueryEntity(WithQueryFields(fields, nameof(Log.CreatedBy)))
+                       .Where(l => l.CreatedBy != null && visibleUserIds.Contains(l.CreatedBy.Value)),
                    request,
                    options);
 
@@ -89,6 +98,7 @@ namespace Partnerly.Controllers
         }
 
         [HttpGet]
+        [Authorize(Policy = "Permission:logs.view")]
         public async Task<IActionResult> Export([FromQuery] DataTableRequest request, [FromQuery] string format = "csv")
         {
             if (string.IsNullOrWhiteSpace(request.TableID))
@@ -100,10 +110,12 @@ namespace Partnerly.Controllers
 
             if (request.TableID == DataTableNames.logsTable)
             {
+                var visibleUserIds = UserVisibility.VisibleUserIds();
                 return await ExportTableAsync(
                             request,
                             format,
-                            fields => _logService.QueryEntity(fields),
+                            fields => _logService.QueryEntity(WithQueryFields(fields, nameof(Log.CreatedBy)))
+                                .Where(l => l.CreatedBy != null && visibleUserIds.Contains(l.CreatedBy.Value)),
                             "logs");
             }
             else

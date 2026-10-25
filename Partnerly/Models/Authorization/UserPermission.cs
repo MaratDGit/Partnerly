@@ -18,4 +18,14 @@ namespace Partnerly.Models.Authorization
 
         public Permission? Permission { get; set; }
     }
+
+    public class UserPermissionExt : UserPermission
+    {
+        public string? UserName { get; set; }
+        public string Module { get; set; } = string.Empty;
+        public string PermissionCode { get; set; } = string.Empty;
+        public string PermissionName { get; set; } = string.Empty;
+        public bool IsActive { get; set; }
+        public bool IsDeleted { get; set; }
+    }
 }

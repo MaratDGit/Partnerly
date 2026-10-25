@@ -30,16 +30,15 @@ Controller  →  I*Service  →  I*Repository : Repository<T>  →  AppDbContext
 
 - `[Authorize]`.
 - Общие зависимости: EventBus, UserService, CurrentUser, LogService, localizer, SystemSettings, DataTableQueryService, DataTableRegistry.
-- `OnActionExecutionAsync` заполняет ViewBag (фото, имя, рефкод, RoleType) и текст тикера / maintenance.
+- `OnActionExecutionAsync` заполняет ViewBag (фото, имя, рефкод) и текст тикера / maintenance; `ViewData["Permissions"]` — эффективные коды прав текущего пользователя для меню.
 - `PrepareViewModelAsync` подставляет имена авторов.
 - `ExportTableAsync` — Excel/CSV.
+- `UserVisibility` / `CanViewUserAsync` — видимость записей по роли.
 - Старый `HasPermision` / RoleType удалён (2026-10-25). Права — через политики `Permission:`.
 
-Контроллеры **без** `_BaseController`: `AccountController`, `HomeController`, `AIController` (`[Authorize]`), `LanguageController`.
+Контроллеры **без** `_BaseController`: `AccountController`, `HomeController`, `AIController` (`[Authorize]` + `ai.use` на Ask), `LanguageController`.
 
-Политики `Permission:*` на 2026-10-25 встречаются в `UsersController`, `RolesController`, `AccessControlController`. Другие модули (группы, тикеты, шаблоны, логи и т.д.) на уровне атрибутов политик **не закрыты** (достаточно быть аутентифицированным через `_BaseController`).
-
-На части действий политика стоит только на GET, не на POST (пример: `UsersController.Create`).
+Политики `Permission:*` стоят на CRUD/Data/Export модулей Users, Roles, UserGroups, SupportTickets, Notifications, EmailTemplates, Logs, SystemPreferences, Attachments (список), AI. MarkAsRead / Upload к своему тикету — без глобального manage. Dashboard / MyProfile — только `[Authorize]`.
 
 ## Сервисы и репозитории
 
@@ -55,6 +54,8 @@ Controller  →  I*Service  →  I*Repository : Repository<T>  →  AppDbContext
 
 - Идентификаторы таблиц: `Models/DataTable/DataTableNames`.
 - Описание колонок/действий: статический `CreateTableOptions` в ViewModel, регистрация в singleton `DataTableRegistry`.
+- Права UI: `Permission` на action/column/export. Фильтр в `_DataTable.cshtml` по `ViewData["Permissions"]` — **не** менять зарегистрированные options (singleton общий для всех пользователей).
+- StickyButtons: `Permission` на `FormActionBase`; фильтр в `_StickyButtons.cshtml`. Удаление вложений в модалке — `attachments.manage` (или `DeletePermission`).
 - Запрос: `DataTableQueryService` + `DataTablePropertyResolver`.
 - UI: `Views/Shared/DataTable/_DataTable.cshtml`, `_DataTablePartial.cshtml`, JS в `wwwroot/js/datatable/`.
 - Inline-правка: `IInlineUpdateService`.
@@ -81,7 +82,11 @@ Controller  →  I*Service  →  I*Repository : Repository<T>  →  AppDbContext
    - пользователь не удалён и не заблокирован, роль активна;
    - индивидуальное `UserPermission.IsGranted` **перекрывает** роль;
    - иначе наличие строки в `RolePermissions`.
-3. `PermissionSeeder.SeedAsync` при старте создаёт коды прав и назначает их системным ролям Admin / Employee / User. Для роли с именем Super есть отдельная ветка, но из‑за `if` без `else if` назначение Super, **скорее всего, не выполняется** (см. `KNOWN_ISSUES.md`).
+   - UI прав роли: DataTable на `Roles/Edit` (`rolePermissionsTable`).
+   - UI индивидуальных прав: DataTable на `Roles/UserRoleEdit` (`userPermissionsTable`); строка = override роли, `IsGranted` = разрешить/запретить.
+   - Изменения пишутся в `AccessControlAuditLogs` из `RoleService` / `UserService` через `IPermissionService.AddAccessAudit`.
+   - `AccessControlController` удалён 2026-10-25.
+3. `PermissionSeeder.SeedAsync` при старте **добавляет** недостающие коды и RolePermissions (лишние строки не удаляет): Super и Admin — `PermissionCodes.All`; Employee — просмотр + работа с тикетами; User — `support_tickets.view/create`. Видимость записей — `IUserVisibilityService`: Super видит всех; Super не виден никому кроме Super; Admin не видит других Admin и Super; Employee не видит Admin и Super; User — только себя.
 4. `RoleChangeMiddleware`: если `User.LastRoleUpdateTime` позже claim `LoginTime`, cookie сбрасывается.
 5. `MaintenanceMiddleware`: не-Admin и не-SuperRole редирект на `/Home/Maintenance`.
 6. Доступ к Super-роли/пользователю: методы `IsSuperRole` / `IsSuperUser` / `IsSystemRole` в `_BaseController`.

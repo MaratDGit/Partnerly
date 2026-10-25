@@ -31,8 +31,8 @@
 - **Дата:** миграции `20261021145957_AddRolePermissionsSystem`, `20261024211314_deleteRoleType`
 - **Суть:** таблицы Permissions / RolePermissions / UserPermissions / AccessControlAuditLogs; политики `Permission:{code}`; seeder кодов прав.
 - **Причина:** в коде закомментирован старый RoleType/`ClaimAuthorize`; поле Type у роли удалено. Точная дискуссия выбора **не сохранилась**.
-- **Затрагивает:** авторизация, AccessControl, Roles, Users, DbContext.
-- **Последствия:** покрытие политиками неполное; stub `HasPermision`; возможный баг seeder для Super-роли.
+- **Затрагивает:** авторизация, Roles, Users, DbContext. UI матриц AccessControl снят 2026-10-25 в пользу DataTable в Roles.
+- **Последствия:** покрытие политиками расширено 2026-10-25 (`PermissionCodes`, seeder Super+Admin = все коды, видимость записей по роли). `HasPermision` удалён. Seeder только добавляет RolePermissions, не снимает лишние. Кнопки DataTable фильтруются при рендере, не в singleton registry.
 - **Альтернативы:** неизвестны (не выдумывать).
 
 ---

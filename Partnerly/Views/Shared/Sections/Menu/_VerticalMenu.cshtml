@@ -2,6 +2,18 @@
     TempData.Keep();
 
     string currentPage = ViewContext.HttpContext.Request.Path.ToString();
+    var permissions = ViewData["Permissions"] as HashSet<string> ?? new HashSet<string>(StringComparer.OrdinalIgnoreCase);
+    bool Can(string code) => permissions.Contains(code);
+    bool showSettings =
+        Can("system_settings.view") ||
+        Can("roles.view") ||
+        Can("users.view") ||
+        Can("user_groups.view") ||
+        Can("support_tickets.view") ||
+        Can("email_templates.view") ||
+        Can("notifications.view") ||
+        Can("logs.view") ||
+        Can("attachments.view");
 }
 
 <aside id="partnerlySidebar" class="partnerly-sidebar">
@@ -135,7 +147,8 @@
 
 
                     <!-- Support -->
-
+                    @if (Can("support_tickets.create"))
+                    {
                     <li class="partnerly-menu-item @(currentPage.Contains("/SupportTickets/OpenNewCase") ? "active" : "")">
 
                         <a asp-controller="SupportTickets"
@@ -157,6 +170,7 @@
                         </a>
 
                     </li>
+                    }
 
 
                     <!-- Documentation -->
@@ -190,7 +204,8 @@
             <!-- ================================================= -->
             <!-- SYSTEM SETTINGS -->
             <!-- ================================================= -->
-            
+            @if (showSettings)
+            {
                 <li class="partnerly-menu-section-group"
                     data-menu-section-group="system">
 
@@ -213,7 +228,8 @@
 
 
                         <!-- Settings -->
-                        
+                        @if (Can("system_settings.view"))
+                        {
                             <li class="partnerly-menu-item @(currentPage.StartsWith("/SystemPreferences") ? "active" : "")">
 
                                 <a asp-controller="SystemPreferences"
@@ -231,9 +247,11 @@
                                 </a>
 
                             </li>
+                        }
 
                             <!-- Roles -->
-
+                            @if (Can("roles.view"))
+                            {
                             <li class="partnerly-menu-item @(currentPage.StartsWith("/Roles") ? "active" : "")">
 
                                 <a asp-controller="Roles"
@@ -251,10 +269,11 @@
                                 </a>
 
                             </li>
-                        
+                            }
 
                         <!-- Users -->
-
+                        @if (Can("users.view"))
+                        {
                         <li class="partnerly-menu-item @(currentPage.StartsWith("/Users") ? "active" : "")">
 
                             <a asp-controller="Users"
@@ -272,10 +291,12 @@
                             </a>
 
                         </li>
+                        }
 
 
                         <!-- Groups -->
-
+                        @if (Can("user_groups.view"))
+                        {
                         <li class="partnerly-menu-item @(currentPage.StartsWith("/UserGroups") ? "active" : "")">
 
                             <a asp-controller="UserGroups"
@@ -293,10 +314,12 @@
                             </a>
 
                         </li>
+                        }
 
 
                         <!-- Tasks -->
-
+                        @if (Can("support_tickets.view"))
+                        {
                         <li class="partnerly-menu-item @(currentPage.StartsWith("/SupportTickets") && !currentPage.Contains("/OpenNewCase") ? "active" : "")">
 
                             <a asp-controller="SupportTickets"
@@ -314,12 +337,12 @@
                             </a>
 
                         </li>
+                        }
 
-
-                       
 
                             <!-- Email Templates -->
-
+                            @if (Can("email_templates.view"))
+                            {
                             <li class="partnerly-menu-item @(currentPage.StartsWith("/EmailTemplates") ? "active" : "")">
 
                                 <a asp-controller="EmailTemplates"
@@ -337,9 +360,11 @@
                                 </a>
 
                             </li>
+                            }
 
                             <!-- Notifications -->
-
+                            @if (Can("notifications.view"))
+                            {
                             <li class="partnerly-menu-item @(currentPage.StartsWith("/Notification") ? "active" : "")">
 
                                 <a asp-controller="Notification"
@@ -357,9 +382,11 @@
                                 </a>
 
                             </li>
+                            }
 
                             <!-- Logs -->
-
+                            @if (Can("logs.view"))
+                            {
                             <li class="partnerly-menu-item @(currentPage.StartsWith("/LogRecords") ? "active" : "")">
 
                                 <a asp-controller="LogRecords"
@@ -377,9 +404,11 @@
                                 </a>
 
                             </li>
+                            }
 
                             <!-- Attachments -->
-
+                            @if (Can("attachments.view"))
+                            {
                             <li class="partnerly-menu-item @(currentPage.StartsWith("/Attachments") ? "active" : "")">
 
                                 <a asp-controller="Attachments"
@@ -397,13 +426,14 @@
                                 </a>
 
                             </li>
+                            }
 
                         
 
                     </ul>
 
                 </li>
-            
+            }
 
         </ul>
 

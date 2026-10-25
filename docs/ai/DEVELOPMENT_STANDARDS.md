@@ -20,7 +20,7 @@
 1. Контроллер: HTTP, antiforgery, выбор View, маппинг ViewModel ↔ сущность, вызов сервиса.
 2. Сервис: правила, логи, события, `ServiceResult`.
 3. Репозиторий: EF, `QueryEntity`.
-4. Не ходить из контроллера в `AppDbContext`, если для модуля уже есть репозиторий (AccessControl/PermissionService сейчас работают с контекстом напрямую — существующее исключение, не размножать без причины).
+4. Не ходить из контроллера в `AppDbContext`, если для модуля уже есть репозиторий (`PermissionService` работает с контекстом напрямую — существующее исключение, не размножать без причины).
 
 Новый модуль: интерфейс + реализация + регистрация Scoped в `Program.cs` + (при списке) DataTable.
 
@@ -29,7 +29,7 @@
 - Админский CRUD: наследовать `_BaseController`.
 - Список: `Index` отдаёт `Views/Shared/DataTable/_DataTablePartial.cshtml` с `DataTableOptions`.
 - Форма Create/Edit: общее View `Form.cshtml`, POST с `[ValidateAntiForgeryToken]`.
-- Права: `[Authorize(Policy = "Permission:...")]` на **GET и POST** одинаковых операций. Сейчас покрытие неполное — новые действия делать полными.
+- Права: `[Authorize(Policy = "Permission:...")]` на **GET и POST** одинаковых операций. Коды — `PermissionCodes`. Списки/карточки пользователей и их тикетов дополнительно фильтруются `IUserVisibilityService`.
 - Удаление: confirmation + `DeleteConfirmed`.
 - Не использовать закомментированный `[ClaimAuthorize]` и `Role.Type`.
 

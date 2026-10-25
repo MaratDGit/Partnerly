@@ -1,6 +1,7 @@
 ﻿using Partnerly.Descriptors.Attributes.BaseAttributes;
 using Partnerly.Descriptors.Messages;
 using Partnerly.Infrastructure.Interfaces;
+using Partnerly.Models.Authorization;
 using Partnerly.Models.DataTable;
 using System.ComponentModel.DataAnnotations;
 
@@ -30,21 +31,21 @@ namespace Partnerly.Models.ViewModels
                             fromController: "Users",
                             toController: "Users",
                             fromAction: "Create",
-                            toAction: "Index"),
+                            toAction: "Index") { Permission = PermissionCodes.UsersView },
 
                         Undo = new ActionUndo(
                             visible: true,
                             fromController: "Users",
                             toController: "Users",
                             fromAction: "Create",
-                            toAction: "Create"),
+                            toAction: "Create") { Permission = PermissionCodes.UsersCreate },
 
                         Save = new ActionSave(
                             visible: true,
                             fromController: "Users",
                             toController: "Users",
                             fromAction: "Create",
-                            toAction: "Edit")
+                            toAction: "Edit") { Permission = PermissionCodes.UsersCreate }
                     };
                 }
 
@@ -56,7 +57,7 @@ namespace Partnerly.Models.ViewModels
                         fromController: "Users",
                         toController: "Users",
                         fromAction: "Edit",
-                        toAction: "Index"),
+                        toAction: "Index") { Permission = PermissionCodes.UsersView },
 
                     Undo = new ActionUndo(
                         id: userId,
@@ -64,7 +65,7 @@ namespace Partnerly.Models.ViewModels
                         fromController: "Users",
                         toController: "Users",
                         fromAction: "Edit",
-                        toAction: "Edit"),
+                        toAction: "Edit") { Permission = PermissionCodes.UsersEdit },
 
                     Save = new ActionSave(
                         id: userId,
@@ -72,7 +73,7 @@ namespace Partnerly.Models.ViewModels
                         fromController: "Users",
                         toController: "Users",
                         fromAction: "Edit",
-                        toAction: "Edit"),
+                        toAction: "Edit") { Permission = PermissionCodes.UsersEdit },
 
                     Create = new ActionCreate(
                         id: userId,
@@ -80,7 +81,7 @@ namespace Partnerly.Models.ViewModels
                         fromController: "Users",
                         toController: "Users",
                         fromAction: "Edit",
-                        toAction: "Create"),
+                        toAction: "Create") { Permission = PermissionCodes.UsersCreate },
 
                     Delete = new ActionDelete(
                         id: userId,
@@ -88,17 +89,17 @@ namespace Partnerly.Models.ViewModels
                         fromController: "Users",
                         toController: "Users",
                         fromAction: "Edit",
-                        toAction: "Delete"),
+                        toAction: "Delete") { Permission = PermissionCodes.UsersDelete },
 
                     Attachements = new ActionAttachements(
                         visible: true,
                         entityType: "User",
-                        entityId: userId),
+                        entityId: userId) { Permission = PermissionCodes.AttachmentsView },
 
                     Note = new ActionNote(
                         visible: true,
                         note: EditModel.Note,
-                        id: userId),
+                        id: userId) { Permission = PermissionCodes.UsersEdit },
 
                     Menu = new ActionMenu(visible: true),
 
@@ -110,7 +111,7 @@ namespace Partnerly.Models.ViewModels
                             displayName: FieldsDisplayNames.EditRole,
                             toController: "Roles",
                             toAction: "UserRoleEdit",
-                            routID: userId)
+                            routID: userId) { Permission = PermissionCodes.UsersManageRoles }
                     }
                 };
             }
@@ -241,6 +242,11 @@ namespace Partnerly.Models.ViewModels
                        KeyField = "Id",
                        AjaxUrl = "/Users/Data",
                        ExportUrl = "/Users/Export",
+                       Export = new DataTableExportOptions
+                       {
+                           Enabled = true,
+                           Permission = PermissionCodes.UsersView
+                       },
 
                        AutoLoad = true,
                        ReloadEnabled = true,
@@ -274,6 +280,7 @@ namespace Partnerly.Models.ViewModels
                                 Type = DataTableColumnType.Link,
                                 UrlTemplate = "/Users/Edit/{Id}",
                                 Editable = true,
+                                Permission = PermissionCodes.UsersEdit,
                             },
                             new DataTableColumn
                             {
@@ -281,6 +288,7 @@ namespace Partnerly.Models.ViewModels
                                 Title = FieldsDisplayNames.LastName,
                                 Type = DataTableColumnType.Text,
                                 Editable = true,
+                                Permission = PermissionCodes.UsersEdit,
                             },
                             new DataTableColumn
                             {
@@ -317,6 +325,7 @@ namespace Partnerly.Models.ViewModels
                                 Title = FieldsDisplayNames.IsBlocked,
                                 Type = DataTableColumnType.Boolean,
                                 Editable = true,
+                                Permission = PermissionCodes.UsersEdit,
                                 Alignment = DataTableAlignment.Center,
                             },
                             new DataTableColumn
@@ -480,7 +489,8 @@ namespace Partnerly.Models.ViewModels
                                     Placement = DataTableActionPlacement.Toolbar,
                                     Url = "/Users/Create",
                                     Method = "Get",
-                                    CssClass = "data-table-grid-action"
+                                    CssClass = "data-table-grid-action",
+                                    Permission = PermissionCodes.UsersCreate
                                 },
 
                                 new DataTableAction
@@ -492,6 +502,7 @@ namespace Partnerly.Models.ViewModels
                                     Placement = DataTableActionPlacement.Row,
                                     Url = "/Users/Edit/{Id}",
                                     Method = "GET",
+                                    Permission = PermissionCodes.UsersEdit
                                 },
 
                                 new DataTableAction
@@ -501,6 +512,7 @@ namespace Partnerly.Models.ViewModels
                                     Icon = "bx bx-edit",
                                     Type = DataTableActionType.InlineEdit,
                                     Placement = DataTableActionPlacement.Row,
+                                    Permission = PermissionCodes.UsersEdit
                                 },
 
                                 new DataTableAction
@@ -512,7 +524,8 @@ namespace Partnerly.Models.ViewModels
                                     Placement = DataTableActionPlacement.Row,
                                     Url = "/Users/Delete/{Id}",
                                     Method = "GET",
-                                    CssClass = "btn btn-sm btn-outline-danger"
+                                    CssClass = "btn btn-sm btn-outline-danger",
+                                    Permission = PermissionCodes.UsersDelete
                                 },
 
                                 new DataTableAction
@@ -524,6 +537,7 @@ namespace Partnerly.Models.ViewModels
                                     Placement = DataTableActionPlacement.Row,
                                     Url = "/Roles/UserRoleEdit/{Id}",
                                     Method = "GET",
+                                    Permission = PermissionCodes.UsersManageRoles
                                     //CssClass = "btn btn-sm btn-outline-danger"
                                 }
                             }

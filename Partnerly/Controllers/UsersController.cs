@@ -38,6 +38,7 @@ namespace Partnerly.Controllers
 
         #region Index / Create / Edit / Delete
 
+        [Authorize(Policy = "Permission:users.view")]
         public IActionResult Index()
         {
             UserViewModel model = new UserViewModel();
@@ -55,6 +56,7 @@ namespace Partnerly.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Policy = "Permission:users.create")]
         public async Task<IActionResult> Create(UserFormViewModel viewModel)
         {
             ModelState.Remove("EditModel");
@@ -151,6 +153,7 @@ namespace Partnerly.Controllers
         {
             var user = await _userService.GetUserByIDAsync(id);
             if (user == null) return NotFound();
+            if (!await CanViewUserAsync(user.Id)) return Forbid();
 
             var userAsView = await PropertyActionsHelper.CopyPropertiesAsync(user, new UserViewModel());
             if (userAsView == null) return NotFound();
@@ -182,6 +185,7 @@ namespace Partnerly.Controllers
             UserViewModel model = viewModel.EditModel;
 
             if (id != model.Id) return NotFound();
+            if (!await CanViewUserAsync(id)) return Forbid();
 
             if (ModelState.IsValid)
             {
@@ -237,6 +241,7 @@ namespace Partnerly.Controllers
         {
             var template = await _userService.GetUserByIDAsync(id);
             if (template == null) return NotFound();
+            if (!await CanViewUserAsync(template.Id)) return Forbid();
 
 
             var deleteModel = new DeleteConfirmationViewModel
@@ -261,6 +266,7 @@ namespace Partnerly.Controllers
             var user = await _userService.GetUserByIDAsync(id);
             if (user != null)
             {
+                if (!await CanViewUserAsync(user.Id)) return Forbid();
                 ServiceResult<User?> result = await _userService.DeleteUserAsync(id);
                 if (!result.Success)
                 {
@@ -276,11 +282,12 @@ namespace Partnerly.Controllers
         #endregion
 
         [HttpGet]
+        [Authorize(Policy = "Permission:users.view")]
         public async Task<IActionResult> GetLookupList(string fieldName)
         {
             if (fieldName == "Name")
             {
-                var query = await _userService.GetAllUsersAsync();
+                var query = await UserVisibility.FilterUsersAsync(await _userService.GetAllUsersAsync());
 
                 var result = query
                     .Select(u => new
@@ -299,6 +306,7 @@ namespace Partnerly.Controllers
         }
 
         [HttpGet]
+        [Authorize(Policy = "Permission:users.view")]
         public async Task<IActionResult> Data([FromQuery] DataTableRequest request)
         {
             if (string.IsNullOrWhiteSpace(request.TableID))
@@ -323,8 +331,10 @@ namespace Partnerly.Controllers
 
             if (request.TableID == DataTableNames.usersTable)
             {
+                var visibleUserIds = UserVisibility.VisibleUserIds();
                 var res = await _tableService.ExecuteAsync(
-                   fields => _userService.QueryEntity(fields),
+                   fields => _userService.QueryEntity(fields)
+                       .Where(u => visibleUserIds.Contains(u.Id)),
                    request,
                    options);
 
@@ -342,6 +352,7 @@ namespace Partnerly.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Policy = "Permission:users.edit")]
         public async Task<IActionResult> UpdateInline(
         [FromBody] DataTableInlineUpdateRequest request)
         {
@@ -374,6 +385,9 @@ namespace Partnerly.Controllers
                 });
             }
 
+            if (!await CanViewUserAsync(user.Id))
+                return Forbid();
+
             var options = _dataTableRegistry.Get(request.TableID);
             var result = _inlineUpdateService.ApplyChanges(
                 user,
@@ -402,6 +416,7 @@ namespace Partnerly.Controllers
         }
 
         [HttpGet]
+        [Authorize(Policy = "Permission:users.view")]
         public async Task<IActionResult> Export([FromQuery] DataTableRequest request, [FromQuery] string format = "csv")
         {
             if (string.IsNullOrWhiteSpace(request.TableID))
@@ -413,10 +428,12 @@ namespace Partnerly.Controllers
             
             if (request.TableID == DataTableNames.usersTable)
             {
+                var visibleUserIds = UserVisibility.VisibleUserIds();
                 return await ExportTableAsync(
                             request,
                             format,
-                            fields => _userService.QueryEntity(fields),
+                            fields => _userService.QueryEntity(fields)
+                                .Where(u => visibleUserIds.Contains(u.Id)),
                             "users");
             }
             else

@@ -1736,6 +1736,9 @@
   <data name="IsActive" xml:space="preserve">
     <value>Активный</value>
   </data>
+  <data name="IsGranted" xml:space="preserve">
+    <value>Разрешено</value>
+  </data>
 
   <data name="DeleteRole" xml:space="preserve">
     <value>Удалить роль</value>

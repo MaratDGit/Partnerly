@@ -42,6 +42,7 @@ namespace Partnerly.Controllers
             _permissionService = permissionService;
         }
 
+        [Authorize(Policy = "Permission:roles.view")]
         public IActionResult Index()
         {
             RolesViewModel model = new RolesViewModel();
@@ -50,6 +51,7 @@ namespace Partnerly.Controllers
             return View("~/Views/Shared/DataTable/_DataTablePartial.cshtml", model.roles);
         }
 
+        [Authorize(Policy = "Permission:roles.create")]
         public IActionResult Create()
         {
             var model = new RolesViewModel { Title = FieldsDisplayNames.RoleCreated };
@@ -58,6 +60,7 @@ namespace Partnerly.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Policy = "Permission:roles.create")]
         public async Task<IActionResult> Create(RolesViewModel model)
         {
             if (ModelState.IsValid)
@@ -90,6 +93,7 @@ namespace Partnerly.Controllers
             return View("Form", model);
         }
 
+        [Authorize(Policy = "Permission:roles.edit")]
         public async Task<IActionResult> Edit(Guid id)
         {
             var role = await _roleService.GetRoleByIDAsync(id);
@@ -110,6 +114,7 @@ namespace Partnerly.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Policy = "Permission:roles.edit")]
         public async Task<IActionResult> Edit(Guid id, RolesViewModel model)
         {
             if (id != model.Id) return NotFound();
@@ -217,6 +222,7 @@ namespace Partnerly.Controllers
         }
 
         [HttpGet]
+        [Authorize(Policy = "Permission:roles.view")]
         public async Task<IActionResult> GetLookupList(string fieldName)
         {
             var roles = await _roleService.GetAllRolesAsync();
@@ -295,35 +301,69 @@ namespace Partnerly.Controllers
         [HttpGet]
         public async Task<IActionResult> LookupPermissions(string? search = null)
         {
+            var userIdTextEarly = Request.Query["userId"].ToString();
+            if (Guid.TryParse(userIdTextEarly, out var lookupUserId))
+            {
+                if (!await CurrentUserHasAsync("users.manage_roles") || !await CanViewUserAsync(lookupUserId))
+                    return Forbid();
+            }
+            else if (!await CurrentUserHasAsync("roles.manage_permissions"))
+            {
+                return Forbid();
+            }
+
             var permissions = await _permissionService.GetAllPermissionAsync();
             var roleIdText = Request.Query["roleId"].ToString();
+            var userIdText = Request.Query["userId"].ToString();
 
-            if (!Guid.TryParse(roleIdText, out var roleId))
-            { 
+            HashSet<Guid> assignedIds;
+
+            if (Guid.TryParse(roleIdText, out var roleId))
+            {
+                assignedIds = (await _permissionService
+                    .QueryRolePermissionsExt(roleId)
+                    .Select(x => x.PermissionId)
+                    .ToListAsync())
+                    .ToHashSet();
+            }
+            else if (Guid.TryParse(userIdText, out var userId))
+            {
+                assignedIds = (await _permissionService
+                    .QueryUserPermissionsExt(userId)
+                    .Select(x => x.PermissionId)
+                    .ToListAsync())
+                    .ToHashSet();
+            }
+            else
+            {
                 return Json(new { });
             }
 
-            var rolePermissions = (await _permissionService
-                .QueryRolePermissionsExt(roleId)
-                .Select(x => x.PermissionId)
-                .ToListAsync())
-                .ToHashSet();
+            var query = permissions.Where(u =>
+                u != null &&
+                u.IsActive == true &&
+                u.IsDeleted != true &&
+                !assignedIds.Contains(u.Id));
 
-            var query = permissions.Where(u => 
-            u.IsActive == true && 
-            u.IsDeleted != true &&
-            !rolePermissions.Contains(u.Id));
+            if (!string.IsNullOrWhiteSpace(search))
+            {
+                query = query.Where(u =>
+                    (u!.Name != null && u.Name.Contains(search, StringComparison.OrdinalIgnoreCase)) ||
+                    (u.Module != null && u.Module.Contains(search, StringComparison.OrdinalIgnoreCase)) ||
+                    (u.Code != null && u.Code.Contains(search, StringComparison.OrdinalIgnoreCase)));
+            }
 
             var result = query
-                .OrderBy(u => u.Name)
+                .OrderBy(u => u!.Name)
                 .Select(u => new
                 {
-                    id = u.Id,
+                    id = u!.Id,
                     permissionId = u.Id,
                     name = u.Name,
                     module = u.Module,
                     code = u.Code,
-                    isActive = u.IsActive
+                    isActive = u.IsActive,
+                    isDeleted = u.IsDeleted
                 })
                 .ToList();
 
@@ -335,8 +375,9 @@ namespace Partnerly.Controllers
         {
             var user = await _userService.GetUserByIDAsync(id);
             if (user == null) return NotFound();
+            if (!await CanViewUserAsync(user.Id)) return Forbid();
 
-            if (_currentUser.RoleId == user.RoleId) return Forbid();
+            //if (_currentUser.RoleId == user.RoleId) return Forbid();
 
             string? roleName = user.Role?.Name;
             if (roleName == null)
@@ -360,6 +401,7 @@ namespace Partnerly.Controllers
 
             if (modelAsView == null) return NotFound();
 
+            AttachUserPermissionsTable(modelAsView);
             modelAsView.Title = FieldsDisplayNames.UserRole;
             return View(modelAsView);
         }
@@ -383,7 +425,8 @@ namespace Partnerly.Controllers
                     return RedirectToAction("UserRoleEdit", model);
                 }
 
-                if (_currentUser.RoleId == user.RoleId) return NotFound();
+                if (!await CanViewUserAsync(user.Id)) return Forbid();
+                //if (_currentUser.RoleId == user.RoleId) return NotFound();
 
                 Role? role = await _roleService.GetRoleByNameAsync(model.NewRoleName);
 
@@ -414,6 +457,8 @@ namespace Partnerly.Controllers
                 TempData["ToastMessage"] = Messages.RecordSaved;
                 return RedirectToAction("UserRoleEdit", new { id = model.Id });
             }
+
+            AttachUserPermissionsTable(model);
             return View(model);
         }
 
@@ -442,6 +487,9 @@ namespace Partnerly.Controllers
 
             if (request.TableID == DataTableNames.rolesTable)
             {
+                if (!await CurrentUserHasAsync("roles.view"))
+                    return Forbid();
+
                 var result =
                     !await base.IsSuperUser() 
                     ?
@@ -459,6 +507,9 @@ namespace Partnerly.Controllers
             }
             else if (request.TableID == DataTableNames.rolePermissionsTable)
             {
+                if (!await CurrentUserHasAsync("roles.manage_permissions"))
+                    return Forbid();
+
                 if (!request.ParentKeys.TryGetValue("RoleId", out var groupIdValue) || !Guid.TryParse(groupIdValue, out var groupId))
                 {
                     return BadRequest(new
@@ -470,6 +521,30 @@ namespace Partnerly.Controllers
 
                 var result = await _tableService.ExecuteAsync(
                     fields => _permissionService.QueryRolePermissionsExt(groupId),
+                    request,
+                    options);
+
+                return Json(result);
+            }
+            else if (request.TableID == DataTableNames.userPermissionsTable)
+            {
+                if (!await CurrentUserHasAsync("users.manage_roles"))
+                    return Forbid();
+
+                if (!request.ParentKeys.TryGetValue("UserId", out var userIdValue) || !Guid.TryParse(userIdValue, out var userId))
+                {
+                    return BadRequest(new
+                    {
+                        success = false,
+                        message = "A valid User Id is required."
+                    });
+                }
+
+                if (!await CanViewUserAsync(userId))
+                    return Forbid();
+
+                var result = await _tableService.ExecuteAsync(
+                    fields => _permissionService.QueryUserPermissionsExt(userId),
                     request,
                     options);
 
@@ -490,6 +565,56 @@ namespace Partnerly.Controllers
         public async Task<IActionResult> UpdateInline(
         [FromBody] DataTableInlineUpdateRequest request)
         {
+            if (request.TableID == DataTableNames.userPermissionsTable)
+            {
+                if (!await CurrentUserHasAsync("users.manage_roles"))
+                    return Forbid();
+
+                if (string.IsNullOrWhiteSpace(request.Id) || !Guid.TryParse(request.Id, out var userPermissionId))
+                {
+                    return BadRequest(new
+                    {
+                        success = false,
+                        message = "A valid User Permission Id is required."
+                    });
+                }
+
+                if (!request.Fields.TryGetValue(nameof(UserPermission.IsGranted), out var grantedValue) ||
+                    !TryParseBool(grantedValue, out var isGranted))
+                {
+                    return BadRequest(new
+                    {
+                        success = false,
+                        message = "A valid IsGranted value is required."
+                    });
+                }
+
+                var existingGrant = await _userService.GetUserPermissionByIdAsync(userPermissionId);
+                if (existingGrant == null)
+                    return NotFound();
+                if (!await CanViewUserAsync(existingGrant.UserId))
+                    return Forbid();
+
+                var grantResult = await _userService.UpdatePermissionGrantAsync(userPermissionId, isGranted);
+                if (!grantResult.Success)
+                {
+                    return BadRequest(new
+                    {
+                        success = false,
+                        message = string.Join(" ", grantResult.Errors)
+                    });
+                }
+
+                return Ok(new
+                {
+                    success = true,
+                    changed = true
+                });
+            }
+
+            if (!await CurrentUserHasAsync("roles.edit"))
+                return Forbid();
+
             if (string.IsNullOrWhiteSpace(request.Id))
             {
                 return BadRequest(new
@@ -565,8 +690,62 @@ namespace Partnerly.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> CreateInline([FromBody] DataTableInlineCreateRequest request)
         {
+            if (request.TableID == DataTableNames.userPermissionsTable)
+            {
+                if (!await CurrentUserHasAsync("users.manage_roles"))
+                    return Forbid();
+
+                if (!request.ParentKeys.TryGetValue("UserId", out var userIdValue) || !Guid.TryParse(userIdValue, out var userId))
+                {
+                    return BadRequest(new
+                    {
+                        success = false,
+                        message = "A valid UserId is required."
+                    });
+                }
+
+                if (!request.Fields.TryGetValue(
+                    nameof(UserPermission.PermissionId), out var userPermissionIdValue) || !Guid.TryParse(userPermissionIdValue, out var userPermissionId))
+                {
+                    return BadRequest(new
+                    {
+                        success = false,
+                        message = "A valid PermissionId is required."
+                    });
+                }
+
+                var isGranted = true;
+                if (request.Fields.TryGetValue(nameof(UserPermission.IsGranted), out var grantedValue) &&
+                    TryParseBool(grantedValue, out var parsedGranted))
+                {
+                    isGranted = parsedGranted;
+                }
+
+                if (!await CanViewUserAsync(userId))
+                    return Forbid();
+
+                var userPermissionResult = await _userService.AddPermissionAsync(userId, userPermissionId, isGranted);
+                if (!userPermissionResult.Success)
+                {
+                    return BadRequest(new
+                    {
+                        success = false,
+                        message = string.Join(" ", userPermissionResult.Errors)
+                    });
+                }
+
+                return Json(new
+                {
+                    success = true,
+                    id = userPermissionResult.Data!.Id
+                });
+            }
+
             if (request.TableID == DataTableNames.rolePermissionsTable)
             {
+                if (!await CurrentUserHasAsync("roles.manage_permissions"))
+                    return Forbid();
+
                 if (!request.ParentKeys.
                     TryGetValue("RoleId", out var roleIdValue) || !Guid.TryParse(roleIdValue, out var roleId))
                 {
@@ -583,7 +762,7 @@ namespace Partnerly.Controllers
                     return BadRequest(new
                     {
                         success = false,
-                        message = "A valid UserId is required."
+                        message = "A valid PermissionId is required."
                     });
                 }
 
@@ -604,6 +783,9 @@ namespace Partnerly.Controllers
                     id = permissionId
                 });
             }
+
+            if (!await CurrentUserHasAsync("roles.create"))
+                return Forbid();
 
             var options = _dataTableRegistry.Get(request.TableID);
 
@@ -675,8 +857,55 @@ namespace Partnerly.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteInline([FromBody] DataTableInlineDeleteRequest request)
         {
+            if (request.TableID == DataTableNames.userPermissionsTable)
+            {
+                if (!await CurrentUserHasAsync("users.manage_roles"))
+                    return Forbid();
+
+                if (!request.Keys.TryGetValue(
+                        nameof(UserPermission.UserId), out var userIdValue) || !Guid.TryParse(userIdValue, out var userId))
+                {
+                    return BadRequest(new
+                    {
+                        success = false,
+                        message = "A valid UserId is required."
+                    });
+                }
+
+                if (!await CanViewUserAsync(userId))
+                    return Forbid();
+
+                if (!request.Keys.TryGetValue(
+                        nameof(UserPermission.PermissionId), out var userPermissionIdValue) || !Guid.TryParse(userPermissionIdValue, out var userPermissionId))
+                {
+                    return BadRequest(new
+                    {
+                        success = false,
+                        message = "A valid PermissionId is required."
+                    });
+                }
+
+                var userResult = await _userService.DeletePermissionAsync(userId, userPermissionId);
+                if (!userResult.Success)
+                {
+                    return BadRequest(new
+                    {
+                        success = false,
+                        message = string.Join(" ", userResult.Errors)
+                    });
+                }
+
+                return Json(new
+                {
+                    success = true
+                });
+            }
+
             if (request.TableID == DataTableNames.rolePermissionsTable)
             {
+                if (!await CurrentUserHasAsync("roles.manage_permissions"))
+                    return Forbid();
+
                 if (!request.Keys.TryGetValue(
                         nameof(RolePermission.RoleId), out var roleIdValue) || !Guid.TryParse(roleIdValue, out var roleId))
                 {
@@ -746,6 +975,37 @@ namespace Partnerly.Controllers
                     message = "Unknown table."
                 });
             }
+        }
+
+        private void AttachUserPermissionsTable(UserRolesViewModel model)
+        {
+            model.userPermissions = UserRolesViewModel.CreateTableOptions(
+                DataTableNames.userPermissionsTable,
+                _dataTableRegistry);
+        }
+
+        private Task<bool> CurrentUserHasAsync(string permissionCode) =>
+            _permissionService.HasPermissionAsync(_currentUser.UserId, permissionCode);
+
+        private static bool TryParseBool(string? value, out bool result)
+        {
+            if (bool.TryParse(value, out result))
+                return true;
+
+            if (value == "1")
+            {
+                result = true;
+                return true;
+            }
+
+            if (value == "0")
+            {
+                result = false;
+                return true;
+            }
+
+            result = false;
+            return false;
         }
     }
 }

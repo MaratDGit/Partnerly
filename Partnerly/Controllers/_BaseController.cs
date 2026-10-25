@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Localization;
 using Partnerly.Descriptors.Messages;
 using Partnerly.Events.BaseEvents;
@@ -55,6 +56,9 @@ namespace Partnerly.Controllers
                 
                 SystemSettings? setting = await _systemSettingsService.GetSetupByIDAsync(1);
                 message = setting?.IsMaintenanceMode == true ? Messages.SiteUnderMaintenanceMode : setting?.ScrollingText;
+
+                var permissionService = context.HttpContext.RequestServices.GetRequiredService<IPermissionService>();
+                ViewData["Permissions"] = await permissionService.GetEffectivePermissionCodesAsync(_currentUser.UserId);
             }
 
             ViewData["ScrollingText"] = message;
@@ -72,6 +76,15 @@ namespace Partnerly.Controllers
                     string.Equals(roleName.Trim(), Constants.Employee, StringComparison.OrdinalIgnoreCase) ||
                         string.Equals(roleName.Trim(), Constants.User, StringComparison.OrdinalIgnoreCase);
         }
+        protected IUserVisibilityService UserVisibility =>
+            HttpContext.RequestServices.GetRequiredService<IUserVisibilityService>();
+
+        protected async Task<bool> CanViewUserAsync(Guid? userId) =>
+            await UserVisibility.CanViewUserAsync(userId);
+
+        protected static IEnumerable<string> WithQueryFields(IEnumerable<string> fields, params string[] extra) =>
+            fields.Concat(extra);
+
         protected virtual async Task<bool> IsSuperUser(User? user = null)
         {
             if (user == null)

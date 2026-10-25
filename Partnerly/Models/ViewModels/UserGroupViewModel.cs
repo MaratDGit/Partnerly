@@ -1,6 +1,7 @@
 ﻿using Partnerly.Descriptors.Attributes.BaseAttributes;
 using Partnerly.Descriptors.Messages;
 using Partnerly.Infrastructure.Interfaces;
+using Partnerly.Models.Authorization;
 using Partnerly.Models.DataTable;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
@@ -58,7 +59,7 @@ namespace Partnerly.Models.ViewModels
                         fromController: "UserGroups",
                         toController: "UserGroups",
                         fromAction: "Edit",
-                        toAction: "Index"),
+                        toAction: "Index") { Permission = PermissionCodes.UserGroupsView },
 
                         Undo = new Partnerly.Models.ViewModels.ActionUndo(
                         id: Id,
@@ -66,7 +67,7 @@ namespace Partnerly.Models.ViewModels
                         fromController: "UserGroups",
                         toController: "UserGroups",
                         fromAction: "Edit",
-                        toAction: "Edit"),
+                        toAction: "Edit") { Permission = PermissionCodes.UserGroupsEdit },
 
                         Save = new Partnerly.Models.ViewModels.ActionSave(
                         id: Id,
@@ -74,7 +75,7 @@ namespace Partnerly.Models.ViewModels
                         fromController: "UserGroups",
                         toController: "UserGroups",
                         fromAction: "Edit",
-                        toAction: "Edit"),
+                        toAction: "Edit") { Permission = PermissionCodes.UserGroupsEdit },
 
                         Create = new Partnerly.Models.ViewModels.ActionCreate(
                         id: Id,
@@ -82,7 +83,7 @@ namespace Partnerly.Models.ViewModels
                         fromController: "UserGroups",
                         toController: "UserGroups",
                         fromAction: "Edit",
-                        toAction: "Create"),
+                        toAction: "Create") { Permission = PermissionCodes.UserGroupsCreate },
 
                         Delete = new Partnerly.Models.ViewModels.ActionDelete(
                         id: Id,
@@ -90,17 +91,17 @@ namespace Partnerly.Models.ViewModels
                         fromController: "UserGroups",
                         toController: "UserGroups",
                         fromAction: "Edit",
-                        toAction: "Delete"),
+                        toAction: "Delete") { Permission = PermissionCodes.UserGroupsDelete },
 
                         Attachements = new Partnerly.Models.ViewModels.ActionAttachements(
                         entityType: "UserGroup",
                         entityId: Id,
-                        visible: true),
+                        visible: true) { Permission = PermissionCodes.AttachmentsView },
 
                         Note = new Partnerly.Models.ViewModels.ActionNote(
                         visible: true,
                         note: Note,
-                        id: Id),
+                        id: Id) { Permission = PermissionCodes.UserGroupsEdit },
 
                         Menu = new Partnerly.Models.ViewModels.ActionMenu(
                         visible: true),
@@ -110,12 +111,12 @@ namespace Partnerly.Models.ViewModels
                             new Partnerly.Models.ViewModels.MenuItemAction(
                                 visible: true,
                                 icon: "bx bx-bell",
-                                displayName: FieldsDisplayNames.Sendnotification),
+                                displayName: FieldsDisplayNames.Sendnotification) { Permission = PermissionCodes.NotificationsCreate },
 
                             new Partnerly.Models.ViewModels.MenuItemAction(
                                 visible: true,
                                 icon: "bx bx-envelope-open",
-                                displayName: FieldsDisplayNames.Sendanemail)
+                                displayName: FieldsDisplayNames.Sendanemail) { Permission = PermissionCodes.EmailTemplatesView }
                         }
                     };      
                 }
@@ -127,21 +128,21 @@ namespace Partnerly.Models.ViewModels
                         fromController: "UserGroups",
                         toController: "UserGroups",
                         fromAction: "Create",
-                        toAction: "Index"),
+                        toAction: "Index") { Permission = PermissionCodes.UserGroupsView },
 
                     Undo = new Partnerly.Models.ViewModels.ActionUndo(
                         visible: true,
                         fromController: "UserGroups",
                         toController: "UserGroups",
                         fromAction: "Create",
-                        toAction: "Create"),
+                        toAction: "Create") { Permission = PermissionCodes.UserGroupsCreate },
 
                     Save = new Partnerly.Models.ViewModels.ActionSave(
                         visible: true,
                         fromController: "UserGroups",
                         toController: "UserGroups",
                         fromAction: "Create",
-                        toAction: "Create")
+                        toAction: "Create") { Permission = PermissionCodes.UserGroupsCreate }
                 };
             }
         }
@@ -190,6 +191,7 @@ namespace Partnerly.Models.ViewModels
                                 Title = FieldsDisplayNames.Name,
                                 Type = DataTableColumnType.Link,
                                 UrlTemplate = "/UserGroups/Edit/{Id}",
+                                Permission = PermissionCodes.UserGroupsEdit,
 
                                 Editable = true,
                                 Visible = true,
@@ -211,6 +213,7 @@ namespace Partnerly.Models.ViewModels
                                 Title = FieldsDisplayNames.Description,
                                 Type = DataTableColumnType.Text,
                                 Editable = true,
+                                Permission = PermissionCodes.UserGroupsEdit,
                                 Resizable = true
                             },
 
@@ -269,7 +272,8 @@ namespace Partnerly.Models.ViewModels
                                     Placement = DataTableActionPlacement.Toolbar,
                                     Url = "/UserGroups/Create",
                                     Method = "Get",
-                                    CssClass = "data-table-grid-action"
+                                    CssClass = "data-table-grid-action",
+                                    Permission = PermissionCodes.UserGroupsCreate
                                 },
 
                                 //new DataTableAction
@@ -292,7 +296,7 @@ namespace Partnerly.Models.ViewModels
                                     Placement = DataTableActionPlacement.Row,
                                     Url = "/UserGroups/Edit/{Id}",
                                     Method = "GET",
-                                    // CssClass = "btn btn-sm btn-outline-secondary"
+                                    Permission = PermissionCodes.UserGroupsEdit
                                 },
 
                                 new DataTableAction
@@ -301,8 +305,8 @@ namespace Partnerly.Models.ViewModels
                                     Title = FieldsDisplayNames.Edit,
                                     Icon = "bx bx-edit",
                                     Type = DataTableActionType.InlineEdit,
-                                    Placement = DataTableActionPlacement.Row,                            
-                                    //CssClass = "btn btn-sm btn-outline-primary"
+                                    Placement = DataTableActionPlacement.Row,
+                                    Permission = PermissionCodes.UserGroupsEdit
                                 },
 
                                 new DataTableAction
@@ -314,7 +318,8 @@ namespace Partnerly.Models.ViewModels
                                     Placement = DataTableActionPlacement.Row,
                                     Url = "/UserGroups/Delete/{Id}",
                                     Method = "GET",
-                                    CssClass = "btn btn-sm btn-outline-danger"
+                                    CssClass = "btn btn-sm btn-outline-danger",
+                                    Permission = PermissionCodes.UserGroupsDelete
                                 },
                             }
                         },
@@ -324,7 +329,8 @@ namespace Partnerly.Models.ViewModels
                             Enabled = true,
                             Csv = true,
                             Excel = true,
-                            Print = false
+                            Print = false,
+                            Permission = PermissionCodes.UserGroupsView
                         }
                     },
 
@@ -383,6 +389,7 @@ namespace Partnerly.Models.ViewModels
                                 Type = DataTableColumnType.Text,
                                 Required = true,
                                 Editable = true,
+                                Permission = PermissionCodes.UserGroupsEdit,
 
                                 Lookup = new DataTableLookupOptions
                                 {
@@ -518,7 +525,8 @@ namespace Partnerly.Models.ViewModels
                                     Type = DataTableActionType.InlineAdd,
                                     Url = "/UserGroups/CreateInline",
                                     Placement = DataTableActionPlacement.Toolbar,
-                                    CssClass = "data-table-grid-action"
+                                    CssClass = "data-table-grid-action",
+                                    Permission = PermissionCodes.UserGroupsEdit
                                 },
                                 new DataTableAction
                                 {
@@ -531,7 +539,8 @@ namespace Partnerly.Models.ViewModels
                                     Method = "POST",
                                     Confirm = true,
                                     ConfirmMessage = ErrorMessages.ConfirmDelete,
-                                    CssClass = "btn btn-sm btn-outline-danger"
+                                    CssClass = "btn btn-sm btn-outline-danger",
+                                    Permission = PermissionCodes.UserGroupsEdit
                                 }
                             }
                         },

@@ -1,4 +1,5 @@
-﻿@model Partnerly.Models.ViewModels.SupportTicketViewModel;
+﻿@using Partnerly.Models.Authorization
+@model Partnerly.Models.ViewModels.SupportTicketViewModel;
 @await Html.PartialAsync("_Toast")
 
 @{
@@ -718,7 +719,7 @@
                         toController: "SupportTickets",
                         fromAction: "ViewCase",
                         toAction: "Index"
-                        ),
+                        ) { Permission = PermissionCodes.SupportTicketsView },
 
                         Menu = new Partnerly.Models.ViewModels.ActionMenu(
                         visible: true
@@ -735,7 +736,7 @@
                         fromAction: "ViewCase",
                         toAction: "StartCase",
                         routID: @Model.Id
-                        ),
+                        ) { Permission = PermissionCodes.SupportTicketsEdit },
 
                         new Partnerly.Models.ViewModels.MenuItemAction(
                         visible: true,
@@ -746,7 +747,7 @@
                         fromAction: "ViewCase",
                         toAction: "CloseCase",
                         routID: @Model.Id
-                        ),
+                        ) { Permission = PermissionCodes.SupportTicketsEdit },
 
                         new Partnerly.Models.ViewModels.MenuItemAction(
                         visible: true,
@@ -757,7 +758,7 @@
                         fromAction: "ViewCase",
                         toAction: "Edit",
                         routID: @Model.Id
-                        )
+                        ) { Permission = PermissionCodes.SupportTicketsEdit }
                         }
                         })
 

@@ -128,7 +128,10 @@ namespace Partnerly.Infrastructure.Services
         public async Task<ServiceResult<SupportTicket?>> ChangeTicketStatus(SupportTicket? ticket, string? oldStatus)
         {
             var result = await UpdateSupportTicketAsync(ticket);
-            if (result.Success)
+            if (result.Success &&
+                !string.IsNullOrEmpty(oldStatus) &&
+                result.Data?.Status != null &&
+                oldStatus != result.Data.Status)
             {
                 await _eventBus.PublishAsync(new SupportTickedStatusChangedEvent(ticket: result.Data, oldStatus: oldStatus, sendEmail: true, sendNote: true));
             }

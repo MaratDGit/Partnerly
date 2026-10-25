@@ -17,6 +17,10 @@
             @await Html.PartialAsync("_StickyButtons", Model.StickyButtons)
 
             <input type="hidden" asp-for="Id" />
+            <input type="hidden"
+                   name="UserId"
+                   value="@Model.Id"
+                   data-parent-key="UserId" />
             <input type="hidden" id="hiddenNote" asp-for="Note" />
 
             <div class="form-floating mb-1 max-w-400 position-relative">
@@ -65,6 +69,12 @@
 
                 <span asp-validation-for="NewRoleName"
                       class="text-danger"></span>
+            </div>
+
+            <div class="mt-8">
+                @await Html.PartialAsync(
+                    "~/Views/Shared/DataTable/_DataTable.cshtml",
+                    Model.userPermissions)
             </div>
         </form>
     </div>

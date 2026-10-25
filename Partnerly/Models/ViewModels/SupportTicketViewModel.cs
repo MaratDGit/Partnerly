@@ -4,6 +4,7 @@ using Partnerly.Descriptors.Attributes.BaseAttributes;
 using Partnerly.Descriptors.Messages;
 using Partnerly.Helpers;
 using Partnerly.Infrastructure.Interfaces;
+using Partnerly.Models.Authorization;
 using Partnerly.Models.DataTable;
 using System.ComponentModel.DataAnnotations;
 
@@ -85,7 +86,7 @@ namespace Partnerly.Models.ViewModels
                         fromController: "SupportTickets",
                         toController: "SupportTickets",
                         fromAction: "Edit",
-                        toAction: "Index"),
+                        toAction: "Index") { Permission = PermissionCodes.SupportTicketsView },
 
                         Undo = new Partnerly.Models.ViewModels.ActionUndo(
                         id: Id,
@@ -93,7 +94,7 @@ namespace Partnerly.Models.ViewModels
                         fromController: "SupportTickets",
                         toController: "SupportTickets",
                         fromAction: "Edit",
-                        toAction: "Edit"),
+                        toAction: "Edit") { Permission = PermissionCodes.SupportTicketsEdit },
 
                         Save = new Partnerly.Models.ViewModels.ActionSave(
                         id: Id,
@@ -101,7 +102,7 @@ namespace Partnerly.Models.ViewModels
                         fromController: "SupportTickets",
                         toController: "SupportTickets",
                         fromAction: "Edit",
-                        toAction: "Edit"),
+                        toAction: "Edit") { Permission = PermissionCodes.SupportTicketsEdit },
 
                         Create = new Partnerly.Models.ViewModels.ActionCreate(
                         id: Id,
@@ -109,7 +110,7 @@ namespace Partnerly.Models.ViewModels
                         fromController: "SupportTickets",
                         toController: "SupportTickets",
                         fromAction: "Edit",
-                        toAction: "Create"),
+                        toAction: "Create") { Permission = PermissionCodes.SupportTicketsCreate },
 
                         Delete = new Partnerly.Models.ViewModels.ActionDelete(
                         id: Id,
@@ -117,17 +118,17 @@ namespace Partnerly.Models.ViewModels
                         fromController: "SupportTickets",
                         toController: "SupportTickets",
                         fromAction: "Edit",
-                        toAction: "Delete"),
+                        toAction: "Delete") { Permission = PermissionCodes.SupportTicketsDelete },
 
                         Attachements = new Partnerly.Models.ViewModels.ActionAttachements(
                         visible: true,
                         entityType: "SupportTicket",
-                        entityId: Id),
+                        entityId: Id) { Permission = PermissionCodes.SupportTicketsView },
 
                         Note = new Partnerly.Models.ViewModels.ActionNote(
                         visible: true,
                         note: Note,
-                        id: Id)
+                        id: Id) { Permission = PermissionCodes.SupportTicketsEdit }
                     };
                 }
 
@@ -139,7 +140,7 @@ namespace Partnerly.Models.ViewModels
                         fromController: "SupportTickets",
                         toController: "SupportTickets",
                         fromAction: "Create",
-                        toAction: "Index"),
+                        toAction: "Index") { Permission = PermissionCodes.SupportTicketsView },
 
                     Undo = new Partnerly.Models.ViewModels.ActionUndo(
                         id: Id,
@@ -147,7 +148,7 @@ namespace Partnerly.Models.ViewModels
                         fromController: "SupportTickets",
                         toController: "SupportTickets",
                         fromAction: "Create",
-                        toAction: "Create"),
+                        toAction: "Create") { Permission = PermissionCodes.SupportTicketsCreate },
 
                     Save = new Partnerly.Models.ViewModels.ActionSave(
                         id: Id,
@@ -155,7 +156,7 @@ namespace Partnerly.Models.ViewModels
                         fromController: "SupportTickets",
                         toController: "SupportTickets",
                         fromAction: "Create",
-                        toAction: "Edit")
+                        toAction: "Edit") { Permission = PermissionCodes.SupportTicketsCreate }
                 };
             }
         }
@@ -177,6 +178,11 @@ namespace Partnerly.Models.ViewModels
                         KeyField = "Id",
                         AjaxUrl = "/SupportTickets/Data",
                         ExportUrl = "/SupportTickets/Export",
+                        Export = new DataTableExportOptions
+                        {
+                            Enabled = true,
+                            Permission = PermissionCodes.SupportTicketsView
+                        },
 
                         AutoLoad = true,
                         ReloadEnabled = true,
@@ -200,6 +206,7 @@ namespace Partnerly.Models.ViewModels
                                 Title = FieldsDisplayNames.TaskNumber,
                                 Type = DataTableColumnType.Link,
                                 UrlTemplate = "/SupportTickets/Edit/{Id}",
+                                Permission = PermissionCodes.SupportTicketsEdit,
                             },
                             new DataTableColumn
                             {
@@ -207,6 +214,7 @@ namespace Partnerly.Models.ViewModels
                                 Title = FieldsDisplayNames.Subject,
                                 Type = DataTableColumnType.Text,
                                 Editable = true,
+                                Permission = PermissionCodes.SupportTicketsEdit,
                             },
                             
                             new DataTableColumn
@@ -355,7 +363,8 @@ namespace Partnerly.Models.ViewModels
                                     Placement = DataTableActionPlacement.Toolbar,
                                     Url = "/SupportTickets/Create",
                                     Method = "Get",
-                                    CssClass = "data-table-grid-action"
+                                    CssClass = "data-table-grid-action",
+                                    Permission = PermissionCodes.SupportTicketsCreate
                                 },
 
                                 new DataTableAction
@@ -367,6 +376,7 @@ namespace Partnerly.Models.ViewModels
                                     Placement = DataTableActionPlacement.Row,
                                     Url = "/SupportTickets/ViewCase/{Id}",
                                     Method = "GET",
+                                    Permission = PermissionCodes.SupportTicketsView
                                 },
 
                                 new DataTableAction
@@ -376,6 +386,7 @@ namespace Partnerly.Models.ViewModels
                                     Icon = "bx bx-edit",
                                     Type = DataTableActionType.InlineEdit,
                                     Placement = DataTableActionPlacement.Row,
+                                    Permission = PermissionCodes.SupportTicketsEdit
                                 },
 
                                 new DataTableAction
@@ -387,7 +398,8 @@ namespace Partnerly.Models.ViewModels
                                     Placement = DataTableActionPlacement.Row,
                                     Url = "/SupportTickets/Delete/{Id}",
                                     Method = "GET",
-                                    CssClass = "btn btn-sm btn-outline-danger"
+                                    CssClass = "btn btn-sm btn-outline-danger",
+                                    Permission = PermissionCodes.SupportTicketsDelete
                                 }
                             }
                         },

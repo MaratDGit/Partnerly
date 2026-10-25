@@ -5,6 +5,7 @@ using Partnerly.Events.BaseEvents;
 using Partnerly.Helpers;
 using Partnerly.Infrastructure.Interfaces;
 using Partnerly.Models;
+using Partnerly.Models.Authorization;
 
 namespace Partnerly.Infrastructure.Services
 {
@@ -14,17 +15,20 @@ namespace Partnerly.Infrastructure.Services
         private readonly IRoleService _roleService;
         private readonly ILogService _logService;
         private readonly IEventBus _eventBus;
+        private readonly IPermissionService _permissionService;
 
         public UserService(
             IUserRepository userRepo, 
             IRoleService roleService, 
             ILogService logService, 
-            IEventBus eventBus)
+            IEventBus eventBus,
+            IPermissionService permissionService)
         {
             _userRepo = userRepo;
             _roleService = roleService;
             _logService = logService;
             _eventBus = eventBus;
+            _permissionService = permissionService;
         }
 
         public async Task<User?> GetUserByEmailAsync(string? email) =>
@@ -207,6 +211,93 @@ namespace Partnerly.Infrastructure.Services
             }
 
             return ServiceResult<User?>.Ok(user);
+        }
+
+        public async Task<UserPermission?> GetUserPermissionByIdAsync(Guid id) =>
+            await _userRepo.GetUserPermissionByIdAsync(id);
+
+        public async Task<ServiceResult<UserPermission?>> AddPermissionAsync(Guid userId, Guid permissionId, bool isGranted = true)
+        {
+            var user = await _userRepo.GetByIdAsync(userId);
+            if (user == null || user.IsDeleted)
+            {
+                return ServiceResult<UserPermission?>.Fail(new List<string> { String.Format(ErrorMessages.Cannotbefound, "User") });
+            }
+
+            var catalogPermission = await _permissionService.GetActivePermissionAsync(permissionId);
+            if (catalogPermission == null)
+            {
+                return ServiceResult<UserPermission?>.Fail(new List<string> { String.Format(ErrorMessages.Cannotbefound, "Permission") });
+            }
+
+            var existing = await _userRepo.GetUserPermissionAsync(userId, permissionId);
+            if (existing != null)
+            {
+                return ServiceResult<UserPermission?>.Fail(new List<string> { $"{FieldsDisplayNames.Permission} {ErrorMessages.UniqueValue}" });
+            }
+
+            var permission = new UserPermission
+            {
+                UserId = userId,
+                PermissionId = permissionId,
+                IsGranted = isGranted
+            };
+
+            await _userRepo.AddUserPermissionAsync(permission);
+            _permissionService.AddAccessAudit(
+                action: "UserPermissionAdded",
+                targetUserId: userId,
+                permissionCode: catalogPermission.Code,
+                details: $"IsGranted={isGranted}");
+            await _userRepo.SaveChangesAsync();
+
+            return ServiceResult<UserPermission?>.Ok(permission);
+        }
+
+        public async Task<ServiceResult<UserPermission?>> DeletePermissionAsync(Guid userId, Guid permissionId)
+        {
+            var user = await _userRepo.GetByIdAsync(userId);
+            if (user == null || user.IsDeleted)
+            {
+                return ServiceResult<UserPermission?>.Fail(new List<string> { String.Format(ErrorMessages.Cannotbefound, "User") });
+            }
+
+            var permission = await _userRepo.GetUserPermissionAsync(userId, permissionId);
+            if (permission == null)
+            {
+                return ServiceResult<UserPermission?>.Fail(new List<string> { String.Format(ErrorMessages.Cannotbefound, "User Permission") });
+            }
+
+            var catalogPermission = await _permissionService.GetActivePermissionAsync(permissionId);
+
+            _userRepo.DeleteUserPermission(permission);
+            _permissionService.AddAccessAudit(
+                action: "UserPermissionRemoved",
+                targetUserId: userId,
+                permissionCode: catalogPermission?.Code);
+            await _userRepo.SaveChangesAsync();
+
+            return ServiceResult<UserPermission?>.Ok(permission);
+        }
+
+        public async Task<ServiceResult<UserPermission?>> UpdatePermissionGrantAsync(Guid userPermissionId, bool isGranted)
+        {
+            var permission = await _userRepo.GetUserPermissionByIdAsync(userPermissionId);
+            if (permission == null)
+            {
+                return ServiceResult<UserPermission?>.Fail(new List<string> { String.Format(ErrorMessages.Cannotbefound, "User Permission") });
+            }
+
+            permission.IsGranted = isGranted;
+            var catalogPermission = await _permissionService.GetActivePermissionAsync(permission.PermissionId);
+            _permissionService.AddAccessAudit(
+                action: "UserPermissionGrantUpdated",
+                targetUserId: permission.UserId,
+                permissionCode: catalogPermission?.Code,
+                details: $"IsGranted={isGranted}");
+            await _userRepo.SaveChangesAsync();
+
+            return ServiceResult<UserPermission?>.Ok(permission);
         }
     }
 }

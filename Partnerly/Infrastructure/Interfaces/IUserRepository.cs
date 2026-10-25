@@ -1,4 +1,5 @@
 ﻿using Partnerly.Models;
+using Partnerly.Models.Authorization;
 
 namespace Partnerly.Infrastructure.Interfaces
 {
@@ -8,5 +9,10 @@ namespace Partnerly.Infrastructure.Interfaces
         Task<User?> GetByRefCodeAsync(string? refCode);
         Task<User?> GetByPhoneAsync(string? phone);
         Task<IEnumerable<User?>> GetReferralsAsync(Guid? userID);
+
+        Task<UserPermission?> GetUserPermissionAsync(Guid userId, Guid permissionId);
+        Task<UserPermission?> GetUserPermissionByIdAsync(Guid id);
+        Task AddUserPermissionAsync(UserPermission permission);
+        void DeleteUserPermission(UserPermission permission);
     }
 }

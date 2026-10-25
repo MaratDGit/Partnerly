@@ -19,6 +19,7 @@ namespace Partnerly.Controllers
         }
 
         [HttpPost]
+        [Authorize(Policy = "Permission:ai.use")]
         public async Task<IActionResult> Ask([FromBody] AIRequestModel model, CancellationToken cancellationToken)
         {
             if (string.IsNullOrWhiteSpace(model.Message))

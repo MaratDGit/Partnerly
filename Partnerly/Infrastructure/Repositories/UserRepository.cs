@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Partnerly.Infrastructure.Interfaces;
 using Partnerly.Models;
+using Partnerly.Models.Authorization;
 using System.Linq;
 
 namespace Partnerly.Infrastructure.Repositories
@@ -40,6 +41,28 @@ namespace Partnerly.Infrastructure.Repositories
                 .Include(u => u.Role)
                 .Include(u => u.Referrer)
                 .ToListAsync();
+        }
+
+        public async Task<UserPermission?> GetUserPermissionAsync(Guid userId, Guid permissionId)
+        {
+            return await _context.Set<UserPermission>()
+                .FirstOrDefaultAsync(x => x.UserId == userId && x.PermissionId == permissionId);
+        }
+
+        public async Task<UserPermission?> GetUserPermissionByIdAsync(Guid id)
+        {
+            return await _context.Set<UserPermission>()
+                .FirstOrDefaultAsync(x => x.Id == id);
+        }
+
+        public async Task AddUserPermissionAsync(UserPermission permission)
+        {
+            await _context.Set<UserPermission>().AddAsync(permission);
+        }
+
+        public void DeleteUserPermission(UserPermission permission)
+        {
+            _context.Set<UserPermission>().Remove(permission);
         }
     }
 }

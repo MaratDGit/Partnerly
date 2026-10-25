@@ -34,6 +34,11 @@
         public string? CssClass { get; set; }
 
         public bool RequiresSelection { get; set; } = false;
+
+        /// <summary>
+        /// Permission code such as users.edit. Empty = visible to anyone who can open the table.
+        /// </summary>
+        public string? Permission { get; set; }
     }
 
 

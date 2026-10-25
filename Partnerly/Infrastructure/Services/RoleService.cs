@@ -10,11 +10,16 @@ namespace Partnerly.Infrastructure.Services
     {
         private readonly IRoleRepository _roleRepo;
         private readonly ILogService _logService;
+        private readonly IPermissionService _permissionService;
 
-        public RoleService(IRoleRepository roleRepo, ILogService logService)
+        public RoleService(
+            IRoleRepository roleRepo,
+            ILogService logService,
+            IPermissionService permissionService)
         {
             _roleRepo = roleRepo;
             _logService = logService;
+            _permissionService = permissionService;
         }
 
         public async Task<Role?> GetRoleByIDAsync(Guid? id) =>
@@ -37,13 +42,30 @@ namespace Partnerly.Infrastructure.Services
                 return ServiceResult<RolePermission?>.Fail(new List<string> { String.Format(ErrorMessages.Cannotbefound, "Role") });
             }
 
+            var catalogPermission = await _permissionService.GetActivePermissionAsync(permissionId);
+            if (catalogPermission == null)
+            {
+                return ServiceResult<RolePermission?>.Fail(new List<string> { String.Format(ErrorMessages.Cannotbefound, "Permission") });
+            }
+
+            var existing = await _roleRepo.GetPermissionAsync(roleId, permissionId);
+            if (existing != null)
+            {
+                return ServiceResult<RolePermission?>.Fail(new List<string> { $"{FieldsDisplayNames.Permission} {ErrorMessages.UniqueValue}" });
+            }
+
             RolePermission per = new RolePermission
             {
-                RoleId = (Guid)roleId,
-                PermissionId = (Guid)permissionId
+                RoleId = roleId,
+                PermissionId = permissionId
             };
 
             await _roleRepo.AddRolePermissionAsync(per);
+            _permissionService.AddAccessAudit(
+                action: "RolePermissionAdded",
+                targetRoleId: roleId,
+                permissionCode: catalogPermission.Code,
+                details: catalogPermission.Name);
             await _roleRepo.SaveChangesAsync();
 
             return ServiceResult<RolePermission?>.Ok(per);
@@ -63,8 +85,14 @@ namespace Partnerly.Infrastructure.Services
                 return ServiceResult<RolePermission?>.Fail(new List<string> { String.Format(ErrorMessages.Cannotbefound, "Role Permission") });
             }
 
-            _roleRepo.DeleteRolePermission(permission);
+            var catalogPermission = await _permissionService.GetActivePermissionAsync(permissionId);
 
+            _roleRepo.DeleteRolePermission(permission);
+            _permissionService.AddAccessAudit(
+                action: "RolePermissionRemoved",
+                targetRoleId: roleId,
+                permissionCode: catalogPermission?.Code,
+                details: catalogPermission?.Name);
             await _roleRepo.SaveChangesAsync();
 
             return ServiceResult<RolePermission?>.Ok(permission);

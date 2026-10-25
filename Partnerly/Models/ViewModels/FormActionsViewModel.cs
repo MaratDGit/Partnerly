@@ -31,6 +31,10 @@ namespace Partnerly.Models.ViewModels
         public Guid? RouteID { get; set; }
         public object? RouteValues { get; set; }
 
+        /// <summary>
+        /// Permission code such as users.edit. Empty = visible if Visible is true.
+        /// </summary>
+        public string? Permission { get; set; }
     }
     public class ActionBack : FormActionBase
     {
@@ -118,6 +122,9 @@ namespace Partnerly.Models.ViewModels
     {
         public string? EntityType { get; set; }
         public Guid? EntityId { get; set; }
+
+        public string? UploadPermission { get; set; }
+        public string? DeletePermission { get; set; }
 
         public ActionAttachements(string? entityType = null, Guid? entityId = null, bool visible = false)
         {

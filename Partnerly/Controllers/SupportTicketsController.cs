@@ -1,4 +1,6 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Localization;
 using Partnerly.Descriptors.Attributes;
 using Partnerly.Descriptors.Attributes.BaseAttributes;
@@ -34,6 +36,7 @@ namespace Partnerly.Controllers
             _inlineUpdateService = inlineUpdateService;
         }
 
+        [Authorize(Policy = "Permission:support_tickets.view")]
         public IActionResult Index()
         {
             SupportTicketViewModel model = new SupportTicketViewModel();
@@ -42,6 +45,7 @@ namespace Partnerly.Controllers
             return View("~/Views/Shared/DataTable/_DataTablePartial.cshtml", model.tickets);
         }
 
+        [Authorize(Policy = "Permission:support_tickets.create")]
         public async Task<IActionResult> OpenNewCase()
         {
             var user = await _userService.GetUserByIDAsync(_currentUser.UserId);
@@ -55,12 +59,15 @@ namespace Partnerly.Controllers
             return View(model);
         }
 
+        [Authorize(Policy = "Permission:support_tickets.edit")]
         public async Task<IActionResult> StartCase(Guid? id)
         {
             if (id != null)
             {
                 var ticket = await _supportTicketService.GetSupportTicketByIDAsync(id);
-                string? status = ticket?.Status;
+                if (ticket == null || !await CanViewUserAsync(ticket.UserId))
+                    return Forbid();
+                string? status = ticket.Status;
                 if (status != null && status != SupportTicketStatusAttribute.InProgress)
                 {
                     ticket.IsRead = true;
@@ -72,12 +79,15 @@ namespace Partnerly.Controllers
             return RedirectToAction(nameof(ViewCase), new { id = id });
         }
 
+        [Authorize(Policy = "Permission:support_tickets.edit")]
         public async Task<IActionResult> CloseCase(Guid? id)
         {
             if (id != null)
             {
                 var ticket = await _supportTicketService.GetSupportTicketByIDAsync(id);
-                string? status = ticket?.Status;
+                if (ticket == null || !await CanViewUserAsync(ticket.UserId))
+                    return Forbid();
+                string? status = ticket.Status;
                 if (status != null && status != SupportTicketStatusAttribute.Closed)
                 {
                     ticket.IsRead = true;
@@ -91,6 +101,7 @@ namespace Partnerly.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Policy = "Permission:support_tickets.create")]
         public async Task<IActionResult> OpenNewCase(SupportTicketViewModel model)
         {
             if (await HasLimitExpired(_currentUser.UserId))
@@ -101,6 +112,7 @@ namespace Partnerly.Controllers
 
             if (ModelState.IsValid)
             {
+                model.UserId = _currentUser.UserId;
                 User? user = await _userService.GetUserByIDAsync(model.UserId);
                 if (user == null)
                 {
@@ -148,10 +160,12 @@ namespace Partnerly.Controllers
             return retval;
         }
 
+        [Authorize(Policy = "Permission:support_tickets.view")]
         public async Task<IActionResult> ViewCase(Guid? id)
         {
             var ticket = await _supportTicketService.GetSupportTicketByIDAsync(id);
             if (ticket == null) return NotFound();
+            if (!await CanViewUserAsync(ticket.UserId)) return Forbid();
 
             var ticketAsView = await PropertyActionsHelper.CopyPropertiesAsync(ticket, new SupportTicketViewModel());
             if (ticketAsView == null) return NotFound();
@@ -168,6 +182,7 @@ namespace Partnerly.Controllers
             return View(ticketAsView);
         }
 
+        [Authorize(Policy = "Permission:support_tickets.create")]
         public IActionResult Create()
         {
             SupportTicketViewModel model = new SupportTicketViewModel() 
@@ -181,10 +196,14 @@ namespace Partnerly.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Policy = "Permission:support_tickets.create")]
         public async Task<IActionResult> Create(SupportTicketViewModel model)
         {
             if (ModelState.IsValid && model != null)
             {
+                if (!await CanViewUserAsync(model.UserId))
+                    return Forbid();
+
                 User? user = await _userService.GetUserByIDAsync(model.UserId);
                 if (user == null)
                 {
@@ -217,10 +236,12 @@ namespace Partnerly.Controllers
             return View("Form", model);
         }
 
+        [Authorize(Policy = "Permission:support_tickets.edit")]
         public async Task<IActionResult> Edit(Guid id)
         {
             var ticket = await _supportTicketService.GetSupportTicketByIDAsync(id);
             if (ticket == null) return NotFound();
+            if (!await CanViewUserAsync(ticket.UserId)) return Forbid();
 
             var ticketAsView = await PropertyActionsHelper.CopyPropertiesAsync(ticket, new SupportTicketViewModel());
             if (ticketAsView == null) return NotFound();
@@ -242,6 +263,7 @@ namespace Partnerly.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Policy = "Permission:support_tickets.edit")]
         public async Task<IActionResult> Edit(Guid id, SupportTicketViewModel model)
         {
             if (id != model.Id) return NotFound();
@@ -251,6 +273,7 @@ namespace Partnerly.Controllers
                 SupportTicket? ticket = await _supportTicketService.GetSupportTicketByIDAsync(model.Id);
                 if (ticket != null)
                 {
+                    if (!await CanViewUserAsync(ticket.UserId)) return Forbid();
                     string? oldStatus = ticket.Status;
                     Guid? oldAssignedTo = ticket.AssignedTo;
 
@@ -280,10 +303,12 @@ namespace Partnerly.Controllers
             return View(model);
         }
 
+        [Authorize(Policy = "Permission:support_tickets.delete")]
         public async Task<IActionResult> Delete(Guid id)
         {
             var ticket = await _supportTicketService.GetSupportTicketByIDAsync(id);
             if (ticket == null) return NotFound();
+            if (!await CanViewUserAsync(ticket.UserId)) return Forbid();
 
             var deleteModel = new DeleteConfirmationViewModel
             {
@@ -301,11 +326,13 @@ namespace Partnerly.Controllers
 
         [HttpPost, ActionName("DeleteConfirmed")]
         [ValidateAntiForgeryToken]
+        [Authorize(Policy = "Permission:support_tickets.delete")]
         public async Task<IActionResult> DeleteConfirmed(Guid id)
         {
             var ticket = await _supportTicketService.GetSupportTicketByIDAsync(id);
             if (ticket != null)
             {
+                if (!await CanViewUserAsync(ticket.UserId)) return Forbid();
                 ServiceResult<SupportTicket?> result = await _supportTicketService.DeleteSupportTicketAsync(id);
                 if (!result.Success)
                 {
@@ -320,11 +347,14 @@ namespace Partnerly.Controllers
         }
 
         [HttpGet]
+        [Authorize(Policy = "Permission:support_tickets.view")]
         public async Task<IActionResult> GetLookupList(string fieldName)
         {
             if (fieldName == "Subject")
             {
                 var query = await _supportTicketService.GetAllSupportTicketAsync();
+                var visibleIds = await UserVisibility.VisibleUserIds().ToListAsync();
+                query = query.Where(u => u != null && u.UserId != null && visibleIds.Contains(u.UserId.Value));
 
                 var result = query
                     .Select(u => new
@@ -347,6 +377,7 @@ namespace Partnerly.Controllers
 
         #region Grids 
         [HttpGet]
+        [Authorize(Policy = "Permission:support_tickets.view")]
         public async Task<IActionResult> Data([FromQuery] DataTableRequest request)
         {
             if (string.IsNullOrWhiteSpace(request.TableID))
@@ -371,8 +402,10 @@ namespace Partnerly.Controllers
 
             if (request.TableID == DataTableNames.supportTicketsTable)
             {
+                var visibleUserIds = UserVisibility.VisibleUserIds();
                 var res = await _tableService.ExecuteAsync(
-                   fields => _supportTicketService.QueryEntityExt(fields),
+                   fields => _supportTicketService.QueryEntityExt(fields)
+                       .Where(t => t.UserId != null && visibleUserIds.Contains(t.UserId.Value)),
                    request,
                    options);
 
@@ -388,6 +421,7 @@ namespace Partnerly.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Policy = "Permission:support_tickets.edit")]
         public async Task<IActionResult> UpdateInline(
         [FromBody] DataTableInlineUpdateRequest request)
         {
@@ -420,6 +454,12 @@ namespace Partnerly.Controllers
                 });
             }
 
+            if (!await CanViewUserAsync(template.UserId))
+                return Forbid();
+
+            var oldStatus = template.Status;
+            var oldAssignedTo = template.AssignedTo;
+
             var options = _dataTableRegistry.Get(request.TableID);
             var result = _inlineUpdateService.ApplyChanges(template, request.Fields, options);
 
@@ -434,7 +474,7 @@ namespace Partnerly.Controllers
 
             if (result.IsChanged)
             {
-                await _supportTicketService.UpdateSupportTicketAsync(template);
+                await _supportTicketService.UpdateSupportTicketAsync(template, oldAssignedTo, oldStatus ?? string.Empty);
             }
 
             return Ok(new
@@ -445,6 +485,7 @@ namespace Partnerly.Controllers
         }
 
         [HttpGet]
+        [Authorize(Policy = "Permission:support_tickets.view")]
         public async Task<IActionResult> Export([FromQuery] DataTableRequest request, [FromQuery] string format = "csv")
         {
             if (string.IsNullOrWhiteSpace(request.TableID))
@@ -456,10 +497,12 @@ namespace Partnerly.Controllers
 
             if (request.TableID == DataTableNames.supportTicketsTable)
             {
+                var visibleUserIds = UserVisibility.VisibleUserIds();
                 return await ExportTableAsync(
                             request,
                             format,
-                            fields => _supportTicketService.QueryEntityExt(fields),
+                            fields => _supportTicketService.QueryEntityExt(fields)
+                                .Where(t => t.UserId != null && visibleUserIds.Contains(t.UserId.Value)),
                             "supportTickets");
             }
             else

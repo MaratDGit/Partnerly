@@ -2,6 +2,7 @@
 using Partnerly.Descriptors.Messages;
 using Partnerly.Helpers;
 using Partnerly.Infrastructure.Interfaces;
+using Partnerly.Models.Authorization;
 using Partnerly.Models.DataTable;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
@@ -65,7 +66,7 @@ namespace Partnerly.Models.ViewModels
                         fromController: "EmailTemplates",
                         toController: "EmailTemplates",
                         fromAction: "Edit",
-                        toAction: "Index"),
+                        toAction: "Index") { Permission = PermissionCodes.EmailTemplatesView },
 
                         Undo = new Partnerly.Models.ViewModels.ActionUndo(
                         id: Id,
@@ -73,7 +74,7 @@ namespace Partnerly.Models.ViewModels
                         fromController: "EmailTemplates",
                         toController: "EmailTemplates",
                         fromAction: "Edit",
-                        toAction: "Edit"),
+                        toAction: "Edit") { Permission = PermissionCodes.EmailTemplatesEdit },
 
                         Save = new Partnerly.Models.ViewModels.ActionSave(
                         id: Id,
@@ -81,7 +82,7 @@ namespace Partnerly.Models.ViewModels
                         fromController: "EmailTemplates",
                         toController: "EmailTemplates",
                         fromAction: "Edit",
-                        toAction: "Edit"),
+                        toAction: "Edit") { Permission = PermissionCodes.EmailTemplatesEdit },
 
                         Create = new Partnerly.Models.ViewModels.ActionCreate(
                         id: Id,
@@ -89,7 +90,7 @@ namespace Partnerly.Models.ViewModels
                         fromController: "EmailTemplates",
                         toController: "EmailTemplates",
                         fromAction: "Edit",
-                        toAction: "Create"),
+                        toAction: "Create") { Permission = PermissionCodes.EmailTemplatesCreate },
 
                         Delete = new Partnerly.Models.ViewModels.ActionDelete(
                         id: Id,
@@ -97,17 +98,17 @@ namespace Partnerly.Models.ViewModels
                         fromController: "EmailTemplates",
                         toController: "EmailTemplates",
                         fromAction: "Edit",
-                        toAction: "Delete"),
+                        toAction: "Delete") { Permission = PermissionCodes.EmailTemplatesDelete },
 
                         Note = new Partnerly.Models.ViewModels.ActionNote(
                         visible: true,
                         note: Note,
-                        id: Id),
+                        id: Id) { Permission = PermissionCodes.EmailTemplatesEdit },
 
                         Attachements = new Partnerly.Models.ViewModels.ActionAttachements(
                         entityType: "EmailTemplate",
                         entityId: Id,
-                        visible: true),
+                        visible: true) { Permission = PermissionCodes.AttachmentsView },
 
                         Menu = new Partnerly.Models.ViewModels.ActionMenu(
                         visible: true),
@@ -135,7 +136,7 @@ namespace Partnerly.Models.ViewModels
                         fromController: "EmailTemplates",
                         toController: "EmailTemplates",
                         fromAction: "Create",
-                        toAction: "Index"),
+                        toAction: "Index") { Permission = PermissionCodes.EmailTemplatesView },
 
                     Undo = new Partnerly.Models.ViewModels.ActionUndo(
                         id: Id,
@@ -143,7 +144,7 @@ namespace Partnerly.Models.ViewModels
                         fromController: "EmailTemplates",
                         toController: "EmailTemplates",
                         fromAction: "Create",
-                        toAction: "Create"),
+                        toAction: "Create") { Permission = PermissionCodes.EmailTemplatesCreate },
 
                     Save = new Partnerly.Models.ViewModels.ActionSave(
                         id: Id,
@@ -151,7 +152,7 @@ namespace Partnerly.Models.ViewModels
                         fromController: "EmailTemplates",
                         toController: "EmailTemplates",
                         fromAction: "Create",
-                        toAction: "Create"),
+                        toAction: "Create") { Permission = PermissionCodes.EmailTemplatesCreate },
 
                     Menu = new Partnerly.Models.ViewModels.ActionMenu(
                         visible: true),
@@ -190,6 +191,11 @@ namespace Partnerly.Models.ViewModels
                         KeyField = "Id",
                         AjaxUrl = "/EmailTemplates/Data",
                         ExportUrl = "/EmailTemplates/Export",
+                        Export = new DataTableExportOptions
+                        {
+                            Enabled = true,
+                            Permission = PermissionCodes.EmailTemplatesView
+                        },
 
                         AutoLoad = true,
                         ReloadEnabled = true,
@@ -214,6 +220,7 @@ namespace Partnerly.Models.ViewModels
                                 Type = DataTableColumnType.Link,
                                 UrlTemplate = "/EmailTemplates/Edit/{Id}",
                                 Editable = true,
+                                Permission = PermissionCodes.EmailTemplatesEdit,
                             },
                             
                             new DataTableColumn
@@ -271,7 +278,8 @@ namespace Partnerly.Models.ViewModels
                                     Placement = DataTableActionPlacement.Toolbar,
                                     Url = "/EmailTemplates/Create",
                                     Method = "Get",
-                                    CssClass = "data-table-grid-action"
+                                    CssClass = "data-table-grid-action",
+                                    Permission = PermissionCodes.EmailTemplatesCreate
                                 },
 
                                 new DataTableAction
@@ -283,6 +291,7 @@ namespace Partnerly.Models.ViewModels
                                     Placement = DataTableActionPlacement.Row,
                                     Url = "/EmailTemplates/Edit/{Id}",
                                     Method = "GET",
+                                    Permission = PermissionCodes.EmailTemplatesEdit
                                 },
 
                                 new DataTableAction
@@ -292,6 +301,7 @@ namespace Partnerly.Models.ViewModels
                                     Icon = "bx bx-edit",
                                     Type = DataTableActionType.InlineEdit,
                                     Placement = DataTableActionPlacement.Row,
+                                    Permission = PermissionCodes.EmailTemplatesEdit
                                 },
 
                                 new DataTableAction
@@ -303,7 +313,8 @@ namespace Partnerly.Models.ViewModels
                                     Placement = DataTableActionPlacement.Row,
                                     Url = "/EmailTemplates/Delete/{Id}",
                                     Method = "GET",
-                                    CssClass = "btn btn-sm btn-outline-danger"
+                                    CssClass = "btn btn-sm btn-outline-danger",
+                                    Permission = PermissionCodes.EmailTemplatesDelete
                                 }
                             }
                         },

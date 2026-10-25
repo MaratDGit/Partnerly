@@ -1,5 +1,6 @@
 ﻿using Partnerly.Descriptors.Messages;
 using Partnerly.Infrastructure.Interfaces;
+using Partnerly.Models.Authorization;
 using Partnerly.Models.DataTable;
 using System.ComponentModel.DataAnnotations;
 
@@ -89,6 +90,11 @@ namespace Partnerly.Models.ViewModels
                        KeyField = "Id",
                        AjaxUrl = "/Attachments/Data",
                        ExportUrl = "/Attachments/Export",
+                       Export = new DataTableExportOptions
+                       {
+                           Enabled = true,
+                           Permission = PermissionCodes.AttachmentsView
+                       },
 
                        AutoLoad = true,
                        ReloadEnabled = true,

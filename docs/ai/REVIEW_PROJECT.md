@@ -64,7 +64,7 @@ Partnerly.sln
 | Дашборд | `DashboardController` | стартовый экран после входа |
 | Пользователи | `UsersController` | список DataTable, CRUD, inline |
 | Роли | `RolesController` | роли, права роли |
-| Права | `AccessControlController` | матрицы role/user permissions |
+| Права | `RolesController` | DataTable role/user permissions на Edit / UserRoleEdit |
 | Группы | `UserGroupsController` | группы и участники |
 | Уведомления | `NotificationController` + hub | список и realtime |
 | Тикеты | `SupportTicketsController` | обращения |

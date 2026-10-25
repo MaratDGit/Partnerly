@@ -37,19 +37,13 @@
 
 ## KI-004 — PermissionSeeder: Super-роль, вероятно, не получает права
 
-- **Статус:** открыто
-- **Суть:** после `if (role.Name == SuperRoleName) { roleCodes = AllPermissions; }` идёт отдельный `if (Admin)` / `else if` / `else continue`. Для имени Super, не равного Admin, выполняется `continue` без записи RolePermissions.
-- **Компоненты:** `PermissionSeeder.SeedAsync`
-- **Журнал:** —
+- **Статус:** закрыто (2026-10-25) — `if (Super || Admin)` затем `else if` Employee / User. На живой БД назначение не проверялось; seeder по-прежнему только добавляет недостающие RolePermissions.
 
 ---
 
 ## KI-005 — Политики прав покрывают не все действия
 
-- **Статус:** открыто
-- **Суть:** `[Authorize(Policy = "Permission:...")]` есть у части Users/Roles/AccessControl. Остальные `_BaseController` требуют только аутентификации. У `UsersController.Create` политика на GET, на POST — нет.
-- **Компоненты:** контроллеры, `PermissionAuthorizationHandler`
-- **Журнал:** —
+- **Статус:** закрыто (2026-10-25) — политики на CRUD/Data/Export основных модулей; видимость записей `IUserVisibilityService`. Dashboard/профиль без отдельных кодов. Seeder не удаляет старые лишние RolePermissions на уже существующей БД.
 
 ---
 
@@ -112,7 +106,4 @@
 
 ## KI-013 — Покрытие политиками vs seeder-коды
 
-- **Статус:** открыто
-- **Суть:** seeder объявляет права вроде `notifications.view`, `support_tickets.*`, `system_settings.*`, но соответствующие контроллеры не помечены политиками (см. KI-005).
-- **Компоненты:** `PermissionSeeder`, контроллеры
-- **Журнал:** —
+- **Статус:** закрыто (2026-10-25) — контроллеры помечены теми же кодами, что `PermissionCodes` / seeder. Лишние старые RolePermissions на существующей БД seeder не снимает.

@@ -1,5 +1,30 @@
 ﻿@using Partnerly.Models.DataTable
 @model Partnerly.Models.DataTable.DataTableOptions
+@{
+    var tablePermissions = ViewData["Permissions"] as HashSet<string>
+        ?? new HashSet<string>(StringComparer.OrdinalIgnoreCase);
+
+    bool CanTable(string? code) =>
+        string.IsNullOrWhiteSpace(code) || tablePermissions.Contains(code);
+
+    var visibleActions = (Model.Actions?.Items ?? new List<DataTableAction>())
+        .Where(action => CanTable(action.Permission))
+        .ToList();
+
+    var exportEnabled = Model.Export.Enabled && CanTable(Model.Export.Permission);
+
+    var inlineEditingEnabled = Model.InlineEditing && (
+        visibleActions.Any(action =>
+            action.Type == DataTableActionType.InlineEdit ||
+            action.Type == DataTableActionType.InlineAdd) ||
+        Model.Columns.Any(column =>
+            column.Visible &&
+            column.Editable &&
+            CanTable(column.Permission)));
+
+    var hasRowActions = Model.Actions.Enabled && visibleActions.Any(x => x.Placement == DataTableActionPlacement.Row);
+    var hasInlineColumns = inlineEditingEnabled && Model.Columns.Any(x => x.Visible && x.Editable && CanTable(x.Permission));
+}
 
 <div id="@Model.Id"
      class="data-table-wrapper"
@@ -43,7 +68,7 @@
 
             @if (Model.Actions.Enabled)
             {
-                foreach (var action in Model.Actions.Items.Where(x => x.Placement == DataTableActionPlacement.Toolbar))
+                foreach (var action in visibleActions.Where(x => x.Placement == DataTableActionPlacement.Toolbar))
                 {
                     if (action.Type == DataTableActionType.Link)
                     {
@@ -117,7 +142,7 @@
            EXPORT
            ========================================================= *@
 
-            @if (Model.Export.Enabled)
+            @if (exportEnabled)
             {
                 <div class="data-table-grid-action-dropdown">
 
@@ -322,26 +347,7 @@
                         </th>
                     }
 
-                    @if
-                                        (
-                                        (
-                                        Model.Actions.Enabled &&
-                                        Model.Actions.Items.Any(
-                                        x =>
-                                        x.Placement ==
-                                        DataTableActionPlacement.Row
-                                        )
-                                        )
-                                        ||
-                                        (
-                                        Model.InlineEditing &&
-                                        Model.Columns.Any(
-                                        x =>
-                                        x.Visible &&
-                                        x.Editable
-                                        )
-                                        )
-                                        )
+                    @if (hasRowActions || hasInlineColumns)
                     {
                         <th data-field="__actions">
                             @Localizer["DataTableActions"]
@@ -672,14 +678,14 @@
                             id = Model.Id,
                             ajaxUrl = Model.AjaxUrl,
                             keyField = Model.KeyField,
-                            exportUrl = Model.ExportUrl,
+                            exportUrl = exportEnabled ? Model.ExportUrl : null,
                             autoLoad = Model.AutoLoad,
                             rememberState = Model.RememberState,
                             columnResizeEnabled = Model.ColumnResizeEnabled,
                             columnResizeMinWidth = Model.ColumnResizeMinWidth,
 
-                            inlineEditing = Model.InlineEditing,
-                            inlineUpdateUrl = Model.InlineUpdateUrl,
+                            inlineEditing = inlineEditingEnabled,
+                            inlineUpdateUrl = inlineEditingEnabled ? Model.InlineUpdateUrl : null,
                             @* inlineCreateUrl = Model.InlineCreateUrl,
                             inlineDeleteUrl = Model.InlineDeleteUrl, *@
 
@@ -718,23 +724,7 @@
                             columnCount =
                                 Model.Columns.Count(x => x.Visible) +
                                 (
-                                    (
-                                        Model.Actions.Enabled &&
-                                        Model.Actions.Items.Any(
-                                                x =>
-                                                        x.Placement ==
-                                                        DataTableActionPlacement.Row
-                                        )
-                                    )
-                                    ||
-                                    (
-                                        Model.InlineEditing &&
-                                        Model.Columns.Any(
-                                                x =>
-                                                        x.Visible &&
-                                                        x.Editable
-                                        )
-                                    )
+                                    (hasRowActions || hasInlineColumns)
                                     ? 1
                                     : 0
                                 ),
@@ -750,11 +740,11 @@
                                     sortable = column.Sortable,
                                     searchable = column.Searchable,
                                     exportable = column.Exportable,
-                                    editable = column.Editable,
+                                    editable = column.Editable && CanTable(column.Permission),
                                     resizable = column.Resizable,
                                     width = column.Width,
                                     format = column.Format,
-                                    urlTemplate = column.UrlTemplate,
+                                    urlTemplate = CanTable(column.Permission) ? column.UrlTemplate : null,
                                     isKey = column.IsKey,
                                     emptyText = column.EmptyText,
                                     alignment = column.Alignment.ToString(),
@@ -819,9 +809,9 @@
 
                             actions = new
                             {
-                                enabled = Model.Actions.Enabled,
+                                enabled = Model.Actions.Enabled && visibleActions.Count > 0,
 
-                                items = Model.Actions.Items.Select(action => new
+                                items = visibleActions.Select(action => new
                                 {
                                         name = action.Name,
                                         title = action.Title,

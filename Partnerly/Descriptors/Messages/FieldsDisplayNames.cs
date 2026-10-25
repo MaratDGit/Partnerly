@@ -166,6 +166,7 @@ namespace Partnerly.Descriptors.Messages
         public static string IsActive => Messages.Get(nameof(IsActive));
         public static string Permissions => Messages.Get(nameof(Permissions));
         public static string Permission => Messages.Get(nameof(Permission));
+        public static string IsGranted => Messages.Get(nameof(IsGranted));
         public static string Module => Messages.Get(nameof(Module));
     }
 }

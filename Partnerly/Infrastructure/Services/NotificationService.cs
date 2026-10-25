@@ -92,10 +92,27 @@ namespace Partnerly.Infrastructure.Services
             newnotification.IsDeleted = false;
             newnotification.Note = notification.Note;
 
-            await _notificationRepository.AddAsync(newnotification);
-            await _notificationRepository.SaveChangesAsync();
+            try
+            {
+                await _notificationRepository.AddAsync(newnotification);
+                await _notificationRepository.SaveChangesAsync();
+            }
+            catch (Exception ex)
+            {
+                await _logService.CreateLogAsync(LogActionsAttribute.NotificationCreated, LogTypeAttribute.Error, ex.Message);
+                return ServiceResult<Notification?>.Fail(new List<string> { ex.Message });
+            }
 
-            await SendNotification(newnotification.UserId.ToString(), newnotification);
+            try
+            {
+                await SendNotification(newnotification.UserId.ToString(), newnotification);
+                var unread = await GetUserNotificationsAsync(newnotification.UserId, onlyUnread: true);
+                await UpdateUnreadCount(newnotification.UserId.ToString(), unread.Count);
+            }
+            catch (Exception ex)
+            {
+                await _logService.CreateLogAsync(LogActionsAttribute.NotificationCreated, LogTypeAttribute.Error, ex.Message);
+            }
 
             return ServiceResult<Notification?>.Ok(newnotification);
         }

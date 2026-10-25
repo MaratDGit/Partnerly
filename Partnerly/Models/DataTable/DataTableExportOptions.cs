@@ -9,5 +9,7 @@
         public bool Excel { get; set; } = true;
 
         public bool Print { get; set; } = false;
+
+        public string? Permission { get; set; }
     }
 }

@@ -27,6 +27,11 @@ namespace Partnerly.Models.DataTable
         public List<DataTableConditionalStyle> ConditionalStyles { get; set; }  = new List<DataTableConditionalStyle>();
         public List<DataTableColumnValueMapping> ValueMappings { get; set; } = new();
         public DataTableLookupOptions? Lookup { get; set; }
+
+        /// <summary>
+        /// Applied to Editable and UrlTemplate. Empty = no extra check.
+        /// </summary>
+        public string? Permission { get; set; }
     }
 
     public enum DataTableColumnType

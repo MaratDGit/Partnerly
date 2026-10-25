@@ -1736,6 +1736,9 @@
   <data name="IsActive" xml:space="preserve">
     <value>Ակտիվ</value>
   </data>
+  <data name="IsGranted" xml:space="preserve">
+    <value>Թույլատրված</value>
+  </data>
 
   <data name="DeleteRole" xml:space="preserve">
     <value>Ջնջել դերը</value>

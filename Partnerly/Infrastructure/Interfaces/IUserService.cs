@@ -1,5 +1,6 @@
 ﻿using Partnerly.Infrastructure.Services;
 using Partnerly.Models;
+using Partnerly.Models.Authorization;
 
 namespace Partnerly.Infrastructure.Interfaces
 {
@@ -18,5 +19,10 @@ namespace Partnerly.Infrastructure.Interfaces
         Task<ServiceResult<User?>> DeleteUserAsync(Guid? id);
 
         IQueryable<User> QueryEntity(IEnumerable<string> fields);
+
+        Task<UserPermission?> GetUserPermissionByIdAsync(Guid id);
+        Task<ServiceResult<UserPermission?>> AddPermissionAsync(Guid userId, Guid permissionId, bool isGranted = true);
+        Task<ServiceResult<UserPermission?>> DeletePermissionAsync(Guid userId, Guid permissionId);
+        Task<ServiceResult<UserPermission?>> UpdatePermissionGrantAsync(Guid userPermissionId, bool isGranted);
     }
 }

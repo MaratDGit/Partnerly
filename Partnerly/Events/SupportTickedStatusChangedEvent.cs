@@ -24,73 +24,100 @@ namespace Partnerly.Events
 
     public class SupportTickedStatusChangedEventHandler : IEventHandler<SupportTickedStatusChangedEvent>
     {
-        private readonly IConfiguration _config;
         private readonly INotificationService _notificationService;
-        private readonly IEmailSender _emailSender;
         private readonly ILogService _logService;
 
-        public SupportTickedStatusChangedEventHandler(IConfiguration config, INotificationService notificationService, IEmailSender emailSender, ILogService logService)
+        public SupportTickedStatusChangedEventHandler(
+            IConfiguration config,
+            INotificationService notificationService,
+            IEmailSender emailSender,
+            ILogService logService)
         {
-            _config = config;
             _notificationService = notificationService;
-            _emailSender = emailSender;
             _logService = logService;
         }
 
         public async Task HandleAsync(SupportTickedStatusChangedEvent @event)
         {
-            if (@event.Ticket != null && @event.OldStatus != null && @event.OldStatus != @event.Ticket.Status)
+            if (@event.Ticket == null ||
+                string.IsNullOrEmpty(@event.OldStatus) ||
+                @event.OldStatus == @event.Ticket.Status ||
+                @event.SendNotification != true)
             {
-                if (@event.SendEmail == true)
+                return;
+            }
+
+            var status = @event.Ticket.Status;
+            string? message = status switch
+            {
+                SupportTicketStatusAttribute.New =>
+                    string.Format(Messages.TicketReopenedNotification, @event.Ticket.TicketID),
+                SupportTicketStatusAttribute.InProgress =>
+                    string.Format(Messages.TicketStartedNotification, @event.Ticket.TicketID),
+                SupportTicketStatusAttribute.Closed =>
+                    string.Format(Messages.TicketClosedNotification, @event.Ticket.TicketID),
+                _ => null
+            };
+
+            if (message == null)
+                return;
+
+            var recipientId = @event.Ticket.UserId ?? @event.Ticket.CreatedBy;
+            if (recipientId == null || recipientId == Guid.Empty)
+            {
+                await _logService.CreateLogAsync(
+                    LogActionsAttribute.SupportTicketUpdated,
+                    LogTypeAttribute.Error,
+                    "Ticket status notification skipped: creator UserId is empty. Ticket " + @event.Ticket.TicketID);
+                return;
+            }
+
+            try
+            {
+                var confirmationLink = $"/SupportTickets/ViewCase/{@event.Ticket.Id}";
+                var notification = new Notification
                 {
+                    UserId = recipientId.Value,
+                    Type = NotificationTypeAttribute.Information,
+                    Message = message,
+                    Link = confirmationLink
+                };
 
-                }
-                if (@event.SendNotification == true)
+                var created = await _notificationService.CreateNotificationAsync(notification);
+                if (!created.Success)
                 {
-                    string status = @event.Ticket.Status;
-                    string? message = null;
-                    if (status == SupportTicketStatusAttribute.New)
-                    {
-                        message = string.Format(Messages.TicketReopenedNotification, @event.Ticket.TicketID);
-                    }
-                    else if (status == SupportTicketStatusAttribute.InProgress)
-                    {
-                        message = string.Format(Messages.TicketStartedNotification, @event.Ticket.TicketID);
-                    }
-                    else if (status == SupportTicketStatusAttribute.Closed)
-                    {
-                        message = string.Format(Messages.TicketClosedNotification, @event.Ticket.TicketID);
-                    }
+                    await _logService.CreateLogAsync(
+                        LogActionsAttribute.SupportTicketUpdated,
+                        LogTypeAttribute.Error,
+                        "Ticket status notification was not saved. Ticket " + @event.Ticket.TicketID + ". " +
+                        string.Join(" ", created.Errors ?? new List<string>()));
+                }
 
-                    if (message != null)
+                if (status == SupportTicketStatusAttribute.Closed)
+                {
+                    var employeeNote = await _notificationService.GetNotificationByTicketIDAsync(@event.Ticket.Id);
+                    if (employeeNote != null)
                     {
-                        //var appUrl = _config["AppSettings:BaseUrl"];
-                        //var confirmationLink = $"{appUrl}/SupportTickets/ViewCase/{@event.Ticket.Id}";
-                        var confirmationLink = $"/SupportTickets/ViewCase/{@event.Ticket.Id}";
-
-                        Notification notification = new Notification { UserId = (Guid)@event.Ticket.UserId, Type = NotificationTypeAttribute.Information, Message = message, Link = confirmationLink };
-                        await _notificationService.CreateNotificationAsync(notification);
-
-                        if (status == SupportTicketStatusAttribute.Closed)
-                        {
-                            var employeeNote = await _notificationService.GetNotificationByTicketIDAsync(@event.Ticket.Id);
-                            if (employeeNote != null)
-                            {
-                                employeeNote.IsRead = true;
-                                await _notificationService.UpdateNotificationAsync(employeeNote);
-                            }
-                        }
-                        else if (status == SupportTicketStatusAttribute.New)
-                        {
-                            var employeeNote = await _notificationService.GetNotificationByTicketIDAsync(@event.Ticket.Id);
-                            if (employeeNote != null && employeeNote.IsRead == true)
-                            {
-                                employeeNote.IsRead = false;
-                                await _notificationService.UpdateNotificationAsync(employeeNote);
-                            }
-                        }
+                        employeeNote.IsRead = true;
+                        await _notificationService.UpdateNotificationAsync(employeeNote);
                     }
                 }
+                else if (status == SupportTicketStatusAttribute.New)
+                {
+                    var employeeNote = await _notificationService.GetNotificationByTicketIDAsync(@event.Ticket.Id);
+                    if (employeeNote != null && employeeNote.IsRead)
+                    {
+                        employeeNote.IsRead = false;
+                        await _notificationService.UpdateNotificationAsync(employeeNote);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                await _logService.CreateLogAsync(
+                    LogActionsAttribute.SupportTicketUpdated,
+                    LogTypeAttribute.Error,
+                    "Ticket status notification failed. Ticket " + @event.Ticket.TicketID + ". " + ex.Message);
             }
         }
     }

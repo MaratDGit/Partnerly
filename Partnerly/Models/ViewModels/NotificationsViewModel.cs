@@ -3,6 +3,7 @@ using Partnerly.Descriptors.Attributes;
 using Partnerly.Descriptors.Messages;
 using Partnerly.Helpers;
 using Partnerly.Infrastructure.Interfaces;
+using Partnerly.Models.Authorization;
 using Partnerly.Models.DataTable;
 using System.ComponentModel.DataAnnotations;
 
@@ -79,7 +80,7 @@ namespace Partnerly.Models.ViewModels
                         fromController: "Notification",
                         toController: "Notification",
                         fromAction: "Edit",
-                        toAction: "Index"),
+                        toAction: "Index") { Permission = PermissionCodes.NotificationsView },
 
                         Undo = new Partnerly.Models.ViewModels.ActionUndo(
                         id: Id,
@@ -87,7 +88,7 @@ namespace Partnerly.Models.ViewModels
                         fromController: "Notification",
                         toController: "Notification",
                         fromAction: "Edit",
-                        toAction: "Edit"),
+                        toAction: "Edit") { Permission = PermissionCodes.NotificationsEdit },
 
                         Save = new Partnerly.Models.ViewModels.ActionSave(
                         id: Id,
@@ -95,7 +96,7 @@ namespace Partnerly.Models.ViewModels
                         fromController: "Notification",
                         toController: "Notification",
                         fromAction: "Edit",
-                        toAction: "Edit"),
+                        toAction: "Edit") { Permission = PermissionCodes.NotificationsEdit },
 
                         Create = new Partnerly.Models.ViewModels.ActionCreate(
                         id: Id,
@@ -103,7 +104,7 @@ namespace Partnerly.Models.ViewModels
                         fromController: "Notification",
                         toController: "Notification",
                         fromAction: "Edit",
-                        toAction: "Create"),
+                        toAction: "Create") { Permission = PermissionCodes.NotificationsCreate },
 
                         Delete = new Partnerly.Models.ViewModels.ActionDelete(
                         id: Id,
@@ -111,12 +112,12 @@ namespace Partnerly.Models.ViewModels
                         fromController: "Notification",
                         toController: "Notification",
                         fromAction: "Edit",
-                        toAction: "Delete"),
+                        toAction: "Delete") { Permission = PermissionCodes.NotificationsDelete },
 
                         Note = new Partnerly.Models.ViewModels.ActionNote(
                         visible: true,
                         note: Note,
-                        id: Id)
+                        id: Id) { Permission = PermissionCodes.NotificationsEdit }
                     };
                 }
 
@@ -128,7 +129,7 @@ namespace Partnerly.Models.ViewModels
                         fromController: "Notification",
                         toController: "Notification",
                         fromAction: "Create",
-                        toAction: "Index"),
+                        toAction: "Index") { Permission = PermissionCodes.NotificationsView },
 
                     Undo = new Partnerly.Models.ViewModels.ActionUndo(
                         id: Id,
@@ -136,7 +137,7 @@ namespace Partnerly.Models.ViewModels
                         fromController: "Notification",
                         toController: "Notification",
                         fromAction: "Create",
-                        toAction: "Create"),
+                        toAction: "Create") { Permission = PermissionCodes.NotificationsCreate },
 
                     Save = new Partnerly.Models.ViewModels.ActionSave(
                         id: Id,
@@ -144,7 +145,7 @@ namespace Partnerly.Models.ViewModels
                         fromController: "Notification",
                         toController: "Notification",
                         fromAction: "Create",
-                        toAction: "Create")
+                        toAction: "Create") { Permission = PermissionCodes.NotificationsCreate }
                 };
             }
         }
@@ -167,6 +168,11 @@ namespace Partnerly.Models.ViewModels
                         KeyField = "Id",
                         AjaxUrl = "/Notification/Data",
                         ExportUrl = "/Notification/Export",
+                        Export = new DataTableExportOptions
+                        {
+                            Enabled = true,
+                            Permission = PermissionCodes.NotificationsView
+                        },
 
                         AutoLoad = true,
                         ReloadEnabled = true,
@@ -188,6 +194,7 @@ namespace Partnerly.Models.ViewModels
                                 Title = FieldsDisplayNames.Action,
                                 Type = DataTableColumnType.Link,
                                 UrlTemplate = "/Notification/Edit/{Id}",
+                                Permission = PermissionCodes.NotificationsEdit,
                             },
                             new DataTableColumn
                             {
@@ -346,7 +353,8 @@ namespace Partnerly.Models.ViewModels
                                     Placement = DataTableActionPlacement.Toolbar,
                                     Url = "/Notification/Create",
                                     Method = "Get",
-                                    CssClass = "data-table-grid-action"
+                                    CssClass = "data-table-grid-action",
+                                    Permission = PermissionCodes.NotificationsCreate
                                 },
 
                                 new DataTableAction
@@ -358,6 +366,7 @@ namespace Partnerly.Models.ViewModels
                                     Placement = DataTableActionPlacement.Row,
                                     Url = "/Notification/Edit/{Id}",
                                     Method = "GET",
+                                    Permission = PermissionCodes.NotificationsEdit
                                 },
 
                                 new DataTableAction
@@ -369,7 +378,8 @@ namespace Partnerly.Models.ViewModels
                                     Placement = DataTableActionPlacement.Row,
                                     Url = "/Notification/Delete/{Id}",
                                     Method = "GET",
-                                    CssClass = "btn btn-sm btn-outline-danger"
+                                    CssClass = "btn btn-sm btn-outline-danger",
+                                    Permission = PermissionCodes.NotificationsDelete
                                 }
                             }
                         },

@@ -37,6 +37,7 @@ builder.Services.AddScoped<DataTableQueryService>();
 builder.Services.AddScoped<DataTablePropertyResolver>();
 
 builder.Services.AddScoped<IPermissionService, PermissionService>();
+builder.Services.AddScoped<IUserVisibilityService, UserVisibilityService>();
 builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<ILogService, LogService>();
@@ -58,8 +59,6 @@ builder.Services.AddScoped<ISupportTicketRepository, SupportTicketRepository>();
 builder.Services.AddScoped<IAttachmentService, AttachmentService>();
 builder.Services.AddScoped<IAttachmentRepository, AttachmentRepository>();
 builder.Services.AddScoped<IFileStorageService, FileStorageService>();
-builder.Services.AddScoped<IAccessControlService, AccessControlService>();
-
 builder.Services.AddScoped<IInlineUpdateService, InlineUpdateService>();
 builder.Services.AddSingleton<IDataTableRegistry, DataTableRegistry>();
 

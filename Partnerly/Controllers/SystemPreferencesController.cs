@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Localization;
 using Partnerly.Descriptors.Attributes;
 using Partnerly.Descriptors.Attributes.BaseAttributes;
@@ -30,6 +31,7 @@ namespace Partnerly.Controllers
             
         }
 
+        [Authorize(Policy = "Permission:system_settings.view")]
         public async Task<IActionResult> Index()
         {
             SystemSettings? setting = await _systemSettingsService.GetSetupByIDAsync(1);
@@ -46,6 +48,7 @@ namespace Partnerly.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Policy = "Permission:system_settings.edit")]
         public async Task<IActionResult> Edit(int id, SystemPreferencesViewModel model)
         {
             if (id != model.Id) return NotFound();

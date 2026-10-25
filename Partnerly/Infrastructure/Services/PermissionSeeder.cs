@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Partnerly.Descriptors.Messages;
 using Partnerly.Models;
 using Partnerly.Models.Authorization;
 
@@ -6,64 +7,26 @@ namespace Partnerly.Infrastructure.Services
 {
     public static class PermissionSeeder
     {
-        private static readonly string[] AllPermissions =
-        {
-            "users.view",
-            "users.create",
-            "users.edit",
-            "users.delete",
-            "users.manage_roles",
-
-            "roles.view",
-            "roles.create",
-            "roles.edit",
-            "roles.delete",
-            "roles.manage_permissions",
-
-            "permissions.view",
-            "permissions.manage",
-
-            "user_groups.view",
-            "user_groups.create",
-            "user_groups.edit",
-            "user_groups.delete",
-
-            "notifications.view",
-
-            "support_tickets.view",
-            "support_tickets.create",
-            "support_tickets.edit",
-            "support_tickets.delete",
-
-            "system_settings.view",
-            "system_settings.edit",
-
-
-        };
-
         private static readonly string[] EmployeePermissions =
         {
-            "user_groups.view",
-            "user_groups.create",
-            "user_groups.edit",
-
-            "notifications.view",
-
-            "support_tickets.view",
-            "support_tickets.create",
-            "support_tickets.edit"
+            PermissionCodes.UsersView,
+            PermissionCodes.UserGroupsView,
+            PermissionCodes.NotificationsView,
+            PermissionCodes.SupportTicketsView,
+            PermissionCodes.SupportTicketsCreate,
+            PermissionCodes.SupportTicketsEdit,
+            PermissionCodes.AttachmentsView
         };
 
-        private static readonly string[] UserPermissions =
+        private static readonly string[] UserRolePermissions =
         {
-            "notifications.view",
-            "support_tickets.view",
-            "support_tickets.create"
+            PermissionCodes.SupportTicketsView,
+            PermissionCodes.SupportTicketsCreate
         };
 
         public static async Task SeedAsync(AppDbContext context)
         {
-            var permissionDefinitions = AllPermissions
+            var permissionDefinitions = PermissionCodes.All
                 .Select(code => new
                 {
                     Code = code,
@@ -108,25 +71,21 @@ namespace Partnerly.Infrastructure.Services
             {
                 string[] roleCodes;
 
-                if (role.Name == Descriptors.Messages.Constants.SuperRoleName)
+                if (role.Name == Constants.SuperRoleName ||
+                    role.Name == Constants.Admin)
                 {
-                    roleCodes = AllPermissions;
+                    roleCodes = PermissionCodes.All;
                 }
-                if (role.Name == Descriptors.Messages.Constants.Admin)
-                {
-                    roleCodes = AllPermissions;
-                }
-                else if (role.Name == Descriptors.Messages.Constants.Employee)
+                else if (role.Name == Constants.Employee)
                 {
                     roleCodes = EmployeePermissions;
                 }
-                else if (role.Name == Descriptors.Messages.Constants.User)
+                else if (role.Name == Constants.User)
                 {
-                    roleCodes = UserPermissions;
+                    roleCodes = UserRolePermissions;
                 }
                 else
                 {
-                    // Custom roles receive no automatic privileges.
                     continue;
                 }
 
@@ -160,5 +119,4 @@ namespace Partnerly.Infrastructure.Services
                 await context.SaveChangesAsync();
         }
     }
-
 }
