@@ -1,0 +1,13 @@
+---
+description: Секреты, БД и запрет разрушительных операций
+alwaysApply: true
+---
+
+# Безопасность и база данных
+
+- Не пиши в Git и документы: пароли, строки подключения, API-ключи, OAuth-секреты, seed-пароли из `Constants`.
+- Живые ключи — `dotnet user-secrets` и локальный `Partnerly/secrets.json` (gitignore). В `appsettings.json` Google ClientId/ClientSecret — пустые строки.
+- Схему БД изучай по сущностям, `AppDbContext` и `Partnerly/Migrations`.
+- Без явного разрешения: не подключайся к прод-БД, не меняй данные, не запускай миграции, не меняй схему, не удаляй таблицы/строки/столбцы.
+- `DbInitializer.Initialize` уже вызывает `EnsureCreated()` — не добавляй миграции «заодно».
+- Не удаляй файлы и не делай force-push / hard reset без просьбы владельца.

@@ -1,0 +1,124 @@
+# Известные проблемы Partnerly
+
+Статусы: открыто / частично / закрыто.  
+Не включать пароли и ключи.
+
+---
+
+## KI-001 — Push GitHub блокировался секретами (снято для Cursor-Agent)
+
+- **Статус:** закрыто для ветки `Cursor-Agent` (2026-10-25). Локальная `Belote-Dev` могла сохранить старую историю — не проверялось после rewrite.
+- **Суть:** в коммитах были OpenAI key и Google OAuth.
+- **Компоненты:** `appsettings.json`, `secrets.json`, история git.
+- **Журнал:** WORK_LOG 2026-10-25 секреты; TR-2026-10-25-02.
+- **Следующий шаг:** по желанию владельца — ротация ключей; не пушить `Belote-Dev` без той же очистки.
+
+---
+
+## KI-002 — EnsureCreated и миграции соседствуют
+
+- **Статус:** открыто
+- **Суть:** старт вызывает `EnsureCreated()`, в репозитории есть полноценные миграции. Поведение на конкретной БД не проверялось в этой сессии.
+- **Воспроизведение:** сравнить `__EFMigrationsHistory` с моделью на стенде разработчика (нужен доступ к БД и разрешение).
+- **Компоненты:** `DbInitializer`, `Migrations/`
+- **Журнал:** —
+
+---
+
+## KI-003 — Seed суперпользователя не привязан к Super-роли
+
+- **Статус:** открыто
+- **Суть:** Super-роль создаётся с одним Guid, пользователь seed получает другой `adminRoleId` роли Admin.
+- **Компоненты:** `DbInitializer.Initialize`
+- **Воспроизведение:** чтение кода; на живой БД не проверялось.
+- **Журнал:** —
+
+---
+
+## KI-004 — PermissionSeeder: Super-роль, вероятно, не получает права
+
+- **Статус:** открыто
+- **Суть:** после `if (role.Name == SuperRoleName) { roleCodes = AllPermissions; }` идёт отдельный `if (Admin)` / `else if` / `else continue`. Для имени Super, не равного Admin, выполняется `continue` без записи RolePermissions.
+- **Компоненты:** `PermissionSeeder.SeedAsync`
+- **Журнал:** —
+
+---
+
+## KI-005 — Политики прав покрывают не все действия
+
+- **Статус:** открыто
+- **Суть:** `[Authorize(Policy = "Permission:...")]` есть у части Users/Roles/AccessControl. Остальные `_BaseController` требуют только аутентификации. У `UsersController.Create` политика на GET, на POST — нет.
+- **Компоненты:** контроллеры, `PermissionAuthorizationHandler`
+- **Журнал:** —
+
+---
+
+## KI-006 — `_BaseController.HasPermision` всегда true
+
+- **Статус:** открыто (мертвый код / ложная защита, если кто-то вызовет)
+- **Компоненты:** `_BaseController`
+- **Журнал:** —
+
+---
+
+## KI-007 — Столкновение id DataTable тикетов и шаблонов писем
+
+- **Статус:** открыто
+- **Суть:** `DataTableNames.supportTicketsTable = "emailTemplatesTable"` — то же значение, что `emailTemplatesTable`.
+- **Воспроизведение:** открыть списки Support Tickets и Email Templates в одном приложении (singleton registry перезапишет опции). В браузере в этой сессии не проверялось.
+- **Компоненты:** `DataTableNames`, `SupportTicketsController`, `EmailTemplatesController`, `DataTableRegistry`
+- **Журнал:** —
+
+---
+
+## KI-008 — Платежи и транзакции без UI
+
+- **Статус:** открыто (незавершённый модуль, не обязательно баг)
+- **Суть:** сущности и DbSet есть, контроллеров нет. Коммит в истории `origin/Development`: «added payments logic part» — объём логики на текущей ветке не разобран построчно.
+- **Компоненты:** `Payment`, `Transaction`
+- **Журнал:** —
+
+---
+
+## KI-009 — Секреты SMTP / прочие поля в appsettings
+
+- **Статус:** открыто
+- **Суть:** GitHub заблокировал Google/OpenAI; в `appsettings.json` по-прежнему могут быть другие чувствительные поля (почта, имя сервера БД). Значения в документы не копируются.
+- **Компоненты:** `appsettings.json`
+- **Журнал:** —
+
+---
+
+## KI-010 — Порядок middleware после MapControllerRoute
+
+- **Статус:** открыто (гипотеза)
+- **Суть:** `UpdateLastActivity`, `Maintenance`, `RoleChange` зарегистрированы после `MapControllerRoute`. Влияние на реальные запросы **не проверено** запуском.
+- **Компоненты:** `Program.cs`
+- **Журнал:** —
+
+---
+
+## KI-011 — Нет автотестов
+
+- **Статус:** открыто
+- **Суть:** в решении только `Partnerly.csproj`.
+- **Компоненты:** решение
+- **Журнал:** —
+
+---
+
+## KI-012 — Случайный using OpenXml в SupportTicket
+
+- **Статус:** открыто
+- **Суть:** `using DocumentFormat.OpenXml.Spreadsheet;` в `SupportTicket.cs` не используется сущностью.
+- **Компоненты:** `Models/SupportTicket.cs`
+- **Журнал:** —
+
+---
+
+## KI-013 — Покрытие политиками vs seeder-коды
+
+- **Статус:** открыто
+- **Суть:** seeder объявляет права вроде `notifications.view`, `support_tickets.*`, `system_settings.*`, но соответствующие контроллеры не помечены политиками (см. KI-005).
+- **Компоненты:** `PermissionSeeder`, контроллеры
+- **Журнал:** —
