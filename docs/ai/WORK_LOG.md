@@ -4,6 +4,14 @@
 
 ---
 
+## 2026-10-26 — Отчёт по изменениям Cursor-Agent
+
+- **Суть:** владелец запросил полный отчёт работ на Partnerly.
+- **Сделано:** `docs/reports/2026-10-26-izmeneniya-cursor-agent.md` по шаблону; сверка WORK_LOG / KI / TR / git. Новых правок приложения нет.
+- **Сборка:** не нужна. Браузер не проверялся.
+
+---
+
 ## 2026-10-26 — Nest Hub Max 1280×800: страницы обрезались
 
 - **Суть:** на 1280×800 включается десктопный layout (≥1200). `.partnerly-layout-content` имел `overflow: hidden`, скролл только у прямого `.card > .card-body`. Dashboard / Profile / Settings / Support — `container-xxl`, не `.card`, низ экрана обрезался.
