@@ -1,17 +1,17 @@
 # Продолжение работы
 
-Обновлено: 2026-10-25.
+Обновлено: 2026-10-26.
 
 ## Текущее состояние
 
 - Ветка: `Cursor-Agent` (tracking `origin/Cursor-Agent`).
 - Приложение: ASP.NET Core MVC, .NET 6, монолит `Partnerly/Partnerly.csproj`.
 - Документация агента на месте.
-- UserPermissions, снятие AccessControl, покрытие политиками — **незакоммичено**.
+- UserPermissions / политики — в коммите `7e8173b` (уже пушилось). После него незакоммичены: sidebar FOUC, иконка Support, адаптив страниц, фикс скролла 1280×800.
 
 ## Последняя задача
 
-DataTable и StickyButtons: UI кнопок по `ViewData["Permissions"]`. Коды на CreateTableOptions и FormActions.
+На Nest Hub Max 1280×800 четыре страницы обрезались из‑за `overflow: hidden` у layout без внутреннего `.card`. Включён скролл контента и компактные стили для 1200–1366 / высоты ≤850. Браузер не проверялся.
 
 ## Уже сделано недавно
 

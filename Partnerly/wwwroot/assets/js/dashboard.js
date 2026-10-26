@@ -52,7 +52,11 @@
     }
 
 
+    let lastGamesChartData = dashboardData.gamesByDay;
+
     function renderGamesChart(data, period) {
+
+        lastGamesChartData = data;
 
         const gamesCanvas =
             document.getElementById("gamesChart");
@@ -1077,17 +1081,26 @@
     // WINDOW RESIZE
     // =========================================
 
-    window.addEventListener(
-        "resize",
-        function () {
+    function relayoutDashboardCharts() {
 
-            if (!gamesChart) {
-                return;
-            }
-
-
-            gamesChart.resize();
+        if (lastGamesChartData) {
+            renderGamesChart(
+                lastGamesChartData,
+                currentGamesPeriod
+            );
         }
-    );
+
+        if (winLoseChart) {
+            winLoseChart.resize();
+        }
+    }
+
+    let relayoutTimer = null;
+
+    window.addEventListener("resize", function () {
+        window.clearTimeout(relayoutTimer);
+        relayoutTimer = window.setTimeout(relayoutDashboardCharts, 150);
+    });
+    window.addEventListener("partnerly-layout-change", relayoutDashboardCharts);
 
 });

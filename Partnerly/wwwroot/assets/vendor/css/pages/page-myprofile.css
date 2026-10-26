@@ -3,7 +3,11 @@
            ========================================================= */
 
 .profile-page {
+    width: 100%;
+    max-width: 100%;
+    min-width: 0;
     padding-bottom: 40px;
+    box-sizing: border-box;
 }
 
 
@@ -56,7 +60,9 @@
     position: relative;
     display: flex;
     align-items: flex-end;
+    flex-wrap: wrap;
     gap: 22px;
+    min-width: 0;
     padding: 0 28px 24px;
 }
 
@@ -460,6 +466,7 @@
     display: flex;
     align-items: center;
     justify-content: space-between;
+    flex-wrap: wrap;
     gap: 20px;
 }
 
@@ -469,6 +476,7 @@
     color: #233446;
     font-size: 21px;
     font-weight: 700;
+    overflow-wrap: anywhere;
 }
 
 
@@ -495,7 +503,7 @@
 
 
 .profile-referral-btn {
-    flex-shrink: 0;
+    flex-shrink: 1;
     border-radius: 9px;
     padding: 9px 15px;
     box-shadow: 0 4px 10px rgba(105, 108, 255, .18);
@@ -509,7 +517,9 @@
 .profile-tabs-wrapper {
     display: flex;
     width: 100%;
+    min-width: 0;
     padding: 5px;
+    overflow-x: auto;
 }
 
 
@@ -700,17 +710,16 @@
 
 .profile-info-content strong {
     display: block;
-    overflow: hidden;
+    overflow-wrap: anywhere;
+    word-break: break-word;
     color: #233446;
     font-size: 13px;
     font-weight: 600;
-    text-overflow: ellipsis;
-    white-space: nowrap;
 }
 
 
 .profile-email {
-    max-width: 220px;
+    max-width: 100%;
 }
 
 
@@ -906,7 +915,7 @@
 .team-members-scroll {
     max-height: 460px;
     overflow-y: auto;
-    overflow-x: hidden;
+    overflow-x: auto;
     scrollbar-width: thin;
     scrollbar-color: rgba(105, 108, 255, .35) transparent;
 }
@@ -935,6 +944,7 @@
 
 .team-member-list {
     width: 100%;
+    min-width: 0;
 }
 
 
@@ -1025,22 +1035,18 @@
 
 
     .team-member-info strong {
-        overflow: hidden;
+        overflow-wrap: anywhere;
         color: #233446;
         font-size: 14px;
         font-weight: 600;
-        text-overflow: ellipsis;
-        white-space: nowrap;
     }
 
 
     .team-member-info span {
         margin-top: 2px;
-        overflow: hidden;
+        overflow-wrap: anywhere;
         color: #8592a3;
         font-size: 12px;
-        text-overflow: ellipsis;
-        white-space: nowrap;
     }
 
 
@@ -1184,6 +1190,23 @@
            RESPONSIVE
            ========================================================= */
 
+@media (max-width: 1199.98px) {
+
+    .profile-header-content {
+        gap: 16px;
+        padding: 0 22px 22px;
+    }
+
+    .team-members-scroll {
+        overflow-x: auto;
+    }
+
+    .team-member-list-header,
+    .team-member-row:not(.team-member-list-header) {
+        grid-template-columns: minmax(200px, 2fr) minmax(110px, .9fr) minmax(90px, .7fr) minmax(100px, .8fr) 40px;
+    }
+}
+
 @media (max-width: 991.98px) {
 
     .profile-header-content {
@@ -1201,18 +1224,43 @@
     }
 
 
-    /* Team */
+    /* Team — card layout before the grid overflows */
 
-    .team-member-list-header,
-    .team-member-row:not(.team-member-list-header) {
-        grid-template-columns: minmax(220px, 2fr) minmax(100px, 1fr) minmax(90px, .8fr) 45px;
+    .team-member-list-header {
+        display: none;
     }
 
+    .team-member-row:not(.team-member-list-header) {
+        display: grid;
+        grid-template-columns: 1fr auto;
+        gap: 10px 12px;
+        min-height: auto;
+        padding: 16px;
+    }
 
-        .team-member-list-header > div:nth-child(4),
-        .team-member-row:not(.team-member-list-header) > div:nth-child(4) {
-            display: none;
-        }
+    .team-member-main {
+        grid-column: 1;
+        grid-row: 1;
+    }
+
+    .team-member-date {
+        grid-column: 1;
+        grid-row: 2;
+        margin-left: 54px;
+    }
+
+    .team-member-referrals {
+        grid-column: 1;
+        grid-row: 3;
+        margin-left: 54px;
+    }
+
+    .team-member-row:not(.team-member-list-header) > div:nth-child(4) {
+        display: inline-flex;
+        grid-column: 2;
+        grid-row: 1;
+        align-self: start;
+    }
 }
 
 
@@ -1909,4 +1957,42 @@ html[data-theme="dark"] .photo-upload-close:focus-visible,
 html[data-theme="dark"] .team-member-actions .btn:focus-visible {
     outline: 2px solid #8185ff;
     outline-offset: 3px;
+}
+
+/* Nest Hub Max / short landscape desktops (1280x800) */
+@media (min-width: 1200px) and (max-width: 1366.98px),
+       (min-width: 1200px) and (max-height: 850px) {
+
+    .profile-page {
+        padding-bottom: 16px;
+    }
+
+    .profile-cover {
+        height: 72px;
+    }
+
+    .profile-header-content {
+        gap: 16px;
+        padding: 0 18px 16px;
+    }
+
+    .profile-empty-state {
+        min-height: 180px;
+        padding: 24px 16px;
+    }
+
+    .profile-activity-card {
+        min-height: 0;
+    }
+
+    .team-member-list-header,
+    .team-member-row:not(.team-member-list-header) {
+        grid-template-columns: minmax(180px, 2fr) minmax(90px, .8fr) minmax(70px, .6fr) minmax(90px, .7fr) 40px;
+        padding-left: 16px;
+        padding-right: 16px;
+    }
+
+    .team-members-scroll {
+        max-height: 280px;
+    }
 }

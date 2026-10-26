@@ -48,6 +48,12 @@ document.addEventListener('DOMContentLoaded', function () {
         } catch (error) {
             // Sidebar still works if storage is unavailable.
         }
+
+        window.setTimeout(function () {
+            window.dispatchEvent(
+                new Event('partnerly-layout-change')
+            );
+        }, 280);
     }
 
     function restoreDesktopSidebarState() {

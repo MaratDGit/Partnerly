@@ -91,6 +91,15 @@ body {
     scrollbar-gutter: stable;
 }
 
+.partnerly-layout-content .container-xxl:has(> .dashboard),
+.partnerly-layout-content .container-xxl:has(> .profile-page),
+.partnerly-layout-content .container-xxl:has(> .settings-page),
+.partnerly-layout-content .container-xxl:has(> .support-page),
+.partnerly-layout-content .container-xxl.profile-page {
+    width: 100%;
+    max-width: 100%;
+}
+
 /* =========================================================
    SIDEBAR
    ========================================================= */
@@ -616,6 +625,7 @@ body.partnerly-sidebar-collapsed
     padding-top: 0;
     padding-bottom: 0;
     overflow: hidden;
+    pointer-events: none;
 }
 
 
@@ -637,6 +647,7 @@ body.partnerly-sidebar-collapsed
 body.partnerly-sidebar-collapsed
 .partnerly-menu-link {
     justify-content: center;
+    gap: 0;
     padding-left: 8px;
     padding-right: 8px;
 }
@@ -658,10 +669,7 @@ body.partnerly-sidebar-collapsed
 .partnerly-menu-badge,
 body.partnerly-sidebar-collapsed
 .partnerly-menu-external {
-    width: 0;
-    opacity: 0;
-    margin: 0;
-    overflow: hidden;
+    display: none;
 }
 
 
@@ -930,6 +938,17 @@ Preserve natural page scrolling on smaller screens
         scrollbar-gutter: auto;
     }
 
+    .partnerly-layout-content .container-xxl:has(> .dashboard),
+    .partnerly-layout-content .container-xxl:has(> .profile-page),
+    .partnerly-layout-content .container-xxl:has(> .settings-page),
+    .partnerly-layout-content .container-xxl:has(> .support-page),
+    .partnerly-layout-content .container-xxl.profile-page {
+        padding-left: 0;
+        padding-right: 0;
+        padding-top: 0;
+        padding-bottom: 0.75rem;
+    }
+
 
     /* Collapsed sidebar state must not affect mobile layout */
 
@@ -951,6 +970,7 @@ Preserve natural page scrolling on smaller screens
     body.partnerly-sidebar-collapsed .partnerly-menu-badge,
     body.partnerly-sidebar-collapsed .partnerly-menu-external,
     body.partnerly-sidebar-collapsed .partnerly-sidebar-footer-text {
+        display: unset;
         width: auto;
         opacity: 1;
         overflow: visible;
@@ -980,6 +1000,7 @@ Preserve natural page scrolling on smaller screens
         margin-bottom: 3px;
         padding: 0 12px;
         overflow: visible;
+        pointer-events: auto;
     }
 
     body.partnerly-sidebar-collapsed
@@ -994,6 +1015,7 @@ Preserve natural page scrolling on smaller screens
 
     body.partnerly-sidebar-collapsed .partnerly-menu-link {
         justify-content: flex-start;
+        gap: 9px;
         padding-left: 11px;
         padding-right: 11px;
     }
@@ -1258,9 +1280,30 @@ input[type="radio"]:checked {
         flex: 1 1 0;
         min-width: 0;
         min-height: 0;
-        padding: 20px;
+        padding: 12px 16px;
         overflow: hidden;
         box-sizing: border-box;
+    }
+
+    /* Dashboard / Profile / Settings / Support are not a .card — they must scroll here */
+    .partnerly-layout-content:not(:has(> .card)) {
+        overflow-y: auto;
+        overflow-x: hidden;
+        overscroll-behavior-y: contain;
+        scrollbar-gutter: stable;
+    }
+
+    .partnerly-layout-content .container-xxl:has(> .dashboard),
+    .partnerly-layout-content .container-xxl:has(> .profile-page),
+    .partnerly-layout-content .container-xxl:has(> .settings-page),
+    .partnerly-layout-content .container-xxl:has(> .support-page),
+    .partnerly-layout-content .container-xxl.profile-page {
+        flex: 1 0 auto;
+        min-width: 0;
+        padding-left: 0.5rem;
+        padding-right: 0.5rem;
+        padding-top: 0.25rem;
+        padding-bottom: 0.75rem;
     }
 
     /* Card fills the available area */
@@ -1296,6 +1339,30 @@ input[type="radio"]:checked {
         min-width: 0;
     }
 
+}
+
+/* Nest Hub Max / 13" laptops: 1280x800 — less chrome, keep content in view */
+@media (min-width: 1200px) and (max-width: 1366.98px),
+       (min-width: 1200px) and (max-height: 850px) {
+
+    .partnerly-layout-content {
+        padding: 8px 10px;
+    }
+
+    .partnerly-layout-content .container-xxl:has(> .dashboard),
+    .partnerly-layout-content .container-xxl:has(> .profile-page),
+    .partnerly-layout-content .container-xxl:has(> .settings-page),
+    .partnerly-layout-content .container-xxl:has(> .support-page),
+    .partnerly-layout-content .container-xxl.profile-page {
+        padding-left: 0.25rem;
+        padding-right: 0.25rem;
+        padding-top: 0;
+        padding-bottom: 0.5rem;
+    }
+
+    .partnerly-footer-inner {
+        padding: 6px 0;
+    }
 }
 
 

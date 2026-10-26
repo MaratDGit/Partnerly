@@ -622,6 +622,15 @@
                 'click',
                 function () {
 
+                    if (
+                        document.body.classList.contains(
+                            'partnerly-sidebar-collapsed'
+                        ) &&
+                        window.innerWidth > 1199.98
+                    ) {
+                        return;
+                    }
+
                     const isExpanded =
                         button.getAttribute(
                             'aria-expanded'

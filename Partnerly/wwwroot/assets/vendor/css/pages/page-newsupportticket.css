@@ -3,8 +3,11 @@
        SUPPORT PAGE
        ========================================================= */
 .support-page {
+    width: 100%;
     max-width: 1400px;
+    min-width: 0;
     margin: 0 auto;
+    box-sizing: border-box;
 }
 
 
@@ -38,6 +41,11 @@
     gap: 18px;
     position: relative;
     z-index: 1;
+    min-width: 0;
+}
+
+.support-header-content > div {
+    min-width: 0;
 }
 
 .support-icon {
@@ -61,6 +69,7 @@
 .support-header p {
     color: #697a8d;
     font-size: 14px;
+    overflow-wrap: anywhere;
 }
 
 
@@ -217,7 +226,8 @@
        ========================================================= */
 
 .support-form-card {
-    height: 100%;
+    height: auto;
+    min-height: 100%;
     border-radius: 16px;
     background: #fff;
     border: 1px solid #e7e7e9;
@@ -342,6 +352,7 @@
     display: flex;
     align-items: center;
     gap: 7px;
+    min-width: 0;
     color: #8a93a2;
     font-size: 12px;
 }
@@ -366,48 +377,124 @@
 
 @media (max-width: 1199.98px) {
 
-    .support-info-card {
-        min-height: auto;
+    .support-page {
+        max-width: 100%;
     }
-
-    .support-info-footer {
-        margin-top: 28px;
-    }
-}
-
-
-@media (max-width: 767.98px) {
 
     .support-header {
         padding: 22px;
     }
 
-    .support-header-content {
-        align-items: flex-start;
-    }
-
-    .support-icon {
-        width: 48px;
-        height: 48px;
-        font-size: 24px;
-    }
-
-    .support-info-card,
-    .support-form {
+    .support-info-card {
+        min-height: auto;
         padding: 22px;
     }
 
+    .support-info-footer {
+        margin-top: 24px;
+    }
+
+    .support-form-header,
+    .support-form {
+        padding: 22px;
+    }
+}
+
+@media (max-width: 991.98px) {
+
+    .support-header-content,
     .support-form-header {
-        padding: 20px 22px;
+        align-items: flex-start;
+        flex-wrap: wrap;
+        gap: 12px;
+    }
+
+    .support-form-header-icon {
+        display: none;
+    }
+
+    .support-form-card {
+        min-height: 0;
+    }
+}
+
+@media (max-width: 767.98px) {
+
+    .support-header {
+        padding: 16px;
+        border-radius: 12px;
+    }
+
+    .support-header::after {
+        display: none;
+    }
+
+    .support-icon {
+        width: 44px;
+        height: 44px;
+        font-size: 22px;
+        border-radius: 12px;
+    }
+
+    .support-header h4 {
+        font-size: 1.15rem;
+        margin-bottom: 4px;
+    }
+
+    .support-header p {
+        font-size: 13px;
+    }
+
+    .support-info-card,
+    .support-form,
+    .support-form-header {
+        padding: 16px;
+        border-radius: 12px;
     }
 
     .support-form-footer {
         align-items: stretch;
         flex-direction: column;
+        gap: 12px;
+        padding-top: 16px;
     }
 
     .support-submit-btn {
         width: 100%;
+        min-width: 0;
+    }
+
+    .support-alert {
+        align-items: flex-start;
+        padding: 12px 14px;
+    }
+}
+
+@media (max-width: 575.98px) {
+
+    .support-header-content {
+        gap: 10px;
+    }
+
+    .support-icon {
+        width: 40px;
+        height: 40px;
+        font-size: 20px;
+    }
+
+    .support-header h4 {
+        font-size: 1.05rem;
+    }
+
+    .support-info-card,
+    .support-form,
+    .support-form-header {
+        padding: 14px;
+    }
+
+    .support-input-wrapper .form-control,
+    .support-textarea-wrapper .form-control {
+        padding-left: 38px;
     }
 }
 
@@ -607,3 +694,61 @@ html[data-theme="dark"] .support-form .input-validation-error {
         border-color: #ff6b72;
         box-shadow: 0 0 0 3px rgba(255, 76, 81, 0.13);
     }
+
+/* Nest Hub Max / short landscape desktops (1280x800) */
+@media (min-width: 1200px) and (max-width: 1366.98px),
+       (min-width: 1200px) and (max-height: 850px) {
+
+    .support-page {
+        max-width: 100%;
+    }
+
+    .support-header {
+        padding: 16px 18px;
+    }
+
+    .support-icon {
+        width: 44px;
+        height: 44px;
+        font-size: 22px;
+    }
+
+    .support-header h4 {
+        font-size: 1.15rem;
+        margin-bottom: 2px;
+    }
+
+    .support-info-card {
+        padding: 16px 18px;
+        min-height: 0;
+    }
+
+    .support-info-icon {
+        width: 40px;
+        height: 40px;
+        font-size: 20px;
+        margin-bottom: 12px;
+    }
+
+    .support-info-footer {
+        margin-top: 16px;
+        padding: 10px;
+    }
+
+    .support-form-header,
+    .support-form {
+        padding: 16px 18px;
+    }
+
+    .support-form-card {
+        min-height: 0;
+    }
+
+    .support-field {
+        margin-bottom: 14px;
+    }
+
+    .support-textarea-wrapper .form-control {
+        min-height: 110px;
+    }
+}
