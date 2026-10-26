@@ -56,6 +56,7 @@ namespace Partnerly.Descriptors.Messages
         public static string InvalidImageFormat => Messages.Get(nameof(InvalidImageFormat));
         public static string Maximumfilesizeis => Messages.Get(nameof(Maximumfilesizeis));
         public static string Photosavedsuccessfully => Messages.Get(nameof(Photosavedsuccessfully));
+        public static string Selectatleastoneuser => Messages.Get(nameof(Selectatleastoneuser));
         #endregion
     }
 }

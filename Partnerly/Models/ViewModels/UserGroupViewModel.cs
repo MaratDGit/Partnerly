@@ -111,12 +111,18 @@ namespace Partnerly.Models.ViewModels
                             new Partnerly.Models.ViewModels.MenuItemAction(
                                 visible: true,
                                 icon: "bx bx-bell",
-                                displayName: FieldsDisplayNames.Sendnotification) { Permission = PermissionCodes.NotificationsCreate },
+                                displayName: FieldsDisplayNames.Sendnotification,
+                                isModal: true,
+                                modalTarget: "#sendGroupMessageModal",
+                                onClick: "prepareGroupSend('notification')") { Permission = PermissionCodes.NotificationsCreate },
 
                             new Partnerly.Models.ViewModels.MenuItemAction(
                                 visible: true,
                                 icon: "bx bx-envelope-open",
-                                displayName: FieldsDisplayNames.Sendanemail) { Permission = PermissionCodes.EmailTemplatesView }
+                                displayName: FieldsDisplayNames.Sendanemail,
+                                isModal: true,
+                                modalTarget: "#sendGroupMessageModal",
+                                onClick: "prepareGroupSend('email')") { Permission = PermissionCodes.EmailTemplatesView }
                         }
                     };      
                 }

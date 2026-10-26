@@ -372,8 +372,279 @@
     </div>
 </div>
 
+@if (isEdit)
+{
+    <div class="modal fade"
+         id="sendGroupMessageModal"
+         tabindex="-1"
+         aria-labelledby="sendGroupMessageModalLabel"
+         aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content rounded-3 shadow-lg">
+                <div class="modal-header py-2">
+                    <h6 class="modal-title" id="sendGroupMessageModalLabel">
+                        <span class="note-modal-icon">
+                            <i class="bx bx-bell" id="sendGroupMessageIcon"></i>
+                        </span>
+                        <span id="sendGroupMessageTitle">@Localizer["Sendnotification"]</span>
+                    </h6>
+                    <button type="button"
+                            class="btn-close"
+                            data-bs-dismiss="modal"
+                            aria-label="@Localizer["Close"]">
+                    </button>
+                </div>
+
+                <div class="modal-body py-2">
+                    <p class="send-group-recipients" id="sendGroupRecipients">
+                        @Localizer["Selectatleastoneuser"]
+                    </p>
+
+                    <div class="form-floating mb-3 d-none" id="sendGroupSubjectWrap">
+                        <input type="text"
+                               class="form-control"
+                               id="sendGroupSubject"
+                               placeholder="@Localizer["Subject"]"
+                               maxlength="200" />
+                        <label for="sendGroupSubject">@Localizer["Subject"]</label>
+                    </div>
+
+                    <div class="form-floating">
+                        <textarea class="form-control"
+                                  id="sendGroupMessage"
+                                  placeholder="@Localizer["Message"]"></textarea>
+                        <label for="sendGroupMessage">@Localizer["Message"]</label>
+                    </div>
+                </div>
+
+                <div class="modal-footer py-2">
+                    <button type="button"
+                            class="btn btn-outline-secondary btn-sm"
+                            data-bs-dismiss="modal">
+                        @Localizer["Cancel"]
+                    </button>
+                    <button type="button"
+                            class="btn btn-primary btn-sm"
+                            id="sendGroupMessageBtn">
+                        @Localizer["Send"]
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+
 <script src="~/assets/js/form-change-tracker.js"></script>
 
 <script>
     enableSaveOnChange("#userGroupForm", "#btnSave");
 </script>
+
+@if (isEdit)
+{
+    <script>
+        (function () {
+            const tableId = @Html.Raw(Json.Serialize(Partnerly.Models.DataTable.DataTableNames.userGroupsMembersTable));
+            const groupId = @Html.Raw(Json.Serialize(Model.Id.ToString()));
+            const labels = {
+                notificationTitle: @Html.Raw(Json.Serialize(Localizer["Sendnotification"].Value)),
+                emailTitle: @Html.Raw(Json.Serialize(Localizer["Sendanemail"].Value)),
+                recipients: @Html.Raw(Json.Serialize(Localizer["Selectedusers"].Value)),
+                selectUsers: @Html.Raw(Json.Serialize(Localizer["Selectatleastoneuser"].Value)),
+                required: @Html.Raw(Json.Serialize(Localizer["FieldRequired"].Value))
+            };
+
+            let sendMode = "notification";
+
+            function addSelectedId(ids, seen, value) {
+                const id = String(value || "").trim();
+                if (!id || seen[id]) {
+                    return;
+                }
+                seen[id] = true;
+                ids.push(id);
+            }
+
+            function getSelectedUserIds() {
+                const table = document.getElementById(tableId);
+                const ids = [];
+                const seen = {};
+                const ctx = (table && table._partnerlyDataTable)
+                    || (window.PartnerlyDataTables && window.PartnerlyDataTables[tableId]);
+
+                if (ctx && ctx.state && Array.isArray(ctx.state.selectedRows)) {
+                    ctx.state.selectedRows.forEach(function (id) {
+                        addSelectedId(ids, seen, id);
+                    });
+                }
+
+                if (table) {
+                    table.querySelectorAll(".data-table-row-select:checked, .data-table-boolean:checked").forEach(function (checkbox) {
+                        addSelectedId(ids, seen, checkbox.getAttribute("data-row-id"));
+
+                        const row = checkbox.closest("tr");
+                        if (!row) {
+                            return;
+                        }
+
+                        try {
+                            const keys = JSON.parse(row.getAttribute("data-row-keys") || "{}");
+                            addSelectedId(ids, seen, keys.UserId || keys.userId);
+                        } catch (error) {
+                            /* ignore malformed keys */
+                        }
+                    });
+                }
+
+                return ids;
+            }
+
+            function getAntiForgeryToken() {
+                const input = document.querySelector('input[name="__RequestVerificationToken"]');
+                return input ? input.value : "";
+            }
+
+            function showClientToast(message, isError) {
+                const existing = document.getElementById("groupSendToast");
+                if (existing) {
+                    existing.remove();
+                }
+
+                const container = document.createElement("div");
+                container.className = "toast-container position-fixed bottom-0 end-0 p-3";
+                container.innerHTML =
+                    '<div id="groupSendToast" class="toast align-items-center ' +
+                    (isError ? "text-bg-danger" : "text-bg-primary") +
+                    ' border-0" role="alert" aria-live="assertive" aria-atomic="true">' +
+                    '<div class="d-flex"><div class="toast-body"></div>' +
+                    '<button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast"></button></div></div>';
+
+                document.body.appendChild(container);
+                container.querySelector(".toast-body").textContent = message;
+
+                const toastEl = document.getElementById("groupSendToast");
+                const toast = new bootstrap.Toast(toastEl, { delay: 3500 });
+                toastEl.addEventListener("hidden.bs.toast", function () {
+                    container.remove();
+                });
+                toast.show();
+            }
+
+            window.prepareGroupSend = function (mode) {
+                sendMode = mode === "email" ? "email" : "notification";
+
+                const title = document.getElementById("sendGroupMessageTitle");
+                const icon = document.getElementById("sendGroupMessageIcon");
+                const subjectWrap = document.getElementById("sendGroupSubjectWrap");
+                const recipients = document.getElementById("sendGroupRecipients");
+                const selected = getSelectedUserIds();
+
+                if (title) {
+                    title.textContent = sendMode === "email"
+                        ? labels.emailTitle
+                        : labels.notificationTitle;
+                }
+
+                if (icon) {
+                    icon.className = sendMode === "email"
+                        ? "bx bx-envelope-open"
+                        : "bx bx-bell";
+                }
+
+                if (subjectWrap) {
+                    subjectWrap.classList.toggle("d-none", sendMode !== "email");
+                }
+
+                if (recipients) {
+                    recipients.textContent = selected.length === 0
+                        ? labels.selectUsers
+                        : labels.recipients.replace("{0}", String(selected.length));
+                }
+            };
+
+            document.addEventListener("DOMContentLoaded", function () {
+                const sendBtn = document.getElementById("sendGroupMessageBtn");
+                const modal = document.getElementById("sendGroupMessageModal");
+
+                if (modal) {
+                    document.body.appendChild(modal);
+                    modal.addEventListener("show.bs.modal", function () {
+                        prepareGroupSend(sendMode);
+                    });
+                }
+
+                if (!sendBtn) {
+                    return;
+                }
+
+                sendBtn.addEventListener("click", async function (event) {
+                    event.preventDefault();
+
+                    const userIds = getSelectedUserIds();
+                    if (userIds.length === 0) {
+                        showClientToast(labels.selectUsers, true);
+                        return;
+                    }
+
+                    const messageEl = document.getElementById("sendGroupMessage");
+                    const subjectEl = document.getElementById("sendGroupSubject");
+                    const message = messageEl ? messageEl.value.trim() : "";
+                    const subject = subjectEl ? subjectEl.value.trim() : "";
+
+                    if (!message || (sendMode === "email" && !subject)) {
+                        showClientToast(labels.required, true);
+                        return;
+                    }
+
+                    sendBtn.disabled = true;
+
+                    try {
+                        const url = sendMode === "email"
+                            ? "@Url.Action("SendEmail", "UserGroups")"
+                            : "@Url.Action("SendNotification", "UserGroups")";
+
+                        const response = await fetch(url, {
+                            method: "POST",
+                            headers: {
+                                "Content-Type": "application/json",
+                                "RequestVerificationToken": getAntiForgeryToken()
+                            },
+                            body: JSON.stringify({
+                                groupId: groupId,
+                                userIds: userIds,
+                                subject: subject,
+                                message: message
+                            })
+                        });
+
+                        const result = await response.json().catch(function () { return null; });
+                        const text = result && result.message
+                            ? result.message
+                            : labels.required;
+
+                        showClientToast(text, !response.ok || !(result && result.success));
+
+                        if (response.ok && result && result.success) {
+                            const instance = bootstrap.Modal.getInstance(modal);
+                            if (instance) {
+                                instance.hide();
+                            }
+
+                            if (messageEl) {
+                                messageEl.value = "";
+                            }
+                            if (subjectEl) {
+                                subjectEl.value = "";
+                            }
+                        }
+                    } catch (error) {
+                        console.error(error);
+                        showClientToast(labels.required, true);
+                    } finally {
+                        sendBtn.disabled = false;
+                    }
+                });
+            });
+        })();
+    </script>
+}

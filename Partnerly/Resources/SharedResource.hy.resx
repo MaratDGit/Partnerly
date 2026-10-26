@@ -1784,4 +1784,16 @@
     <value>Այս էջը պաշտպանված է մուտքի վերահսկման համակարգով</value>
   </data>
 
+  <data name="Selectatleastoneuser" xml:space="preserve">
+    <value>Ընտրեք առնվազն մեկ օգտատեր</value>
+  </data>
+
+  <data name="Selectedusers" xml:space="preserve">
+    <value>Ընտրված օգտատերեր՝ {0}</value>
+  </data>
+
+  <data name="GroupMembersSent" xml:space="preserve">
+    <value>Ուղարկվել է {0} օգտատիրոջ։ Բաց է թողնվել՝ {1}։</value>
+  </data>
+
 </root>

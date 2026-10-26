@@ -1398,3 +1398,207 @@ html[data-theme="dark"] .sticky-buttons .btn-note:focus-visible,
 html[data-theme="dark"] .sticky-buttons .btn-attachement:focus-visible {
     box-shadow: 0 0 0 3px rgba(129, 133, 255, 0.24);
 }
+
+/* =========================================================
+   SEND GROUP MESSAGE MODAL
+   ========================================================= */
+
+#sendGroupMessageModal .modal-dialog {
+    width: 100%;
+    max-width: 520px;
+    margin: 1rem auto;
+}
+
+#sendGroupMessageModal .modal-content {
+    overflow: hidden;
+    border: 1px solid rgba(67, 89, 113, 0.10);
+    border-radius: 14px;
+    background: #fff;
+    box-shadow: 0 15px 45px rgba(67, 89, 113, 0.18);
+}
+
+#sendGroupMessageModal .modal-header {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    min-height: 60px;
+    padding: 12px 18px;
+    border-bottom: 1px solid rgba(67, 89, 113, 0.08);
+    background: #fff;
+}
+
+#sendGroupMessageModal .modal-title {
+    display: flex;
+    align-items: center;
+    min-width: 0;
+    margin: 0;
+    color: #384551;
+    font-size: 15px;
+    font-weight: 600;
+    line-height: 1.3;
+}
+
+#sendGroupMessageModal .note-modal-icon {
+    width: 32px;
+    height: 32px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    flex: 0 0 32px;
+    margin-right: 9px;
+    border-radius: 9px;
+    background: rgba(105, 108, 255, 0.10);
+    color: #696cff;
+}
+
+#sendGroupMessageModal .note-modal-icon i {
+    margin: 0 !important;
+    font-size: 18px;
+    line-height: 1;
+}
+
+#sendGroupMessageModal .modal-header .btn-close {
+    position: static !important;
+    top: auto;
+    right: auto;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    flex: 0 0 34px;
+    width: 34px;
+    height: 34px;
+    min-width: 34px;
+    min-height: 34px;
+    margin: 0;
+    padding: 0;
+    border: 0;
+    border-radius: 8px;
+    background: #f5f5fa;
+    background-image: none;
+    color: #697a8d;
+    font-size: 0;
+    line-height: 1;
+    opacity: 1;
+    cursor: pointer;
+    transform: none !important;
+    box-shadow: none;
+}
+
+#sendGroupMessageModal .modal-header .btn-close::before {
+    content: "\00d7";
+    font-size: 24px;
+    font-weight: 400;
+    line-height: 1;
+}
+
+#sendGroupMessageModal .modal-header .btn-close:hover {
+    color: #ff4c51;
+    background: rgba(255, 76, 81, 0.10);
+}
+
+#sendGroupMessageModal .modal-body {
+    padding: 18px;
+    background: #fff;
+}
+
+#sendGroupMessageModal .send-group-recipients {
+    margin: 0 0 14px;
+    color: #697a8d;
+    font-size: 13px;
+}
+
+#sendGroupMessageModal .form-floating > .form-control {
+    min-height: 48px;
+    border-color: #d9dee3;
+    border-radius: 9px;
+    color: #566a7f;
+    background: #fff;
+}
+
+#sendGroupMessageModal #sendGroupMessage {
+    min-height: 140px;
+    height: 140px;
+    resize: vertical;
+}
+
+#sendGroupMessageModal .form-floating > .form-control:focus {
+    border-color: #696cff;
+    box-shadow: 0 0 0 3px rgba(105, 108, 255, 0.12);
+}
+
+#sendGroupMessageModal .form-floating > label {
+    color: #8592a3;
+}
+
+#sendGroupMessageModal .modal-footer {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 8px;
+    padding: 12px 18px;
+    border-top: 1px solid rgba(67, 89, 113, 0.08);
+    background: #fff;
+}
+
+#sendGroupMessageModal .modal-footer .btn {
+    min-height: 34px;
+    padding: 6px 13px;
+    border-radius: 7px;
+    font-size: 0.8125rem;
+}
+
+html[data-theme="dark"] #sendGroupMessageModal .modal-content {
+    color: #c5cee0;
+    background: #151c2c;
+    border-color: #29344a;
+    box-shadow: 0 18px 48px rgba(0, 0, 0, 0.32), 0 0 22px rgba(105, 108, 255, 0.08);
+}
+
+html[data-theme="dark"] #sendGroupMessageModal .modal-header,
+html[data-theme="dark"] #sendGroupMessageModal .modal-body,
+html[data-theme="dark"] #sendGroupMessageModal .modal-footer {
+    color: #c5cee0;
+    background: #151c2c;
+    border-color: #29344a;
+}
+
+html[data-theme="dark"] #sendGroupMessageModal .modal-title {
+    color: #edf2ff;
+}
+
+html[data-theme="dark"] #sendGroupMessageModal .note-modal-icon {
+    color: #aeb1ff;
+    background: rgba(129, 133, 255, 0.15);
+}
+
+html[data-theme="dark"] #sendGroupMessageModal .modal-header .btn-close {
+    color: #c5cee0;
+    background: #202a40;
+    background-image: none;
+}
+
+html[data-theme="dark"] #sendGroupMessageModal .modal-header .btn-close:hover {
+    color: #ff6268;
+    background: rgba(255, 76, 81, 0.13);
+}
+
+html[data-theme="dark"] #sendGroupMessageModal .send-group-recipients {
+    color: #8996b0;
+}
+
+html[data-theme="dark"] #sendGroupMessageModal .form-floating > .form-control {
+    color: #edf2ff;
+    background-color: #111a2b;
+    border-color: #35425b;
+}
+
+html[data-theme="dark"] #sendGroupMessageModal .form-floating > .form-control:focus {
+    border-color: #8185ff;
+    box-shadow: 0 0 0 3px rgba(129, 133, 255, 0.14);
+}
+
+html[data-theme="dark"] #sendGroupMessageModal .form-floating > label {
+    color: #8996b0;
+}

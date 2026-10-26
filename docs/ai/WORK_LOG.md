@@ -4,6 +4,23 @@
 
 ---
 
+## 2026-10-26 — User Groups popup: выбранные и стили
+
+- **Суть:** попап всегда писал «select at least one user» при отмеченных чекбоксах и выглядел без стилей.
+- **Сделано:** выбранные читаются из `selectedRows` и из checked checkbox/`data-row-keys`; модалка переносится в `document.body` (иначе `overflow: hidden` карточки её режет); стили как у note-modal, светлая и тёмная тема.
+- **Сборка:** не запускалась (разметка/CSS/JS). Браузер не проверялся.
+
+---
+
+## 2026-10-26 — User Groups: popup уведомление / письмо выбранным
+
+- **Суть:** на форме группы кнопки Send notification / Send email ничего не делали. Нужен popup с текстом и отправка выбранным в гриде (чекбоксы).
+- **Сделано:** модалка на Edit; `SendNotification` / `SendEmail` используют `INotificationService` и `IEmailSender`; только участники группы, видимые текущему пользователю; пропуск blocked и тех, кто выключил уведомления/почту. DataTable ctx вешается на элемент таблицы, KeyField UserId уже был.
+- **Сборка:** `dotnet build Partnerly.sln` в `%TEMP%\PartnerlyBuildGroupSend` — 0 ошибок.
+- **Браузер:** не проверялся.
+
+---
+
 ## 2026-10-26 — Отчёт по изменениям Cursor-Agent
 
 - **Суть:** владелец запросил полный отчёт работ на Partnerly.

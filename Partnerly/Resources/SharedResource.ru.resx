@@ -1784,4 +1784,16 @@
     <value>Эта страница защищена системой контроля доступа</value>
   </data>
 
+  <data name="Selectatleastoneuser" xml:space="preserve">
+    <value>Выберите хотя бы одного пользователя</value>
+  </data>
+
+  <data name="Selectedusers" xml:space="preserve">
+    <value>Выбрано пользователей: {0}</value>
+  </data>
+
+  <data name="GroupMembersSent" xml:space="preserve">
+    <value>Отправлено {0} польз. Пропущено: {1}.</value>
+  </data>
+
 </root>

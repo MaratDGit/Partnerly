@@ -122,6 +122,10 @@
             modules.actions.initialize(ctx);
         }
 
+        ctx.root._partnerlyDataTable = ctx;
+        window.PartnerlyDataTables = window.PartnerlyDataTables || {};
+        window.PartnerlyDataTables[options.id] = ctx;
+
         if (options.autoLoad !== false) {
 
             ctx.load();

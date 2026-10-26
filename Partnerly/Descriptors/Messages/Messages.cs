@@ -30,5 +30,6 @@ namespace Partnerly.Descriptors.Messages
         public static string TicketStartedNotification => Get(nameof(TicketStartedNotification));
         public static string TicketReopenedNotification => Get(nameof(TicketReopenedNotification));
         public static string TicketClosedNotification => Get(nameof(TicketClosedNotification));
+        public static string GroupMembersSent => Get(nameof(GroupMembersSent));
     }
 }

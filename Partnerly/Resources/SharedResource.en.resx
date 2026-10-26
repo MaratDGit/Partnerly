@@ -1784,4 +1784,16 @@
     <value>This page is protected by access control</value>
   </data>
 
+  <data name="Selectatleastoneuser" xml:space="preserve">
+    <value>Select at least one user</value>
+  </data>
+
+  <data name="Selectedusers" xml:space="preserve">
+    <value>Selected users: {0}</value>
+  </data>
+
+  <data name="GroupMembersSent" xml:space="preserve">
+    <value>Sent to {0} user(s). Skipped: {1}.</value>
+  </data>
+
 </root>

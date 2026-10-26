@@ -12,6 +12,7 @@ using Partnerly.Infrastructure.Services;
 using Partnerly.Models;
 using Partnerly.Models.DataTable;
 using Partnerly.Models.ViewModels;
+using System.Net;
 
 namespace Partnerly.Controllers
 {
@@ -19,6 +20,8 @@ namespace Partnerly.Controllers
     {
         private readonly IUserGroupService _userGroupService;
         private readonly IInlineUpdateService _inlineUpdateService;
+        private readonly INotificationService _notificationService;
+        private readonly IEmailSender _emailSender;
 
         public UserGroupsController(
             IEventBus eventBus, 
@@ -30,11 +33,15 @@ namespace Partnerly.Controllers
             ISystemSettingsService systemSettingsService,
             IInlineUpdateService inlineUpdateService, 
             DataTableQueryService tableService, 
-            IDataTableRegistry dataTableRegistry)
+            IDataTableRegistry dataTableRegistry,
+            INotificationService notificationService,
+            IEmailSender emailSender)
         : base(eventBus, userService, currentUser, logService, localizer, systemSettingsService, tableService, dataTableRegistry)
         {
             _userGroupService = userGroupService;
             _inlineUpdateService = inlineUpdateService;
+            _notificationService = notificationService;
+            _emailSender = emailSender;
         }
 
         #region Index / Create / Edit / Delete
@@ -543,6 +550,137 @@ namespace Partnerly.Controllers
             return Json(new
             {
                 success = true
+            });
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        [Authorize(Policy = "Permission:user_groups.edit")]
+        [Authorize(Policy = "Permission:notifications.create")]
+        public async Task<IActionResult> SendNotification([FromBody] SendToGroupMembersRequest request)
+        {
+            return await SendToSelectedMembersAsync(request, sendNotification: true, sendEmail: false);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        [Authorize(Policy = "Permission:user_groups.edit")]
+        [Authorize(Policy = "Permission:email_templates.view")]
+        public async Task<IActionResult> SendEmail([FromBody] SendToGroupMembersRequest request)
+        {
+            return await SendToSelectedMembersAsync(request, sendNotification: false, sendEmail: true);
+        }
+
+        private async Task<IActionResult> SendToSelectedMembersAsync(
+            SendToGroupMembersRequest request,
+            bool sendNotification,
+            bool sendEmail)
+        {
+            if (request == null || request.GroupId == Guid.Empty)
+            {
+                return BadRequest(new { success = false, message = ErrorMessages.NotFound });
+            }
+
+            var group = await _userGroupService.GetByIDAsync(request.GroupId);
+            if (group == null)
+            {
+                return NotFound(new { success = false, message = ErrorMessages.NotFound });
+            }
+
+            var userIds = (request.UserIds ?? new List<Guid>())
+                .Where(id => id != Guid.Empty)
+                .Distinct()
+                .ToList();
+
+            if (userIds.Count == 0)
+            {
+                return BadRequest(new { success = false, message = ErrorMessages.Selectatleastoneuser });
+            }
+
+            var message = request.Message?.Trim();
+            if (string.IsNullOrWhiteSpace(message))
+            {
+                return BadRequest(new { success = false, message = ErrorMessages.FieldRequired });
+            }
+
+            var subject = request.Subject?.Trim();
+            if (sendEmail && string.IsNullOrWhiteSpace(subject))
+            {
+                return BadRequest(new { success = false, message = ErrorMessages.FieldRequired });
+            }
+
+            var memberIds = (await _userGroupService.GetAllUsersByGroupIDAsync(request.GroupId))
+                .Where(member => member != null)
+                .Select(member => member!.UserId)
+                .ToHashSet();
+
+            var sent = 0;
+            var skipped = 0;
+            var htmlBody = sendEmail
+                ? WebUtility.HtmlEncode(message).Replace("\r\n", "<br />").Replace("\n", "<br />")
+                : null;
+
+            foreach (var userId in userIds)
+            {
+                if (!memberIds.Contains(userId) || !await CanViewUserAsync(userId))
+                {
+                    skipped++;
+                    continue;
+                }
+
+                var user = await _userService.GetUserByIDAsync(userId);
+                if (user == null || user.IsBlocked == true)
+                {
+                    skipped++;
+                    continue;
+                }
+
+                if (sendNotification)
+                {
+                    if (user.AllowSendNotifications == false)
+                    {
+                        skipped++;
+                        continue;
+                    }
+
+                    var result = await _notificationService.CreateNotificationAsync(new Notification
+                    {
+                        UserId = user.Id,
+                        Message = message,
+                        Type = NotificationTypeAttribute.Information
+                    });
+
+                    if (result.Success)
+                        sent++;
+                    else
+                        skipped++;
+                }
+                else if (sendEmail)
+                {
+                    if (user.AllowSendEmails == false || string.IsNullOrWhiteSpace(user.Email))
+                    {
+                        skipped++;
+                        continue;
+                    }
+
+                    try
+                    {
+                        await _emailSender.SendEmailWithoutTemplateAsync(user.Email, subject, htmlBody);
+                        sent++;
+                    }
+                    catch
+                    {
+                        skipped++;
+                    }
+                }
+            }
+
+            return Json(new
+            {
+                success = sent > 0,
+                sent,
+                skipped,
+                message = string.Format(Messages.GroupMembersSent, sent, skipped)
             });
         }
 
