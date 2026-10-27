@@ -5,6 +5,7 @@ using Partnerly.Events.BaseEvents;
 using Partnerly.Infrastructure.Interfaces;
 using Partnerly.Infrastructure.Services;
 using Partnerly.Models;
+using Partnerly.Models.Authorization;
 using Partnerly.Models.DataTable;
 using Partnerly.Models.ViewModels;
 
@@ -139,6 +140,78 @@ namespace Partnerly.Controllers
             };
 
             return Json(data);
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> ReferralTree(Guid? userId)
+        {
+            var resolved = await ResolveReferralTreeAsync(userId);
+            if (resolved.StatusCode == 401)
+                return Challenge();
+            if (resolved.StatusCode == 403)
+                return Forbid();
+            if (resolved.StatusCode == 404 || resolved.Tree == null)
+                return NotFound();
+
+            var permissions = ViewData["Permissions"] as HashSet<string>
+                ?? new HashSet<string>(StringComparer.OrdinalIgnoreCase);
+
+            var page = new ReferralTreePageViewModel
+            {
+                ViewerUserId = _currentUser.UserId ?? Guid.Empty,
+                RootUserId = resolved.Tree.Id,
+                RootDisplayName = resolved.Tree.DisplayName,
+                CanPickUser = permissions.Contains(PermissionCodes.UsersView),
+                Tree = resolved.Tree
+            };
+
+            return View(page);
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> GetReferralTree(Guid? userId)
+        {
+            var resolved = await ResolveReferralTreeAsync(userId);
+            if (resolved.StatusCode == 401)
+                return Unauthorized();
+            if (resolved.StatusCode == 403)
+                return Forbid();
+            if (resolved.StatusCode == 404 || resolved.Tree == null)
+                return NotFound();
+
+            return Json(new
+            {
+                success = true,
+                tree = resolved.Tree
+            });
+        }
+
+        private async Task<(int StatusCode, ReferralTreeNodeViewModel? Tree)> ResolveReferralTreeAsync(Guid? userId)
+        {
+            if (_currentUser.UserId == null)
+                return (401, null);
+
+            var viewerId = _currentUser.UserId.Value;
+            var rootId = userId ?? viewerId;
+            var viewerIsSuper = string.Equals(
+                _currentUser.RoleName?.Trim(),
+                Constants.SuperRoleName,
+                StringComparison.OrdinalIgnoreCase);
+
+            var canViewRoot = rootId == viewerId || await CanViewUserAsync(rootId);
+            var result = await _userService.GetReferralTreeAsync(
+                rootId,
+                viewerId,
+                viewerIsSuper,
+                canViewRoot);
+
+            if (result.AccessDenied)
+                return (403, null);
+
+            if (result.Tree == null)
+                return (404, null);
+
+            return (200, result.Tree);
         }
 
         public async Task<IActionResult> MyProfile()

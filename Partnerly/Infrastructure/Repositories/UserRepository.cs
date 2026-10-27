@@ -43,6 +43,15 @@ namespace Partnerly.Infrastructure.Repositories
                 .ToListAsync();
         }
 
+        public async Task<IReadOnlyList<User>> GetReferralGraphUsersAsync()
+        {
+            return await _dbSet
+                .AsNoTracking()
+                .Where(u => !u.IsDeleted)
+                .Include(u => u.Role)
+                .ToListAsync();
+        }
+
         public async Task<UserPermission?> GetUserPermissionAsync(Guid userId, Guid permissionId)
         {
             return await _context.Set<UserPermission>()

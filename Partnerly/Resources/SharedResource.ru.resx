@@ -1796,4 +1796,68 @@
     <value>Отправлено {0} польз. Пропущено: {1}.</value>
   </data>
 
+  <data name="ReferralTree" xml:space="preserve">
+    <value>Дерево рефералов</value>
+  </data>
+
+  <data name="ReferralTreeHint" xml:space="preserve">
+    <value>Так видно, кто кого пригласил. Перетаскивайте холст, крутите колесо для масштаба, нажмите карточку — подсветится цепочка.</value>
+  </data>
+
+  <data name="SelectUserForTree" xml:space="preserve">
+    <value>Дерево пользователя</value>
+  </data>
+
+  <data name="SearchInTree" xml:space="preserve">
+    <value>Поиск по имени или коду</value>
+  </data>
+
+  <data name="ZoomIn" xml:space="preserve">
+    <value>Увеличить</value>
+  </data>
+
+  <data name="ZoomOut" xml:space="preserve">
+    <value>Уменьшить</value>
+  </data>
+
+  <data name="FitView" xml:space="preserve">
+    <value>Вписать в экран</value>
+  </data>
+
+  <data name="ExpandAll" xml:space="preserve">
+    <value>Развернуть всё</value>
+  </data>
+
+  <data name="CollapseAll" xml:space="preserve">
+    <value>Свернуть всё</value>
+  </data>
+
+  <data name="MyReferralTree" xml:space="preserve">
+    <value>Моё дерево</value>
+  </data>
+
+  <data name="NoReferralsInTree" xml:space="preserve">
+    <value>У этого пользователя пока нет рефералов</value>
+  </data>
+
+  <data name="ReferralTreeLoadError" xml:space="preserve">
+    <value>Не удалось загрузить дерево рефералов</value>
+  </data>
+
+  <data name="NetworkSize" xml:space="preserve">
+    <value>В сети</value>
+  </data>
+
+  <data name="TreeLevels" xml:space="preserve">
+    <value>Уровней</value>
+  </data>
+
+  <data name="Online" xml:space="preserve">
+    <value>Онлайн</value>
+  </data>
+
+  <data name="Blocked" xml:space="preserve">
+    <value>Заблокирован</value>
+  </data>
+
 </root>

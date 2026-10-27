@@ -9,6 +9,7 @@ namespace Partnerly.Infrastructure.Interfaces
         Task<User?> GetByRefCodeAsync(string? refCode);
         Task<User?> GetByPhoneAsync(string? phone);
         Task<IEnumerable<User?>> GetReferralsAsync(Guid? userID);
+        Task<IReadOnlyList<User>> GetReferralGraphUsersAsync();
 
         Task<UserPermission?> GetUserPermissionAsync(Guid userId, Guid permissionId);
         Task<UserPermission?> GetUserPermissionByIdAsync(Guid id);

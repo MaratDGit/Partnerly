@@ -1,6 +1,7 @@
 ﻿using Partnerly.Infrastructure.Services;
 using Partnerly.Models;
 using Partnerly.Models.Authorization;
+using Partnerly.Models.ViewModels;
 
 namespace Partnerly.Infrastructure.Interfaces
 {
@@ -13,6 +14,11 @@ namespace Partnerly.Infrastructure.Interfaces
         Task<User?> GetUserByIDAsync(string? id);
         Task<IEnumerable<User?>> GetAllUsersAsync();
         Task<IEnumerable<User?>> GetReferralsAsync(Guid? userID);
+        Task<ReferralTreeQueryResult> GetReferralTreeAsync(
+            Guid rootUserId,
+            Guid viewerId,
+            bool viewerIsSuper,
+            bool canViewRoot);
 
         Task<ServiceResult<User?>> CreateUserAsync(User? user);
         Task<ServiceResult<User?>> UpdateUserAsync(User? user, Guid? userId = null);

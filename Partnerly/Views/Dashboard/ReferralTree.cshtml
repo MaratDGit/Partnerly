@@ -1,0 +1,135 @@
+@model Partnerly.Models.ViewModels.ReferralTreePageViewModel
+@{
+    ViewData["Title"] = Localizer["ReferralTree"].Value;
+}
+
+@section PageStyles {
+    <link rel="stylesheet" href="~/assets/css/referral-tree.css" asp-append-version="true" />
+}
+
+@section PageScripts {
+    <script>
+        window.referralTreeCurrentUserId = @Html.Raw(Json.Serialize(Model.ViewerUserId));
+        window.referralTreeData = @Html.Raw(Json.Serialize(Model.Tree));
+        window.referralTreeCanPickUser = @Html.Raw(Json.Serialize(Model.CanPickUser));
+        window.referralTreeTranslations = {
+            search: @Html.Raw(Json.Serialize(Localizer["SearchInTree"].Value)),
+            zoomIn: @Html.Raw(Json.Serialize(Localizer["ZoomIn"].Value)),
+            zoomOut: @Html.Raw(Json.Serialize(Localizer["ZoomOut"].Value)),
+            fitView: @Html.Raw(Json.Serialize(Localizer["FitView"].Value)),
+            expandAll: @Html.Raw(Json.Serialize(Localizer["ExpandAll"].Value)),
+            collapseAll: @Html.Raw(Json.Serialize(Localizer["CollapseAll"].Value)),
+            myTree: @Html.Raw(Json.Serialize(Localizer["MyReferralTree"].Value)),
+            empty: @Html.Raw(Json.Serialize(Localizer["NoReferralsInTree"].Value)),
+            loadError: @Html.Raw(Json.Serialize(Localizer["ReferralTreeLoadError"].Value)),
+            network: @Html.Raw(Json.Serialize(Localizer["NetworkSize"].Value)),
+            levels: @Html.Raw(Json.Serialize(Localizer["TreeLevels"].Value)),
+            direct: @Html.Raw(Json.Serialize(Localizer["DirectReferrals"].Value)),
+            referrals: @Html.Raw(Json.Serialize(Localizer["Referrals"].Value)),
+            online: @Html.Raw(Json.Serialize(Localizer["Online"].Value)),
+            blocked: @Html.Raw(Json.Serialize(Localizer["Blocked"].Value)),
+            code: @Html.Raw(Json.Serialize(Localizer["ReferrerCode"].Value))
+        };
+    </script>
+    <script src="~/assets/js/referral-tree.js" asp-append-version="true"></script>
+}
+
+<div class="container-xxl flex-grow-1 container-p-y referral-tree-page">
+    <div class="referral-tree">
+        <div class="referral-tree-header">
+            <div class="referral-tree-title-block">
+                <h4 class="referral-tree-title">
+                    <i class="bx bx-git-branch"></i>
+                    @Localizer["ReferralTree"]
+                </h4>
+                <p class="referral-tree-subtitle">@Localizer["ReferralTreeHint"]</p>
+            </div>
+
+            <div class="referral-tree-stats" data-tree-stats>
+                <div class="referral-tree-stat">
+                    <span class="referral-tree-stat-value" data-stat="network">0</span>
+                    <span class="referral-tree-stat-label">@Localizer["NetworkSize"]</span>
+                </div>
+                <div class="referral-tree-stat">
+                    <span class="referral-tree-stat-value" data-stat="direct">0</span>
+                    <span class="referral-tree-stat-label">@Localizer["DirectReferrals"]</span>
+                </div>
+                <div class="referral-tree-stat">
+                    <span class="referral-tree-stat-value" data-stat="levels">0</span>
+                    <span class="referral-tree-stat-label">@Localizer["TreeLevels"]</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="referral-tree-toolbar">
+            @if (Model.CanPickUser)
+            {
+                <div class="referral-tree-picker">
+                    <input type="hidden" id="referralTreeUserId" value="@Model.RootUserId" />
+                    <div class="form-floating position-relative">
+                        <input id="referralTreeUserLookup"
+                               class="form-control lookup-input pe-5"
+                               placeholder=" "
+                               value="@Model.RootDisplayName"
+                               data-lookup="true"
+                               data-lookup-source="/Users/GetLookupList"
+                               data-lookup-title="@Localizer["Users"]"
+                               data-lookup-column-names="name:@Localizer["Name"],email:@Localizer["Email"]"
+                               data-lookup-display-field="name"
+                               data-lookup-param="fieldName"
+                               data-lookup-param-value="Name"
+                               data-lookup-target-id="referralTreeUserId"
+                               autocomplete="off" />
+                        <label for="referralTreeUserLookup">@Localizer["SelectUserForTree"]</label>
+                        <i class="bx bx-search lookup-icon"></i>
+                    </div>
+                </div>
+            }
+
+            <div class="referral-tree-search">
+                <i class="bx bx-search"></i>
+                <input type="search"
+                       id="referralTreeSearch"
+                       class="form-control"
+                       placeholder="@Localizer["SearchInTree"]"
+                       autocomplete="off" />
+            </div>
+
+            <div class="referral-tree-actions">
+                <button type="button" class="referral-tree-btn" data-tree-action="me" title="@Localizer["MyReferralTree"]">
+                    <i class="bx bx-user"></i>
+                    <span>@Localizer["MyReferralTree"]</span>
+                </button>
+                <button type="button" class="referral-tree-btn" data-tree-action="expand" title="@Localizer["ExpandAll"]">
+                    <i class="bx bx-expand-vertical"></i>
+                </button>
+                <button type="button" class="referral-tree-btn" data-tree-action="collapse" title="@Localizer["CollapseAll"]">
+                    <i class="bx bx-collapse-vertical"></i>
+                </button>
+                <button type="button" class="referral-tree-btn" data-tree-action="zoom-out" title="@Localizer["ZoomOut"]">
+                    <i class="bx bx-minus"></i>
+                </button>
+                <button type="button" class="referral-tree-btn" data-tree-action="zoom-in" title="@Localizer["ZoomIn"]">
+                    <i class="bx bx-plus"></i>
+                </button>
+                <button type="button" class="referral-tree-btn" data-tree-action="fit" title="@Localizer["FitView"]">
+                    <i class="bx bx-target-lock"></i>
+                </button>
+            </div>
+        </div>
+
+        <div class="referral-tree-stage" data-tree-stage tabindex="0">
+            <div class="referral-tree-viewport" data-tree-viewport>
+                <svg class="referral-tree-links" data-tree-links></svg>
+                <div class="referral-tree-nodes" data-tree-nodes></div>
+            </div>
+            <div class="referral-tree-empty" data-tree-empty hidden>
+                <i class="bx bx-git-branch"></i>
+                <p>@Localizer["NoReferralsInTree"]</p>
+            </div>
+            <div class="referral-tree-solo" data-tree-solo hidden>
+                @Localizer["NoReferralsInTree"]
+            </div>
+        </div>
+    </div>
+</div>

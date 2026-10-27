@@ -38,7 +38,7 @@ Controller  →  I*Service  →  I*Repository : Repository<T>  →  AppDbContext
 
 Контроллеры **без** `_BaseController`: `AccountController`, `HomeController`, `AIController` (`[Authorize]` + `ai.use` на Ask), `LanguageController`.
 
-Политики `Permission:*` стоят на CRUD/Data/Export модулей Users, Roles, UserGroups, SupportTickets, Notifications, EmailTemplates, Logs, SystemPreferences, Attachments (список), AI. MarkAsRead / Upload к своему тикету — без глобального manage. Dashboard / MyProfile — только `[Authorize]`.
+Политики `Permission:*` стоят на CRUD/Data/Export модулей Users, Roles, UserGroups, SupportTickets, Notifications, EmailTemplates, Logs, SystemPreferences, Attachments (список), AI. MarkAsRead / Upload к своему тикету — без глобального manage. Dashboard / MyProfile / ReferralTree — только `[Authorize]`. Дерево рефералов: `DashboardController.ReferralTree` + `GetReferralTree`; корень — текущий пользователь или тот, кого можно видеть (`CanViewUser` / своя downline). Super скрыт от остальных. Схема БД не меняется (`User.ReferrerId`).
 
 ## Сервисы и репозитории
 

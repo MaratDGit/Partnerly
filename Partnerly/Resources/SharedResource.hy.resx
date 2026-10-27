@@ -1796,4 +1796,68 @@
     <value>Ուղարկվել է {0} օգտատիրոջ։ Բաց է թողնվել՝ {1}։</value>
   </data>
 
+  <data name="ReferralTree" xml:space="preserve">
+    <value>Ռեֆերալների ծառ</value>
+  </data>
+
+  <data name="ReferralTreeHint" xml:space="preserve">
+    <value>Տեսեք՝ ով ում է հրավիրել։ Քաշեք կտավը, անիվով խոշորացրեք, սեղմեք քարտին՝ շղթան լուսավորելու համար։</value>
+  </data>
+
+  <data name="SelectUserForTree" xml:space="preserve">
+    <value>Օգտատիրոջ ծառ</value>
+  </data>
+
+  <data name="SearchInTree" xml:space="preserve">
+    <value>Որոնել անունով կամ կոդով</value>
+  </data>
+
+  <data name="ZoomIn" xml:space="preserve">
+    <value>Խոշորացնել</value>
+  </data>
+
+  <data name="ZoomOut" xml:space="preserve">
+    <value>Փոքրացնել</value>
+  </data>
+
+  <data name="FitView" xml:space="preserve">
+    <value>Համապատասխանեցնել էկրանին</value>
+  </data>
+
+  <data name="ExpandAll" xml:space="preserve">
+    <value>Բացել բոլորը</value>
+  </data>
+
+  <data name="CollapseAll" xml:space="preserve">
+    <value>Փակել բոլորը</value>
+  </data>
+
+  <data name="MyReferralTree" xml:space="preserve">
+    <value>Իմ ծառը</value>
+  </data>
+
+  <data name="NoReferralsInTree" xml:space="preserve">
+    <value>Այս օգտատերը դեռ ռեֆերալներ չունի</value>
+  </data>
+
+  <data name="ReferralTreeLoadError" xml:space="preserve">
+    <value>Չհաջողվեց բեռնել ռեֆերալների ծառը</value>
+  </data>
+
+  <data name="NetworkSize" xml:space="preserve">
+    <value>Ցանցում</value>
+  </data>
+
+  <data name="TreeLevels" xml:space="preserve">
+    <value>Մակարդակներ</value>
+  </data>
+
+  <data name="Online" xml:space="preserve">
+    <value>Առցանց</value>
+  </data>
+
+  <data name="Blocked" xml:space="preserve">
+    <value>Արգելափակված</value>
+  </data>
+
 </root>

@@ -1796,4 +1796,68 @@
     <value>Sent to {0} user(s). Skipped: {1}.</value>
   </data>
 
+  <data name="ReferralTree" xml:space="preserve">
+    <value>Referral tree</value>
+  </data>
+
+  <data name="ReferralTreeHint" xml:space="preserve">
+    <value>See how users invited each other. Drag to move, scroll to zoom, click a card to highlight the chain.</value>
+  </data>
+
+  <data name="SelectUserForTree" xml:space="preserve">
+    <value>Show tree for user</value>
+  </data>
+
+  <data name="SearchInTree" xml:space="preserve">
+    <value>Search by name or code</value>
+  </data>
+
+  <data name="ZoomIn" xml:space="preserve">
+    <value>Zoom in</value>
+  </data>
+
+  <data name="ZoomOut" xml:space="preserve">
+    <value>Zoom out</value>
+  </data>
+
+  <data name="FitView" xml:space="preserve">
+    <value>Fit to screen</value>
+  </data>
+
+  <data name="ExpandAll" xml:space="preserve">
+    <value>Expand all</value>
+  </data>
+
+  <data name="CollapseAll" xml:space="preserve">
+    <value>Collapse all</value>
+  </data>
+
+  <data name="MyReferralTree" xml:space="preserve">
+    <value>My tree</value>
+  </data>
+
+  <data name="NoReferralsInTree" xml:space="preserve">
+    <value>This user has no referrals yet</value>
+  </data>
+
+  <data name="ReferralTreeLoadError" xml:space="preserve">
+    <value>Could not load the referral tree</value>
+  </data>
+
+  <data name="NetworkSize" xml:space="preserve">
+    <value>In the network</value>
+  </data>
+
+  <data name="TreeLevels" xml:space="preserve">
+    <value>Levels</value>
+  </data>
+
+  <data name="Online" xml:space="preserve">
+    <value>Online</value>
+  </data>
+
+  <data name="Blocked" xml:space="preserve">
+    <value>Blocked</value>
+  </data>
+
 </root>

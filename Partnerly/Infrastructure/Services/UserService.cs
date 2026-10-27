@@ -6,6 +6,7 @@ using Partnerly.Helpers;
 using Partnerly.Infrastructure.Interfaces;
 using Partnerly.Models;
 using Partnerly.Models.Authorization;
+using Partnerly.Models.ViewModels;
 
 namespace Partnerly.Infrastructure.Services
 {
@@ -58,6 +59,140 @@ namespace Partnerly.Infrastructure.Services
 
         public async Task<IEnumerable<User?>> GetReferralsAsync(Guid? userID) =>
             await _userRepo.GetReferralsAsync(userID);
+
+        public async Task<ReferralTreeQueryResult> GetReferralTreeAsync(
+            Guid rootUserId,
+            Guid viewerId,
+            bool viewerIsSuper,
+            bool canViewRoot)
+        {
+            const int maxDepth = 25;
+            var users = await _userRepo.GetReferralGraphUsersAsync();
+            var byId = users.ToDictionary(u => u.Id);
+
+            if (!byId.TryGetValue(rootUserId, out var rootUser))
+            {
+                return new ReferralTreeQueryResult();
+            }
+
+            if (IsSuperUserRole(rootUser) && !viewerIsSuper)
+            {
+                return new ReferralTreeQueryResult { AccessDenied = true };
+            }
+
+            if (rootUserId != viewerId
+                && !canViewRoot
+                && !IsInReferralDownline(byId, viewerId, rootUserId, maxDepth))
+            {
+                return new ReferralTreeQueryResult { AccessDenied = true };
+            }
+
+            var visibleUsers = viewerIsSuper
+                ? users
+                : users.Where(u => !IsSuperUserRole(u)).ToList();
+
+            var childrenByReferrer = visibleUsers
+                .Where(u => u.ReferrerId != null)
+                .GroupBy(u => u.ReferrerId!.Value)
+                .ToDictionary(g => g.Key, g => g.OrderBy(u => u.FirstName).ThenBy(u => u.LastName).ToList());
+
+            var tree = BuildReferralNode(rootUserId, 0, new HashSet<Guid>(), childrenByReferrer, byId, maxDepth);
+            return new ReferralTreeQueryResult { Tree = tree };
+        }
+
+        private static bool IsInReferralDownline(
+            IReadOnlyDictionary<Guid, User> byId,
+            Guid ancestorId,
+            Guid descendantId,
+            int maxDepth)
+        {
+            if (ancestorId == descendantId)
+                return true;
+
+            var visited = new HashSet<Guid>();
+            var current = descendantId;
+            var depth = 0;
+
+            while (depth++ < maxDepth)
+            {
+                if (!visited.Add(current))
+                    return false;
+
+                if (!byId.TryGetValue(current, out var user) || user.ReferrerId == null)
+                    return false;
+
+                if (user.ReferrerId.Value == ancestorId)
+                    return true;
+
+                current = user.ReferrerId.Value;
+            }
+
+            return false;
+        }
+
+        private static ReferralTreeNodeViewModel? BuildReferralNode(
+            Guid userId,
+            int level,
+            HashSet<Guid> path,
+            IReadOnlyDictionary<Guid, List<User>> childrenByReferrer,
+            IReadOnlyDictionary<Guid, User> byId,
+            int maxDepth)
+        {
+            if (level >= maxDepth || !path.Add(userId) || !byId.TryGetValue(userId, out var user))
+                return null;
+
+            var children = new List<ReferralTreeNodeViewModel>();
+            if (childrenByReferrer.TryGetValue(userId, out var childUsers))
+            {
+                foreach (var child in childUsers)
+                {
+                    var childNode = BuildReferralNode(
+                        child.Id,
+                        level + 1,
+                        path,
+                        childrenByReferrer,
+                        byId,
+                        maxDepth);
+
+                    if (childNode != null)
+                        children.Add(childNode);
+                }
+            }
+
+            path.Remove(userId);
+
+            var displayName = $"{user.FirstName} {user.LastName}".Trim();
+            if (string.IsNullOrWhiteSpace(displayName))
+                displayName = user.MyReferralCode ?? user.Email ?? user.Id.ToString();
+
+            return new ReferralTreeNodeViewModel
+            {
+                Id = user.Id,
+                DisplayName = displayName,
+                ReferralCode = user.MyReferralCode,
+                PhotoUrl = ToPublicPhotoUrl(user.PhotoUrl),
+                RoleName = user.Role?.Name,
+                DirectCount = children.Count,
+                TotalCount = 1 + children.Sum(c => c.TotalCount),
+                Level = level,
+                IsBlocked = user.IsBlocked == true,
+                IsOnline = user.IsOnlayn == true,
+                CreatedDate = user.CreatedDate,
+                Children = children
+            };
+        }
+
+        private static bool IsSuperUserRole(User user) =>
+            string.Equals(user.Role?.Name?.Trim(), Constants.SuperRoleName, StringComparison.OrdinalIgnoreCase);
+
+        private static string ToPublicPhotoUrl(string? photoUrl)
+        {
+            var path = string.IsNullOrWhiteSpace(photoUrl)
+                ? Constants.DefaultUserProfilePhotoPath
+                : photoUrl;
+
+            return path.StartsWith("~") ? path[1..] : path;
+        }
 
         public IQueryable<User> QueryEntity(IEnumerable<string> fields) =>
             _userRepo.QueryEntity(fields);
