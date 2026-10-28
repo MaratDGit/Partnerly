@@ -1,0 +1,118 @@
+@{
+    ViewData["Title"] = Localizer["WebInspector"].Value;
+}
+
+@section PageStyles {
+    <link rel="stylesheet" href="~/assets/css/web-inspector.css" asp-append-version="true" />
+}
+
+@section PageScripts {
+    <script>
+        window.webInspectorConfig = {
+            extensionFolder: @Html.Raw(Json.Serialize(ViewBag.ExtensionFolder as string ?? ""))
+        };
+        window.webInspectorTranslations = {
+            load: @Html.Raw(Json.Serialize(Localizer["WebInspectorLoad"].Value)),
+            copied: @Html.Raw(Json.Serialize(Localizer["WebInspectorCopied"].Value)),
+            empty: @Html.Raw(Json.Serialize(Localizer["WebInspectorEmpty"].Value)),
+            needExtension: @Html.Raw(Json.Serialize(Localizer["WebInspectorNeedExtension"].Value)),
+            detached: @Html.Raw(Json.Serialize(Localizer["WebInspectorDetached"].Value)),
+            live: @Html.Raw(Json.Serialize(Localizer["WebInspectorLive"].Value)),
+            waiting: @Html.Raw(Json.Serialize(Localizer["WebInspectorWaiting"].Value)),
+            enableExtension: @Html.Raw(Json.Serialize(Localizer["WebInspectorEnableExtension"].Value)),
+            extensionOn: @Html.Raw(Json.Serialize(Localizer["WebInspectorExtensionOn"].Value)),
+            extensionCopied: @Html.Raw(Json.Serialize(Localizer["WebInspectorExtensionCopied"].Value)),
+            none: @Html.Raw(Json.Serialize(Localizer["WebInspectorNone"].Value)),
+            details: @Html.Raw(Json.Serialize(Localizer["WebInspectorDetails"].Value)),
+            copyText: @Html.Raw(Json.Serialize(Localizer["WebInspectorCopyText"].Value)),
+            copyHtml: @Html.Raw(Json.Serialize(Localizer["WebInspectorCopyHtml"].Value))
+        };
+    </script>
+    <script src="~/assets/js/web-inspector.js" asp-append-version="true"></script>
+}
+
+<div class="container-xxl flex-grow-1 container-p-y web-inspector-page" data-inspector-root>
+    <div class="web-inspector">
+        <div class="web-inspector-top">
+            <form class="web-inspector-urlbar" data-inspector-form data-no-loader>
+                <span class="web-inspector-url-scheme" data-url-scheme>https</span>
+                <input type="text"
+                       id="webInspectorUrl"
+                       class="form-control"
+                       placeholder="@Localizer["WebInspectorPlaceholder"]"
+                       autocomplete="off"
+                       spellcheck="false" />
+                <button type="submit" class="web-inspector-go" data-inspector-go>
+                    <i class="bx bx-search"></i>
+                    <span>@Localizer["WebInspectorLoad"]</span>
+                </button>
+            </form>
+            <button type="button" class="web-inspector-ext" data-enable-extension>
+                <i class="bx bx-puzzle"></i>
+                <span data-ext-label>@Localizer["WebInspectorEnableExtension"]</span>
+            </button>
+        </div>
+
+        <p class="web-inspector-banner" data-inspector-banner hidden></p>
+
+        <div class="web-inspector-split">
+            <section class="web-inspector-browser" data-browser-pane>
+                <div class="web-inspector-browser-head">
+                    <span class="web-inspector-pulse" data-live-pulse></span>
+                    <strong data-kpi="live">@Localizer["WebInspectorWaiting"]</strong>
+                    <button type="button" class="web-inspector-mini" data-focus-live>@Localizer["WebInspectorOpenHere"]</button>
+                </div>
+                <p class="web-inspector-browser-url" data-kpi="url"></p>
+                <p class="web-inspector-browser-hint" data-browser-hint>@Localizer["WebInspectorEmpty"]</p>
+            </section>
+
+            <section class="web-inspector-runtime">
+                <div class="web-inspector-kpis">
+                    <article data-card="title" data-flash="title"><span>@Localizer["WebInspectorPageTitle"]</span><strong data-kpi="title">—</strong></article>
+                    <article data-card="mutations" data-flash="mutations"><span>@Localizer["WebInspectorMutations"]</span><strong data-kpi="mutations">0</strong></article>
+                    <article data-card="ready" data-flash="ready"><span>@Localizer["WebInspectorReady"]</span><strong data-kpi="ready">—</strong></article>
+                    <article data-card="nodes" data-flash="nodes"><span>@Localizer["WebInspectorNodes"]</span><strong data-kpi="nodes">0</strong></article>
+                    <article data-card="frames" data-flash="frames"><span>@Localizer["WebInspectorFrames"]</span><strong data-kpi="frames">0</strong></article>
+                    <article data-card="links" data-flash="links"><span>@Localizer["WebInspectorLinks"]</span><strong data-kpi="links">0</strong></article>
+                    <article data-card="images" data-flash="images"><span>@Localizer["WebInspectorImages"]</span><strong data-kpi="images">0</strong></article>
+                    <article data-card="forms" data-flash="forms"><span>@Localizer["WebInspectorForms"]</span><strong data-kpi="forms">0</strong></article>
+                    <article data-card="inputs" data-flash="inputs"><span>@Localizer["WebInspectorInputs"]</span><strong data-kpi="inputs">0</strong></article>
+                    <article data-card="buttons" data-flash="buttons"><span>@Localizer["WebInspectorButtons"]</span><strong data-kpi="buttons">0</strong></article>
+                    <article data-card="headings" data-flash="headings"><span>@Localizer["WebInspectorHeadings"]</span><strong data-kpi="headings">0</strong></article>
+                    <article data-card="reason" data-flash="reason"><span>@Localizer["WebInspectorLastChange"]</span><strong data-kpi="reason">—</strong></article>
+                    <article data-card="updated" data-flash="updated"><span>@Localizer["WebInspectorUpdated"]</span><strong data-kpi="updated">—</strong></article>
+                </div>
+
+                <div class="web-inspector-tabs" data-stream-tabs>
+                    <button type="button" class="is-active" data-stream-tab="text">@Localizer["WebInspectorVisibleText"]</button>
+                    <button type="button" data-stream-tab="html">@Localizer["WebInspectorHtml"]</button>
+                    <button type="button" data-stream-tab="detail" data-detail-tab>@Localizer["WebInspectorDetails"]</button>
+                </div>
+
+                <div class="web-inspector-stream-panels">
+                    <section class="is-active" data-stream-panel="text">
+                        <header>
+                            <span>@Localizer["WebInspectorVisibleText"]</span>
+                            <button type="button" class="web-inspector-mini" data-copy="text">@Localizer["WebInspectorCopyText"]</button>
+                        </header>
+                        <div class="web-inspector-text" data-visible-text></div>
+                    </section>
+                    <section data-stream-panel="html" hidden>
+                        <header>
+                            <span>@Localizer["WebInspectorHtml"]</span>
+                            <button type="button" class="web-inspector-mini" data-copy="html">@Localizer["WebInspectorCopyHtml"]</button>
+                        </header>
+                        <pre class="web-inspector-code" data-html-source></pre>
+                    </section>
+                    <section data-stream-panel="detail" hidden>
+                        <header>
+                            <span data-detail-title>@Localizer["WebInspectorDetails"]</span>
+                            <button type="button" class="web-inspector-mini" data-copy="detail">@Localizer["WebInspectorCopyText"]</button>
+                        </header>
+                        <div class="web-inspector-detail" data-detail-body></div>
+                    </section>
+                </div>
+            </section>
+        </div>
+    </div>
+</div>

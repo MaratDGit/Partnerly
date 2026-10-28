@@ -67,10 +67,18 @@ html[data-theme="dark"] {
         color: var(--partnerly-text-dark, #edf2ff);
     }
 
-        html[data-theme="dark"] .form-control::placeholder,
-        html[data-theme="dark"] .form-floating > .form-control::placeholder {
+        html[data-theme="dark"] .form-control::placeholder {
             color: var(--partnerly-muted, #8996b0);
             opacity: 1;
+        }
+
+        /* Bootstrap form-floating keeps the placeholder transparent so only the label shows.
+           Dark color-scheme otherwise paints both the label and the placeholder in the same spot. */
+        html[data-theme="dark"] .form-floating > .form-control::placeholder,
+        html[data-theme="dark"] .form-floating > .form-control-plaintext::placeholder {
+            color: transparent !important;
+            opacity: 0 !important;
+            -webkit-text-fill-color: transparent !important;
         }
 
     html[data-theme="dark"] .form-floating > label {

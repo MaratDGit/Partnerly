@@ -46,6 +46,7 @@ namespace Partnerly.Models.Authorization
         public const string AttachmentsManage = "attachments.manage";
 
         public const string AiUse = "ai.use";
+        public const string WebInspectorUse = "web_inspector.use";
 
         public static readonly string[] All =
         {
@@ -59,7 +60,8 @@ namespace Partnerly.Models.Authorization
             EmailTemplatesView, EmailTemplatesCreate, EmailTemplatesEdit, EmailTemplatesDelete,
             LogsView,
             AttachmentsView, AttachmentsManage,
-            AiUse
+            AiUse,
+            WebInspectorUse
         };
     }
 }

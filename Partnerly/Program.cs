@@ -15,6 +15,7 @@ using Partnerly.Infrastructure.Services.MiddlewareServices;
 using Partnerly.Models;
 using Partnerly.Models.DataTable;
 using System.Globalization;
+using System.Net;
 
 
 var builder = WebApplication.CreateBuilder(args);
@@ -74,6 +75,15 @@ builder.Services.AddHttpContextAccessor();
 builder.Services.AddScoped<ICurrentUserService, CurrentUserService>();
 // AI Services
 builder.Services.AddHttpClient<IOpenAIService, OpenAIService>();
+builder.Services.AddHttpClient<IWebPageInspectorService, WebPageInspectorService>(client =>
+{
+    client.Timeout = TimeSpan.FromSeconds(20);
+})
+.ConfigurePrimaryHttpMessageHandler(() => new HttpClientHandler
+{
+    AllowAutoRedirect = false,
+    AutomaticDecompression = DecompressionMethods.All
+});
 
 // Database
 builder.Services.AddDbContext<AppDbContext>(options =>

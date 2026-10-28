@@ -1860,4 +1860,204 @@
     <value>Заблокирован</value>
   </data>
 
+  <data name="EmailPreviewEmpty" xml:space="preserve">
+    <value>В этом шаблоне пока нет HTML</value>
+  </data>
+
+  <data name="Tools" xml:space="preserve">
+    <value>Инструменты</value>
+  </data>
+
+  <data name="WebInspector" xml:space="preserve">
+    <value>Веб-инспектор</value>
+  </data>
+
+  <data name="WebInspectorHint" xml:space="preserve">
+    <value>Живой сайт открывается в окне Chrome. HTML и видимые данные остаются здесь — для автоматизации.</value>
+  </data>
+
+  <data name="WebInspectorPlaceholder" xml:space="preserve">
+    <value>https://example.com</value>
+  </data>
+
+  <data name="WebInspectorLoad" xml:space="preserve">
+    <value>Открыть</value>
+  </data>
+
+  <data name="WebInspectorLoading" xml:space="preserve">
+    <value>Загрузка…</value>
+  </data>
+
+  <data name="WebInspectorPreview" xml:space="preserve">
+    <value>Окно Chrome</value>
+  </data>
+
+  <data name="WebInspectorVisibleText" xml:space="preserve">
+    <value>Видимый текст</value>
+  </data>
+
+  <data name="WebInspectorData" xml:space="preserve">
+    <value>Данные</value>
+  </data>
+
+  <data name="WebInspectorHtml" xml:space="preserve">
+    <value>HTML</value>
+  </data>
+
+  <data name="WebInspectorCopyHtml" xml:space="preserve">
+    <value>Копировать HTML</value>
+  </data>
+
+  <data name="WebInspectorCopyJson" xml:space="preserve">
+    <value>Копировать JSON</value>
+  </data>
+
+  <data name="WebInspectorCopied" xml:space="preserve">
+    <value>Скопировано</value>
+  </data>
+
+  <data name="WebInspectorEmpty" xml:space="preserve">
+    <value>Введите адрес сайта и нажмите Открыть</value>
+  </data>
+
+  <data name="WebInspectorJsNote" xml:space="preserve">
+    <value>Живой сайт открывается в отдельном окне Chrome без блокировки iframe. HTML и данные здесь — снимок с сервера: страницы с входом и тяжёлым JavaScript могут отличаться от живого окна. Локальные и внутренние адреса сервер не качает.</value>
+  </data>
+
+  <data name="WebInspectorInvalidUrl" xml:space="preserve">
+    <value>Введите корректный адрес http или https</value>
+  </data>
+
+  <data name="WebInspectorBlockedUrl" xml:space="preserve">
+    <value>Этот адрес открыть нельзя</value>
+  </data>
+
+  <data name="WebInspectorTimeout" xml:space="preserve">
+    <value>Страница слишком долго отвечает</value>
+  </data>
+
+  <data name="WebInspectorTooLarge" xml:space="preserve">
+    <value>Страница слишком большая для разбора</value>
+  </data>
+
+  <data name="WebInspectorFetchFailed" xml:space="preserve">
+    <value>Не удалось загрузить страницу</value>
+  </data>
+
+  <data name="WebInspectorOpenHere" xml:space="preserve">
+    <value>Показать окно</value>
+  </data>
+
+  <data name="WebInspectorLiveTitle" xml:space="preserve">
+    <value>Сайт открыт в Chrome</value>
+  </data>
+
+  <data name="WebInspectorLiveOpened" xml:space="preserve">
+    <value>Сайт открыт в отдельном окне. HTML, текст и данные — на вкладках здесь.</value>
+  </data>
+
+  <data name="WebInspectorLiveHint" xml:space="preserve">
+    <value>Chrome грузит настоящий сайт (скрипты, вход, cookie). Partnerly не может читать то окно из‑за защиты браузера — снимок на вкладках приходит с нашего сервера.</value>
+  </data>
+
+  <data name="WebInspectorPopupBlocked" xml:space="preserve">
+    <value>Chrome заблокировал новое окно. Разрешите всплывающие окна для этого сайта и снова нажмите Открыть.</value>
+  </data>
+
+  <data name="WebInspectorHeadings" xml:space="preserve">
+    <value>Заголовки</value>
+  </data>
+
+  <data name="WebInspectorLinks" xml:space="preserve">
+    <value>Ссылки</value>
+  </data>
+
+  <data name="WebInspectorImages" xml:space="preserve">
+    <value>Картинки</value>
+  </data>
+
+  <data name="WebInspectorForms" xml:space="preserve">
+    <value>Формы</value>
+  </data>
+
+  <data name="WebInspectorTables" xml:space="preserve">
+    <value>Таблицы</value>
+  </data>
+
+  <data name="WebInspectorNone" xml:space="preserve">
+    <value>Ничего не найдено</value>
+  </data>
+
+  <data name="WebInspectorNeedExtension" xml:space="preserve">
+    <value>Установите расширение Chrome: chrome://extensions → «Загрузить распакованное» → папка tools/partnerly-web-inspector-extension, затем обновите страницу.</value>
+  </data>
+
+  <data name="WebInspectorDetached" xml:space="preserve">
+    <value>Окно сайта закрыто</value>
+  </data>
+
+  <data name="WebInspectorLive" xml:space="preserve">
+    <value>LIVE</value>
+  </data>
+
+  <data name="WebInspectorWaiting" xml:space="preserve">
+    <value>Ожидание</value>
+  </data>
+
+  <data name="WebInspectorPageTitle" xml:space="preserve">
+    <value>Заголовок</value>
+  </data>
+
+  <data name="WebInspectorMutations" xml:space="preserve">
+    <value>Изменения</value>
+  </data>
+
+  <data name="WebInspectorReady" xml:space="preserve">
+    <value>Состояние</value>
+  </data>
+
+  <data name="WebInspectorNodes" xml:space="preserve">
+    <value>Узлы</value>
+  </data>
+
+  <data name="WebInspectorFrames" xml:space="preserve">
+    <value>Iframe</value>
+  </data>
+
+  <data name="WebInspectorInputs" xml:space="preserve">
+    <value>Поля</value>
+  </data>
+
+  <data name="WebInspectorButtons" xml:space="preserve">
+    <value>Кнопки</value>
+  </data>
+
+  <data name="WebInspectorLastChange" xml:space="preserve">
+    <value>Событие</value>
+  </data>
+
+  <data name="WebInspectorUpdated" xml:space="preserve">
+    <value>Обновлено</value>
+  </data>
+
+  <data name="WebInspectorCopyText" xml:space="preserve">
+    <value>Копировать текст</value>
+  </data>
+
+  <data name="WebInspectorEnableExtension" xml:space="preserve">
+    <value>Включить расширение</value>
+  </data>
+
+  <data name="WebInspectorExtensionOn" xml:space="preserve">
+    <value>Расширение включено</value>
+  </data>
+
+  <data name="WebInspectorExtensionCopied" xml:space="preserve">
+    <value>Путь к папке скопирован. В chrome://extensions включите режим разработчика → «Загрузить распакованное» → вставьте папку.</value>
+  </data>
+
+  <data name="WebInspectorDetails" xml:space="preserve">
+    <value>Карточка</value>
+  </data>
+
 </root>

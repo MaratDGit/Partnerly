@@ -74,6 +74,7 @@ Partnerly.sln
 | Журнал | `LogRecordsController` | логи |
 | Язык | `LanguageController` | культура |
 | AI | `AIController` | прокси к OpenAI |
+| Веб-инспектор | `WebInspectorController` | загрузка страницы, HTML и видимые данные (`/WebInspector`) |
 
 ## Важные зависимости и интеграции
 

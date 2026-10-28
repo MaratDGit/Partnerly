@@ -96,6 +96,7 @@ body {
 .partnerly-layout-content .container-xxl:has(> .settings-page),
 .partnerly-layout-content .container-xxl:has(> .support-page),
 .partnerly-layout-content .container-xxl:has(> .referral-tree-page),
+.partnerly-layout-content .container-xxl:has(> .web-inspector-page),
 .partnerly-layout-content .container-xxl.profile-page {
     width: 100%;
     max-width: 100%;
@@ -944,6 +945,7 @@ Preserve natural page scrolling on smaller screens
     .partnerly-layout-content .container-xxl:has(> .settings-page),
     .partnerly-layout-content .container-xxl:has(> .support-page),
     .partnerly-layout-content .container-xxl:has(> .referral-tree-page),
+    .partnerly-layout-content .container-xxl:has(> .web-inspector-page),
     .partnerly-layout-content .container-xxl.profile-page {
         padding-left: 0;
         padding-right: 0;
@@ -1300,6 +1302,7 @@ input[type="radio"]:checked {
     .partnerly-layout-content .container-xxl:has(> .settings-page),
     .partnerly-layout-content .container-xxl:has(> .support-page),
     .partnerly-layout-content .container-xxl:has(> .referral-tree-page),
+    .partnerly-layout-content .container-xxl:has(> .web-inspector-page),
     .partnerly-layout-content .container-xxl.profile-page {
         flex: 1 0 auto;
         min-width: 0;
@@ -1357,6 +1360,7 @@ input[type="radio"]:checked {
     .partnerly-layout-content .container-xxl:has(> .settings-page),
     .partnerly-layout-content .container-xxl:has(> .support-page),
     .partnerly-layout-content .container-xxl:has(> .referral-tree-page),
+    .partnerly-layout-content .container-xxl:has(> .web-inspector-page),
     .partnerly-layout-content .container-xxl.profile-page {
         padding-left: 0.25rem;
         padding-right: 0.25rem;

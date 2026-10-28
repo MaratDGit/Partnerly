@@ -1515,8 +1515,11 @@
                  * Cache busting
                  */
 
+                const uploadedPhotoUrl =
+                    result.photoUrl || result.PhotoUrl;
+
                 const cacheBustedPhotoUrl =
-                    `${result.photoUrl}?v=${Date.now()}`;
+                    `${uploadedPhotoUrl}?v=${Date.now()}`;
 
                 /* =================================================
                    UPDATE PROFILE AVATAR
@@ -1577,7 +1580,9 @@
                         );
 
                     navbarAvatars.forEach(function (avatar) {
-                        avatar.src = cacheBustedPhotoUrl;
+                        if (avatar && uploadedPhotoUrl) {
+                            avatar.src = cacheBustedPhotoUrl;
+                        }
                     });
 
 

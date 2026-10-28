@@ -676,7 +676,7 @@ namespace Partnerly.Controllers
                 var result = await _userService.UpdateUserAsync(user);
                 if (result?.Success == true)
                 {
-                    ViewBag.UserPhotoUrl = user.PhotoUrl;
+                    await RefreshUserPhotoClaimAsync(photoUrl);
                 }
             }
 
@@ -686,6 +686,31 @@ namespace Partnerly.Controllers
                 photoUrl,
                 message = ErrorMessages.Photosavedsuccessfully
             });
+        }
+
+        private async Task RefreshUserPhotoClaimAsync(string photoUrl)
+        {
+            var auth = await HttpContext.AuthenticateAsync(
+                CookieAuthenticationDefaults.AuthenticationScheme);
+
+            var currentPrincipal = auth.Principal ?? User;
+            if (currentPrincipal?.Identity is not ClaimsIdentity)
+                return;
+
+            var claims = currentPrincipal.Claims
+                .Where(c => c.Type != Constants.ClaimTypeUserPhotoUrl)
+                .ToList();
+
+            claims.Add(new Claim(Constants.ClaimTypeUserPhotoUrl, photoUrl));
+
+            var identity = new ClaimsIdentity(
+                claims,
+                CookieAuthenticationDefaults.AuthenticationScheme);
+
+            await HttpContext.SignInAsync(
+                CookieAuthenticationDefaults.AuthenticationScheme,
+                new ClaimsPrincipal(identity),
+                auth.Properties ?? new AuthenticationProperties());
         }
     }
 }

@@ -8,6 +8,10 @@
     Layout = "_ContentNavbarLayout";
 }
 
+@section PageStyles {
+    <link rel="stylesheet" href="~/assets/css/email-template-preview.css" asp-append-version="true" />
+}
+
 <div class="card">
     <div class="card-header d-flex align-items-center justify-content-between">
         <h5 class="mb-0">
@@ -112,11 +116,14 @@
      aria-labelledby="previewModalLabel"
      aria-hidden="true">
 
-    <div class="modal-dialog modal-lg">
-        <div class="modal-content">
-            <div class="modal-header">
+    <div class="modal-dialog modal-dialog-centered email-preview-dialog">
+        <div class="modal-content email-preview-content">
+            <div class="modal-header email-preview-header">
                 <h5 class="modal-title" id="previewModalLabel">
-                    @Localizer["Emailpreview"]
+                    <span class="email-preview-icon">
+                        <i class="bx bx-envelope-open"></i>
+                    </span>
+                    <span>@Localizer["Emailpreview"]</span>
                 </h5>
 
                 <button type="button"
@@ -126,18 +133,26 @@
                 </button>
             </div>
 
-            <div class="modal-body">
-                <h4 id="previewSubject"></h4>
-                <hr />
+            <div class="modal-body email-preview-body">
+                <div class="email-preview-letter">
+                    <div class="email-preview-meta">
+                        <span class="email-preview-meta-label">@Localizer["Subject"]</span>
+                        <h4 id="previewSubject" class="email-preview-subject"></h4>
+                    </div>
 
-                <iframe id="previewFrame"
-                        title="Email template preview"
-                        sandbox=""
-                        style="width: 100%; min-height: 400px; border: 0;">
-                </iframe>
+                    <div class="email-preview-frame-wrap">
+                        <iframe id="previewFrame"
+                                title="Email template preview"
+                                sandbox=""></iframe>
+                        <div class="email-preview-empty" data-preview-empty hidden>
+                            <i class="bx bx-mail-send"></i>
+                            <p>@Localizer["EmailPreviewEmpty"]</p>
+                        </div>
+                    </div>
+                </div>
             </div>
 
-            <div class="modal-footer">
+            <div class="modal-footer email-preview-footer">
                 <button type="button"
                         class="btn btn-secondary"
                         data-bs-dismiss="modal">
@@ -153,13 +168,36 @@
 <script>
     enableSaveOnChange("#emailTemplateForm", "#btnSave");
 
-    function showPreview() {
-        const subject = document.getElementById("subject").value;
-        const bodyHtml = document.getElementById("bodyHtml").value;
-
-        document.getElementById("previewSubject").innerText = subject;
-
-        // Keep the HTML preview isolated from the main application page.
-        document.getElementById("previewFrame").srcdoc = bodyHtml;
+    function mountPreviewModal() {
+        const modal = document.getElementById("previewModal");
+        if (modal && modal.parentElement !== document.body) {
+            document.body.appendChild(modal);
+        }
+        return modal;
     }
+
+    function showPreview() {
+        mountPreviewModal();
+
+        const subject = (document.getElementById("subject")?.value || "").trim();
+        const bodyHtml = document.getElementById("bodyHtml")?.value || "";
+        const subjectEl = document.getElementById("previewSubject");
+        const frame = document.getElementById("previewFrame");
+        const empty = document.querySelector("[data-preview-empty]");
+
+        if (subjectEl) {
+            subjectEl.textContent = subject || "—";
+            subjectEl.classList.toggle("is-empty", !subject);
+        }
+
+        if (frame) {
+            frame.srcdoc = bodyHtml;
+        }
+
+        if (empty) {
+            empty.hidden = bodyHtml.trim().length > 0;
+        }
+    }
+
+    document.addEventListener("DOMContentLoaded", mountPreviewModal);
 </script>

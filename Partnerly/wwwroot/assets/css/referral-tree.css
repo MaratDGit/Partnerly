@@ -469,6 +469,26 @@ html[data-theme="dark"] .referral-tree-picker .form-control {
     color: #d7d8ed;
 }
 
+html[data-theme="dark"] .referral-tree-search .form-control::placeholder {
+    color: #8b8da6;
+    opacity: 1;
+}
+
+html[data-theme="dark"] .referral-tree-picker .form-floating > label {
+    color: #8b8da6;
+}
+
+html[data-theme="dark"] .referral-tree-picker .form-floating > .form-control:focus ~ label,
+html[data-theme="dark"] .referral-tree-picker .form-floating > .form-control:not(:placeholder-shown) ~ label {
+    color: #a3a6ff;
+}
+
+html[data-theme="dark"] .referral-tree-picker .form-floating > .form-control::placeholder {
+    color: transparent !important;
+    opacity: 0 !important;
+    -webkit-text-fill-color: transparent !important;
+}
+
 html[data-theme="dark"] .referral-tree-stage {
     background:
         radial-gradient(circle at top left, rgba(105, 108, 255, 0.16), transparent 34%),

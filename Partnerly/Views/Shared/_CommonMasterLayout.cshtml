@@ -56,9 +56,9 @@
             }
         })();
     </script>
-    <link rel="stylesheet" href="~/assets/css/spiner.css" />
+    <link rel="stylesheet" href="~/assets/css/spiner.css" asp-append-version="true" />
     <!-- Global Loader-Spiner -->
-    <div id="globalLoader" style="display:none;">
+    <div id="globalLoader" hidden style="display:none;" aria-hidden="true">
         <div class="loader-container">
             <div class="spinner"></div>
             <div class="loader-text">@Localizer["LookupLoading"]</div>
@@ -145,7 +145,7 @@
     </script>
 
     <script src="~/assets/js/partnerly-theme.js" asp-append-version="true"></script>
-    <script src="~/assets/js/spiner.js"></script>
+    <script src="~/assets/js/spiner.js" asp-append-version="true"></script>
     <script src="~/assets/js/field-lookup.js"></script>
     <link rel="stylesheet" href="~/assets/css/field-lookup.css" />
 

@@ -4,6 +4,79 @@
 
 ---
 
+## 2026-10-28 — Инспектор парсит HTML внутри iframe
+
+- **Суть:** live-снимок включает документы всех фреймов, не только top.
+- **Сделано:** inject `observe.js` во все frameId; merge HTML/текст/карточки; same-origin fallback через `contentDocument`; карточка Iframes. Opaque/sandbox фреймы могут остаться закрытыми.
+- **Сборка:** `dotnet build Partnerly.sln` в `%TEMP%\PartnerlyBuildInspectorFrames` — 0 ошибок. Нужен Reload unpacked extension (новое право `webNavigation`).
+
+---
+
+## 2026-10-28 — Инспектор: кнопка расширения, вкладки, карточки
+
+- **Суть:** кнопка открывает chrome://extensions (автоустановка Chrome не даёт); текст и HTML — вкладки с форматированием; клик по KPI показывает только этот тип.
+- **Сделано:** `OPEN_EXTENSIONS` в background; путь папки копируется; observe шлёт details; pretty HTML + подсветка; списки links/forms/… .
+- **Сборка:** `dotnet build Partnerly.sln` в `%TEMP%\PartnerlyBuildInspectorUi` — 0 ошибок.
+
+---
+
+## 2026-10-27 — Realtime инспектор через расширение Chrome
+
+- **Суть:** каждое изменение в открытом окне сайта сразу отражается индикаторами в Partnerly.
+- **Сделано:** MV3-расширение `tools/partnerly-web-inspector-extension`; страница очищена; split — окно сайта слева на мониторе, справа KPI/текст/HTML; вспышка индикаторов на mutation/click/input/навигацию. Always-on-top OS недоступен, окна ставятся рядом.
+- **Сборка:** `dotnet build Partnerly.sln` в `%TEMP%\PartnerlyBuildInspectorLive2` — 0 ошибок.
+
+---
+
+## 2026-10-27 — Инспектор открывает сайт в окне Chrome
+
+- **Суть:** живой сайт — отдельное окно Chrome; HTML/текст/данные остаются в Partnerly.
+- **Сделано:** `window.open` по клику «Открыть» (до fetch, иначе popup-blocker); убран sandbox iframe; карточка «сайт в Chrome» + фокус/повтор; серверный снимок как раньше. i18n en/ru/hy.
+- **Сборка:** `dotnet build Partnerly.sln` в `%TEMP%\PartnerlyBuildWebInspectorLive` — 0 ошибок.
+
+---
+
+## 2026-10-27 — Лоадер не снимался в веб-инспекторе
+
+- **Суть:** по «Открыть» глобальный `#globalLoader` крутился и не исчезал, хотя страница уже пришла.
+- **Сделано:** `spiner.js` не показывает лоадер на `data-no-loader` и на submit с `preventDefault`; прячет его, если документ уже `complete` и нет jQuery AJAX (ajaxStop/Error, load, pageshow, visibility). Инспектор: `data-no-loader` + `PartnerlyLoader.hide()` после fetch.
+- **Сборка:** не запускалась (JS).
+
+---
+
+## 2026-10-27 — Веб-инспектор
+
+- **Суть:** нужна страница, где открывается любой сайт как в браузере, и программа читает HTML и видимые данные для автоматизации.
+- **Сделано:** секция меню Tools → Веб-инспектор; сервер качает страницу, превью + текст + ссылки/формы/таблицы + сырой HTML; копирование HTML/JSON; SSRF-блок localhost/private; право `web_inspector.use`. Iframe чужого origin не используется.
+- **Сборка:** `dotnet build Partnerly.sln` в `%TEMP%\PartnerlyBuildWebInspector` — 0 ошибок.
+- **Ограничение:** без JS-движка SPA могут открыться неполностью. Нужен рестарт приложения, чтобы seeder выдал право Super/Admin/Employee.
+
+---
+
+## 2026-10-27 — Превью email-шаблона
+
+- **Суть:** попап Preview на форме Email Templates выглядел как сырой Bootstrap modal.
+- **Сделано:** оформление как у note/lookup: иконка, крестик в рамке, карточка «письма» с темой и iframe; светлая и тёмная тема; модалка переносится в `body`, чтобы её не резал `overflow` layout. HTML письма остаётся на белом фоне.
+- **Сборка:** `dotnet build Partnerly.sln` в `%TEMP%\PartnerlyBuildEmailPreview` — 0 ошибок.
+
+---
+
+## 2026-10-27 — Навбар не обновлял фото профиля
+
+- **Суть:** после смены фото на My Profile картинка в БД новая, в навбаре — старая до повторного входа.
+- **Сделано:** `AccountController.UploadPhoto` после сохранения перевыпускает cookie и claim `UserPhotoUrl`; навбар на текущей странице по-прежнему обновляется JS.
+- **Сборка:** `dotnet build Partnerly.sln` в `%TEMP%\PartnerlyBuildPhotoClaim` — 0 ошибок.
+
+---
+
+## 2026-10-27 — Тёмная тема: label и placeholder в полях
+
+- **Суть:** в тёмной теме имя поля и placeholder наезжали друг на друга; на светлой нет.
+- **Сделано:** у `form-floating` в dark placeholder снова прозрачный (как в Bootstrap). Обычные инпуты по-прежнему показывают подсказку. Правка в `site.css`, плюс дерево рефералов.
+- **Сборка:** не запускалась (CSS). Браузер в этой сессии не проверялся.
+
+---
+
 ## 2026-10-26 — Экран дерева рефералов
 
 - **Суть:** нужен красивый экран с деревом рефералов в меню под Statistics, связи между пользователями как у дерева.

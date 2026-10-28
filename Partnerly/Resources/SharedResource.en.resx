@@ -1860,4 +1860,204 @@
     <value>Blocked</value>
   </data>
 
+  <data name="EmailPreviewEmpty" xml:space="preserve">
+    <value>There is no HTML in this template yet</value>
+  </data>
+
+  <data name="Tools" xml:space="preserve">
+    <value>Tools</value>
+  </data>
+
+  <data name="WebInspector" xml:space="preserve">
+    <value>Web inspector</value>
+  </data>
+
+  <data name="WebInspectorHint" xml:space="preserve">
+    <value>Open the live site in a Chrome window. HTML and visible data stay here for later automation.</value>
+  </data>
+
+  <data name="WebInspectorPlaceholder" xml:space="preserve">
+    <value>https://example.com</value>
+  </data>
+
+  <data name="WebInspectorLoad" xml:space="preserve">
+    <value>Open</value>
+  </data>
+
+  <data name="WebInspectorLoading" xml:space="preserve">
+    <value>Loading…</value>
+  </data>
+
+  <data name="WebInspectorPreview" xml:space="preserve">
+    <value>Chrome window</value>
+  </data>
+
+  <data name="WebInspectorVisibleText" xml:space="preserve">
+    <value>Visible text</value>
+  </data>
+
+  <data name="WebInspectorData" xml:space="preserve">
+    <value>Extracted data</value>
+  </data>
+
+  <data name="WebInspectorHtml" xml:space="preserve">
+    <value>HTML</value>
+  </data>
+
+  <data name="WebInspectorCopyHtml" xml:space="preserve">
+    <value>Copy HTML</value>
+  </data>
+
+  <data name="WebInspectorCopyJson" xml:space="preserve">
+    <value>Copy JSON</value>
+  </data>
+
+  <data name="WebInspectorCopied" xml:space="preserve">
+    <value>Copied</value>
+  </data>
+
+  <data name="WebInspectorEmpty" xml:space="preserve">
+    <value>Enter a website address and press Open</value>
+  </data>
+
+  <data name="WebInspectorJsNote" xml:space="preserve">
+    <value>The live site opens in a separate Chrome window with no iframe blocking. HTML and extracted data here are a server snapshot — login walls and heavy JavaScript apps may differ from the live window. Local and private addresses are not fetched by the server.</value>
+  </data>
+
+  <data name="WebInspectorInvalidUrl" xml:space="preserve">
+    <value>Enter a valid http or https address</value>
+  </data>
+
+  <data name="WebInspectorBlockedUrl" xml:space="preserve">
+    <value>This address cannot be opened</value>
+  </data>
+
+  <data name="WebInspectorTimeout" xml:space="preserve">
+    <value>The page took too long to respond</value>
+  </data>
+
+  <data name="WebInspectorTooLarge" xml:space="preserve">
+    <value>The page is too large to inspect</value>
+  </data>
+
+  <data name="WebInspectorFetchFailed" xml:space="preserve">
+    <value>Could not load the page</value>
+  </data>
+
+  <data name="WebInspectorOpenHere" xml:space="preserve">
+    <value>Show window</value>
+  </data>
+
+  <data name="WebInspectorLiveTitle" xml:space="preserve">
+    <value>Live site is in Chrome</value>
+  </data>
+
+  <data name="WebInspectorLiveOpened" xml:space="preserve">
+    <value>The site opened in a separate window. HTML, text and extracted data are on the tabs here.</value>
+  </data>
+
+  <data name="WebInspectorLiveHint" xml:space="preserve">
+    <value>Chrome loads the real site (scripts, login, cookies). Partnerly cannot read that window because of browser security — the snapshot below comes from our server.</value>
+  </data>
+
+  <data name="WebInspectorPopupBlocked" xml:space="preserve">
+    <value>Chrome blocked the new window. Allow popups for this site and press Open again.</value>
+  </data>
+
+  <data name="WebInspectorHeadings" xml:space="preserve">
+    <value>Headings</value>
+  </data>
+
+  <data name="WebInspectorLinks" xml:space="preserve">
+    <value>Links</value>
+  </data>
+
+  <data name="WebInspectorImages" xml:space="preserve">
+    <value>Images</value>
+  </data>
+
+  <data name="WebInspectorForms" xml:space="preserve">
+    <value>Forms</value>
+  </data>
+
+  <data name="WebInspectorTables" xml:space="preserve">
+    <value>Tables</value>
+  </data>
+
+  <data name="WebInspectorNone" xml:space="preserve">
+    <value>Nothing found</value>
+  </data>
+
+  <data name="WebInspectorNeedExtension" xml:space="preserve">
+    <value>Install the Chrome extension: chrome://extensions → Load unpacked → folder tools/partnerly-web-inspector-extension, then refresh this page.</value>
+  </data>
+
+  <data name="WebInspectorDetached" xml:space="preserve">
+    <value>Site window closed</value>
+  </data>
+
+  <data name="WebInspectorLive" xml:space="preserve">
+    <value>LIVE</value>
+  </data>
+
+  <data name="WebInspectorWaiting" xml:space="preserve">
+    <value>Waiting</value>
+  </data>
+
+  <data name="WebInspectorPageTitle" xml:space="preserve">
+    <value>Title</value>
+  </data>
+
+  <data name="WebInspectorMutations" xml:space="preserve">
+    <value>Changes</value>
+  </data>
+
+  <data name="WebInspectorReady" xml:space="preserve">
+    <value>State</value>
+  </data>
+
+  <data name="WebInspectorNodes" xml:space="preserve">
+    <value>Nodes</value>
+  </data>
+
+  <data name="WebInspectorFrames" xml:space="preserve">
+    <value>Iframes</value>
+  </data>
+
+  <data name="WebInspectorInputs" xml:space="preserve">
+    <value>Inputs</value>
+  </data>
+
+  <data name="WebInspectorButtons" xml:space="preserve">
+    <value>Buttons</value>
+  </data>
+
+  <data name="WebInspectorLastChange" xml:space="preserve">
+    <value>Last event</value>
+  </data>
+
+  <data name="WebInspectorUpdated" xml:space="preserve">
+    <value>Updated</value>
+  </data>
+
+  <data name="WebInspectorCopyText" xml:space="preserve">
+    <value>Copy text</value>
+  </data>
+
+  <data name="WebInspectorEnableExtension" xml:space="preserve">
+    <value>Enable extension</value>
+  </data>
+
+  <data name="WebInspectorExtensionOn" xml:space="preserve">
+    <value>Extension on</value>
+  </data>
+
+  <data name="WebInspectorExtensionCopied" xml:space="preserve">
+    <value>Folder path copied. In chrome://extensions turn on Developer mode → Load unpacked → paste the folder.</value>
+  </data>
+
+  <data name="WebInspectorDetails" xml:space="preserve">
+    <value>Card</value>
+  </data>
+
 </root>

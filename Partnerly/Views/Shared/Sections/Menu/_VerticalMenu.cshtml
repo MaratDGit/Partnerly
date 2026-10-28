@@ -140,6 +140,55 @@
 
 
             <!-- ================================================= -->
+            <!-- TOOLS -->
+            <!-- ================================================= -->
+            @if (Can("web_inspector.use"))
+            {
+            <li class="partnerly-menu-section-group"
+                data-menu-section-group="tools">
+
+                <button type="button"
+                        class="partnerly-menu-section partnerly-menu-section-toggle"
+                        data-menu-section="tools"
+                        aria-expanded="true">
+
+                    <span>
+                        @Localizer["Tools"]
+                    </span>
+
+                    <i class="bx bx-chevron-down partnerly-menu-section-arrow"></i>
+
+                </button>
+
+
+                <ul class="partnerly-menu-section-content"
+                    data-menu-section-content="tools">
+
+                    <li class="partnerly-menu-item @(currentPage.StartsWith("/WebInspector") ? "active" : "")">
+
+                        <a asp-controller="WebInspector"
+                           asp-action="Index"
+                           class="partnerly-menu-link">
+
+                            <span class="partnerly-menu-icon">
+                                <i class="bx bx-globe"></i>
+                            </span>
+
+                            <span class="partnerly-menu-text">
+                                @Localizer["WebInspector"]
+                            </span>
+
+                        </a>
+
+                    </li>
+
+                </ul>
+
+            </li>
+            }
+
+
+            <!-- ================================================= -->
             <!-- MISCELLANEOUS -->
             <!-- ================================================= -->
 

@@ -1,0 +1,18 @@
+{
+  "manifest_version": 3,
+  "name": "Partnerly Web Inspector",
+  "version": "1.1.0",
+  "description": "Streams live DOM changes from the opened site window into Partnerly.",
+  "permissions": ["tabs", "windows", "scripting", "storage", "webNavigation"],
+  "host_permissions": ["http://*/*", "https://*/*"],
+  "background": {
+    "service_worker": "background.js"
+  },
+  "content_scripts": [
+    {
+      "matches": ["http://*/*", "https://*/*"],
+      "js": ["partnerly-bridge.js"],
+      "run_at": "document_idle"
+    }
+  ]
+}

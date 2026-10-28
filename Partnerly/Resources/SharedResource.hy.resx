@@ -1860,4 +1860,204 @@
     <value>Արգելափակված</value>
   </data>
 
+  <data name="EmailPreviewEmpty" xml:space="preserve">
+    <value>Այս ձևանմուշում դեռ HTML չկա</value>
+  </data>
+
+  <data name="Tools" xml:space="preserve">
+    <value>Գործիքներ</value>
+  </data>
+
+  <data name="WebInspector" xml:space="preserve">
+    <value>Վեբ ստուգիչ</value>
+  </data>
+
+  <data name="WebInspectorHint" xml:space="preserve">
+    <value>Կենդանի կայքը բացվում է Chrome-ի պատուհանում։ HTML-ը և տեսանելի տվյալները մնում են այստեղ՝ ավտոմատացման համար։</value>
+  </data>
+
+  <data name="WebInspectorPlaceholder" xml:space="preserve">
+    <value>https://example.com</value>
+  </data>
+
+  <data name="WebInspectorLoad" xml:space="preserve">
+    <value>Բացել</value>
+  </data>
+
+  <data name="WebInspectorLoading" xml:space="preserve">
+    <value>Բեռնվում է…</value>
+  </data>
+
+  <data name="WebInspectorPreview" xml:space="preserve">
+    <value>Chrome պատուհան</value>
+  </data>
+
+  <data name="WebInspectorVisibleText" xml:space="preserve">
+    <value>Տեսանելի տեքստ</value>
+  </data>
+
+  <data name="WebInspectorData" xml:space="preserve">
+    <value>Տվյալներ</value>
+  </data>
+
+  <data name="WebInspectorHtml" xml:space="preserve">
+    <value>HTML</value>
+  </data>
+
+  <data name="WebInspectorCopyHtml" xml:space="preserve">
+    <value>Պատճենել HTML</value>
+  </data>
+
+  <data name="WebInspectorCopyJson" xml:space="preserve">
+    <value>Պատճենել JSON</value>
+  </data>
+
+  <data name="WebInspectorCopied" xml:space="preserve">
+    <value>Պատճենված է</value>
+  </data>
+
+  <data name="WebInspectorEmpty" xml:space="preserve">
+    <value>Մուտքագրեք կայքի հասցեն և սեղմեք Բացել</value>
+  </data>
+
+  <data name="WebInspectorJsNote" xml:space="preserve">
+    <value>Կենդանի կայքը բացվում է առանձին Chrome պատուհանում՝ առանց iframe արգելքի։ HTML-ը և տվյալները այստեղ սերվերի նկարն են. մուտքով և ծանր JavaScript-ով կայքերը կարող են տարբերվել կենդանի պատուհանից։ Սերվերը տեղական և ներքին հասցեներ չի բեռնում։</value>
+  </data>
+
+  <data name="WebInspectorInvalidUrl" xml:space="preserve">
+    <value>Մուտքագրեք վավեր http կամ https հասցե</value>
+  </data>
+
+  <data name="WebInspectorBlockedUrl" xml:space="preserve">
+    <value>Այս հասցեն բացել չի կարելի</value>
+  </data>
+
+  <data name="WebInspectorTimeout" xml:space="preserve">
+    <value>Էջը չափազանց երկար է պատասխանում</value>
+  </data>
+
+  <data name="WebInspectorTooLarge" xml:space="preserve">
+    <value>Էջը չափազանց մեծ է ստուգելու համար</value>
+  </data>
+
+  <data name="WebInspectorFetchFailed" xml:space="preserve">
+    <value>Չհաջողվեց բեռնել էջը</value>
+  </data>
+
+  <data name="WebInspectorOpenHere" xml:space="preserve">
+    <value>Ցույց տալ պատուհանը</value>
+  </data>
+
+  <data name="WebInspectorLiveTitle" xml:space="preserve">
+    <value>Կայքը բացված է Chrome-ում</value>
+  </data>
+
+  <data name="WebInspectorLiveOpened" xml:space="preserve">
+    <value>Կայքը բացվեց առանձին պատուհանում։ HTML-ը, տեքստը և տվյալները այստեղ են։</value>
+  </data>
+
+  <data name="WebInspectorLiveHint" xml:space="preserve">
+    <value>Chrome-ը բեռնում է իրական կայքը (սկրիպտներ, մուտք, cookie)։ Partnerly-ն չի կարող կարդալ այդ պատուհանը բրաուզերի պաշտպանության պատճառով. այստեղի նկարը գալիս է մեր սերվերից։</value>
+  </data>
+
+  <data name="WebInspectorPopupBlocked" xml:space="preserve">
+    <value>Chrome-ը արգելեց նոր պատուհանը։ Թույլատրեք pop-up-ները այս կայքի համար և նորից սեղմեք Բացել։</value>
+  </data>
+
+  <data name="WebInspectorHeadings" xml:space="preserve">
+    <value>Վերնագրեր</value>
+  </data>
+
+  <data name="WebInspectorLinks" xml:space="preserve">
+    <value>Հղումներ</value>
+  </data>
+
+  <data name="WebInspectorImages" xml:space="preserve">
+    <value>Նկարներ</value>
+  </data>
+
+  <data name="WebInspectorForms" xml:space="preserve">
+    <value>Ձևեր</value>
+  </data>
+
+  <data name="WebInspectorTables" xml:space="preserve">
+    <value>Աղյուսակներ</value>
+  </data>
+
+  <data name="WebInspectorNone" xml:space="preserve">
+    <value>Ոչինչ չի գտնվել</value>
+  </data>
+
+  <data name="WebInspectorNeedExtension" xml:space="preserve">
+    <value>Տեղադրեք Chrome ընդլայնումը. chrome://extensions → Load unpacked → tools/partnerly-web-inspector-extension, ապա թարմացրեք էջը։</value>
+  </data>
+
+  <data name="WebInspectorDetached" xml:space="preserve">
+    <value>Կայքի պատուհանը փակ է</value>
+  </data>
+
+  <data name="WebInspectorLive" xml:space="preserve">
+    <value>LIVE</value>
+  </data>
+
+  <data name="WebInspectorWaiting" xml:space="preserve">
+    <value>Սպասում</value>
+  </data>
+
+  <data name="WebInspectorPageTitle" xml:space="preserve">
+    <value>Վերնագիր</value>
+  </data>
+
+  <data name="WebInspectorMutations" xml:space="preserve">
+    <value>Փոփոխություններ</value>
+  </data>
+
+  <data name="WebInspectorReady" xml:space="preserve">
+    <value>Վիճակ</value>
+  </data>
+
+  <data name="WebInspectorNodes" xml:space="preserve">
+    <value>Հանգույցներ</value>
+  </data>
+
+  <data name="WebInspectorFrames" xml:space="preserve">
+    <value>Iframe</value>
+  </data>
+
+  <data name="WebInspectorInputs" xml:space="preserve">
+    <value>Դաշտեր</value>
+  </data>
+
+  <data name="WebInspectorButtons" xml:space="preserve">
+    <value>Կոճակներ</value>
+  </data>
+
+  <data name="WebInspectorLastChange" xml:space="preserve">
+    <value>Իրադարձություն</value>
+  </data>
+
+  <data name="WebInspectorUpdated" xml:space="preserve">
+    <value>Թարմացված</value>
+  </data>
+
+  <data name="WebInspectorCopyText" xml:space="preserve">
+    <value>Պատճենել տեքստը</value>
+  </data>
+
+  <data name="WebInspectorEnableExtension" xml:space="preserve">
+    <value>Միացնել ընդլայնումը</value>
+  </data>
+
+  <data name="WebInspectorExtensionOn" xml:space="preserve">
+    <value>Ընդլայնումը միացված է</value>
+  </data>
+
+  <data name="WebInspectorExtensionCopied" xml:space="preserve">
+    <value>Թղթապանակի ուղին պատճենված է։ chrome://extensions-ում միացրեք Developer mode → Load unpacked → տեղադրեք թղթապանակը։</value>
+  </data>
+
+  <data name="WebInspectorDetails" xml:space="preserve">
+    <value>Քարտ</value>
+  </data>
+
 </root>

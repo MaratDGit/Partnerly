@@ -15,7 +15,8 @@ namespace Partnerly.Infrastructure.Services
             PermissionCodes.SupportTicketsView,
             PermissionCodes.SupportTicketsCreate,
             PermissionCodes.SupportTicketsEdit,
-            PermissionCodes.AttachmentsView
+            PermissionCodes.AttachmentsView,
+            PermissionCodes.WebInspectorUse
         };
 
         private static readonly string[] UserRolePermissions =

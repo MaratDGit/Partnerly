@@ -7,90 +7,124 @@
     }
 
     let loaderTimeout = null;
-
+    let visible = false;
 
     function showLoader() {
-
         clearTimeout(loaderTimeout);
-
-        // show
+        visible = true;
         loader.style.display = "flex";
+        loader.removeAttribute("hidden");
+        loader.setAttribute("aria-hidden", "false");
 
-        // max time to show — 15 seconds
         loaderTimeout = setTimeout(function () {
             hideLoader();
         }, 15000);
     }
 
-
     function hideLoader() {
-
         clearTimeout(loaderTimeout);
         loaderTimeout = null;
+        visible = false;
         loader.style.display = "none";
+        loader.setAttribute("hidden", "");
+        loader.setAttribute("aria-hidden", "true");
     }
 
+    function hasNoLoaderFlag(element) {
+        if (!element) {
+            return false;
+        }
+        return element.hasAttribute("data-no-loader") ||
+            $(element).closest("[data-no-loader]").length > 0;
+    }
 
-    // ==========================================
-    // AJAX
-    // ==========================================
+    function isEventCancelled(event) {
+        return !!(event && (
+            event.defaultPrevented ||
+            (typeof event.isDefaultPrevented === "function" && event.isDefaultPrevented())
+        ));
+    }
+
+    function jqueryAjaxBusy() {
+        return typeof $ !== "undefined" && typeof $.active === "number" && $.active > 0;
+    }
+
+    function hideLoaderIfPageReady() {
+        if (document.readyState === "complete" && !jqueryAjaxBusy()) {
+            hideLoader();
+        }
+    }
+
+    function showLoaderUnlessCancelled(event) {
+        if (isEventCancelled(event)) {
+            hideLoader();
+            return;
+        }
+
+        showLoader();
+
+        window.setTimeout(function () {
+            if (isEventCancelled(event)) {
+                hideLoader();
+            }
+        }, 0);
+    }
 
     $(document).ajaxStart(function () {
         showLoader();
     });
 
     $(document).ajaxStop(function () {
-        hideLoader();
+        hideLoaderIfPageReady();
     });
 
-
-    // ==========================================
-    // FORM SUBMIT
-    // ==========================================
-
-    $(document).on("submit", "form", function () {
-        showLoader();
+    $(document).ajaxError(function () {
+        hideLoaderIfPageReady();
     });
 
+    $(document).on("submit", "form", function (event) {
+        if (hasNoLoaderFlag(this)) {
+            hideLoader();
+            return;
+        }
 
-    // ==========================================
-    // LINKS
-    // ==========================================
+        showLoaderUnlessCancelled(event);
+    });
 
-    $(document).on("click", "a", function () {
-
+    $(document).on("click", "a", function (event) {
         const href = $(this).attr("href");
 
         if (
+            hasNoLoaderFlag(this) ||
             !href ||
             href.startsWith("#") ||
             href.startsWith("javascript:") ||
             $(this).attr("target") === "_blank" ||
-            $(this).attr("data-bs-toggle") ||
-            $(this).attr("data-no-loader")
+            $(this).attr("data-bs-toggle")
         ) {
             return;
         }
 
-        showLoader();
+        showLoaderUnlessCancelled(event);
     });
 
+    window.addEventListener("pageshow", hideLoader);
+    window.addEventListener("pagehide", hideLoader);
+    window.addEventListener("load", hideLoaderIfPageReady);
+    document.addEventListener("visibilitychange", function () {
+        if (document.visibilityState === "visible") {
+            hideLoaderIfPageReady();
+        }
+    });
 
-    // ==========================================
-    // BACK / FORWARD
-    // ==========================================
-
-    window.addEventListener("pageshow", function () {
+    if (document.readyState === "complete") {
         hideLoader();
-    });
+    }
 
-
-    // ==========================================
-    // BEFORE PAGE GOES INTO BFCache
-    // ==========================================
-
-    window.addEventListener("pagehide", function () {
-        hideLoader();
-    });
-
+    window.PartnerlyLoader = {
+        show: showLoader,
+        hide: hideLoader,
+        hideIfReady: hideLoaderIfPageReady,
+        isVisible: function () { return visible; }
+    };
 });
