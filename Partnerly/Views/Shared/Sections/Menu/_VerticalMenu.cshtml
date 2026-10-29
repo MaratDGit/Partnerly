@@ -116,24 +116,6 @@
 
                     </li>
 
-                    <li class="partnerly-menu-item @(currentPage.StartsWith("/Dashboard/Dashboards") ? "active" : "")">
-
-                        <a asp-controller="Dashboard"
-                           asp-action="Dashboards"
-                           class="partnerly-menu-link">
-
-                            <span class="partnerly-menu-icon">
-                                <i class="bx bx-grid-alt"></i>
-                            </span>
-
-                            <span class="partnerly-menu-text">
-                                @Localizer["Dashboards"]
-                            </span>
-
-                        </a>
-
-                    </li>
-
                     <li class="partnerly-menu-item @(currentPage.StartsWith("/Dashboard/ReferralTree") ? "active" : "")">
 
                         <a asp-controller="Dashboard"

@@ -16,6 +16,11 @@
    STAT CARDS
 ========================================= */
 
+.dashboard > .row.g-4.mb-4 > [class*="col-"] {
+    display: flex;
+    flex-direction: column;
+}
+
 .dashboard-stat-card {
     position: relative;
     overflow: hidden;
@@ -26,6 +31,11 @@
     border: 1px solid rgba(67, 89, 113, 0.08);
     box-shadow: 0 4px 18px rgba(67, 89, 113, 0.06);
     transition: all .25s ease;
+}
+
+.dashboard > .row.g-4.mb-4 .dashboard-stat-card {
+    flex: 1 1 auto;
+    width: 100%;
 }
 
     .dashboard-stat-card:hover {
@@ -167,6 +177,25 @@
     box-shadow: 0 4px 18px rgba(67, 89, 113, 0.06);
     padding: 24px;
     transition: box-shadow .25s ease;
+}
+
+.dashboard-charts-row > [class*="col-"] {
+    display: flex;
+    flex-direction: column;
+}
+
+.dashboard-charts-row .dashboard-card {
+    display: flex;
+    flex-direction: column;
+    flex: 1 1 auto;
+    width: 100%;
+    min-height: 0;
+}
+
+.dashboard-charts-row .chart-container,
+.dashboard-charts-row .donut-container {
+    flex: 1 1 auto;
+    min-height: 0;
 }
 
     .dashboard-card:hover {

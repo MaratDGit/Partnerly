@@ -2116,6 +2116,14 @@
     <value>Օգտատերեր ըստ դերի</value>
   </data>
 
+  <data name="PermissionsByRole" xml:space="preserve">
+    <value>Թույլտվություններ ըստ դերի</value>
+  </data>
+
+  <data name="Games" xml:space="preserve">
+    <value>Խաղեր</value>
+  </data>
+
   <data name="TasksByStatus" xml:space="preserve">
     <value>Խնդիրներ ըստ կարգավիճակի</value>
   </data>
@@ -2190,6 +2198,22 @@
 
   <data name="Read" xml:space="preserve">
     <value>Կարդացված</value>
+  </data>
+
+  <data name="SiteSearchPlaceholder" xml:space="preserve">
+    <value>Որոնել բաժիններում և տվյալներում...</value>
+  </data>
+
+  <data name="SiteSearchEmpty" xml:space="preserve">
+    <value>Մուտքագրեք առնվազն 2 նիշ</value>
+  </data>
+
+  <data name="SiteSearchNoResults" xml:space="preserve">
+    <value>Արդյունք չկա</value>
+  </data>
+
+  <data name="SiteSearchSections" xml:space="preserve">
+    <value>Բաժիններ</value>
   </data>
 
 </root>

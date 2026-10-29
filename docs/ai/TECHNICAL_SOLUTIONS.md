@@ -4,6 +4,17 @@
 
 ---
 
+## TR-2026-10-29-03 — Глобальный поиск в навбаре
+
+- **Дата:** 2026-10-29
+- **Суть:** title страницы в навбаре заменён полем поиска (десктоп и планшет ≥768px, на телефоне скрыто). Запрос идёт на `/Search/Query`; сервис ищет разделы меню (локализованные названия + английские ключи) и данные модулей, которые пользователю можно видеть. Клиент — `fetch`, не jQuery, чтобы не включать `#globalLoader`.
+- **Причина:** владелец просил искать по сайту (секции и данные), а не показывать заголовок текущей страницы.
+- **Затрагивает:** `SearchController`, `ISiteSearchService`, `_NavbarPartial`, `site-search.js`, `navbar.css`, i18n `SiteSearch*`.
+- **Последствия:** нового permission нет — доступ к данным тот же, что у списков (`*.view` + `VisibleUserIds`). Миграций и пакетов нет.
+- **Альтернативы:** полнотекстовый SQL / отдельный индекс — не брались, чтобы не трогать схему и пакеты.
+
+---
+
 ## TR-2026-10-29-02 — OK заметки и автоширина заголовков DataTable
 
 - **Дата:** 2026-10-29
@@ -28,11 +39,11 @@
 
 ## TR-2026-10-28-02 — Модульные дашборды под Statistics
 
-- **Дата:** 2026-10-28
-- **Суть:** экран `/Dashboard/Dashboards` в меню Main сразу под Statistics. KPI и списки по Users / Tasks (тикеты) / Roles / Groups / Notifications. Счётчики через `IInsightsDashboardService` и `VisibleUserIds()`. Секции только при соответствующем `*.view`. Личные KPI (мои рефералы, мои задачи) всегда. Журнал и email-шаблоны на этом экране не показываются. Без нового permission и без Chart.js (полоски CSS). Index Dashboard с играми не трогался.
+- **Дата:** 2026-10-28, уточнено 2026-10-29
+- **Суть:** KPI Users / Tasks / Roles / Groups / Notifications через `IInsightsDashboardService` и `VisibleUserIds()`, секции по `*.view`. С 2026-10-29 это не отдельная страница, а вкладки на `/Dashboard` вместе с Games (первая). Пункт меню Dashboards снят; `/Dashboard/Dashboards` редирект на Index. В Roles: Users by role с фото (макс. 5, hover — имя и email) и Permissions by role. Журнал и email-шаблоны на этом экране не показываются. Без нового permission. Chart.js только у Games.
 - **Причина:** владельцу нужна отдельная страница дашбордов по модулям, в дизайне сайта, light/dark.
-- **Затрагивает:** `DashboardController.Dashboards`, `InsightsDashboardService`, view/css/js, меню, i18n en/ru/hy.
-- **Последствия:** страница должна скроллиться (класс `dashboards-page`, не `dashboard`). Миграций нет.
+- **Затрагивает:** `DashboardController.Index` (+ редирект Dashboards), `InsightsDashboardService`, `Index.cshtml`, `_InsightsPanels.cshtml`, меню, i18n en/ru/hy.
+- **Последствия:** страница скроллится классом `dashboards-page`. View `Dashboards.cshtml` остаётся в репозитории, контроллер на него не смотрит. Миграций нет.
 - **Альтернативы:** подменю Statistics, отдельные permission-коды, Chart.js — не брались.
 
 ---

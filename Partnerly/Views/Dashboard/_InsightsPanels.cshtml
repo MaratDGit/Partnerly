@@ -1,0 +1,578 @@
+@model Partnerly.Models.ViewModels.DashboardsViewModel
+@using Partnerly.Models.ViewModels
+@{
+    string Fmt(DateTime? d) => d.HasValue ? d.Value.ToString("g") : "";
+    string ItemTitle(DashboardListItem item) =>
+        string.IsNullOrWhiteSpace(item.Title) ? item.Meta : item.Title;
+    string NamedLabel(string? name) => name switch
+    {
+        "New" => Localizer["New"].Value,
+        "InProgress" => Localizer["InProgress"].Value,
+        "Closed" => Localizer["Closed"].Value,
+        "Online" => Localizer["Online"].Value,
+        "Blocked" => Localizer["Blocked"].Value,
+        "Unread" => Localizer["Unread"].Value,
+        "Information" => Localizer["Information"].Value,
+        "Warning" => Localizer["Warning"].Value,
+        "Error" => Localizer["Error"].Value,
+        "Success" => Localizer["Success"].Value,
+        _ => name ?? ""
+    };
+    int Pct(int part, int total) => total <= 0 ? 0 : (int)Math.Round(part * 100d / total);
+    var tasksOpen = Model.TasksNew + Model.TasksInProgress;
+    var notificationsRead = Model.NotificationsTotal - Model.NotificationsUnread;
+}
+
+        @if (Model.CanUsers)
+        {
+            <section class="dashboards-panel" data-dash-panel="users" role="tabpanel" hidden>
+                <div class="dashboards-kpi-grid">
+                    <article class="dashboards-kpi dashboards-kpi--users">
+                        <div class="dashboards-kpi-body">
+                            <span class="dashboards-kpi-label">@Localizer["DashboardsTotal"]</span>
+                            <strong class="dashboards-kpi-value">@Model.UsersTotal</strong>
+                            <a class="dashboards-kpi-hint dashboards-kpi-link dashboards-open" asp-controller="Users" asp-action="Index">
+                                @Localizer["ViewList"] <i class="bx bx-right-arrow-alt"></i>
+                            </a>
+                        </div>
+                        <span class="dashboards-kpi-icon"><i class="bx bx-user"></i></span>
+                    </article>
+                    <article class="dashboards-kpi dashboards-kpi--personal">
+                        <div class="dashboards-kpi-body">
+                            <span class="dashboards-kpi-label">@Localizer["Online"]</span>
+                            <strong class="dashboards-kpi-value">@Model.UsersOnline</strong>
+                            <span class="dashboards-kpi-hint">@Pct(Model.UsersOnline, Model.UsersTotal)% @Localizer["DashboardsTotal"]</span>
+                        </div>
+                        <span class="dashboards-kpi-icon"><i class="bx bx-wifi"></i></span>
+                    </article>
+                    <article class="dashboards-kpi dashboards-kpi--notes">
+                        <div class="dashboards-kpi-body">
+                            <span class="dashboards-kpi-label">@Localizer["Blocked"]</span>
+                            <strong class="dashboards-kpi-value">@Model.UsersBlocked</strong>
+                            <span class="dashboards-kpi-hint">@Pct(Model.UsersBlocked, Model.UsersTotal)% @Localizer["DashboardsTotal"]</span>
+                        </div>
+                        <span class="dashboards-kpi-icon"><i class="bx bx-block"></i></span>
+                    </article>
+                    <article class="dashboards-kpi dashboards-kpi--tasks">
+                        <div class="dashboards-kpi-body">
+                            <span class="dashboards-kpi-label">@Localizer["NewThisWeek"]</span>
+                            <strong class="dashboards-kpi-value">@Model.UsersNewWeek</strong>
+                            <span class="dashboards-kpi-hint">@Model.UsersNewMonth @Localizer["ThisMonth"]</span>
+                        </div>
+                        <span class="dashboards-kpi-icon"><i class="bx bx-plus-circle"></i></span>
+                    </article>
+                    <article class="dashboards-kpi dashboards-kpi--roles">
+                        <div class="dashboards-kpi-body">
+                            <span class="dashboards-kpi-label">@Localizer["ThisMonth"]</span>
+                            <strong class="dashboards-kpi-value">@Model.UsersNewMonth</strong>
+                            <span class="dashboards-kpi-hint">@Pct(Model.UsersNewMonth, Model.UsersTotal)% @Localizer["DashboardsTotal"]</span>
+                        </div>
+                        <span class="dashboards-kpi-icon"><i class="bx bx-calendar"></i></span>
+                    </article>
+                    <article class="dashboards-kpi dashboards-kpi--groups">
+                        <div class="dashboards-kpi-body">
+                            <span class="dashboards-kpi-label">@Localizer["WithReferrer"]</span>
+                            <strong class="dashboards-kpi-value">@Model.UsersWithReferrer</strong>
+                            <span class="dashboards-kpi-hint">@Pct(Model.UsersWithReferrer, Model.UsersTotal)% @Localizer["DashboardsTotal"]</span>
+                        </div>
+                        <span class="dashboards-kpi-icon"><i class="bx bx-git-branch"></i></span>
+                    </article>
+                    <article class="dashboards-kpi dashboards-kpi--users">
+                        <div class="dashboards-kpi-body">
+                            <span class="dashboards-kpi-label">@Localizer["WithPhone"]</span>
+                            <strong class="dashboards-kpi-value">@Model.UsersWithPhone</strong>
+                            <span class="dashboards-kpi-hint">@Pct(Model.UsersWithPhone, Model.UsersTotal)% @Localizer["DashboardsTotal"]</span>
+                        </div>
+                        <span class="dashboards-kpi-icon"><i class="bx bx-phone"></i></span>
+                    </article>
+                    <article class="dashboards-kpi dashboards-kpi--personal">
+                        <div class="dashboards-kpi-body">
+                            <span class="dashboards-kpi-label">@Localizer["GoogleSignIn"]</span>
+                            <strong class="dashboards-kpi-value">@Model.UsersGoogle</strong>
+                            <span class="dashboards-kpi-hint">@Pct(Model.UsersGoogle, Model.UsersTotal)% @Localizer["DashboardsTotal"]</span>
+                        </div>
+                        <span class="dashboards-kpi-icon"><i class="bx bxl-google"></i></span>
+                    </article>
+                </div>
+                <div class="dashboards-card-grid">
+                    <article class="dashboards-card">
+                        <div class="dashboards-card-head">
+                            <h5><i class="bx bx-pie-chart-alt"></i> @Localizer["UsersByRole"]</h5>
+                        </div>
+                        @if (Model.UsersByRole.Count == 0)
+                        {
+                            <p class="dashboards-empty">@Localizer["DashboardsEmptyList"]</p>
+                        }
+                        else
+                        {
+                            foreach (var row in Model.UsersByRole)
+                            {
+                                <div class="dashboards-bar">
+                                    <div class="dashboards-bar-meta">
+                                        <span>@row.Name</span>
+                                        <span>@row.Count · @row.Percent%</span>
+                                    </div>
+                                    <div class="dashboards-bar-track">
+                                        <div class="dashboards-bar-fill dashboards-bar-fill--users" style="width: @row.Percent%"></div>
+                                    </div>
+                                </div>
+                            }
+                        }
+                    </article>
+                    <article class="dashboards-card">
+                        <div class="dashboards-card-head">
+                            <h5><i class="bx bx-time-five"></i> @Localizer["RecentUsers"]</h5>
+                        </div>
+                        @if (Model.RecentUsers.Count == 0)
+                        {
+                            <p class="dashboards-empty">@Localizer["DashboardsEmptyList"]</p>
+                        }
+                        else
+                        {
+                            <ul class="dashboards-list">
+                                @foreach (var item in Model.RecentUsers)
+                                {
+                                    <li>
+                                        <span class="dashboards-list-title">
+                                            @ItemTitle(item)
+                                            @if (!string.IsNullOrEmpty(item.Badge))
+                                            {
+                                                <span class="dashboards-badge">@NamedLabel(item.Badge)</span>
+                                            }
+                                        </span>
+                                        <span class="dashboards-list-meta">@item.Meta</span>
+                                        <span class="dashboards-list-date">@Fmt(item.Date)</span>
+                                    </li>
+                                }
+                            </ul>
+                        }
+                    </article>
+                </div>
+            </section>
+        }
+
+        @if (Model.CanTasks)
+        {
+            <section class="dashboards-panel" data-dash-panel="tasks" role="tabpanel" hidden>
+                <div class="dashboards-kpi-grid">
+                    <article class="dashboards-kpi dashboards-kpi--tasks">
+                        <div class="dashboards-kpi-body">
+                            <span class="dashboards-kpi-label">@Localizer["DashboardsTotal"]</span>
+                            <strong class="dashboards-kpi-value">@Model.TasksTotal</strong>
+                            <a class="dashboards-kpi-hint dashboards-kpi-link dashboards-open" asp-controller="SupportTickets" asp-action="Index">
+                                @Localizer["ViewList"] <i class="bx bx-right-arrow-alt"></i>
+                            </a>
+                        </div>
+                        <span class="dashboards-kpi-icon"><i class="bx bx-task"></i></span>
+                    </article>
+                    <article class="dashboards-kpi dashboards-kpi--personal">
+                        <div class="dashboards-kpi-body">
+                            <span class="dashboards-kpi-label">@Localizer["New"]</span>
+                            <strong class="dashboards-kpi-value">@Model.TasksNew</strong>
+                            <span class="dashboards-kpi-hint">@Pct(Model.TasksNew, Model.TasksTotal)% @Localizer["DashboardsTotal"]</span>
+                        </div>
+                        <span class="dashboards-kpi-icon"><i class="bx bx-plus-circle"></i></span>
+                    </article>
+                    <article class="dashboards-kpi dashboards-kpi--roles">
+                        <div class="dashboards-kpi-body">
+                            <span class="dashboards-kpi-label">@Localizer["InProgress"]</span>
+                            <strong class="dashboards-kpi-value">@Model.TasksInProgress</strong>
+                            <span class="dashboards-kpi-hint">@Pct(Model.TasksInProgress, Model.TasksTotal)% @Localizer["DashboardsTotal"]</span>
+                        </div>
+                        <span class="dashboards-kpi-icon"><i class="bx bx-loader-circle"></i></span>
+                    </article>
+                    <article class="dashboards-kpi dashboards-kpi--groups">
+                        <div class="dashboards-kpi-body">
+                            <span class="dashboards-kpi-label">@Localizer["Closed"]</span>
+                            <strong class="dashboards-kpi-value">@Model.TasksClosed</strong>
+                            <span class="dashboards-kpi-hint">@Pct(Model.TasksClosed, Model.TasksTotal)% @Localizer["DashboardsTotal"]</span>
+                        </div>
+                        <span class="dashboards-kpi-icon"><i class="bx bx-check-circle"></i></span>
+                    </article>
+                    <article class="dashboards-kpi dashboards-kpi--notes">
+                        <div class="dashboards-kpi-body">
+                            <span class="dashboards-kpi-label">@Localizer["Unassigned"]</span>
+                            <strong class="dashboards-kpi-value">@Model.TasksUnassigned</strong>
+                            <span class="dashboards-kpi-hint">@Pct(Model.TasksUnassigned, Model.TasksTotal)% @Localizer["DashboardsTotal"]</span>
+                        </div>
+                        <span class="dashboards-kpi-icon"><i class="bx bx-user-x"></i></span>
+                    </article>
+                    <article class="dashboards-kpi dashboards-kpi--tasks">
+                        <div class="dashboards-kpi-body">
+                            <span class="dashboards-kpi-label">@Localizer["Unread"]</span>
+                            <strong class="dashboards-kpi-value">@Model.TasksUnread</strong>
+                            <span class="dashboards-kpi-hint">@Pct(Model.TasksUnread, Model.TasksTotal)% @Localizer["DashboardsTotal"]</span>
+                        </div>
+                        <span class="dashboards-kpi-icon"><i class="bx bx-envelope-open"></i></span>
+                    </article>
+                    <article class="dashboards-kpi dashboards-kpi--personal">
+                        <div class="dashboards-kpi-body">
+                            <span class="dashboards-kpi-label">@Localizer["ThisWeek"]</span>
+                            <strong class="dashboards-kpi-value">@Model.TasksWeek</strong>
+                            <span class="dashboards-kpi-hint">@Pct(Model.TasksWeek, Model.TasksTotal)% @Localizer["DashboardsTotal"]</span>
+                        </div>
+                        <span class="dashboards-kpi-icon"><i class="bx bx-calendar"></i></span>
+                    </article>
+                    <article class="dashboards-kpi dashboards-kpi--roles">
+                        <div class="dashboards-kpi-body">
+                            <span class="dashboards-kpi-label">@Localizer["OpenTasks"]</span>
+                            <strong class="dashboards-kpi-value">@tasksOpen</strong>
+                            <span class="dashboards-kpi-hint">@Model.TasksNew @Localizer["New"] · @Model.TasksInProgress @Localizer["InProgress"]</span>
+                        </div>
+                        <span class="dashboards-kpi-icon"><i class="bx bx-time-five"></i></span>
+                    </article>
+                </div>
+                <div class="dashboards-card-grid">
+                    <article class="dashboards-card">
+                        <div class="dashboards-card-head">
+                            <h5><i class="bx bx-bar-chart-alt-2"></i> @Localizer["TasksByStatus"]</h5>
+                        </div>
+                        @foreach (var row in Model.TasksByStatus)
+                        {
+                            <div class="dashboards-bar">
+                                <div class="dashboards-bar-meta">
+                                    <span>@NamedLabel(row.Name)</span>
+                                    <span>@row.Count · @row.Percent%</span>
+                                </div>
+                                <div class="dashboards-bar-track">
+                                    <div class="dashboards-bar-fill dashboards-bar-fill--tasks" style="width: @row.Percent%"></div>
+                                </div>
+                            </div>
+                        }
+                    </article>
+                    <article class="dashboards-card">
+                        <div class="dashboards-card-head">
+                            <h5><i class="bx bx-time-five"></i> @Localizer["RecentTasks"]</h5>
+                        </div>
+                        @if (Model.RecentTasks.Count == 0)
+                        {
+                            <p class="dashboards-empty">@Localizer["DashboardsEmptyList"]</p>
+                        }
+                        else
+                        {
+                            <ul class="dashboards-list">
+                                @foreach (var item in Model.RecentTasks)
+                                {
+                                    <li>
+                                        <span class="dashboards-list-title">
+                                            @ItemTitle(item)
+                                            @if (!string.IsNullOrEmpty(item.Badge))
+                                            {
+                                                <span class="dashboards-badge">@NamedLabel(item.Badge)</span>
+                                            }
+                                        </span>
+                                        <span class="dashboards-list-meta">@item.Meta</span>
+                                        <span class="dashboards-list-date">@Fmt(item.Date)</span>
+                                    </li>
+                                }
+                            </ul>
+                        }
+                    </article>
+                </div>
+            </section>
+        }
+
+        @if (Model.CanRoles)
+        {
+            <section class="dashboards-panel" data-dash-panel="roles" role="tabpanel" hidden>
+                <div class="dashboards-kpi-grid">
+                    <article class="dashboards-kpi dashboards-kpi--roles">
+                        <div class="dashboards-kpi-body">
+                            <span class="dashboards-kpi-label">@Localizer["DashboardsTotal"]</span>
+                            <strong class="dashboards-kpi-value">@Model.RolesTotal</strong>
+                            <a class="dashboards-kpi-hint dashboards-kpi-link dashboards-open" asp-controller="Roles" asp-action="Index">
+                                @Localizer["ViewList"] <i class="bx bx-right-arrow-alt"></i>
+                            </a>
+                        </div>
+                        <span class="dashboards-kpi-icon"><i class="bx bx-shield-quarter"></i></span>
+                    </article>
+                    <article class="dashboards-kpi dashboards-kpi--groups">
+                        <div class="dashboards-kpi-body">
+                            <span class="dashboards-kpi-label">@Localizer["Active"]</span>
+                            <strong class="dashboards-kpi-value">@Model.RolesActive</strong>
+                            <span class="dashboards-kpi-hint">@Pct(Model.RolesActive, Model.RolesTotal)% @Localizer["DashboardsTotal"]</span>
+                        </div>
+                        <span class="dashboards-kpi-icon"><i class="bx bx-check-circle"></i></span>
+                    </article>
+                    <article class="dashboards-kpi dashboards-kpi--notes">
+                        <div class="dashboards-kpi-body">
+                            <span class="dashboards-kpi-label">@Localizer["Inactive"]</span>
+                            <strong class="dashboards-kpi-value">@Model.RolesInactive</strong>
+                            <span class="dashboards-kpi-hint">@Pct(Model.RolesInactive, Model.RolesTotal)% @Localizer["DashboardsTotal"]</span>
+                        </div>
+                        <span class="dashboards-kpi-icon"><i class="bx bx-pause-circle"></i></span>
+                    </article>
+                    <article class="dashboards-kpi dashboards-kpi--personal">
+                        <div class="dashboards-kpi-body">
+                            <span class="dashboards-kpi-label">@Localizer["Permissions"]</span>
+                            <strong class="dashboards-kpi-value">@Model.RolePermissions</strong>
+                            <span class="dashboards-kpi-hint">@Localizer["RolePermissionsHint"]</span>
+                        </div>
+                        <span class="dashboards-kpi-icon"><i class="bx bx-key"></i></span>
+                    </article>
+                </div>
+                <div class="dashboards-card-grid">
+                    @if (Model.CanUsers)
+                    {
+                        <article class="dashboards-card">
+                            <div class="dashboards-card-head">
+                                <h5><i class="bx bx-pie-chart-alt"></i> @Localizer["UsersByRole"]</h5>
+                            </div>
+                            @if (Model.UsersByRole.Count == 0)
+                            {
+                                <p class="dashboards-empty">@Localizer["DashboardsEmptyList"]</p>
+                            }
+                            else
+                            {
+                                foreach (var row in Model.UsersByRole)
+                                {
+                                    <div class="dashboards-bar">
+                                        <div class="dashboards-bar-meta">
+                                            <span class="dashboards-bar-role">
+                                                <span class="dashboards-bar-role-name">@row.Name</span>
+                                                @if (row.Users.Count > 0)
+                                                {
+                                                    <span class="dashboards-avatars">
+                                                        @foreach (var user in row.Users)
+                                                        {
+                                                            <span class="dashboards-avatar" tabindex="0">
+                                                                <img src="@Url.Content(user.PhotoUrl)" alt="@user.Name" />
+                                                                <span class="dashboards-avatar-tip">
+                                                                    <strong>@user.Name</strong>
+                                                                    @if (!string.IsNullOrEmpty(user.Email))
+                                                                    {
+                                                                        <span>@user.Email</span>
+                                                                    }
+                                                                </span>
+                                                            </span>
+                                                        }
+                                                        @if (row.Count > row.Users.Count)
+                                                        {
+                                                            <span class="dashboards-avatar-more">+@(row.Count - row.Users.Count)</span>
+                                                        }
+                                                    </span>
+                                                }
+                                            </span>
+                                            <span>@row.Count · @row.Percent%</span>
+                                        </div>
+                                        <div class="dashboards-bar-track">
+                                            <div class="dashboards-bar-fill dashboards-bar-fill--roles" style="width: @row.Percent%"></div>
+                                        </div>
+                                    </div>
+                                }
+                            }
+                        </article>
+                    }
+                    <article class="dashboards-card">
+                        <div class="dashboards-card-head">
+                            <h5><i class="bx bx-key"></i> @Localizer["PermissionsByRole"]</h5>
+                        </div>
+                        @if (Model.PermissionsByRole.Count == 0)
+                        {
+                            <p class="dashboards-empty">@Localizer["DashboardsEmptyList"]</p>
+                        }
+                        else
+                        {
+                            foreach (var row in Model.PermissionsByRole)
+                            {
+                                <div class="dashboards-bar">
+                                    <div class="dashboards-bar-meta">
+                                        <span>@row.Name</span>
+                                        <span>@row.Count · @row.Percent%</span>
+                                    </div>
+                                    <div class="dashboards-bar-track">
+                                        <div class="dashboards-bar-fill dashboards-bar-fill--personal" style="width: @row.Percent%"></div>
+                                    </div>
+                                </div>
+                            }
+                        }
+                    </article>
+                </div>
+            </section>
+        }
+
+        @if (Model.CanGroups)
+        {
+            <section class="dashboards-panel" data-dash-panel="groups" role="tabpanel" hidden>
+                <div class="dashboards-kpi-grid">
+                    <article class="dashboards-kpi dashboards-kpi--groups">
+                        <div class="dashboards-kpi-body">
+                            <span class="dashboards-kpi-label">@Localizer["DashboardsTotal"]</span>
+                            <strong class="dashboards-kpi-value">@Model.GroupsTotal</strong>
+                            <a class="dashboards-kpi-hint dashboards-kpi-link dashboards-open" asp-controller="UserGroups" asp-action="Index">
+                                @Localizer["ViewList"] <i class="bx bx-right-arrow-alt"></i>
+                            </a>
+                        </div>
+                        <span class="dashboards-kpi-icon"><i class="bx bx-group"></i></span>
+                    </article>
+                    <article class="dashboards-kpi dashboards-kpi--users">
+                        <div class="dashboards-kpi-body">
+                            <span class="dashboards-kpi-label">@Localizer["Members"]</span>
+                            <strong class="dashboards-kpi-value">@Model.GroupsMembers</strong>
+                            <span class="dashboards-kpi-hint">@Localizer["VisibleMembers"]</span>
+                        </div>
+                        <span class="dashboards-kpi-icon"><i class="bx bx-user-check"></i></span>
+                    </article>
+                    <article class="dashboards-kpi dashboards-kpi--notes">
+                        <div class="dashboards-kpi-body">
+                            <span class="dashboards-kpi-label">@Localizer["EmptyGroups"]</span>
+                            <strong class="dashboards-kpi-value">@Model.GroupsEmpty</strong>
+                            <span class="dashboards-kpi-hint">@Pct(Model.GroupsEmpty, Model.GroupsTotal)% @Localizer["DashboardsTotal"]</span>
+                        </div>
+                        <span class="dashboards-kpi-icon"><i class="bx bx-folder-open"></i></span>
+                    </article>
+                    <article class="dashboards-kpi dashboards-kpi--tasks">
+                        <div class="dashboards-kpi-body">
+                            <span class="dashboards-kpi-label">@Localizer["NewThisWeek"]</span>
+                            <strong class="dashboards-kpi-value">@Model.GroupsNewWeek</strong>
+                            <span class="dashboards-kpi-hint">@Pct(Model.GroupsNewWeek, Model.GroupsTotal)% @Localizer["DashboardsTotal"]</span>
+                        </div>
+                        <span class="dashboards-kpi-icon"><i class="bx bx-plus-circle"></i></span>
+                    </article>
+                </div>
+                <div class="dashboards-card-grid">
+                    <article class="dashboards-card">
+                        <div class="dashboards-card-head">
+                            <h5><i class="bx bx-bar-chart-alt-2"></i> @Localizer["GroupsBySize"]</h5>
+                        </div>
+                        @if (Model.GroupsBySize.Count == 0)
+                        {
+                            <p class="dashboards-empty">@Localizer["DashboardsEmptyList"]</p>
+                        }
+                        else
+                        {
+                            foreach (var row in Model.GroupsBySize)
+                            {
+                                <div class="dashboards-bar">
+                                    <div class="dashboards-bar-meta">
+                                        <span>@row.Name</span>
+                                        <span>@row.Count @Localizer["Members"]</span>
+                                    </div>
+                                    <div class="dashboards-bar-track">
+                                        <div class="dashboards-bar-fill dashboards-bar-fill--groups" style="width: @row.Percent%"></div>
+                                    </div>
+                                </div>
+                            }
+                        }
+                    </article>
+                    <article class="dashboards-card">
+                        <div class="dashboards-card-head">
+                            <h5><i class="bx bx-time-five"></i> @Localizer["RecentGroups"]</h5>
+                        </div>
+                        @if (Model.RecentGroups.Count == 0)
+                        {
+                            <p class="dashboards-empty">@Localizer["DashboardsEmptyList"]</p>
+                        }
+                        else
+                        {
+                            <ul class="dashboards-list">
+                                @foreach (var item in Model.RecentGroups)
+                                {
+                                    <li>
+                                        <span class="dashboards-list-title">@ItemTitle(item)</span>
+                                        <span class="dashboards-list-meta">@item.Meta @Localizer["Members"]</span>
+                                        <span class="dashboards-list-date">@Fmt(item.Date)</span>
+                                    </li>
+                                }
+                            </ul>
+                        }
+                    </article>
+                </div>
+            </section>
+        }
+
+        @if (Model.CanNotifications)
+        {
+            <section class="dashboards-panel" data-dash-panel="notifications" role="tabpanel" hidden>
+                <div class="dashboards-kpi-grid">
+                    <article class="dashboards-kpi dashboards-kpi--notes">
+                        <div class="dashboards-kpi-body">
+                            <span class="dashboards-kpi-label">@Localizer["DashboardsTotal"]</span>
+                            <strong class="dashboards-kpi-value">@Model.NotificationsTotal</strong>
+                            <a class="dashboards-kpi-hint dashboards-kpi-link dashboards-open" asp-controller="Notification" asp-action="Index">
+                                @Localizer["ViewList"] <i class="bx bx-right-arrow-alt"></i>
+                            </a>
+                        </div>
+                        <span class="dashboards-kpi-icon"><i class="bx bx-bell"></i></span>
+                    </article>
+                    <article class="dashboards-kpi dashboards-kpi--tasks">
+                        <div class="dashboards-kpi-body">
+                            <span class="dashboards-kpi-label">@Localizer["Unread"]</span>
+                            <strong class="dashboards-kpi-value">@Model.NotificationsUnread</strong>
+                            <span class="dashboards-kpi-hint">@Pct(Model.NotificationsUnread, Model.NotificationsTotal)% @Localizer["DashboardsTotal"]</span>
+                        </div>
+                        <span class="dashboards-kpi-icon"><i class="bx bx-envelope-open"></i></span>
+                    </article>
+                    <article class="dashboards-kpi dashboards-kpi--groups">
+                        <div class="dashboards-kpi-body">
+                            <span class="dashboards-kpi-label">@Localizer["Read"]</span>
+                            <strong class="dashboards-kpi-value">@notificationsRead</strong>
+                            <span class="dashboards-kpi-hint">@Pct(notificationsRead, Model.NotificationsTotal)% @Localizer["DashboardsTotal"]</span>
+                        </div>
+                        <span class="dashboards-kpi-icon"><i class="bx bx-check-double"></i></span>
+                    </article>
+                    <article class="dashboards-kpi dashboards-kpi--personal">
+                        <div class="dashboards-kpi-body">
+                            <span class="dashboards-kpi-label">@Localizer["ThisWeek"]</span>
+                            <strong class="dashboards-kpi-value">@Model.NotificationsWeek</strong>
+                            <span class="dashboards-kpi-hint">@Pct(Model.NotificationsWeek, Model.NotificationsTotal)% @Localizer["DashboardsTotal"]</span>
+                        </div>
+                        <span class="dashboards-kpi-icon"><i class="bx bx-calendar"></i></span>
+                    </article>
+                </div>
+                <div class="dashboards-card-grid">
+                    <article class="dashboards-card">
+                        <div class="dashboards-card-head">
+                            <h5><i class="bx bx-bar-chart-alt-2"></i> @Localizer["NotificationsByType"]</h5>
+                        </div>
+                        @if (Model.NotificationsByType.Count == 0)
+                        {
+                            <p class="dashboards-empty">@Localizer["DashboardsEmptyList"]</p>
+                        }
+                        else
+                        {
+                            foreach (var row in Model.NotificationsByType)
+                            {
+                                <div class="dashboards-bar">
+                                    <div class="dashboards-bar-meta">
+                                        <span>@NamedLabel(row.Name)</span>
+                                        <span>@row.Count · @row.Percent%</span>
+                                    </div>
+                                    <div class="dashboards-bar-track">
+                                        <div class="dashboards-bar-fill dashboards-bar-fill--notes" style="width: @row.Percent%"></div>
+                                    </div>
+                                </div>
+                            }
+                        }
+                    </article>
+                    <article class="dashboards-card">
+                        <div class="dashboards-card-head">
+                            <h5><i class="bx bx-time-five"></i> @Localizer["RecentNotifications"]</h5>
+                        </div>
+                        @if (Model.RecentNotifications.Count == 0)
+                        {
+                            <p class="dashboards-empty">@Localizer["DashboardsEmptyList"]</p>
+                        }
+                        else
+                        {
+                            <ul class="dashboards-list">
+                                @foreach (var item in Model.RecentNotifications)
+                                {
+                                    <li>
+                                        <span class="dashboards-list-title">
+                                            @ItemTitle(item)
+                                            @if (!string.IsNullOrEmpty(item.Badge))
+                                            {
+                                                <span class="dashboards-badge">@NamedLabel(item.Badge)</span>
+                                            }
+                                        </span>
+                                        <span class="dashboards-list-meta">@NamedLabel(item.Meta)</span>
+                                        <span class="dashboards-list-date">@Fmt(item.Date)</span>
+                                    </li>
+                                }
+                            </ul>
+                        }
+                    </article>
+                </div>
+            </section>
+        }

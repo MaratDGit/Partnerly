@@ -69,6 +69,132 @@
     color: #a1acb8;
 }
 
+.partnerly-site-search {
+    position: relative;
+    flex: 1 1 auto;
+    min-width: 0;
+    max-width: 300px;
+}
+
+.partnerly-site-search-icon {
+    position: absolute;
+    top: 50%;
+    left: 12px;
+    z-index: 1;
+    color: #a1acb8;
+    font-size: 16px;
+    pointer-events: none;
+    transform: translateY(-50%);
+}
+
+.partnerly-site-search-input {
+    display: block;
+    width: 100%;
+    min-width: 0;
+    height: 38px;
+    padding: 0 12px 0 36px;
+    border: 1px solid rgba(67, 89, 113, 0.14);
+    border-radius: 10px;
+    outline: none;
+    background: #fff;
+    color: #32475c;
+    font-size: 0.86rem;
+    box-sizing: border-box;
+    transition: border-color .15s ease, box-shadow .15s ease;
+}
+
+.partnerly-site-search-input::placeholder {
+    color: #a1acb8;
+}
+
+.partnerly-site-search-input:focus {
+    border-color: rgba(105, 108, 255, 0.5);
+    box-shadow: 0 0 0 3px rgba(105, 108, 255, 0.12);
+}
+
+.partnerly-site-search-panel {
+    position: absolute;
+    top: calc(100% + 8px);
+    left: 0;
+    right: 0;
+    z-index: 40;
+    max-height: min(70vh, 440px);
+    overflow: auto;
+    padding: 8px 0;
+    border: 1px solid rgba(67, 89, 113, 0.12);
+    border-radius: 12px;
+    background: #fff;
+    box-shadow: 0 12px 32px rgba(67, 89, 113, 0.14);
+}
+
+.partnerly-site-search-hint {
+    margin: 0;
+    padding: 12px 16px;
+    color: #8592a3;
+    font-size: 0.82rem;
+}
+
+.partnerly-site-search-group + .partnerly-site-search-group {
+    margin-top: 4px;
+    padding-top: 4px;
+    border-top: 1px solid rgba(67, 89, 113, 0.08);
+}
+
+.partnerly-site-search-group-title {
+    padding: 6px 16px 4px;
+    color: #a1acb8;
+    font-size: 0.7rem;
+    font-weight: 700;
+    letter-spacing: .04em;
+    text-transform: uppercase;
+}
+
+.partnerly-site-search-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    min-width: 0;
+    padding: 8px 16px;
+    color: #32475c;
+    text-decoration: none !important;
+}
+
+.partnerly-site-search-item:hover,
+.partnerly-site-search-item.is-active {
+    background: rgba(105, 108, 255, 0.08);
+    color: #696cff;
+}
+
+.partnerly-site-search-item i {
+    flex: 0 0 auto;
+    color: #696cff;
+    font-size: 1.05rem;
+}
+
+.partnerly-site-search-item-body {
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 1px;
+}
+
+.partnerly-site-search-item-title,
+.partnerly-site-search-item-meta {
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+}
+
+.partnerly-site-search-item-title {
+    font-size: 0.84rem;
+    font-weight: 600;
+}
+
+.partnerly-site-search-item-meta {
+    color: #8592a3;
+    font-size: 0.72rem;
+}
+
 
 /* =========================================================
            NAVBAR ACTIONS
@@ -490,6 +616,10 @@
         display: none;
     }
 
+    .partnerly-site-search {
+        max-width: 240px;
+    }
+
     .partnerly-navbar-actions {
         gap: 3px;
     }
@@ -504,6 +634,12 @@
         max-width: calc(100vw - 20px);
         margin: 0 !important;
         transform: none !important;
+    }
+}
+
+@media (max-width: 767.98px) {
+    .partnerly-site-search {
+        display: none;
     }
 }
 
@@ -621,6 +757,32 @@ html[data-theme="dark"] .partnerly-navbar-page-title-main {
 
 html[data-theme="dark"] .partnerly-navbar-page-title-subtitle {
     color: #8996b0;
+}
+
+html[data-theme="dark"] .partnerly-site-search-input {
+    border-color: rgba(129, 133, 255, 0.18);
+    background: rgba(16, 22, 36, 0.72);
+    color: #edf2ff;
+}
+
+html[data-theme="dark"] .partnerly-site-search-input:focus {
+    border-color: rgba(129, 133, 255, 0.5);
+    box-shadow: 0 0 0 3px rgba(129, 133, 255, 0.16);
+}
+
+html[data-theme="dark"] .partnerly-site-search-panel {
+    border-color: rgba(129, 133, 255, 0.16);
+    background: #1a2234;
+    box-shadow: 0 12px 32px rgba(0, 0, 0, 0.28);
+}
+
+html[data-theme="dark"] .partnerly-site-search-item {
+    color: #edf2ff;
+}
+
+html[data-theme="dark"] .partnerly-site-search-item:hover,
+html[data-theme="dark"] .partnerly-site-search-item.is-active {
+    background: rgba(129, 133, 255, 0.14);
 }
 
 /* =========================================================

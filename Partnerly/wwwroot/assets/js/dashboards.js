@@ -1,4 +1,4 @@
-(function () {
+document.addEventListener("DOMContentLoaded", function () {
     var root = document.querySelector("[data-dashboards]");
     if (!root) {
         return;
@@ -7,11 +7,21 @@
     var tabs = Array.prototype.slice.call(root.querySelectorAll("[data-dash-tab]"));
     var panels = Array.prototype.slice.call(root.querySelectorAll("[data-dash-panel]"));
 
+    function firstTab() {
+        return tabs.length
+            ? tabs[0].getAttribute("data-dash-tab")
+            : "";
+    }
+
     function show(name) {
         var exists = tabs.some(function (tab) {
             return tab.getAttribute("data-dash-tab") === name;
         });
-        var target = exists ? name : "overview";
+        var target = exists ? name : firstTab();
+
+        if (!target) {
+            return;
+        }
 
         tabs.forEach(function (tab) {
             var active = tab.getAttribute("data-dash-tab") === target;
@@ -26,6 +36,10 @@
         if (history.replaceState) {
             history.replaceState(null, "", "#" + target);
         }
+
+        if (target === "games") {
+            window.dispatchEvent(new Event("partnerly-layout-change"));
+        }
     }
 
     tabs.forEach(function (tab) {
@@ -34,12 +48,6 @@
         });
     });
 
-    root.querySelectorAll("[data-dash-goto]").forEach(function (el) {
-        el.addEventListener("click", function () {
-            show(el.getAttribute("data-dash-goto"));
-        });
-    });
-
-    var hash = (location.hash || "#overview").replace("#", "");
+    var hash = (location.hash || "").replace("#", "");
     show(hash);
-})();
+});

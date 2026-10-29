@@ -4,6 +4,70 @@
 
 ---
 
+## 2026-10-29 — Фото роли в одну линию, tooltip не под меню
+
+- **Суть:** подсказка с именем уходила под левое меню; фото стояли под названием роли.
+- **Сделано:** аватарки в строке с именем роли; tooltip справа от фото, z-index выше сайдбара.
+- **Сборка:** только Razor/CSS.
+
+---
+
+## 2026-10-29 — Statistics + Dashboards на одной странице
+
+- **Суть:** слить Dashboards со Statistics; первой вкладкой Games; в Roles у Users by role — фото пользователей (макс. 5) с именем/email по наведению; рядом Permissions by role.
+- **Сделано:** `/Dashboard` — вкладки Games / Users / Tasks / Roles / Groups / Notifications. Пункт меню Dashboards убран; `/Dashboard/Dashboards` редирект на Index. `UsersByRole` отдаёт до 5 превью с фото; карточка `PermissionsByRole` — число прав роли от каталога. i18n `Games`, `PermissionsByRole`. View `Dashboards.cshtml` не удалялся (редирект в контроллере).
+- **Сборка:** `dotnet build Partnerly.sln` в `%TEMP%\PartnerlyBuildStatsMerge` — 0 ошибок. Браузер недоступен.
+
+---
+
+## 2026-10-29 — Поиск уже и виден на планшете
+
+- **Суть:** поле ещё уже; на планшетах показывать, на телефоне нет.
+- **Сделано:** десктоп `max-width: 300px`; планшет (768–1199) `240px`; скрыто только `<768px`.
+- **Сборка:** только CSS.
+
+---
+
+## 2026-10-29 — Поиск в навбаре скрыт на мобильной ширине
+
+- **Суть:** поиск в навбаре не показывать в мобильной версии.
+- **Сделано:** `@media (max-width: 1199.98px)` — `.partnerly-site-search { display: none }`, тот же порог, что у кнопки меню. На ≥1200px поле остаётся.
+- **Сборка:** только CSS. Браузер в этой сессии недоступен.
+
+---
+
+## 2026-10-29 — Поиск в навбаре вместо заголовка страницы
+
+- **Суть:** вместо title в навбаре — поиск по разделам меню и данным сайта.
+- **Сделано:** поле в `_NavbarPartial` (placeholder, без глобального loader). GET `/Search/Query` (`[Authorize]`, без отдельного permission). `ISiteSearchService` отдаёт секции по эффективным правам и записи Users / Roles / Groups / Tasks / Notifications / EmailTemplates / Logs / Attachments; списки режутся `VisibleUserIds()` (тикеты ещё по `AssignedTo`, вложения по `CreatedBy`). Минимум 2 символа, до 5 строк в группе. JS: debounce, AbortController, стрелки/Enter. i18n en/ru/hy.
+- **Сборка:** `dotnet build Partnerly.sln` в `%TEMP%\PartnerlyBuildSiteSearch` — 0 ошибок, 110 предупреждений (уже были). Браузер в этой сессии недоступен.
+
+---
+
+## 2026-10-29 — Дашборды: без Overview, счётчики на вкладках
+
+- **Суть:** убрать вкладку Overview; в маленьких кнопках секций сверху показывать total записей.
+- **Сделано:** вкладка и панель Overview удалены. Users/Tasks/Roles/Groups/Notifications — бейдж с total. JS открывает первую доступную секцию вместо overview. CSS бейджа light/dark, на узком экране прячется только подпись, число остаётся. Шапка секции (`dashboards-panel-head`) снята; ссылка ViewList стоит в карточке Total каждой вкладки.
+- **Сборка:** `dotnet build Partnerly.sln` в `%TEMP%\PartnerlyBuildDashTabs` — 0 ошибок. Правка ссылки ViewList — Razor/CSS, отдельная сборка ниже если запускалась.
+
+---
+
+## 2026-10-29 — Statistics: заголовок и высота KPI
+
+- **Суть:** на странице Statistics заголовок всегда был Dashboard; нижние KPI-карточки разной высоты.
+- **Сделано:** `Dashboard/Index` — `ViewData["Title"]` = Statistics. Навбар снова показывает Title. Высота KPI в одном ряду ровная, без растягивания всех рядов. Карточки Games by day и Wins/Losses в одном ряду одной высоты (`dashboard-charts-row`).
+- **Сборка:** `dotnet build Partnerly.sln` в `%TEMP%\PartnerlyBuildStatsTitle` — 0 ошибок. Правка длины карточек — только CSS. Браузер недоступен.
+
+---
+
+## 2026-10-29 — Дашборды: ViewList в карточке Total
+
+- **Суть:** убрать `dashboards-panel-head`; открытие списка — из карточки Total.
+- **Сделано:** шапка с заголовком секции снята у Users/Tasks/Roles/Groups/Notifications. Ссылка `@Localizer["ViewList"]` в карточке Total.
+- **Сборка:** `dotnet build Partnerly.sln` в `%TEMP%\PartnerlyBuildDashTotalLink` — 0 ошибок. Браузер недоступен.
+
+---
+
 ## 2026-10-29 — Закрытие заметки OK и подгон колонок DataTable
 
 - **Суть:** OK в попапе заметки не закрывал модалку; в тулбаре таблицы нужна иконка справа от фильтра, чтобы подогнать ширину колонок под полный текст заголовка и иконки сортировки/фильтра.

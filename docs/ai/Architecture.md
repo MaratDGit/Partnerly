@@ -36,9 +36,9 @@ Controller  →  I*Service  →  I*Repository : Repository<T>  →  AppDbContext
 - `UserVisibility` / `CanViewUserAsync` — видимость записей по роли. Тикет: `CanViewSupportTicketAsync` — автор из видимых **или** текущий пользователь = `AssignedTo`.
 - Старый `HasPermision` / RoleType удалён (2026-10-25). Права — через политики `Permission:`.
 
-Контроллеры **без** `_BaseController`: `AccountController`, `HomeController`, `AIController` (`[Authorize]` + `ai.use` на Ask), `LanguageController`.
+Контроллеры **без** `_BaseController`: `AccountController`, `HomeController`, `AIController` (`[Authorize]` + `ai.use` на Ask), `LanguageController`, `SearchController` (`[Authorize]`, поиск по секциям и данным).
 
-Политики `Permission:*` стоят на CRUD/Data/Export модулей Users, Roles, UserGroups, SupportTickets, Notifications, EmailTemplates, Logs, SystemPreferences, Attachments (список), AI, Web inspector (`web_inspector.use`). MarkAsRead / Upload к своему тикету — без глобального manage. Dashboard / MyProfile / ReferralTree / Dashboards — только `[Authorize]`. Модульные дашборды: `DashboardController.Dashboards` + `IInsightsDashboardService`; секции Users / Tasks / Roles / Groups / Notifications по существующим `*.view`; журнал и email-шаблоны не входят; счётчики режутся `VisibleUserIds()`. Дерево рефералов: `DashboardController.ReferralTree` + `GetReferralTree`; корень — текущий пользователь или тот, кого можно видеть (`CanViewUser` / своя downline). Super скрыт от остальных. Схема БД не меняется (`User.ReferrerId`). Веб-инспектор: `WebInspectorController` + unpacked Chrome extension `tools/partnerly-web-inspector-extension` — живое окно сайта слева, realtime DOM/индикаторы справа. Серверный fetch для live-потока не используется. Право `web_inspector.use`.
+Политики `Permission:*` стоят на CRUD/Data/Export модулей Users, Roles, UserGroups, SupportTickets, Notifications, EmailTemplates, Logs, SystemPreferences, Attachments (список), AI, Web inspector (`web_inspector.use`). MarkAsRead / Upload к своему тикету — без глобального manage. Dashboard / MyProfile / ReferralTree — только `[Authorize]`. Statistics (`DashboardController.Index`) и бывшие модульные дашборды — одна страница: вкладки Games (первая) / Users / Tasks / Roles / Groups / Notifications; KPI модулей через `IInsightsDashboardService` по `*.view` и `VisibleUserIds()`. `/Dashboard/Dashboards` редирект на Index. В Roles: превью фото в Users by role (макс. 5) и Permissions by role. Дерево рефералов: `DashboardController.ReferralTree` + `GetReferralTree`; корень — текущий пользователь или тот, кого можно видеть (`CanViewUser` / своя downline). Super скрыт от остальных. Схема БД не меняется (`User.ReferrerId`). Веб-инспектор: `WebInspectorController` + unpacked Chrome extension `tools/partnerly-web-inspector-extension` — живое окно сайта слева, realtime DOM/индикаторы справа. Серверный fetch для live-потока не используется. Право `web_inspector.use`.
 
 ## Сервисы и репозитории
 
@@ -116,6 +116,7 @@ Controller  →  I*Service  →  I*Repository : Repository<T>  →  AppDbContext
 
 - `_ViewStart.cshtml`: layout `_ContentNavbarLayout`.
 - Другие layout: `_CommonMasterLayout`, `_BlankLayout`, `_LandingLayout`.
+- Навбар: вместо title страницы — глобальный поиск (`_NavbarPartial` + `site-search.js`) на десктопе и планшете (≥768px); на телефоне скрыто. Запрос `GET /Search/Query` через `ISiteSearchService`: секции по эффективным правам, данные модулей по `*.view` и `VisibleUserIds()`.
 - Повторяемые части: `_Toast`, `_DeleteConfirmation`, `_AuditInfo`, `_StickyButtons`, секции в `Views/Shared/Sections/`.
 - Локализация: `AddLocalization` + `Resources/SharedResource.{en,ru,hy}.resx`, культуры `en`, `ru`, `hy`, default `en`.
 - `RequiredLabelTagHelper` — обязательные поля в формах.

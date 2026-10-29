@@ -42,12 +42,24 @@
 
     <div class="partnerly-navbar-left">
 
-        <div class="partnerly-navbar-page-title">
-
-           @*  <span class="partnerly-navbar-page-title-main">
-                @ViewData["Title"]
-            </span> *@
-
+        <div class="partnerly-site-search"
+             data-site-search
+             data-no-loader
+             data-search-url="@Url.Action("Query", "Search")"
+             data-empty="@Localizer["SiteSearchEmpty"]"
+             data-no-results="@Localizer["SiteSearchNoResults"]">
+            <i class="bx bx-search partnerly-site-search-icon"></i>
+            <input type="search"
+                   class="partnerly-site-search-input"
+                   placeholder="@Localizer["SiteSearchPlaceholder"]"
+                   autocomplete="off"
+                   spellcheck="false"
+                   aria-label="@Localizer["SiteSearchPlaceholder"]"
+                   data-no-loader />
+            <div class="partnerly-site-search-panel" hidden>
+                <p class="partnerly-site-search-hint" data-site-search-hint>@Localizer["SiteSearchEmpty"]</p>
+                <div class="partnerly-site-search-results" data-site-search-results></div>
+            </div>
         </div>
 
     </div>

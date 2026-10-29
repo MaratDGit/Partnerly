@@ -1,10 +1,11 @@
 ﻿@model Partnerly.Models.ViewModels.DashboardViewModel
 @{
-    ViewData["Title"] = "Dashboard";
+    ViewData["Title"] = Localizer["Statistics"].Value;
 }
 
 @section PageStyles {
     <link rel="stylesheet" href="~/assets/css/dashboard.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/assets/css/dashboards.css" asp-append-version="true" />
 }
 
 @section PageScripts {
@@ -54,9 +55,87 @@
     </script>
 
     <script src="~/assets/js/dashboard.js" asp-append-version="true"></script>
+    <script src="~/assets/js/dashboards.js" asp-append-version="true"></script>
 }
 
 <div class="container-xxl flex-grow-1 container-p-y">
+    <div class="dashboards-page dashboards" data-dashboards>
+        @{
+            var insights = Model.Insights ?? new Partnerly.Models.ViewModels.DashboardsViewModel();
+        }
+        <nav class="dashboards-tabs" role="tablist" aria-label="@Localizer["Statistics"]">
+            <button type="button"
+                    class="dashboards-tab is-active"
+                    role="tab"
+                    aria-selected="true"
+                    data-dash-tab="games">
+                <i class="bx bx-game"></i>
+                <span class="dashboards-tab-label">@Localizer["Games"]</span>
+                <span class="dashboards-tab-count">@Model.GamesPlayed</span>
+            </button>
+            @if (insights.CanUsers)
+            {
+                <button type="button"
+                        class="dashboards-tab"
+                        role="tab"
+                        aria-selected="false"
+                        data-dash-tab="users">
+                    <i class="bx bx-user"></i>
+                    <span class="dashboards-tab-label">@Localizer["Users"]</span>
+                    <span class="dashboards-tab-count">@insights.UsersTotal</span>
+                </button>
+            }
+            @if (insights.CanTasks)
+            {
+                <button type="button"
+                        class="dashboards-tab"
+                        role="tab"
+                        aria-selected="false"
+                        data-dash-tab="tasks">
+                    <i class="bx bx-task"></i>
+                    <span class="dashboards-tab-label">@Localizer["Tasks"]</span>
+                    <span class="dashboards-tab-count">@insights.TasksTotal</span>
+                </button>
+            }
+            @if (insights.CanRoles)
+            {
+                <button type="button"
+                        class="dashboards-tab"
+                        role="tab"
+                        aria-selected="false"
+                        data-dash-tab="roles">
+                    <i class="bx bx-shield-quarter"></i>
+                    <span class="dashboards-tab-label">@Localizer["Roles"]</span>
+                    <span class="dashboards-tab-count">@insights.RolesTotal</span>
+                </button>
+            }
+            @if (insights.CanGroups)
+            {
+                <button type="button"
+                        class="dashboards-tab"
+                        role="tab"
+                        aria-selected="false"
+                        data-dash-tab="groups">
+                    <i class="bx bx-group"></i>
+                    <span class="dashboards-tab-label">@Localizer["Groups"]</span>
+                    <span class="dashboards-tab-count">@insights.GroupsTotal</span>
+                </button>
+            }
+            @if (insights.CanNotifications)
+            {
+                <button type="button"
+                        class="dashboards-tab"
+                        role="tab"
+                        aria-selected="false"
+                        data-dash-tab="notifications">
+                    <i class="bx bx-bell"></i>
+                    <span class="dashboards-tab-label">@Localizer["Notifications"]</span>
+                    <span class="dashboards-tab-count">@insights.NotificationsTotal</span>
+                </button>
+            }
+        </nav>
+
+        <section class="dashboards-panel" data-dash-panel="games" role="tabpanel">
     <div class="dashboard">
 
     <!-- ==================== STAT CARDS ==================== -->
@@ -237,12 +316,12 @@
 
 
     <!-- ==================== CHARTS ==================== -->
-    <div class="row g-4">
+    <div class="row g-4 dashboard-charts-row">
 
         <!-- Games by day -->
         <div class="col-12 col-lg-8">
 
-            <div class="dashboard-card">
+            <div class="dashboard-card h-100">
                 
                 <button type="button"
                         class="btn btn-sm btn-icon dashboard-card-refresh"
@@ -408,6 +487,9 @@
         </div>
 
     </div>
+    </div>
+        </section>
 
-</div>
+        @await Html.PartialAsync("_InsightsPanels", insights)
+    </div>
 </div>

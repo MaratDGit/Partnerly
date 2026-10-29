@@ -82,12 +82,46 @@ namespace Partnerly.Infrastructure.Services
                 if (!viewerIsSuper)
                     byRole = byRole.Where(x => !string.Equals(x.Name, Constants.SuperRoleName, StringComparison.OrdinalIgnoreCase)).ToList();
 
-                model.UsersByRole = ToNamed(byRole.Select(x => (x.Name, x.Count)), model.UsersTotal);
+                var previews = await users
+                    .Where(u => !u.IsDeleted)
+                    .OrderBy(u => u.FirstName)
+                    .ThenBy(u => u.LastName)
+                    .Select(u => new
+                    {
+                        RoleName = u.Role != null ? u.Role.Name : "—",
+                        u.FirstName,
+                        u.LastName,
+                        u.Email,
+                        u.PhotoUrl
+                    })
+                    .ToListAsync(cancellationToken);
+
+                var previewsByRole = previews
+                    .GroupBy(u => u.RoleName ?? "—", StringComparer.OrdinalIgnoreCase)
+                    .ToDictionary(
+                        g => g.Key,
+                        g => g.Take(5).Select(u => new RoleUserPreview
+                        {
+                            Name = FormatName(u.FirstName, u.LastName, u.Email),
+                            Email = u.Email,
+                            PhotoUrl = string.IsNullOrWhiteSpace(u.PhotoUrl)
+                                ? Constants.DefaultUserProfilePhotoPath
+                                : u.PhotoUrl
+                        }).ToList(),
+                        StringComparer.OrdinalIgnoreCase);
+
+                model.UsersByRole = byRole.Select(row => new RoleUsersBreakdown
+                {
+                    Name = row.Name,
+                    Count = row.Count,
+                    Percent = model.UsersTotal <= 0 ? 0 : (int)Math.Round(row.Count * 100d / model.UsersTotal),
+                    Users = previewsByRole.TryGetValue(row.Name, out var list) ? list : new List<RoleUserPreview>()
+                }).ToList();
 
                 model.RecentUsers = await users
                     .Where(u => !u.IsDeleted)
                     .OrderByDescending(u => u.CreatedDate)
-                    .Take(8)
+                    .Take(5)
                     .Select(u => new DashboardListItem
                     {
                         Title = ((u.FirstName ?? "") + " " + (u.LastName ?? "")).Trim(),
@@ -112,6 +146,22 @@ namespace Partnerly.Infrastructure.Services
                     join r in roles on rp.RoleId equals r.Id
                     select rp.Id
                 ).CountAsync(cancellationToken);
+
+                var permissionCatalog = await _context.Set<Permission>().AsNoTracking()
+                    .CountAsync(p => p.IsActive && !p.IsDeleted, cancellationToken);
+
+                var permByRole = await (
+                    from rp in _context.Set<RolePermission>().AsNoTracking()
+                    join r in roles on rp.RoleId equals r.Id
+                    join p in _context.Set<Permission>().AsNoTracking() on rp.PermissionId equals p.Id
+                    where p.IsActive && !p.IsDeleted
+                    group p by (r.Name ?? "—") into g
+                    select new { Name = g.Key, Count = g.Count() }
+                ).ToListAsync(cancellationToken);
+
+                model.PermissionsByRole = ToNamed(
+                    permByRole.OrderByDescending(x => x.Count).Select(x => (x.Name, x.Count)),
+                    permissionCatalog);
             }
 
             if (model.CanGroups)
@@ -172,7 +222,7 @@ namespace Partnerly.Infrastructure.Services
 
                 model.RecentTasks = await tickets
                     .OrderByDescending(t => t.CreatedDate)
-                    .Take(8)
+                    .Take(5)
                     .Select(t => new DashboardListItem
                     {
                         Title = t.Subject ?? t.TicketID ?? "",
@@ -205,7 +255,7 @@ namespace Partnerly.Infrastructure.Services
 
                 var recentNotes = await notes
                     .OrderByDescending(n => n.CreatedDate)
-                    .Take(8)
+                    .Take(5)
                     .Select(n => new { n.Message, n.Type, n.IsRead, n.CreatedDate })
                     .ToListAsync(cancellationToken);
                 model.RecentNotifications = recentNotes.Select(n =>
@@ -246,6 +296,12 @@ namespace Partnerly.Infrastructure.Services
                 Count = row.Count,
                 Percent = total <= 0 ? 0 : (int)Math.Round(row.Count * 100d / total)
             }).ToList();
+        }
+
+        private static string FormatName(string? firstName, string? lastName, string? fallback)
+        {
+            var name = ((firstName ?? "") + " " + (lastName ?? "")).Trim();
+            return name.Length > 0 ? name : (fallback ?? "");
         }
     }
 }

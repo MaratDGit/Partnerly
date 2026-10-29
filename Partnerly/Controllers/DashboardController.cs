@@ -31,8 +31,11 @@ namespace Partnerly.Controllers
             _insightsDashboard = insightsDashboard;
         }
 
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
+            var permissions = ViewData["Permissions"] as HashSet<string>
+                ?? new HashSet<string>(StringComparer.OrdinalIgnoreCase);
+
             var model = new DashboardViewModel
             {
                 // Current month
@@ -54,7 +57,8 @@ namespace Partnerly.Controllers
                     new() { Date = DateTime.Today.AddDays(-2), Count = 18 },
                     new() { Date = DateTime.Today.AddDays(-1), Count = 27 },
                     new() { Date = DateTime.Today, Count = 16 }
-                }
+                },
+                Insights = await _insightsDashboard.BuildAsync(permissions)
             };
 
             return View(model);
@@ -146,12 +150,9 @@ namespace Partnerly.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> Dashboards()
+        public IActionResult Dashboards()
         {
-            var permissions = ViewData["Permissions"] as HashSet<string>
-                ?? new HashSet<string>(StringComparer.OrdinalIgnoreCase);
-            var model = await _insightsDashboard.BuildAsync(permissions);
-            return View(model);
+            return RedirectToAction(nameof(Index));
         }
 
         [HttpGet]

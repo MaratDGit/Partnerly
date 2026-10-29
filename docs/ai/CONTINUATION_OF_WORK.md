@@ -8,11 +8,11 @@
 - Приложение: ASP.NET Core MVC, .NET 6, монолит `Partnerly/Partnerly.csproj`.
 - Документация агента на месте.
 - UserPermissions / политики — `7e8173b` (на origin). Адатив четырёх страниц — `3f8568b` (на origin). User Groups send + попап — `e27dcad` (на origin).
-- Дерево рефералов — коммит `f1e14ea`. Веб-инспектор (iframe HTML) — `bdc34e4`. Дашборды, assignee тикета, заметки/fit-columns — незакоммичены.
+- Дерево рефералов — коммит `f1e14ea`. Веб-инспектор — `bdc34e4`. Поиск в навбаре, Statistics+Dashboards, фото ролей — в текущем коммите.
 
 ## Последняя задача
 
-OK в попапе заметки закрывает модалку. В DataTable справа от фильтра — подгон колонок под заголовок; колонка кнопок (`__actions`) подгоняется по всем кнопкам в строке, не по тексту заголовка.
+Statistics (`/Dashboard`) объединена с Dashboards: вкладка Games первая, затем Users/Tasks/Roles/Groups/Notifications. Меню Dashboards снято. В Roles — фото в Users by role (макс. 5, tooltip имя+email) и карточка Permissions by role.
 
 ## Уже сделано недавно
 
@@ -25,7 +25,7 @@ OK в попапе заметки закрывает модалку. В DataTabl
 
 - Секреты: user-secrets + локальный `secrets.json`. В Git Google OAuth пустой.
 - Права: политики на CRUD; видимость — `IUserVisibilityService`. Тикет: автор из видимых **или** `AssignedTo`.
-- Дашборды: отдельного permission нет; Tasks = SupportTickets. Класс страницы `dashboards-page`, чтобы layout не прятал скролл как у inspector.
+- Statistics = Games + модульные вкладки; отдельного permission нет; Tasks = SupportTickets. Класс `dashboards-page` на `/Dashboard`.
 - Дерево рефералов: корень = сам / CanViewUser / своя downline; Super скрыт если смотрящий не Super.
 - DataTable: id таблиц уникальны; тикеты — `supportTicketsTable`. Fit-columns пишет ширины в тот же localStorage, что и drag-resize.
 - БД: не запускать миграции без разрешения. Seeder **не удаляет** лишние RolePermissions на уже заполненной БД.
@@ -36,13 +36,11 @@ OK в попапе заметки закрывает модалку. В DataTabl
 - Нет автотестов.
 - Модули Payment/Transaction без UI.
 - KI-003 seed user на Admin, не Super — открыто.
-- Браузер в этой сессии недоступен — заметки/fit-columns и дашборды нужно проверить после рестарта приложения.
+- Браузер в этой сессии недоступен — объединённую Statistics и поиск в навбаре нужно проверить после рестарта приложения.
 - Приложение могло быть запущено (сборка шла в `%TEMP%`).
-- Дашборды, assignee, заметки/fit — не закоммичены. Push не просили.
 
 ## Рекомендуемый следующий шаг
 
-1. Проверить попап заметки (OK закрывает) на форме Users/Roles и кнопку подгона колонок на любом списке DataTable.
-2. Коммит/push — только если попросит владелец.
+1. После рестарта проверить Statistics (Games первая, Roles фото/tooltip) и поиск в навбаре на десктопе/планшете.
 
 Перед кодом снова прочитать `AGENTS.md` и этот файл.

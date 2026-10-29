@@ -42,7 +42,8 @@
         public int MyTasks { get; set; }
         public int MyTasksOpen { get; set; }
 
-        public List<NamedCount> UsersByRole { get; set; } = new();
+        public List<RoleUsersBreakdown> UsersByRole { get; set; } = new();
+        public List<NamedCount> PermissionsByRole { get; set; } = new();
         public List<NamedCount> TasksByStatus { get; set; } = new();
         public List<NamedCount> GroupsBySize { get; set; } = new();
         public List<NamedCount> NotificationsByType { get; set; } = new();
@@ -57,6 +58,18 @@
         public string Name { get; set; } = string.Empty;
         public int Count { get; set; }
         public int Percent { get; set; }
+    }
+
+    public class RoleUsersBreakdown : NamedCount
+    {
+        public List<RoleUserPreview> Users { get; set; } = new();
+    }
+
+    public class RoleUserPreview
+    {
+        public string Name { get; set; } = string.Empty;
+        public string? Email { get; set; }
+        public string PhotoUrl { get; set; } = string.Empty;
     }
 
     public class DashboardListItem

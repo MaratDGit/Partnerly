@@ -40,6 +40,7 @@ builder.Services.AddScoped<DataTablePropertyResolver>();
 builder.Services.AddScoped<IPermissionService, PermissionService>();
 builder.Services.AddScoped<IUserVisibilityService, UserVisibilityService>();
 builder.Services.AddScoped<IInsightsDashboardService, InsightsDashboardService>();
+builder.Services.AddScoped<ISiteSearchService, SiteSearchService>();
 builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<ILogService, LogService>();

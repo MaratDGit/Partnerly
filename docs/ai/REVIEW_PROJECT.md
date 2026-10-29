@@ -61,7 +61,7 @@ Partnerly.sln
 |--------|-------------------|------------|
 | Вход / регистрация | `AccountController` | cookie, Google, подтверждение email, сброс пароля |
 | Лендинг / ошибки | `HomeController` | редирект на Dashboard, maintenance, error |
-| Дашборд | `DashboardController` | стартовый экран после входа, модульные дашборды (`/Dashboard/Dashboards`), дерево рефералов (`/Dashboard/ReferralTree`) |
+| Дашборд | `DashboardController` | Statistics (`/Dashboard`): Games + вкладки Users/Tasks/Roles/Groups/Notifications; дерево рефералов (`/Dashboard/ReferralTree`) |
 | Пользователи | `UsersController` | список DataTable, CRUD, inline |
 | Роли | `RolesController` | роли, права роли |
 | Права | `RolesController` | DataTable role/user permissions на Edit / UserRoleEdit |
@@ -75,6 +75,7 @@ Partnerly.sln
 | Язык | `LanguageController` | культура |
 | AI | `AIController` | прокси к OpenAI |
 | Веб-инспектор | `WebInspectorController` | загрузка страницы, HTML и видимые данные (`/WebInspector`) |
+| Поиск | `SearchController` | глобальный поиск в навбаре по разделам и данным (`/Search/Query`) |
 
 ## Важные зависимости и интеграции
 

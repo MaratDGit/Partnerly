@@ -2116,6 +2116,14 @@
     <value>Пользователи по ролям</value>
   </data>
 
+  <data name="PermissionsByRole" xml:space="preserve">
+    <value>Права по ролям</value>
+  </data>
+
+  <data name="Games" xml:space="preserve">
+    <value>Игры</value>
+  </data>
+
   <data name="TasksByStatus" xml:space="preserve">
     <value>Задачи по статусам</value>
   </data>
@@ -2190,6 +2198,22 @@
 
   <data name="Read" xml:space="preserve">
     <value>Прочитанные</value>
+  </data>
+
+  <data name="SiteSearchPlaceholder" xml:space="preserve">
+    <value>Поиск по разделам и данным...</value>
+  </data>
+
+  <data name="SiteSearchEmpty" xml:space="preserve">
+    <value>Введите минимум 2 символа</value>
+  </data>
+
+  <data name="SiteSearchNoResults" xml:space="preserve">
+    <value>Ничего не найдено</value>
+  </data>
+
+  <data name="SiteSearchSections" xml:space="preserve">
+    <value>Разделы</value>
   </data>
 
 </root>

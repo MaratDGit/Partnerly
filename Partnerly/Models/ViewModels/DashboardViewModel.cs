@@ -62,6 +62,8 @@
         public List<GamesByDayViewModel> GamesByDay { get; set; } = new();
 
         public List<WinLossViewModel> WinLoss { get; set; } = new();
+
+        public DashboardsViewModel Insights { get; set; } = new();
     }
 
     public class GamesByDayViewModel
