@@ -2060,4 +2060,132 @@
     <value>Карточка</value>
   </data>
 
+  <data name="Dashboards" xml:space="preserve">
+    <value>Дашборды</value>
+  </data>
+
+  <data name="DashboardsOverview" xml:space="preserve">
+    <value>Обзор</value>
+  </data>
+
+  <data name="DashboardsTotal" xml:space="preserve">
+    <value>Всего</value>
+  </data>
+
+  <data name="DashboardsNoAccess" xml:space="preserve">
+    <value>Для вашего уровня доступа нет модульных дашбордов. Показаны только личные показатели.</value>
+  </data>
+
+  <data name="DashboardsEmptyList" xml:space="preserve">
+    <value>Пока нет данных</value>
+  </data>
+
+  <data name="NewThisWeek" xml:space="preserve">
+    <value>Новые за неделю</value>
+  </data>
+
+  <data name="ThisWeek" xml:space="preserve">
+    <value>За неделю</value>
+  </data>
+
+  <data name="Unassigned" xml:space="preserve">
+    <value>Без исполнителя</value>
+  </data>
+
+  <data name="Unread" xml:space="preserve">
+    <value>Непрочитанные</value>
+  </data>
+
+  <data name="Members" xml:space="preserve">
+    <value>Участники</value>
+  </data>
+
+  <data name="RecentUsers" xml:space="preserve">
+    <value>Последние пользователи</value>
+  </data>
+
+  <data name="RecentTasks" xml:space="preserve">
+    <value>Последние задачи</value>
+  </data>
+
+  <data name="UsersByRole" xml:space="preserve">
+    <value>Пользователи по ролям</value>
+  </data>
+
+  <data name="TasksByStatus" xml:space="preserve">
+    <value>Задачи по статусам</value>
+  </data>
+
+  <data name="MyReferrals" xml:space="preserve">
+    <value>Мои рефералы</value>
+  </data>
+
+  <data name="MyTasks" xml:space="preserve">
+    <value>Мои задачи</value>
+  </data>
+
+  <data name="ViewList" xml:space="preserve">
+    <value>Открыть список</value>
+  </data>
+
+  <data name="ThisMonth" xml:space="preserve">
+    <value>За месяц</value>
+  </data>
+
+  <data name="WithReferrer" xml:space="preserve">
+    <value>С реферером</value>
+  </data>
+
+  <data name="WithPhone" xml:space="preserve">
+    <value>С телефоном</value>
+  </data>
+
+  <data name="GoogleSignIn" xml:space="preserve">
+    <value>Вход через Google</value>
+  </data>
+
+  <data name="EmptyGroups" xml:space="preserve">
+    <value>Пустые группы</value>
+  </data>
+
+  <data name="GroupsBySize" xml:space="preserve">
+    <value>Группы по размеру</value>
+  </data>
+
+  <data name="RecentGroups" xml:space="preserve">
+    <value>Последние группы</value>
+  </data>
+
+  <data name="OpenTasks" xml:space="preserve">
+    <value>Открытые</value>
+  </data>
+
+  <data name="Inactive" xml:space="preserve">
+    <value>Неактивные</value>
+  </data>
+
+  <data name="RolePermissionsHint" xml:space="preserve">
+    <value>Назначено видимым ролям</value>
+  </data>
+
+  <data name="AvgMembers" xml:space="preserve">
+    <value>В среднем участников</value>
+  </data>
+
+  <data name="VisibleMembers" xml:space="preserve">
+    <value>Видимые участники</value>
+  </data>
+
+  <data name="NotificationsByType" xml:space="preserve">
+    <value>Уведомления по типу</value>
+  </data>
+
+  <data name="RecentNotifications" xml:space="preserve">
+    <value>Последние уведомления</value>
+  </data>
+
+  <data name="Read" xml:space="preserve">
+    <value>Прочитанные</value>
+  </data>
+
 </root>

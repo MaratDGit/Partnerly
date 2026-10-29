@@ -4,6 +4,17 @@
 
 ---
 
+## TR-2026-10-28-02 — Модульные дашборды под Statistics
+
+- **Дата:** 2026-10-28
+- **Суть:** экран `/Dashboard/Dashboards` в меню Main сразу под Statistics. KPI и списки по Users / Tasks (тикеты) / Roles / Groups / Notifications. Счётчики через `IInsightsDashboardService` и `VisibleUserIds()`. Секции только при соответствующем `*.view`. Личные KPI (мои рефералы, мои задачи) всегда. Журнал и email-шаблоны на этом экране не показываются. Без нового permission и без Chart.js (полоски CSS). Index Dashboard с играми не трогался.
+- **Причина:** владельцу нужна отдельная страница дашбордов по модулям, в дизайне сайта, light/dark.
+- **Затрагивает:** `DashboardController.Dashboards`, `InsightsDashboardService`, view/css/js, меню, i18n en/ru/hy.
+- **Последствия:** страница должна скроллиться (класс `dashboards-page`, не `dashboard`). Миграций нет.
+- **Альтернативы:** подменю Statistics, отдельные permission-коды, Chart.js — не брались.
+
+---
+
 ## TR-2026-10-28-01 — Инспектор: HTML всех iframe
 
 - **Дата:** 2026-10-28

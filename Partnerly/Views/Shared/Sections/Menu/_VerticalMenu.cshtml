@@ -98,7 +98,7 @@
 
                     <!-- Dashboard -->
 
-                    <li class="partnerly-menu-item @(currentPage.StartsWith("/Dashboard") && !currentPage.StartsWith("/Dashboard/ReferralTree") ? "active" : "")">
+                    <li class="partnerly-menu-item @(currentPage == "/Dashboard" || currentPage.StartsWith("/Dashboard/Index") ? "active" : "")">
 
                         <a asp-controller="Dashboard"
                            asp-action="Index"
@@ -110,6 +110,24 @@
 
                             <span class="partnerly-menu-text">
                                 @Localizer["Statistics"]
+                            </span>
+
+                        </a>
+
+                    </li>
+
+                    <li class="partnerly-menu-item @(currentPage.StartsWith("/Dashboard/Dashboards") ? "active" : "")">
+
+                        <a asp-controller="Dashboard"
+                           asp-action="Dashboards"
+                           class="partnerly-menu-link">
+
+                            <span class="partnerly-menu-icon">
+                                <i class="bx bx-grid-alt"></i>
+                            </span>
+
+                            <span class="partnerly-menu-text">
+                                @Localizer["Dashboards"]
                             </span>
 
                         </a>

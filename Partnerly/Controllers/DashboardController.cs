@@ -13,6 +13,8 @@ namespace Partnerly.Controllers
 {
     public class DashboardController : _BaseController
     {
+        private readonly IInsightsDashboardService _insightsDashboard;
+
         public DashboardController(
             IEventBus eventBus, 
             IUserService userService, 
@@ -22,10 +24,11 @@ namespace Partnerly.Controllers
             ISystemSettingsService systemSettingsService, 
             IStringLocalizer<SharedResource> localizer, 
             DataTableQueryService tableService, 
-            IDataTableRegistry dataTableRegistry)
+            IDataTableRegistry dataTableRegistry,
+            IInsightsDashboardService insightsDashboard)
         : base(eventBus, userService, currentUser, logService, localizer, systemSettingsService, tableService, dataTableRegistry)
         {
-
+            _insightsDashboard = insightsDashboard;
         }
 
         public IActionResult Index()
@@ -140,6 +143,15 @@ namespace Partnerly.Controllers
             };
 
             return Json(data);
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> Dashboards()
+        {
+            var permissions = ViewData["Permissions"] as HashSet<string>
+                ?? new HashSet<string>(StringComparer.OrdinalIgnoreCase);
+            var model = await _insightsDashboard.BuildAsync(permissions);
+            return View(model);
         }
 
         [HttpGet]

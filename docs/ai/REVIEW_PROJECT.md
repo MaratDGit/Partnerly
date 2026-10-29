@@ -61,7 +61,7 @@ Partnerly.sln
 |--------|-------------------|------------|
 | Вход / регистрация | `AccountController` | cookie, Google, подтверждение email, сброс пароля |
 | Лендинг / ошибки | `HomeController` | редирект на Dashboard, maintenance, error |
-| Дашборд | `DashboardController` | стартовый экран после входа, дерево рефералов (`/Dashboard/ReferralTree`) |
+| Дашборд | `DashboardController` | стартовый экран после входа, модульные дашборды (`/Dashboard/Dashboards`), дерево рефералов (`/Dashboard/ReferralTree`) |
 | Пользователи | `UsersController` | список DataTable, CRUD, inline |
 | Роли | `RolesController` | роли, права роли |
 | Права | `RolesController` | DataTable role/user permissions на Edit / UserRoleEdit |

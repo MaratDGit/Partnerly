@@ -38,7 +38,7 @@
 Пользователь системы. FK: `RoleId` → Roles, `ReferrerId` → Users (`OnDelete: Restrict`).  
 Поля (подтверждено сущностью): GoogleId, Email, PasswordHash, Phone, FirstName, LastName, PhotoUrl, Balance, LastRoleUpdateTime, MyReferralCode, LastActivity, IsOnlayn, IsBlocked, EmailConfirmed, AllowSendNotifications, AllowSendEmails, системные колонки.  
 Навигации: Role, Referrer, Referrals, Transactions, Payments, UserPermissions.  
-Экран дерева рефералов (`/Dashboard/ReferralTree`) только читает `ReferrerId` / `Referrals`, схему не меняет.
+Экран дерева рефералов (`/Dashboard/ReferralTree`) только читает `ReferrerId` / `Referrals`, схему не меняет. Модульные дашборды (`/Dashboard/Dashboards`) только считают существующие сущности (User, Role, UserGroup, SupportTicket, Notification), схему не меняют.
 
 ### Roles
 

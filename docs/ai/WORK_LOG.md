@@ -4,6 +4,22 @@
 
 ---
 
+## 2026-10-28 — Дашборды: убраны журнал и шаблоны, ровные KPI
+
+- **Суть:** с экрана дашбордов убраны email templates, logs, подсказка, «My numbers» и карточка Active; KPI выровнены, в карточках больше цифр.
+- **Сделано:** вкладки Users / Tasks / Roles / Groups / Notifications; сетка 4 колонки одинаковой высоты; подписи с процентами; списки с бейджами; группы по размеру; уведомления по типу.
+- **Сборка:** `dotnet build Partnerly.sln` в `%TEMP%\PartnerlyBuildDashboards2` — 0 ошибок. Браузер в этой сессии недоступен.
+
+---
+
+## 2026-10-28 — Модульные дашборды
+
+- **Суть:** отдельная страница KPI по users, tasks, roles, groups, notifications; пункт меню под Statistics.
+- **Сделано:** `Dashboard/Dashboards`; `IInsightsDashboardService` считает по `VisibleUserIds()`; секции по существующим `*.view`; личные KPI всегда; вкладки, карточки, CSS-полоски, light/dark; i18n en/ru/hy. Нового permission и Chart.js нет. Index с играми не менялся.
+- **Сборка:** `dotnet build Partnerly.sln` в `%TEMP%\PartnerlyBuildDashboards` — 0 ошибок, 110 предупреждений (уже были). Браузер в этой сессии недоступен.
+
+---
+
 ## 2026-10-28 — Инспектор парсит HTML внутри iframe
 
 - **Суть:** live-снимок включает документы всех фреймов, не только top.
