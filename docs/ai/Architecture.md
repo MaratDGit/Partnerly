@@ -33,7 +33,7 @@ Controller  →  I*Service  →  I*Repository : Repository<T>  →  AppDbContext
 - `OnActionExecutionAsync` заполняет ViewBag (фото, имя, рефкод) и текст тикера / maintenance; `ViewData["Permissions"]` — эффективные коды прав текущего пользователя для меню.
 - `PrepareViewModelAsync` подставляет имена авторов.
 - `ExportTableAsync` — Excel/CSV.
-- `UserVisibility` / `CanViewUserAsync` — видимость записей по роли.
+- `UserVisibility` / `CanViewUserAsync` — видимость записей по роли. Тикет: `CanViewSupportTicketAsync` — автор из видимых **или** текущий пользователь = `AssignedTo`.
 - Старый `HasPermision` / RoleType удалён (2026-10-25). Права — через политики `Permission:`.
 
 Контроллеры **без** `_BaseController`: `AccountController`, `HomeController`, `AIController` (`[Authorize]` + `ai.use` на Ask), `LanguageController`.
@@ -57,7 +57,7 @@ Controller  →  I*Service  →  I*Repository : Repository<T>  →  AppDbContext
 - Права UI: `Permission` на action/column/export. Фильтр в `_DataTable.cshtml` по `ViewData["Permissions"]` — **не** менять зарегистрированные options (singleton общий для всех пользователей).
 - StickyButtons: `Permission` на `FormActionBase`; фильтр в `_StickyButtons.cshtml`. Удаление вложений в модалке — `attachments.manage` (или `DeletePermission`).
 - Запрос: `DataTableQueryService` + `DataTablePropertyResolver`.
-- UI: `Views/Shared/DataTable/_DataTable.cshtml`, `_DataTablePartial.cshtml`, JS в `wwwroot/js/datatable/`.
+- UI: `Views/Shared/DataTable/_DataTable.cshtml`, `_DataTablePartial.cshtml`, JS в `wwwroot/js/datatable/`. Тулбар: справа от фильтра кнопка `data-table-fit-columns` (`resize.js` / `fitHeaderColumns`) подгоняет ширину колонок под полный текст заголовка и иконки sort/filter; колонка `__actions` — по ширине всех кнопок в строке, не по тексту заголовка.
 - Inline-правка: `IInlineUpdateService`.
 - Экспорт: `DataTableExcelExporter`, `DataTableCsvExporter`.
 

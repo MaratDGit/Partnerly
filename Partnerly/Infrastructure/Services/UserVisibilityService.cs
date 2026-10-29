@@ -67,6 +67,17 @@ namespace Partnerly.Infrastructure.Services
             return await CanViewUserAsync(user);
         }
 
+        public async Task<bool> CanViewSupportTicketAsync(Guid? creatorUserId, Guid? assignedTo)
+        {
+            if (_currentUser.UserId == null)
+                return false;
+
+            if (creatorUserId == _currentUser.UserId || assignedTo == _currentUser.UserId)
+                return true;
+
+            return await CanViewUserAsync(creatorUserId);
+        }
+
         public Task<bool> CanViewUserAsync(User? user)
         {
             if (user == null || _currentUser.UserId == null)

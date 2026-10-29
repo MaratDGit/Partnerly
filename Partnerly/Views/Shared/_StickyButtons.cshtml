@@ -160,7 +160,8 @@
 
                     <button type="button"
                             class="btn btn-primary btn-sm"
-                            id="saveNoteBtn">
+                            id="saveNoteBtn"
+                            data-bs-dismiss="modal">
                         @Localizer["OK"]
                     </button>
                 </div>
@@ -307,6 +308,38 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 
     let lastSavedNote = noteText.value.trim();
+    const noteModalEl = document.getElementById('noteModal');
+
+    if (noteModalEl && noteModalEl.parentElement !== document.body) {
+        document.body.appendChild(noteModalEl);
+    }
+
+    function findNoteHiddenInputs() {
+        return document.querySelectorAll(
+            'input[type="hidden"]#hiddenNote, input[type="hidden"]#Note, input[type="hidden"][name="Note"], input[type="hidden"][name$=".Note"]'
+        );
+    }
+
+    function closeNoteModal() {
+        if (!noteModalEl) {
+            return;
+        }
+
+        if (window.bootstrap && bootstrap.Modal) {
+            bootstrap.Modal.getOrCreateInstance(noteModalEl).hide();
+            return;
+        }
+
+        noteModalEl.classList.remove('show');
+        noteModalEl.style.display = 'none';
+        noteModalEl.setAttribute('aria-hidden', 'true');
+        document.querySelectorAll('.modal-backdrop').forEach(function (backdrop) {
+            backdrop.remove();
+        });
+        document.body.classList.remove('modal-open');
+        document.body.style.removeProperty('overflow');
+        document.body.style.removeProperty('padding-right');
+    }
 
     function updateNoteButtonColor() {
         if (noteText.value.trim().length > 0) {
@@ -316,28 +349,37 @@ document.addEventListener('DOMContentLoaded', function () {
         }
     }
 
-    clearBtn.addEventListener('click', function () {
-        noteText.value = '';
-        noteText.focus();
-        updateNoteButtonColor();
-    });
+    if (clearBtn) {
+        clearBtn.addEventListener('click', function () {
+            noteText.value = '';
+            noteText.focus();
+            updateNoteButtonColor();
+        });
+    }
 
-    saveNoteBtn.addEventListener('click', function () {
-        const note = noteText.value.trim();
-        lastSavedNote = note;
-        const hiddenNote = document.getElementById('hiddenNote');
-        hiddenNote.value = note;
-        noteText.dispatchEvent(new Event('input', { bubbles: true }));
+    if (saveNoteBtn) {
+        saveNoteBtn.addEventListener('click', function (event) {
+            event.preventDefault();
+            try {
+                const note = noteText.value.trim();
+                lastSavedNote = note;
+                findNoteHiddenInputs().forEach(function (input) {
+                    input.value = note;
+                });
+                noteText.dispatchEvent(new Event('input', { bubbles: true }));
+                updateNoteButtonColor();
+            } finally {
+                closeNoteModal();
+            }
+        });
+    }
 
-        updateNoteButtonColor();
-        const modal = bootstrap.Modal.getInstance(document.getElementById('noteModal'));
-        modal.hide();
-    });
-
-    cancelNoteBtn.addEventListener('click', function () {
-        noteText.value = lastSavedNote;
-        updateNoteButtonColor();
-    });
+    if (cancelNoteBtn) {
+        cancelNoteBtn.addEventListener('click', function () {
+            noteText.value = lastSavedNote;
+            updateNoteButtonColor();
+        });
+    }
 
     noteText.addEventListener('input', updateNoteButtonColor);
     updateNoteButtonColor();

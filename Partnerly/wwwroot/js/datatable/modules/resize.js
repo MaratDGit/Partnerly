@@ -764,6 +764,528 @@
 
             /*
              * =========================================================
+             * FIT HEADERS
+             * =========================================================
+             */
+
+            function getFilterFields() {
+
+                var fields = {};
+                var filters =
+                    options.filters &&
+                    options.filters.items;
+
+                if (filters && Array.isArray(filters)) {
+
+                    for (var i = 0; i < filters.length; i++) {
+
+                        if (filters[i] && filters[i].field) {
+                            fields[String(filters[i].field)] = true;
+                        }
+                    }
+                }
+
+                return fields;
+            }
+
+
+            function measureTextWidth(text, font) {
+
+                var canvas =
+                    measureTextWidth.canvas ||
+                    (measureTextWidth.canvas =
+                        document.createElement("canvas"));
+
+                var context =
+                    canvas.getContext("2d");
+
+                context.font = font;
+
+                return context.measureText(
+                    text || ""
+                ).width;
+            }
+
+
+            function getHeaderTitle(column) {
+
+                if (
+                    column.config &&
+                    column.config.title
+                ) {
+                    return String(column.config.title);
+                }
+
+                var titleSpan =
+                    column.header.querySelector(
+                        ".data-table-sort > span:not(.data-table-sort-icon):not(.data-table-column-filter-icon)"
+                    );
+
+                if (titleSpan) {
+                    return (titleSpan.textContent || "").trim();
+                }
+
+                if (
+                    column.header.querySelector(
+                        ".data-table-select-all"
+                    )
+                ) {
+                    return "";
+                }
+
+                return (column.header.textContent || "").trim();
+            }
+
+
+            function measureHeaderTitleWidth(column) {
+
+                var source =
+                    column.header.querySelector(
+                        ".data-table-sort"
+                    ) ||
+                    column.header;
+
+                var style =
+                    window.getComputedStyle(
+                        source
+                    );
+
+                var title =
+                    getHeaderTitle(column);
+
+                if (style.textTransform === "uppercase") {
+                    title = title.toUpperCase();
+                }
+
+                var font =
+                    style.font ||
+                    [
+                        style.fontWeight,
+                        style.fontSize,
+                        style.fontFamily
+                    ].join(" ");
+
+                var width =
+                    measureTextWidth(
+                        title,
+                        font
+                    );
+
+                var letterSpacing =
+                    parseFloat(
+                        style.letterSpacing
+                    );
+
+                if (
+                    !isNaN(letterSpacing) &&
+                    title.length > 1
+                ) {
+                    width +=
+                        letterSpacing *
+                        (title.length - 1);
+                }
+
+                return width;
+            }
+
+
+            function syncTableWidth() {
+
+                var total = 0;
+
+                columns.forEach(
+                    function (column) {
+
+                        total += column.width;
+                    }
+                );
+
+                if (total > 0) {
+
+                    table.style.width =
+                        total + "px";
+
+                    table.style.maxWidth =
+                        "none";
+
+                    table.style.minWidth =
+                        total + "px";
+                }
+            }
+
+
+            function estimateActionsFallbackWidth() {
+
+                var count = 0;
+                var hasExplicitInlineEdit =
+                    false;
+
+                if (
+                    typeof ctx.getRowActions ===
+                    "function"
+                ) {
+
+                    var rowActions =
+                        ctx.getRowActions();
+
+                    count =
+                        rowActions.length;
+
+                    for (
+                        var i = 0;
+                        i < rowActions.length;
+                        i++
+                    ) {
+
+                        if (
+                            rowActions[i] &&
+                            rowActions[i].type ===
+                            "InlineEdit"
+                        ) {
+                            hasExplicitInlineEdit =
+                                true;
+                            break;
+                        }
+                    }
+                }
+
+                if (
+                    !hasExplicitInlineEdit &&
+                    options.inlineEditing &&
+                    typeof ctx.hasEditableColumns ===
+                    "function" &&
+                    ctx.hasEditableColumns()
+                ) {
+                    count += 1;
+                }
+
+                if (count < 1) {
+                    count = 2;
+                }
+
+                return (
+                    count * 33 +
+                    28
+                );
+            }
+
+
+            function measureActionsColumnWidth(
+                column
+            ) {
+
+                var extra = 10;
+
+                if (
+                    column.header.querySelector(
+                        "[data-column-resizer]"
+                    )
+                ) {
+                    extra += 8;
+                }
+
+                var cells =
+                    table.querySelectorAll(
+                        "tbody td.data-table-actions"
+                    );
+
+                if (!cells.length) {
+
+                    return (
+                        estimateActionsFallbackWidth() +
+                        extra
+                    );
+                }
+
+                var prevColWidth =
+                    column.col.style.width;
+
+                var prevHeaderWidth =
+                    column.header.style.width;
+
+                var prevTableWidth =
+                    table.style.width;
+
+                var prevTableMax =
+                    table.style.maxWidth;
+
+                var prevTableMin =
+                    table.style.minWidth;
+
+                var otherWidth = 0;
+
+                columns.forEach(
+                    function (item) {
+
+                        if (item !== column) {
+                            otherWidth +=
+                                item.width;
+                        }
+                    }
+                );
+
+                var wide = 2000;
+
+                column.col.style.width =
+                    wide + "px";
+
+                column.header.style.width =
+                    wide + "px";
+
+                table.style.maxWidth =
+                    "none";
+
+                table.style.width =
+                    (otherWidth + wide) + "px";
+
+                table.style.minWidth =
+                    (otherWidth + wide) + "px";
+
+                var maxWidth = 0;
+
+                for (
+                    var i = 0;
+                    i < cells.length;
+                    i++
+                ) {
+
+                    var cell =
+                        cells[i];
+
+                    var prevOverflow =
+                        cell.style.overflow;
+
+                    var prevMaxWidth =
+                        cell.style.maxWidth;
+
+                    var prevWhiteSpace =
+                        cell.style.whiteSpace;
+
+                    cell.style.overflow =
+                        "visible";
+
+                    cell.style.maxWidth =
+                        "none";
+
+                    cell.style.whiteSpace =
+                        "nowrap";
+
+                    var content = 0;
+                    var children =
+                        cell.children;
+
+                    for (
+                        var j = 0;
+                        j < children.length;
+                        j++
+                    ) {
+
+                        var child =
+                            children[j];
+
+                        var childPrevMax =
+                            child.style.maxWidth;
+
+                        var childPrevWhite =
+                            child.style.whiteSpace;
+
+                        child.style.maxWidth =
+                            "none";
+
+                        child.style.whiteSpace =
+                            "nowrap";
+
+                        var childStyle =
+                            window.getComputedStyle(
+                                child
+                            );
+
+                        content +=
+                            child.getBoundingClientRect()
+                                .width +
+                            (parseFloat(childStyle.marginLeft) || 0) +
+                            (parseFloat(childStyle.marginRight) || 0);
+
+                        child.style.maxWidth =
+                            childPrevMax;
+
+                        child.style.whiteSpace =
+                            childPrevWhite;
+                    }
+
+                    var cellStyle =
+                        window.getComputedStyle(
+                            cell
+                        );
+
+                    content +=
+                        (parseFloat(cellStyle.paddingLeft) || 0) +
+                        (parseFloat(cellStyle.paddingRight) || 0);
+
+                    cell.style.overflow =
+                        prevOverflow;
+
+                    cell.style.maxWidth =
+                        prevMaxWidth;
+
+                    cell.style.whiteSpace =
+                        prevWhiteSpace;
+
+                    if (content > maxWidth) {
+                        maxWidth = content;
+                    }
+                }
+
+                column.col.style.width =
+                    prevColWidth;
+
+                column.header.style.width =
+                    prevHeaderWidth;
+
+                table.style.width =
+                    prevTableWidth;
+
+                table.style.maxWidth =
+                    prevTableMax;
+
+                table.style.minWidth =
+                    prevTableMin;
+
+                if (maxWidth <= 0) {
+                    maxWidth =
+                        estimateActionsFallbackWidth();
+                }
+
+                return maxWidth + extra;
+            }
+
+
+            ctx.fitHeaderColumns =
+                function () {
+
+                    var filterFields =
+                        getFilterFields();
+
+                    columns.forEach(
+                        function (column) {
+
+                            if (
+                                column.config &&
+                                column.config.resizable === false
+                            ) {
+                                return;
+                            }
+
+                            if (
+                                column.field ===
+                                "__actions"
+                            ) {
+
+                                setColumnWidth(
+                                    column,
+                                    measureActionsColumnWidth(
+                                        column
+                                    )
+                                );
+
+                                return;
+                            }
+
+                            var title =
+                                getHeaderTitle(column);
+
+                            if (
+                                !title &&
+                                column.header.querySelector(
+                                    ".data-table-select-all"
+                                )
+                            ) {
+                                return;
+                            }
+
+                            var headerStyle =
+                                window.getComputedStyle(
+                                    column.header
+                                );
+
+                            var padding =
+                                (parseFloat(headerStyle.paddingLeft) || 0) +
+                                (parseFloat(headerStyle.paddingRight) || 0);
+
+                            var titleWidth =
+                                measureHeaderTitleWidth(
+                                    column
+                                );
+
+                            /*
+                             * Extra space so the full
+                             * header name stays visible
+                             * together with sort / filter
+                             * icons when they are present.
+                             */
+
+                            var extra = 14;
+
+                            if (
+                                column.header.querySelector(
+                                    ".data-table-sort"
+                                )
+                            ) {
+                                extra += 16;
+                            }
+
+                            if (
+                                filterFields[column.field] ||
+                                column.header.querySelector(
+                                    ".data-table-column-filter-icon"
+                                )
+                            ) {
+                                extra += 16;
+                            }
+
+                            if (
+                                column.header.querySelector(
+                                    "[data-column-resizer]"
+                                )
+                            ) {
+                                extra += 8;
+                            }
+
+                            setColumnWidth(
+                                column,
+                                titleWidth + padding + extra
+                            );
+                        }
+                    );
+
+                    syncTableWidth();
+
+                    saveWidths(
+                        collectWidths()
+                    );
+                };
+
+
+            var fitButton =
+                ctx.root.querySelector(
+                    "[data-table-fit-columns]"
+                );
+
+            if (fitButton) {
+
+                fitButton.addEventListener(
+                    "click",
+                    function (event) {
+
+                        event.preventDefault();
+                        ctx.fitHeaderColumns();
+                    }
+                );
+            }
+
+
+            /*
+             * =========================================================
              * PUBLIC API
              * =========================================================
              */

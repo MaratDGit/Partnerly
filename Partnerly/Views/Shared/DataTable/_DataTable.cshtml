@@ -242,6 +242,21 @@
                 </button>
             }
 
+            @if (Model.ColumnResizeEnabled)
+            {
+                <button type="button"
+                        class="data-table-grid-action"
+                        data-table-fit-columns
+                        title="@Localizer["DataTableFitColumns"]"
+                        aria-label="@Localizer["DataTableFitColumns"]">
+
+                    <span class="data-table-grid-action-icon">
+                        <i class="bx bx-move-horizontal"></i>
+                    </span>
+
+                </button>
+            }
+
         </div>
 
 

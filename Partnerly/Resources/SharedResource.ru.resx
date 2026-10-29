@@ -713,6 +713,10 @@
     <value>Фильтры</value>
   </data>
 
+  <data name="DataTableFitColumns" xml:space="preserve">
+    <value>Подогнать заголовки колонок</value>
+  </data>
+
   <data name="DataTableApply" xml:space="preserve">
     <value>Применить</value>
   </data>

@@ -26,6 +26,7 @@ namespace Partnerly.Infrastructure.Repositories
             {
                 Id = x.Id,
                 UserId = x.UserId,
+                AssignedTo = x.AssignedTo,
                 CreatorName = x.Creator.FirstName + " " + x.Creator.LastName,
                 AssignedToName = x.Assigned.FirstName + " " + x.Assigned.LastName,
                 Status = x.Status,

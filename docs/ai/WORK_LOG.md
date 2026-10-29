@@ -4,6 +4,22 @@
 
 ---
 
+## 2026-10-29 — Закрытие заметки OK и подгон колонок DataTable
+
+- **Суть:** OK в попапе заметки не закрывал модалку; в тулбаре таблицы нужна иконка справа от фильтра, чтобы подогнать ширину колонок под полный текст заголовка и иконки сортировки/фильтра.
+- **Сделано:** `_StickyButtons.cshtml` — OK пишет во все hidden `Note` (не только `#hiddenNote`), `getOrCreateInstance().hide()`, `data-bs-dismiss`, модалка на `document.body`. DataTable: кнопка `data-table-fit-columns` сразу справа от фильтра; `resize.js` считает ширину заголовка (uppercase + letter-spacing) + запас на sort/filter/resizer и задаёт ширину таблицы, чтобы колонки не сжимались. Колонка `__actions` при подгоне меряется по кнопкам в строках, не по тексту заголовка. i18n `DataTableFitColumns` en/ru/hy.
+- **Сборка:** `dotnet build Partnerly.sln` в `%TEMP%\PartnerlyBuildNoteFit` — 0 ошибок, 110 предупреждений (уже были). JS-правка колонки кнопок отдельно не собиралась. Браузер в этой сессии недоступен.
+
+---
+
+## 2026-10-29 — Назначенный видит тикет из уведомления
+
+- **Суть:** View на уведомлении вёл на ViewCase, и исполнитель получал «нет доступа», если автора тикета не видно по ролям.
+- **Сделано:** `CanViewSupportTicketAsync` — автор из видимых или `AssignedTo` = текущий пользователь. ViewCase / Start / Close / Edit / Delete / inline / вложения / Data / Export / lookup. В `QueryEntityExt` добавлен `AssignedTo`.
+- **Сборка:** `dotnet build Partnerly.sln` в `%TEMP%\PartnerlyBuildTicketAssignee` — 0 ошибок. Браузер не проверялся.
+
+---
+
 ## 2026-10-28 — Дашборды: убраны журнал и шаблоны, ровные KPI
 
 - **Суть:** с экрана дашбордов убраны email templates, logs, подсказка, «My numbers» и карточка Active; KPI выровнены, в карточках больше цифр.

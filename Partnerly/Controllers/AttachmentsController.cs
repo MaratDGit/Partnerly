@@ -234,7 +234,7 @@ namespace Partnerly.Controllers
             if (string.Equals(entityType, "SupportTicket", StringComparison.OrdinalIgnoreCase))
             {
                 var ticket = await _supportTicketService.GetSupportTicketByIDAsync(entityId);
-                return ticket != null && await CanViewUserAsync(ticket.UserId);
+                return await CanViewSupportTicketAsync(ticket);
             }
 
             if (string.Equals(entityType, "User", StringComparison.OrdinalIgnoreCase))

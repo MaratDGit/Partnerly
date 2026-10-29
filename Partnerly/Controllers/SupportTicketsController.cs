@@ -65,7 +65,7 @@ namespace Partnerly.Controllers
             if (id != null)
             {
                 var ticket = await _supportTicketService.GetSupportTicketByIDAsync(id);
-                if (ticket == null || !await CanViewUserAsync(ticket.UserId))
+                if (ticket == null || !await CanViewSupportTicketAsync(ticket))
                     return Forbid();
                 string? status = ticket.Status;
                 if (status != null && status != SupportTicketStatusAttribute.InProgress)
@@ -85,7 +85,7 @@ namespace Partnerly.Controllers
             if (id != null)
             {
                 var ticket = await _supportTicketService.GetSupportTicketByIDAsync(id);
-                if (ticket == null || !await CanViewUserAsync(ticket.UserId))
+                if (ticket == null || !await CanViewSupportTicketAsync(ticket))
                     return Forbid();
                 string? status = ticket.Status;
                 if (status != null && status != SupportTicketStatusAttribute.Closed)
@@ -165,7 +165,7 @@ namespace Partnerly.Controllers
         {
             var ticket = await _supportTicketService.GetSupportTicketByIDAsync(id);
             if (ticket == null) return NotFound();
-            if (!await CanViewUserAsync(ticket.UserId)) return Forbid();
+            if (!await CanViewSupportTicketAsync(ticket)) return Forbid();
 
             var ticketAsView = await PropertyActionsHelper.CopyPropertiesAsync(ticket, new SupportTicketViewModel());
             if (ticketAsView == null) return NotFound();
@@ -241,7 +241,7 @@ namespace Partnerly.Controllers
         {
             var ticket = await _supportTicketService.GetSupportTicketByIDAsync(id);
             if (ticket == null) return NotFound();
-            if (!await CanViewUserAsync(ticket.UserId)) return Forbid();
+            if (!await CanViewSupportTicketAsync(ticket)) return Forbid();
 
             var ticketAsView = await PropertyActionsHelper.CopyPropertiesAsync(ticket, new SupportTicketViewModel());
             if (ticketAsView == null) return NotFound();
@@ -273,7 +273,7 @@ namespace Partnerly.Controllers
                 SupportTicket? ticket = await _supportTicketService.GetSupportTicketByIDAsync(model.Id);
                 if (ticket != null)
                 {
-                    if (!await CanViewUserAsync(ticket.UserId)) return Forbid();
+                    if (!await CanViewSupportTicketAsync(ticket)) return Forbid();
                     string? oldStatus = ticket.Status;
                     Guid? oldAssignedTo = ticket.AssignedTo;
 
@@ -308,7 +308,7 @@ namespace Partnerly.Controllers
         {
             var ticket = await _supportTicketService.GetSupportTicketByIDAsync(id);
             if (ticket == null) return NotFound();
-            if (!await CanViewUserAsync(ticket.UserId)) return Forbid();
+            if (!await CanViewSupportTicketAsync(ticket)) return Forbid();
 
             var deleteModel = new DeleteConfirmationViewModel
             {
@@ -332,7 +332,7 @@ namespace Partnerly.Controllers
             var ticket = await _supportTicketService.GetSupportTicketByIDAsync(id);
             if (ticket != null)
             {
-                if (!await CanViewUserAsync(ticket.UserId)) return Forbid();
+                if (!await CanViewSupportTicketAsync(ticket)) return Forbid();
                 ServiceResult<SupportTicket?> result = await _supportTicketService.DeleteSupportTicketAsync(id);
                 if (!result.Success)
                 {
@@ -354,7 +354,10 @@ namespace Partnerly.Controllers
             {
                 var query = await _supportTicketService.GetAllSupportTicketAsync();
                 var visibleIds = await UserVisibility.VisibleUserIds().ToListAsync();
-                query = query.Where(u => u != null && u.UserId != null && visibleIds.Contains(u.UserId.Value));
+                var currentId = _currentUser.UserId;
+                query = query.Where(u => u != null && (
+                    (u.UserId != null && visibleIds.Contains(u.UserId.Value)) ||
+                    (currentId != null && u.AssignedTo == currentId)));
 
                 var result = query
                     .Select(u => new
@@ -403,9 +406,12 @@ namespace Partnerly.Controllers
             if (request.TableID == DataTableNames.supportTicketsTable)
             {
                 var visibleUserIds = UserVisibility.VisibleUserIds();
+                var currentId = _currentUser.UserId;
                 var res = await _tableService.ExecuteAsync(
                    fields => _supportTicketService.QueryEntityExt(fields)
-                       .Where(t => t.UserId != null && visibleUserIds.Contains(t.UserId.Value)),
+                       .Where(t =>
+                           (t.UserId != null && visibleUserIds.Contains(t.UserId.Value)) ||
+                           (currentId != null && t.AssignedTo == currentId)),
                    request,
                    options);
 
@@ -454,7 +460,7 @@ namespace Partnerly.Controllers
                 });
             }
 
-            if (!await CanViewUserAsync(template.UserId))
+            if (!await CanViewSupportTicketAsync(template))
                 return Forbid();
 
             var oldStatus = template.Status;
@@ -498,11 +504,14 @@ namespace Partnerly.Controllers
             if (request.TableID == DataTableNames.supportTicketsTable)
             {
                 var visibleUserIds = UserVisibility.VisibleUserIds();
+                var currentId = _currentUser.UserId;
                 return await ExportTableAsync(
                             request,
                             format,
                             fields => _supportTicketService.QueryEntityExt(fields)
-                                .Where(t => t.UserId != null && visibleUserIds.Contains(t.UserId.Value)),
+                                .Where(t =>
+                                    (t.UserId != null && visibleUserIds.Contains(t.UserId.Value)) ||
+                                    (currentId != null && t.AssignedTo == currentId)),
                             "supportTickets");
             }
             else

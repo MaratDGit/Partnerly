@@ -29,7 +29,7 @@
 - Админский CRUD: наследовать `_BaseController`.
 - Список: `Index` отдаёт `Views/Shared/DataTable/_DataTablePartial.cshtml` с `DataTableOptions`.
 - Форма Create/Edit: общее View `Form.cshtml`, POST с `[ValidateAntiForgeryToken]`.
-- Права: `[Authorize(Policy = "Permission:...")]` на **GET и POST** одинаковых операций. Коды — `PermissionCodes`. Списки/карточки пользователей и их тикетов дополнительно фильтруются `IUserVisibilityService`.
+- Права: `[Authorize(Policy = "Permission:...")]` на **GET и POST** одинаковых операций. Коды — `PermissionCodes`. Списки/карточки пользователей и их тикетов дополнительно фильтруются `IUserVisibilityService`. Тикет также виден, если `AssignedTo` = текущий пользователь, даже когда автора по обычным правилам не видно.
 - Удаление: confirmation + `DeleteConfirmed`.
 - Не использовать закомментированный `[ClaimAuthorize]` и `Role.Type`.
 

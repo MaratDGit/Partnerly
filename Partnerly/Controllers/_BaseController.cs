@@ -82,6 +82,9 @@ namespace Partnerly.Controllers
         protected async Task<bool> CanViewUserAsync(Guid? userId) =>
             await UserVisibility.CanViewUserAsync(userId);
 
+        protected async Task<bool> CanViewSupportTicketAsync(SupportTicket? ticket) =>
+            ticket != null && await UserVisibility.CanViewSupportTicketAsync(ticket.UserId, ticket.AssignedTo);
+
         protected static IEnumerable<string> WithQueryFields(IEnumerable<string> fields, params string[] extra) =>
             fields.Concat(extra);
 
