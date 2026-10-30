@@ -1,0 +1,26 @@
+@{
+    var panel = ViewBag.InfoPanel as string;
+    var isOpen = panel == "privacy";
+}
+
+<div id="landingInfo"
+     class="landing-auth landing-info@(isOpen ? " is-open" : "")"
+     data-open="@(isOpen ? panel : "")"
+     data-title-privacy="@Localizer["PrivacyPolicyandTerms"]"
+     aria-hidden="@(isOpen ? "false" : "true")">
+
+    <div class="landing-auth-card landing-info-card" role="dialog" aria-modal="true" aria-labelledby="landingInfoTitle">
+        <button type="button"
+                class="landing-auth-close"
+                data-info-close
+                aria-label="@Localizer["Close"]">
+            <i class="bx bx-x"></i>
+        </button>
+
+        <div class="landing-auth-panel@(isOpen ? " is-active" : "")"
+             data-info-panel="privacy">
+            <h2 class="landing-auth-title" id="landingInfoTitle">@Localizer["PrivacyPolicyandTerms"]</h2>
+            @await Html.PartialAsync("_LegalPrivacy")
+        </div>
+    </div>
+</div>

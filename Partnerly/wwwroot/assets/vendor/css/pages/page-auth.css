@@ -990,8 +990,8 @@
 html[data-theme="dark"] {
     --auth-primary: #8185ff;
     --auth-primary-dark: #696cff;
-    --auth-text: #edf2ff;
-    --auth-muted: #9aa8c0;
+    --auth-text: #f7f9ff;
+    --auth-muted: #c4d0e6;
     --auth-border: #303b52;
     --auth-bg: #0d1321;
 }
@@ -1074,7 +1074,7 @@ html[data-theme="dark"] {
     }
 
         html[data-theme="dark"] .auth-form .form-control::placeholder {
-            color: #7887a1;
+            color: #c4d0e6;
         }
 
         html[data-theme="dark"] .auth-form .form-control:focus {
@@ -1084,13 +1084,13 @@ html[data-theme="dark"] {
         }
 
     html[data-theme="dark"] .auth-form .form-floating > label {
-        color: #98a5bc;
+        color: #d5def2;
     }
 
     html[data-theme="dark"] .auth-form .input-group-text {
         border-color: var(--auth-border);
         background: #1a2438;
-        color: #98a5bc;
+        color: #c4d0e6;
     }
 
     html[data-theme="dark"] .auth-form .input-group:focus-within .input-group-text {
@@ -1100,7 +1100,7 @@ html[data-theme="dark"] {
 
     html[data-theme="dark"] .auth-options .form-check-label,
     html[data-theme="dark"] .auth-terms .form-check-label {
-        color: #a6b1c7;
+        color: #e4ebf8;
     }
 
     html[data-theme="dark"] .auth-options a,

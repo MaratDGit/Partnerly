@@ -4,6 +4,17 @@
 
 ---
 
+## TR-2026-10-30-05 — Контраст текста в dark mode
+
+- **Дата:** 2026-10-30
+- **Суть:** тёмная тема Partnerly задаёт `data-theme` / `data-bs-theme`, но `core.css` (Sneat/Bootstrap light-first) почти не содержит `[data-bs-theme=dark]` палитры. Подписи, body и `.text-muted` остаются `#384551` / `#646e78` / `#a7acb2`.
+- **Причина:** владелец: в dark на формах, Documentation и других страницах текст «хмурый».
+- **Затрагивает:** токены в `partnerly-layout.css`, helper-классы в `site.css`, legal-copy в `landing.css`, floating labels в Settings / System Preferences / auth.
+- **Последствия:** страницы без своих dark-override тоже читают новые `--partnerly-text*`. Vendor `core.css` не менялся.
+- **Альтернативы:** полноценный Bootstrap dark rebuild `core.css` — не брался, слишком широко.
+
+---
+
 ## TR-2026-10-30-04 — Account-формы как попап на лендинге
 
 - **Дата:** 2026-10-30

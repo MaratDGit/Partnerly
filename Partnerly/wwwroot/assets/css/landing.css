@@ -698,7 +698,7 @@ html[data-theme="dark"] .landing-auth-title {
 }
 
 html[data-theme="dark"] .landing-auth-lead {
-    color: rgba(237, 240, 255, 0.68);
+    color: #dce5f8;
 }
 
 .landing-auth-card .form-control {
@@ -734,7 +734,7 @@ html[data-theme="dark"] .landing-auth-card .form-control {
     }
 
     html[data-theme="dark"] .landing-auth-card .form-floating > label {
-        color: #94a3b8;
+        color: #d5def2;
     }
 
 .landing-auth-card .input-group-text {
@@ -814,7 +814,7 @@ html[data-theme="dark"] .landing-auth-alert {
 html[data-theme="dark"] .landing-auth-card .form-check-label,
 html[data-theme="dark"] .landing-auth-switch,
 html[data-theme="dark"] .landing-auth-terms {
-    color: rgba(237, 240, 255, 0.72);
+    color: #e4ebf8;
 }
 
 .landing-auth-terms {
@@ -986,8 +986,57 @@ html[data-theme="dark"] .landing-auth-result-icon {
 }
 
 html[data-theme="dark"] .landing-auth-result-note {
-    color: rgba(237, 240, 255, 0.68);
+    color: #dce5f8;
 }
+
+.landing-info {
+    z-index: 18;
+}
+
+.landing-info-card {
+    width: min(620px, 100%);
+}
+
+.legal-copy {
+    color: rgba(44, 41, 102, 0.82);
+    font-size: 0.95rem;
+    line-height: 1.55;
+}
+
+    .legal-copy p {
+        margin: 0 0 14px;
+    }
+
+    .legal-copy h3 {
+        margin: 18px 0 8px;
+        color: #1e1b4b;
+        font-size: 1.02rem;
+        font-weight: 700;
+    }
+
+    .legal-copy .legal-draft {
+        display: inline-block;
+        margin-bottom: 16px;
+        padding: 6px 10px;
+        border-radius: 999px;
+        color: #4f46e5;
+        background: rgba(99, 102, 241, 0.12);
+        font-size: 0.8rem;
+        font-weight: 600;
+    }
+
+html[data-theme="dark"] .legal-copy {
+    color: #eef2ff;
+}
+
+    html[data-theme="dark"] .legal-copy h3 {
+        color: #ffffff;
+    }
+
+    html[data-theme="dark"] .legal-copy .legal-draft {
+        color: #c4b5fd;
+        background: rgba(167, 139, 250, 0.16);
+    }
 
 @media (max-width: 575.98px) {
     .landing-auth {

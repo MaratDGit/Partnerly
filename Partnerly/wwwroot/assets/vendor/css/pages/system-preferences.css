@@ -760,7 +760,7 @@ html[data-theme="dark"] .settings-field .form-select {
     }
 
 html[data-theme="dark"] .settings-field .form-floating > label {
-    color: var(--partnerly-muted, #8996b0);
+    color: #d5def2;
 }
 
 html[data-theme="dark"] .settings-field .form-floating > .form-control:focus ~ label,
@@ -800,7 +800,7 @@ html[data-theme="dark"] .scrolling-textarea {
 }
 
     html[data-theme="dark"] .scrolling-textarea::placeholder {
-        color: #71809a;
+        color: var(--partnerly-muted, #c4d0e6);
         opacity: 1;
     }
 
@@ -816,7 +816,7 @@ html[data-theme="dark"] .scrolling-textarea {
     }
 
 html[data-theme="dark"] .scrolling-text-box .form-floating > label {
-    color: var(--partnerly-muted, #8996b0);
+    color: #d5def2;
 }
 
 html[data-theme="dark"] .scrolling-text-box .form-floating > .form-control:focus ~ label,

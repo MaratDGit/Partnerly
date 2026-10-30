@@ -1474,9 +1474,25 @@ html[data-theme="dark"] {
     --partnerly-primary-hover: rgba(105, 108, 255, 0.23);
     --partnerly-accent-blue: #55b7ff;
     --partnerly-accent-purple: #b49aff;
-    --partnerly-text: #c5cee0;
-    --partnerly-text-dark: #edf2ff;
-    --partnerly-muted: #8996b0;
+    --partnerly-text: #e8eefc;
+    --partnerly-text-dark: #f7f9ff;
+    --partnerly-muted: #c4d0e6;
+    --bs-body-color: #e8eefc;
+    --bs-body-color-rgb: 232, 238, 252;
+    --bs-heading-color: #f7f9ff;
+    --bs-emphasis-color: #ffffff;
+    --bs-secondary-color: #d0daf0;
+    --bs-secondary-color-rgb: 208, 218, 240;
+    --bs-tertiary-color: #c4d0e6;
+    --bs-tertiary-color-rgb: 196, 208, 230;
+    --bs-highlight-color: #e8eefc;
+    --bs-card-color: #e8eefc;
+    --bs-card-title-color: #f7f9ff;
+    --bs-card-cap-color: #f7f9ff;
+    --bs-accordion-color: #e8eefc;
+    --bs-accordion-btn-color: #f7f9ff;
+    --bs-list-group-color: #f7f9ff;
+    --bs-nav-link-color: #e8eefc;
     --partnerly-border: #29344a;
     --partnerly-background: #151c2c;
     --partnerly-page-background: #0d1321;
@@ -1697,6 +1713,7 @@ html[data-theme="dark"] {
    Bootstrap cards inside the main content area
    --------------------------------------------------------- */
 
+        html[data-theme="dark"] .card,
         html[data-theme="dark"] .partnerly-layout-content > .card {
             color: var(--partnerly-text);
             background: var(--partnerly-background);
@@ -1704,15 +1721,81 @@ html[data-theme="dark"] {
             box-shadow: 0 8px 28px rgba(0, 0, 0, 0.12);
         }
 
+            html[data-theme="dark"] .card > .card-header,
             html[data-theme="dark"] .partnerly-layout-content > .card > .card-header {
                 color: var(--partnerly-text-dark);
                 background: var(--partnerly-background);
                 border-bottom-color: var(--partnerly-border);
             }
 
+            html[data-theme="dark"] .card > .card-body,
+            html[data-theme="dark"] .card-body,
             html[data-theme="dark"] .partnerly-layout-content > .card > .card-body {
-                color: var(--partnerly-text);
+                color: var(--partnerly-text-dark);
             }
+
+        html[data-theme="dark"] .form-label,
+        html[data-theme="dark"] .col-form-label,
+        html[data-theme="dark"] .form-check-label,
+        html[data-theme="dark"] .form-text,
+        html[data-theme="dark"] .form-control-plaintext {
+            color: var(--partnerly-text-dark);
+        }
+
+        html[data-theme="dark"] h1,
+        html[data-theme="dark"] h2,
+        html[data-theme="dark"] h3,
+        html[data-theme="dark"] h4,
+        html[data-theme="dark"] h5,
+        html[data-theme="dark"] h6,
+        html[data-theme="dark"] .h1,
+        html[data-theme="dark"] .h2,
+        html[data-theme="dark"] .h3,
+        html[data-theme="dark"] .h4,
+        html[data-theme="dark"] .h5,
+        html[data-theme="dark"] .h6,
+        html[data-theme="dark"] .card-title,
+        html[data-theme="dark"] .card-title:not(h1):not(.h1):not(h2):not(.h2):not(h3):not(.h3):not(h4):not(.h4):not(h5):not(.h5):not(h6):not(.h6),
+        html[data-theme="dark"] .card-header h5,
+        html[data-theme="dark"] .card-header .mb-0 {
+            color: var(--partnerly-text-dark);
+        }
+
+.legal-copy {
+    max-width: 720px;
+    font-size: 0.98rem;
+    line-height: 1.6;
+}
+
+    .legal-copy p {
+        margin: 0 0 14px;
+    }
+
+    .legal-copy h3 {
+        margin: 20px 0 8px;
+        font-size: 1.05rem;
+        font-weight: 700;
+    }
+
+    .legal-copy .legal-draft {
+        display: inline-block;
+        margin-bottom: 16px;
+        padding: 6px 10px;
+        border-radius: 999px;
+        color: var(--partnerly-primary, #696cff);
+        background: var(--partnerly-primary-hover, rgba(105, 108, 255, 0.12));
+        font-size: 0.8rem;
+        font-weight: 600;
+    }
+
+html[data-theme="dark"] .legal-copy,
+html[data-theme="dark"] .legal-copy p {
+    color: var(--partnerly-text-dark, #f7f9ff);
+}
+
+html[data-theme="dark"] .legal-copy h3 {
+    color: #ffffff;
+}
 
 /* ---------------------------------------------------------
    Accessibility: avoid excessive motion

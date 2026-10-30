@@ -2276,4 +2276,80 @@
     <value>Continue with Apple</value>
   </data>
 
+  <data name="PrivacyLead" xml:space="preserve">
+    <value>This is a working draft of how Partnerly handles personal data. The final legal text will replace it later.</value>
+  </data>
+
+  <data name="PrivacyDataTitle" xml:space="preserve">
+    <value>What we store</value>
+  </data>
+
+  <data name="PrivacyDataBody" xml:space="preserve">
+    <value>We keep the profile you submit (name, email, phone), login activity, referrals, and files you attach to support tickets.</value>
+  </data>
+
+  <data name="PrivacyUseTitle" xml:space="preserve">
+    <value>How we use it</value>
+  </data>
+
+  <data name="PrivacyUseBody" xml:space="preserve">
+    <value>We use this data to run your account, send confirmations, and provide support. We do not sell personal data.</value>
+  </data>
+
+  <data name="PrivacyRightsTitle" xml:space="preserve">
+    <value>Your choices</value>
+  </data>
+
+  <data name="PrivacyRightsBody" xml:space="preserve">
+    <value>You can update your profile in Settings, ask for help in Support, or request that an administrator close the account.</value>
+  </data>
+
+  <data name="PrivacyTermsTitle" xml:space="preserve">
+    <value>Terms of use</value>
+  </data>
+
+  <data name="PrivacyTermsBody" xml:space="preserve">
+    <value>By creating a {0} account you agree to use the service lawfully and not to abuse other members or the platform.</value>
+  </data>
+
+  <data name="DocsDraftNote" xml:space="preserve">
+    <value>Draft — we will rewrite this guide later</value>
+  </data>
+
+  <data name="DocsLead" xml:space="preserve">
+    <value>A short map of the screens that exist in Partnerly today. Treat this as a placeholder, not the final manual.</value>
+  </data>
+
+  <data name="DocsStartTitle" xml:space="preserve">
+    <value>After you sign in</value>
+  </data>
+
+  <data name="DocsStartBody" xml:space="preserve">
+    <value>You land on Statistics. The sidebar opens Users, Roles, Groups, Support, Notifications, Attachments, and Settings, depending on your permissions.</value>
+  </data>
+
+  <data name="DocsUsersTitle" xml:space="preserve">
+    <value>People and access</value>
+  </data>
+
+  <data name="DocsUsersBody" xml:space="preserve">
+    <value>Administrators manage users, roles, and groups. What you can see follows the permissions on your role.</value>
+  </data>
+
+  <data name="DocsTicketsTitle" xml:space="preserve">
+    <value>Support</value>
+  </data>
+
+  <data name="DocsTicketsBody" xml:space="preserve">
+    <value>Open a case from Support. Staff see tickets they created, tickets assigned to them, or tickets for people in their visibility scope.</value>
+  </data>
+
+  <data name="DocsSettingsTitle" xml:space="preserve">
+    <value>System settings</value>
+  </data>
+
+  <data name="DocsSettingsBody" xml:space="preserve">
+    <value>System Settings hold language, timezone, Google sign-in, lockout, and mail-related flags. API secrets stay out of this screen.</value>
+  </data>
+
 </root>

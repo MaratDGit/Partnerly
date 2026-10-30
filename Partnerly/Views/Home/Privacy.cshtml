@@ -1,9 +1,12 @@
 ﻿@{
     ViewData["Title"] = Localizer["PrivacyPolicyandTerms"].Value;
-    ViewData["LandingScroll"] = true;
-    Layout = "_LandingLayout";
 }
 
-<article class="landing-article">
-    <h1>@Localizer["PrivacyPolicyandTerms"]</h1>
-</article>
+<div class="card">
+    <div class="card-header">
+        <h5 class="mb-0">@Localizer["PrivacyPolicyandTerms"]</h5>
+    </div>
+    <div class="card-body">
+        @await Html.PartialAsync("_LegalPrivacy")
+    </div>
+</div>

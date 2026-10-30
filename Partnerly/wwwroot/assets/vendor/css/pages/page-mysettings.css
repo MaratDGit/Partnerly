@@ -814,7 +814,7 @@ html[data-theme="dark"] .settings-field-icon {
 }
 
 html[data-theme="dark"] .settings-field .form-floating > label {
-    color: var(--partnerly-muted, #8996b0);
+    color: #d5def2;
 }
 
 html[data-theme="dark"] .settings-field .form-control {

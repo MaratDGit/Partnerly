@@ -1,0 +1,19 @@
+@{
+    var appName = TempData.Peek("appName") as string ?? Partnerly.Helpers.SystemSettingsDefaults.ApplicationName;
+}
+
+<div class="legal-copy">
+    <p>@Localizer["PrivacyLead"]</p>
+
+    <h3>@Localizer["PrivacyDataTitle"]</h3>
+    <p>@Localizer["PrivacyDataBody"]</p>
+
+    <h3>@Localizer["PrivacyUseTitle"]</h3>
+    <p>@Localizer["PrivacyUseBody"]</p>
+
+    <h3>@Localizer["PrivacyRightsTitle"]</h3>
+    <p>@Localizer["PrivacyRightsBody"]</p>
+
+    <h3>@Localizer["PrivacyTermsTitle"]</h3>
+    <p>@string.Format(Localizer["PrivacyTermsBody"].Value, appName)</p>
+</div>

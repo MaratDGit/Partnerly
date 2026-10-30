@@ -2276,4 +2276,80 @@
     <value>Продолжить через Apple</value>
   </data>
 
+  <data name="PrivacyLead" xml:space="preserve">
+    <value>Это рабочий черновик того, как Partnerly обрабатывает персональные данные. Позже его заменит финальный юридический текст.</value>
+  </data>
+
+  <data name="PrivacyDataTitle" xml:space="preserve">
+    <value>Что мы храним</value>
+  </data>
+
+  <data name="PrivacyDataBody" xml:space="preserve">
+    <value>Мы храним профиль, который вы указываете (имя, email, телефон), активность входа, рефералы и файлы, прикреплённые к обращениям в поддержку.</value>
+  </data>
+
+  <data name="PrivacyUseTitle" xml:space="preserve">
+    <value>Как мы это используем</value>
+  </data>
+
+  <data name="PrivacyUseBody" xml:space="preserve">
+    <value>Данные нужны, чтобы вести аккаунт, отправлять подтверждения и оказывать поддержку. Мы не продаём персональные данные.</value>
+  </data>
+
+  <data name="PrivacyRightsTitle" xml:space="preserve">
+    <value>Ваши возможности</value>
+  </data>
+
+  <data name="PrivacyRightsBody" xml:space="preserve">
+    <value>Профиль можно изменить в Настройках, помощь — через Поддержку, закрытие аккаунта — через администратора.</value>
+  </data>
+
+  <data name="PrivacyTermsTitle" xml:space="preserve">
+    <value>Условия использования</value>
+  </data>
+
+  <data name="PrivacyTermsBody" xml:space="preserve">
+    <value>Создавая аккаунт {0}, вы соглашаетесь пользоваться сервисом законно и не злоупотреблять другими участниками и платформой.</value>
+  </data>
+
+  <data name="DocsDraftNote" xml:space="preserve">
+    <value>Черновик — это руководство ещё будем переписывать</value>
+  </data>
+
+  <data name="DocsLead" xml:space="preserve">
+    <value>Краткая карта экранов, которые сейчас есть в Partnerly. Это заглушка, а не финальная инструкция.</value>
+  </data>
+
+  <data name="DocsStartTitle" xml:space="preserve">
+    <value>После входа</value>
+  </data>
+
+  <data name="DocsStartBody" xml:space="preserve">
+    <value>Открывается Статистика. В боковом меню — Пользователи, Роли, Группы, Поддержка, Уведомления, Вложения и Настройки, в зависимости от прав.</value>
+  </data>
+
+  <data name="DocsUsersTitle" xml:space="preserve">
+    <value>Люди и доступ</value>
+  </data>
+
+  <data name="DocsUsersBody" xml:space="preserve">
+    <value>Администраторы управляют пользователями, ролями и группами. Видимость данных следует правам вашей роли.</value>
+  </data>
+
+  <data name="DocsTicketsTitle" xml:space="preserve">
+    <value>Поддержка</value>
+  </data>
+
+  <data name="DocsTicketsBody" xml:space="preserve">
+    <value>Обращение открывается из Поддержки. Сотрудник видит свои тикеты, назначенные ему, или тикеты людей из своей области видимости.</value>
+  </data>
+
+  <data name="DocsSettingsTitle" xml:space="preserve">
+    <value>Системные настройки</value>
+  </data>
+
+  <data name="DocsSettingsBody" xml:space="preserve">
+    <value>В системных настройках — язык, часовой пояс, вход через Google, блокировка и флаги почты. Секреты API на этот экран не выносятся.</value>
+  </data>
+
 </root>

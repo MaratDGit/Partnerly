@@ -34,9 +34,8 @@
                     @Localizer["License"]
                 </a>
 
-                <a href="@TempData.Peek("documentation")"
-                   target="_blank"
-                   rel="noopener noreferrer">
+                <a asp-controller="Home"
+                   asp-action="Documentation">
                     @Localizer["Documentation"]
                 </a>
 

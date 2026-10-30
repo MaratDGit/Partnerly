@@ -1,16 +1,19 @@
 ﻿@{
     var appName = TempData.Peek("appName") as string ?? Partnerly.Helpers.SystemSettingsDefaults.ApplicationName;
     var authPanel = ViewBag.AuthPanel as string;
-    ViewData["Title"] = authPanel switch
-    {
-        "login" => Localizer["Login"].Value,
-        "register" => Localizer["Signup"].Value,
-        "forgot" => Localizer["ForgotPassword"].Value,
-        "register-ok" => Localizer["AccountCreated"].Value,
-        "forgot-ok" => Localizer["EmailSent"].Value,
-        "email-ok" => Localizer["EmailVerified"].Value,
-        _ => appName
-    };
+    var infoPanel = ViewBag.InfoPanel as string;
+    ViewData["Title"] = infoPanel == "privacy"
+        ? Localizer["PrivacyPolicyandTerms"].Value
+        : authPanel switch
+        {
+            "login" => Localizer["Login"].Value,
+            "register" => Localizer["Signup"].Value,
+            "forgot" => Localizer["ForgotPassword"].Value,
+            "register-ok" => Localizer["AccountCreated"].Value,
+            "forgot-ok" => Localizer["EmailSent"].Value,
+            "email-ok" => Localizer["EmailVerified"].Value,
+            _ => appName
+        };
     Layout = "_LandingLayout";
     var googleEnabled = ViewBag.GoogleLoginEnabled as bool? ?? true;
     var typePhrases = new[]
@@ -78,9 +81,11 @@
 </section>
 
 @await Html.PartialAsync("_LandingAuthModal")
+@await Html.PartialAsync("_LandingInfoModal")
 
 @section Scripts {
     <script src="~/assets/js/landing-dots.js" asp-append-version="true"></script>
     <script src="~/assets/js/landing-search.js" asp-append-version="true"></script>
     <script src="~/assets/js/landing-auth.js" asp-append-version="true"></script>
+    <script src="~/assets/js/landing-info.js" asp-append-version="true"></script>
 }

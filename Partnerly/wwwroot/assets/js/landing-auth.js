@@ -142,6 +142,10 @@
         }
 
         if (event.key === "Escape" && isOpen()) {
+            var info = document.getElementById("landingInfo");
+            if (info && info.classList.contains("is-open")) {
+                return;
+            }
             close();
         }
     });

@@ -607,12 +607,12 @@ html[data-theme="dark"] .support-form-header {
 /* Inputs */
 
 html[data-theme="dark"] .support-form .form-label {
-    color: var(--partnerly-text, #c5cee0);
+    color: var(--partnerly-text-dark, #f7f9ff);
 }
 
 html[data-theme="dark"] .support-input-wrapper > i,
 html[data-theme="dark"] .support-textarea-wrapper > i {
-    color: #8996b0;
+    color: var(--partnerly-muted, #c4d0e6);
 }
 
 html[data-theme="dark"] .support-form .form-control {

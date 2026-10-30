@@ -236,11 +236,10 @@
 
                     <!-- Documentation -->
 
-                    <li class="partnerly-menu-item">
+                    <li class="partnerly-menu-item @(currentPage.StartsWith("/Home/Documentation") ? "active" : "")">
 
-                        <a href="@TempData.Peek("documentation")"
-                           target="_blank"
-                           rel="noopener noreferrer"
+                        <a asp-controller="Home"
+                           asp-action="Documentation"
                            class="partnerly-menu-link">
 
                             <span class="partnerly-menu-icon">
@@ -250,8 +249,6 @@
                             <span class="partnerly-menu-text">
                                 @Localizer["Documentation"]
                             </span>
-
-                            <i class="bx bx-link-external partnerly-menu-external"></i>
 
                         </a>
 

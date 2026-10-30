@@ -2276,4 +2276,80 @@
     <value>Շարունակել Apple-ով</value>
   </data>
 
+  <data name="PrivacyLead" xml:space="preserve">
+    <value>Սա Partnerly-ի անձնական տվյալների մշակման աշխատանքային նախագիծ է։ Ավելի ուշ այն կփոխարինվի վերջնական իրավական տեքստով։</value>
+  </data>
+
+  <data name="PrivacyDataTitle" xml:space="preserve">
+    <value>Ինչ ենք պահում</value>
+  </data>
+
+  <data name="PrivacyDataBody" xml:space="preserve">
+    <value>Պահում ենք ձեր նշած պրոֆիլը (անուն, էլ․ փոստ, հեռախոս), մուտքի ակտիվությունը, ռեֆերալները և աջակցության հայցերին կցված ֆայլերը։</value>
+  </data>
+
+  <data name="PrivacyUseTitle" xml:space="preserve">
+    <value>Ինչպես ենք օգտագործում</value>
+  </data>
+
+  <data name="PrivacyUseBody" xml:space="preserve">
+    <value>Տվյալներն օգտագործում ենք հաշիվը վարելու, հաստատումներ ուղարկելու և աջակցություն տրամադրելու համար։ Անձնական տվյալներ չենք վաճառում։</value>
+  </data>
+
+  <data name="PrivacyRightsTitle" xml:space="preserve">
+    <value>Ձեր ընտրանքները</value>
+  </data>
+
+  <data name="PrivacyRightsBody" xml:space="preserve">
+    <value>Պրոֆիլը կարող եք թարմացնել Կարգավորումներում, օգնություն խնդրել Աջակցությունից կամ խնդրել ադմինիստրատորին փակել հաշիվը։</value>
+  </data>
+
+  <data name="PrivacyTermsTitle" xml:space="preserve">
+    <value>Օգտագործման պայմաններ</value>
+  </data>
+
+  <data name="PrivacyTermsBody" xml:space="preserve">
+    <value>{0} հաշիվ ստեղծելով՝ համաձայնում եք ծառայությունն օգտագործել օրինական և չչարաշահել այլ մասնակիցներին կամ հարթակը։</value>
+  </data>
+
+  <data name="DocsDraftNote" xml:space="preserve">
+    <value>Նախագիծ — այս ուղեցույցը հետո կվերագրենք</value>
+  </data>
+
+  <data name="DocsLead" xml:space="preserve">
+    <value>Partnerly-ի ներկայիս էկրանների կարճ քարտեզ։ Սա տեղապահ է, ոչ վերջնական ձեռնարկ։</value>
+  </data>
+
+  <data name="DocsStartTitle" xml:space="preserve">
+    <value>Մուտքից հետո</value>
+  </data>
+
+  <data name="DocsStartBody" xml:space="preserve">
+    <value>Բացվում է Վիճակագրությունը։ Կողային ընտրացանկում՝ Օգտատերեր, Դերեր, Խմբեր, Աջակցություն, Ծանուցումներ, Կցորդներ և Կարգավորումներ՝ ըստ իրավունքների։</value>
+  </data>
+
+  <data name="DocsUsersTitle" xml:space="preserve">
+    <value>Մարդիկ և մուտք</value>
+  </data>
+
+  <data name="DocsUsersBody" xml:space="preserve">
+    <value>Ադմինիստրատորները կառավարում են օգտատերերին, դերերն ու խմբերը։ Ինչ եք տեսնում՝ կախված է ձեր դերի իրավունքներից։</value>
+  </data>
+
+  <data name="DocsTicketsTitle" xml:space="preserve">
+    <value>Աջակցություն</value>
+  </data>
+
+  <data name="DocsTicketsBody" xml:space="preserve">
+    <value>Հայցը բացվում է Աջակցությունից։ Աշխատակիցը տեսնում է իր ստեղծած, իրեն նշանակված կամ իր տեսանելիության շրջանակի տոմսերը։</value>
+  </data>
+
+  <data name="DocsSettingsTitle" xml:space="preserve">
+    <value>Համակարգի կարգավորումներ</value>
+  </data>
+
+  <data name="DocsSettingsBody" xml:space="preserve">
+    <value>Համակարգի կարգավորումներում են լեզուն, ժամային գոտին, Google մուտքը, արգելափակումը և փոստի դրոշները։ API գաղտնիքները այս էկրանին չեն։</value>
+  </data>
+
 </root>

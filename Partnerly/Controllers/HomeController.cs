@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Partnerly.Helpers;
 using Partnerly.Infrastructure.Interfaces;
 using Partnerly.Models.ViewModels;
@@ -20,7 +21,7 @@ namespace Partnerly.Controllers
         }
         #endregion
 
-        public async Task<IActionResult> Index(string? auth = null, string? reff = null, string? returnUrl = null)
+        public async Task<IActionResult> Index(string? auth = null, string? reff = null, string? returnUrl = null, string? dialog = null)
         {
             if (User.Identity != null && User.Identity.IsAuthenticated)
             {
@@ -31,6 +32,7 @@ namespace Partnerly.Controllers
             ViewBag.GoogleLoginEnabled = settings?.EnableGoogleLogin != false;
             ViewBag.ReturnUrl = returnUrl;
             ViewBag.AuthPanel = NormalizeAuthPanel(auth);
+            ViewBag.InfoPanel = dialog == "privacy" ? "privacy" : null;
             ViewBag.LoginModel ??= new LoginViewModel();
             ViewBag.ForgotModel ??= new ForgotPasswordViewModel();
 
@@ -56,6 +58,17 @@ namespace Partnerly.Controllers
         }
 
         public IActionResult Privacy()
+        {
+            if (User.Identity == null || !User.Identity.IsAuthenticated)
+            {
+                return RedirectToAction(nameof(Index), new { dialog = "privacy" });
+            }
+
+            return View();
+        }
+
+        [Authorize]
+        public IActionResult Documentation()
         {
             return View();
         }

@@ -103,7 +103,10 @@
                    id="auth-register-terms" />
             <label class="form-check-label" for="auth-register-terms">
                 @Localizer["Iagreewith"]
-                <a asp-controller="Home" asp-action="Privacy" target="_blank" rel="noopener">
+                <a asp-controller="Home"
+                   asp-action="Privacy"
+                   data-info="privacy"
+                   data-no-loader>
                     @Localizer["PrivacyPolicyandTerms"]
                 </a>
             </label>

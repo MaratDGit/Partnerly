@@ -1745,10 +1745,10 @@ html[data-theme="dark"] .data-table-wrapper {
     --dt-danger: #ff686d;
     --dt-danger-soft: rgba(255, 104, 109, .12);
     --dt-warning: #ffbd4a;
-    --dt-text: #edf2ff;
-    --dt-text-secondary: #c5cee0;
-    --dt-text-muted: #8996b0;
-    --dt-text-light: #7886a0;
+    --dt-text: #f7f9ff;
+    --dt-text-secondary: #e8eefc;
+    --dt-text-muted: #c4d0e6;
+    --dt-text-light: #b3bfd4;
     --dt-border: rgba(137, 150, 176, .20);
     --dt-border-light: rgba(137, 150, 176, .12);
     --dt-surface: #151c2c;

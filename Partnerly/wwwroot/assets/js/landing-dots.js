@@ -15,6 +15,9 @@
     var lastFrame = 0;
     var rafId = 0;
     var spawnWait = 0;
+    var sizeScale = 1;
+    var MIN_SCALE = 0.4;
+    var MAX_SCALE = 2.5;
 
     var COLORS = [
         "105, 108, 255",
@@ -108,15 +111,50 @@
 
             ctx.beginPath();
             ctx.fillStyle = "rgba(" + dot.color + "," + alpha.toFixed(3) + ")";
-            ctx.arc(dot.x, dot.y, dot.size, 0, Math.PI * 2);
+            ctx.arc(dot.x, dot.y, dot.size * sizeScale, 0, Math.PI * 2);
             ctx.fill();
         }
 
         rafId = window.requestAnimationFrame(draw);
     }
 
+    function canScaleDots() {
+        if (document.body.classList.contains("is-auth-open") ||
+            document.body.classList.contains("is-info-open")) {
+            return false;
+        }
+        if (document.body.classList.contains("is-chat")) {
+            return false;
+        }
+        var stage = document.querySelector(".landing-stage");
+        if (stage && stage.classList.contains("is-chat")) {
+            return false;
+        }
+        var auth = document.getElementById("landingAuth");
+        if (auth && auth.classList.contains("is-open")) {
+            return false;
+        }
+        return true;
+    }
+
+    function onWheel(event) {
+        if (!canScaleDots()) {
+            return;
+        }
+
+        event.preventDefault();
+        var next = sizeScale * Math.exp(-event.deltaY * 0.0016);
+        if (next < MIN_SCALE) {
+            next = MIN_SCALE;
+        } else if (next > MAX_SCALE) {
+            next = MAX_SCALE;
+        }
+        sizeScale = next;
+    }
+
     resize();
     window.addEventListener("resize", resize);
+    window.addEventListener("wheel", onWheel, { passive: false });
 
     document.addEventListener("visibilitychange", function () {
         if (document.hidden) {
