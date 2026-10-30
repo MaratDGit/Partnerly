@@ -1,6 +1,6 @@
 ﻿@{
     Layout = "_BlankLayout";
-    ViewData["Title"] = "Account created";
+    ViewData["Title"] = Localizer["AccountCreated"].Value;
 }
 
 @section PageStyles {
@@ -15,10 +15,7 @@
 
             <div class="auth-result-logo">
                 <a asp-controller="Home" asp-action="Index" class="auth-logo">
-                    <span class="auth-logo-icon">
-                        <img src="~/favicon.png" alt="Logo">
-                    </span>
-
+                    @await Html.PartialAsync("_SiteLogo", "regOk")
                     <span>@TempData.Peek("appName")</span>
                 </a>
             </div>

@@ -25,13 +25,7 @@
            asp-action="Index"
            class="partnerly-brand">
 
-            <span class="partnerly-brand-logo">
-                <img src="~/favicon.png"
-                     alt="Partnerly"
-                     width="38"
-                     height="38" />
-            </span>
-
+            @await Html.PartialAsync("_SiteLogo", "sidebar")
             <span class="partnerly-brand-name">
                 @TempData.Peek("appName")
             </span>

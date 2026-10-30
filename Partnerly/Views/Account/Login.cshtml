@@ -2,7 +2,7 @@
 
 @{
     Layout = "_BlankLayout";
-    ViewData["Title"] = "Log in";
+    ViewData["Title"] = Localizer["Login"].Value;
 }
 
 @section PageStyles {
@@ -49,16 +49,10 @@
             <a asp-controller="Home"
                asp-action="Index"
                class="auth-logo">
-
-                <span class="auth-logo-icon">
-                    <img src="~/favicon.png"
-                         alt="Logo">
-                </span>
-
+                @await Html.PartialAsync("_SiteLogo", "loginBrand")
                 <span>
                     @TempData.Peek("appName")
                 </span>
-
             </a>
 
 
@@ -105,12 +99,7 @@
                 <a asp-controller="Home"
                    asp-action="Index"
                    class="auth-logo">
-
-                    <span class="auth-logo-icon">
-                        <img src="~/favicon.png"
-                             alt="Logo">
-                    </span>
-
+                    @await Html.PartialAsync("_SiteLogo", "loginMobile")
                     <span>
                         @TempData.Peek("appName")
                     </span>

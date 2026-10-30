@@ -2380,4 +2380,52 @@
     <value>Ստեղծվել է նոր տոմս՝ {0} — {1}։</value>
   </data>
 
+  <data name="LandingHeroTitle" xml:space="preserve">
+    <value>Գտիր քո գործընկերոջը</value>
+  </data>
+
+  <data name="LandingHeroSub" xml:space="preserve">
+    <value>Խաղա խելացի։ Հաղթիր վստահությամբ։</value>
+  </data>
+
+  <data name="LandingType1" xml:space="preserve">
+    <value>Գտիր գործընկերոջը...</value>
+  </data>
+
+  <data name="LandingType2" xml:space="preserve">
+    <value>Խաղա խելացի...</value>
+  </data>
+
+  <data name="LandingType3" xml:space="preserve">
+    <value>Միացիր խաղին...</value>
+  </data>
+
+  <data name="EmailVerified" xml:space="preserve">
+    <value>Էլփոստը հաստատված է</value>
+  </data>
+
+  <data name="AccountCreated" xml:space="preserve">
+    <value>Հաշիվը ստեղծված է</value>
+  </data>
+
+  <data name="LandingSearchSubmit" xml:space="preserve">
+    <value>Որոնել</value>
+  </data>
+
+  <data name="LandingChatReply1" xml:space="preserve">
+    <value>Մուտք գործեք կամ գրանցվեք, և կկարողանամ օգնել շարունակել։</value>
+  </data>
+
+  <data name="LandingChatReply2" xml:space="preserve">
+    <value>Ստեղծեք հաշիվ կամ մուտք գործեք՝ զրույցը շարունակելու համար։</value>
+  </data>
+
+  <data name="LandingChatReply3" xml:space="preserve">
+    <value>Եթե նոր եք՝ գրանցվեք, եթե արդեն ունեք հաշիվ՝ մուտք գործեք, և կպատասխանեմ ամբողջությամբ։</value>
+  </data>
+
+  <data name="ContinuewithApple" xml:space="preserve">
+    <value>Շարունակել Apple-ով</value>
+  </data>
+
 </root>

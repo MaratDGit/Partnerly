@@ -20,13 +20,15 @@ namespace Partnerly.Controllers
         }
         #endregion
 
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
             if (User.Identity != null && User.Identity.IsAuthenticated)
             {
                 return RedirectToAction("Index", "Dashboard");
             }
 
+            var settings = await _systemSettingsService.GetCurrentAsync();
+            ViewBag.GoogleLoginEnabled = settings?.EnableGoogleLogin != false;
             return View("Index");
         }
 

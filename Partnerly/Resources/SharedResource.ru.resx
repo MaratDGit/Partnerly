@@ -2380,4 +2380,52 @@
     <value>Создан новый тикет: {0} — {1}.</value>
   </data>
 
+  <data name="LandingHeroTitle" xml:space="preserve">
+    <value>Найди своего партнёра</value>
+  </data>
+
+  <data name="LandingHeroSub" xml:space="preserve">
+    <value>Играй умнее. Побеждай уверенно.</value>
+  </data>
+
+  <data name="LandingType1" xml:space="preserve">
+    <value>Найди партнёра...</value>
+  </data>
+
+  <data name="LandingType2" xml:space="preserve">
+    <value>Играй умнее...</value>
+  </data>
+
+  <data name="LandingType3" xml:space="preserve">
+    <value>Присоединяйся...</value>
+  </data>
+
+  <data name="EmailVerified" xml:space="preserve">
+    <value>Почта подтверждена</value>
+  </data>
+
+  <data name="AccountCreated" xml:space="preserve">
+    <value>Аккаунт создан</value>
+  </data>
+
+  <data name="LandingSearchSubmit" xml:space="preserve">
+    <value>Поиск</value>
+  </data>
+
+  <data name="LandingChatReply1" xml:space="preserve">
+    <value>Войдите или зарегистрируйтесь — тогда я смогу помочь дальше.</value>
+  </data>
+
+  <data name="LandingChatReply2" xml:space="preserve">
+    <value>Создайте аккаунт или войдите, чтобы продолжить этот разговор.</value>
+  </data>
+
+  <data name="LandingChatReply3" xml:space="preserve">
+    <value>Если вы новый пользователь — зарегистрируйтесь, если уже есть аккаунт — войдите, и я отвечу полностью.</value>
+  </data>
+
+  <data name="ContinuewithApple" xml:space="preserve">
+    <value>Продолжить через Apple</value>
+  </data>
+
 </root>

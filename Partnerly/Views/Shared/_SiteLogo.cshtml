@@ -1,0 +1,38 @@
+@model string
+@{
+    var uid = string.IsNullOrWhiteSpace(Model) ? "sl" : Model;
+}
+<svg class="site-logo"
+     viewBox="0 0 32 32"
+     fill="none"
+     xmlns="http://www.w3.org/2000/svg"
+     aria-hidden="true"
+     focusable="false">
+    <defs>
+        <linearGradient id="@(uid)-br" x1="8" y1="28" x2="26" y2="6" gradientUnits="userSpaceOnUse">
+            <stop stop-color="#5A5DFF"/>
+            <stop offset="0.55" stop-color="#7C73FF"/>
+            <stop offset="1" stop-color="#B197FC"/>
+        </linearGradient>
+    </defs>
+    <g stroke="url(#@(uid)-br)" stroke-width="2.15" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M11.2 26.4C11.1 21.2 11.4 17.4 13.8 13.6"/>
+        <path d="M13.8 13.6C11.6 10.8 9.6 8.6 7.6 6.4"/>
+        <path d="M13.8 13.6C18.2 11.6 22.4 9.6 25.8 7.2"/>
+        <path d="M12.2 19.8C16.6 18.8 20.2 16.8 23.2 14.4"/>
+    </g>
+    <g fill="url(#@(uid)-br)">
+        <circle cx="11.2" cy="26.6" r="2.85"/>
+        <circle cx="13.8" cy="13.6" r="2.55"/>
+        <circle cx="7.6" cy="6.3" r="2.55"/>
+        <circle cx="25.8" cy="7.15" r="2.85"/>
+        <circle cx="23.2" cy="14.4" r="2.15"/>
+    </g>
+    <g fill="#fff" fill-opacity="0.92">
+        <circle cx="11.2" cy="26.6" r="1.05"/>
+        <circle cx="13.8" cy="13.6" r="0.95"/>
+        <circle cx="7.6" cy="6.3" r="0.95"/>
+        <circle cx="25.8" cy="7.15" r="1.05"/>
+        <circle cx="23.2" cy="14.4" r="0.8"/>
+    </g>
+</svg>

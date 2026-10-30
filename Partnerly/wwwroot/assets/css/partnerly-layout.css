@@ -146,10 +146,19 @@ body {
     min-width: 0;
     display: flex;
     align-items: center;
-    gap: 11px;
+    gap: 0.65rem;
     text-decoration: none !important;
     color: var(--partnerly-text-dark) !important;
     overflow: hidden;
+}
+
+
+.partnerly-brand .site-logo {
+    width: 34px;
+    height: 34px;
+    flex: 0 0 34px;
+    display: block;
+    overflow: visible;
 }
 
 
@@ -176,13 +185,15 @@ body {
 
 
 .partnerly-brand-name {
-    font-size: 1.12rem;
+    font-family: "Cormorant Garamond", "Times New Roman", serif;
+    font-size: 1.28rem;
     font-weight: 700;
-    letter-spacing: -0.2px;
+    letter-spacing: 0.03em;
+    -webkit-text-stroke: 0.4px currentColor;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
-    transition: opacity .2s ease, width .25s ease, margin .25s ease;
+    transition: opacity .2s ease, width .25s ease, margin .25s ease, font-size .2s ease;
 }
 
 
@@ -454,9 +465,8 @@ body {
 
 .partnerly-menu-item.active .partnerly-menu-link {
     color: var(--partnerly-primary) !important;
-    background: linear-gradient(90deg, rgba(105, 108, 255, 0.13), rgba(105, 108, 255, 0.055));
-/*    box-shadow: inset 3px 0 0 var(--partnerly-primary);
-*/
+    background: var(--partnerly-primary-hover);
+    box-shadow: none;
 }
 
 
@@ -575,9 +585,15 @@ body.partnerly-sidebar-collapsed
 
 body.partnerly-sidebar-collapsed
 .partnerly-brand-name {
-    width: 0;
-    opacity: 0;
-    margin: 0;
+    display: none;
+}
+
+
+body.partnerly-sidebar-collapsed
+.partnerly-brand .site-logo {
+    width: 32px;
+    height: 32px;
+    flex-basis: 32px;
 }
 
 
@@ -591,7 +607,12 @@ body.partnerly-sidebar-collapsed
 
 body.partnerly-sidebar-collapsed
 .partnerly-brand {
+    flex: 1 1 auto;
+    min-width: 0;
+    flex-direction: row;
     justify-content: center;
+    align-items: center;
+    gap: 0;
 }
 
 
@@ -653,6 +674,21 @@ body.partnerly-sidebar-collapsed
     gap: 0;
     padding-left: 8px;
     padding-right: 8px;
+}
+
+
+@media (min-width: 1200px) {
+    body.partnerly-sidebar-collapsed .partnerly-menu-link {
+        padding: 2px 0;
+        box-shadow: none;
+        transform: none;
+    }
+
+    body.partnerly-sidebar-collapsed .partnerly-menu-link:hover {
+        background: transparent;
+        box-shadow: none;
+        transform: none;
+    }
 }
 
 
@@ -982,6 +1018,17 @@ Preserve natural page scrolling on smaller screens
         overflow: visible;
     }
 
+    body.partnerly-sidebar-collapsed .partnerly-brand-name {
+        font-size: 1.28rem;
+        line-height: 1.15;
+        letter-spacing: 0.03em;
+        white-space: nowrap;
+        text-align: left;
+        -webkit-line-clamp: unset;
+        -webkit-box-orient: unset;
+        max-width: none;
+    }
+
     body.partnerly-sidebar-collapsed .partnerly-sidebar-header {
         justify-content: flex-start;
         padding-left: 16px;
@@ -989,7 +1036,16 @@ Preserve natural page scrolling on smaller screens
     }
 
     body.partnerly-sidebar-collapsed .partnerly-brand {
+        flex-direction: row;
         justify-content: flex-start;
+        align-items: center;
+        gap: 0.65rem;
+    }
+
+    body.partnerly-sidebar-collapsed .partnerly-brand .site-logo {
+        width: 32px;
+        height: 32px;
+        flex-basis: 32px;
     }
 
     body.partnerly-sidebar-collapsed .partnerly-sidebar-toggle {
@@ -1254,7 +1310,7 @@ input[type="radio"]:checked {
     }
 
     .partnerly-brand-name {
-        font-size: 1.05rem;
+        font-size: 1.18rem;
     }
 
     .partnerly-sidebar-content {
@@ -1510,8 +1566,16 @@ html[data-theme="dark"] {
 
         html[data-theme="dark"] .partnerly-menu-item.active .partnerly-menu-link {
             color: var(--partnerly-accent-blue) !important;
-            background: linear-gradient( 100deg, rgba(85, 183, 255, 0.15), rgba(167, 139, 250, 0.10) );
-            box-shadow: inset 3px 0 0 var(--partnerly-accent-blue), 0 0 18px rgba(105, 108, 255, 0.07);
+            background: rgba(105, 108, 255, 0.16);
+            box-shadow: none;
+        }
+
+        @media (min-width: 1200px) {
+            html[data-theme="dark"] body.partnerly-sidebar-collapsed .partnerly-menu-link:hover {
+                background: transparent;
+                box-shadow: none;
+                transform: none;
+            }
         }
 
         html[data-theme="dark"] .partnerly-menu-item.active .partnerly-menu-icon {

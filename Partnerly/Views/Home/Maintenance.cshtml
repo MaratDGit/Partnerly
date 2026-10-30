@@ -20,12 +20,8 @@
 
             <!-- Logo -->
             <div class="partnerly-maintenance-logo">
-                <img src="~/favicon.png"
-                     alt="Partnerly"
-                     width="42"
-                     height="42" />
-
-                <span></span>
+                @await Html.PartialAsync("_SiteLogo", "maint")
+                <span>@TempData.Peek("appName")</span>
             </div>
 
 

@@ -1,0 +1,14 @@
+@{
+    var pageTitle = ViewData["Title"] as string ?? "";
+    var appName = TempData.Peek("appName") as string ?? Partnerly.Helpers.SystemSettingsDefaults.ApplicationName;
+    string tabTitle;
+    if (string.IsNullOrWhiteSpace(pageTitle) || string.Equals(pageTitle, appName, StringComparison.OrdinalIgnoreCase))
+    {
+        tabTitle = appName;
+    }
+    else
+    {
+        tabTitle = pageTitle + " - " + appName;
+    }
+}
+<title>@tabTitle</title>

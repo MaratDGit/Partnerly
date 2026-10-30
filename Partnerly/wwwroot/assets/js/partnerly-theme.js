@@ -71,15 +71,13 @@
         }
 
         if (elements.button) {
-            elements.button.setAttribute(
-                "aria-label",
-                `Current theme: ${theme}. Change theme`
-            );
+            const nextLabel =
+                effectiveTheme === "dark"
+                    ? "Switch to light theme"
+                    : "Switch to dark theme";
 
-            elements.button.setAttribute(
-                "title",
-                `Theme: ${theme}`
-            );
+            elements.button.setAttribute("aria-label", nextLabel);
+            elements.button.setAttribute("title", nextLabel);
         }
 
         elements.options.forEach(function (option) {
@@ -115,14 +113,24 @@
         applyTheme(theme);
     }
 
+    function toggleTheme() {
+        const next =
+            getEffectiveTheme(getSavedTheme()) === "dark"
+                ? "light"
+                : "dark";
+
+        saveTheme(next);
+    }
+
     function initializeThemeSwitcher() {
         const elements = getElements();
 
-        elements.options.forEach(function (option) {
-            option.addEventListener("click", function () {
-                saveTheme(this.dataset.themeValue);
+        if (elements.button) {
+            elements.button.addEventListener("click", function (event) {
+                event.preventDefault();
+                toggleTheme();
             });
-        });
+        }
 
         applyTheme(getSavedTheme());
     }

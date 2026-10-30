@@ -1,337 +1,78 @@
 ﻿@{
-    ViewData["Title"] = "Home";
+    ViewData["Title"] = TempData.Peek("appName") as string ?? Partnerly.Helpers.SystemSettingsDefaults.ApplicationName;
     Layout = "_LandingLayout";
+    var googleEnabled = ViewBag.GoogleLoginEnabled as bool? ?? true;
+    var typePhrases = new[]
+    {
+        Localizer["LandingType1"].Value,
+        Localizer["LandingType2"].Value,
+        Localizer["LandingType3"].Value
+    };
+    var chatReplies = new[]
+    {
+        Localizer["LandingChatReply1"].Value,
+        Localizer["LandingChatReply2"].Value,
+        Localizer["LandingChatReply3"].Value
+    };
 }
 
-<!-- Hero -->
-<section class="landing-hero">
+<section class="landing-stage">
+    <canvas id="landingDots" aria-hidden="true"></canvas>
 
-    <div class="hero-content">
+    <div class="landing-hero-search">
+        <div class="landing-hero-copy">
+            <h1 class="landing-hero-title">@Localizer["LandingHeroTitle"]</h1>
+            <p class="landing-hero-sub">@Localizer["LandingHeroSub"]</p>
+        </div>
 
-        <h1 class="landing-title">
-            @Localizer["PlaySmarter"]
-            <span>@Localizer["WinwithConfidence"]</span>
-        </h1>
+        <div class="landing-chat">
+            <div class="landing-chat-thread" data-landing-thread></div>
+        </div>
 
-        <div class="landing-actions">
-            <a asp-controller="Account"
-               asp-action="Register"
-               class="btn btn-primary landing-btn-primary">
-                @Localizer["Join"]
-                <i class="bx bx-right-arrow-alt"></i>
-            </a>
+        <form class="landing-search"
+              action="#"
+              method="get"
+              data-type-phrases='@Html.Raw(System.Text.Json.JsonSerializer.Serialize(typePhrases))'
+              data-chat-replies='@Html.Raw(System.Text.Json.JsonSerializer.Serialize(chatReplies))'
+              data-google-url="@(googleEnabled ? Url.Action("GoogleLogin", "Account") : "")"
+              data-apple-url="@Url.Action("AppleLogin", "Account")"
+              data-login-url="@Url.Action("Login", "Account")"
+              data-register-url="@Url.Action("Register", "Account")"
+              data-google-label="@Localizer["ContinuewithGoogle"]"
+              data-apple-label="@Localizer["ContinuewithApple"]"
+              data-login-label="@Localizer["Login"]"
+              data-signup-label="@Localizer["Signup"]">
+            <input type="search"
+                   name="q"
+                   class="landing-search-input"
+                   autocomplete="off"
+                   spellcheck="false"
+                   aria-label="@Localizer["LandingType1"]" />
+            <span class="landing-search-type" aria-hidden="true"></span>
+            <button type="submit"
+                    class="landing-search-submit"
+                    aria-label="@Localizer["LandingSearchSubmit"]">
+                <i class="bx bx-search landing-search-submit-find"></i>
+                <i class="bx bx-send landing-search-submit-send"></i>
+            </button>
+        </form>
 
+        <div class="landing-hero-actions">
             <a asp-controller="Account"
                asp-action="Login"
-               class="btn landing-btn-secondary">
+               class="landing-auth-link">
                 @Localizer["Login"]
             </a>
+            <a asp-controller="Account"
+               asp-action="Register"
+               class="landing-auth-link">
+                @Localizer["Signup"]
+            </a>
         </div>
-
-        <div class="hero-trust">
-            <div class="trust-avatars">
-                <div class="trust-avatar">M</div>
-                <div class="trust-avatar">A</div>
-                <div class="trust-avatar">S</div>
-                <div class="trust-avatar">+</div>
-            </div>
-
-            <div>
-                <strong>@Localizer["PlaySmarter"]</strong>
-                <span>@Localizer["YourSmartBeloteAssistant"]</span>
-            </div>
-        </div>
-
     </div>
-
-
-    <div class="hero-visual">
-
-        <div class="hero-glow"></div>
-
-        <!-- Main card -->
-        <div class="hero-main-card">
-
-            <div class="hero-card-header">
-                <div>
-                    <h4>Blote Assistant</h4>
-                </div>
-
-                <div class="hero-card-icon">
-                    <i class="bx bx-brain"></i>
-                </div>
-            </div>
-
-            <div class="hero-score">
-
-                <div class="score-item">
-                    <span>Team A</span>
-                    <strong>82</strong>
-                </div>
-
-                <div class="score-divider">
-                    <span>VS</span>
-                </div>
-
-                <div class="score-item score-right">
-                    <span>Team B</span>
-                    <strong>67</strong>
-                </div>
-
-            </div>
-
-            <div class="hero-progress">
-                <div class="hero-progress-bar"></div>
-            </div>
-
-            <div class="hero-card-footer">
-                <span>
-                    <i class="bx bx-check-circle"></i>
-                    Smart tracking
-                </span>
-
-                <span>
-                    <i class="bx bx-trending-up"></i>
-                    +18%
-                </span>
-            </div>
-
-        </div>
-
-
-        <!-- Floating cards -->
-
-        <div class="floating-card floating-card-top">
-            <div class="floating-icon">
-                <i class="bx bx-trophy"></i>
-            </div>
-
-            <div>
-                <span>Performance</span>
-                <strong>Excellent</strong>
-            </div>
-        </div>
-
-
-        <div class="floating-card floating-card-bottom">
-            <div class="floating-icon">
-                <i class="bx bx-group"></i>
-            </div>
-
-            <div>
-                <span>Partners</span>
-                <strong>Growing</strong>
-            </div>
-        </div>
-
-
-        <!-- Decorative cards -->
-
-        <div class="playing-card playing-card-one">
-            <span>A</span>
-            <i class="bx bxs-heart"></i>
-        </div>
-
-        <div class="playing-card playing-card-two">
-            <span>K</span>
-            <i class="bx bxs-diamond"></i>
-        </div>
-
-    </div>
-
 </section>
 
-
-<!-- Features -->
-
-<section class="features-section">
-
-    <div class="section-header">
-
-        <h2 class="section-title">
-            @Localizer["PlaySmarter"]
-        </h2>
-
-        <p class="section-subtitle">
-            @Localizer["YourSmartBeloteAssistant"]
-        </p>
-
-    </div>
-
-
-    <div class="features-grid">
-
-        <div class="feature-card">
-
-            <div class="feature-icon">
-                <i class="bx bx-brain"></i>
-            </div>
-
-            <h3>Smart Play</h3>
-
-            <p>
-                Make better decisions and keep track of your game with Partnerly.
-            </p>
-
-        </div>
-
-
-        <div class="feature-card">
-
-            <div class="feature-icon">
-                <i class="bx bx-bar-chart-alt-2"></i>
-            </div>
-
-            <h3>Track Progress</h3>
-
-            <p>
-                Follow your activity, results and progress in one convenient place.
-            </p>
-
-        </div>
-
-
-        <div class="feature-card">
-
-            <div class="feature-icon">
-                <i class="bx bx-group"></i>
-            </div>
-
-            <h3>Build Your Team</h3>
-
-            <p>
-                Connect with your partners and grow your Partnerly network.
-            </p>
-
-        </div>
-
-    </div>
-
-</section>
-
-
-<!-- Videos -->
-
-<section class="videos-section" id="videos">
-
-    <div class="section-header">
-
-        <div class="section-badge">
-            <i class="bx bx-play-circle"></i>
-            @TempData.Peek("authorName")
-        </div>
-
-        <h2 class="section-title">
-            @Localizer["Educationalvideos"]
-        </h2>
-
-        <p class="section-subtitle">
-            @Localizer["Seehowourplatformworks"]
-        </p>
-
-    </div>
-
-
-    <div class="videos-grid">
-
-        <div class="video-card">
-
-            <div class="video-wrapper">
-
-                <iframe src=""
-                        title="Video 1"
-                        frameborder="0"
-                        allowfullscreen>
-                </iframe>
-
-                <div class="video-placeholder">
-                    <i class="bx bx-play-circle"></i>
-                </div>
-
-            </div>
-
-            <div class="video-content">
-                <span class="video-number">01</span>
-
-                <div>
-                    <p class="video-title">
-                        @Localizer["Howtoregisterandgetstarted"]
-                    </p>
-
-                    <span class="video-description">
-                        Learn how to get started with Partnerly.
-                    </span>
-                </div>
-            </div>
-
-        </div>
-
-
-        <div class="video-card">
-
-            <div class="video-wrapper">
-
-                <iframe src=""
-                        title="Video 2"
-                        frameborder="0"
-                        allowfullscreen>
-                </iframe>
-
-                <div class="video-placeholder">
-                    <i class="bx bx-play-circle"></i>
-                </div>
-
-            </div>
-
-            <div class="video-content">
-                <span class="video-number">02</span>
-
-                <div>
-                    <p class="video-title">
-                        @Localizer["Invitefriendsandearn"]
-                    </p>
-
-                    <span class="video-description">
-                        Discover how referrals work.
-                    </span>
-                </div>
-            </div>
-
-        </div>
-
-
-        <div class="video-card">
-
-            <div class="video-wrapper">
-
-                <iframe src=""
-                        title="Video 3"
-                        frameborder="0"
-                        allowfullscreen>
-                </iframe>
-
-                <div class="video-placeholder">
-                    <i class="bx bx-play-circle"></i>
-                </div>
-
-            </div>
-
-            <div class="video-content">
-                <span class="video-number">03</span>
-
-                <div>
-                    <p class="video-title">
-                        @Localizer["Ratesandbonuslevels"]
-                    </p>
-
-                    <span class="video-description">
-                        Learn more about Partnerly benefits.
-                    </span>
-                </div>
-            </div>
-
-        </div>
-
-    </div>
-
-</section>
+@section Scripts {
+    <script src="~/assets/js/landing-dots.js" asp-append-version="true"></script>
+    <script src="~/assets/js/landing-search.js" asp-append-version="true"></script>
+}

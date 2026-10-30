@@ -2380,4 +2380,52 @@
     <value>A new ticket was created: {0} — {1}.</value>
   </data>
 
+  <data name="LandingHeroTitle" xml:space="preserve">
+    <value>Find your partner</value>
+  </data>
+
+  <data name="LandingHeroSub" xml:space="preserve">
+    <value>Play smarter. Win with confidence.</value>
+  </data>
+
+  <data name="LandingType1" xml:space="preserve">
+    <value>Find your partner...</value>
+  </data>
+
+  <data name="LandingType2" xml:space="preserve">
+    <value>Play smarter...</value>
+  </data>
+
+  <data name="LandingType3" xml:space="preserve">
+    <value>Join the game...</value>
+  </data>
+
+  <data name="EmailVerified" xml:space="preserve">
+    <value>Email verified</value>
+  </data>
+
+  <data name="AccountCreated" xml:space="preserve">
+    <value>Account created</value>
+  </data>
+
+  <data name="LandingSearchSubmit" xml:space="preserve">
+    <value>Search</value>
+  </data>
+
+  <data name="LandingChatReply1" xml:space="preserve">
+    <value>Log in or sign up and I can keep helping you from there.</value>
+  </data>
+
+  <data name="LandingChatReply2" xml:space="preserve">
+    <value>Create an account or log in to continue this conversation.</value>
+  </data>
+
+  <data name="LandingChatReply3" xml:space="preserve">
+    <value>Sign up if you are new, or log in if you already have an account — then I can answer in full.</value>
+  </data>
+
+  <data name="ContinuewithApple" xml:space="preserve">
+    <value>Continue with Apple</value>
+  </data>
+
 </root>

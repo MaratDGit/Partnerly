@@ -419,24 +419,33 @@ namespace Partnerly.Controllers
             });
         }
 
+        [HttpGet]
+        [ActionName(nameof(GoogleLogin))]
+        public Task<IActionResult> GoogleLoginGet(string? returnUrl = null)
+        {
+            return StartGoogleLoginAsync(returnUrl);
+        }
+
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> GoogleLogin(string? returnUrl = null)
+        public Task<IActionResult> GoogleLogin(string? returnUrl = null)
         {
-            if (!await IsGoogleLoginEnabledAsync())
-                return RedirectToAction(nameof(Login));
+            return StartGoogleLoginAsync(returnUrl);
+        }
 
-            var redirectUrl = Url.Action(
-                nameof(GoogleCallback),
-                "Account",
-                new { returnUrl });
+        [HttpGet]
+        [ActionName(nameof(AppleLogin))]
+        public IActionResult AppleLoginGet(string? returnUrl = null)
+        {
+            return AppleLogin(returnUrl);
+        }
 
-            var properties = new AuthenticationProperties
-            {
-                RedirectUri = redirectUrl
-            };
-
-            return Challenge(properties, "Google");
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult AppleLogin(string? returnUrl = null)
+        {
+            // Apple Sign In is not wired yet; send the guest to the login page.
+            return RedirectToAction(nameof(Login), new { returnUrl });
         }
 
         [HttpGet]
@@ -790,6 +799,24 @@ namespace Partnerly.Controllers
                 appName = SystemSettingsDefaults.ApplicationName;
 
             TempData["appName"] = appName;
+        }
+
+        private async Task<IActionResult> StartGoogleLoginAsync(string? returnUrl)
+        {
+            if (!await IsGoogleLoginEnabledAsync())
+                return RedirectToAction(nameof(Login));
+
+            var redirectUrl = Url.Action(
+                nameof(GoogleCallback),
+                "Account",
+                new { returnUrl });
+
+            var properties = new AuthenticationProperties
+            {
+                RedirectUri = redirectUrl
+            };
+
+            return Challenge(properties, "Google");
         }
 
         private async Task<bool> IsGoogleLoginEnabledAsync()

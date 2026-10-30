@@ -2,344 +2,141 @@
 
 @await Html.PartialAsync("Sections/_Variables")
 
+@{
+    var currentCulture = CultureInfo.CurrentUICulture.TwoLetterISOLanguageName;
+    var currentFlag = currentCulture switch
+    {
+        "en" => "gb",
+        "ru" => "ru",
+        "hy" => "am",
+        _ => "gb"
+    };
+    var appName = TempData.Peek("appName") as string ?? Partnerly.Helpers.SystemSettingsDefaults.ApplicationName;
+    var isScrollable = ViewData["LandingScroll"] as bool? == true;
+}
+
 <!DOCTYPE html>
-<html lang="@CultureInfo.CurrentUICulture.TwoLetterISOLanguageName">
+<html lang="@currentCulture"
+      data-theme="light"
+      data-bs-theme="light">
 
 <head>
     <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#080814" />
 
-    <meta name="viewport"
-          content="width=device-width, initial-scale=1.0" />
+    @await Html.PartialAsync("_PageTitle")
 
-    <meta name="theme-color"
-          content="#696cff" />
+    <script>
+        (function () {
+            try {
+                var saved = localStorage.getItem("partnerly-theme") || "system";
+                var dark = saved === "dark" || (saved === "system" && window.matchMedia("(prefers-color-scheme: dark)").matches);
+                var theme = dark ? "dark" : "light";
+                document.documentElement.setAttribute("data-theme", theme);
+                document.documentElement.setAttribute("data-bs-theme", theme);
+            } catch (error) {
+                // Keep the default light theme.
+            }
+        })();
+    </script>
 
-    <title>
-        @ViewData["Title"] - @TempData.Peek("appName")
-    </title>
-
-    <!-- Bootstrap -->
-    <link rel="stylesheet"
-          href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
-
-    <!-- Landing -->
-    <link rel="stylesheet"
-          href="~/assets/css/landing.css"
-          asp-append-version="true" />
-
-    <!-- Boxicons -->
-    <link rel="stylesheet"
-          href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" />
-
-    <!-- Favicon -->
-    <link rel="icon"
-          type="image/png"
-          href="~/favicon.png"
-          asp-append-version="true" />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@600;700&display=swap" />
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" />
+    <link rel="stylesheet" href="~/assets/css/navbar.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/assets/css/landing.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/assets/css/spiner.css" asp-append-version="true" />
+    <link rel="icon" href="~/favicon.ico" asp-append-version="true" />
+    <link rel="icon" type="image/svg+xml" href="~/assets/img/favicon.svg" asp-append-version="true" />
+    <link rel="icon" type="image/png" sizes="32x32" href="~/favicon.png" asp-append-version="true" />
 </head>
 
+<body class="landing-body@(isScrollable ? " is-scrollable" : "")">
 
-<body>
-
-    @{
-        var currentCulture =
-        CultureInfo.CurrentUICulture.TwoLetterISOLanguageName;
-
-        var currentFlag = currentCulture switch
-        {
-            "en" => "gb",
-            "ru" => "ru",
-            "hy" => "am",
-            _ => "gb"
-        };
-    }
-
-    <!-- =========================================================
-         HEADER
-         ========================================================= -->
+    <div id="globalLoader" hidden style="display:none;" aria-hidden="true">
+        <div class="loader-container">
+            <div class="spinner"></div>
+            <div class="loader-text">@Localizer["LookupLoading"]</div>
+        </div>
+    </div>
 
     <header class="landing-header">
+        <div class="landing-header-inner">
 
-        <div class="container">
+            <a asp-controller="Home"
+               asp-action="Index"
+               class="landing-brand">
+                @await Html.PartialAsync("_SiteLogo", "landing")
+                <span class="landing-brand-text">@appName</span>
+            </a>
 
-            <!-- Logo -->
+            <div class="landing-header-actions partnerly-navbar-actions">
 
-            <div class="logo">
-
-                <a asp-controller="Home"
-                   asp-action="Index"
-                   class="app-brand-link gap-2">
-
-                    <span class="app-brand-logo demo">
-
-                        <img src="~/favicon.png"
-                             alt="@TempData.Peek("appName")"
-                             width="34"
-                             height="34"
-                             class="me-2" />
-
-                    </span>
-
-                    <span>
-                        @TempData.Peek("appName")
-                    </span>
-
-                </a>
-
-            </div>
-
-
-            <!-- Navigation -->
-
-            <nav class="nav-links">
-
-                <!-- Educational videos -->
-
-                <a href="#videos">
-                    @Localizer["Educationalvideos"]
-                </a>
-
-
-                <!-- Language -->
-
-                <div class="landing-language">
-
+                <div class="dropdown">
                     <button type="button"
-                            class="landing-language-toggle"
-                            aria-label="Language"
-                            onclick="this.parentElement.classList.toggle('open')">
-
+                            class="partnerly-navbar-action partnerly-language-button"
+                            data-bs-toggle="dropdown"
+                            aria-expanded="false"
+                            aria-label="Language">
                         <img src="https://flagcdn.com/24x18/@(currentFlag).png"
                              alt="@currentCulture"
                              width="24"
                              height="18" />
-
                     </button>
 
-
-                    <div class="landing-language-menu">
-
-                        <!-- English -->
-                        <form asp-controller="Language"
-                              asp-action="SetLanguage"
-                              method="post">
-
-                            <input type="hidden"
-                                   name="returnUrl"
-                                   value="@Context.Request.Path@Context.Request.QueryString" />
-
-                            <button type="submit"
-                                    name="culture"
-                                    value="en">
-
-                                <img src="https://flagcdn.com/24x18/gb.png"
-                                     width="24"
-                                     height="18"
-                                     alt="English" />
-
-                                <span>
-                                    English
-                                </span>
-
-                            </button>
-
-                        </form>
-
-                        <!-- Russian -->
-                        <form asp-controller="Language"
-                              asp-action="SetLanguage"
-                              method="post">
-
-                            <input type="hidden"
-                                   name="returnUrl"
-                                   value="@Context.Request.Path@Context.Request.QueryString" />
-
-                            <button type="submit"
-                                    name="culture"
-                                    value="ru">
-
-                                <img src="https://flagcdn.com/24x18/ru.png"
-                                     width="24"
-                                     height="18"
-                                     alt="Русский" />
-
-                                <span>
-                                    Русский
-                                </span>
-
-                            </button>
-
-                        </form>
-
-                        <!-- Armenian -->
-                        <form asp-controller="Language"
-                              asp-action="SetLanguage"
-                              method="post">
-
-                            <input type="hidden"
-                                   name="returnUrl"
-                                   value="@Context.Request.Path@Context.Request.QueryString" />
-
-                            <button type="submit"
-                                    name="culture"
-                                    value="hy">
-
-                                <img src="https://flagcdn.com/24x18/am.png"
-                                     width="24"
-                                     height="18"
-                                     alt="Հայերեն" />
-
-                                <span>
-                                    Հայերեն
-                                </span>
-
-                            </button>
-
-                        </form>
-
-                    </div>
-
+                    <ul class="dropdown-menu dropdown-menu-end partnerly-language-menu">
+                        <li>
+                            <form asp-controller="Language" asp-action="SetLanguage" method="post">
+                                <input type="hidden" name="returnUrl" value="@Context.Request.Path@Context.Request.QueryString" />
+                                <button type="submit" name="culture" value="en" class="dropdown-item">
+                                    <img src="https://flagcdn.com/24x18/gb.png" width="24" height="18" class="me-2" alt="English" />
+                                    <span>English</span>
+                                </button>
+                            </form>
+                        </li>
+                        <li>
+                            <form asp-controller="Language" asp-action="SetLanguage" method="post">
+                                <input type="hidden" name="returnUrl" value="@Context.Request.Path@Context.Request.QueryString" />
+                                <button type="submit" name="culture" value="ru" class="dropdown-item">
+                                    <img src="https://flagcdn.com/24x18/ru.png" width="24" height="18" class="me-2" alt="Русский" />
+                                    <span>Русский</span>
+                                </button>
+                            </form>
+                        </li>
+                        <li>
+                            <form asp-controller="Language" asp-action="SetLanguage" method="post">
+                                <input type="hidden" name="returnUrl" value="@Context.Request.Path@Context.Request.QueryString" />
+                                <button type="submit" name="culture" value="hy" class="dropdown-item">
+                                    <img src="https://flagcdn.com/24x18/am.png" width="24" height="18" class="me-2" alt="Հայերեն" />
+                                    <span>Հայերեն</span>
+                                </button>
+                            </form>
+                        </li>
+                    </ul>
                 </div>
 
+                <button type="button"
+                        class="partnerly-navbar-action partnerly-theme-button"
+                        id="partnerlyThemeButton"
+                        aria-label="Change theme"
+                        title="Change theme">
+                    <i class="bx bx-moon" id="partnerlyThemeIcon"></i>
+                </button>
 
-                <!-- Login -->
-
-                <a asp-controller="Account" asp-action="Login" class="btn-outline">
-                    @Localizer["Login"]
-                </a>
-
-            </nav>
-
-
-            <!-- Mobile menu -->
-
-            <button type="button"
-                    class="menu-toggle"
-                    aria-label="Open menu"
-                    onclick="document.body.classList.toggle('menu-open')">
-
-                <i class="bx bx-menu"></i>
-
-            </button>
-
+            </div>
         </div>
-
     </header>
 
-
-
-    <!-- =========================================================
-         MAIN CONTENT
-         ========================================================= -->
-
-    <main role="main">
-
+    <main class="landing-main">
         @RenderBody()
-
     </main>
 
-
-
-    <!-- =========================================================
-         FOOTER
-         ========================================================= -->
-
-    <footer class="landing-footer">
-
-        <div class="container">
-
-            <p>
-                &copy;
-                <span id="currentYear"></span>
-                @TempData.Peek("appName").
-                @Localizer["Allrightsreserved"].
-            </p>
-
-
-            <nav>
-
-                <a asp-controller="Home" asp-action="Privacy">
-                    @Localizer["Policy"]
-                </a>
-
-            </nav>
-
-        </div>
-
-    </footer>
-
-
-
-    <!-- =========================================================
-         SCRIPTS
-         ========================================================= -->
-
-    <script src="~/lib/jquery/dist/jquery.js"></script>
-
-    <script>
-
-        /*
-         * Current year
-         */
-
-        document.getElementById("currentYear").textContent =
-            new Date().getFullYear();
-
-
-        /*
-         * Close language dropdown when clicking outside
-         */
-
-        document.addEventListener("click", function (event) {
-
-            const language = document.querySelector(".landing-language");
-
-            if (!language) {
-                return;
-            }
-
-            if (!language.contains(event.target)) {
-                language.classList.remove("open");
-            }
-
-        });
-
-
-        /*
-         * Close mobile menu after clicking a navigation link
-         */
-
-        document.querySelectorAll(".nav-links a").forEach(function (link) {
-
-            link.addEventListener("click", function () {
-
-                document.body.classList.remove("menu-open");
-
-            });
-
-        });
-
-
-        /*
-         * Close mobile menu after selecting a language
-         */
-
-        document.querySelectorAll(".landing-language-menu button")
-            .forEach(function (button) {
-
-                button.addEventListener("click", function () {
-
-                    document.body.classList.remove("menu-open");
-
-                });
-
-            });
-
-    </script>
-
-
+    <script src="~/assets/vendor/libs/jquery/jquery.js" asp-append-version="true"></script>
+    <script src="~/assets/vendor/js/bootstrap.js" asp-append-version="true"></script>
+    <script src="~/assets/js/spiner.js" asp-append-version="true"></script>
+    <script src="~/assets/js/partnerly-theme.js" asp-append-version="true"></script>
     @await RenderSectionAsync("Scripts", required: false)
 
 </body>
-
 </html>

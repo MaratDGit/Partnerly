@@ -16,17 +16,17 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0" />
 
     @{
-        string title = ViewData["title"] as string ?? "";
-        string appName = TempData.Peek("appName") as string ?? "";
         string productPage = TempData.Peek("productPage") as string ?? "";
     }
 
-    <title>@title</title>
+    @await Html.PartialAsync("_PageTitle")
     <meta name="description" content="" />
 
     <link rel="canonical" href='@productPage'>
-    <!-- Favicon -->
-    <link rel="icon" type="image/x-icon" href="~/favicon.png" />
+    <link rel="icon" href="~/favicon.ico" asp-append-version="true" />
+    <link rel="icon" type="image/svg+xml" href="~/assets/img/favicon.svg" asp-append-version="true" />
+    <link rel="icon" type="image/png" sizes="32x32" href="~/favicon.png" asp-append-version="true" />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@600;700&display=swap" />
 
     <!-- Core Styles -->
     @await Html.PartialAsync("Sections/_Styles")
