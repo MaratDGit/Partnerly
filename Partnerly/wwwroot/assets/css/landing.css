@@ -90,6 +90,7 @@ html[data-theme="dark"] .landing-body.is-scrollable .landing-header {
     align-items: center;
     gap: 0.7rem;
     text-decoration: none;
+    transition: opacity 0.55s ease;
 }
 
 .landing-brand .site-logo {
@@ -106,15 +107,16 @@ html[data-theme="dark"] .landing-brand .site-logo {
 }
 
 .landing-brand-text {
-    display: block;
+    position: relative;
+    display: flex;
+    align-items: baseline;
     min-width: 0;
     overflow: hidden;
-    text-overflow: ellipsis;
     white-space: nowrap;
     font-family: "Cormorant Garamond", "Times New Roman", serif;
     font-size: clamp(1.55rem, 2.7vw, 2.1rem);
     font-weight: 700;
-    letter-spacing: 0.03em;
+    letter-spacing: 0;
     line-height: 1.15;
     -webkit-text-stroke: 0.45px currentColor;
     color: #2c2966;
@@ -126,7 +128,12 @@ html[data-theme="dark"] .landing-brand-text {
 
 .landing-brand-letter {
     display: inline-block;
+    margin-right: -0.045em;
 }
+
+    .landing-brand-letter:last-child {
+        margin-right: 0;
+    }
 
 html.landing-draw .landing-brand-text {
     overflow: visible;
@@ -134,15 +141,35 @@ html.landing-draw .landing-brand-text {
 
 html.landing-draw .landing-brand-letter {
     opacity: 0;
-    transform: translateY(0.22em);
-    filter: blur(4px);
-    transition: opacity 0.38s ease, transform 0.38s ease, filter 0.38s ease;
+    clip-path: inset(-0.22em 100% -0.2em -0.08em);
 }
 
     html.landing-draw .landing-brand-letter.is-in {
         opacity: 1;
-        transform: none;
-        filter: none;
+        clip-path: inset(-0.22em -0.08em -0.2em -0.08em);
+    }
+
+    html.landing-draw .landing-brand.is-writing .landing-brand-letter.is-in {
+        transition: clip-path var(--write-ms, 220ms) cubic-bezier(0.18, 0.72, 0.28, 1);
+    }
+
+.landing-brand-pen {
+    position: absolute;
+    top: 0.18em;
+    left: 0;
+    width: 1.5px;
+    height: 0.78em;
+    border-radius: 1px;
+    background: currentColor;
+    opacity: 0;
+    pointer-events: none;
+    z-index: 1;
+    transform: translateX(-1px);
+}
+
+    html.landing-draw .landing-brand.is-writing .landing-brand-pen {
+        opacity: 0.7;
+        transition: left 0.12s linear, opacity 0.18s ease;
     }
 
 html.landing-draw .landing-brand .site-logo path {
@@ -160,6 +187,7 @@ html.landing-draw .landing-brand .site-logo circle {
         opacity: 1;
         transform: none;
         filter: none;
+        clip-path: none;
     }
 
     html.landing-draw .landing-brand .site-logo path {
@@ -274,6 +302,15 @@ html[data-theme="dark"] .landing-hero-sub {
     justify-content: center;
     gap: 26px;
     padding: 96px 24px 40px;
+    pointer-events: none;
+    transition: opacity 0.55s ease;
+}
+
+.landing-body.is-auth-open .landing-brand,
+.landing-body.is-info-open .landing-brand,
+.landing-body.is-auth-open .landing-hero-search,
+.landing-body.is-info-open .landing-hero-search {
+    opacity: 0;
     pointer-events: none;
 }
 
@@ -633,34 +670,29 @@ html[data-theme="dark"] .landing-search-type {
     position: fixed;
     inset: 0;
     z-index: 15;
-    display: none;
+    display: flex;
     align-items: flex-start;
     justify-content: center;
     padding: 88px 16px 24px;
     background: transparent;
-    transition: background 0.85s ease, backdrop-filter 0.85s ease;
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+    transition: opacity 0.55s ease, visibility 0.55s ease, background 0.55s ease, backdrop-filter 0.55s ease;
 }
 
     .landing-auth.is-open {
-        display: flex;
+        opacity: 1;
+        visibility: visible;
+        pointer-events: auto;
         background: rgba(238, 240, 248, 0.42);
         backdrop-filter: blur(14px);
         -webkit-backdrop-filter: blur(14px);
     }
 
-    .landing-auth.is-open.is-forming {
-        background: transparent;
-        backdrop-filter: none;
-        -webkit-backdrop-filter: none;
-    }
-
 html[data-theme="dark"] .landing-auth.is-open {
     background: rgba(7, 7, 18, 0.52);
 }
-
-    html[data-theme="dark"] .landing-auth.is-open.is-forming {
-        background: transparent;
-    }
 
 .landing-auth-stage {
     width: min(440px, 100%);
@@ -689,18 +721,6 @@ html[data-theme="dark"] .landing-auth.is-open {
             transition: transform 0.34s ease-out;
         }
 
-.landing-auth.is-forming .landing-auth-card {
-    opacity: 0;
-    transform: scale(0.985);
-    pointer-events: none;
-}
-
-.landing-auth.is-formed .landing-auth-card {
-    opacity: 1;
-    transform: none;
-    transition: opacity 0.8s ease, transform 0.8s ease;
-}
-
 .landing-auth-card {
     position: relative;
     width: 100%;
@@ -708,6 +728,10 @@ html[data-theme="dark"] .landing-auth.is-open {
     overflow: auto;
     backface-visibility: hidden;
     -webkit-backface-visibility: hidden;
+    opacity: 0;
+    transform: translateY(14px);
+    pointer-events: none;
+    transition: opacity 0.6s ease, transform 0.6s ease;
     padding: 28px 26px 22px;
     border: 1px solid rgba(99, 102, 241, 0.18);
     border-radius: 28px;
@@ -717,6 +741,12 @@ html[data-theme="dark"] .landing-auth.is-open {
     -webkit-backdrop-filter: blur(16px);
     scrollbar-width: thin;
     scrollbar-color: rgba(99, 102, 241, 0.32) transparent;
+}
+
+.landing-auth.is-open .landing-auth-card {
+    opacity: 1;
+    transform: none;
+    pointer-events: auto;
 }
 
     .landing-auth-card::-webkit-scrollbar {
@@ -1164,7 +1194,7 @@ html[data-theme="dark"] .legal-copy {
 
     .landing-brand-text {
         font-size: 1.35rem;
-        letter-spacing: 0.03em;
+        letter-spacing: 0;
     }
 
     .landing-brand .site-logo {
@@ -1229,7 +1259,10 @@ html[data-theme="dark"] .legal-copy {
     .landing-hero-copy,
     .landing-hero-actions,
     .landing-chat,
-    .landing-search {
+    .landing-search,
+    .landing-brand,
+    .landing-auth,
+    .landing-auth-card {
         transition: none;
     }
 

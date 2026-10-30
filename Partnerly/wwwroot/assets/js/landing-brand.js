@@ -15,6 +15,14 @@
     var firstPass = true;
     var HOLD_MS = 5600;
     var ERASE_MS = 700;
+    var pen = null;
+
+    if (textEl) {
+        pen = document.createElement("span");
+        pen.className = "landing-brand-pen";
+        pen.setAttribute("aria-hidden", "true");
+        textEl.appendChild(pen);
+    }
 
     function later(fn, ms) {
         var id = window.setTimeout(fn, ms);
@@ -67,12 +75,59 @@
         }, 60 + paths.length * 150 + 180);
     }
 
-    function drawName() {
-        Array.prototype.forEach.call(letters, function (letter, index) {
-            later(function () {
-                letter.classList.add("is-in");
-            }, 380 + index * 70);
+    function letterWriteMs(ch) {
+        if (!ch || ch === " " || ch === "\u00A0") {
+            return 70;
+        }
+        if (/[MWGOwm@%Q]/.test(ch)) {
+            return 270;
+        }
+        if (/[iljI1.,:'!|]/.test(ch)) {
+            return 115;
+        }
+        return 175 + (ch.charCodeAt(0) % 45);
+    }
+
+    function movePen(letter) {
+        if (!pen || !letter) {
+            return;
+        }
+        pen.style.left = (letter.offsetLeft + letter.offsetWidth) + "px";
+        pen.style.top = (letter.offsetTop + letter.offsetHeight * 0.16) + "px";
+        pen.style.height = (letter.offsetHeight * 0.7) + "px";
+    }
+
+    function hidePen() {
+        if (!pen) {
+            return;
+        }
+        pen.style.left = "";
+    }
+
+    function nameWriteDuration() {
+        var total = 280;
+        Array.prototype.forEach.call(letters, function (letter) {
+            total += letterWriteMs(letter.textContent) * 0.68;
         });
+        return total + 240;
+    }
+
+    function drawName() {
+        var delay = 0;
+        brand.classList.add("is-writing");
+        Array.prototype.forEach.call(letters, function (letter) {
+            var ms = letterWriteMs(letter.textContent);
+            later(function () {
+                letter.style.setProperty("--write-ms", ms + "ms");
+                letter.classList.add("is-in");
+                movePen(letter);
+            }, 280 + delay);
+            delay += ms * 0.68;
+        });
+        later(function () {
+            brand.classList.remove("is-writing");
+            hidePen();
+        }, 280 + delay + 220);
     }
 
     function eraseLogo() {
@@ -99,7 +154,7 @@
         }
 
         var logoDone = 60 + paths.length * 150 + 700;
-        var nameDone = 380 + letters.length * 70 + 280;
+        var nameDone = nameWriteDuration();
         var drawnAt = firstPass ? Math.max(logoDone, nameDone) : logoDone;
 
         later(eraseLogo, drawnAt + HOLD_MS);

@@ -163,45 +163,18 @@
             flipTo(panel);
             return;
         }
-        overlay.classList.add("is-open", "is-forming");
-        overlay.classList.remove("is-formed");
+        overlay.classList.add("is-open");
         overlay.setAttribute("aria-hidden", "false");
         document.body.classList.add("is-auth-open");
-        setPanel(panel, { deferFocus: !reduceMotion });
+        setPanel(panel);
         syncUrl(panel);
-        revealFromDots();
-    }
-
-    function revealFromDots() {
-        var card = overlay.querySelector(".landing-auth-card");
-        var dotsApi = window.partnerlyLandingDots;
-
-        function showCard() {
-            overlay.classList.add("is-formed");
-            overlay.classList.remove("is-forming");
-            focusActiveInput();
-        }
-
-        if (reduceMotion || !card || !dotsApi || typeof dotsApi.gatherToAuth !== "function") {
-            showCard();
-            return;
-        }
-
-        window.requestAnimationFrame(function () {
-            window.requestAnimationFrame(function () {
-                dotsApi.gatherToAuth(card, showCard);
-            });
-        });
     }
 
     function close() {
         queuedPanel = null;
         flipping = false;
         resetFlipper();
-        if (window.partnerlyLandingDots && typeof window.partnerlyLandingDots.cancelGather === "function") {
-            window.partnerlyLandingDots.cancelGather();
-        }
-        overlay.classList.remove("is-open", "is-forming", "is-formed");
+        overlay.classList.remove("is-open");
         overlay.setAttribute("aria-hidden", "true");
         overlay.setAttribute("data-open", "");
         document.body.classList.remove("is-auth-open");
@@ -251,7 +224,7 @@
             return;
         }
 
-        if (isOpen() && event.target === overlay && !overlay.classList.contains("is-forming")) {
+        if (isOpen() && event.target === overlay) {
             close();
         }
     });
@@ -275,7 +248,7 @@
 
     var initial = overlay.getAttribute("data-open");
     if (initial && Object.prototype.hasOwnProperty.call(titles, initial)) {
-        overlay.classList.add("is-open", "is-formed");
+        overlay.classList.add("is-open");
         overlay.setAttribute("aria-hidden", "false");
         document.body.classList.add("is-auth-open");
         setPanel(initial);
