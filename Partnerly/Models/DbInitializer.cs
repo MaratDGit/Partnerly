@@ -52,6 +52,7 @@ namespace Partnerly.Models
                     UpdatedDate = DateTime.UtcNow,
                 });
 
+                var userRoleId = Guid.NewGuid();
                 if (context.Roles != null)
                 {
                     context.Roles.Add(new Role
@@ -78,7 +79,7 @@ namespace Partnerly.Models
                     });
                     context.Roles.Add(new Role
                     {
-                        Id = Guid.NewGuid(),
+                        Id = userRoleId,
                         Name = Constants.User,
                         IsDeleted = false,
                         IsActive = true,
@@ -112,6 +113,26 @@ namespace Partnerly.Models
                         EmailConfirmationTokenExpiredAtHours = 24,
                         ForgotPasswordTokenExpiredAtHours = 1,
                         OnlineStatusAutoRefreshMinute = 10,
+                        ApplicationName = Partnerly.Helpers.SystemSettingsDefaults.ApplicationName,
+                        DefaultLanguage = Partnerly.Helpers.SystemSettingsDefaults.DefaultLanguage,
+                        TimeZoneId = Partnerly.Helpers.SystemSettingsDefaults.TimeZoneId,
+                        IsAiAssistantEnabled = true,
+                        DefaultNewUserRoleId = userRoleId,
+                        EnableGoogleLogin = true,
+                        PersistentCookieDays = Partnerly.Helpers.SystemSettingsDefaults.PersistentCookieDays,
+                        SessionExpireMinutes = Partnerly.Helpers.SystemSettingsDefaults.SessionExpireMinutes,
+                        MaxProfilePhotoSizeMb = Partnerly.Helpers.SystemSettingsDefaults.MaxProfilePhotoSizeMb,
+                        MaxFailedLoginAttempts = Partnerly.Helpers.SystemSettingsDefaults.MaxFailedLoginAttempts,
+                        LockoutDurationMinutes = Partnerly.Helpers.SystemSettingsDefaults.LockoutDurationMinutes,
+                        EnableEmailSending = true,
+                        EnableNotifications = true,
+                        EmailAdminOnNewRegistration = false,
+                        EmailAdminOnNewTicket = false,
+                        DefaultAllowSendEmails = true,
+                        DefaultAllowSendNotifications = true,
+                        MaxAttachmentSizeMb = Partnerly.Helpers.SystemSettingsDefaults.MaxAttachmentSizeMb,
+                        AllowedAttachmentExtensions = Partnerly.Helpers.SystemSettingsDefaults.AllowedAttachmentExtensions,
+                        TicketAutoAssignUserId = adminUserId,
                         IsDeleted = false,
                         CreatedBy = adminUserId,
                         CreatedDate = DateTime.UtcNow,

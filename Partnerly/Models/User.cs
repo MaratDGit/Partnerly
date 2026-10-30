@@ -90,6 +90,12 @@ namespace Partnerly.Models
         [Display(Name = "Allow Send Emails")]
         public bool? AllowSendEmails { get; set; }
         #endregion
+        #region AccessFailedCount
+        public int AccessFailedCount { get; set; } = 0;
+        #endregion
+        #region LockoutEnd
+        public DateTime? LockoutEnd { get; set; }
+        #endregion
 
         #region System Columns
         public string? Note { get; set; }

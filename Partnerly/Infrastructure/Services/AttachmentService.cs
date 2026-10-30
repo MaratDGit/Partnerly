@@ -1,4 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Partnerly.Descriptors.Messages;
+using Partnerly.Helpers;
 using Partnerly.Infrastructure.Interfaces;
 using Partnerly.Models;
 
@@ -9,16 +11,19 @@ namespace Partnerly.Infrastructure.Services
         private readonly AppDbContext _context;
         private readonly IFileStorageService _fileStorageService;
         private readonly IAttachmentRepository _attachmentRepository;
+        private readonly ISystemSettingsService _systemSettingsService;
 
         public AttachmentService(
             AppDbContext context,
             IFileStorageService fileStorageService,
             ICurrentUserService currentUserService,
-            IAttachmentRepository attachmentRepository)
+            IAttachmentRepository attachmentRepository,
+            ISystemSettingsService systemSettingsService)
         {
             _context = context;
             _fileStorageService = fileStorageService;
             _attachmentRepository = attachmentRepository;
+            _systemSettingsService = systemSettingsService;
         }
 
         public IQueryable<Attachment> QueryEntity(IEnumerable<string> fields) =>
@@ -31,6 +36,25 @@ namespace Partnerly.Infrastructure.Services
         {
             if (file == null || file.Length == 0)
                 throw new ArgumentException("File is empty.");
+
+            var settings = await _systemSettingsService.GetCurrentAsync();
+            var maxMb = settings?.MaxAttachmentSizeMb ?? SystemSettingsDefaults.MaxAttachmentSizeMb;
+            if (maxMb > 0 && file.Length > maxMb * 1024L * 1024L)
+                throw new InvalidOperationException(string.Format(ErrorMessages.FileTooLarge, maxMb));
+
+            var allowedRaw = string.IsNullOrWhiteSpace(settings?.AllowedAttachmentExtensions)
+                ? SystemSettingsDefaults.AllowedAttachmentExtensions
+                : settings.AllowedAttachmentExtensions;
+
+            var allowed = allowedRaw
+                .Split(new[] { ',', ';', ' ' }, StringSplitOptions.RemoveEmptyEntries)
+                .Select(x => x.Trim().TrimStart('.').ToLowerInvariant())
+                .Where(x => x.Length > 0)
+                .ToHashSet();
+
+            var extension = Path.GetExtension(file.FileName)?.TrimStart('.').ToLowerInvariant();
+            if (string.IsNullOrWhiteSpace(extension) || !allowed.Contains(extension))
+                throw new InvalidOperationException(ErrorMessages.FileExtensionNotAllowed);
 
             var (storedFileName, storagePath) =
                 await _fileStorageService.SaveAsync(file);

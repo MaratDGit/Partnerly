@@ -60,8 +60,19 @@ namespace Partnerly.Infrastructure.Services
 
             if (ticket.AssignedTo == null)
             {
-                var superAdmin = await _userRepo.GetByEmailAsync(Constants.SuperUserEmail);
-                newTicket.AssignedTo = superAdmin?.Id;
+                var settings = await _systemSettingsRepository.GetBySetupIDAsync(1);
+                if (settings?.TicketAutoAssignUserId != null)
+                {
+                    var assignedUser = await _userRepo.GetByIdAsync(settings.TicketAutoAssignUserId);
+                    if (assignedUser != null && !assignedUser.IsDeleted && assignedUser.IsBlocked != true)
+                        newTicket.AssignedTo = assignedUser.Id;
+                }
+
+                if (newTicket.AssignedTo == null && settings?.TicketAutoAssignRoleId != null)
+                {
+                    var roleUser = await _userRepo.GetFirstActiveByRoleIdAsync(settings.TicketAutoAssignRoleId.Value);
+                    newTicket.AssignedTo = roleUser?.Id;
+                }
             }
 
             try

@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Partnerly.Descriptors.Messages;
 using Partnerly.Infrastructure.Interfaces;
 
 namespace Partnerly.Controllers
@@ -9,19 +10,32 @@ namespace Partnerly.Controllers
     {
         private readonly IOpenAIService _openAIService;
         private readonly ILogger<AIController> _logger;
+        private readonly ISystemSettingsService _systemSettingsService;
 
         public AIController(
             IOpenAIService openAIService,
-            ILogger<AIController> logger)
+            ILogger<AIController> logger,
+            ISystemSettingsService systemSettingsService)
         {
             _openAIService = openAIService;
             _logger = logger;
+            _systemSettingsService = systemSettingsService;
         }
 
         [HttpPost]
         [Authorize(Policy = "Permission:ai.use")]
         public async Task<IActionResult> Ask([FromBody] AIRequestModel model, CancellationToken cancellationToken)
         {
+            var settings = await _systemSettingsService.GetCurrentAsync();
+            if (settings?.IsAiAssistantEnabled == false)
+            {
+                return StatusCode(403, new
+                {
+                    success = false,
+                    message = ErrorMessages.AiAssistantDisabled
+                });
+            }
+
             if (string.IsNullOrWhiteSpace(model.Message))
             {
                 return BadRequest(new

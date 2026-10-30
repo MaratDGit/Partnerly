@@ -68,7 +68,15 @@ namespace Partnerly.Controllers
                 if (file == null || file.Length == 0)
                     continue;
 
-                var attachment = await _attachmentService.UploadAsync(file, entityType, entityId);
+                Attachment attachment;
+                try
+                {
+                    attachment = await _attachmentService.UploadAsync(file, entityType, entityId);
+                }
+                catch (InvalidOperationException ex)
+                {
+                    return BadRequest(new { success = false, message = ex.Message });
+                }
 
                 attachments.Add(new
                 {

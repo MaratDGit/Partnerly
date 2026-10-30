@@ -46,7 +46,9 @@
                     </h1>
 
                     <p>
-                        @Localizer["Technicalmaintenanceunderway"]
+                        @(string.IsNullOrWhiteSpace(ViewBag.MaintenanceMessage as string)
+                            ? Localizer["Technicalmaintenanceunderway"].Value
+                            : (string)ViewBag.MaintenanceMessage)
                     </p>
 
                     <div class="partnerly-maintenance-actions">
@@ -93,7 +95,9 @@
                 <span class="maintenance-footer-separator">·</span>
 
                 <span>
-                    @Localizer["Technicalmaintenanceunderway"]
+                    @(string.IsNullOrWhiteSpace(ViewBag.MaintenanceMessage as string)
+                        ? Localizer["Technicalmaintenanceunderway"].Value
+                        : (string)ViewBag.MaintenanceMessage)
                 </span>
 
             </div>

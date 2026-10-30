@@ -1,7 +1,9 @@
 @model Partnerly.Models.ViewModels.DashboardsViewModel
 @using Partnerly.Models.ViewModels
+@inject Partnerly.Infrastructure.Interfaces.ISystemSettingsService InsightsSettings
 @{
-    string Fmt(DateTime? d) => d.HasValue ? d.Value.ToString("g") : "";
+    var tz = Partnerly.Helpers.TimeZoneHelper.Resolve((await InsightsSettings.GetCurrentAsync())?.TimeZoneId);
+    string Fmt(DateTime? d) => d.HasValue ? Partnerly.Helpers.TimeZoneHelper.Format(d.Value, tz, "g") : "";
     string ItemTitle(DashboardListItem item) =>
         string.IsNullOrWhiteSpace(item.Title) ? item.Meta : item.Title;
     string NamedLabel(string? name) => name switch

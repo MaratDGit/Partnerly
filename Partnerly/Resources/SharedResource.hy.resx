@@ -1470,7 +1470,7 @@
   </data>
 
   <data name="Maximumfilesizeis" xml:space="preserve">
-    <value>Ֆայլի առավելագույն չափը՝ </value>
+    <value>Ֆայլի առավելագույն չափը՝ {0} ՄԲ</value>
   </data>
 
   <data name="Photosavedsuccessfully" xml:space="preserve">
@@ -2214,6 +2214,170 @@
 
   <data name="SiteSearchSections" xml:space="preserve">
     <value>Բաժիններ</value>
+  </data>
+
+  <data name="Access" xml:space="preserve">
+    <value>Մուտք</value>
+  </data>
+
+  <data name="Mailandnotifications" xml:space="preserve">
+    <value>Փոստ և ծանուցումներ</value>
+  </data>
+
+  <data name="Files" xml:space="preserve">
+    <value>Ֆայլեր</value>
+  </data>
+
+  <data name="ApplicationName" xml:space="preserve">
+    <value>Հավելվածի անուն</value>
+  </data>
+
+  <data name="MaintenanceMessage" xml:space="preserve">
+    <value>Սպասարկման էջի տեքստ</value>
+  </data>
+
+  <data name="MaintenanceMessageHint" xml:space="preserve">
+    <value>Ցուցադրվում է սպասարկման էջում և վերնագրի տողում, երբ սպասարկման ռեժիմը միացված է։ Դատարկ դաշտը օգտագործում է ստանդարտ տեքստը։</value>
+  </data>
+
+  <data name="DefaultLanguage" xml:space="preserve">
+    <value>Լռելյայն լեզու</value>
+  </data>
+
+  <data name="TimeZone" xml:space="preserve">
+    <value>Ժամային գոտի</value>
+  </data>
+
+  <data name="AiAssistantEnabled" xml:space="preserve">
+    <value>AI օգնական</value>
+  </data>
+
+  <data name="DefaultNewUserRole" xml:space="preserve">
+    <value>Նոր օգտատիրոջ լռելյայն դեր</value>
+  </data>
+
+  <data name="UseBuiltInUserRole" xml:space="preserve">
+    <value>Ներկառուցված User դեր</value>
+  </data>
+
+  <data name="EnableGoogleLogin" xml:space="preserve">
+    <value>Google մուտք</value>
+  </data>
+
+  <data name="PersistentCookieDays" xml:space="preserve">
+    <value>Հիշել ինձ (օր)</value>
+  </data>
+
+  <data name="SessionExpireMinutes" xml:space="preserve">
+    <value>Սեսիայի տևողություն (րոպե)</value>
+  </data>
+
+  <data name="MaxProfilePhotoSizeMb" xml:space="preserve">
+    <value>Պրոֆիլի լուսանկարի առավելագույն չափ (ՄԲ)</value>
+  </data>
+
+  <data name="MaxFailedLoginAttempts" xml:space="preserve">
+    <value>Արգելափակում սխալ գաղտնաբառերից հետո</value>
+  </data>
+
+  <data name="MaxFailedLoginAttemptsHint" xml:space="preserve">
+    <value>0-ն անջատում է արգելափակումը։</value>
+  </data>
+
+  <data name="LockoutDurationMinutes" xml:space="preserve">
+    <value>Արգելափակման տևողություն (րոպե)</value>
+  </data>
+
+  <data name="EnableEmailSending" xml:space="preserve">
+    <value>Նամակների ուղարկում</value>
+  </data>
+
+  <data name="EnableNotifications" xml:space="preserve">
+    <value>Ծանուցումներ հավելվածում</value>
+  </data>
+
+  <data name="EmailAdminOnNewRegistration" xml:space="preserve">
+    <value>Նամակ ադմինին նոր գրանցման դեպքում</value>
+  </data>
+
+  <data name="EmailAdminOnNewTicket" xml:space="preserve">
+    <value>Նամակ ադմինին նոր տոմսի դեպքում</value>
+  </data>
+
+  <data name="AdminNotificationEmail" xml:space="preserve">
+    <value>Ադմինի ծանուցման էլ. փոստ</value>
+  </data>
+
+  <data name="DefaultAllowSendEmails" xml:space="preserve">
+    <value>Նամակներ նոր օգտատերերի համար</value>
+  </data>
+
+  <data name="DefaultAllowSendNotifications" xml:space="preserve">
+    <value>Ծանուցումներ նոր օգտատերերի համար</value>
+  </data>
+
+  <data name="MaxAttachmentSizeMb" xml:space="preserve">
+    <value>Կցորդի առավելագույն չափ (ՄԲ)</value>
+  </data>
+
+  <data name="AllowedAttachmentExtensions" xml:space="preserve">
+    <value>Թույլատրված ընդլայնումներ</value>
+  </data>
+
+  <data name="AllowedAttachmentExtensionsHint" xml:space="preserve">
+    <value>Ստորակետով, առանց կետի։ Օրինակ՝ jpg,png,pdf</value>
+  </data>
+
+  <data name="TicketAutoAssignUser" xml:space="preserve">
+    <value>Տոմսերի ավտոնշանակում օգտատիրոջը</value>
+  </data>
+
+  <data name="TicketAutoAssignRole" xml:space="preserve">
+    <value>Տոմսերի ավտոնշանակում դերին</value>
+  </data>
+
+  <data name="TicketAutoAssignHint" xml:space="preserve">
+    <value>Եթե ընտրված է օգտատեր, նշանակվում է նա։ Հակառակ դեպքում՝ ընտրված դերի առաջին ակտիվ օգտատերը։</value>
+  </data>
+
+  <data name="None" xml:space="preserve">
+    <value>Ոչ մեկը</value>
+  </data>
+
+  <data name="AccountLocked" xml:space="preserve">
+    <value>Հաշիվը ժամանակավորապես արգելափակված է չափից շատ սխալ մուտքի փորձերի պատճառով։</value>
+  </data>
+
+  <data name="FileTooLarge" xml:space="preserve">
+    <value>Ֆայլը մեծ է {0} ՄԲ-ից։</value>
+  </data>
+
+  <data name="FileExtensionNotAllowed" xml:space="preserve">
+    <value>Այս ֆայլի տեսակը թույլատրված չէ։</value>
+  </data>
+
+  <data name="GoogleLoginDisabled" xml:space="preserve">
+    <value>Google մուտքն անջատված է։</value>
+  </data>
+
+  <data name="AiAssistantDisabled" xml:space="preserve">
+    <value>AI օգնականն անջատված է։</value>
+  </data>
+
+  <data name="AdminNewRegistrationSubject" xml:space="preserve">
+    <value>Նոր գրանցում</value>
+  </data>
+
+  <data name="AdminNewRegistrationBody" xml:space="preserve">
+    <value>Գրանցվել է նոր օգտատեր՝ {0} ({1})։</value>
+  </data>
+
+  <data name="AdminNewTicketSubject" xml:space="preserve">
+    <value>Նոր տոմս {0}</value>
+  </data>
+
+  <data name="AdminNewTicketBody" xml:space="preserve">
+    <value>Ստեղծվել է նոր տոմս՝ {0} — {1}։</value>
   </data>
 
 </root>

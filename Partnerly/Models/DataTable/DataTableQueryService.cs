@@ -1,4 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Partnerly.Helpers;
+using Partnerly.Infrastructure.Interfaces;
 using System.Globalization;
 using System.Linq.Expressions;
 
@@ -7,10 +9,14 @@ namespace Partnerly.Models.DataTable
     public class DataTableQueryService
     {
         private readonly DataTablePropertyResolver _propertyResolver;
+        private readonly ISystemSettingsService _systemSettingsService;
 
-        public DataTableQueryService(DataTablePropertyResolver propertyResolver)
+        public DataTableQueryService(
+            DataTablePropertyResolver propertyResolver,
+            ISystemSettingsService systemSettingsService)
         {
             _propertyResolver = propertyResolver;
+            _systemSettingsService = systemSettingsService;
         }
 
         #region Execute query
@@ -33,7 +39,8 @@ namespace Partnerly.Models.DataTable
             query = ApplyFilters(
                 query,
                 request,
-                options);
+                options,
+                await ResolveTimeZoneAsync());
 
             var total = await query.CountAsync();
 
@@ -499,10 +506,17 @@ namespace Partnerly.Models.DataTable
         // FILTERS
         // =========================================================
 
+        private async Task<TimeZoneInfo> ResolveTimeZoneAsync()
+        {
+            var settings = await _systemSettingsService.GetCurrentAsync();
+            return TimeZoneHelper.Resolve(settings?.TimeZoneId);
+        }
+
         private IQueryable<T> ApplyFilters<T>(
             IQueryable<T> query,
             DataTableRequest request,
-            DataTableOptions options)
+            DataTableOptions options,
+            TimeZoneInfo timeZone)
         {
             if (!options.Filters.Enabled)
             {
@@ -523,7 +537,8 @@ namespace Partnerly.Models.DataTable
                 query = ApplyFilter(
                     query,
                     filter,
-                    values);
+                    values,
+                    timeZone);
             }
 
             return query;
@@ -532,7 +547,8 @@ namespace Partnerly.Models.DataTable
         private IQueryable<T> ApplyFilter<T>(
             IQueryable<T> query,
             DataTableFilter filter,
-            string[] values)
+            string[] values,
+            TimeZoneInfo timeZone)
         {
             if (values.Length == 0)
             {
@@ -563,13 +579,15 @@ namespace Partnerly.Models.DataTable
                     return ApplyDateFilter(
                         query,
                         filter.Field,
-                        values);
+                        values,
+                        timeZone);
 
                 case DataTableFilterType.DateRange:
                     return ApplyDateRangeFilter(
                         query,
                         filter.Field,
-                        values);
+                        values,
+                        timeZone);
 
                 case DataTableFilterType.Number:
                     return ApplyNumberFilter(
@@ -823,7 +841,8 @@ namespace Partnerly.Models.DataTable
         private IQueryable<T> ApplyDateFilter<T>(
             IQueryable<T> query,
             string field,
-            string[] values)
+            string[] values,
+            TimeZoneInfo timeZone)
         {
             if (values.Length == 0)
             {
@@ -866,8 +885,8 @@ namespace Partnerly.Models.DataTable
                 return query;
             }
 
-            var start = date.Date;
-            var end = start.AddDays(1);
+            var start = TimeZoneHelper.StartOfCalendarDayUtc(date, timeZone);
+            var end = TimeZoneHelper.ExclusiveEndOfCalendarDayUtc(date, timeZone);
 
             var startExpression =
                 CreateComparisonExpression(
@@ -909,7 +928,8 @@ namespace Partnerly.Models.DataTable
         private IQueryable<T> ApplyDateRangeFilter<T>(
             IQueryable<T> query,
             string field,
-            string[] values)
+            string[] values,
+            TimeZoneInfo timeZone)
         {
             if (values.Length == 0)
             {
@@ -955,7 +975,7 @@ namespace Partnerly.Models.DataTable
                 var fromExpression =
                     CreateComparisonExpression(
                         property,
-                        from.Date,
+                        TimeZoneHelper.StartOfCalendarDayUtc(from, timeZone),
                         propertyType,
                         ExpressionType.GreaterThanOrEqual);
 
@@ -977,7 +997,7 @@ namespace Partnerly.Models.DataTable
                 var toExpression =
                     CreateComparisonExpression(
                         property,
-                        to.Date.AddDays(1),
+                        TimeZoneHelper.ExclusiveEndOfCalendarDayUtc(to, timeZone),
                         propertyType,
                         ExpressionType.LessThan);
 
@@ -1350,7 +1370,8 @@ namespace Partnerly.Models.DataTable
                 ApplyFilters(
                     query,
                     request,
-                    options);
+                    options,
+                    await ResolveTimeZoneAsync());
 
             query =
                 ApplySorting(

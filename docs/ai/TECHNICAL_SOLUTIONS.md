@@ -4,6 +4,17 @@
 
 ---
 
+## TR-2026-10-30-01 — Операционные настройки в SystemSettings
+
+- **Дата:** 2026-10-30
+- **Суть:** параметры, которые раньше были зашиты в коде, читаются из единственной строки `SystemSettings` (Id=1). Google-схема в DI остаётся; Challenge и кнопки входа режутся флагом. SMTP/Google/OpenAI секреты не переносились. Часовой пояс — IANA id, без нового NuGet (`TimeZoneHelper`).
+- **Причина:** владелец попросил вынести перечисленные опции в System Settings и перевязать все hardcode-связки.
+- **Затрагивает:** сущность и UI SystemPreferences; User lockout-поля; UserService, AccountController, EmailSender, NotificationService, SupportTicketService, AttachmentService, event handlers, AIController, layouts, DataTable JS/экспорт/фильтры дат, Insights.
+- **Последствия:** миграция `20261030074752_ExpandSystemSettingsAndUserLockout` создана и применена на локальной БД 2026-10-30. Тикеты больше не назначаются на Super по email, если оба auto-assign поля пустые. Null в новых bool/int трактуется как прежнее поведение (кроме автоназначения). DataTable Date/DateRange сравнивает календарный день настроек в UTC, JSON ячеек не конвертируется (клиент форматирует). Коммит на ветке `Cursor-Agent` 2026-10-30; push ещё нет.
+- **Альтернативы:** отдельная таблица key/value — не бралась, чтобы не плодить механизм рядом с однострочными настройками.
+
+---
+
 ## TR-2026-10-29-03 — Глобальный поиск в навбаре
 
 - **Дата:** 2026-10-29

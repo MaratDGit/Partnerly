@@ -1470,7 +1470,7 @@
   </data>
 
   <data name="Maximumfilesizeis" xml:space="preserve">
-    <value>Maximum file size is </value>
+    <value>Maximum file size is {0} MB</value>
   </data>
 
   <data name="Photosavedsuccessfully" xml:space="preserve">
@@ -2214,6 +2214,170 @@
 
   <data name="SiteSearchSections" xml:space="preserve">
     <value>Sections</value>
+  </data>
+
+  <data name="Access" xml:space="preserve">
+    <value>Access</value>
+  </data>
+
+  <data name="Mailandnotifications" xml:space="preserve">
+    <value>Mail and notifications</value>
+  </data>
+
+  <data name="Files" xml:space="preserve">
+    <value>Files</value>
+  </data>
+
+  <data name="ApplicationName" xml:space="preserve">
+    <value>Application name</value>
+  </data>
+
+  <data name="MaintenanceMessage" xml:space="preserve">
+    <value>Maintenance page text</value>
+  </data>
+
+  <data name="MaintenanceMessageHint" xml:space="preserve">
+    <value>Shown on the maintenance page and in the header ticker when maintenance mode is on. Leave empty to use the default message.</value>
+  </data>
+
+  <data name="DefaultLanguage" xml:space="preserve">
+    <value>Default language</value>
+  </data>
+
+  <data name="TimeZone" xml:space="preserve">
+    <value>Time zone</value>
+  </data>
+
+  <data name="AiAssistantEnabled" xml:space="preserve">
+    <value>AI assistant</value>
+  </data>
+
+  <data name="DefaultNewUserRole" xml:space="preserve">
+    <value>Default role for new users</value>
+  </data>
+
+  <data name="UseBuiltInUserRole" xml:space="preserve">
+    <value>Built-in User role</value>
+  </data>
+
+  <data name="EnableGoogleLogin" xml:space="preserve">
+    <value>Google sign-in</value>
+  </data>
+
+  <data name="PersistentCookieDays" xml:space="preserve">
+    <value>Remember me (days)</value>
+  </data>
+
+  <data name="SessionExpireMinutes" xml:space="preserve">
+    <value>Session length (minutes)</value>
+  </data>
+
+  <data name="MaxProfilePhotoSizeMb" xml:space="preserve">
+    <value>Max profile photo (MB)</value>
+  </data>
+
+  <data name="MaxFailedLoginAttempts" xml:space="preserve">
+    <value>Lock after failed passwords</value>
+  </data>
+
+  <data name="MaxFailedLoginAttemptsHint" xml:space="preserve">
+    <value>0 disables lockout.</value>
+  </data>
+
+  <data name="LockoutDurationMinutes" xml:space="preserve">
+    <value>Lockout duration (minutes)</value>
+  </data>
+
+  <data name="EnableEmailSending" xml:space="preserve">
+    <value>Send emails</value>
+  </data>
+
+  <data name="EnableNotifications" xml:space="preserve">
+    <value>In-app notifications</value>
+  </data>
+
+  <data name="EmailAdminOnNewRegistration" xml:space="preserve">
+    <value>Email admin on new registration</value>
+  </data>
+
+  <data name="EmailAdminOnNewTicket" xml:space="preserve">
+    <value>Email admin on new ticket</value>
+  </data>
+
+  <data name="AdminNotificationEmail" xml:space="preserve">
+    <value>Admin notification email</value>
+  </data>
+
+  <data name="DefaultAllowSendEmails" xml:space="preserve">
+    <value>Allow emails for new users</value>
+  </data>
+
+  <data name="DefaultAllowSendNotifications" xml:space="preserve">
+    <value>Allow notifications for new users</value>
+  </data>
+
+  <data name="MaxAttachmentSizeMb" xml:space="preserve">
+    <value>Max attachment size (MB)</value>
+  </data>
+
+  <data name="AllowedAttachmentExtensions" xml:space="preserve">
+    <value>Allowed extensions</value>
+  </data>
+
+  <data name="AllowedAttachmentExtensionsHint" xml:space="preserve">
+    <value>Comma-separated, without dots. Example: jpg,png,pdf</value>
+  </data>
+
+  <data name="TicketAutoAssignUser" xml:space="preserve">
+    <value>Auto-assign tickets to user</value>
+  </data>
+
+  <data name="TicketAutoAssignRole" xml:space="preserve">
+    <value>Auto-assign tickets to role</value>
+  </data>
+
+  <data name="TicketAutoAssignHint" xml:space="preserve">
+    <value>If a user is selected, that user is assigned. Otherwise the first active user of the selected role is used.</value>
+  </data>
+
+  <data name="None" xml:space="preserve">
+    <value>None</value>
+  </data>
+
+  <data name="AccountLocked" xml:space="preserve">
+    <value>This account is temporarily locked because of too many failed sign-in attempts.</value>
+  </data>
+
+  <data name="FileTooLarge" xml:space="preserve">
+    <value>The file is larger than {0} MB.</value>
+  </data>
+
+  <data name="FileExtensionNotAllowed" xml:space="preserve">
+    <value>This file type is not allowed.</value>
+  </data>
+
+  <data name="GoogleLoginDisabled" xml:space="preserve">
+    <value>Google sign-in is disabled.</value>
+  </data>
+
+  <data name="AiAssistantDisabled" xml:space="preserve">
+    <value>The AI assistant is disabled.</value>
+  </data>
+
+  <data name="AdminNewRegistrationSubject" xml:space="preserve">
+    <value>New user registration</value>
+  </data>
+
+  <data name="AdminNewRegistrationBody" xml:space="preserve">
+    <value>A new user registered: {0} ({1}).</value>
+  </data>
+
+  <data name="AdminNewTicketSubject" xml:space="preserve">
+    <value>New ticket {0}</value>
+  </data>
+
+  <data name="AdminNewTicketBody" xml:space="preserve">
+    <value>A new ticket was created: {0} — {1}.</value>
   </data>
 
 </root>

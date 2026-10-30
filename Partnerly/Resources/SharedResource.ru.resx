@@ -1470,7 +1470,7 @@
   </data>
 
   <data name="Maximumfilesizeis" xml:space="preserve">
-    <value>Максимальный размер файла — </value>
+    <value>Максимальный размер файла — {0} МБ</value>
   </data>
 
   <data name="Photosavedsuccessfully" xml:space="preserve">
@@ -2214,6 +2214,170 @@
 
   <data name="SiteSearchSections" xml:space="preserve">
     <value>Разделы</value>
+  </data>
+
+  <data name="Access" xml:space="preserve">
+    <value>Доступ</value>
+  </data>
+
+  <data name="Mailandnotifications" xml:space="preserve">
+    <value>Почта и уведомления</value>
+  </data>
+
+  <data name="Files" xml:space="preserve">
+    <value>Файлы</value>
+  </data>
+
+  <data name="ApplicationName" xml:space="preserve">
+    <value>Название приложения</value>
+  </data>
+
+  <data name="MaintenanceMessage" xml:space="preserve">
+    <value>Текст страницы обслуживания</value>
+  </data>
+
+  <data name="MaintenanceMessageHint" xml:space="preserve">
+    <value>Показывается на странице обслуживания и в тикере, когда включён режим обслуживания. Пустое поле — стандартный текст.</value>
+  </data>
+
+  <data name="DefaultLanguage" xml:space="preserve">
+    <value>Язык по умолчанию</value>
+  </data>
+
+  <data name="TimeZone" xml:space="preserve">
+    <value>Часовой пояс</value>
+  </data>
+
+  <data name="AiAssistantEnabled" xml:space="preserve">
+    <value>AI-ассистент</value>
+  </data>
+
+  <data name="DefaultNewUserRole" xml:space="preserve">
+    <value>Роль по умолчанию для новых пользователей</value>
+  </data>
+
+  <data name="UseBuiltInUserRole" xml:space="preserve">
+    <value>Встроенная роль User</value>
+  </data>
+
+  <data name="EnableGoogleLogin" xml:space="preserve">
+    <value>Вход через Google</value>
+  </data>
+
+  <data name="PersistentCookieDays" xml:space="preserve">
+    <value>Запомнить меня (дней)</value>
+  </data>
+
+  <data name="SessionExpireMinutes" xml:space="preserve">
+    <value>Срок сессии (минуты)</value>
+  </data>
+
+  <data name="MaxProfilePhotoSizeMb" xml:space="preserve">
+    <value>Макс. фото профиля (МБ)</value>
+  </data>
+
+  <data name="MaxFailedLoginAttempts" xml:space="preserve">
+    <value>Блокировка после неверных паролей</value>
+  </data>
+
+  <data name="MaxFailedLoginAttemptsHint" xml:space="preserve">
+    <value>0 отключает блокировку.</value>
+  </data>
+
+  <data name="LockoutDurationMinutes" xml:space="preserve">
+    <value>Длительность блокировки (минуты)</value>
+  </data>
+
+  <data name="EnableEmailSending" xml:space="preserve">
+    <value>Отправка писем</value>
+  </data>
+
+  <data name="EnableNotifications" xml:space="preserve">
+    <value>Уведомления в приложении</value>
+  </data>
+
+  <data name="EmailAdminOnNewRegistration" xml:space="preserve">
+    <value>Письмо админу при новой регистрации</value>
+  </data>
+
+  <data name="EmailAdminOnNewTicket" xml:space="preserve">
+    <value>Письмо админу при новом тикете</value>
+  </data>
+
+  <data name="AdminNotificationEmail" xml:space="preserve">
+    <value>Email для писем админу</value>
+  </data>
+
+  <data name="DefaultAllowSendEmails" xml:space="preserve">
+    <value>Письма для новых пользователей</value>
+  </data>
+
+  <data name="DefaultAllowSendNotifications" xml:space="preserve">
+    <value>Уведомления для новых пользователей</value>
+  </data>
+
+  <data name="MaxAttachmentSizeMb" xml:space="preserve">
+    <value>Макс. размер вложения (МБ)</value>
+  </data>
+
+  <data name="AllowedAttachmentExtensions" xml:space="preserve">
+    <value>Разрешённые расширения</value>
+  </data>
+
+  <data name="AllowedAttachmentExtensionsHint" xml:space="preserve">
+    <value>Через запятую, без точки. Например: jpg,png,pdf</value>
+  </data>
+
+  <data name="TicketAutoAssignUser" xml:space="preserve">
+    <value>Автоназначение тикетов на пользователя</value>
+  </data>
+
+  <data name="TicketAutoAssignRole" xml:space="preserve">
+    <value>Автоназначение тикетов на роль</value>
+  </data>
+
+  <data name="TicketAutoAssignHint" xml:space="preserve">
+    <value>Если выбран пользователь, назначается он. Иначе — первый активный пользователь выбранной роли.</value>
+  </data>
+
+  <data name="None" xml:space="preserve">
+    <value>Нет</value>
+  </data>
+
+  <data name="AccountLocked" xml:space="preserve">
+    <value>Учётная запись временно заблокирована из-за слишком большого числа неверных попыток входа.</value>
+  </data>
+
+  <data name="FileTooLarge" xml:space="preserve">
+    <value>Файл больше {0} МБ.</value>
+  </data>
+
+  <data name="FileExtensionNotAllowed" xml:space="preserve">
+    <value>Этот тип файла не разрешён.</value>
+  </data>
+
+  <data name="GoogleLoginDisabled" xml:space="preserve">
+    <value>Вход через Google отключён.</value>
+  </data>
+
+  <data name="AiAssistantDisabled" xml:space="preserve">
+    <value>AI-ассистент отключён.</value>
+  </data>
+
+  <data name="AdminNewRegistrationSubject" xml:space="preserve">
+    <value>Новая регистрация</value>
+  </data>
+
+  <data name="AdminNewRegistrationBody" xml:space="preserve">
+    <value>Зарегистрировался новый пользователь: {0} ({1}).</value>
+  </data>
+
+  <data name="AdminNewTicketSubject" xml:space="preserve">
+    <value>Новый тикет {0}</value>
+  </data>
+
+  <data name="AdminNewTicketBody" xml:space="preserve">
+    <value>Создан новый тикет: {0} — {1}.</value>
   </data>
 
 </root>

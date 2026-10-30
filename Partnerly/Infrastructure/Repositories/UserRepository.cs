@@ -34,6 +34,17 @@ namespace Partnerly.Infrastructure.Repositories
                 .FirstOrDefaultAsync(u => u.Phone == phone && phone != null);
         }
 
+        public async Task<User?> GetFirstActiveByRoleIdAsync(Guid roleId)
+        {
+            return await _dbSet
+                .Where(u =>
+                    u.RoleId == roleId &&
+                    !u.IsDeleted &&
+                    u.IsBlocked != true)
+                .OrderBy(u => u.CreatedDate)
+                .FirstOrDefaultAsync();
+        }
+
         public async Task<IEnumerable<User?>> GetReferralsAsync(Guid? userID)
         {
             return await _dbSet

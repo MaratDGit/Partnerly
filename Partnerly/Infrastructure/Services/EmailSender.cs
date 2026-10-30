@@ -14,13 +14,20 @@ namespace Partnerly.Infrastructure.Services
         private readonly ILogService _logService;
         private readonly IEmailTemplateService _emailTemplateService;
         private readonly IAttachmentService _attachmentService;
+        private readonly ISystemSettingsService _systemSettingsService;
 
-        public EmailSender(IConfiguration config, ILogService logService, IEmailTemplateService emailTemplateService, IAttachmentService attachmentService)
+        public EmailSender(
+            IConfiguration config,
+            ILogService logService,
+            IEmailTemplateService emailTemplateService,
+            IAttachmentService attachmentService,
+            ISystemSettingsService systemSettingsService)
         {
             _config = config;
             _logService = logService;
             _emailTemplateService = emailTemplateService;
             _attachmentService = attachmentService;
+            _systemSettingsService = systemSettingsService;
         }
 
         public async Task SendEmailWithTemplateAsync(string? templateName, string? toEmail, object model)
@@ -82,6 +89,10 @@ namespace Partnerly.Infrastructure.Services
 
         private async Task SendEmailAsync(string email, string subject, string message, List<Partnerly.Models.Attachment>? attachments = null)
         {
+            var settings = await _systemSettingsService.GetCurrentAsync();
+            if (settings?.EnableEmailSending == false)
+                return;
+
             var smtpHost = _config["EmailSettings:SmtpServer"];
             var smtpPort = int.Parse(_config["EmailSettings:Port"]);
             var smtpUser = _config["EmailSettings:Username"];

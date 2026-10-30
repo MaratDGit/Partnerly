@@ -29,14 +29,22 @@ namespace Partnerly.Events
         private readonly IEmailSender _emailSender;
         private readonly IEmailConfirmationTokenService _tokenService;
         private readonly ILogService _logService;
+        private readonly ISystemSettingsService _systemSettingsService;
 
-        public UserRegisteredEventHandler(IConfiguration config, INotificationService notificationService, IEmailSender emailSender, IEmailConfirmationTokenService emailConfirmationTokenService, ILogService logService)
+        public UserRegisteredEventHandler(
+            IConfiguration config,
+            INotificationService notificationService,
+            IEmailSender emailSender,
+            IEmailConfirmationTokenService emailConfirmationTokenService,
+            ILogService logService,
+            ISystemSettingsService systemSettingsService)
         {
             _config = config;
             _notificationService = notificationService;
             _emailSender = emailSender;
             _tokenService = emailConfirmationTokenService;
             _logService = logService;
+            _systemSettingsService = systemSettingsService;
         }
 
         public async Task HandleAsync(UserRegisteredEvent @event)
@@ -95,6 +103,20 @@ namespace Partnerly.Events
                 Notification notification = new Notification { UserId = @event.NewUser.Id, Type = NotificationTypeAttribute.Information, Message = message, Link = "/Dashboard/MyProfile" };
 
                 await _notificationService.CreateNotificationAsync(notification);
+            }
+
+            var settings = await _systemSettingsService.GetCurrentAsync();
+            if (settings?.EmailAdminOnNewRegistration == true)
+            {
+                var adminEmail = string.IsNullOrWhiteSpace(settings.AdminNotificationEmail)
+                    ? Constants.SuperUserEmail
+                    : settings.AdminNotificationEmail.Trim();
+
+                var userName = $"{@event.NewUser.FirstName} {@event.NewUser.LastName}".Trim();
+                await _emailSender.SendEmailWithoutTemplateAsync(
+                    adminEmail,
+                    Messages.AdminNewRegistrationSubject,
+                    string.Format(Messages.AdminNewRegistrationBody, userName, @event.NewUser.Email));
             }
 
             await _logService.CreateLogAsync(LogActionsAttribute.UserCreated, LogTypeAttribute.Information, @event.NewUser.Email);

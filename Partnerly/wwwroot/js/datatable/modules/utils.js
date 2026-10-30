@@ -309,9 +309,9 @@
 
                     var defaultDateLocalization = {
                         justNow: "just now",
-                        minuteAgo: "minute ago",
+                        minuteAgo: "a minute ago",
                         minutesAgo: "minutes ago",
-                        hourAgo: "hour ago",
+                        hourAgo: "an hour ago",
                         hoursAgo: "hours ago",
                         daysAgo: "days ago",
                         yesterday: "yesterday"
@@ -358,12 +358,12 @@
                         minutes < 60
                     ) {
 
+                        if (minutes === 1) {
+                            return dateLoc.minuteAgo;
+                        }
+
                         return minutes + " " +
-                            (
-                                minutes === 1
-                                ? dateLoc.minuteAgo
-                                : dateLoc.minutesAgo
-                            );
+                            dateLoc.minutesAgo;
                     }
 
                     var hours =
@@ -375,12 +375,12 @@
                         hours < 24
                     ) {
 
+                        if (hours === 1) {
+                            return dateLoc.hourAgo;
+                        }
+
                         return hours + " " +
-                            (
-                                hours === 1
-                                ? dateLoc.hourAgo
-                                : dateLoc.hoursAgo
-                            );
+                            dateLoc.hoursAgo;
                     }
 
                     var days =
@@ -401,9 +401,63 @@
                             dateLoc.daysAgo;
                     }
 
-                    return date.toLocaleDateString();
+                    return ctx.formatDatePattern(
+                        date,
+                        "dd.MM.yyyy"
+                    );
                 };
 
+
+            ctx.getTimeZoneId =
+                function () {
+                    var tz = window.partnerlyTimeZone;
+
+                    if (typeof tz === "string") {
+                        tz = tz.trim();
+                    }
+
+                    return tz || "Asia/Yerevan";
+                };
+
+            ctx.getZonedDateParts =
+                function (date) {
+                    var tz = ctx.getTimeZoneId();
+                    var parts = {};
+
+                    function applyParts(timeZoneId) {
+                        var formatted = new Intl.DateTimeFormat("en-GB", {
+                            timeZone: timeZoneId,
+                            year: "numeric",
+                            month: "2-digit",
+                            day: "2-digit",
+                            hour: "2-digit",
+                            minute: "2-digit",
+                            second: "2-digit",
+                            hourCycle: "h23"
+                        }).formatToParts(date);
+
+                        formatted.forEach(function (part) {
+                            parts[part.type] = part.value;
+                        });
+                    }
+
+                    try {
+                        applyParts(tz);
+                    } catch (error) {
+                        try {
+                            applyParts("UTC");
+                        } catch (utcError) {
+                            parts.year = String(date.getUTCFullYear());
+                            parts.month = String(date.getUTCMonth() + 1).padStart(2, "0");
+                            parts.day = String(date.getUTCDate()).padStart(2, "0");
+                            parts.hour = String(date.getUTCHours()).padStart(2, "0");
+                            parts.minute = String(date.getUTCMinutes()).padStart(2, "0");
+                            parts.second = String(date.getUTCSeconds()).padStart(2, "0");
+                        }
+                    }
+
+                    return parts;
+                };
 
             ctx.formatDatePattern =
                 function (
@@ -414,48 +468,26 @@
                     var result =
                         String(format);
 
+                    var zoned =
+                        ctx.getZonedDateParts(date);
+
                     var day =
-                        String(
-                            date.getDate()
-                        ).padStart(
-                            2,
-                            "0"
-                        );
+                        String(zoned.day || "").padStart(2, "0");
 
                     var month =
-                        String(
-                            date.getMonth() + 1
-                        ).padStart(
-                            2,
-                            "0"
-                        );
+                        String(zoned.month || "").padStart(2, "0");
 
                     var year =
-                        date.getFullYear();
+                        zoned.year;
 
                     var hours =
-                        String(
-                            date.getHours()
-                        ).padStart(
-                            2,
-                            "0"
-                        );
+                        String(zoned.hour || "").padStart(2, "0");
 
                     var minutes =
-                        String(
-                            date.getMinutes()
-                        ).padStart(
-                            2,
-                            "0"
-                        );
+                        String(zoned.minute || "").padStart(2, "0");
 
                     var seconds =
-                        String(
-                            date.getSeconds()
-                        ).padStart(
-                            2,
-                            "0"
-                        );
+                        String(zoned.second || "").padStart(2, "0");
 
                     result =
                         result.replace(
@@ -513,7 +545,16 @@
                     }
 
                     if (!format) {
-                        return date.toLocaleDateString();
+                        try {
+                            return date.toLocaleDateString(undefined, {
+                                timeZone: ctx.getTimeZoneId()
+                            });
+                        } catch (error) {
+                            return ctx.formatDatePattern(
+                                date,
+                                "dd.MM.yyyy"
+                            );
+                        }
                     }
 
                     return ctx.formatDatePattern(
@@ -550,7 +591,16 @@
                     }
 
                     if (!format) {
-                        return date.toLocaleString();
+                        try {
+                            return date.toLocaleString(undefined, {
+                                timeZone: ctx.getTimeZoneId()
+                            });
+                        } catch (error) {
+                            return ctx.formatDatePattern(
+                                date,
+                                "dd.MM.yyyy HH:mm"
+                            );
+                        }
                     }
 
                     return ctx.formatDatePattern(

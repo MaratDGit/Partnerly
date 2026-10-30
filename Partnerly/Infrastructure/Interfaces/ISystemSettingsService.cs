@@ -6,6 +6,7 @@ namespace Partnerly.Infrastructure.Interfaces
     public interface ISystemSettingsService
     {
         Task<SystemSettings?> GetSetupByIDAsync(int? id);
+        Task<SystemSettings?> GetCurrentAsync();
         Task<IEnumerable<SystemSettings?>> GetAllSetupAsync();
         Task<ServiceResult<SystemSettings?>> CreateSystemSettingsAsync(SystemSettings? rec);
         Task<ServiceResult<SystemSettings?>> UpdateSystemSettingsAsync(SystemSettings? rec);

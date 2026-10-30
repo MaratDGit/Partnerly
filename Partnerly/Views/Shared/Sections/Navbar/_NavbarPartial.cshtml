@@ -239,6 +239,8 @@
         </div>
 
 
+        @if (ViewBag.IsAiAssistantEnabled as bool? ?? true)
+        {
         <!-- =================================================
         AI ASSISTANT
         ================================================= -->
@@ -252,6 +254,7 @@
             <i class="bx bx-bot"></i>
 
         </button>
+        }
 
         <!-- =================================================
              NOTIFICATIONS
@@ -460,6 +463,8 @@
 
 </div>
 
+@if (ViewBag.IsAiAssistantEnabled as bool? ?? true)
+{
 <!-- =========================================================
      PARTNERLY AI ASSISTANT
      ========================================================= -->
@@ -644,6 +649,7 @@
     </div>
 
 </div>
+}
 
 
 <!-- =========================================================
@@ -745,17 +751,11 @@ SIGNALR
                         new Date(notification.createdDate);
 
 
-                    date =
-                        new Date(
-                            date.getTime() +
-                            4 * 60 * 60 * 1000
-                        );
-
-
                     const created =
                         date.toLocaleString(
                             currentCulture,
                             {
+                                timeZone: window.partnerlyTimeZone || 'Asia/Yerevan',
                                 day: '2-digit',
                                 month: 'long',
                                 year: 'numeric',

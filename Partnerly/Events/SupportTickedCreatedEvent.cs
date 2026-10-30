@@ -34,17 +34,43 @@ namespace Partnerly.Events
         private readonly INotificationService _notificationService;
         private readonly IEmailSender _emailSender;
         private readonly ILogService _logService;
+        private readonly ISystemSettingsService _systemSettingsService;
 
-        public SupportTickedCreatedEventHandler(IConfiguration config, INotificationService notificationService, IEmailSender emailSender, ILogService logService)
+        public SupportTickedCreatedEventHandler(
+            IConfiguration config,
+            INotificationService notificationService,
+            IEmailSender emailSender,
+            ILogService logService,
+            ISystemSettingsService systemSettingsService)
         {
             _config = config;
             _notificationService = notificationService;
             _emailSender = emailSender;
             _logService = logService;
+            _systemSettingsService = systemSettingsService;
         }
 
         public async Task HandleAsync(SupportTickedCreatedEvent @event)
         {
+            if (@event.Type == SupportTickedCreatedEvent.EventType.Created)
+            {
+                var settings = await _systemSettingsService.GetCurrentAsync();
+                if (settings?.EmailAdminOnNewTicket == true)
+                {
+                    var adminEmail = string.IsNullOrWhiteSpace(settings.AdminNotificationEmail)
+                        ? Constants.SuperUserEmail
+                        : settings.AdminNotificationEmail.Trim();
+
+                    await _emailSender.SendEmailWithoutTemplateAsync(
+                        adminEmail,
+                        string.Format(Messages.AdminNewTicketSubject, @event.NewTicket?.TicketID),
+                        string.Format(
+                            Messages.AdminNewTicketBody,
+                            @event.NewTicket?.TicketID,
+                            @event.NewTicket?.Subject));
+                }
+            }
+
             if (@event.NewTicket?.AssignedTo != null)
             {
                 if (@event.SendEmail == true)

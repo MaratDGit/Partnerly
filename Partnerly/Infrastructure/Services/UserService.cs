@@ -17,19 +17,22 @@ namespace Partnerly.Infrastructure.Services
         private readonly ILogService _logService;
         private readonly IEventBus _eventBus;
         private readonly IPermissionService _permissionService;
+        private readonly ISystemSettingsService _systemSettingsService;
 
         public UserService(
             IUserRepository userRepo, 
             IRoleService roleService, 
             ILogService logService, 
             IEventBus eventBus,
-            IPermissionService permissionService)
+            IPermissionService permissionService,
+            ISystemSettingsService systemSettingsService)
         {
             _userRepo = userRepo;
             _roleService = roleService;
             _logService = logService;
             _eventBus = eventBus;
             _permissionService = permissionService;
+            _systemSettingsService = systemSettingsService;
         }
 
         public async Task<User?> GetUserByEmailAsync(string? email) =>
@@ -232,11 +235,23 @@ namespace Partnerly.Infrastructure.Services
                 }
             }
 
+            var settings = await _systemSettingsService.GetCurrentAsync();
+
             Guid? roleID = user.RoleId;
             if (roleID == null)
             {
-                Role? role = await _roleService.GetRoleByNameAsync(Constants.User);
-                roleID = role?.Id;
+                if (settings?.DefaultNewUserRoleId != null)
+                {
+                    var configuredRole = await _roleService.GetRoleByIDAsync(settings.DefaultNewUserRoleId);
+                    if (configuredRole != null && !configuredRole.IsDeleted && configuredRole.IsActive == true)
+                        roleID = configuredRole.Id;
+                }
+
+                if (roleID == null)
+                {
+                    Role? role = await _roleService.GetRoleByNameAsync(Constants.User);
+                    roleID = role?.Id;
+                }
             }
 
             newUser.Email = user.Email;
@@ -251,8 +266,8 @@ namespace Partnerly.Infrastructure.Services
             newUser.EmailConfirmed = user.EmailConfirmed ?? false;
             newUser.IsBlocked = user.IsBlocked ?? false;
             newUser.IsDeleted = false;
-            newUser.AllowSendEmails = true;
-            newUser.AllowSendNotifications = true;
+            newUser.AllowSendEmails = user.AllowSendEmails ?? settings?.DefaultAllowSendEmails ?? true;
+            newUser.AllowSendNotifications = user.AllowSendNotifications ?? settings?.DefaultAllowSendNotifications ?? true;
             newUser.PhotoUrl = Constants.DefaultUserProfilePhotoPath;
             newUser.Note = user.Note;
             newUser.GoogleId = user.GoogleId;

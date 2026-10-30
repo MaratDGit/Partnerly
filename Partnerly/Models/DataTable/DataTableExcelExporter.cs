@@ -8,7 +8,8 @@ namespace Partnerly.Models.DataTable
     {
         public byte[] Export<T>(
             IEnumerable<T> items,
-            IEnumerable<DataTableColumn> columns)
+            IEnumerable<DataTableColumn> columns,
+            TimeZoneInfo? timeZone = null)
         {
             var exportColumns =
                 columns
@@ -62,7 +63,8 @@ namespace Partnerly.Models.DataTable
                     var formattedValue =
                         FormatValue(
                             value,
-                            column
+                            column,
+                            timeZone
                         );
 
                     worksheet.Cell(
@@ -136,7 +138,8 @@ namespace Partnerly.Models.DataTable
 
         private string FormatValue(
             object? value,
-            DataTableColumn column)
+            DataTableColumn column,
+            TimeZoneInfo? timeZone)
         {
             if (value == null)
             {
@@ -145,6 +148,9 @@ namespace Partnerly.Models.DataTable
 
             if (value is DateTime dateTime)
             {
+                if (timeZone != null)
+                    dateTime = Partnerly.Helpers.TimeZoneHelper.ToLocal(dateTime, timeZone);
+
                 if (!string.IsNullOrWhiteSpace(
                     column.Format))
                 {

@@ -73,6 +73,7 @@
 
     .system-settings-tabs .nav-tabs {
         display: flex;
+        flex-wrap: wrap;
         align-items: stretch;
         gap: 6px;
         padding: 0 4px;
@@ -274,7 +275,35 @@
     min-width: 0;
 }
 
-.settings-field .form-control {
+.settings-field .lookup-input {
+    padding-right: 64px;
+}
+
+.settings-field .settings-lookup-clear {
+    position: absolute;
+    right: 40px;
+    top: 50%;
+    width: 24px;
+    height: 24px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transform: translateY(-50%);
+    color: #8592a3;
+    font-size: 18px;
+    cursor: pointer;
+    z-index: 2;
+    border-radius: 6px;
+    transition: color .2s ease, background-color .2s ease;
+}
+
+    .settings-field .settings-lookup-clear:hover {
+        color: #696cff;
+        background: rgba(105, 108, 255, 0.10);
+    }
+
+.settings-field .form-control,
+.settings-field .form-select {
     height: 54px;
     border-radius: 10px;
     border-color: rgba(67, 89, 113, 0.20);
@@ -282,11 +311,13 @@
     transition: border-color .2s ease, box-shadow .2s ease;
 }
 
-    .settings-field .form-control:hover {
+    .settings-field .form-control:hover,
+    .settings-field .form-select:hover {
         border-color: rgba(67, 89, 113, 0.35);
     }
 
-    .settings-field .form-control:focus {
+    .settings-field .form-control:focus,
+    .settings-field .form-select:focus {
         border-color: #696cff;
         box-shadow: 0 0 0 0.15rem rgba(105, 108, 255, 0.12);
     }
@@ -296,7 +327,9 @@
 }
 
 .settings-field .form-floating > .form-control:focus ~ label,
-.settings-field .form-floating > .form-control:not(:placeholder-shown) ~ label {
+.settings-field .form-floating > .form-control:not(:placeholder-shown) ~ label,
+.settings-field .form-floating > .form-select:focus ~ label,
+.settings-field .form-floating > .form-select:not([value=""]):not(:placeholder-shown) ~ label {
     color: #696cff;
 }
 
@@ -706,18 +739,21 @@ html[data-theme="dark"] .settings-field:focus-within .settings-field-icon {
     box-shadow: 0 0 14px rgba(105, 108, 255, 0.08);
 }
 
-html[data-theme="dark"] .settings-field .form-control {
+html[data-theme="dark"] .settings-field .form-control,
+html[data-theme="dark"] .settings-field .form-select {
     background-color: var(--partnerly-control-background, #111a2b);
     color: var(--partnerly-text-dark, #edf2ff);
     border-color: var(--partnerly-border, #29344a);
     caret-color: var(--partnerly-primary, #8185ff);
 }
 
-    html[data-theme="dark"] .settings-field .form-control:hover {
+    html[data-theme="dark"] .settings-field .form-control:hover,
+    html[data-theme="dark"] .settings-field .form-select:hover {
         border-color: rgba(129, 133, 255, 0.42);
     }
 
-    html[data-theme="dark"] .settings-field .form-control:focus {
+    html[data-theme="dark"] .settings-field .form-control:focus,
+    html[data-theme="dark"] .settings-field .form-select:focus {
         background-color: var(--partnerly-control-background, #111a2b);
         border-color: var(--partnerly-primary, #8185ff);
         box-shadow: 0 0 0 3px rgba(105, 108, 255, 0.13);
@@ -791,6 +827,15 @@ html[data-theme="dark"] .scrolling-text-box .form-floating > .form-control:not(:
 html[data-theme="dark"] .scrolling-text-hint {
     color: var(--partnerly-muted, #8996b0);
 }
+
+html[data-theme="dark"] .settings-field .settings-lookup-clear {
+    color: var(--partnerly-muted, #8996b0);
+}
+
+    html[data-theme="dark"] .settings-field .settings-lookup-clear:hover {
+        color: var(--partnerly-primary, #8185ff);
+        background: rgba(105, 108, 255, 0.16);
+    }
 
 /* Autofill */
 

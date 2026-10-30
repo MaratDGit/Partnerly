@@ -7,7 +7,7 @@
 
 Веб-приложение для внутренней работы с пользователями и администрирования: регистрация и вход (пароль и Google), роли и права, группы пользователей, уведомления (в т.ч. SignalR), обращения в поддержку, вложения, шаблоны писем, системные настройки, журнал действий. В модели также заложены платежи и транзакции, но экранов под них нет.
 
-Продуктовое имя в `AppSettings:AppName` — «Belote» (конфигурация). Код и решение называются Partnerly.
+Продуктовое имя: `SystemSettings.ApplicationName`, запасной вариант `AppSettings:AppName` («Belote»). Код и решение называются Partnerly.
 
 ## Технологии и версии (из `Partnerly.csproj`)
 
@@ -70,7 +70,7 @@ Partnerly.sln
 | Тикеты | `SupportTicketsController` | обращения |
 | Вложения | `AttachmentsController` + `IFileStorageService` | файлы сущностей |
 | Письма | `EmailTemplatesController` | HTML-шаблоны |
-| Настройки | `SystemPreferencesController` | `SystemSettings` |
+| Настройки | `SystemPreferencesController` | `SystemSettings` (доступ, почта, файлы, тикеты, вид) |
 | Журнал | `LogRecordsController` | логи |
 | Язык | `LanguageController` | культура |
 | AI | `AIController` | прокси к OpenAI |

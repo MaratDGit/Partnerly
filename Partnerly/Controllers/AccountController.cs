@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 using Partnerly.Descriptors.Attributes;
 using Partnerly.Descriptors.Messages;
 using Partnerly.Events.BaseEvents;
+using Partnerly.Helpers;
 using Partnerly.Infrastructure.Interfaces;
 using Partnerly.Models;
 using Partnerly.Models.ViewModels;
@@ -26,6 +27,7 @@ namespace Partnerly.Controllers
         private readonly IEmailConfirmationTokenService _tokenService;
         private readonly IEventBus _eventBus;
         private readonly IWebHostEnvironment _environment;
+        private readonly ISystemSettingsService _systemSettingsService;
         #endregion
         #region Constructor
         public AccountController(
@@ -37,7 +39,8 @@ namespace Partnerly.Controllers
             IEmailSender emailSender, 
             IEmailConfirmationTokenService tokenService, 
             IEventBus eventBus, 
-            IWebHostEnvironment environment)
+            IWebHostEnvironment environment,
+            ISystemSettingsService systemSettingsService)
         {
             _config = config;
             _logger = logger;
@@ -48,6 +51,7 @@ namespace Partnerly.Controllers
             _tokenService = tokenService;
             _eventBus = eventBus;
             _environment = environment;
+            _systemSettingsService = systemSettingsService;
         }
         #endregion
 
@@ -59,16 +63,18 @@ namespace Partnerly.Controllers
         }
 
         [HttpGet]
-        public IActionResult Login(string? returnUrl = null)
+        public async Task<IActionResult> Login(string? returnUrl = null)
         {
             ViewBag.ReturnUrl = returnUrl;
+            await PopulateAuthSettingsAsync();
             return View();
         }
 
         [HttpGet]
-        public IActionResult Register(string? reff = null, string? returnUrl = null)
+        public async Task<IActionResult> Register(string? reff = null, string? returnUrl = null)
         {
             ViewBag.ReturnUrl = returnUrl;
+            await PopulateAuthSettingsAsync();
 
             var model = new RegisterViewModel();
             if (reff != null)
@@ -81,9 +87,10 @@ namespace Partnerly.Controllers
         }
 
         [HttpGet]
-        public IActionResult ForgotPassword(string? returnUrl = null)
+        public async Task<IActionResult> ForgotPassword(string? returnUrl = null)
         {
             ViewBag.ReturnUrl = returnUrl;
+            await PopulateAuthSettingsAsync();
             return View();
         }
 
@@ -93,26 +100,51 @@ namespace Partnerly.Controllers
         {
             if (!ModelState.IsValid)
             {
+                await PopulateAuthSettingsAsync();
                 return View(model);
             }
 
             var user = await _userService.GetUserByEmailAsync(model.Email);
 
-            if (user == null || !BCrypt.Net.BCrypt.Verify(model.Password, user.PasswordHash) || user.IsDeleted)
+            if (user == null || user.IsDeleted)
             {
                 ModelState.AddModelError("Password", ErrorMessages.InvalidEmailOrPassword);
+                await PopulateAuthSettingsAsync();
                 return View(model);
             }
+
+            if (await IsUserLockedOutAsync(user))
+            {
+                ModelState.AddModelError("Password", ErrorMessages.AccountLocked);
+                await PopulateAuthSettingsAsync();
+                return View(model);
+            }
+
+            if (!BCrypt.Net.BCrypt.Verify(model.Password, user.PasswordHash))
+            {
+                await RegisterFailedLoginAsync(user);
+                if (await IsUserLockedOutAsync(user))
+                    ModelState.AddModelError("Password", ErrorMessages.AccountLocked);
+                else
+                    ModelState.AddModelError("Password", ErrorMessages.InvalidEmailOrPassword);
+
+                await PopulateAuthSettingsAsync();
+                return View(model);
+            }
+
+            await ResetLockoutAsync(user);
 
             if (user.Role == null || user.IsBlocked == true)
             {
                 ModelState.AddModelError("Password", ErrorMessages.UserAccessDenied);
+                await PopulateAuthSettingsAsync();
                 return View(model);
             }
 
             if (user.EmailConfirmed != true)
             {
                 ViewBag.EmailConfirmationMessage = ErrorMessages.LoginEmailConfirmationMessage;
+                await PopulateAuthSettingsAsync();
                 return View(model);
             }
 
@@ -389,8 +421,11 @@ namespace Partnerly.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult GoogleLogin(string? returnUrl = null)
+        public async Task<IActionResult> GoogleLogin(string? returnUrl = null)
         {
+            if (!await IsGoogleLoginEnabledAsync())
+                return RedirectToAction(nameof(Login));
+
             var redirectUrl = Url.Action(
                 nameof(GoogleCallback),
                 "Account",
@@ -405,13 +440,18 @@ namespace Partnerly.Controllers
         }
 
         [HttpGet]
-        public IActionResult GoogleRegister(
+        public async Task<IActionResult> GoogleRegister(
             string googleId,
             string email,
             string? firstName,
             string? lastName,
             string? returnUrl)
         {
+            if (!await IsGoogleLoginEnabledAsync())
+                return RedirectToAction(nameof(Login));
+
+            await PopulateAuthSettingsAsync();
+
             var model = new GoogleRegisterViewModel
             {
                 GoogleId = googleId,
@@ -427,6 +467,9 @@ namespace Partnerly.Controllers
         [HttpGet]
         public async Task<IActionResult> GoogleCallback(string? returnUrl = null)
         {
+            if (!await IsGoogleLoginEnabledAsync())
+                return RedirectToAction(nameof(Login));
+
             var result = await HttpContext.AuthenticateAsync("Google");
 
             if (!result.Succeeded || result.Principal == null)
@@ -475,6 +518,11 @@ namespace Partnerly.Controllers
                 return RedirectToAction(nameof(Login));
             }
 
+            if (await IsUserLockedOutAsync(user))
+            {
+                return RedirectToAction(nameof(Login));
+            }
+
             if (user.Role == null)
             {
                 return RedirectToAction(nameof(Login));
@@ -502,8 +550,14 @@ namespace Partnerly.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> GoogleRegister(GoogleRegisterViewModel model)
         {
+            if (!await IsGoogleLoginEnabledAsync())
+                return RedirectToAction(nameof(Login));
+
             if (!ModelState.IsValid)
+            {
+                await PopulateAuthSettingsAsync();
                 return View(model);
+            }
 
             var existingUser = await _userService.GetUserByEmailAsync(model.Email);
 
@@ -579,12 +633,20 @@ namespace Partnerly.Controllers
 
             var claimsIdentity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
 
+            var settings = await _systemSettingsService.GetCurrentAsync();
+            var persistentDays = settings?.PersistentCookieDays > 0
+                ? settings.PersistentCookieDays.Value
+                : SystemSettingsDefaults.PersistentCookieDays;
+            var sessionMinutes = settings?.SessionExpireMinutes > 0
+                ? settings.SessionExpireMinutes.Value
+                : SystemSettingsDefaults.SessionExpireMinutes;
+
             var authProperties = new AuthenticationProperties
             {
                 IsPersistent = rememberMe,
                 ExpiresUtc = rememberMe
-                    ? DateTimeOffset.UtcNow.AddDays(14)
-                    : DateTimeOffset.UtcNow.AddMinutes(60)
+                    ? DateTimeOffset.UtcNow.AddDays(persistentDays)
+                    : DateTimeOffset.UtcNow.AddMinutes(sessionMinutes)
             };
 
             await HttpContext.SignInAsync(
@@ -623,15 +685,18 @@ namespace Partnerly.Controllers
                 });
             }
 
-            const int maxSizeMB = 5;
-            const long maxFileSize = maxSizeMB * 1024 * 1024;
+            var settings = await _systemSettingsService.GetCurrentAsync();
+            var maxSizeMB = settings?.MaxProfilePhotoSizeMb > 0
+                ? settings.MaxProfilePhotoSizeMb.Value
+                : SystemSettingsDefaults.MaxProfilePhotoSizeMb;
+            var maxFileSize = maxSizeMB * 1024L * 1024L;
             
             if (photo.Length > maxFileSize)
             {
                 return BadRequest(new
                 {
                     success = false,
-                    message = ErrorMessages.Maximumfilesizeis + $"{maxFileSize.ToString()} MB"
+                    message = string.Format(ErrorMessages.Maximumfilesizeis, maxSizeMB)
                 });
             }
 
@@ -711,6 +776,67 @@ namespace Partnerly.Controllers
                 CookieAuthenticationDefaults.AuthenticationScheme,
                 new ClaimsPrincipal(identity),
                 auth.Properties ?? new AuthenticationProperties());
+        }
+
+        private async Task PopulateAuthSettingsAsync()
+        {
+            var settings = await _systemSettingsService.GetCurrentAsync();
+            ViewBag.GoogleLoginEnabled = settings?.EnableGoogleLogin != false;
+
+            var appName = settings?.ApplicationName;
+            if (string.IsNullOrWhiteSpace(appName))
+                appName = _config["AppSettings:AppName"];
+            if (string.IsNullOrWhiteSpace(appName))
+                appName = SystemSettingsDefaults.ApplicationName;
+
+            TempData["appName"] = appName;
+        }
+
+        private async Task<bool> IsGoogleLoginEnabledAsync()
+        {
+            var settings = await _systemSettingsService.GetCurrentAsync();
+            return settings?.EnableGoogleLogin != false;
+        }
+
+        private async Task<bool> IsUserLockedOutAsync(User user)
+        {
+            if (user.LockoutEnd != null && user.LockoutEnd <= DateTime.UtcNow)
+            {
+                user.LockoutEnd = null;
+                user.AccessFailedCount = 0;
+                await _userService.UpdateUserAsync(user, user.Id);
+            }
+
+            return user.LockoutEnd != null && user.LockoutEnd > DateTime.UtcNow;
+        }
+
+        private async Task RegisterFailedLoginAsync(User user)
+        {
+            var settings = await _systemSettingsService.GetCurrentAsync();
+            var maxAttempts = settings?.MaxFailedLoginAttempts ?? SystemSettingsDefaults.MaxFailedLoginAttempts;
+            if (maxAttempts <= 0)
+                return;
+
+            user.AccessFailedCount += 1;
+            if (user.AccessFailedCount >= maxAttempts)
+            {
+                var minutes = settings?.LockoutDurationMinutes > 0
+                    ? settings.LockoutDurationMinutes.Value
+                    : SystemSettingsDefaults.LockoutDurationMinutes;
+                user.LockoutEnd = DateTime.UtcNow.AddMinutes(minutes);
+            }
+
+            await _userService.UpdateUserAsync(user, user.Id);
+        }
+
+        private async Task ResetLockoutAsync(User user)
+        {
+            if (user.AccessFailedCount == 0 && user.LockoutEnd == null)
+                return;
+
+            user.AccessFailedCount = 0;
+            user.LockoutEnd = null;
+            await _userService.UpdateUserAsync(user, user.Id);
         }
     }
 }

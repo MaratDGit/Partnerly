@@ -4,6 +4,54 @@
 
 ---
 
+## 2026-10-30 — Коммит System Settings
+
+- **Суть:** владелец попросил закоммитить отложенный пакет System Settings.
+- **Сделано:** коммит на `Cursor-Agent` (настройки, миграция, lookup ролей/auto-assign, timezone DataTable). Push не делался.
+- **Сборка:** в этом шаге не запускалась.
+
+---
+
+## 2026-10-30 — Lookup роли новичка в System Settings
+
+- **Суть:** Default role for new users — тот же lookup ролей, что auto-assign tickets to role, а не dropdown.
+- **Сделано:** `/Roles/GetLookupList?fieldName=RoleName`; скрытый Id + имя; крестик очищает (тогда UserService берёт роль `User`). `RoleOptions` убран. Поведение назначения роли при регистрации не менялось.
+- **Сборка:** `dotnet build Partnerly.sln` в `%TEMP%\PartnerlyBuildRoleLookup` — 0 ошибок. Браузер недоступен.
+
+---
+
+## 2026-10-30 — DataTable даты по SystemSettings.TimeZoneId
+
+- **Суть:** колонки Date/DateTime в DataTable должны показывать и фильтровать календарный день в часовом поясе из System Settings, а не в поясе браузера.
+- **Сделано:** `formatDate` / `formatDateTime` / `formatDatePattern` читают `window.partnerlyTimeZone`. Relative старше 7 дней — та же зона (`dd.MM.yyyy`). Intl при ошибке падает на UTC, не на local. Фильтры Date/DateRange на сервере переводят выбранный день из пояса настроек в UTC (`TimeZoneHelper.StartOfCalendarDayUtc`). JSON списка по-прежнему UTC, без двойного сдвига. Экспорт уже конвертировал.
+- **Сборка:** `dotnet build Partnerly.sln` в `%TEMP%\PartnerlyBuildTz` — 0 ошибок, 108 предупреждений (уже были). Браузер недоступен.
+
+---
+
+## 2026-10-30 — Relative date в DataTable без лишней цифры
+
+- **Суть:** после обновления ячейки даты показывалось «1 a minute ago».
+- **Сделано:** для одной минуты/часа `formatRelativeDate` не ставит число вперёд — строка уже полная (`a minute ago`, `минуту назад`, `մեկ րոպե առաջ`). Для 2+ число остаётся.
+- **Сборка:** только JS.
+
+---
+
+## 2026-10-30 — Lookup вместо dropdown у автоназначения тикетов
+
+- **Суть:** поля auto-assign user/role в System Settings должны использовать системный lookup, как на тикетах и ролях.
+- **Сделано:** `/Users/GetLookupList` и `/Roles/GetLookupList?fieldName=RoleName`; скрытый Id + имя; крестик очищает выбор (бывший пункт None). Dropdown ролей для роли новичка не трогал.
+- **Сборка:** `dotnet build Partnerly.sln` в `%TEMP%\PartnerlyBuildLookup` — 0 ошибок. Браузер недоступен.
+
+---
+
+## 2026-10-30 — System Settings: операционные опции вместо hardcode
+
+- **Суть:** вынести в настройки регистрацию/доступ, почту и уведомления, файлы, автоназначение тикетов, внешний вид, lockout, AI, часовой пояс; перевязать все прежние зашитые значения.
+- **Сделано:** новые колонки `SystemSettings` + `User.AccessFailedCount`/`LockoutEnd`. Вкладки System / Access / Mail / Files / Tickets. Вызовы переведены: роль новичка, Google Challenge, cookie, размер фото, EmailSender, NotificationService, письма админу, вложения, auto-assign тикетов, app name, текст обслуживания, язык, AI-кнопка, timezone в списках/логах/экспорте. Миграция `20261030074752_ExpandSystemSettingsAndUserLockout` создана; применена на локальной БД 2026-10-30 (колонки Users/SystemSettings + дефолты строки Id=1). Коммит не делался.
+- **Сборка:** `dotnet build Partnerly.sln` в `%TEMP%\PartnerlyBuildSettings` — 0 ошибок, 111 предупреждений (уже были). Браузер недоступен.
+
+---
+
 ## 2026-10-29 — Фото роли в одну линию, tooltip не под меню
 
 - **Суть:** подсказка с именем уходила под левое меню; фото стояли под названием роли.

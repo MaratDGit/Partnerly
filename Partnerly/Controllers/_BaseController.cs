@@ -5,6 +5,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Localization;
 using Partnerly.Descriptors.Messages;
 using Partnerly.Events.BaseEvents;
+using Partnerly.Helpers;
 using Partnerly.Infrastructure.Interfaces;
 using Partnerly.Models;
 using Partnerly.Models.DataTable;
@@ -54,8 +55,25 @@ namespace Partnerly.Controllers
                 ViewBag.UserRefCode = _currentUser.ReffCode;
                 ViewBag.UserFullName = $"{_currentUser.FirstName} {_currentUser.LastName}";
                 
-                SystemSettings? setting = await _systemSettingsService.GetSetupByIDAsync(1);
-                message = setting?.IsMaintenanceMode == true ? Messages.SiteUnderMaintenanceMode : setting?.ScrollingText;
+                SystemSettings? setting = await _systemSettingsService.GetCurrentAsync();
+                if (setting?.IsMaintenanceMode == true)
+                {
+                    message = string.IsNullOrWhiteSpace(setting.MaintenanceMessage)
+                        ? Messages.SiteUnderMaintenanceMode
+                        : setting.MaintenanceMessage;
+                }
+                else
+                {
+                    message = setting?.ScrollingText;
+                }
+
+                ViewBag.IsAiAssistantEnabled = setting?.IsAiAssistantEnabled != false;
+                ViewBag.TimeZoneId = string.IsNullOrWhiteSpace(setting?.TimeZoneId)
+                    ? SystemSettingsDefaults.TimeZoneId
+                    : setting.TimeZoneId;
+                ViewBag.ApplicationName = string.IsNullOrWhiteSpace(setting?.ApplicationName)
+                    ? SystemSettingsDefaults.ApplicationName
+                    : setting.ApplicationName;
 
                 var permissionService = context.HttpContext.RequestServices.GetRequiredService<IPermissionService>();
                 ViewData["Permissions"] = await permissionService.GetEffectivePermissionCodesAsync(_currentUser.UserId);
@@ -135,13 +153,17 @@ namespace Partnerly.Controllers
 
             var items = await _tableService.ExecuteExportAsync(queryFactory, request, options);
 
+            var settings = await _systemSettingsService.GetCurrentAsync();
+            var timeZone = TimeZoneHelper.Resolve(settings?.TimeZoneId);
+            var stamp = TimeZoneHelper.ToLocal(DateTime.UtcNow, timeZone);
+
             if (string.Equals(format, "excel", StringComparison.OrdinalIgnoreCase))
             {
                 var excelExporter = new DataTableExcelExporter();
 
-                var bytes = excelExporter.Export(items, options.Columns);
+                var bytes = excelExporter.Export(items, options.Columns, timeZone);
 
-                var excelFileName = $"{fileName}-{DateTime.Now:yyyyMMdd-HHmmss}.xlsx";
+                var excelFileName = $"{fileName}-{stamp:yyyyMMdd-HHmmss}.xlsx";
 
                 return File(
                     bytes,
@@ -151,9 +173,9 @@ namespace Partnerly.Controllers
 
             var csvExporter = new DataTableCsvExporter();
 
-            var csvBytes = csvExporter.Export(items, options.Columns);
+            var csvBytes = csvExporter.Export(items, options.Columns, timeZone);
 
-            var csvFileName = $"{fileName}-{DateTime.Now:yyyyMMdd-HHmmss}.csv";
+            var csvFileName = $"{fileName}-{stamp:yyyyMMdd-HHmmss}.csv";
 
             return File(
                 csvBytes,

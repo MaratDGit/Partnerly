@@ -36,7 +36,7 @@
 ### Users
 
 Пользователь системы. FK: `RoleId` → Roles, `ReferrerId` → Users (`OnDelete: Restrict`).  
-Поля (подтверждено сущностью): GoogleId, Email, PasswordHash, Phone, FirstName, LastName, PhotoUrl, Balance, LastRoleUpdateTime, MyReferralCode, LastActivity, IsOnlayn, IsBlocked, EmailConfirmed, AllowSendNotifications, AllowSendEmails, системные колонки.  
+Поля (подтверждено сущностью): GoogleId, Email, PasswordHash, Phone, FirstName, LastName, PhotoUrl, Balance, LastRoleUpdateTime, MyReferralCode, LastActivity, IsOnlayn, IsBlocked, EmailConfirmed, AllowSendNotifications, AllowSendEmails, AccessFailedCount, LockoutEnd, системные колонки.  
 Навигации: Role, Referrer, Referrals, Transactions, Payments, UserPermissions.  
 Экран дерева рефералов (`/Dashboard/ReferralTree`) только читает `ReferrerId` / `Referrals`, схему не меняет. Модульные дашборды (`/Dashboard/Dashboards`) только считают существующие сущности (User, Role, UserGroup, SupportTicket, Notification), схему не меняют.
 
@@ -98,7 +98,9 @@ FK `CreatedBy` → Users.Creator Restrict; `AssignedTo` → Users.Assigned Restr
 
 ### SystemSettings
 
-Обычно одна запись. Id int. Maintenance, сроки токенов, интервал онлайн-статуса, `TaskTickedID`, `ScrollingText`.
+Обычно одна запись Id=1. Старые поля: Maintenance, сроки токенов, интервал онлайн-статуса, `TaskTickedID`, `ScrollingText`.  
+С 2026-10-30 также: имя приложения, текст обслуживания, язык и часовой пояс, AI on/off, роль новых пользователей, Google-вход, срок cookie/сессии, размер фото, lockout, глобальная почта/уведомления, письма админу, дефолты AllowSend*, лимиты вложений, автоназначение тикетов.  
+Миграция `20261030074752_ExpandSystemSettingsAndUserLockout` применена на локальной БД 2026-10-30. Другие стенды не трогались.
 
 ### Payments
 
@@ -137,6 +139,7 @@ Fluent API **не** описывает явно все FK Payments/Transactions/
 Начальная: `20250923122644_InitialClean`.  
 Права: `20261021145957_AddRolePermissionsSystem`.  
 Удаление Role.Type: `20261024211314_deleteRoleType`.  
+Расширение SystemSettings + lockout пользователя: `20261030074752_ExpandSystemSettingsAndUserLockout` (создана, на локальной БД применена 2026-10-30).  
 Есть `20250923122849_testMigration`.
 
 Полный список файлов — в каталоге; не все имена отражают фактический SQL без чтения файла.

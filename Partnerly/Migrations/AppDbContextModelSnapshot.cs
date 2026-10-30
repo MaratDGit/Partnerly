@@ -586,6 +586,18 @@ namespace Partnerly.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
+                    b.Property<string>("AdminNotificationEmail")
+                        .HasMaxLength(256)
+                        .HasColumnType("nvarchar(256)");
+
+                    b.Property<string>("AllowedAttachmentExtensions")
+                        .HasMaxLength(500)
+                        .HasColumnType("nvarchar(500)");
+
+                    b.Property<string>("ApplicationName")
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
                     b.Property<Guid?>("CreatedBy")
                         .IsRequired()
                         .HasColumnType("uniqueidentifier");
@@ -594,19 +606,66 @@ namespace Partnerly.Migrations
                         .IsRequired()
                         .HasColumnType("datetime2");
 
+                    b.Property<bool?>("DefaultAllowSendEmails")
+                        .HasColumnType("bit");
+
+                    b.Property<bool?>("DefaultAllowSendNotifications")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("DefaultLanguage")
+                        .HasMaxLength(10)
+                        .HasColumnType("nvarchar(10)");
+
+                    b.Property<Guid?>("DefaultNewUserRoleId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<bool?>("EmailAdminOnNewRegistration")
+                        .HasColumnType("bit");
+
+                    b.Property<bool?>("EmailAdminOnNewTicket")
+                        .HasColumnType("bit");
+
                     b.Property<int?>("EmailConfirmationTokenExpiredAtHours")
                         .IsRequired()
                         .HasColumnType("int");
 
+                    b.Property<bool?>("EnableEmailSending")
+                        .HasColumnType("bit");
+
+                    b.Property<bool?>("EnableGoogleLogin")
+                        .HasColumnType("bit");
+
+                    b.Property<bool?>("EnableNotifications")
+                        .HasColumnType("bit");
+
                     b.Property<int?>("ForgotPasswordTokenExpiredAtHours")
                         .IsRequired()
                         .HasColumnType("int");
+
+                    b.Property<bool?>("IsAiAssistantEnabled")
+                        .HasColumnType("bit");
 
                     b.Property<bool>("IsDeleted")
                         .HasColumnType("bit");
 
                     b.Property<bool?>("IsMaintenanceMode")
                         .HasColumnType("bit");
+
+                    b.Property<int?>("LockoutDurationMinutes")
+                        .HasColumnType("int");
+
+                    b.Property<string>("MaintenanceMessage")
+                        .HasMaxLength(1000)
+                        .HasColumnType("nvarchar(1000)");
+
+                    b.Property<int?>("MaxAttachmentSizeMb")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("MaxFailedLoginAttempts")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("MaxProfilePhotoSizeMb")
+                        .HasColumnType("int");
 
                     b.Property<string>("Note")
                         .HasColumnType("nvarchar(max)");
@@ -615,11 +674,27 @@ namespace Partnerly.Migrations
                         .IsRequired()
                         .HasColumnType("int");
 
+                    b.Property<int?>("PersistentCookieDays")
+                        .HasColumnType("int");
+
                     b.Property<string>("ScrollingText")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<int?>("SessionExpireMinutes")
+                        .HasColumnType("int");
+
                     b.Property<string>("TaskTickedID")
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<Guid?>("TicketAutoAssignRoleId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid?>("TicketAutoAssignUserId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("TimeZoneId")
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
 
                     b.Property<Guid?>("UpdatedBy")
                         .IsRequired()
@@ -685,6 +760,9 @@ namespace Partnerly.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
+                    b.Property<int>("AccessFailedCount")
+                        .HasColumnType("int");
+
                     b.Property<bool?>("AllowSendEmails")
                         .HasColumnType("bit");
 
@@ -733,6 +811,9 @@ namespace Partnerly.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime?>("LastRoleUpdateTime")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime?>("LockoutEnd")
                         .HasColumnType("datetime2");
 
                     b.Property<string>("MyReferralCode")

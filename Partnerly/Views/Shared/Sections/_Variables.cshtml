@@ -1,5 +1,17 @@
-﻿@{
-  TempData["appName"] = "Blot Assist";
+﻿@inject Partnerly.Infrastructure.Interfaces.ISystemSettingsService SystemSettingsService
+@inject Microsoft.Extensions.Configuration.IConfiguration Configuration
+@{
+  var settings = await SystemSettingsService.GetCurrentAsync();
+  var appName = settings?.ApplicationName;
+  if (string.IsNullOrWhiteSpace(appName))
+    appName = Configuration["AppSettings:AppName"];
+  if (string.IsNullOrWhiteSpace(appName))
+    appName = Partnerly.Helpers.SystemSettingsDefaults.ApplicationName;
+
+  TempData["appName"] = appName;
+  ViewBag.TimeZoneId = string.IsNullOrWhiteSpace(settings?.TimeZoneId)
+      ? Partnerly.Helpers.SystemSettingsDefaults.TimeZoneId
+      : settings.TimeZoneId;
   TempData["appUrl"] = "";
   TempData["authorName"] = "Blot Academy";
   TempData["authorUrl"] = "";

@@ -12,12 +12,18 @@ namespace Partnerly.Infrastructure.Services
         private readonly INotificationRepository _notificationRepository;
         private readonly IHubContext<NotificationHub> _hub;
         private readonly ILogService _logService;
+        private readonly ISystemSettingsService _systemSettingsService;
 
-        public NotificationService(INotificationRepository notificationRepository, IHubContext<NotificationHub> hub, ILogService logService)
+        public NotificationService(
+            INotificationRepository notificationRepository,
+            IHubContext<NotificationHub> hub,
+            ILogService logService,
+            ISystemSettingsService systemSettingsService)
         {
             _notificationRepository = notificationRepository;
             _hub = hub;
             _logService = logService;
+            _systemSettingsService = systemSettingsService;
         }
 
         public async Task<Notification?> GetNotificationByIDAsync(Guid? id) =>
@@ -81,6 +87,10 @@ namespace Partnerly.Infrastructure.Services
                 await _logService.CreateLogAsync(LogActionsAttribute.NotificationCreated, LogTypeAttribute.Error, String.Format(ErrorMessages.RecordIsNullFromController, "Notification"));
                 return ServiceResult<Notification?>.Fail(new List<string> { String.Format(ErrorMessages.RecordIsNullFromController, "Notification") });
             }
+
+            var settings = await _systemSettingsService.GetCurrentAsync();
+            if (settings?.EnableNotifications == false)
+                return ServiceResult<Notification?>.Ok(notification);
 
             var newnotification = new Notification { Id = Guid.NewGuid() };
 

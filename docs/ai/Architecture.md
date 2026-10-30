@@ -67,9 +67,10 @@ Controller  →  I*Service  →  I*Repository : Repository<T>  →  AppDbContext
 
 ### Аутентификация
 
-- Схема по умолчанию: cookie (`LoginPath=/Account/Login`, `AccessDeniedPath=/Account/AccessDenied`).
-- Google: схема `"Google"`, ClientId/Secret из конфигурации.
+- Схема по умолчанию: cookie (`LoginPath=/Account/Login`, `AccessDeniedPath=/Account/AccessDenied`). Срок cookie/сессии берётся из `SystemSettings` в `SignInUserAsync`, не из `ExpireTimeSpan` в `Program.cs`.
+- Google: схема `"Google"` регистрируется всегда; Challenge и кнопки на Login/Register режутся `EnableGoogleLogin`. ClientId/Secret из конфигурации, не из SystemSettings.
 - Claims при входе собираются в `AccountController` (`NameIdentifier` = `User.Id`, Role, Email, кастомные claim имени, фото, рефкода, RoleId, LoginTime).
+- Операционные флаги сайта (роль новичка, почта, SignalR, AI, лимиты файлов, автоназначение тикетов, имя приложения, язык, timezone) — строка `SystemSettings` Id=1 через `ISystemSettingsService.GetCurrentAsync()`.
 - `ICurrentUserService` читает claims, не ходит в БД на каждое свойство.
 
 Пользователи и роли — **свои** сущности, не ASP.NET Identity.

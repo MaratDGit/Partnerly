@@ -1,4 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Partnerly.Helpers;
+using Partnerly.Infrastructure.Interfaces;
 using Partnerly.Models.ViewModels;
 using System.Diagnostics;
 
@@ -8,11 +10,13 @@ namespace Partnerly.Controllers
     {
         #region Services
         private readonly ILogger<HomeController> _logger;
+        private readonly ISystemSettingsService _systemSettingsService;
         #endregion
         #region Constructor
-        public HomeController(ILogger<HomeController> logger)
+        public HomeController(ILogger<HomeController> logger, ISystemSettingsService systemSettingsService)
         {
             _logger = logger;
+            _systemSettingsService = systemSettingsService;
         }
         #endregion
 
@@ -31,8 +35,15 @@ namespace Partnerly.Controllers
             return View();
         }
 
-        public IActionResult Maintenance()
+        public async Task<IActionResult> Maintenance()
         {
+            var settings = await _systemSettingsService.GetCurrentAsync();
+            ViewBag.MaintenanceMessage = string.IsNullOrWhiteSpace(settings?.MaintenanceMessage)
+                ? null
+                : settings.MaintenanceMessage;
+            ViewBag.ApplicationName = string.IsNullOrWhiteSpace(settings?.ApplicationName)
+                ? SystemSettingsDefaults.ApplicationName
+                : settings.ApplicationName;
             return View();
         }
 

@@ -137,6 +137,27 @@ var localizationOptions = new RequestLocalizationOptions
     SupportedUICultures = supportedCultures
 };
 
+localizationOptions.RequestCultureProviders.Insert(2, new CustomRequestCultureProvider(async context =>
+{
+    try
+    {
+        var settingsService = context.RequestServices.GetService<ISystemSettingsService>();
+        if (settingsService == null)
+            return null;
+
+        var settings = await settingsService.GetCurrentAsync();
+        var language = settings?.DefaultLanguage;
+        if (string.IsNullOrWhiteSpace(language) || supportedCultures.All(c => c.Name != language))
+            return null;
+
+        return new ProviderCultureResult(language);
+    }
+    catch
+    {
+        return null;
+    }
+}));
+
 app.UseRequestLocalization(localizationOptions);
 
 // -------------------- INITIALIZATION --------------------
