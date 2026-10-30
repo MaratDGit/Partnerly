@@ -4,6 +4,30 @@
 
 ---
 
+## 2026-10-30 — Глаз на сбросе пароля не показывал пароль
+
+- **Суть:** на `ConfirmForgotPassword` клик по иконке глаза не переключал поле в видимый текст.
+- **Сделано:** на span глаза добавлен `password-toggle-icon` (как в Settings). `site.js` также ловит `.form-password-toggle .input-group-text`; иконка выше поля по z-index, чтобы клик не перехватывал input.
+- **Сборка:** `dotnet build Partnerly.sln` — 0 ошибок. Браузер в этой сессии недоступен.
+
+---
+
+## 2026-10-30 — Удалены неиспользуемые account-страницы и ключи ресурсов
+
+- **Суть:** убрать views, которые после попапа больше не отдаются, и ключи SharedResource, которые код не читает.
+- **Сделано:** удалены `Views/Account/Login`, `Register`, `ForgotPassword`, `RegistrationSuccessful`, `ForgotPasswordSuccessful`, `ConfirmEmailSuccess`. Оставлены AccessDenied, GoogleRegister, ConfirmForgotPassword. Из en/ru/hy сняты 38 неиспользуемых ключей (старый бренд login/register, старый лендинг, старый Web Inspector, `UseBuiltInUserRole` и др.). В SharedResource осталось 540 ключей, неиспользуемых по коду — 0.
+- **Сборка:** `dotnet build Partnerly.sln` — 0 ошибок.
+
+---
+
+## 2026-10-30 — Account как попап на главной
+
+- **Суть:** Login, Register, Forgot password и экраны успеха открываются стеклянным попапом на гостевой `/`, в стиле лендинга, без отдельных auth-страниц.
+- **Сделано:** GET `/Account/Login|Register|ForgotPassword` и успешный ConfirmEmail / смена пароля ведут на `/?auth=...`. Ошибки POST возвращают `Home/Index` с ModelState. Login/Sign up и иконки чата открывают попап (`data-auth`). Google/Apple по-прежнему навигация. Сброс пароля по письму, GoogleRegister и AccessDenied — отдельные страницы.
+- **Сборка:** `dotnet build Partnerly.sln` — 0 ошибок. Браузер в этой сессии недоступен.
+
+---
+
 ## 2026-10-30 — Иконки поиска, скролл чата, тексты входа
 
 - **Суть:** одна иконка lookup справа в стиле прежней левой; send в чате тот же стиль; аккуратный скролл; бот зовёт войти или зарегистрироваться.

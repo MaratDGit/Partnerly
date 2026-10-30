@@ -1,5 +1,16 @@
 ﻿@{
-    ViewData["Title"] = TempData.Peek("appName") as string ?? Partnerly.Helpers.SystemSettingsDefaults.ApplicationName;
+    var appName = TempData.Peek("appName") as string ?? Partnerly.Helpers.SystemSettingsDefaults.ApplicationName;
+    var authPanel = ViewBag.AuthPanel as string;
+    ViewData["Title"] = authPanel switch
+    {
+        "login" => Localizer["Login"].Value,
+        "register" => Localizer["Signup"].Value,
+        "forgot" => Localizer["ForgotPassword"].Value,
+        "register-ok" => Localizer["AccountCreated"].Value,
+        "forgot-ok" => Localizer["EmailSent"].Value,
+        "email-ok" => Localizer["EmailVerified"].Value,
+        _ => appName
+    };
     Layout = "_LandingLayout";
     var googleEnabled = ViewBag.GoogleLoginEnabled as bool? ?? true;
     var typePhrases = new[]
@@ -36,8 +47,6 @@
               data-chat-replies='@Html.Raw(System.Text.Json.JsonSerializer.Serialize(chatReplies))'
               data-google-url="@(googleEnabled ? Url.Action("GoogleLogin", "Account") : "")"
               data-apple-url="@Url.Action("AppleLogin", "Account")"
-              data-login-url="@Url.Action("Login", "Account")"
-              data-register-url="@Url.Action("Register", "Account")"
               data-google-label="@Localizer["ContinuewithGoogle"]"
               data-apple-label="@Localizer["ContinuewithApple"]"
               data-login-label="@Localizer["Login"]"
@@ -58,21 +67,20 @@
         </form>
 
         <div class="landing-hero-actions">
-            <a asp-controller="Account"
-               asp-action="Login"
-               class="landing-auth-link">
+            <button type="button" class="landing-auth-link" data-auth="login">
                 @Localizer["Login"]
-            </a>
-            <a asp-controller="Account"
-               asp-action="Register"
-               class="landing-auth-link">
+            </button>
+            <button type="button" class="landing-auth-link" data-auth="register">
                 @Localizer["Signup"]
-            </a>
+            </button>
         </div>
     </div>
 </section>
 
+@await Html.PartialAsync("_LandingAuthModal")
+
 @section Scripts {
     <script src="~/assets/js/landing-dots.js" asp-append-version="true"></script>
     <script src="~/assets/js/landing-search.js" asp-append-version="true"></script>
+    <script src="~/assets/js/landing-auth.js" asp-append-version="true"></script>
 }

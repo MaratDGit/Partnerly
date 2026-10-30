@@ -1,0 +1,33 @@
+@model Partnerly.Models.ViewModels.ForgotPasswordViewModel
+
+<form class="landing-auth-form"
+      asp-controller="Account"
+      asp-action="ForgotPassword"
+      method="post">
+
+    <input type="hidden" name="returnUrl" value="@ViewBag.ReturnUrl" />
+
+    <div asp-validation-summary="ModelOnly" class="landing-auth-error"></div>
+
+    <div class="form-floating mb-4">
+        <input asp-for="Email"
+               class="form-control"
+               id="auth-forgot-email"
+               placeholder="@Localizer["Enteryouremailaddress"]"
+               autocomplete="email" />
+        <label asp-for="Email" for="auth-forgot-email"></label>
+        <span asp-validation-for="Email" class="landing-auth-error"></span>
+    </div>
+
+    <button class="landing-auth-submit" type="submit">
+        <span>@Localizer["Get"]</span>
+        <i class="bx bx-send"></i>
+    </button>
+</form>
+
+<p class="landing-auth-switch">
+    <span>@Localizer["Doyoualreadhaveanaccount"]</span>
+    <button type="button" class="landing-auth-text-btn" data-auth="login">
+        @Localizer["Login"]
+    </button>
+</p>

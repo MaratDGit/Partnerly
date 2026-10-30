@@ -7,8 +7,8 @@
 
         if (!container) return;
 
-        const input = container.querySelector("input");
-        const icon = toggle.querySelector("i");
+        const input = container.querySelector("input:not([type='hidden'])");
+        const icon = toggle.querySelector("i") || (toggle.tagName === "I" ? toggle : null);
 
         if (!input || !icon) return;
 
@@ -25,8 +25,13 @@
         );
     }
 
+    function findToggle(event) {
+        return event.target.closest(".password-toggle-icon") ||
+            event.target.closest(".form-password-toggle .input-group-text");
+    }
+
     document.addEventListener("click", function (event) {
-        const toggle = event.target.closest(".password-toggle-icon");
+        const toggle = findToggle(event);
 
         if (!toggle) return;
 
@@ -34,7 +39,7 @@
     });
 
     document.addEventListener("keydown", function (event) {
-        const toggle = event.target.closest(".password-toggle-icon");
+        const toggle = findToggle(event);
 
         if (!toggle) return;
 

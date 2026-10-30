@@ -293,10 +293,6 @@
     <value>Welcome, {0}! 🎉 We are glad to see you on our website.</value>
   </data>
 
-  <data name="Userroles" xml:space="preserve">
-    <value>User roles</value>
-  </data>
-
   <data name="Users" xml:space="preserve">
     <value>Users</value>
   </data>
@@ -593,14 +589,6 @@
     <value>made by</value>
   </data>
 
-  <data name="Theemailverificationtokenhasexpired" xml:space="preserve">
-    <value>The email confirmation link has expired.</value>
-  </data>
-
-  <data name="ThetokenForgotpasswordhasexpired" xml:space="preserve">
-    <value>The password reset link has expired.</value>
-  </data>
-
   <data name="Onlinestatusautoupdateinterval" xml:space="preserve">
     <value>Online status interval (minutes)</value>
   </data>
@@ -659,10 +647,6 @@
 
   <data name="Viewuser" xml:space="preserve">
     <value>View user</value>
-  </data>
-
-  <data name="Selectarole" xml:space="preserve">
-    <value>Select a role</value>
   </data>
 
   <data name="Edittemplate" xml:space="preserve">
@@ -781,18 +765,6 @@
     <value>Actions</value>
   </data>
 
-  <data name="Rates" xml:space="preserve">
-    <value>Rates</value>
-  </data>
-
-  <data name="Educationalvideos" xml:space="preserve">
-    <value>Educational videos</value>
-  </data>
-
-  <data name="Allrightsreserved" xml:space="preserve">
-    <value>All rights reserved</value>
-  </data>
-
   <data name="Policy" xml:space="preserve">
     <value>Policy</value>
   </data>
@@ -885,40 +857,12 @@
     <value>Join</value>
   </data>
 
-  <data name="YourSmartBeloteAssistant" xml:space="preserve">
-    <value>Your Smart Belote Assistant.</value>
-  </data>
-
-  <data name="PlaySmarter" xml:space="preserve">
-    <value>Play Smarter</value>
-  </data>
-
-  <data name="WinwithConfidence" xml:space="preserve">
-    <value>Win with Confidence</value>
-  </data>
-
   <data name="Undermaintenance" xml:space="preserve">
     <value>Under maintenance</value>
   </data>
 
   <data name="Technicalmaintenanceunderway" xml:space="preserve">
     <value>We apologize for the inconvenience; technical maintenance is currently underway.</value>
-  </data>
-
-  <data name="Seehowourplatformworks" xml:space="preserve">
-    <value>See how our platform works</value>
-  </data>
-
-  <data name="Howtoregisterandgetstarted" xml:space="preserve">
-    <value>How to register and get started</value>
-  </data>
-
-  <data name="Invitefriendsandearn" xml:space="preserve">
-    <value>Invite friends and earn</value>
-  </data>
-
-  <data name="Ratesandbonuslevels" xml:space="preserve">
-    <value>Rates and bonus levels</value>
   </data>
 
   <data name="Gamesplayed" xml:space="preserve">
@@ -979,10 +923,6 @@
 
   <data name="Completeregistration" xml:space="preserve">
     <value>Complete registration</value>
-  </data>
-
-  <data name="Completeyourregistration" xml:space="preserve">
-    <value>Complete your registration</value>
   </data>
 
   <data name="WereceivedyourdataviaGoogle" xml:space="preserve">
@@ -1169,10 +1109,6 @@
     <value>Link copied!</value>
   </data>
 
-  <data name="Copyerror" xml:space="preserve">
-    <value>Copy error:</value>
-  </data>
-
   <data name="Noinformationonactivity" xml:space="preserve">
     <value>No information on activity...</value>
   </data>
@@ -1355,10 +1291,6 @@
 
   <data name="OverallGameResults" xml:space="preserve">
     <value>Overall game results</value>
-  </data>
-
-  <data name="GameActivityLast7Days" xml:space="preserve">
-    <value>Game activity over the last 7 days</value>
   </data>
 
   <data name="Last7Days" xml:space="preserve">
@@ -1645,26 +1577,6 @@
     <value>Verified with Google</value>
   </data>
 
-  <data name="Smartexperience" xml:space="preserve">
-    <value>Smart experience</value>
-  </data>
-
-  <data name="Buildyourteam" xml:space="preserve">
-    <value>Build your team</value>
-  </data>
-
-  <data name="Connectwithyourteamnetwork" xml:space="preserve">
-    <value>Connect with your team network.</value>
-  </data>
-
-  <data name="Secureaccount" xml:space="preserve">
-    <value>Secure account</value>
-  </data>
-
-  <data name="Yourinformationstaysprotected" xml:space="preserve">
-    <value>Your information stays protected.</value>
-  </data>
-
   <data name="Youraccountisready" xml:space="preserve">
     <value>Your account is ready</value>
   </data>
@@ -1723,14 +1635,6 @@
 
   <data name="Add" xml:space="preserve">
     <value>Add</value>
-  </data>
-
-  <data name="Darktheme" xml:space="preserve">
-    <value>Dark theme</value>
-  </data>
-
-  <data name="Lighttheme" xml:space="preserve">
-    <value>Light theme</value>
   </data>
 
   <data name="Roles" xml:space="preserve">
@@ -1876,10 +1780,6 @@
     <value>Web inspector</value>
   </data>
 
-  <data name="WebInspectorHint" xml:space="preserve">
-    <value>Open the live site in a Chrome window. HTML and visible data stay here for later automation.</value>
-  </data>
-
   <data name="WebInspectorPlaceholder" xml:space="preserve">
     <value>https://example.com</value>
   </data>
@@ -1888,20 +1788,8 @@
     <value>Open</value>
   </data>
 
-  <data name="WebInspectorLoading" xml:space="preserve">
-    <value>Loading…</value>
-  </data>
-
-  <data name="WebInspectorPreview" xml:space="preserve">
-    <value>Chrome window</value>
-  </data>
-
   <data name="WebInspectorVisibleText" xml:space="preserve">
     <value>Visible text</value>
-  </data>
-
-  <data name="WebInspectorData" xml:space="preserve">
-    <value>Extracted data</value>
   </data>
 
   <data name="WebInspectorHtml" xml:space="preserve">
@@ -1912,20 +1800,12 @@
     <value>Copy HTML</value>
   </data>
 
-  <data name="WebInspectorCopyJson" xml:space="preserve">
-    <value>Copy JSON</value>
-  </data>
-
   <data name="WebInspectorCopied" xml:space="preserve">
     <value>Copied</value>
   </data>
 
   <data name="WebInspectorEmpty" xml:space="preserve">
     <value>Enter a website address and press Open</value>
-  </data>
-
-  <data name="WebInspectorJsNote" xml:space="preserve">
-    <value>The live site opens in a separate Chrome window with no iframe blocking. HTML and extracted data here are a server snapshot — login walls and heavy JavaScript apps may differ from the live window. Local and private addresses are not fetched by the server.</value>
   </data>
 
   <data name="WebInspectorInvalidUrl" xml:space="preserve">
@@ -1952,22 +1832,6 @@
     <value>Show window</value>
   </data>
 
-  <data name="WebInspectorLiveTitle" xml:space="preserve">
-    <value>Live site is in Chrome</value>
-  </data>
-
-  <data name="WebInspectorLiveOpened" xml:space="preserve">
-    <value>The site opened in a separate window. HTML, text and extracted data are on the tabs here.</value>
-  </data>
-
-  <data name="WebInspectorLiveHint" xml:space="preserve">
-    <value>Chrome loads the real site (scripts, login, cookies). Partnerly cannot read that window because of browser security — the snapshot below comes from our server.</value>
-  </data>
-
-  <data name="WebInspectorPopupBlocked" xml:space="preserve">
-    <value>Chrome blocked the new window. Allow popups for this site and press Open again.</value>
-  </data>
-
   <data name="WebInspectorHeadings" xml:space="preserve">
     <value>Headings</value>
   </data>
@@ -1982,10 +1846,6 @@
 
   <data name="WebInspectorForms" xml:space="preserve">
     <value>Forms</value>
-  </data>
-
-  <data name="WebInspectorTables" xml:space="preserve">
-    <value>Tables</value>
   </data>
 
   <data name="WebInspectorNone" xml:space="preserve">
@@ -2066,10 +1926,6 @@
 
   <data name="Dashboards" xml:space="preserve">
     <value>Dashboards</value>
-  </data>
-
-  <data name="DashboardsOverview" xml:space="preserve">
-    <value>Overview</value>
   </data>
 
   <data name="DashboardsTotal" xml:space="preserve">
@@ -2180,10 +2036,6 @@
     <value>Assigned to visible roles</value>
   </data>
 
-  <data name="AvgMembers" xml:space="preserve">
-    <value>Average members</value>
-  </data>
-
   <data name="VisibleMembers" xml:space="preserve">
     <value>Visible members</value>
   </data>
@@ -2254,10 +2106,6 @@
 
   <data name="DefaultNewUserRole" xml:space="preserve">
     <value>Default role for new users</value>
-  </data>
-
-  <data name="UseBuiltInUserRole" xml:space="preserve">
-    <value>Built-in User role</value>
   </data>
 
   <data name="EnableGoogleLogin" xml:space="preserve">

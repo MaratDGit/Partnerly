@@ -1,0 +1,141 @@
+@model Partnerly.Models.ViewModels.RegisterViewModel
+
+<form class="landing-auth-form"
+      asp-controller="Account"
+      asp-action="Register"
+      method="post">
+
+    <div class="form-floating mb-3">
+        <input asp-for="FullName"
+               class="form-control"
+               id="auth-register-name"
+               placeholder=""
+               autocomplete="name" />
+        <label asp-for="FullName" for="auth-register-name"></label>
+        <span asp-validation-for="FullName" class="landing-auth-error"></span>
+    </div>
+
+    <div class="form-floating mb-3">
+        <input type="hidden" asp-for="FromReferrerLink" />
+        @if (Model.FromReferrerLink)
+        {
+            <input type="text"
+                   class="form-control"
+                   id="auth-register-ref-display"
+                   value="@Model.ReferrerCode"
+                   readonly />
+            <input type="hidden" asp-for="ReferrerCode" />
+        }
+        else
+        {
+            <input asp-for="ReferrerCode"
+                   class="form-control"
+                   id="auth-register-ref"
+                   placeholder="@Localizer["Referrersreferralcode"]" />
+        }
+        <label asp-for="ReferrerCode" for="@(Model.FromReferrerLink ? "auth-register-ref-display" : "auth-register-ref")"></label>
+        <span asp-validation-for="ReferrerCode" class="landing-auth-error"></span>
+    </div>
+
+    <div class="form-floating mb-3">
+        <input asp-for="Email"
+               class="form-control"
+               id="auth-register-email"
+               placeholder="@Localizer["Enteryouremailaddress"]"
+               autocomplete="email" />
+        <label asp-for="Email" for="auth-register-email"></label>
+        <span asp-validation-for="Email" class="landing-auth-error"></span>
+    </div>
+
+    <div class="form-floating mb-3">
+        <input asp-for="Phone"
+               class="form-control"
+               id="auth-register-phone"
+               placeholder="+37477123456"
+               autocomplete="tel" />
+        <label asp-for="Phone" for="auth-register-phone"></label>
+        <span asp-validation-for="Phone" class="landing-auth-error"></span>
+    </div>
+
+    <div class="mb-3 form-password-toggle">
+        <div class="form-floating input-group input-group-merge">
+            <input asp-for="Password"
+                   type="password"
+                   id="auth-register-password"
+                   class="form-control"
+                   placeholder="••••••••"
+                   autocomplete="new-password" />
+            <label asp-for="Password" for="auth-register-password"></label>
+            <span class="input-group-text cursor-pointer password-toggle-icon"
+                  role="button"
+                  tabindex="0"
+                  aria-label="Show password">
+                <i class="bx bx-hide"></i>
+            </span>
+        </div>
+        <span asp-validation-for="Password" class="landing-auth-error"></span>
+    </div>
+
+    <div class="mb-3 form-password-toggle">
+        <div class="form-floating input-group input-group-merge">
+            <input asp-for="ConfirmPassword"
+                   type="password"
+                   id="auth-register-confirm"
+                   class="form-control"
+                   placeholder="••••••••"
+                   autocomplete="new-password" />
+            <label asp-for="ConfirmPassword" for="auth-register-confirm"></label>
+            <span class="input-group-text cursor-pointer password-toggle-icon"
+                  role="button"
+                  tabindex="0"
+                  aria-label="Show password">
+                <i class="bx bx-hide"></i>
+            </span>
+        </div>
+        <span asp-validation-for="ConfirmPassword" class="landing-auth-error"></span>
+    </div>
+
+    <div class="landing-auth-terms">
+        <div class="form-check">
+            <input asp-for="TermsConditions"
+                   class="form-check-input"
+                   type="checkbox"
+                   id="auth-register-terms" />
+            <label class="form-check-label" for="auth-register-terms">
+                @Localizer["Iagreewith"]
+                <a asp-controller="Home" asp-action="Privacy" target="_blank" rel="noopener">
+                    @Localizer["PrivacyPolicyandTerms"]
+                </a>
+            </label>
+        </div>
+        <span asp-validation-for="TermsConditions" class="landing-auth-error"></span>
+    </div>
+
+    <button class="landing-auth-submit" type="submit">
+        <span>@Localizer["Signup"]</span>
+        <i class="bx bx-right-arrow-alt"></i>
+    </button>
+</form>
+
+@if (ViewBag.GoogleLoginEnabled as bool? ?? true)
+{
+    <div class="landing-auth-divider">
+        <span>@Localizer["Or"]</span>
+    </div>
+
+    <form asp-controller="Account" asp-action="GoogleLogin" method="post">
+        @Html.AntiForgeryToken()
+        <input type="hidden" name="returnUrl" value="@ViewBag.ReturnUrl" />
+        <button type="submit" class="landing-auth-google">
+            <i class="bx bxl-google"></i>
+            <span>@Localizer["ContinuewithGoogle"]</span>
+        </button>
+    </form>
+}
+
+<p class="landing-auth-switch">
+    <span>@Localizer["Doyoualreadhaveanaccount"]</span>
+    <button type="button" class="landing-auth-text-btn" data-auth="login">
+        @Localizer["Login"]
+    </button>
+</p>

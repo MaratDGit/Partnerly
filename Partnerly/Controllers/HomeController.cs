@@ -20,7 +20,7 @@ namespace Partnerly.Controllers
         }
         #endregion
 
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(string? auth = null, string? reff = null, string? returnUrl = null)
         {
             if (User.Identity != null && User.Identity.IsAuthenticated)
             {
@@ -29,7 +29,30 @@ namespace Partnerly.Controllers
 
             var settings = await _systemSettingsService.GetCurrentAsync();
             ViewBag.GoogleLoginEnabled = settings?.EnableGoogleLogin != false;
+            ViewBag.ReturnUrl = returnUrl;
+            ViewBag.AuthPanel = NormalizeAuthPanel(auth);
+            ViewBag.LoginModel ??= new LoginViewModel();
+            ViewBag.ForgotModel ??= new ForgotPasswordViewModel();
+
+            var register = ViewBag.RegisterModel as RegisterViewModel ?? new RegisterViewModel();
+            if (!string.IsNullOrWhiteSpace(reff))
+            {
+                register.ReferrerCode = reff;
+                register.FromReferrerLink = true;
+                ViewBag.AuthPanel ??= "register";
+            }
+            ViewBag.RegisterModel = register;
+
             return View("Index");
+        }
+
+        private static string? NormalizeAuthPanel(string? auth)
+        {
+            return auth switch
+            {
+                "login" or "register" or "forgot" or "register-ok" or "forgot-ok" or "email-ok" => auth,
+                _ => null
+            };
         }
 
         public IActionResult Privacy()

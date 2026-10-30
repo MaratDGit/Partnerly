@@ -1,0 +1,111 @@
+@using Partnerly.Models.ViewModels
+@{
+    var panel = ViewBag.AuthPanel as string;
+    var appName = TempData.Peek("appName") as string ?? Partnerly.Helpers.SystemSettingsDefaults.ApplicationName;
+    var login = ViewBag.LoginModel as LoginViewModel ?? new LoginViewModel();
+    var register = ViewBag.RegisterModel as RegisterViewModel ?? new RegisterViewModel();
+    var forgot = ViewBag.ForgotModel as ForgotPasswordViewModel ?? new ForgotPasswordViewModel();
+    var isOpen = !string.IsNullOrEmpty(panel);
+}
+
+<div id="landingAuth"
+     class="landing-auth@(isOpen ? " is-open" : "")"
+     data-open="@(isOpen ? panel : "")"
+     data-app-name="@appName"
+     data-title-login="@Localizer["Login"]"
+     data-title-register="@Localizer["Signup"]"
+     data-title-forgot="@Localizer["ForgotPassword"]"
+     data-title-register-ok="@Localizer["AccountCreated"]"
+     data-title-forgot-ok="@Localizer["EmailSent"]"
+     data-title-email-ok="@Localizer["EmailVerified"]"
+     aria-hidden="@(isOpen ? "false" : "true")">
+
+    <div class="landing-auth-card" role="dialog" aria-modal="true" aria-labelledby="landingAuthTitle">
+        <button type="button"
+                class="landing-auth-close"
+                data-auth-close
+                aria-label="@Localizer["Close"]">
+            <i class="bx bx-x"></i>
+        </button>
+
+        <div class="landing-auth-panel@(panel == "login" || string.IsNullOrEmpty(panel) ? " is-active" : "")"
+             data-auth-panel="login">
+            <h2 class="landing-auth-title" id="landingAuthTitle">@Localizer["Login"]</h2>
+            @await Html.PartialAsync("_LandingAuthLogin", login)
+        </div>
+
+        <div class="landing-auth-panel@(panel == "register" ? " is-active" : "")"
+             data-auth-panel="register">
+            <h2 class="landing-auth-title">@Localizer["Signup"]</h2>
+            @await Html.PartialAsync("_LandingAuthRegister", register)
+        </div>
+
+        <div class="landing-auth-panel@(panel == "forgot" ? " is-active" : "")"
+             data-auth-panel="forgot">
+            <h2 class="landing-auth-title">@Localizer["Forgotyourpassword"]</h2>
+            <p class="landing-auth-lead">
+                @Localizer["EnteryouremailaddressandclickGet"].
+            </p>
+            @await Html.PartialAsync("_LandingAuthForgot", forgot)
+        </div>
+
+        <div class="landing-auth-panel@(panel == "register-ok" ? " is-active" : "")"
+             data-auth-panel="register-ok">
+            <div class="landing-auth-result">
+                <div class="landing-auth-result-icon">
+                    <i class="bx bx-user-check"></i>
+                </div>
+                <h2 class="landing-auth-title">@Localizer["Registrationwassuccessful"]</h2>
+                <p class="landing-auth-lead">
+                    @Localizer["Youraccounthasbeensuccessfullycreated"]
+                </p>
+                <button type="button" class="landing-auth-submit" data-auth="login">
+                    <span>@Localizer["OK"]</span>
+                    <i class="bx bx-right-arrow-alt"></i>
+                </button>
+                <p class="landing-auth-result-note">
+                    <i class="bx bx-check-circle"></i>
+                    @Localizer["Youraccountisready"]
+                </p>
+            </div>
+        </div>
+
+        <div class="landing-auth-panel@(panel == "forgot-ok" ? " is-active" : "")"
+             data-auth-panel="forgot-ok">
+            <div class="landing-auth-result">
+                <div class="landing-auth-result-icon">
+                    <i class="bx bx-envelope"></i>
+                </div>
+                <h2 class="landing-auth-title">@Localizer["EmailSent"]</h2>
+                <p class="landing-auth-lead">
+                    @Localizer["Wehavesentemailwithinstructionsresetyourpassword"]
+                </p>
+                <button type="button" class="landing-auth-submit" data-auth="login">
+                    <span>@Localizer["OK"]</span>
+                    <i class="bx bx-right-arrow-alt"></i>
+                </button>
+                <p class="landing-auth-result-note">
+                    <i class="bx bx-info-circle"></i>
+                    @Localizer["Checkyourinbox"]
+                </p>
+            </div>
+        </div>
+
+        <div class="landing-auth-panel@(panel == "email-ok" ? " is-active" : "")"
+             data-auth-panel="email-ok">
+            <div class="landing-auth-result">
+                <div class="landing-auth-result-icon">
+                    <i class="bx bx-check"></i>
+                </div>
+                <h2 class="landing-auth-title">@Localizer["Youremailsuccessfullyverified"]</h2>
+                <p class="landing-auth-lead">
+                    @Localizer["Younowloginusingyourcredentials"]
+                </p>
+                <button type="button" class="landing-auth-submit" data-auth="login">
+                    <span>@Localizer["Login"]</span>
+                    <i class="bx bx-right-arrow-alt"></i>
+                </button>
+            </div>
+        </div>
+    </div>
+</div>

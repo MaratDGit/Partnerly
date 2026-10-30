@@ -39,7 +39,10 @@
     font-weight: 700;
 }
 
-.password-toggle-icon {
+.password-toggle-icon,
+.form-password-toggle .input-group-text {
+    position: relative;
+    z-index: 5;
     cursor: pointer;
     user-select: none;
 }

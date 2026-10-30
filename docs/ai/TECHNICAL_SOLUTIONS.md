@@ -4,6 +4,17 @@
 
 ---
 
+## TR-2026-10-30-04 — Account-формы как попап на лендинге
+
+- **Дата:** 2026-10-30
+- **Суть:** вход, регистрация, забытый пароль и сообщения об успехе показываются стеклянным диалогом поверх `/`, а не страницами `_BlankLayout`.
+- **Причина:** владелец попросил убрать отдельные account-страницы и выдержать стиль главной.
+- **Затрагивает:** `Home/Index`, `_LandingAuthModal` и partials, `landing-auth.js`, `landing.css`, GET/POST `AccountController` Login/Register/ForgotPassword, успех ConfirmEmail и ChangePassword. Cookie `LoginPath` по-прежнему `/Account/Login` (302 на `/?auth=login`).
+- **Последствия:** реферальная ссылка `/Account/Register?reff=` открывает попап регистрации. Google Challenge и Apple-заглушка не менялись. ConfirmForgotPassword, GoogleRegister, AccessDenied остаются страницами. Неиспользуемые `Views/Account/Login|Register|Forgot*` и экраны успеха удалены 2026-10-30.
+- **Альтернативы:** полноценный SPA-auth — не брался, POST и antiforgery остаются MVC.
+
+---
+
 ## TR-2026-10-30-03 — Гостевой search как чат без AI
 
 - **Дата:** 2026-10-30

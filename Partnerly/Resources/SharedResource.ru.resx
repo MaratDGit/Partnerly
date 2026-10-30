@@ -293,10 +293,6 @@
     <value>Добро пожаловать, {0}! Мы рады видеть вас на сайте.</value>
   </data>
 
-  <data name="Userroles" xml:space="preserve">
-    <value>Роли пользователей</value>
-  </data>
-
   <data name="Users" xml:space="preserve">
     <value>Пользователи</value>
   </data>
@@ -593,14 +589,6 @@
     <value>сделано</value>
   </data>
 
-  <data name="Theemailverificationtokenhasexpired" xml:space="preserve">
-    <value>Срок действия ссылки подтверждения почты истёк.</value>
-  </data>
-
-  <data name="ThetokenForgotpasswordhasexpired" xml:space="preserve">
-    <value>Срок действия ссылки сброса пароля истёк.</value>
-  </data>
-
   <data name="Onlinestatusautoupdateinterval" xml:space="preserve">
     <value>Интервал онлайн-статуса (минуты)</value>
   </data>
@@ -659,10 +647,6 @@
 
   <data name="Viewuser" xml:space="preserve">
     <value>Просмотр пользователя</value>
-  </data>
-
-  <data name="Selectarole" xml:space="preserve">
-    <value>Выберите роль</value>
   </data>
 
   <data name="Edittemplate" xml:space="preserve">
@@ -781,18 +765,6 @@
     <value>Действия</value>
   </data>
 
-  <data name="Rates" xml:space="preserve">
-    <value>Тарифы</value>
-  </data>
-
-  <data name="Educationalvideos" xml:space="preserve">
-    <value>Обучающие видео</value>
-  </data>
-
-  <data name="Allrightsreserved" xml:space="preserve">
-    <value>Все права защищены</value>
-  </data>
-
   <data name="Policy" xml:space="preserve">
     <value>Политика</value>
   </data>
@@ -885,40 +857,12 @@
     <value>Присоединиться</value>
   </data>
 
-  <data name="YourSmartBeloteAssistant" xml:space="preserve">
-    <value>Ваш умный помощник в белот.</value>
-  </data>
-
-  <data name="PlaySmarter" xml:space="preserve">
-    <value>Играйте с умом</value>
-  </data>
-
-  <data name="WinwithConfidence" xml:space="preserve">
-    <value>Побеждайте уверенно</value>
-  </data>
-
   <data name="Undermaintenance" xml:space="preserve">
     <value>На обслуживании</value>
   </data>
 
   <data name="Technicalmaintenanceunderway" xml:space="preserve">
     <value>Извините за неудобства: сейчас идут технические работы.</value>
-  </data>
-
-  <data name="Seehowourplatformworks" xml:space="preserve">
-    <value>Посмотрите, как работает наша платформа</value>
-  </data>
-
-  <data name="Howtoregisterandgetstarted" xml:space="preserve">
-    <value>Как зарегистрироваться и начать</value>
-  </data>
-
-  <data name="Invitefriendsandearn" xml:space="preserve">
-    <value>Приглашайте друзей и зарабатывайте</value>
-  </data>
-
-  <data name="Ratesandbonuslevels" xml:space="preserve">
-    <value>Тарифы и уровни бонусов</value>
   </data>
 
   <data name="Gamesplayed" xml:space="preserve">
@@ -979,10 +923,6 @@
 
   <data name="Completeregistration" xml:space="preserve">
     <value>Завершить регистрацию</value>
-  </data>
-
-  <data name="Completeyourregistration" xml:space="preserve">
-    <value>Завершите регистрацию</value>
   </data>
 
   <data name="WereceivedyourdataviaGoogle" xml:space="preserve">
@@ -1169,10 +1109,6 @@
     <value>Ссылка скопирована!</value>
   </data>
 
-  <data name="Copyerror" xml:space="preserve">
-    <value>Ошибка копирования:</value>
-  </data>
-
   <data name="Noinformationonactivity" xml:space="preserve">
     <value>Нет сведений об активности...</value>
   </data>
@@ -1355,10 +1291,6 @@
 
   <data name="OverallGameResults" xml:space="preserve">
     <value>Общие результаты игр</value>
-  </data>
-
-  <data name="GameActivityLast7Days" xml:space="preserve">
-    <value>Игровая активность за последние 7 дней</value>
   </data>
 
   <data name="Last7Days" xml:space="preserve">
@@ -1645,26 +1577,6 @@
     <value>Подтверждено через Google</value>
   </data>
 
-  <data name="Smartexperience" xml:space="preserve">
-    <value>Умный подход</value>
-  </data>
-
-  <data name="Buildyourteam" xml:space="preserve">
-    <value>Соберите свою команду</value>
-  </data>
-
-  <data name="Connectwithyourteamnetwork" xml:space="preserve">
-    <value>Наладьте связи внутри своей команды.</value>
-  </data>
-
-  <data name="Secureaccount" xml:space="preserve">
-    <value>Защищённый аккаунт</value>
-  </data>
-
-  <data name="Yourinformationstaysprotected" xml:space="preserve">
-    <value>Ваши данные остаются защищёнными.</value>
-  </data>
-
   <data name="Youraccountisready" xml:space="preserve">
     <value>Аккаунт готов</value>
   </data>
@@ -1723,14 +1635,6 @@
 
   <data name="Add" xml:space="preserve">
     <value>Добавить</value>
-  </data>
-
-  <data name="Darktheme" xml:space="preserve">
-    <value>Тёмная тема</value>
-  </data>
-
-  <data name="Lighttheme" xml:space="preserve">
-    <value>Светлая тема</value>
   </data>
 
   <data name="Roles" xml:space="preserve">
@@ -1876,10 +1780,6 @@
     <value>Веб-инспектор</value>
   </data>
 
-  <data name="WebInspectorHint" xml:space="preserve">
-    <value>Живой сайт открывается в окне Chrome. HTML и видимые данные остаются здесь — для автоматизации.</value>
-  </data>
-
   <data name="WebInspectorPlaceholder" xml:space="preserve">
     <value>https://example.com</value>
   </data>
@@ -1888,20 +1788,8 @@
     <value>Открыть</value>
   </data>
 
-  <data name="WebInspectorLoading" xml:space="preserve">
-    <value>Загрузка…</value>
-  </data>
-
-  <data name="WebInspectorPreview" xml:space="preserve">
-    <value>Окно Chrome</value>
-  </data>
-
   <data name="WebInspectorVisibleText" xml:space="preserve">
     <value>Видимый текст</value>
-  </data>
-
-  <data name="WebInspectorData" xml:space="preserve">
-    <value>Данные</value>
   </data>
 
   <data name="WebInspectorHtml" xml:space="preserve">
@@ -1912,20 +1800,12 @@
     <value>Копировать HTML</value>
   </data>
 
-  <data name="WebInspectorCopyJson" xml:space="preserve">
-    <value>Копировать JSON</value>
-  </data>
-
   <data name="WebInspectorCopied" xml:space="preserve">
     <value>Скопировано</value>
   </data>
 
   <data name="WebInspectorEmpty" xml:space="preserve">
     <value>Введите адрес сайта и нажмите Открыть</value>
-  </data>
-
-  <data name="WebInspectorJsNote" xml:space="preserve">
-    <value>Живой сайт открывается в отдельном окне Chrome без блокировки iframe. HTML и данные здесь — снимок с сервера: страницы с входом и тяжёлым JavaScript могут отличаться от живого окна. Локальные и внутренние адреса сервер не качает.</value>
   </data>
 
   <data name="WebInspectorInvalidUrl" xml:space="preserve">
@@ -1952,22 +1832,6 @@
     <value>Показать окно</value>
   </data>
 
-  <data name="WebInspectorLiveTitle" xml:space="preserve">
-    <value>Сайт открыт в Chrome</value>
-  </data>
-
-  <data name="WebInspectorLiveOpened" xml:space="preserve">
-    <value>Сайт открыт в отдельном окне. HTML, текст и данные — на вкладках здесь.</value>
-  </data>
-
-  <data name="WebInspectorLiveHint" xml:space="preserve">
-    <value>Chrome грузит настоящий сайт (скрипты, вход, cookie). Partnerly не может читать то окно из‑за защиты браузера — снимок на вкладках приходит с нашего сервера.</value>
-  </data>
-
-  <data name="WebInspectorPopupBlocked" xml:space="preserve">
-    <value>Chrome заблокировал новое окно. Разрешите всплывающие окна для этого сайта и снова нажмите Открыть.</value>
-  </data>
-
   <data name="WebInspectorHeadings" xml:space="preserve">
     <value>Заголовки</value>
   </data>
@@ -1982,10 +1846,6 @@
 
   <data name="WebInspectorForms" xml:space="preserve">
     <value>Формы</value>
-  </data>
-
-  <data name="WebInspectorTables" xml:space="preserve">
-    <value>Таблицы</value>
   </data>
 
   <data name="WebInspectorNone" xml:space="preserve">
@@ -2066,10 +1926,6 @@
 
   <data name="Dashboards" xml:space="preserve">
     <value>Дашборды</value>
-  </data>
-
-  <data name="DashboardsOverview" xml:space="preserve">
-    <value>Обзор</value>
   </data>
 
   <data name="DashboardsTotal" xml:space="preserve">
@@ -2180,10 +2036,6 @@
     <value>Назначено видимым ролям</value>
   </data>
 
-  <data name="AvgMembers" xml:space="preserve">
-    <value>В среднем участников</value>
-  </data>
-
   <data name="VisibleMembers" xml:space="preserve">
     <value>Видимые участники</value>
   </data>
@@ -2254,10 +2106,6 @@
 
   <data name="DefaultNewUserRole" xml:space="preserve">
     <value>Роль по умолчанию для новых пользователей</value>
-  </data>
-
-  <data name="UseBuiltInUserRole" xml:space="preserve">
-    <value>Встроенная роль User</value>
   </data>
 
   <data name="EnableGoogleLogin" xml:space="preserve">

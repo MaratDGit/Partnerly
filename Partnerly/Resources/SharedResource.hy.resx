@@ -293,10 +293,6 @@
     <value>Բարի գալուստ, {0}։ Ուրախ ենք տեսնել ձեզ մեր կայքում։</value>
   </data>
 
-  <data name="Userroles" xml:space="preserve">
-    <value>Օգտատերերի դերեր</value>
-  </data>
-
   <data name="Users" xml:space="preserve">
     <value>Օգտատերեր</value>
   </data>
@@ -593,14 +589,6 @@
     <value>պատրաստված է</value>
   </data>
 
-  <data name="Theemailverificationtokenhasexpired" xml:space="preserve">
-    <value>Էլ․ փոստի հաստատման հղման ժամկետը լրացել է։</value>
-  </data>
-
-  <data name="ThetokenForgotpasswordhasexpired" xml:space="preserve">
-    <value>Գաղտնաբառի վերականգնման հղման ժամկետը լրացել է։</value>
-  </data>
-
   <data name="Onlinestatusautoupdateinterval" xml:space="preserve">
     <value>Առցանց կարգավիճակի միջակայք (րոպե)</value>
   </data>
@@ -659,10 +647,6 @@
 
   <data name="Viewuser" xml:space="preserve">
     <value>Դիտել օգտատիրոջը</value>
-  </data>
-
-  <data name="Selectarole" xml:space="preserve">
-    <value>Ընտրեք դեր</value>
   </data>
 
   <data name="Edittemplate" xml:space="preserve">
@@ -781,18 +765,6 @@
     <value>Գործողություններ</value>
   </data>
 
-  <data name="Rates" xml:space="preserve">
-    <value>Սակագներ</value>
-  </data>
-
-  <data name="Educationalvideos" xml:space="preserve">
-    <value>Ուսումնական տեսանյութեր</value>
-  </data>
-
-  <data name="Allrightsreserved" xml:space="preserve">
-    <value>Բոլոր իրավունքները պաշտպանված են</value>
-  </data>
-
   <data name="Policy" xml:space="preserve">
     <value>Քաղաքականություն</value>
   </data>
@@ -885,40 +857,12 @@
     <value>Միանալ</value>
   </data>
 
-  <data name="YourSmartBeloteAssistant" xml:space="preserve">
-    <value>Ձեր խելացի բելոտի օգնականը։</value>
-  </data>
-
-  <data name="PlaySmarter" xml:space="preserve">
-    <value>Խաղացեք խելացի</value>
-  </data>
-
-  <data name="WinwithConfidence" xml:space="preserve">
-    <value>Հաղթե՛ք վստահությամբ</value>
-  </data>
-
   <data name="Undermaintenance" xml:space="preserve">
     <value>Սպասարկման փուլում</value>
   </data>
 
   <data name="Technicalmaintenanceunderway" xml:space="preserve">
     <value>Ներողություն անհարմարության համար․ այս պահին կատարվում են տեխնիկական աշխատանքներ։</value>
-  </data>
-
-  <data name="Seehowourplatformworks" xml:space="preserve">
-    <value>Տեսեք, թե ինչպես է աշխատում մեր հարթակը</value>
-  </data>
-
-  <data name="Howtoregisterandgetstarted" xml:space="preserve">
-    <value>Ինչպես գրանցվել և սկսել</value>
-  </data>
-
-  <data name="Invitefriendsandearn" xml:space="preserve">
-    <value>Հրավիրեք ընկերներին և վաստակեք</value>
-  </data>
-
-  <data name="Ratesandbonuslevels" xml:space="preserve">
-    <value>Սակագներ և բոնուսային մակարդակներ</value>
   </data>
 
   <data name="Gamesplayed" xml:space="preserve">
@@ -979,10 +923,6 @@
 
   <data name="Completeregistration" xml:space="preserve">
     <value>Ավարտել գրանցումը</value>
-  </data>
-
-  <data name="Completeyourregistration" xml:space="preserve">
-    <value>Ավարտեք գրանցումը</value>
   </data>
 
   <data name="WereceivedyourdataviaGoogle" xml:space="preserve">
@@ -1169,10 +1109,6 @@
     <value>Հղումը պատճենվեց։</value>
   </data>
 
-  <data name="Copyerror" xml:space="preserve">
-    <value>Պատճենման սխալ՝</value>
-  </data>
-
   <data name="Noinformationonactivity" xml:space="preserve">
     <value>Ակտիվության մասին տվյալներ չկան...</value>
   </data>
@@ -1355,10 +1291,6 @@
 
   <data name="OverallGameResults" xml:space="preserve">
     <value>Խաղերի ընդհանուր արդյունքները</value>
-  </data>
-
-  <data name="GameActivityLast7Days" xml:space="preserve">
-    <value>Խաղային ակտիվությունը վերջին 7 օրվա ընթացքում</value>
   </data>
 
   <data name="Last7Days" xml:space="preserve">
@@ -1645,26 +1577,6 @@
     <value>Հաստատված է Google-ի միջոցով</value>
   </data>
 
-  <data name="Smartexperience" xml:space="preserve">
-    <value>Խելացի մոտեցում</value>
-  </data>
-
-  <data name="Buildyourteam" xml:space="preserve">
-    <value>Կազմեք ձեր թիմը</value>
-  </data>
-
-  <data name="Connectwithyourteamnetwork" xml:space="preserve">
-    <value>Կապ հաստատեք ձեր թիմային ցանցի հետ։</value>
-  </data>
-
-  <data name="Secureaccount" xml:space="preserve">
-    <value>Անվտանգ հաշիվ</value>
-  </data>
-
-  <data name="Yourinformationstaysprotected" xml:space="preserve">
-    <value>Ձեր տվյալները մնում են պաշտպանված։</value>
-  </data>
-
   <data name="Youraccountisready" xml:space="preserve">
     <value>Հաշիվը պատրաստ է</value>
   </data>
@@ -1723,14 +1635,6 @@
 
   <data name="Add" xml:space="preserve">
     <value>Ավելացնել</value>
-  </data>
-
-  <data name="Darktheme" xml:space="preserve">
-    <value>Մուգ թեմա</value>
-  </data>
-
-  <data name="Lighttheme" xml:space="preserve">
-    <value>Բաց թեմա</value>
   </data>
 
   <data name="Roles" xml:space="preserve">
@@ -1876,10 +1780,6 @@
     <value>Վեբ ստուգիչ</value>
   </data>
 
-  <data name="WebInspectorHint" xml:space="preserve">
-    <value>Կենդանի կայքը բացվում է Chrome-ի պատուհանում։ HTML-ը և տեսանելի տվյալները մնում են այստեղ՝ ավտոմատացման համար։</value>
-  </data>
-
   <data name="WebInspectorPlaceholder" xml:space="preserve">
     <value>https://example.com</value>
   </data>
@@ -1888,20 +1788,8 @@
     <value>Բացել</value>
   </data>
 
-  <data name="WebInspectorLoading" xml:space="preserve">
-    <value>Բեռնվում է…</value>
-  </data>
-
-  <data name="WebInspectorPreview" xml:space="preserve">
-    <value>Chrome պատուհան</value>
-  </data>
-
   <data name="WebInspectorVisibleText" xml:space="preserve">
     <value>Տեսանելի տեքստ</value>
-  </data>
-
-  <data name="WebInspectorData" xml:space="preserve">
-    <value>Տվյալներ</value>
   </data>
 
   <data name="WebInspectorHtml" xml:space="preserve">
@@ -1912,20 +1800,12 @@
     <value>Պատճենել HTML</value>
   </data>
 
-  <data name="WebInspectorCopyJson" xml:space="preserve">
-    <value>Պատճենել JSON</value>
-  </data>
-
   <data name="WebInspectorCopied" xml:space="preserve">
     <value>Պատճենված է</value>
   </data>
 
   <data name="WebInspectorEmpty" xml:space="preserve">
     <value>Մուտքագրեք կայքի հասցեն և սեղմեք Բացել</value>
-  </data>
-
-  <data name="WebInspectorJsNote" xml:space="preserve">
-    <value>Կենդանի կայքը բացվում է առանձին Chrome պատուհանում՝ առանց iframe արգելքի։ HTML-ը և տվյալները այստեղ սերվերի նկարն են. մուտքով և ծանր JavaScript-ով կայքերը կարող են տարբերվել կենդանի պատուհանից։ Սերվերը տեղական և ներքին հասցեներ չի բեռնում։</value>
   </data>
 
   <data name="WebInspectorInvalidUrl" xml:space="preserve">
@@ -1952,22 +1832,6 @@
     <value>Ցույց տալ պատուհանը</value>
   </data>
 
-  <data name="WebInspectorLiveTitle" xml:space="preserve">
-    <value>Կայքը բացված է Chrome-ում</value>
-  </data>
-
-  <data name="WebInspectorLiveOpened" xml:space="preserve">
-    <value>Կայքը բացվեց առանձին պատուհանում։ HTML-ը, տեքստը և տվյալները այստեղ են։</value>
-  </data>
-
-  <data name="WebInspectorLiveHint" xml:space="preserve">
-    <value>Chrome-ը բեռնում է իրական կայքը (սկրիպտներ, մուտք, cookie)։ Partnerly-ն չի կարող կարդալ այդ պատուհանը բրաուզերի պաշտպանության պատճառով. այստեղի նկարը գալիս է մեր սերվերից։</value>
-  </data>
-
-  <data name="WebInspectorPopupBlocked" xml:space="preserve">
-    <value>Chrome-ը արգելեց նոր պատուհանը։ Թույլատրեք pop-up-ները այս կայքի համար և նորից սեղմեք Բացել։</value>
-  </data>
-
   <data name="WebInspectorHeadings" xml:space="preserve">
     <value>Վերնագրեր</value>
   </data>
@@ -1982,10 +1846,6 @@
 
   <data name="WebInspectorForms" xml:space="preserve">
     <value>Ձևեր</value>
-  </data>
-
-  <data name="WebInspectorTables" xml:space="preserve">
-    <value>Աղյուսակներ</value>
   </data>
 
   <data name="WebInspectorNone" xml:space="preserve">
@@ -2066,10 +1926,6 @@
 
   <data name="Dashboards" xml:space="preserve">
     <value>Վահանակներ</value>
-  </data>
-
-  <data name="DashboardsOverview" xml:space="preserve">
-    <value>Ակնարկ</value>
   </data>
 
   <data name="DashboardsTotal" xml:space="preserve">
@@ -2180,10 +2036,6 @@
     <value>Նշանակված տեսանելի դերերին</value>
   </data>
 
-  <data name="AvgMembers" xml:space="preserve">
-    <value>Միջին անդամներ</value>
-  </data>
-
   <data name="VisibleMembers" xml:space="preserve">
     <value>Տեսանելի անդամներ</value>
   </data>
@@ -2254,10 +2106,6 @@
 
   <data name="DefaultNewUserRole" xml:space="preserve">
     <value>Նոր օգտատիրոջ լռելյայն դեր</value>
-  </data>
-
-  <data name="UseBuiltInUserRole" xml:space="preserve">
-    <value>Ներկառուցված User դեր</value>
   </data>
 
   <data name="EnableGoogleLogin" xml:space="preserve">

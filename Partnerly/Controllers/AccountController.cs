@@ -63,35 +63,21 @@ namespace Partnerly.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> Login(string? returnUrl = null)
+        public IActionResult Login(string? returnUrl = null)
         {
-            ViewBag.ReturnUrl = returnUrl;
-            await PopulateAuthSettingsAsync();
-            return View();
+            return RedirectToLandingAuth("login", returnUrl);
         }
 
         [HttpGet]
-        public async Task<IActionResult> Register(string? reff = null, string? returnUrl = null)
+        public IActionResult Register(string? reff = null, string? returnUrl = null)
         {
-            ViewBag.ReturnUrl = returnUrl;
-            await PopulateAuthSettingsAsync();
-
-            var model = new RegisterViewModel();
-            if (reff != null)
-            {
-                model.ReferrerCode = reff;
-                model.FromReferrerLink = true;
-            }
-
-            return View(model);
+            return RedirectToLandingAuth("register", returnUrl, reff);
         }
 
         [HttpGet]
-        public async Task<IActionResult> ForgotPassword(string? returnUrl = null)
+        public IActionResult ForgotPassword(string? returnUrl = null)
         {
-            ViewBag.ReturnUrl = returnUrl;
-            await PopulateAuthSettingsAsync();
-            return View();
+            return RedirectToLandingAuth("forgot", returnUrl);
         }
 
         [HttpPost]
@@ -99,25 +85,20 @@ namespace Partnerly.Controllers
         public async Task<IActionResult> Login(LoginViewModel model, string? returnUrl = null)
         {
             if (!ModelState.IsValid)
-            {
-                await PopulateAuthSettingsAsync();
-                return View(model);
-            }
+                return await ShowLandingAuthAsync("login", login: model, returnUrl: returnUrl);
 
             var user = await _userService.GetUserByEmailAsync(model.Email);
 
             if (user == null || user.IsDeleted)
             {
                 ModelState.AddModelError("Password", ErrorMessages.InvalidEmailOrPassword);
-                await PopulateAuthSettingsAsync();
-                return View(model);
+                return await ShowLandingAuthAsync("login", login: model, returnUrl: returnUrl);
             }
 
             if (await IsUserLockedOutAsync(user))
             {
                 ModelState.AddModelError("Password", ErrorMessages.AccountLocked);
-                await PopulateAuthSettingsAsync();
-                return View(model);
+                return await ShowLandingAuthAsync("login", login: model, returnUrl: returnUrl);
             }
 
             if (!BCrypt.Net.BCrypt.Verify(model.Password, user.PasswordHash))
@@ -128,8 +109,7 @@ namespace Partnerly.Controllers
                 else
                     ModelState.AddModelError("Password", ErrorMessages.InvalidEmailOrPassword);
 
-                await PopulateAuthSettingsAsync();
-                return View(model);
+                return await ShowLandingAuthAsync("login", login: model, returnUrl: returnUrl);
             }
 
             await ResetLockoutAsync(user);
@@ -137,15 +117,13 @@ namespace Partnerly.Controllers
             if (user.Role == null || user.IsBlocked == true)
             {
                 ModelState.AddModelError("Password", ErrorMessages.UserAccessDenied);
-                await PopulateAuthSettingsAsync();
-                return View(model);
+                return await ShowLandingAuthAsync("login", login: model, returnUrl: returnUrl);
             }
 
             if (user.EmailConfirmed != true)
             {
                 ViewBag.EmailConfirmationMessage = ErrorMessages.LoginEmailConfirmationMessage;
-                await PopulateAuthSettingsAsync();
-                return View(model);
+                return await ShowLandingAuthAsync("login", login: model, returnUrl: returnUrl);
             }
 
             await SignInUserAsync(user, model.RememberMe);
@@ -161,12 +139,12 @@ namespace Partnerly.Controllers
         public async Task<IActionResult> Register(RegisterViewModel model)
         {
             if (!ModelState.IsValid || _userService == null)
-                return View(model);
+                return await ShowLandingAuthAsync("register", register: model);
 
             if (model?.TermsConditions != true)
             {
                 ModelState.AddModelError("TermsConditions", ErrorMessages.ReadPolicyAndTerms);
-                return View(model);
+                return await ShowLandingAuthAsync("register", register: model);
             }
 
             User? referrer = null;
@@ -176,7 +154,7 @@ namespace Partnerly.Controllers
                 if (referrer == null)
                 {
                     ModelState.AddModelError("ReferrerCode", ErrorMessages.InvalidReferralCode);
-                    return View(model);
+                    return await ShowLandingAuthAsync("register", register: model);
                 }
             }
 
@@ -185,14 +163,14 @@ namespace Partnerly.Controllers
             if (existingUser != null)
             {
                 ModelState.AddModelError("Email", ErrorMessages.UserWithEmailAlreadyExists);
-                return View(model);
+                return await ShowLandingAuthAsync("register", register: model);
             }
 
             existingUser = await _userService.GetUserByPhoneAsync(model?.Phone);
             if (existingUser != null)
             {
                 ModelState.AddModelError("Phone", ErrorMessages.UserWithPhoneAlreadyExists);
-                return View(model);
+                return await ShowLandingAuthAsync("register", register: model);
             }
 
             string? fullName = model?.FullName?.Trim();
@@ -210,12 +188,12 @@ namespace Partnerly.Controllers
             if (string.IsNullOrEmpty(firstName))
             {
                 ModelState.AddModelError("FullName", $"{FieldsDisplayNames.FirstName} {ErrorMessages.FieldRequired}");
-                return View(model);
+                return await ShowLandingAuthAsync("register", register: model);
             }
             if (string.IsNullOrEmpty(lastName))
             {
                 ModelState.AddModelError("FullName", $"{FieldsDisplayNames.LastName} {ErrorMessages.FieldRequired}");
-                return View(model);
+                return await ShowLandingAuthAsync("register", register: model);
             }
 
             Partnerly.Models.User newUser = new Partnerly.Models.User();
@@ -233,10 +211,10 @@ namespace Partnerly.Controllers
                 {
                     ModelState.AddModelError("TermsConditions", error);
                 }
-                return View(model);
+                return await ShowLandingAuthAsync("register", register: model);
             }
 
-            return View("RegistrationSuccessful");
+            return RedirectToLandingAuth("register-ok");
         }
 
         [HttpGet]
@@ -251,21 +229,19 @@ namespace Partnerly.Controllers
         public async Task<IActionResult> ForgotPassword(ForgotPasswordViewModel model, string? returnUrl = null)
         {
             if (!ModelState.IsValid)
-            {
-                return View(model);
-            }
+                return await ShowLandingAuthAsync("forgot", forgot: model, returnUrl: returnUrl);
 
             var user = await _userService.GetUserByEmailAsync(model.Email);
             if (user == null || user.IsDeleted)
             {
                 ModelState.AddModelError("Email", ErrorMessages.InvalidEmail);
-                return View(model);
+                return await ShowLandingAuthAsync("forgot", forgot: model, returnUrl: returnUrl);
             }
 
             if (user.IsBlocked == true)
             {
                 ModelState.AddModelError("Email", ErrorMessages.UserIsBlocked);
-                return View(model);
+                return await ShowLandingAuthAsync("forgot", forgot: model, returnUrl: returnUrl);
             }
 
             var emailToken = new EmailConfirmationToken { UserId = user.Id, TokenType = EmailTokenTypeAttribute.ForgotPassword };
@@ -277,7 +253,7 @@ namespace Partnerly.Controllers
                 {
                     ModelState.AddModelError("", error);
                 }
-                return View(model);
+                return await ShowLandingAuthAsync("forgot", forgot: model, returnUrl: returnUrl);
             }
 
             if (tokenResult?.Data?.UserId != null && tokenResult.Data.Token != null)
@@ -296,7 +272,7 @@ namespace Partnerly.Controllers
 
                 await _emailSender.SendEmailWithTemplateAsync(EmailTemplateNameAttribute.ForgotPassword, user.Email, emailModel);
 
-                return View("ForgotPasswordSuccessful");
+                return RedirectToLandingAuth("forgot-ok", returnUrl);
             }
 
             return RedirectToAction("Index", "Home");
@@ -374,7 +350,7 @@ namespace Partnerly.Controllers
                 return View(model);
             }
 
-            return RedirectToAction("Index", "Home");
+            return RedirectToLandingAuth("login", returnUrl);
         }
 
         [HttpGet]
@@ -405,7 +381,7 @@ namespace Partnerly.Controllers
 
                         if (tokenResult.Success)
                         {
-                            return View("ConfirmEmailSuccess");
+                            return RedirectToLandingAuth("email-ok");
                         }
                     }
                 }
@@ -785,6 +761,27 @@ namespace Partnerly.Controllers
                 CookieAuthenticationDefaults.AuthenticationScheme,
                 new ClaimsPrincipal(identity),
                 auth.Properties ?? new AuthenticationProperties());
+        }
+
+        private IActionResult RedirectToLandingAuth(string auth, string? returnUrl = null, string? reff = null)
+        {
+            return RedirectToAction("Index", "Home", new { auth, returnUrl, reff });
+        }
+
+        private async Task<IActionResult> ShowLandingAuthAsync(
+            string panel,
+            LoginViewModel? login = null,
+            RegisterViewModel? register = null,
+            ForgotPasswordViewModel? forgot = null,
+            string? returnUrl = null)
+        {
+            await PopulateAuthSettingsAsync();
+            ViewBag.AuthPanel = panel;
+            ViewBag.ReturnUrl = returnUrl;
+            ViewBag.LoginModel = login ?? new LoginViewModel();
+            ViewBag.RegisterModel = register ?? new RegisterViewModel();
+            ViewBag.ForgotModel = forgot ?? new ForgotPasswordViewModel();
+            return View("~/Views/Home/Index.cshtml");
         }
 
         private async Task PopulateAuthSettingsAsync()

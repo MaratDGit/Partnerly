@@ -18,8 +18,6 @@
     var replies = parseList(form.getAttribute("data-chat-replies"));
     var googleUrl = form.getAttribute("data-google-url") || "";
     var appleUrl = form.getAttribute("data-apple-url") || "";
-    var loginUrl = form.getAttribute("data-login-url") || "";
-    var registerUrl = form.getAttribute("data-register-url") || "";
     var googleLabel = form.getAttribute("data-google-label") || "Google";
     var appleLabel = form.getAttribute("data-apple-label") || "Apple";
     var loginLabel = form.getAttribute("data-login-label") || "Log in";
@@ -166,12 +164,17 @@
         return row;
     }
 
-    function providerLink(url, label, iconClass) {
+    function providerLink(url, label, iconClass, authPanel) {
         var link = document.createElement("a");
         link.className = "landing-chat-provider";
-        link.href = url;
         link.setAttribute("aria-label", label);
         link.title = label;
+        if (authPanel) {
+            link.href = "#";
+            link.setAttribute("data-auth", authPanel);
+        } else {
+            link.href = url;
+        }
         var icon = document.createElement("i");
         icon.className = iconClass;
         icon.setAttribute("aria-hidden", "true");
@@ -182,12 +185,8 @@
     function authRow() {
         var row = document.createElement("div");
         row.className = "landing-chat-auth";
-        if (loginUrl) {
-            row.appendChild(providerLink(loginUrl, loginLabel, "bx bx-log-in"));
-        }
-        if (registerUrl) {
-            row.appendChild(providerLink(registerUrl, signupLabel, "bx bx-user-plus"));
-        }
+        row.appendChild(providerLink("#", loginLabel, "bx bx-log-in", "login"));
+        row.appendChild(providerLink("#", signupLabel, "bx bx-user-plus", "register"));
         if (googleUrl) {
             row.appendChild(providerLink(googleUrl, googleLabel, "bx bxl-google"));
         }
