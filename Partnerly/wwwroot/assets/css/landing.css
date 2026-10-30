@@ -124,6 +124,58 @@ html[data-theme="dark"] .landing-brand-text {
     color: #edf0ff;
 }
 
+.landing-brand-letter {
+    display: inline-block;
+}
+
+html.landing-draw .landing-brand-text {
+    overflow: visible;
+}
+
+html.landing-draw .landing-brand-letter {
+    opacity: 0;
+    transform: translateY(0.22em);
+    filter: blur(4px);
+    transition: opacity 0.38s ease, transform 0.38s ease, filter 0.38s ease;
+}
+
+    html.landing-draw .landing-brand-letter.is-in {
+        opacity: 1;
+        transform: none;
+        filter: none;
+    }
+
+html.landing-draw .landing-brand .site-logo path {
+    stroke-dasharray: 80;
+    stroke-dashoffset: 80;
+}
+
+html.landing-draw .landing-brand .site-logo circle {
+    opacity: 0;
+}
+
+@media (prefers-reduced-motion: reduce) {
+    html.landing-draw .landing-brand-letter,
+    html.landing-draw .landing-brand .site-logo circle {
+        opacity: 1;
+        transform: none;
+        filter: none;
+    }
+
+    html.landing-draw .landing-brand .site-logo path {
+        stroke-dasharray: none;
+        stroke-dashoffset: 0;
+    }
+
+    .landing-auth-flipper,
+    .landing-auth-flipper.is-flip-out,
+    .landing-auth-flipper.is-flip-in,
+    .landing-auth-flipper.is-flip-in.is-flip-settle {
+        transform: none;
+        transition: none;
+    }
+}
+
 .landing-hero-actions {
     display: flex;
     align-items: center;
@@ -585,24 +637,77 @@ html[data-theme="dark"] .landing-search-type {
     align-items: flex-start;
     justify-content: center;
     padding: 88px 16px 24px;
-    background: rgba(238, 240, 248, 0.42);
-    backdrop-filter: blur(14px);
-    -webkit-backdrop-filter: blur(14px);
+    background: transparent;
+    transition: background 0.85s ease, backdrop-filter 0.85s ease;
 }
 
     .landing-auth.is-open {
         display: flex;
+        background: rgba(238, 240, 248, 0.42);
+        backdrop-filter: blur(14px);
+        -webkit-backdrop-filter: blur(14px);
     }
 
-html[data-theme="dark"] .landing-auth {
+    .landing-auth.is-open.is-forming {
+        background: transparent;
+        backdrop-filter: none;
+        -webkit-backdrop-filter: none;
+    }
+
+html[data-theme="dark"] .landing-auth.is-open {
     background: rgba(7, 7, 18, 0.52);
+}
+
+    html[data-theme="dark"] .landing-auth.is-open.is-forming {
+        background: transparent;
+    }
+
+.landing-auth-stage {
+    width: min(440px, 100%);
+    perspective: 1400px;
+    perspective-origin: 50% 42%;
+}
+
+.landing-auth-flipper {
+    transform-origin: 50% 50%;
+    transform-style: preserve-3d;
+    transition: transform 0.34s ease-in;
+    will-change: transform;
+}
+
+    .landing-auth-flipper.is-flip-out {
+        transform: rotateY(var(--auth-flip-out, 90deg));
+    }
+
+    .landing-auth-flipper.is-flip-in {
+        transform: rotateY(var(--auth-flip-in, -90deg));
+        transition: none;
+    }
+
+        .landing-auth-flipper.is-flip-in.is-flip-settle {
+            transform: rotateY(0deg);
+            transition: transform 0.34s ease-out;
+        }
+
+.landing-auth.is-forming .landing-auth-card {
+    opacity: 0;
+    transform: scale(0.985);
+    pointer-events: none;
+}
+
+.landing-auth.is-formed .landing-auth-card {
+    opacity: 1;
+    transform: none;
+    transition: opacity 0.8s ease, transform 0.8s ease;
 }
 
 .landing-auth-card {
     position: relative;
-    width: min(440px, 100%);
+    width: 100%;
     max-height: calc(100dvh - 112px);
     overflow: auto;
+    backface-visibility: hidden;
+    -webkit-backface-visibility: hidden;
     padding: 28px 26px 22px;
     border: 1px solid rgba(99, 102, 241, 0.18);
     border-radius: 28px;

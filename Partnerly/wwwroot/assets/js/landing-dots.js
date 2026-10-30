@@ -18,6 +18,7 @@
     var sizeScale = 1;
     var MIN_SCALE = 0.4;
     var MAX_SCALE = 2.5;
+    var gather = null;
 
     var COLORS = [
         "105, 108, 255",
@@ -71,17 +72,110 @@
         canvas.width = Math.round(width * dpr);
         canvas.height = Math.round(height * dpr);
         ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+        gather = null;
         createDots();
+    }
+
+    function easeInOutCubic(t) {
+        return t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2;
+    }
+
+    function gatherToAuth(card, onReady) {
+        if (reduceMotion || !card) {
+            if (typeof onReady === "function") {
+                onReady();
+            }
+            return;
+        }
+
+        var canvasRect = canvas.getBoundingClientRect();
+        var cardRect = card.getBoundingClientRect();
+        var left = cardRect.left - canvasRect.left;
+        var top = cardRect.top - canvasRect.top;
+        var innerW = Math.max(24, cardRect.width - 28);
+        var innerH = Math.max(24, cardRect.height - 28);
+        var i;
+        var dot;
+        var u;
+        var v;
+
+        for (i = 0; i < dots.length; i++) {
+            dot = dots[i];
+            dot.homeX = dot.x;
+            dot.homeY = dot.y;
+            dot.homeSize = dot.size;
+            u = Math.random();
+            v = Math.random();
+            if (Math.random() < 0.38) {
+                u = 0.5 + (Math.random() - 0.5) * 0.5;
+                v = 0.5 + (Math.random() - 0.5) * 0.55;
+            }
+            dot.targetX = left + 14 + u * innerW;
+            dot.targetY = top + 14 + v * innerH;
+            dot.targetSize = 4.2 + Math.random() * 11;
+            dot.gatherDelay = Math.min(0.38, Math.hypot(dot.targetX - dot.x, dot.targetY - dot.y) / 2400);
+        }
+
+        gather = {
+            t: 0,
+            duration: 1.28,
+            delaySpan: 0.38,
+            phase: "in",
+            onReady: onReady,
+            ready: false
+        };
+    }
+
+    function cancelGather() {
+        gather = null;
     }
 
     function draw(now) {
         var dt = lastFrame ? Math.min(0.033, (now - lastFrame) / 1000) : 0.016;
         lastFrame = now;
         var target = countForSize();
+        var gathering = gather !== null;
+        var gatherEase = 0;
+        var i;
+        var dot;
+        var fadeIn;
+        var fadeOut;
+        var envelope;
+        var twinkle;
+        var alpha;
+        var radius;
+        var gx;
 
         ctx.clearRect(0, 0, width, height);
 
-        if (!reduceMotion) {
+        if (gathering) {
+            gather.t += dt;
+            gatherEase = Math.min(1, gather.t / gather.duration);
+
+            if (gather.phase === "in" && !gather.ready && gatherEase >= 0.72) {
+                gather.ready = true;
+                if (typeof gather.onReady === "function") {
+                    gather.onReady();
+                }
+            }
+
+            if (gather.t >= gather.duration) {
+                if (gather.phase === "in") {
+                    gather.phase = "hold";
+                    gather.t = 0;
+                    gather.duration = 0.22;
+                } else if (gather.phase === "hold") {
+                    gather.phase = "out";
+                    gather.t = 0;
+                    gather.duration = 1.35;
+                } else {
+                    gather = null;
+                    gathering = false;
+                }
+            }
+        }
+
+        if (!reduceMotion && !gathering) {
             spawnWait -= dt;
             if (spawnWait <= 0) {
                 var need = Math.max(1, Math.round((target - dots.length) * 0.12));
@@ -90,8 +184,35 @@
             }
         }
 
-        for (var i = dots.length - 1; i >= 0; i--) {
-            var dot = dots[i];
+        for (i = dots.length - 1; i >= 0; i--) {
+            dot = dots[i];
+
+            if (gathering) {
+                if (gather.phase === "hold") {
+                    gx = 1;
+                } else {
+                    gx = Math.min(1, Math.max(0, (gather.t - (dot.gatherDelay || 0)) / Math.max(0.2, gather.duration - (gather.delaySpan || 0))));
+                    gx = easeInOutCubic(gx);
+                }
+
+                if (gather.phase === "out") {
+                    dot.x = dot.targetX + (dot.homeX - dot.targetX) * gx;
+                    dot.y = dot.targetY + (dot.homeY - dot.targetY) * gx;
+                    radius = (dot.targetSize + (dot.homeSize - dot.targetSize) * gx) * sizeScale;
+                    alpha = Math.max(0.18, 1 - gx * 0.5);
+                } else {
+                    dot.x = dot.homeX + (dot.targetX - dot.homeX) * gx;
+                    dot.y = dot.homeY + (dot.targetY - dot.homeY) * gx;
+                    radius = (dot.homeSize + (dot.targetSize - dot.homeSize) * gx) * sizeScale;
+                    alpha = Math.min(1, 0.22 + gx * 0.7);
+                }
+
+                ctx.beginPath();
+                ctx.fillStyle = "rgba(" + dot.color + "," + alpha.toFixed(3) + ")";
+                ctx.arc(dot.x, dot.y, radius, 0, Math.PI * 2);
+                ctx.fill();
+                continue;
+            }
 
             if (!reduceMotion) {
                 dot.life += dt;
@@ -103,11 +224,11 @@
                 continue;
             }
 
-            var fadeIn = Math.min(1, dot.life / 0.4);
-            var fadeOut = Math.min(1, (dot.maxLife - dot.life) / 0.65);
-            var envelope = reduceMotion ? 1 : Math.min(fadeIn, fadeOut);
-            var twinkle = 0.18 + (Math.sin(dot.phase) * 0.5 + 0.5) * 0.72;
-            var alpha = twinkle * envelope;
+            fadeIn = Math.min(1, dot.life / 0.4);
+            fadeOut = Math.min(1, (dot.maxLife - dot.life) / 0.65);
+            envelope = reduceMotion ? 1 : Math.min(fadeIn, fadeOut);
+            twinkle = 0.18 + (Math.sin(dot.phase) * 0.5 + 0.5) * 0.72;
+            alpha = twinkle * envelope;
 
             ctx.beginPath();
             ctx.fillStyle = "rgba(" + dot.color + "," + alpha.toFixed(3) + ")";
@@ -166,4 +287,9 @@
     });
 
     rafId = window.requestAnimationFrame(draw);
+
+    window.partnerlyLandingDots = {
+        gatherToAuth: gatherToAuth,
+        cancelGather: cancelGather
+    };
 })();

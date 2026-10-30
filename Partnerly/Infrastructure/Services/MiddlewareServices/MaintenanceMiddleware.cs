@@ -1,4 +1,4 @@
-﻿using Partnerly.Models;
+﻿using Partnerly.Infrastructure.Interfaces;
 
 namespace Partnerly.Infrastructure.Services.MiddlewareServices
 {
@@ -12,11 +12,11 @@ namespace Partnerly.Infrastructure.Services.MiddlewareServices
             _linkGenerator = linkGenerator;
         }
 
-        public async Task InvokeAsync(HttpContext context, AppDbContext dbContext)
+        public async Task InvokeAsync(HttpContext context, ISystemSettingsService settingsService)
         {
-            if (context.User.Identity?.IsAuthenticated == true && dbContext?.SystemSettings != null)
+            if (context.User.Identity?.IsAuthenticated == true)
             {
-                var settings = dbContext.SystemSettings.FirstOrDefault();
+                var settings = await settingsService.GetCurrentAsync();
 
                 if (settings != null && settings.IsMaintenanceMode == true)
                 {

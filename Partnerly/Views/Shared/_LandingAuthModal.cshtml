@@ -20,7 +20,9 @@
      data-title-email-ok="@Localizer["EmailVerified"]"
      aria-hidden="@(isOpen ? "false" : "true")">
 
-    <div class="landing-auth-card" role="dialog" aria-modal="true" aria-labelledby="landingAuthTitle">
+    <div class="landing-auth-stage">
+        <div class="landing-auth-flipper">
+            <div class="landing-auth-card" role="dialog" aria-modal="true" aria-labelledby="landingAuthTitle">
         <button type="button"
                 class="landing-auth-close"
                 data-auth-close
@@ -105,6 +107,8 @@
                     <span>@Localizer["Login"]</span>
                     <i class="bx bx-right-arrow-alt"></i>
                 </button>
+            </div>
+        </div>
             </div>
         </div>
     </div>

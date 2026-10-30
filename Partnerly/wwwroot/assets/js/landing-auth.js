@@ -6,6 +6,11 @@
         return;
     }
 
+    var flipper = overlay.querySelector(".landing-auth-flipper");
+    var reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    var flipping = false;
+    var queuedPanel = null;
+    var flipSign = 1;
     var appName = overlay.getAttribute("data-app-name") || "";
     var titles = {
         login: overlay.getAttribute("data-title-login") || "",
@@ -43,7 +48,16 @@
         }
     }
 
-    function setPanel(panel) {
+    function focusActiveInput() {
+        window.requestAnimationFrame(function () {
+            var input = overlay.querySelector(".landing-auth-panel.is-active input:not([type='hidden']):not([readonly])");
+            if (input) {
+                input.focus();
+            }
+        });
+    }
+
+    function setPanel(panel, options) {
         var panels = overlay.querySelectorAll("[data-auth-panel]");
         var found = false;
         for (var i = 0; i < panels.length; i += 1) {
@@ -58,27 +72,136 @@
         }
         overlay.setAttribute("data-open", panel);
         setTitle(panel);
-        window.requestAnimationFrame(function () {
-            var input = overlay.querySelector(".landing-auth-panel.is-active input:not([type='hidden']):not([readonly])");
-            if (input) {
-                input.focus();
+        if (!options || !options.deferFocus) {
+            focusActiveInput();
+        }
+    }
+
+    function activePanel() {
+        return overlay.getAttribute("data-open") || "";
+    }
+
+    function waitTransform(el, done, ms) {
+        var finished = false;
+        function finish() {
+            if (finished) {
+                return;
             }
-        });
+            finished = true;
+            el.removeEventListener("transitionend", onEnd);
+            window.clearTimeout(timer);
+            done();
+        }
+        function onEnd(event) {
+            if (event.target === el && event.propertyName === "transform") {
+                finish();
+            }
+        }
+        el.addEventListener("transitionend", onEnd);
+        var timer = window.setTimeout(finish, ms);
+    }
+
+    function resetFlipper() {
+        if (!flipper) {
+            return;
+        }
+        flipper.classList.remove("is-flip-out", "is-flip-in", "is-flip-settle");
+        flipper.style.transform = "";
+    }
+
+    function flipTo(panel) {
+        if (!flipper || reduceMotion) {
+            setPanel(panel);
+            syncUrl(panel);
+            return;
+        }
+
+        if (flipping) {
+            queuedPanel = panel;
+            return;
+        }
+
+        flipping = true;
+        overlay.style.setProperty("--auth-flip-out", (90 * flipSign) + "deg");
+        overlay.style.setProperty("--auth-flip-in", (-90 * flipSign) + "deg");
+        flipSign *= -1;
+
+        function finishFlip() {
+            resetFlipper();
+            flipping = false;
+            syncUrl(panel);
+            var next = queuedPanel;
+            queuedPanel = null;
+            if (next && next !== panel && Object.prototype.hasOwnProperty.call(titles, next)) {
+                flipTo(next);
+            }
+        }
+
+        function turnIn() {
+            setPanel(panel);
+            flipper.classList.remove("is-flip-out");
+            flipper.classList.add("is-flip-in");
+            void flipper.offsetWidth;
+            window.requestAnimationFrame(function () {
+                flipper.classList.add("is-flip-settle");
+            });
+            waitTransform(flipper, finishFlip, 420);
+        }
+
+        flipper.classList.add("is-flip-out");
+        waitTransform(flipper, turnIn, 420);
     }
 
     function open(panel) {
         if (!Object.prototype.hasOwnProperty.call(titles, panel)) {
             return;
         }
-        overlay.classList.add("is-open");
+        if (isOpen() && activePanel() === panel) {
+            return;
+        }
+        if (isOpen() && activePanel()) {
+            flipTo(panel);
+            return;
+        }
+        overlay.classList.add("is-open", "is-forming");
+        overlay.classList.remove("is-formed");
         overlay.setAttribute("aria-hidden", "false");
         document.body.classList.add("is-auth-open");
-        setPanel(panel);
+        setPanel(panel, { deferFocus: !reduceMotion });
         syncUrl(panel);
+        revealFromDots();
+    }
+
+    function revealFromDots() {
+        var card = overlay.querySelector(".landing-auth-card");
+        var dotsApi = window.partnerlyLandingDots;
+
+        function showCard() {
+            overlay.classList.add("is-formed");
+            overlay.classList.remove("is-forming");
+            focusActiveInput();
+        }
+
+        if (reduceMotion || !card || !dotsApi || typeof dotsApi.gatherToAuth !== "function") {
+            showCard();
+            return;
+        }
+
+        window.requestAnimationFrame(function () {
+            window.requestAnimationFrame(function () {
+                dotsApi.gatherToAuth(card, showCard);
+            });
+        });
     }
 
     function close() {
-        overlay.classList.remove("is-open");
+        queuedPanel = null;
+        flipping = false;
+        resetFlipper();
+        if (window.partnerlyLandingDots && typeof window.partnerlyLandingDots.cancelGather === "function") {
+            window.partnerlyLandingDots.cancelGather();
+        }
+        overlay.classList.remove("is-open", "is-forming", "is-formed");
         overlay.setAttribute("aria-hidden", "true");
         overlay.setAttribute("data-open", "");
         document.body.classList.remove("is-auth-open");
@@ -128,7 +251,7 @@
             return;
         }
 
-        if (isOpen() && event.target === overlay) {
+        if (isOpen() && event.target === overlay && !overlay.classList.contains("is-forming")) {
             close();
         }
     });
@@ -152,7 +275,7 @@
 
     var initial = overlay.getAttribute("data-open");
     if (initial && Object.prototype.hasOwnProperty.call(titles, initial)) {
-        overlay.classList.add("is-open");
+        overlay.classList.add("is-open", "is-formed");
         overlay.setAttribute("aria-hidden", "false");
         document.body.classList.add("is-auth-open");
         setPanel(initial);

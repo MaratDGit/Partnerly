@@ -1,4 +1,5 @@
-﻿using Partnerly.Descriptors.Attributes;
+﻿using Microsoft.Extensions.Caching.Memory;
+using Partnerly.Descriptors.Attributes;
 using Partnerly.Descriptors.Messages;
 using Partnerly.Infrastructure.Interfaces;
 using Partnerly.Models;
@@ -7,15 +8,23 @@ namespace Partnerly.Infrastructure.Services
 {
     public class SystemSettingsService : ISystemSettingsService
     {
+        public const string CurrentCacheKey = "partnerly:system-settings:current";
+        private static readonly TimeSpan CurrentCacheDuration = TimeSpan.FromMinutes(10);
+
         private readonly ISystemSettingsRepository _setupRepo;
         private readonly ILogService _logService;
+        private readonly IMemoryCache _cache;
         private SystemSettings? _current;
         private bool _currentLoaded;
 
-        public SystemSettingsService(ISystemSettingsRepository setupRepo, ILogService logService)
+        public SystemSettingsService(
+            ISystemSettingsRepository setupRepo,
+            ILogService logService,
+            IMemoryCache cache)
         {
             _setupRepo = setupRepo;
             _logService = logService;
+            _cache = cache;
         }
 
         public async Task<SystemSettings?> GetSetupByIDAsync(int? id) =>
@@ -24,11 +33,20 @@ namespace Partnerly.Infrastructure.Services
         public async Task<SystemSettings?> GetCurrentAsync()
         {
             if (_currentLoaded)
-                return _current;
+                return Clone(_current);
 
-            _current = await _setupRepo.GetBySetupIDAsync(1);
+            if (_cache.TryGetValue(CurrentCacheKey, out SystemSettings? cached) && cached != null)
+            {
+                _current = cached;
+                _currentLoaded = true;
+                return Clone(_current);
+            }
+
+            var fromDb = await _setupRepo.GetBySetupIDAsync(1);
+            _current = Clone(fromDb);
             _currentLoaded = true;
-            return _current;
+            StoreCurrent(_current);
+            return Clone(_current);
         }
 
         public async Task<IEnumerable<SystemSettings?>> GetAllSetupAsync() =>
@@ -49,8 +67,7 @@ namespace Partnerly.Infrastructure.Services
             await _setupRepo.AddAsync(newSetup);
             await _setupRepo.SaveChangesAsync();
 
-            _current = newSetup;
-            _currentLoaded = true;
+            RememberCurrent(newSetup);
 
             return ServiceResult<SystemSettings?>.Ok(newSetup);
         }
@@ -66,8 +83,7 @@ namespace Partnerly.Infrastructure.Services
             _setupRepo.Update(rec);
             await _setupRepo.SaveChangesAsync();
 
-            _current = rec;
-            _currentLoaded = true;
+            RememberCurrent(rec);
 
             return ServiceResult<SystemSettings?>.Ok(rec);
         }
@@ -126,6 +142,50 @@ namespace Partnerly.Infrastructure.Services
             //await _setupRepo.SaveChangesAsync();
 
             return ServiceResult<SystemSettings?>.Ok(setup);
+        }
+
+        private void RememberCurrent(SystemSettings? settings)
+        {
+            _current = Clone(settings);
+            _currentLoaded = true;
+            StoreCurrent(_current);
+        }
+
+        private void StoreCurrent(SystemSettings? settings)
+        {
+            if (settings == null)
+            {
+                _cache.Remove(CurrentCacheKey);
+                return;
+            }
+
+            _cache.Set(
+                CurrentCacheKey,
+                Clone(settings),
+                new MemoryCacheEntryOptions
+                {
+                    AbsoluteExpirationRelativeToNow = CurrentCacheDuration
+                });
+        }
+
+        private static SystemSettings? Clone(SystemSettings? source)
+        {
+            if (source == null)
+                return null;
+
+            var copy = new SystemSettings
+            {
+                Id = source.Id,
+                TaskTickedID = source.TaskTickedID,
+                IsDeleted = source.IsDeleted,
+                CreatedBy = source.CreatedBy,
+                CreatedDate = source.CreatedDate,
+                UpdatedBy = source.UpdatedBy,
+                UpdatedDate = source.UpdatedDate
+            };
+
+            CopySettings(source, copy);
+            return copy;
         }
     }
 }

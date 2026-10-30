@@ -35,6 +35,9 @@
                 var theme = dark ? "dark" : "light";
                 document.documentElement.setAttribute("data-theme", theme);
                 document.documentElement.setAttribute("data-bs-theme", theme);
+                if (!window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+                    document.documentElement.classList.add("landing-draw");
+                }
             } catch (error) {
                 // Keep the default light theme.
             }
@@ -68,7 +71,12 @@
                asp-action="Index"
                class="landing-brand">
                 @await Html.PartialAsync("_SiteLogo", "landing")
-                <span class="landing-brand-text">@appName</span>
+                <span class="landing-brand-text" aria-label="@appName">
+                    @foreach (var character in appName)
+                    {
+                        <span class="landing-brand-letter">@(character == ' ' ? "\u00A0" : character.ToString())</span>
+                    }
+                </span>
             </a>
 
             <div class="landing-header-actions partnerly-navbar-actions">
@@ -136,6 +144,7 @@
     <script src="~/assets/vendor/js/bootstrap.js" asp-append-version="true"></script>
     <script src="~/assets/js/spiner.js" asp-append-version="true"></script>
     <script src="~/assets/js/partnerly-theme.js" asp-append-version="true"></script>
+    <script src="~/assets/js/landing-brand.js" asp-append-version="true"></script>
     @await RenderSectionAsync("Scripts", required: false)
 
 </body>

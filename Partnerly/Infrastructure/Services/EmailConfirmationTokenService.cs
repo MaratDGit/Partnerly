@@ -45,7 +45,7 @@ namespace Partnerly.Infrastructure.Services
                 return ServiceResult<EmailConfirmationToken?>.Fail(new List<string> { });
             }
 
-            var setup = await _setupServoce.GetSetupByIDAsync(1);
+            var setup = await _setupServoce.GetCurrentAsync();
 
             var tokenBytes = RandomNumberGenerator.GetBytes(32);
             var token = Convert.ToBase64String(tokenBytes);
