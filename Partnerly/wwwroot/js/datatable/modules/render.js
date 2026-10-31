@@ -361,6 +361,9 @@
             ctx.renderRows =
                 function (items) {
 
+                    ctx.lastItems =
+                        items;
+
                     if (
                         !items ||
                         items.length === 0
@@ -570,7 +573,7 @@
                             ) {
 
                                 html +=
-                                    '<td class="data-table-actions">';
+                                    '<td class="data-table-actions" data-field="__actions">';
 
 
                                 /*

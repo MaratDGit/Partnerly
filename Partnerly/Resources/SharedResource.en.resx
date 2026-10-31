@@ -701,6 +701,14 @@
     <value>Fit column headers</value>
   </data>
 
+  <data name="DataTableColumnSettings" xml:space="preserve">
+    <value>Column settings</value>
+  </data>
+
+  <data name="DataTableColumns" xml:space="preserve">
+    <value>Columns</value>
+  </data>
+
   <data name="DataTableApply" xml:space="preserve">
     <value>Apply</value>
   </data>

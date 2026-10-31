@@ -427,10 +427,17 @@
                         field
                     );
 
+                var isHidden =
+                    header.classList.contains(
+                        "data-table-col-hidden"
+                    );
+
                 var width =
-                    header
-                        .getBoundingClientRect()
-                        .width;
+                    isHidden
+                        ? minWidth
+                        : header
+                            .getBoundingClientRect()
+                            .width;
 
                 width =
                     normalizeWidth(
@@ -471,6 +478,13 @@
                     "data-field",
                     field
                 );
+
+                if (isHidden) {
+
+                    col.classList.add(
+                        "data-table-col-hidden"
+                    );
+                }
 
                 col.style.width =
                     width + "px";
@@ -1168,6 +1182,15 @@
 
                     columns.forEach(
                         function (column) {
+
+                            if (
+                                column.header &&
+                                column.header.classList.contains(
+                                    "data-table-col-hidden"
+                                )
+                            ) {
+                                return;
+                            }
 
                             if (
                                 column.config &&

@@ -10,6 +10,8 @@
 //            ├── state.js
 //            ├── utils.js
 //            ├── columns.js
+//            ├── reorder.js
+//            ├── columnSettings.js
 //            ├── render.js
 //            ├── data.js
 //            ├── search.js
@@ -55,6 +57,8 @@
             modules.state,
             modules.utils,
             modules.columns,
+            modules.reorder,
+            modules.columnSettings,
             modules.render,
             modules.data,
             modules.search,

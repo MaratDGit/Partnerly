@@ -177,7 +177,13 @@
 
 
                             var header =
-                                headers[index];
+                                ctx.root.querySelector(
+                                    'thead th[data-field="' +
+                                    String(column.field)
+                                        .replace(/\\/g, "\\\\")
+                                        .replace(/"/g, '\\"') +
+                                    '"]'
+                                );
 
 
                             if (!header) {

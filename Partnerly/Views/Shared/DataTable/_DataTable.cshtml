@@ -260,6 +260,8 @@
         </div>
 
 
+        <div class="data-table-toolbar-right">
+
         @* =============================================================
        SEARCH
        ============================================================= *@
@@ -292,6 +294,74 @@
                 </div>
         }
 
+        @if (Model.ColumnSettingsEnabled)
+        {
+            <div class="data-table-columns-dropdown">
+
+                <button type="button"
+                        class="data-table-grid-action"
+                        data-table-column-settings
+                        title="@Localizer["DataTableColumnSettings"]"
+                        aria-label="@Localizer["DataTableColumnSettings"]"
+                        aria-haspopup="true"
+                        aria-expanded="false">
+
+                    <span class="data-table-grid-action-icon">
+                        <i class="bx bx-cog"></i>
+                    </span>
+
+                </button>
+
+                <div class="data-table-columns-panel"
+                     data-table-columns-panel
+                     hidden>
+
+                    <div class="data-table-columns-panel-header">
+
+                        <div class="data-table-columns-panel-title">
+
+                            <span class="data-table-columns-panel-title-icon">
+                                <i class="bx bx-columns"></i>
+                            </span>
+
+                            <span>
+                                @Localizer["DataTableColumns"]
+                            </span>
+
+                        </div>
+
+                        <button type="button"
+                                class="data-table-columns-panel-close"
+                                data-table-columns-close
+                                aria-label="@Localizer["Cancel"]">
+                        </button>
+
+                    </div>
+
+                    <div class="data-table-columns-panel-body"
+                         data-table-columns-list>
+                    </div>
+
+                    <div class="data-table-columns-panel-footer">
+
+                        <button type="button"
+                                class="btn btn-light"
+                                data-table-columns-reset>
+
+                            <i class="bx bx-undo"></i>
+                            @Localizer["DataTableReset"]
+
+                        </button>
+
+                    </div>
+
+                </div>
+
+            </div>
+        }
+
+        </div>
+
     </div>
 
     </div>
@@ -306,12 +376,9 @@
 
                     @foreach (var column in Model.Columns)
                     {
-                        @if (!column.Visible)
-                        {
-                            continue;
-                        }
-
-                        <th data-field="@column.Field" style="@(string.IsNullOrWhiteSpace(column.Width) ? "" : "width:" + column.Width + ";")">
+                        <th data-field="@column.Field"
+                            class="@(column.Visible ? null : "data-table-col-hidden")"
+                            style="@(string.IsNullOrWhiteSpace(column.Width) ? "" : "width:" + column.Width + ";")">
 
                             @if (
                                 Model.Rows.Selectable &&
@@ -698,6 +765,8 @@
                             rememberState = Model.RememberState,
                             columnResizeEnabled = Model.ColumnResizeEnabled,
                             columnResizeMinWidth = Model.ColumnResizeMinWidth,
+                            columnReorderEnabled = Model.ColumnReorderEnabled,
+                            columnSettingsEnabled = Model.ColumnSettingsEnabled,
 
                             inlineEditing = inlineEditingEnabled,
                             inlineUpdateUrl = inlineEditingEnabled ? Model.InlineUpdateUrl : null,
@@ -757,6 +826,7 @@
                                     exportable = column.Exportable,
                                     editable = column.Editable && CanTable(column.Permission),
                                     resizable = column.Resizable,
+                                    reorderable = column.Reorderable,
                                     width = column.Width,
                                     format = column.Format,
                                     urlTemplate = CanTable(column.Permission) ? column.UrlTemplate : null,

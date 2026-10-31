@@ -701,6 +701,14 @@
     <value>Подогнать заголовки колонок</value>
   </data>
 
+  <data name="DataTableColumnSettings" xml:space="preserve">
+    <value>Настройки колонок</value>
+  </data>
+
+  <data name="DataTableColumns" xml:space="preserve">
+    <value>Колонки</value>
+  </data>
+
   <data name="DataTableApply" xml:space="preserve">
     <value>Применить</value>
   </data>

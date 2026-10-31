@@ -701,6 +701,14 @@
     <value>Հարմարեցնել սյուների վերնագրերը</value>
   </data>
 
+  <data name="DataTableColumnSettings" xml:space="preserve">
+    <value>Սյուների կարգավորումներ</value>
+  </data>
+
+  <data name="DataTableColumns" xml:space="preserve">
+    <value>Սյուներ</value>
+  </data>
+
   <data name="DataTableApply" xml:space="preserve">
     <value>Կիրառել</value>
   </data>

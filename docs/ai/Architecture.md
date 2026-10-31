@@ -57,7 +57,7 @@ Controller  →  I*Service  →  I*Repository : Repository<T>  →  AppDbContext
 - Права UI: `Permission` на action/column/export. Фильтр в `_DataTable.cshtml` по `ViewData["Permissions"]` — **не** менять зарегистрированные options (singleton общий для всех пользователей).
 - StickyButtons: `Permission` на `FormActionBase`; фильтр в `_StickyButtons.cshtml`. Удаление вложений в модалке — `attachments.manage` (или `DeletePermission`).
 - Запрос: `DataTableQueryService` + `DataTablePropertyResolver`.
-- UI: `Views/Shared/DataTable/_DataTable.cshtml`, `_DataTablePartial.cshtml`, JS в `wwwroot/js/datatable/`. Тулбар: справа от фильтра кнопка `data-table-fit-columns` (`resize.js` / `fitHeaderColumns`) подгоняет ширину колонок под полный текст заголовка и иконки sort/filter; колонка `__actions` — по ширине всех кнопок в строке, не по тексту заголовка.
+- UI: `Views/Shared/DataTable/_DataTable.cshtml`, `_DataTablePartial.cshtml`, JS в `wwwroot/js/datatable/`. Тулбар: справа от фильтра кнопка `data-table-fit-columns` (`resize.js` / `fitHeaderColumns`) подгоняет ширину колонок под полный текст заголовка и иконки sort/filter; колонка `__actions` — по ширине всех кнопок в строке, не по тексту заголовка. Порядок колонок: `reorder.js` — перетаскивание заголовка (кроме `__actions`); сохранённый порядок в localStorage при `RememberState`. Кнопка настроек (шестерёнка) справа от поиска открывает панель колонок (`columnSettings.js`): вкл/выкл и drag-порядок; `__actions` в списке нет.
 - Вкладки форм: `<partnerly-tabs>` / `<partnerly-tab>` (`PartnerlyTabsTagHelper`), стили `partnerly-tabs.css`. Сейчас на Edit User Role и Edit Group. System Preferences пока свой markup.
 - Inline-правка: `IInlineUpdateService`.
 - Экспорт: `DataTableExcelExporter`, `DataTableCsvExporter`.

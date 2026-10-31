@@ -13,6 +13,64 @@
                 ctx.options;
 
 
+            ctx.defaultColumnLayout =
+                (options.columns || []).map(
+                    function (column) {
+
+                        return {
+                            field:
+                                column &&
+                                column.field != null
+                                    ? String(column.field)
+                                    : "",
+                            visible:
+                                !column ||
+                                column.visible !== false
+                        };
+                    }
+                );
+
+
+            ctx.refreshColumnCount =
+                function () {
+
+                    var count = 0;
+
+                    if (
+                        options.columns &&
+                        Array.isArray(options.columns)
+                    ) {
+
+                        for (
+                            var i = 0;
+                            i < options.columns.length;
+                            i++
+                        ) {
+
+                            if (
+                                options.columns[i] &&
+                                options.columns[i].visible
+                            ) {
+                                count += 1;
+                            }
+                        }
+                    }
+
+                    if (
+                        typeof ctx.hasActionsColumn ===
+                            "function" &&
+                        ctx.hasActionsColumn()
+                    ) {
+                        count += 1;
+                    }
+
+                    options.columnCount =
+                        count;
+
+                    return count;
+                };
+
+
             /*
              * =========================================================
              * COLUMN ALIGNMENT
