@@ -1664,6 +1664,34 @@
     <value>Օգտատիրոջ դեր</value>
   </data>
 
+  <data name="EditUserRole" xml:space="preserve">
+    <value>Խմբագրել օգտատիրոջ դերը</value>
+  </data>
+
+  <data name="History" xml:space="preserve">
+    <value>Պատմություն</value>
+  </data>
+
+  <data name="PerformedBy" xml:space="preserve">
+    <value>Փոփոխել է</value>
+  </data>
+
+  <data name="UserRoleChanged" xml:space="preserve">
+    <value>Դերը փոխվել է</value>
+  </data>
+
+  <data name="UserPermissionAdded" xml:space="preserve">
+    <value>Իրավունքը ավելացվել է</value>
+  </data>
+
+  <data name="UserPermissionRemoved" xml:space="preserve">
+    <value>Իրավունքը հեռացվել է</value>
+  </data>
+
+  <data name="UserPermissionGrantUpdated" xml:space="preserve">
+    <value>Իրավունքը փոփոխվել է</value>
+  </data>
+
   <data name="Permission" xml:space="preserve">
     <value>Իրավունք</value>
   </data>

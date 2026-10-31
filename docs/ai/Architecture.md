@@ -58,6 +58,7 @@ Controller  →  I*Service  →  I*Repository : Repository<T>  →  AppDbContext
 - StickyButtons: `Permission` на `FormActionBase`; фильтр в `_StickyButtons.cshtml`. Удаление вложений в модалке — `attachments.manage` (или `DeletePermission`).
 - Запрос: `DataTableQueryService` + `DataTablePropertyResolver`.
 - UI: `Views/Shared/DataTable/_DataTable.cshtml`, `_DataTablePartial.cshtml`, JS в `wwwroot/js/datatable/`. Тулбар: справа от фильтра кнопка `data-table-fit-columns` (`resize.js` / `fitHeaderColumns`) подгоняет ширину колонок под полный текст заголовка и иконки sort/filter; колонка `__actions` — по ширине всех кнопок в строке, не по тексту заголовка.
+- Вкладки форм: `<partnerly-tabs>` / `<partnerly-tab>` (`PartnerlyTabsTagHelper`), стили `partnerly-tabs.css`. Сейчас на Edit User Role и Edit Group. System Preferences пока свой markup.
 - Inline-правка: `IInlineUpdateService`.
 - Экспорт: `DataTableExcelExporter`, `DataTableCsvExporter`.
 

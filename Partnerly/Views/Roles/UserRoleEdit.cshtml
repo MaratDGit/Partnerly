@@ -8,7 +8,7 @@
 
 <div class="card">
     <div class="card-header justify-content-between">
-        <h5>@Localizer["EditRole"]</h5>
+        <h5>@Localizer["EditUserRole"]</h5>
     </div>
 
     <div class="card-body">
@@ -71,11 +71,23 @@
                       class="text-danger"></span>
             </div>
 
-            <div class="mt-8">
-                @await Html.PartialAsync(
-                    "~/Views/Shared/DataTable/_DataTable.cshtml",
-                    Model.userPermissions)
-            </div>
+            <partnerly-tabs id="userRoleTabs" class="mt-4">
+                <partnerly-tab id="permissions"
+                               icon="bx bx-shield-quarter"
+                               title="@Localizer["Permissions"]"
+                               active="true">
+                    @await Html.PartialAsync(
+                        "~/Views/Shared/DataTable/_DataTable.cshtml",
+                        Model.userPermissions)
+                </partnerly-tab>
+                <partnerly-tab id="history"
+                               icon="bx bx-history"
+                               title="@Localizer["History"]">
+                    @await Html.PartialAsync(
+                        "~/Views/Shared/DataTable/_DataTable.cshtml",
+                        Model.accessHistory)
+                </partnerly-tab>
+            </partnerly-tabs>
         </form>
     </div>
 </div>
@@ -84,5 +96,3 @@
 <script>
     enableSaveOnChange("#userRoleForm", "#btnSave");
 </script>
-
-

@@ -4,6 +4,17 @@
 
 ---
 
+## TR-2026-10-31-01 — Общий tab control
+
+- **Дата:** 2026-10-31
+- **Суть:** вкладки форм — `<partnerly-tabs>` / `<partnerly-tab>` и `partnerly-tabs.css`, стиль как на Edit Group. User Role Edit и User Groups используют один control.
+- **Причина:** владелец: не копировать стили вкладок; сделать общий control для сайта.
+- **Затрагивает:** `PartnerlyTabsTagHelper`, `partnerly-tabs.css` / `.js`, `UserRoleEdit.cshtml`, `UserGroups/Form.cshtml`, `_CommonMasterLayout`.
+- **Последствия:** System Preferences пока на своих `.system-settings-tabs`.
+- **Альтернативы:** копировать CSS Edit Group на User Role — отклонено.
+
+---
+
 ## TR-2026-10-30-07 — Auth-попап без сборки из точек
 
 - **Дата:** 2026-10-30

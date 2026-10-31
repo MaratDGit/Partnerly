@@ -11,7 +11,7 @@ namespace Partnerly.Models.ViewModels
 {
     public class UserRolesViewModel : IAuditableViewModel
     {
-        public string? Title { get; set; } = " User Role";
+        public string? Title { get; set; } = "Edit User Role";
 
         #region ID
         [Required]
@@ -52,6 +52,8 @@ namespace Partnerly.Models.ViewModels
         public string? Note { get; set; }
 
         public DataTableOptions userPermissions { get; set; } = new DataTableOptions();
+
+        public DataTableOptions accessHistory { get; set; } = new DataTableOptions();
 
         #region Audit fields
         [Display(Name = nameof(FieldsDisplayNames.CreatorName), ResourceType = typeof(FieldsDisplayNames))]
@@ -329,6 +331,105 @@ namespace Partnerly.Models.ViewModels
                                     Permission = PermissionCodes.UsersManageRoles
                                 }
                             }
+                        },
+                    },
+
+                DataTableNames.userAccessAuditTable =>
+                    new DataTableOptions
+                    {
+                        Id = tableID,
+                        KeyField = "Id",
+                        AjaxUrl = "/Roles/Data",
+
+                        AutoLoad = true,
+                        ReloadEnabled = true,
+                        RememberState = true,
+                        InlineEditing = false,
+
+                        Columns = new List<DataTableColumn>
+                        {
+                            new DataTableColumn
+                            {
+                                Field = "Id",
+                                Type = DataTableColumnType.Text,
+                                Visible = false,
+                            },
+                            new DataTableColumn
+                            {
+                                Field = nameof(AccessControlAuditLogExt.TargetUserId),
+                                Type = DataTableColumnType.Text,
+                                Visible = false,
+                            },
+                            new DataTableColumn
+                            {
+                                Field = nameof(AccessControlAuditLogExt.CreatedDateUtc),
+                                Title = FieldsDisplayNames.CreatedDate,
+                                Type = DataTableColumnType.DateTime,
+                            },
+                            new DataTableColumn
+                            {
+                                Field = nameof(AccessControlAuditLogExt.Action),
+                                Title = FieldsDisplayNames.Action,
+                                Type = DataTableColumnType.Text,
+                                ValueMappings = new List<DataTableColumnValueMapping>
+                                {
+                                    new() { Value = "UserRoleChanged", Label = FieldsDisplayNames.UserRoleChanged },
+                                    new() { Value = "UserPermissionAdded", Label = FieldsDisplayNames.UserPermissionAdded },
+                                    new() { Value = "UserPermissionRemoved", Label = FieldsDisplayNames.UserPermissionRemoved },
+                                    new() { Value = "UserPermissionGrantUpdated", Label = FieldsDisplayNames.UserPermissionGrantUpdated },
+                                }
+                            },
+                            new DataTableColumn
+                            {
+                                Field = nameof(AccessControlAuditLogExt.PermissionCode),
+                                Title = FieldsDisplayNames.Permission,
+                                Type = DataTableColumnType.Text,
+                            },
+                            new DataTableColumn
+                            {
+                                Field = nameof(AccessControlAuditLogExt.Details),
+                                Title = FieldsDisplayNames.Details,
+                                Type = DataTableColumnType.Text,
+                            },
+                            new DataTableColumn
+                            {
+                                Field = nameof(AccessControlAuditLogExt.PerformedByUserName),
+                                Title = FieldsDisplayNames.PerformedBy,
+                                Type = DataTableColumnType.Text,
+                            },
+                        },
+
+                        Search = new DataTableSearchOptions
+                        {
+                            Enabled = true,
+                            Placeholder = FieldsDisplayNames.DataTableSearch,
+                        },
+
+                        Sorting = new DataTableSortOptions
+                        {
+                            DefaultField = nameof(AccessControlAuditLogExt.CreatedDateUtc),
+                            DefaultDirection = "desc",
+                        },
+
+                        Filters = new DataTableFilterOptions
+                        {
+                            Enabled = false,
+                        },
+
+                        Export = new DataTableExportOptions
+                        {
+                            Enabled = false,
+                        },
+
+                        Paging = new DataTablePagingOptions
+                        {
+                            Enabled = true,
+                            PageSize = 10,
+                        },
+
+                        Actions = new DataTableActionOptions
+                        {
+                            Enabled = false,
                         },
                     },
 

@@ -15,5 +15,6 @@
         public const string rolesTable = "rolesTable";
         public const string rolePermissionsTable = "rolePermissionsTable";
         public const string userPermissionsTable = "userPermissionsTable";
+        public const string userAccessAuditTable = "userAccessAuditTable";
     }
 }

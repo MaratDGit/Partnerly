@@ -15,6 +15,7 @@ namespace Partnerly.Infrastructure.Interfaces
 
         IQueryable<RolePermissionExt> QueryRolePermissionsExt(Guid? roleId = null);
         IQueryable<UserPermissionExt> QueryUserPermissionsExt(Guid? userId = null);
+        IQueryable<AccessControlAuditLogExt> QueryUserAccessAudit(Guid userId);
 
         void AddAccessAudit(
             string action,

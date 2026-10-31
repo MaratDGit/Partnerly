@@ -4,6 +4,22 @@
 
 ---
 
+## 2026-10-31 — Общий tab control
+
+- **Суть:** вкладки Edit User Role выглядят как на Edit Group; стили вынесены в общий control сайта.
+- **Сделано:** `<partnerly-tabs>` / `<partnerly-tab>`, `partnerly-tabs.css`. Подключены User Role Edit и User Groups. Инлайн-CSS групп убран.
+- **Сборка:** `dotnet build Partnerly.sln` — 0 ошибок. Браузер в этой сессии недоступен.
+
+---
+
+## 2026-10-30 — История на Edit User Role
+
+- **Суть:** страница роли пользователя переименована в Edit User Role; вкладка History показывает `AccessControlAuditLogs` по этому пользователю.
+- **Сделано:** вкладки Permissions / History, DataTable `userAccessAuditTable`, смена роли пишет `UserRoleChanged`. Права как у страницы (`users.manage_roles`).
+- **Сборка:** `dotnet build Partnerly.sln` — 0 ошибок. Браузер в этой сессии недоступен.
+
+---
+
 ## 2026-10-30 — Имя сайта пишется при первой загрузке
 
 - **Суть:** при первой загрузке `/` название появляется как рукопись, не fade/blur буквами. Дальше по-прежнему перерисовывается только логотип.

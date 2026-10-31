@@ -401,8 +401,8 @@ namespace Partnerly.Controllers
 
             if (modelAsView == null) return NotFound();
 
-            AttachUserPermissionsTable(modelAsView);
-            modelAsView.Title = FieldsDisplayNames.UserRole;
+            AttachUserRoleTables(modelAsView);
+            modelAsView.Title = FieldsDisplayNames.EditUserRole;
             return View(modelAsView);
         }
 
@@ -438,6 +438,15 @@ namespace Partnerly.Controllers
                     return RedirectToAction("UserRoleEdit", model);
                 }
 
+                if (user.RoleId != role.Id)
+                {
+                    _permissionService.AddAccessAudit(
+                        action: "UserRoleChanged",
+                        targetRoleId: role.Id,
+                        targetUserId: user.Id,
+                        details: $"{model.OldRoleName} -> {role.Name}");
+                }
+
                 user.RoleId = role.Id;
                 user.LastRoleUpdateTime = DateTime.UtcNow;
                 user.Note = model.Note;
@@ -458,7 +467,7 @@ namespace Partnerly.Controllers
                 return RedirectToAction("UserRoleEdit", new { id = model.Id });
             }
 
-            AttachUserPermissionsTable(model);
+            AttachUserRoleTables(model);
             return View(model);
         }
 
@@ -545,6 +554,30 @@ namespace Partnerly.Controllers
 
                 var result = await _tableService.ExecuteAsync(
                     fields => _permissionService.QueryUserPermissionsExt(userId),
+                    request,
+                    options);
+
+                return Json(result);
+            }
+            else if (request.TableID == DataTableNames.userAccessAuditTable)
+            {
+                if (!await CurrentUserHasAsync("users.manage_roles"))
+                    return Forbid();
+
+                if (!request.ParentKeys.TryGetValue("UserId", out var auditUserIdValue) || !Guid.TryParse(auditUserIdValue, out var auditUserId))
+                {
+                    return BadRequest(new
+                    {
+                        success = false,
+                        message = "A valid User Id is required."
+                    });
+                }
+
+                if (!await CanViewUserAsync(auditUserId))
+                    return Forbid();
+
+                var result = await _tableService.ExecuteAsync(
+                    fields => _permissionService.QueryUserAccessAudit(auditUserId),
                     request,
                     options);
 
@@ -977,10 +1010,13 @@ namespace Partnerly.Controllers
             }
         }
 
-        private void AttachUserPermissionsTable(UserRolesViewModel model)
+        private void AttachUserRoleTables(UserRolesViewModel model)
         {
             model.userPermissions = UserRolesViewModel.CreateTableOptions(
                 DataTableNames.userPermissionsTable,
+                _dataTableRegistry);
+            model.accessHistory = UserRolesViewModel.CreateTableOptions(
+                DataTableNames.userAccessAuditTable,
                 _dataTableRegistry);
         }
 

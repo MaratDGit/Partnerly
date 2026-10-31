@@ -229,5 +229,25 @@ namespace Partnerly.Infrastructure.Services
                 IsDeleted = x.Permission.IsDeleted
             });
         }
+
+        public IQueryable<AccessControlAuditLogExt> QueryUserAccessAudit(Guid userId)
+        {
+            return _context.AccessControlAuditLogs
+                .AsNoTracking()
+                .Where(log => log.TargetUserId == userId)
+                .Select(log => new AccessControlAuditLogExt
+                {
+                    Id = log.Id,
+                    TargetUserId = log.TargetUserId,
+                    Action = log.Action,
+                    PermissionCode = log.PermissionCode,
+                    Details = log.Details,
+                    CreatedDateUtc = log.CreatedDateUtc,
+                    PerformedByUserName = _context.Users
+                        .Where(u => u.Id == log.PerformedByUserId)
+                        .Select(u => ((u.FirstName ?? "") + " " + (u.LastName ?? "")).Trim())
+                        .FirstOrDefault() ?? ""
+                });
+        }
     }
 }

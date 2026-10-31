@@ -108,7 +108,7 @@ namespace Partnerly.Models.ViewModels
                         new MenuItemAction(
                             visible: true,
                             icon: "bx bx-key",
-                            displayName: FieldsDisplayNames.EditRole,
+                            displayName: FieldsDisplayNames.EditUserRole,
                             toController: "Roles",
                             toAction: "UserRoleEdit",
                             routID: userId) { Permission = PermissionCodes.UsersManageRoles }

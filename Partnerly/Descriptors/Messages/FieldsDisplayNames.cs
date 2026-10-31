@@ -28,7 +28,14 @@ namespace Partnerly.Descriptors.Messages
         public static string Roles => Messages.Get(nameof(Roles));
         public static string NewRole => Messages.Get(nameof(NewRole));
         public static string EditRole => Messages.Get(nameof(EditRole));
-        public static string UserRole => Messages.Get(nameof(UserRole)); 
+        public static string EditUserRole => Messages.Get(nameof(EditUserRole));
+        public static string UserRole => Messages.Get(nameof(UserRole));
+        public static string History => Messages.Get(nameof(History));
+        public static string PerformedBy => Messages.Get(nameof(PerformedBy));
+        public static string UserRoleChanged => Messages.Get(nameof(UserRoleChanged));
+        public static string UserPermissionAdded => Messages.Get(nameof(UserPermissionAdded));
+        public static string UserPermissionRemoved => Messages.Get(nameof(UserPermissionRemoved));
+        public static string UserPermissionGrantUpdated => Messages.Get(nameof(UserPermissionGrantUpdated)); 
         public static string TemplateType => Messages.Get(nameof(TemplateType));
         public static string AllowSendNotifications => Messages.Get(nameof(AllowSendNotifications));
         public static string AllowSendEmails => Messages.Get(nameof(AllowSendEmails));

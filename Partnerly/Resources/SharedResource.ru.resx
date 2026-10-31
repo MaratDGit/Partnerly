@@ -1664,6 +1664,34 @@
     <value>Роль пользователя</value>
   </data>
 
+  <data name="EditUserRole" xml:space="preserve">
+    <value>Редактирование роли пользователя</value>
+  </data>
+
+  <data name="History" xml:space="preserve">
+    <value>История</value>
+  </data>
+
+  <data name="PerformedBy" xml:space="preserve">
+    <value>Кто изменил</value>
+  </data>
+
+  <data name="UserRoleChanged" xml:space="preserve">
+    <value>Роль изменена</value>
+  </data>
+
+  <data name="UserPermissionAdded" xml:space="preserve">
+    <value>Право добавлено</value>
+  </data>
+
+  <data name="UserPermissionRemoved" xml:space="preserve">
+    <value>Право удалено</value>
+  </data>
+
+  <data name="UserPermissionGrantUpdated" xml:space="preserve">
+    <value>Право изменено</value>
+  </data>
+
   <data name="Permission" xml:space="preserve">
     <value>Право</value>
   </data>

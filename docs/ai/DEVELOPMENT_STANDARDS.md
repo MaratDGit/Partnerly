@@ -57,8 +57,8 @@
 ## Razor / CSS / JS
 
 - Layout по умолчанию `_ContentNavbarLayout`.
-- Переиспользовать `_Toast`, `_DeleteConfirmation`, `_AuditInfo`, DataTable partials.
-- Стили проекта: `wwwroot/assets/css/site.css` и узкие css страниц; vendor не править без нужды.
+- Переиспользовать `_Toast`, `_DeleteConfirmation`, `_AuditInfo`, DataTable partials, вкладки `<partnerly-tabs>` / `<partnerly-tab>`.
+- Стили проекта: `wwwroot/assets/css/site.css`, `partnerly-layout.css`, `partnerly-tabs.css` и узкие css страниц; vendor не править без нужды.
 - JS таблиц: модули в `wwwroot/js/datatable/modules/`.
 - Локализация текстов UI через resx, не хардкодить третий язык вразброс.
 - Новый Tag Helper — только если нет существующего (`RequiredLabelTagHelper`).
