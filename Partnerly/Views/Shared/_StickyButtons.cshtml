@@ -320,6 +320,26 @@ document.addEventListener('DOMContentLoaded', function () {
         );
     }
 
+    function notifyFormNoteChanged(note) {
+        var inputs = findNoteHiddenInputs();
+        inputs.forEach(function (input) {
+            input.value = note;
+            input.dispatchEvent(new Event('input', { bubbles: true }));
+            input.dispatchEvent(new Event('change', { bubbles: true }));
+        });
+
+        if (inputs.length > 0) {
+            return;
+        }
+
+        var sticky = document.querySelector('.sticky-buttons');
+        var form = sticky ? sticky.closest('form') : null;
+
+        if (form) {
+            form.dispatchEvent(new Event('input', { bubbles: true }));
+        }
+    }
+
     function closeNoteModal() {
         if (!noteModalEl) {
             return;
@@ -363,9 +383,7 @@ document.addEventListener('DOMContentLoaded', function () {
             try {
                 const note = noteText.value.trim();
                 lastSavedNote = note;
-                findNoteHiddenInputs().forEach(function (input) {
-                    input.value = note;
-                });
+                notifyFormNoteChanged(note);
                 noteText.dispatchEvent(new Event('input', { bubbles: true }));
                 updateNoteButtonColor();
             } finally {

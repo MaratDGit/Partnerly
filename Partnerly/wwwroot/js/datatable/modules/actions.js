@@ -543,6 +543,20 @@
                     }
 
 
+                    if (
+                        column.type ===
+                        "Note"
+                    ) {
+
+                        return (
+                            '<button type="button" ' +
+                            'class="data-table-note-btn" disabled>' +
+                            '<i class="bx bx-note"></i>' +
+                            "</button>"
+                        );
+                    }
+
+
                     /*
                      * BOOLEAN
                      */

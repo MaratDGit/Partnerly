@@ -709,6 +709,10 @@
     <value>Колонки</value>
   </data>
 
+  <data name="Note" xml:space="preserve">
+    <value>Заметка</value>
+  </data>
+
   <data name="DataTableApply" xml:space="preserve">
     <value>Применить</value>
   </data>

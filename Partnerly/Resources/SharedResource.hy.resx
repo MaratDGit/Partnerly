@@ -709,6 +709,10 @@
     <value>Սյուներ</value>
   </data>
 
+  <data name="Note" xml:space="preserve">
+    <value>Նշում</value>
+  </data>
+
   <data name="DataTableApply" xml:space="preserve">
     <value>Կիրառել</value>
   </data>

@@ -7,6 +7,10 @@
     bool CanTable(string? code) =>
         string.IsNullOrWhiteSpace(code) || tablePermissions.Contains(code);
 
+    var tableColumns = Model.Columns
+        .Where(column => CanTable(column.Permission))
+        .ToList();
+
     var visibleActions = (Model.Actions?.Items ?? new List<DataTableAction>())
         .Where(action => CanTable(action.Permission))
         .ToList();
@@ -374,7 +378,7 @@
 
                 <tr>
 
-                    @foreach (var column in Model.Columns)
+                    @foreach (var column in tableColumns)
                     {
                         <th data-field="@column.Field"
                             class="@(column.Visible ? null : "data-table-col-hidden")"
@@ -443,7 +447,7 @@
             <tbody id="@Model.Id-body">
 
                 <tr>
-                    <td colspan="@Model.Columns.Count">
+                    <td colspan="@tableColumns.Count">
                         @Localizer["LookupLoading"]
                     </td>
                 </tr>
@@ -806,14 +810,14 @@
                             },
 
                             columnCount =
-                                Model.Columns.Count(x => x.Visible) +
+                                tableColumns.Count(x => x.Visible) +
                                 (
                                     (hasRowActions || hasInlineColumns)
                                     ? 1
                                     : 0
                                 ),
 
-                            columns = Model.Columns.Select(column => new
+                            columns = tableColumns.Select(column => new
                             {
                                     field = column.Field,
                                     title = column.Title,

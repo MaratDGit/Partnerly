@@ -47,6 +47,7 @@ namespace Partnerly.Models.Authorization
 
         public const string AiUse = "ai.use";
         public const string WebInspectorUse = "web_inspector.use";
+        public const string DataTableViewIds = "datatable.view_ids";
 
         public static readonly string[] All =
         {
@@ -61,7 +62,8 @@ namespace Partnerly.Models.Authorization
             LogsView,
             AttachmentsView, AttachmentsManage,
             AiUse,
-            WebInspectorUse
+            WebInspectorUse,
+            DataTableViewIds
         };
     }
 }

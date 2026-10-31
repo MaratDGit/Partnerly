@@ -709,6 +709,10 @@
     <value>Columns</value>
   </data>
 
+  <data name="Note" xml:space="preserve">
+    <value>Note</value>
+  </data>
+
   <data name="DataTableApply" xml:space="preserve">
     <value>Apply</value>
   </data>

@@ -579,6 +579,65 @@
 
                     /*
                      * =================================================
+                     * NOTE
+                     * =================================================
+                     */
+
+                    if (
+                        column.type ===
+                        "Note"
+                    ) {
+
+                        var noteValue =
+                            value === null ||
+                            value === undefined
+                                ? ""
+                                : String(value);
+
+                        var noteFilled =
+                            noteValue.trim().length > 0;
+
+                        var noteLabel =
+                            (
+                                typeof dataTableLocalization !==
+                                    "undefined" &&
+                                dataTableLocalization.note
+                            )
+                                ? dataTableLocalization.note
+                                : "Note";
+
+                        return {
+
+                            html:
+                                '<button type="button" ' +
+                                'class="data-table-note-btn' +
+                                (
+                                    noteFilled
+                                        ? " is-filled"
+                                        : ""
+                                ) +
+                                '" ' +
+                                'title="' +
+                                ctx.escapeHtml(
+                                    noteLabel
+                                ) +
+                                '" ' +
+                                'aria-label="' +
+                                ctx.escapeHtml(
+                                    noteLabel
+                                ) +
+                                '">' +
+                                '<i class="bx bx-note"></i>' +
+                                "</button>",
+
+                            rawValue:
+                                noteValue
+                        };
+                    }
+
+
+                    /*
+                     * =================================================
                      * EMPTY
                      * =================================================
                      */

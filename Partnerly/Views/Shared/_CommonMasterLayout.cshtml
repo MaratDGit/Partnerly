@@ -133,7 +133,11 @@
             all: @Html.Raw(Json.Serialize(Localizer["DataTableAll"].Value)),
             yes: @Html.Raw(Json.Serialize(Localizer["DataTableYes"].Value)),
             no: @Html.Raw(Json.Serialize(Localizer["DataTableNo"].Value)),
-            actions: @Html.Raw(Json.Serialize(Localizer["DataTableActions"].Value))
+            actions: @Html.Raw(Json.Serialize(Localizer["DataTableActions"].Value)),
+            note: @Html.Raw(Json.Serialize(Localizer["Note"].Value)),
+            noteTitle: @Html.Raw(Json.Serialize(Localizer["Notetothedocument"].Value)),
+            notePlaceholder: @Html.Raw(Json.Serialize(Localizer["Enteranote"].Value)),
+            ok: @Html.Raw(Json.Serialize(Localizer["OK"].Value))
         };
 
         const attachementLocalization = {

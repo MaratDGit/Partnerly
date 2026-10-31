@@ -4,6 +4,30 @@
 
 ---
 
+## 2026-10-31 — Save после изменения заметки на форме
+
+- **Суть:** OK в попапе заметки теперь включает кнопку Save документа.
+- **Сделано:** после записи в hidden `Note` шлём `input`/`change`, чтобы `enableSaveOnChange` увидел правку. Модалка вынесена в `body`, поэтому события textarea до формы не доходили.
+- **Сборка:** код только в `_StickyButtons.cshtml`. Браузер в этой сессии недоступен.
+
+---
+
+## 2026-10-31 — Попап Note из DataTable: без Cancel, крестик в шапке
+
+- **Суть:** из таблицы в попапе заметки нет Cancel; крестик закрытия больше не обрезается углом карточки.
+- **Сделано:** footer только OK; `.btn-close` в flex-потоке шапки (`position: static`), без отрицательного margin Bootstrap.
+- **Сборка:** `node --check` для `render.js`. Браузер в этой сессии недоступен.
+
+---
+
+## 2026-10-31 — DataTable: ID по праву и колонка Note
+
+- **Суть:** ID в таблице и в списке колонок только при `datatable.view_ids` (Super / Administrator / Employee по seed). Note — в списке колонок таблиц с полем Note, выкл. по умолчанию; в таблице иконка, заполненная — цвет кнопки заметки формы, клик открывает попап как на форме.
+- **Сделано:** право и seed; `HiddenNote()` на users/roles/groups/members/logs/notifications/email/tickets/attachments; фильтр колонок в `_DataTable.cshtml`; тип `Note` в JS + CSS. Нет Note на rolePermissions / userPermissions / userAccessAudit (поля нет).
+- **Сборка:** `dotnet build Partnerly.sln` — 0 ошибок, 112 прежних предупреждений. `node --check` для columns/render/inline/actions.js. Браузер в этой сессии недоступен.
+
+---
+
 ## 2026-10-31 — DataTable: панель настроек колонок
 
 - **Суть:** справа от поиска — кнопка-шестерёнка; попап со всеми колонками таблицы, вкл/выкл и drag-порядок.

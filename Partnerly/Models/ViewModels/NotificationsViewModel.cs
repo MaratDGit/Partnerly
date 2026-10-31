@@ -187,6 +187,7 @@ namespace Partnerly.Models.ViewModels
                                 Title = "ID",
                                 Type = DataTableColumnType.Text,
                                 Visible = false,
+                                Permission = PermissionCodes.DataTableViewIds,
                             },
                             new DataTableColumn
                             {
@@ -291,7 +292,8 @@ namespace Partnerly.Models.ViewModels
                                 Title = FieldsDisplayNames.CreatedDate,
                                 Type = DataTableColumnType.DateTime,
                                 Format = "dd.MM.yyyy HH:mm",
-                            }
+                            },
+                            DataTableColumn.HiddenNote()
                         },
 
                         Sorting = new DataTableSortOptions

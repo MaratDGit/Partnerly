@@ -410,7 +410,9 @@
 
                             if (
                                 !column.visible ||
-                                !column.editable
+                                !column.editable ||
+                                column.type ===
+                                "Note"
                             ) {
                                 return;
                             }

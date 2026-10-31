@@ -118,8 +118,10 @@ namespace Partnerly.Models.ViewModels
                             new DataTableColumn
                             {
                                 Field = "Id",
+                                Title = "ID",
                                 Type = DataTableColumnType.Text,
                                 Visible = false,
+                                Permission = PermissionCodes.DataTableViewIds,
                             },
                             new DataTableColumn
                             {
@@ -351,8 +353,10 @@ namespace Partnerly.Models.ViewModels
                             new DataTableColumn
                             {
                                 Field = "Id",
+                                Title = "ID",
                                 Type = DataTableColumnType.Text,
                                 Visible = false,
+                                Permission = PermissionCodes.DataTableViewIds,
                             },
                             new DataTableColumn
                             {

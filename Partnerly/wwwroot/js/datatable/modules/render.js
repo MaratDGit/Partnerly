@@ -352,6 +352,199 @@
                 };
 
 
+            function noteLocalization(key, fallback) {
+
+                if (
+                    typeof dataTableLocalization !==
+                        "undefined" &&
+                    dataTableLocalization[key]
+                ) {
+                    return dataTableLocalization[key];
+                }
+
+                return fallback;
+            }
+
+
+            ctx.ensureNoteModal =
+                function () {
+
+                    var modal =
+                        document.getElementById(
+                            "dataTableNoteModal"
+                        );
+
+                    if (modal) {
+                        return modal;
+                    }
+
+                    modal =
+                        document.createElement(
+                            "div"
+                        );
+
+                    modal.id =
+                        "dataTableNoteModal";
+                    modal.className =
+                        "modal fade partnerly-note-modal";
+                    modal.tabIndex = -1;
+                    modal.setAttribute(
+                        "aria-labelledby",
+                        "dataTableNoteModalLabel"
+                    );
+                    modal.setAttribute(
+                        "aria-hidden",
+                        "true"
+                    );
+
+                    modal.innerHTML =
+                        '<div class="modal-dialog modal-dialog-centered">' +
+                        '<div class="modal-content rounded-3 shadow-lg">' +
+                        '<div class="modal-header py-2">' +
+                        '<h6 class="modal-title" id="dataTableNoteModalLabel">' +
+                        '<span class="note-modal-icon">' +
+                        '<i class="bx bx-note"></i>' +
+                        "</span>" +
+                        "<span>" +
+                        ctx.escapeHtml(
+                            noteLocalization(
+                                "noteTitle",
+                                "Note"
+                            )
+                        ) +
+                        "</span>" +
+                        "</h6>" +
+                        '<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="' +
+                        ctx.escapeHtml(
+                            noteLocalization(
+                                "close",
+                                "Close"
+                            )
+                        ) +
+                        '"></button>' +
+                        "</div>" +
+                        '<div class="modal-body py-2">' +
+                        '<div class="form-floating">' +
+                        '<textarea id="dataTableNoteText" class="form-control" placeholder="' +
+                        ctx.escapeHtml(
+                            noteLocalization(
+                                "notePlaceholder",
+                                ""
+                            )
+                        ) +
+                        '" readonly style="height: 120px; font-size: 0.9rem;"></textarea>' +
+                        "</div>" +
+                        "</div>" +
+                        '<div class="modal-footer py-2">' +
+                        '<button type="button" class="btn btn-primary btn-sm" data-bs-dismiss="modal">' +
+                        ctx.escapeHtml(
+                            noteLocalization(
+                                "ok",
+                                "OK"
+                            )
+                        ) +
+                        "</button>" +
+                        "</div>" +
+                        "</div>" +
+                        "</div>";
+
+                    document.body.appendChild(
+                        modal
+                    );
+
+                    return modal;
+                };
+
+
+            ctx.openNotePopup =
+                function (noteValue) {
+
+                    var modal =
+                        ctx.ensureNoteModal();
+
+                    var textarea =
+                        modal.querySelector(
+                            "#dataTableNoteText"
+                        );
+
+                    if (textarea) {
+                        textarea.value =
+                            noteValue == null
+                                ? ""
+                                : String(noteValue);
+                    }
+
+                    if (
+                        window.bootstrap &&
+                        bootstrap.Modal
+                    ) {
+                        bootstrap.Modal.getOrCreateInstance(
+                            modal
+                        ).show();
+                        return;
+                    }
+
+                    modal.classList.add(
+                        "show"
+                    );
+                    modal.style.display =
+                        "block";
+                    modal.setAttribute(
+                        "aria-hidden",
+                        "false"
+                    );
+                };
+
+
+            ctx.bindNotePopup =
+                function () {
+
+                    if (
+                        ctx._notePopupBound ||
+                        !ctx.body
+                    ) {
+                        return;
+                    }
+
+                    ctx._notePopupBound =
+                        true;
+
+                    ctx.body.addEventListener(
+                        "click",
+                        function (event) {
+
+                            var button =
+                                event.target.closest(
+                                    ".data-table-note-btn"
+                                );
+
+                            if (!button) {
+                                return;
+                            }
+
+                            event.preventDefault();
+                            event.stopPropagation();
+
+                            var cell =
+                                button.closest(
+                                    "td"
+                                );
+
+                            var noteValue =
+                                cell
+                                    ? cell.getAttribute(
+                                        "data-original-value"
+                                    )
+                                    : "";
+
+                            ctx.openNotePopup(
+                                noteValue || ""
+                            );
+                        }
+                    );
+                };
+
+
             /*
              * =========================================================
              * RENDER ROWS
@@ -512,6 +705,15 @@
                                     if (column.cssClass) {
                                         cellClasses.push(
                                             column.cssClass
+                                        );
+                                    }
+
+                                    if (
+                                        column.type ===
+                                        "Note"
+                                    ) {
+                                        cellClasses.push(
+                                            "data-table-note-cell"
                                         );
                                     }
 
@@ -949,6 +1151,8 @@
             ctx.bindSelectAll();
 
             ctx.bindRowClick();
+
+            ctx.bindNotePopup();
 
         }
     };

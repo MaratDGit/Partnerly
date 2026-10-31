@@ -4,6 +4,17 @@
 
 ---
 
+## TR-2026-10-31-04 — DataTable: ID по праву и колонка Note
+
+- **Дата:** 2026-10-31
+- **Суть:** колонка ID есть в таблице и в панели колонок только при праве `datatable.view_ids`. По умолчанию оно у Super, Administrator и Employee. У таблиц с полем `Note` в списке колонок есть Note (выкл. по умолчанию): иконка, заливка как у кнопки заметки на форме, клик открывает тот же вид попапа.
+- **Причина:** владелец не хочет показывать ID без права; Note нужен как опциональная колонка.
+- **Затрагивает:** `PermissionCodes.DataTableViewIds`, `PermissionSeeder`, `DataTableColumn.HiddenNote` / `DataTableColumnType.Note`, фильтр колонок в `_DataTable.cshtml`, `columns.js` / `render.js`, `partnerly-data-table.css`.
+- **Последствия:** реестр DataTable не мутируется. JSON ответа по-прежнему содержит `Id` как KeyField. Note не на `rolePermissions`, `userPermissions`, `userAccessAudit` — у сущностей нет поля Note. Новое право появится после старта (`PermissionSeeder`).
+- **Альтернативы:** прятать ID только CSS — отклонено, колонка осталась бы в настройках.
+
+---
+
 ## TR-2026-10-31-03 — Панель колонок DataTable
 
 - **Дата:** 2026-10-31

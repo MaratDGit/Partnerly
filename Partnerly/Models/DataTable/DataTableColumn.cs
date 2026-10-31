@@ -1,4 +1,5 @@
 ﻿using Partnerly.Descriptors.Messages;
+using Partnerly.Models.Authorization;
 
 namespace Partnerly.Models.DataTable
 {
@@ -30,9 +31,23 @@ namespace Partnerly.Models.DataTable
         public DataTableLookupOptions? Lookup { get; set; }
 
         /// <summary>
-        /// Applied to Editable and UrlTemplate. Empty = no extra check.
+        /// Applied to Editable, UrlTemplate, and column visibility in the table/settings.
+        /// Empty = no extra check.
         /// </summary>
         public string? Permission { get; set; }
+
+        public static DataTableColumn HiddenNote() => new()
+        {
+            Field = "Note",
+            Title = FieldsDisplayNames.Note,
+            Type = DataTableColumnType.Note,
+            Visible = false,
+            Sortable = false,
+            Searchable = true,
+            Exportable = false,
+            Alignment = DataTableAlignment.Center,
+            Width = "52px"
+        };
     }
 
     public enum DataTableColumnType
@@ -46,7 +61,8 @@ namespace Partnerly.Models.DataTable
         Badge,
         Email,
         Link,
-        Size
+        Size,
+        Note
     }
 
     public enum DataTableAlignment
