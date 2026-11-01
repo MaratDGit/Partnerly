@@ -2336,6 +2336,10 @@
     <value>Под любые задачи. Собери агента и запусти его.</value>
   </data>
 
+  <data name="LandingHeroCta" xml:space="preserve">
+    <value>Начать бесплатно</value>
+  </data>
+
   <data name="LandingType1" xml:space="preserve">
     <value>Это очень просто...</value>
   </data>

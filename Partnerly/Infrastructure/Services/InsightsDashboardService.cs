@@ -1,6 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using Partnerly.Descriptors.Attributes;
 using Partnerly.Descriptors.Messages;
+using Partnerly.Helpers;
 using Partnerly.Infrastructure.Interfaces;
 using Partnerly.Models;
 using Partnerly.Models.Authorization;
@@ -260,7 +261,7 @@ namespace Partnerly.Infrastructure.Services
                     .ToListAsync(cancellationToken);
                 model.RecentNotifications = recentNotes.Select(n =>
                 {
-                    var message = n.Message ?? "";
+                    var message = NotificationMessage.Format(n.Message);
                     if (message.Length > 80)
                         message = message.Substring(0, 80) + "…";
                     return new DashboardListItem

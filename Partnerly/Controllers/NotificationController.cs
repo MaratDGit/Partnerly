@@ -126,6 +126,7 @@ namespace Partnerly.Controllers
 
             var templatesAsView = await PropertyActionsHelper.CopyPropertiesAsync(template, new NotificationsViewModel());
             if (templatesAsView == null) return NotFound();
+            templatesAsView.Message = NotificationMessage.Format(templatesAsView.Message);
 
             var creator = await _userService.GetUserByIDAsync(templatesAsView.CreatedBy);
             var owner = await _userService.GetUserByIDAsync(templatesAsView.UserId);
@@ -151,7 +152,14 @@ namespace Partnerly.Controllers
                 if (template != null)
                 {
                     if (!await CanViewUserAsync(template.UserId)) return Forbid();
-                    template.Message = model.Message;
+                    if (!(NotificationMessage.IsCoded(template.Message) &&
+                          string.Equals(
+                              model.Message,
+                              NotificationMessage.Format(template.Message),
+                              StringComparison.Ordinal)))
+                    {
+                        template.Message = model.Message;
+                    }
                     template.IsRead = model.IsRead;
                     template.Link = model.Link;
 
@@ -264,6 +272,12 @@ namespace Partnerly.Controllers
                    request,
                    options);
 
+                if (res.Items != null)
+                {
+                    foreach (var item in res.Items)
+                        item.Message = NotificationMessage.Format(item.Message);
+                }
+
                 return Json(res);
             }
             else
@@ -295,7 +309,8 @@ namespace Partnerly.Controllers
                             format,
                             fields => _notificationService.QueryEntity(WithQueryFields(fields, nameof(Notification.UserId)))
                                 .Where(n => visibleUserIds.Contains(n.UserId)),
-                            "notifications");
+                            "notifications",
+                            item => item.Message = NotificationMessage.Format(item.Message));
             }
             else
             {

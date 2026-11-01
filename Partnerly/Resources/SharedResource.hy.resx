@@ -2336,6 +2336,10 @@
     <value>Ցանկացած առաջադրանքի համար։ Ստեղծիր և գործարկիր։</value>
   </data>
 
+  <data name="LandingHeroCta" xml:space="preserve">
+    <value>Սկսել անվճար</value>
+  </data>
+
   <data name="LandingType1" xml:space="preserve">
     <value>Սա շատ պարզ է...</value>
   </data>

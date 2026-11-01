@@ -2336,6 +2336,10 @@
     <value>For any task. Build them, then put them to work.</value>
   </data>
 
+  <data name="LandingHeroCta" xml:space="preserve">
+    <value>Start for free</value>
+  </data>
+
   <data name="LandingType1" xml:space="preserve">
     <value>It's this simple...</value>
   </data>

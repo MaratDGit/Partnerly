@@ -521,15 +521,122 @@
             }
 
 
+            var panelHost =
+                panel.parentNode;
+
+
+            function positionPanel() {
+
+                if (!isOpen()) {
+                    return;
+                }
+
+                var rect =
+                    button.getBoundingClientRect();
+
+                var margin = 8;
+                var pad = 12;
+                var width =
+                    Math.min(
+                        320,
+                        Math.max(
+                            220,
+                            window.innerWidth - (pad * 2)
+                        )
+                    );
+
+                panel.classList.add("is-viewport");
+                panel.style.width = width + "px";
+
+                var left = rect.right - width;
+
+                if (left < pad) {
+                    left = pad;
+                }
+
+                if (left + width > window.innerWidth - pad) {
+                    left = window.innerWidth - pad - width;
+                }
+
+                panel.style.left = Math.round(left) + "px";
+                panel.style.right = "auto";
+
+                var spaceBelow =
+                    window.innerHeight - rect.bottom - margin - pad;
+
+                var spaceAbove =
+                    rect.top - margin - pad;
+
+                var openAbove =
+                    spaceBelow < 260 &&
+                    spaceAbove > spaceBelow;
+
+                if (openAbove) {
+
+                    panel.style.top = "auto";
+                    panel.style.bottom =
+                        Math.round(
+                            window.innerHeight - rect.top + margin
+                        ) + "px";
+                    panel.style.maxHeight =
+                        Math.max(160, spaceAbove) + "px";
+
+                }
+                else {
+
+                    panel.style.bottom = "auto";
+                    panel.style.top =
+                        Math.round(rect.bottom + margin) + "px";
+                    panel.style.maxHeight =
+                        Math.max(160, spaceBelow) + "px";
+
+                }
+            }
+
+
+            function clearPanelPosition() {
+
+                panel.classList.remove("is-viewport");
+                panel.style.top = "";
+                panel.style.bottom = "";
+                panel.style.left = "";
+                panel.style.right = "";
+                panel.style.width = "";
+                panel.style.maxHeight = "";
+            }
+
+
+            function attachViewportListeners() {
+
+                window.addEventListener("resize", positionPanel);
+                window.addEventListener("scroll", positionPanel, true);
+            }
+
+
+            function detachViewportListeners() {
+
+                window.removeEventListener("resize", positionPanel);
+                window.removeEventListener("scroll", positionPanel, true);
+            }
+
+
             function openPanel() {
 
                 renderList();
+
+                if (panel.parentNode !== document.body) {
+                    document.body.appendChild(panel);
+                }
+
                 panel.removeAttribute("hidden");
                 button.classList.add("is-open");
                 button.setAttribute(
                     "aria-expanded",
                     "true"
                 );
+
+                positionPanel();
+                attachViewportListeners();
             }
 
 
@@ -541,6 +648,16 @@
                     "aria-expanded",
                     "false"
                 );
+
+                detachViewportListeners();
+                clearPanelPosition();
+
+                if (
+                    panelHost &&
+                    panel.parentNode !== panelHost
+                ) {
+                    panelHost.appendChild(panel);
+                }
             }
 
 

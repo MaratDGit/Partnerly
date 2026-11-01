@@ -312,12 +312,6 @@
                 );
             }
 
-            function confirmStop() {
-                return window.confirm(
-                    text("bulkDeleteStopConfirm", "Stop the deletion process?")
-                );
-            }
-
             button.addEventListener("click", function (event) {
                 event.preventDefault();
                 event.stopPropagation();
@@ -368,19 +362,12 @@
                         return;
                     }
 
-                    if (!confirmStop()) {
-                        return;
-                    }
-
                     session.stopRequested = true;
                 });
             }
 
             function requestClose() {
                 if (session.running) {
-                    if (!confirmStop()) {
-                        return;
-                    }
                     session.stopRequested = true;
                     session.closeAfterStop = true;
                     return;

@@ -208,41 +208,99 @@ html.landing-draw .landing-brand .site-logo circle {
     display: flex;
     align-items: center;
     justify-content: center;
-    gap: 28px;
     pointer-events: auto;
 }
 
-.landing-auth-link {
+.landing-hero-cta {
+    --cta-orbit-duration: 6s;
+    position: relative;
+    isolation: isolate;
     display: inline-flex;
     align-items: center;
-    padding: 0;
+    justify-content: center;
+    overflow: hidden;
+    min-height: 46px;
+    padding: 0 22px;
     border: 0;
+    border-radius: 999px;
+    color: #312e81;
     background: transparent;
-    color: #2c2966;
-    font-size: 1rem;
+    box-shadow: none;
+    font-size: 0.98rem;
     font-weight: 600;
     letter-spacing: 0.02em;
-    text-decoration: none;
-    box-shadow: none;
     cursor: pointer;
-    transition: color 0.2s ease;
+    transition: transform 0.2s ease, color 0.2s ease;
 }
 
-    .landing-auth-link:hover,
-    .landing-auth-link:focus-visible {
-        color: #4f46e5;
-        background: transparent;
+    .landing-hero-cta:hover,
+    .landing-hero-cta:focus-visible {
+        color: #4338ca;
         box-shadow: none;
+        transform: translateY(-1px);
     }
 
-html[data-theme="dark"] .landing-auth-link {
-    color: #edf0ff;
+    .landing-hero-cta:focus-visible {
+        outline: 2px solid #c4b5fd;
+        outline-offset: 3px;
+    }
+
+.landing-hero-cta-orbit {
+    position: absolute;
+    inset: -45%;
+    background: conic-gradient(
+        from 0deg,
+        transparent 0deg,
+        transparent 292deg,
+        #22d3ee 318deg,
+        #818cf8 338deg,
+        #e879f9 350deg,
+        #fbbf24 357deg,
+        #22d3ee 360deg
+    );
+    animation: landing-cta-orbit var(--cta-orbit-duration) linear infinite;
+    pointer-events: none;
 }
 
-    html[data-theme="dark"] .landing-auth-link:hover,
-    html[data-theme="dark"] .landing-auth-link:focus-visible {
-        color: #c4b5fd;
+    .landing-hero-cta-orbit.is-glow {
+        filter: blur(8px);
+        opacity: 0.9;
     }
+
+.landing-hero-cta-glass {
+    position: absolute;
+    inset: 2px;
+    border-radius: inherit;
+    background: rgba(255, 255, 255, 0.78);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    pointer-events: none;
+}
+
+.landing-hero-cta-label {
+    position: relative;
+    z-index: 1;
+}
+
+html[data-theme="dark"] .landing-hero-cta {
+    color: #edf0ff;
+    box-shadow: none;
+}
+
+    html[data-theme="dark"] .landing-hero-cta:hover,
+    html[data-theme="dark"] .landing-hero-cta:focus-visible {
+        color: #ddd6fe;
+    }
+
+html[data-theme="dark"] .landing-hero-cta-glass {
+    background: rgba(16, 18, 40, 0.82);
+}
+
+@keyframes landing-cta-orbit {
+    to {
+        transform: rotate(360deg);
+    }
+}
 
 .landing-stage {
     position: relative;
@@ -1179,16 +1237,19 @@ html[data-theme="dark"] .landing-auth-text-btn {
 }
 
 .landing-auth-submit {
-    border: 0;
-    color: #fff;
-    background: linear-gradient(180deg, #7c7fff 0%, #6366f1 100%);
-    box-shadow: 0 10px 24px rgba(99, 102, 241, 0.28);
+    border: 1px solid rgba(99, 102, 241, 0.18);
+    color: #312e81;
+    background: rgba(255, 255, 255, 0.72);
+    box-shadow: 0 8px 24px rgba(49, 46, 129, 0.08);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
 }
 
     .landing-auth-submit:hover,
     .landing-auth-submit:focus-visible {
-        color: #fff;
-        background: linear-gradient(180deg, #6f72f5 0%, #4f46e5 100%);
+        color: #4f46e5;
+        background: rgba(255, 255, 255, 0.94);
+        border-color: rgba(99, 102, 241, 0.38);
     }
 
     .landing-auth-submit i {
@@ -1200,12 +1261,15 @@ html[data-theme="dark"] .landing-auth-text-btn {
     border: 1px solid rgba(99, 102, 241, 0.18);
     color: #1e1b4b;
     background: rgba(255, 255, 255, 0.72);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
 }
 
     .landing-auth-google:hover,
     .landing-auth-google:focus-visible {
         color: #4f46e5;
-        background: #fff;
+        background: rgba(255, 255, 255, 0.94);
+        border-color: rgba(99, 102, 241, 0.38);
     }
 
     .landing-auth-google i {
@@ -1213,16 +1277,20 @@ html[data-theme="dark"] .landing-auth-text-btn {
         line-height: 1;
     }
 
+html[data-theme="dark"] .landing-auth-submit,
 html[data-theme="dark"] .landing-auth-google {
     border-color: rgba(167, 139, 250, 0.28);
     color: #edf0ff;
     background: rgba(12, 14, 32, 0.72);
 }
 
+    html[data-theme="dark"] .landing-auth-submit:hover,
+    html[data-theme="dark"] .landing-auth-submit:focus-visible,
     html[data-theme="dark"] .landing-auth-google:hover,
     html[data-theme="dark"] .landing-auth-google:focus-visible {
         color: #c4b5fd;
         background: rgba(36, 38, 72, 0.96);
+        border-color: rgba(167, 139, 250, 0.42);
     }
 
 .landing-auth-divider {
@@ -1385,12 +1453,10 @@ html[data-theme="dark"] .legal-copy {
         font-size: 0.92rem;
     }
 
-    .landing-auth-link {
+    .landing-hero-cta {
+        min-height: 42px;
+        padding: 0 18px;
         font-size: 0.92rem;
-    }
-
-    .landing-hero-actions {
-        gap: 22px;
     }
 
     .landing-search {
@@ -1441,5 +1507,17 @@ html[data-theme="dark"] .legal-copy {
 
     .landing-chat-msg.is-typing .landing-chat-bubble span {
         animation: none;
+    }
+
+    .landing-hero-cta-orbit {
+        animation: none;
+        background: conic-gradient(
+            from 210deg,
+            transparent 0deg,
+            #22d3ee 40deg,
+            #818cf8 80deg,
+            #e879f9 120deg,
+            transparent 160deg
+        );
     }
 }

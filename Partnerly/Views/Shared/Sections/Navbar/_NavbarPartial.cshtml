@@ -523,6 +523,42 @@ SIGNALR
 
     };
 
+    const notificationTemplates = {
+        UserRegistrationNotification: @Html.Raw(Json.Serialize(Localizer["UserRegistrationNotification"].Value)),
+        NewTicketToEmployeeNotification: @Html.Raw(Json.Serialize(Localizer["NewTicketToEmployeeNotification"].Value)),
+        TicketStartedNotification: @Html.Raw(Json.Serialize(Localizer["TicketStartedNotification"].Value)),
+        TicketClosedNotification: @Html.Raw(Json.Serialize(Localizer["TicketClosedNotification"].Value)),
+        TicketReopenedNotification: @Html.Raw(Json.Serialize(Localizer["TicketReopenedNotification"].Value))
+    };
+
+    function formatNotificationMessage(stored) {
+        if (!stored || stored.indexOf("$N:") !== 0) {
+            return stored || "";
+        }
+
+        var rest = stored.substring(3);
+        var parts = rest.split("|");
+        var template = notificationTemplates[parts[0]];
+        if (!template) {
+            return stored;
+        }
+
+        var text = template;
+        for (var i = 1; i < parts.length; i++) {
+            text = text.replace("{" + (i - 1) + "}", parts[i]);
+        }
+
+        return text;
+    }
+
+    function escapeNotificationHtml(value) {
+        return String(value)
+            .replace(/&/g, "&amp;")
+            .replace(/</g, "&lt;")
+            .replace(/>/g, "&gt;")
+            .replace(/"/g, "&quot;");
+    }
+
     const currentCulture =
         '@CultureInfo.CurrentUICulture.Name';
 
@@ -633,7 +669,7 @@ SIGNALR
                             <div class="notification-message"
                                  id="msg-${notification.id}">
 
-                                ${notification.message}
+                                ${escapeNotificationHtml(formatNotificationMessage(notification.message))}
 
                             </div>
 

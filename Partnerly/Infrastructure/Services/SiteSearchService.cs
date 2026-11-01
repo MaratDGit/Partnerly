@@ -1,5 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Localization;
+using Partnerly.Helpers;
 using Partnerly.Infrastructure.Interfaces;
 using Partnerly.Models;
 using Partnerly.Models.Authorization;
@@ -161,7 +162,7 @@ namespace Partnerly.Infrastructure.Services
 
                 AddGroup(result, "notifications", _localizer["Notifications"].Value, notes.Select(n => new SiteSearchItem
                 {
-                    Title = n.Message ?? "",
+                    Title = NotificationMessage.Format(n.Message),
                     Subtitle = n.Type,
                     Url = string.IsNullOrEmpty(n.Link)
                         ? "/Notification/Edit/" + n.Id

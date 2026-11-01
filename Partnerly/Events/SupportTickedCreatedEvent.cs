@@ -1,6 +1,7 @@
 ﻿using Partnerly.Descriptors.Attributes;
 using Partnerly.Descriptors.Messages;
 using Partnerly.Events.BaseEvents;
+using Partnerly.Helpers;
 using Partnerly.Infrastructure.Interfaces;
 using Partnerly.Models;
 
@@ -83,7 +84,9 @@ namespace Partnerly.Events
                     //var appUrl = _config["AppSettings:BaseUrl"];
                     //var confirmationLink = $"{appUrl}/SupportTickets/ViewCase/{@event.NewTicket.Id}";
                     var confirmationLink = $"/SupportTickets/ViewCase/{@event.NewTicket.Id}";
-                    var message = string.Format(Messages.NewTicketToEmployeeNotification, @event.NewTicket.TicketID);
+                    var message = NotificationMessage.Encode(
+                        nameof(Messages.NewTicketToEmployeeNotification),
+                        @event.NewTicket.TicketID);
 
                     if (@event.Type == SupportTickedCreatedEvent.EventType.Created)
                     {

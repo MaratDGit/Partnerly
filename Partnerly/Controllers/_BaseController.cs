@@ -151,11 +151,21 @@ namespace Partnerly.Controllers
             return model;
         }
 
-        protected async Task<IActionResult> ExportTableAsync<T>(DataTableRequest request, string format, Func<IEnumerable<string>, IQueryable<T>> queryFactory, string fileName)
+        protected async Task<IActionResult> ExportTableAsync<T>(
+            DataTableRequest request,
+            string format,
+            Func<IEnumerable<string>, IQueryable<T>> queryFactory,
+            string fileName,
+            Action<T>? prepareItem = null)
         {
             var options = _dataTableRegistry.Get(request.TableID);
 
             var items = await _tableService.ExecuteExportAsync(queryFactory, request, options);
+            if (prepareItem != null)
+            {
+                foreach (var item in items)
+                    prepareItem(item);
+            }
 
             var settings = await _systemSettingsService.GetCurrentAsync();
             var timeZone = TimeZoneHelper.Resolve(settings?.TimeZoneId);

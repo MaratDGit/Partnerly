@@ -1404,6 +1404,45 @@ input[type="radio"]:checked {
         min-width: 0;
     }
 
+    /* Edit Role / User Role / Group: nested DataTable fills the card so pagination sits at the bottom */
+    .partnerly-layout-content > .card:has(.data-table-wrapper) > .card-body {
+        display: flex;
+        flex-direction: column;
+        overflow: hidden;
+        padding-bottom: 0;
+    }
+
+    .partnerly-layout-content > .card:has(.data-table-wrapper) > .card-body > form {
+        display: flex;
+        flex-direction: column;
+        flex: 1 1 auto;
+        min-width: 0;
+        min-height: 0;
+    }
+
+    .partnerly-layout-content > .card:has(.data-table-wrapper) > .card-body > form > * {
+        flex-shrink: 0;
+    }
+
+    .partnerly-layout-content > .card:has(.data-table-wrapper) > .card-body > form > .data-table-wrapper,
+    .partnerly-layout-content > .card:has(.data-table-wrapper) > .card-body > form > .partnerly-tabs,
+    .partnerly-layout-content > .card:has(.data-table-wrapper) > .card-body > form > *:has(> .data-table-wrapper) {
+        display: flex;
+        flex-direction: column;
+        flex: 1 1 auto;
+        min-width: 0;
+        min-height: 0;
+        overflow: hidden;
+    }
+
+    .partnerly-layout-content > .card:has(.data-table-wrapper) > .card-body > form > *:has(> .data-table-wrapper) > .data-table-wrapper,
+    .partnerly-layout-content > .card:has(.data-table-wrapper) .partnerly-tab-body > .data-table-wrapper {
+        flex: 1 1 auto;
+        min-width: 0;
+        min-height: 0;
+        height: 100%;
+    }
+
 }
 
 /* Nest Hub Max / 13" laptops: 1280x800 — less chrome, keep content in view */

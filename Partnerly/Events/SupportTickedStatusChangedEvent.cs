@@ -1,6 +1,7 @@
 ﻿using Partnerly.Descriptors.Attributes;
 using Partnerly.Descriptors.Messages;
 using Partnerly.Events.BaseEvents;
+using Partnerly.Helpers;
 using Partnerly.Infrastructure.Interfaces;
 using Partnerly.Models;
 
@@ -51,11 +52,17 @@ namespace Partnerly.Events
             string? message = status switch
             {
                 SupportTicketStatusAttribute.New =>
-                    string.Format(Messages.TicketReopenedNotification, @event.Ticket.TicketID),
+                    NotificationMessage.Encode(
+                        nameof(Messages.TicketReopenedNotification),
+                        @event.Ticket.TicketID),
                 SupportTicketStatusAttribute.InProgress =>
-                    string.Format(Messages.TicketStartedNotification, @event.Ticket.TicketID),
+                    NotificationMessage.Encode(
+                        nameof(Messages.TicketStartedNotification),
+                        @event.Ticket.TicketID),
                 SupportTicketStatusAttribute.Closed =>
-                    string.Format(Messages.TicketClosedNotification, @event.Ticket.TicketID),
+                    NotificationMessage.Encode(
+                        nameof(Messages.TicketClosedNotification),
+                        @event.Ticket.TicketID),
                 _ => null
             };
 

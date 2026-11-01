@@ -1,6 +1,7 @@
 ﻿using Partnerly.Descriptors.Attributes;
 using Partnerly.Descriptors.Messages;
 using Partnerly.Events.BaseEvents;
+using Partnerly.Helpers;
 using Partnerly.Infrastructure.Interfaces;
 using Partnerly.Models;
 
@@ -99,7 +100,9 @@ namespace Partnerly.Events
 
             if (@event.SendNotification == true)
             {
-                var message = string.Format(Messages.UserRegistrationNotification, @event.NewUser.FirstName);
+                var message = NotificationMessage.Encode(
+                    nameof(Messages.UserRegistrationNotification),
+                    @event.NewUser.FirstName);
                 Notification notification = new Notification { UserId = @event.NewUser.Id, Type = NotificationTypeAttribute.Information, Message = message, Link = "/Dashboard/MyProfile" };
 
                 await _notificationService.CreateNotificationAsync(notification);

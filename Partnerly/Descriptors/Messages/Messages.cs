@@ -12,11 +12,11 @@ namespace Partnerly.Descriptors.Messages
             "Partnerly.Resources.SharedResource",
             typeof(SharedResource).Assembly);
 
-        public static string Get(string key)
+        public static string Get(string key, CultureInfo? culture = null)
         {
             return ResourceManager.GetString(
                 key,
-                CultureInfo.CurrentUICulture) ?? key;
+                culture ?? CultureInfo.CurrentUICulture) ?? key;
         }
 
         public static string RecordSaved => Get(nameof(RecordSaved));
