@@ -11,15 +11,23 @@
     var flipping = false;
     var queuedPanel = null;
     var flipSign = 1;
-    var appName = overlay.getAttribute("data-app-name") || "";
-    var titles = {
-        login: overlay.getAttribute("data-title-login") || "",
-        register: overlay.getAttribute("data-title-register") || "",
-        forgot: overlay.getAttribute("data-title-forgot") || "",
-        "register-ok": overlay.getAttribute("data-title-register-ok") || "",
-        "forgot-ok": overlay.getAttribute("data-title-forgot-ok") || "",
-        "email-ok": overlay.getAttribute("data-title-email-ok") || ""
-    };
+    var appName = "";
+    var titles = {};
+
+    function readTitles() {
+        flipper = overlay.querySelector(".landing-auth-flipper");
+        appName = overlay.getAttribute("data-app-name") || "";
+        titles = {
+            login: overlay.getAttribute("data-title-login") || "",
+            register: overlay.getAttribute("data-title-register") || "",
+            forgot: overlay.getAttribute("data-title-forgot") || "",
+            "register-ok": overlay.getAttribute("data-title-register-ok") || "",
+            "forgot-ok": overlay.getAttribute("data-title-forgot-ok") || "",
+            "email-ok": overlay.getAttribute("data-title-email-ok") || ""
+        };
+    }
+
+    readTitles();
 
     function isOpen() {
         return overlay.classList.contains("is-open");
@@ -245,6 +253,15 @@
             close();
         }
     });
+
+    window.partnerlyLandingAuth = {
+        refresh: function () {
+            readTitles();
+            if (isOpen()) {
+                setTitle(activePanel());
+            }
+        }
+    };
 
     var initial = overlay.getAttribute("data-open");
     if (initial && Object.prototype.hasOwnProperty.call(titles, initial)) {

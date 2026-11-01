@@ -54,14 +54,6 @@ namespace Partnerly.Models.ViewModels
         public string? Password { get; set; }
         #endregion
 
-        #region ConfirmPassword
-        [Required(ErrorMessageResourceType = typeof(ErrorMessages), ErrorMessageResourceName = nameof(ErrorMessages.FieldRequired))]
-        [DataType(DataType.Password)]
-        [Display(Name = nameof(FieldsDisplayNames.ConfirmPassword), ResourceType = typeof(FieldsDisplayNames))]
-        [Compare("Password", ErrorMessageResourceType = typeof(ErrorMessages), ErrorMessageResourceName = nameof(ErrorMessages.CompareConfirmPassword))]
-        public string? ConfirmPassword { get; set; }
-        #endregion
-
         #region TermsConditions
         [Display(Name = nameof(FieldsDisplayNames.TermsConditions), ResourceType = typeof(FieldsDisplayNames))]
         public bool TermsConditions { get; set; }

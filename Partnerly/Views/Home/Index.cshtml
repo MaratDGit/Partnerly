@@ -1,4 +1,5 @@
-﻿@{
+﻿@using System.Collections.Generic
+@{
     var appName = TempData.Peek("appName") as string ?? Partnerly.Helpers.SystemSettingsDefaults.ApplicationName;
     var authPanel = ViewBag.AuthPanel as string;
     var infoPanel = ViewBag.InfoPanel as string;
@@ -20,13 +21,86 @@
     {
         Localizer["LandingType1"].Value,
         Localizer["LandingType2"].Value,
-        Localizer["LandingType3"].Value
+        Localizer["LandingType3"].Value,
+        Localizer["LandingType4"].Value
     };
     var chatReplies = new[]
     {
         Localizer["LandingChatReply1"].Value,
         Localizer["LandingChatReply2"].Value,
         Localizer["LandingChatReply3"].Value
+    };
+    var chatPrompts = new object[]
+    {
+        new Dictionary<string, object?>
+        {
+            ["id"] = "what",
+            ["label"] = Localizer["LandingPromptWhat"].Value,
+            ["kind"] = "text",
+            ["text"] = Localizer["LandingAnswerWhat"].Value
+        },
+        new Dictionary<string, object?>
+        {
+            ["id"] = "start",
+            ["label"] = Localizer["LandingPromptStart"].Value,
+            ["kind"] = "text",
+            ["text"] = Localizer["LandingAnswerStart"].Value,
+            ["auth"] = true
+        },
+        new Dictionary<string, object?>
+        {
+            ["id"] = "example",
+            ["label"] = Localizer["LandingPromptExample"].Value,
+            ["kind"] = "slider",
+            ["slides"] = new object[]
+            {
+                new Dictionary<string, string>
+                {
+                    ["title"] = Localizer["LandingSlideExample1Title"].Value,
+                    ["body"] = Localizer["LandingSlideExample1Body"].Value,
+                    ["icon"] = "bx-envelope"
+                },
+                new Dictionary<string, string>
+                {
+                    ["title"] = Localizer["LandingSlideExample2Title"].Value,
+                    ["body"] = Localizer["LandingSlideExample2Body"].Value,
+                    ["icon"] = "bx-message-dots"
+                },
+                new Dictionary<string, string>
+                {
+                    ["title"] = Localizer["LandingSlideExample3Title"].Value,
+                    ["body"] = Localizer["LandingSlideExample3Body"].Value,
+                    ["icon"] = "bx-news"
+                }
+            }
+        },
+        new Dictionary<string, object?>
+        {
+            ["id"] = "how",
+            ["label"] = Localizer["LandingPromptHow"].Value,
+            ["kind"] = "slider",
+            ["slides"] = new object[]
+            {
+                new Dictionary<string, string>
+                {
+                    ["title"] = Localizer["LandingSlideHow1Title"].Value,
+                    ["body"] = Localizer["LandingSlideHow1Body"].Value,
+                    ["icon"] = "bx-edit-alt"
+                },
+                new Dictionary<string, string>
+                {
+                    ["title"] = Localizer["LandingSlideHow2Title"].Value,
+                    ["body"] = Localizer["LandingSlideHow2Body"].Value,
+                    ["icon"] = "bx-play-circle"
+                },
+                new Dictionary<string, string>
+                {
+                    ["title"] = Localizer["LandingSlideHow3Title"].Value,
+                    ["body"] = Localizer["LandingSlideHow3Body"].Value,
+                    ["icon"] = "bx-check-circle"
+                }
+            }
+        }
     };
 }
 
@@ -46,8 +120,11 @@
         <form class="landing-search"
               action="#"
               method="get"
-              data-type-phrases='@Html.Raw(System.Text.Json.JsonSerializer.Serialize(typePhrases))'
-              data-chat-replies='@Html.Raw(System.Text.Json.JsonSerializer.Serialize(chatReplies))'
+              data-type-phrases="@System.Text.Json.JsonSerializer.Serialize(typePhrases)"
+              data-chat-replies="@System.Text.Json.JsonSerializer.Serialize(chatReplies)"
+              data-chat-prompts="@System.Text.Json.JsonSerializer.Serialize(chatPrompts)"
+              data-slider-prev="@Localizer["LandingSliderPrev"]"
+              data-slider-next="@Localizer["LandingSliderNext"]"
               data-google-url="@(googleEnabled ? Url.Action("GoogleLogin", "Account") : "")"
               data-apple-url="@Url.Action("AppleLogin", "Account")"
               data-google-label="@Localizer["ContinuewithGoogle"]"
@@ -68,6 +145,21 @@
                 <i class="bx bx-send landing-search-submit-send"></i>
             </button>
         </form>
+
+        <div class="landing-prompts" data-landing-prompts>
+            <button type="button" class="landing-prompt" data-landing-prompt="what">
+                @Localizer["LandingPromptWhat"]
+            </button>
+            <button type="button" class="landing-prompt" data-landing-prompt="start">
+                @Localizer["LandingPromptStart"]
+            </button>
+            <button type="button" class="landing-prompt" data-landing-prompt="example">
+                @Localizer["LandingPromptExample"]
+            </button>
+            <button type="button" class="landing-prompt" data-landing-prompt="how">
+                @Localizer["LandingPromptHow"]
+            </button>
+        </div>
 
         <div class="landing-hero-actions">
             <button type="button" class="landing-auth-link" data-auth="login">

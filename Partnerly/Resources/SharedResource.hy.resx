@@ -878,27 +878,27 @@
   </data>
 
   <data name="Gamesplayed" xml:space="preserve">
-    <value>Խաղացված խաղեր</value>
+    <value>Ստեղծված գործակալներ</value>
   </data>
 
   <data name="Victories" xml:space="preserve">
-    <value>Հաղթանակներ</value>
+    <value>Կատարված</value>
   </data>
 
   <data name="Defeats" xml:space="preserve">
-    <value>Պարտություններ</value>
+    <value>Հերթում</value>
   </data>
 
   <data name="WinRate" xml:space="preserve">
-    <value>Հաղթանակների տոկոս</value>
+    <value>Հաջողության տոկոս</value>
   </data>
 
   <data name="Gamesbyday" xml:space="preserve">
-    <value>Խաղերն ըստ օրերի</value>
+    <value>Ակտիվությունն ըստ օրերի</value>
   </data>
 
   <data name="WinsLosses" xml:space="preserve">
-    <value>Հաղթանակներ / պարտություններ</value>
+    <value>Կատարված / հերթում</value>
   </data>
 
   <data name="Sendnotification" xml:space="preserve">
@@ -1302,7 +1302,7 @@
   </data>
 
   <data name="OverallGameResults" xml:space="preserve">
-    <value>Խաղերի ընդհանուր արդյունքները</value>
+    <value>Գործակալների արդյունքներ</value>
   </data>
 
   <data name="Last7Days" xml:space="preserve">
@@ -1398,7 +1398,7 @@
   </data>
 
   <data name="Gamesbymonth" xml:space="preserve">
-    <value>Խաղերն ըստ ամիսների</value>
+    <value>Ակտիվությունն ըստ ամիսների</value>
   </data>
 
   <data name="Refresh" xml:space="preserve">
@@ -2017,7 +2017,7 @@
   </data>
 
   <data name="Games" xml:space="preserve">
-    <value>Խաղեր</value>
+    <value>Գործակալներ</value>
   </data>
 
   <data name="TasksByStatus" xml:space="preserve">
@@ -2269,23 +2269,27 @@
   </data>
 
   <data name="LandingHeroTitle" xml:space="preserve">
-    <value>Գտիր քո գործընկերոջը</value>
+    <value>Ստեղծիր AI գործակալներ</value>
   </data>
 
   <data name="LandingHeroSub" xml:space="preserve">
-    <value>Խաղա խելացի։ Հաղթիր վստահությամբ։</value>
+    <value>Ցանկացած առաջադրանքի համար։ Ստեղծիր և գործարկիր։</value>
   </data>
 
   <data name="LandingType1" xml:space="preserve">
-    <value>Գտիր գործընկերոջը...</value>
+    <value>Սա շատ պարզ է...</value>
   </data>
 
   <data name="LandingType2" xml:space="preserve">
-    <value>Խաղա խելացի...</value>
+    <value>Բոլորը կարող են օգտվել...</value>
   </data>
 
   <data name="LandingType3" xml:space="preserve">
-    <value>Միացիր խաղին...</value>
+    <value>Ինչպե՞ս սկսել։</value>
+  </data>
+
+  <data name="LandingType4" xml:space="preserve">
+    <value>Ի՞նչ է սա։</value>
   </data>
 
   <data name="EmailVerified" xml:space="preserve">
@@ -2301,15 +2305,15 @@
   </data>
 
   <data name="LandingChatReply1" xml:space="preserve">
-    <value>Մուտք գործեք կամ գրանցվեք, և կկարողանամ օգնել շարունակել։</value>
+    <value>Մուտք գործեք կամ գրանցվեք՝ ձեր գործակալներին ստեղծելու համար։</value>
   </data>
 
   <data name="LandingChatReply2" xml:space="preserve">
-    <value>Ստեղծեք հաշիվ կամ մուտք գործեք՝ զրույցը շարունակելու համար։</value>
+    <value>Մուտք գործեք՝ գործակալներ ստեղծելու և նրանց առաջադրանքներ տալու համար։</value>
   </data>
 
   <data name="LandingChatReply3" xml:space="preserve">
-    <value>Եթե նոր եք՝ գրանցվեք, եթե արդեն ունեք հաշիվ՝ մուտք գործեք, և կպատասխանեմ ամբողջությամբ։</value>
+    <value>Եթե նոր եք՝ գրանցվեք, եթե ունեք հաշիվ՝ մուտք գործեք, և կկարգավորենք ձեր գործակալներին։</value>
   </data>
 
   <data name="ContinuewithApple" xml:space="preserve">
@@ -2390,6 +2394,86 @@
 
   <data name="DocsSettingsBody" xml:space="preserve">
     <value>Համակարգի կարգավորումներում են լեզուն, ժամային գոտին, Google մուտքը, արգելափակումը և փոստի դրոշները։ API գաղտնիքները այս էկրանին չեն։</value>
+  </data>
+
+  <data name="LandingPromptWhat" xml:space="preserve">
+    <value>Ի՞նչ է սա։</value>
+  </data>
+
+  <data name="LandingPromptStart" xml:space="preserve">
+    <value>Ինչպե՞ս սկսել։</value>
+  </data>
+
+  <data name="LandingPromptExample" xml:space="preserve">
+    <value>Ցույց տուր օրինակ</value>
+  </data>
+
+  <data name="LandingPromptHow" xml:space="preserve">
+    <value>Ինչպե՞ս է աշխատում գործակալը։</value>
+  </data>
+
+  <data name="LandingAnswerWhat" xml:space="preserve">
+    <value>Այստեղ ստեղծում եք AI գործակալներ առօրյա աշխատանքի համար։ Նկարագրեք գործը պարզ լեզվով — գործակալը կանի այն ձեր փոխարեն։ Առանց կոդի և բարդ կարգավորումների։</value>
+  </data>
+
+  <data name="LandingAnswerStart" xml:space="preserve">
+    <value>Ստեղծեք հաշիվ, ընտրեք առաջադրանք, և գործակալը կսկսի։ Առաջին արդյունքը կարող եք տեսնել այստեղ։ Մուտք գործեք, երբ ուզեք պահպանել գործակալը և ստեղծել ևս։</value>
+  </data>
+
+  <data name="LandingSlideExample1Title" xml:space="preserve">
+    <value>Նամակների գործակալ</value>
+  </data>
+
+  <data name="LandingSlideExample1Body" xml:space="preserve">
+    <value>Կարդում է նոր նամակները և պատրաստում պատասխան ձեր ոճով։ Ուղարկում եք, երբ տեքստը ձեզ հարմար է։</value>
+  </data>
+
+  <data name="LandingSlideExample2Title" xml:space="preserve">
+    <value>Աջակցության գործակալ</value>
+  </data>
+
+  <data name="LandingSlideExample2Body" xml:space="preserve">
+    <value>Տոմսը վերածում է կարճ պատասխանի, որը կարող եք ուղարկել կամ խմբագրել մեկ հպումով։</value>
+  </data>
+
+  <data name="LandingSlideExample3Title" xml:space="preserve">
+    <value>Ամփոփման գործակալ</value>
+  </data>
+
+  <data name="LandingSlideExample3Body" xml:space="preserve">
+    <value>Այսօրվա թարմացումները հավաքում է մեկ հաղորդագրության մեջ, որպեսզի օրը սկսեք արդեն տեղյակ։</value>
+  </data>
+
+  <data name="LandingSlideHow1Title" xml:space="preserve">
+    <value>Դուք նկարագրում եք առաջադրանքը</value>
+  </data>
+
+  <data name="LandingSlideHow1Body" xml:space="preserve">
+    <value>Գրեք այնպես, ինչպես կասեիք գործընկերոջը։ Հատուկ հրամաններ պետք չեն։</value>
+  </data>
+
+  <data name="LandingSlideHow2Title" xml:space="preserve">
+    <value>Գործակալը կատարում է այն</value>
+  </data>
+
+  <data name="LandingSlideHow2Body" xml:space="preserve">
+    <value>Աշխատում է հետին պլանում. կարդում է անհրաժեշտը, պատրաստում սևագիրն ու արդյունքը։</value>
+  </data>
+
+  <data name="LandingSlideHow3Title" xml:space="preserve">
+    <value>Դուք ստանում եք արդյունքը</value>
+  </data>
+
+  <data name="LandingSlideHow3Body" xml:space="preserve">
+    <value>Պատասխանը երևում է այստեղ։ Մուտք գործեք՝ գործակալը պահպանելու և նորից գործարկելու համար, երբ պետք լինի։</value>
+  </data>
+
+  <data name="LandingSliderPrev" xml:space="preserve">
+    <value>Նախորդ</value>
+  </data>
+
+  <data name="LandingSliderNext" xml:space="preserve">
+    <value>Հաջորդ</value>
   </data>
 
 </root>

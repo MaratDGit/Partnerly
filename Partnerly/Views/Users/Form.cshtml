@@ -221,25 +221,6 @@
                     <span asp-validation-for="CreateModel.Password"
                           class="text-danger"></span>
                 </div>
-
-                <div class="mb-1 form-password-toggle max-w-600">
-                    <div class="form-floating input-group input-group-merge">
-                        <input asp-for="CreateModel.ConfirmPassword"
-                               type="password"
-                               id="confirmPassword"
-                               class="form-control"
-                               placeholder=" " />
-
-                        <label asp-for="CreateModel.ConfirmPassword"></label>
-
-                        <span class="input-group-text cursor-pointer">
-                            <i class="bx bx-hide"></i>
-                        </span>
-                    </div>
-
-                    <span asp-validation-for="CreateModel.ConfirmPassword"
-                          class="text-danger"></span>
-                </div>
             }
         </form>
     </div>

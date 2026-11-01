@@ -6,12 +6,18 @@
         return;
     }
 
-    var appName = document.querySelector("#landingAuth")
-        ? document.querySelector("#landingAuth").getAttribute("data-app-name") || ""
-        : "";
-    var titles = {
-        privacy: overlay.getAttribute("data-title-privacy") || ""
-    };
+    var appName = "";
+    var titles = {};
+
+    function readTitles() {
+        var auth = document.getElementById("landingAuth");
+        appName = auth ? auth.getAttribute("data-app-name") || "" : "";
+        titles = {
+            privacy: overlay.getAttribute("data-title-privacy") || ""
+        };
+    }
+
+    readTitles();
 
     function isOpen() {
         return overlay.classList.contains("is-open");
@@ -120,6 +126,15 @@
             close();
         }
     });
+
+    window.partnerlyLandingInfo = {
+        refresh: function () {
+            readTitles();
+            if (isOpen()) {
+                setTitle(overlay.getAttribute("data-open") || "privacy");
+            }
+        }
+    };
 
     var initial = overlay.getAttribute("data-open");
     if (initial && Object.prototype.hasOwnProperty.call(titles, initial)) {

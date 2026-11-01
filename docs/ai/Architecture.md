@@ -119,8 +119,8 @@ Controller  →  I*Service  →  I*Repository : Repository<T>  →  AppDbContext
 - `_ViewStart.cshtml`: layout `_ContentNavbarLayout`.
 - Другие layout: `_CommonMasterLayout`, `_BlankLayout`, `_LandingLayout`.
 - Навбар: вместо title страницы — глобальный поиск (`_NavbarPartial` + `site-search.js`) на десктопе и планшете (≥768px); на телефоне скрыто. Запрос `GET /Search/Query` через `ISiteSearchService`: секции по эффективным правам, данные модулей по `*.view` и `VisibleUserIds()`.
-- Повторяемые части: `_Toast`, `_DeleteConfirmation`, `_AuditInfo`, `_StickyButtons`, секции в `Views/Shared/Sections/`.
-- Локализация: `AddLocalization` + `Resources/SharedResource.{en,ru,hy}.resx`, культуры `en`, `ru`, `hy`, default `en`.
+- Повторяемые части: `_Toast`, `_DeleteConfirmation`, `_AuditInfo`, `_StickyButtons`, `_LanguageSwitcher`, секции в `Views/Shared/Sections/`. Переключатель языка — флаги в ряд и коды ENG/RUS/HYE; навбар и лендинг используют один partial.
+- Локализация: `AddLocalization` + `Resources/SharedResource.{en,ru,hy}.resx`, культуры `en`, `ru`, `hy`, default `en`. Смена языка: AJAX POST `Language/SetLanguage` (cookie `.AspNetCore.Culture`), затем подмена HTML текущей страницы без navigation reload (`partnerly-language.js`). Без JS — обычный POST + redirect.
 - `RequiredLabelTagHelper` — обязательные поля в формах.
 - Тема / vendor CSS: `wwwroot/assets` (шаблон админки). Свой код: `wwwroot/assets/css/site.css`, `wwwroot/js/datatable`.
 

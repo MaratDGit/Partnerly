@@ -1,23 +1,8 @@
-﻿@using System.Globalization
-
-<link rel="stylesheet"
+﻿<link rel="stylesheet"
       href="~/assets/css/navbar.css" />
 
 <link rel="stylesheet"
       href="~/assets/css/partnerly-ai.css" />
-
-
-@{
-    var currentCulture = CultureInfo.CurrentUICulture.TwoLetterISOLanguageName;
-
-    var currentFlag = currentCulture switch
-    {
-        "en" => "gb",
-        "ru" => "ru",
-        "hy" => "am",
-        _ => "un"
-    };
-}
 
 
 <div class="partnerly-navbar-inner">
@@ -77,117 +62,7 @@
              LANGUAGE
              ================================================= -->
 
-        <div class="dropdown">
-
-            <button type="button"
-                    class="partnerly-navbar-action partnerly-language-button"
-                    data-bs-toggle="dropdown"
-                    aria-expanded="false"
-                    aria-label="Language">
-
-                <img src="https://flagcdn.com/24x18/@(currentFlag).png"
-                     alt="@currentCulture"
-                     width="24"
-                     height="18" />
-
-            </button>
-
-
-            <ul class="dropdown-menu dropdown-menu-end partnerly-language-menu">
-
-
-                <li>
-
-                    <form asp-controller="Language"
-                          asp-action="SetLanguage"
-                          method="post">
-
-                        <input type="hidden"
-                               name="returnUrl"
-                               value="@Context.Request.Path@Context.Request.QueryString" />
-
-                        <button type="submit"
-                                name="culture"
-                                value="en"
-                                class="dropdown-item">
-
-                            <img src="https://flagcdn.com/24x18/gb.png"
-                                 width="24"
-                                 height="18"
-                                 class="me-2"
-                                 alt="English" />
-
-                            <span>English</span>
-
-                        </button>
-
-                    </form>
-
-                </li>
-
-
-                <li>
-
-                    <form asp-controller="Language"
-                          asp-action="SetLanguage"
-                          method="post">
-
-                        <input type="hidden"
-                               name="returnUrl"
-                               value="@Context.Request.Path@Context.Request.QueryString" />
-
-                        <button type="submit"
-                                name="culture"
-                                value="ru"
-                                class="dropdown-item">
-
-                            <img src="https://flagcdn.com/24x18/ru.png"
-                                 width="24"
-                                 height="18"
-                                 class="me-2"
-                                 alt="Русский" />
-
-                            <span>Русский</span>
-
-                        </button>
-
-                    </form>
-
-                </li>
-
-
-                <li>
-
-                    <form asp-controller="Language"
-                          asp-action="SetLanguage"
-                          method="post">
-
-                        <input type="hidden"
-                               name="returnUrl"
-                               value="@Context.Request.Path@Context.Request.QueryString" />
-
-                        <button type="submit"
-                                name="culture"
-                                value="hy"
-                                class="dropdown-item">
-
-                            <img src="https://flagcdn.com/24x18/am.png"
-                                 width="24"
-                                 height="18"
-                                 class="me-2"
-                                 alt="Հայերեն" />
-
-                            <span>Հայերեն</span>
-
-                        </button>
-
-                    </form>
-
-                </li>
-
-            </ul>
-
-        </div>
+        @await Html.PartialAsync("_LanguageSwitcher")
 
         <!-- =================================================
             THEME

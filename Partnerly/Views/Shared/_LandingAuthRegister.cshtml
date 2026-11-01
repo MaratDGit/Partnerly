@@ -15,27 +15,20 @@
         <span asp-validation-for="FullName" class="landing-auth-error"></span>
     </div>
 
-    <div class="form-floating mb-3">
-        <input type="hidden" asp-for="FromReferrerLink" />
-        @if (Model.FromReferrerLink)
-        {
+    <input type="hidden" asp-for="FromReferrerLink" />
+    @if (Model.FromReferrerLink && !string.IsNullOrWhiteSpace(Model.ReferrerCode))
+    {
+        <div class="form-floating mb-3">
             <input type="text"
                    class="form-control"
                    id="auth-register-ref-display"
                    value="@Model.ReferrerCode"
                    readonly />
             <input type="hidden" asp-for="ReferrerCode" />
-        }
-        else
-        {
-            <input asp-for="ReferrerCode"
-                   class="form-control"
-                   id="auth-register-ref"
-                   placeholder="@Localizer["Referrersreferralcode"]" />
-        }
-        <label asp-for="ReferrerCode" for="@(Model.FromReferrerLink ? "auth-register-ref-display" : "auth-register-ref")"></label>
-        <span asp-validation-for="ReferrerCode" class="landing-auth-error"></span>
-    </div>
+            <label asp-for="ReferrerCode" for="auth-register-ref-display"></label>
+            <span asp-validation-for="ReferrerCode" class="landing-auth-error"></span>
+        </div>
+    }
 
     <div class="form-floating mb-3">
         <input asp-for="Email"
@@ -45,16 +38,6 @@
                autocomplete="email" />
         <label asp-for="Email" for="auth-register-email"></label>
         <span asp-validation-for="Email" class="landing-auth-error"></span>
-    </div>
-
-    <div class="form-floating mb-3">
-        <input asp-for="Phone"
-               class="form-control"
-               id="auth-register-phone"
-               placeholder="+37477123456"
-               autocomplete="tel" />
-        <label asp-for="Phone" for="auth-register-phone"></label>
-        <span asp-validation-for="Phone" class="landing-auth-error"></span>
     </div>
 
     <div class="mb-3 form-password-toggle">
@@ -74,25 +57,6 @@
             </span>
         </div>
         <span asp-validation-for="Password" class="landing-auth-error"></span>
-    </div>
-
-    <div class="mb-3 form-password-toggle">
-        <div class="form-floating input-group input-group-merge">
-            <input asp-for="ConfirmPassword"
-                   type="password"
-                   id="auth-register-confirm"
-                   class="form-control"
-                   placeholder="••••••••"
-                   autocomplete="new-password" />
-            <label asp-for="ConfirmPassword" for="auth-register-confirm"></label>
-            <span class="input-group-text cursor-pointer password-toggle-icon"
-                  role="button"
-                  tabindex="0"
-                  aria-label="Show password">
-                <i class="bx bx-hide"></i>
-            </span>
-        </div>
-        <span asp-validation-for="ConfirmPassword" class="landing-auth-error"></span>
     </div>
 
     <div class="landing-auth-terms">

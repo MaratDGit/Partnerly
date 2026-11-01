@@ -878,27 +878,27 @@
   </data>
 
   <data name="Gamesplayed" xml:space="preserve">
-    <value>Сыграно игр</value>
+    <value>Создано агентов</value>
   </data>
 
   <data name="Victories" xml:space="preserve">
-    <value>Победы</value>
+    <value>Выполнено</value>
   </data>
 
   <data name="Defeats" xml:space="preserve">
-    <value>Поражения</value>
+    <value>В очереди</value>
   </data>
 
   <data name="WinRate" xml:space="preserve">
-    <value>Процент побед</value>
+    <value>Успешность</value>
   </data>
 
   <data name="Gamesbyday" xml:space="preserve">
-    <value>Игры по дням</value>
+    <value>Активность по дням</value>
   </data>
 
   <data name="WinsLosses" xml:space="preserve">
-    <value>Победы / поражения</value>
+    <value>Готово / в очереди</value>
   </data>
 
   <data name="Sendnotification" xml:space="preserve">
@@ -1302,7 +1302,7 @@
   </data>
 
   <data name="OverallGameResults" xml:space="preserve">
-    <value>Общие результаты игр</value>
+    <value>Результаты агентов</value>
   </data>
 
   <data name="Last7Days" xml:space="preserve">
@@ -1398,7 +1398,7 @@
   </data>
 
   <data name="Gamesbymonth" xml:space="preserve">
-    <value>Игры по месяцам</value>
+    <value>Активность по месяцам</value>
   </data>
 
   <data name="Refresh" xml:space="preserve">
@@ -2017,7 +2017,7 @@
   </data>
 
   <data name="Games" xml:space="preserve">
-    <value>Игры</value>
+    <value>Агенты</value>
   </data>
 
   <data name="TasksByStatus" xml:space="preserve">
@@ -2269,23 +2269,27 @@
   </data>
 
   <data name="LandingHeroTitle" xml:space="preserve">
-    <value>Найди своего партнёра</value>
+    <value>Создавай ИИ-агентов</value>
   </data>
 
   <data name="LandingHeroSub" xml:space="preserve">
-    <value>Играй умнее. Побеждай уверенно.</value>
+    <value>Под любые задачи. Собери агента и запусти его.</value>
   </data>
 
   <data name="LandingType1" xml:space="preserve">
-    <value>Найди партнёра...</value>
+    <value>Это очень просто...</value>
   </data>
 
   <data name="LandingType2" xml:space="preserve">
-    <value>Играй умнее...</value>
+    <value>Ими может пользоваться каждый...</value>
   </data>
 
   <data name="LandingType3" xml:space="preserve">
-    <value>Присоединяйся...</value>
+    <value>Как начать?</value>
+  </data>
+
+  <data name="LandingType4" xml:space="preserve">
+    <value>Что это такое?</value>
   </data>
 
   <data name="EmailVerified" xml:space="preserve">
@@ -2301,15 +2305,15 @@
   </data>
 
   <data name="LandingChatReply1" xml:space="preserve">
-    <value>Войдите или зарегистрируйтесь — тогда я смогу помочь дальше.</value>
+    <value>Войдите или зарегистрируйтесь, чтобы создавать своих агентов.</value>
   </data>
 
   <data name="LandingChatReply2" xml:space="preserve">
-    <value>Создайте аккаунт или войдите, чтобы продолжить этот разговор.</value>
+    <value>Войдите, чтобы создавать агентов и ставить им задачи.</value>
   </data>
 
   <data name="LandingChatReply3" xml:space="preserve">
-    <value>Если вы новый пользователь — зарегистрируйтесь, если уже есть аккаунт — войдите, и я отвечу полностью.</value>
+    <value>Нет аккаунта — зарегистрируйтесь, есть — войдите, и настроим ваших агентов.</value>
   </data>
 
   <data name="ContinuewithApple" xml:space="preserve">
@@ -2390,6 +2394,86 @@
 
   <data name="DocsSettingsBody" xml:space="preserve">
     <value>В системных настройках — язык, часовой пояс, вход через Google, блокировка и флаги почты. Секреты API на этот экран не выносятся.</value>
+  </data>
+
+  <data name="LandingPromptWhat" xml:space="preserve">
+    <value>Что это такое?</value>
+  </data>
+
+  <data name="LandingPromptStart" xml:space="preserve">
+    <value>Как начать?</value>
+  </data>
+
+  <data name="LandingPromptExample" xml:space="preserve">
+    <value>Покажи пример</value>
+  </data>
+
+  <data name="LandingPromptHow" xml:space="preserve">
+    <value>Как работает агент?</value>
+  </data>
+
+  <data name="LandingAnswerWhat" xml:space="preserve">
+    <value>Здесь вы создаёте ИИ-агентов для обычных задач. Опишите работу простыми словами — агент сделает её за вас. Без кода и сложной настройки.</value>
+  </data>
+
+  <data name="LandingAnswerStart" xml:space="preserve">
+    <value>Создайте аккаунт, выберите задачу — агент сразу начнёт. Первый результат можно увидеть здесь. Войдите, когда захотите сохранить агента и сделать ещё.</value>
+  </data>
+
+  <data name="LandingSlideExample1Title" xml:space="preserve">
+    <value>Агент входящих</value>
+  </data>
+
+  <data name="LandingSlideExample1Body" xml:space="preserve">
+    <value>Читает новую почту и готовит ответ в вашем тоне. Отправляете, когда текст вам подходит.</value>
+  </data>
+
+  <data name="LandingSlideExample2Title" xml:space="preserve">
+    <value>Агент поддержки</value>
+  </data>
+
+  <data name="LandingSlideExample2Body" xml:space="preserve">
+    <value>Превращает тикет в короткий ответ, который можно отправить или поправить одним касанием.</value>
+  </data>
+
+  <data name="LandingSlideExample3Title" xml:space="preserve">
+    <value>Агент сводки</value>
+  </data>
+
+  <data name="LandingSlideExample3Body" xml:space="preserve">
+    <value>Собирает сегодняшние обновления в одно сообщение, чтобы день начинался уже в курсе дел.</value>
+  </data>
+
+  <data name="LandingSlideHow1Title" xml:space="preserve">
+    <value>Вы описываете задачу</value>
+  </data>
+
+  <data name="LandingSlideHow1Body" xml:space="preserve">
+    <value>Пишите так, как сказали бы коллеге. Специальные команды не нужны.</value>
+  </data>
+
+  <data name="LandingSlideHow2Title" xml:space="preserve">
+    <value>Агент выполняет её</value>
+  </data>
+
+  <data name="LandingSlideHow2Body" xml:space="preserve">
+    <value>Работает в фоне: читает нужное, готовит черновик и результат.</value>
+  </data>
+
+  <data name="LandingSlideHow3Title" xml:space="preserve">
+    <value>Вы получаете результат</value>
+  </data>
+
+  <data name="LandingSlideHow3Body" xml:space="preserve">
+    <value>Ответ появляется здесь. Войдите, чтобы сохранить агента и запускать его снова, когда понадобится.</value>
+  </data>
+
+  <data name="LandingSliderPrev" xml:space="preserve">
+    <value>Назад</value>
+  </data>
+
+  <data name="LandingSliderNext" xml:space="preserve">
+    <value>Дальше</value>
   </data>
 
 </root>

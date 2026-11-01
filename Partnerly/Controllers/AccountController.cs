@@ -148,9 +148,9 @@ namespace Partnerly.Controllers
             }
 
             User? referrer = null;
-            if (model.ReferrerCode != null)
+            if (!string.IsNullOrWhiteSpace(model.ReferrerCode))
             {
-                referrer = await _userService.GetUserByRefCodeAsync(model?.ReferrerCode);
+                referrer = await _userService.GetUserByRefCodeAsync(model.ReferrerCode);
                 if (referrer == null)
                 {
                     ModelState.AddModelError("ReferrerCode", ErrorMessages.InvalidReferralCode);
@@ -158,19 +158,21 @@ namespace Partnerly.Controllers
                 }
             }
 
-            User? existingUser = null;
-            existingUser = await _userService.GetUserByEmailAsync(model?.Email);
+            User? existingUser = await _userService.GetUserByEmailAsync(model?.Email);
             if (existingUser != null)
             {
                 ModelState.AddModelError("Email", ErrorMessages.UserWithEmailAlreadyExists);
                 return await ShowLandingAuthAsync("register", register: model);
             }
 
-            existingUser = await _userService.GetUserByPhoneAsync(model?.Phone);
-            if (existingUser != null)
+            if (!string.IsNullOrWhiteSpace(model?.Phone))
             {
-                ModelState.AddModelError("Phone", ErrorMessages.UserWithPhoneAlreadyExists);
-                return await ShowLandingAuthAsync("register", register: model);
+                existingUser = await _userService.GetUserByPhoneAsync(model.Phone);
+                if (existingUser != null)
+                {
+                    ModelState.AddModelError("Phone", ErrorMessages.UserWithPhoneAlreadyExists);
+                    return await ShowLandingAuthAsync("register", register: model);
+                }
             }
 
             string? fullName = model?.FullName?.Trim();
@@ -198,7 +200,7 @@ namespace Partnerly.Controllers
 
             Partnerly.Models.User newUser = new Partnerly.Models.User();
             newUser.Email = model?.Email;
-            newUser.Phone = model?.Phone;
+            newUser.Phone = string.IsNullOrWhiteSpace(model?.Phone) ? null : model.Phone;
             newUser.FirstName = firstName;
             newUser.LastName = lastName;
             newUser.PasswordHash = BCrypt.Net.BCrypt.HashPassword(model?.Password);

@@ -1,0 +1,64 @@
+@using System.Globalization
+@{
+    var currentCulture = CultureInfo.CurrentUICulture.TwoLetterISOLanguageName;
+    var currentFlag = currentCulture switch
+    {
+        "en" => "gb",
+        "ru" => "ru",
+        "hy" => "am",
+        _ => "gb"
+    };
+    var returnUrl = Context.Request.Path + Context.Request.QueryString;
+    var languages = new[]
+    {
+        new { Culture = "en", Flag = "gb", Code = "ENG", Name = "English" },
+        new { Culture = "ru", Flag = "ru", Code = "RUS", Name = "Русский" },
+        new { Culture = "hy", Flag = "am", Code = "HYE", Name = "Հայերեն" }
+    };
+}
+
+<div class="dropdown partnerly-language">
+    <button type="button"
+            class="partnerly-navbar-action partnerly-language-button"
+            data-bs-toggle="dropdown"
+            data-bs-display="static"
+            data-bs-offset="0,10"
+            aria-expanded="false"
+            aria-label="Language"
+            title="Language">
+        <span class="partnerly-language-flag">
+            <img src="https://flagcdn.com/40x30/@(currentFlag).png"
+                 alt=""
+                 width="22"
+                 height="16" />
+        </span>
+    </button>
+
+    <div class="dropdown-menu dropdown-menu-end partnerly-language-menu">
+        <div class="partnerly-language-tray">
+            @foreach (var language in languages)
+            {
+                var isCurrent = string.Equals(currentCulture, language.Culture, StringComparison.OrdinalIgnoreCase);
+
+                <form asp-controller="Language" asp-action="SetLanguage" method="post">
+                    <input type="hidden" name="returnUrl" value="@returnUrl" />
+                    <button type="submit"
+                            name="culture"
+                            value="@language.Culture"
+                            class="partnerly-language-option@(isCurrent ? " is-current" : null)"
+                            title="@language.Name"
+                            aria-label="@language.Name"
+                            aria-current="@(isCurrent ? "true" : "false")">
+                        <span class="partnerly-language-option-flag">
+                            <img src="https://flagcdn.com/40x30/@(language.Flag).png"
+                                 width="28"
+                                 height="21"
+                                 alt="" />
+                        </span>
+                        <span class="partnerly-language-option-code">@language.Code</span>
+                    </button>
+                </form>
+            }
+        </div>
+    </div>
+</div>

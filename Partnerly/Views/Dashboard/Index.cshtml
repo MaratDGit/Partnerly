@@ -69,7 +69,7 @@
                     role="tab"
                     aria-selected="true"
                     data-dash-tab="games">
-                <i class="bx bx-game"></i>
+                <i class="bx bx-bot"></i>
                 <span class="dashboards-tab-label">@Localizer["Games"]</span>
                 <span class="dashboards-tab-count">@Model.GamesPlayed</span>
             </button>
@@ -141,7 +141,7 @@
     <!-- ==================== STAT CARDS ==================== -->
     <div class="row g-4 mb-4">
 
-        <!-- Games -->
+        <!-- Agents -->
         <div class="col-12 col-sm-6 col-xl-3">
             <div class="dashboard-stat-card games-card">
                 <div class="stat-card-content">
@@ -170,7 +170,7 @@
                     </div>
 
                     <div class="stat-icon">
-                        <i class="bx bx-game"></i>
+                        <i class="bx bx-bot"></i>
                     </div>
                 </div>
                 <button type="button"
@@ -212,7 +212,7 @@
                     </div>
 
                     <div class="stat-icon">
-                        <i class="bx bx-trophy"></i>
+                        <i class="bx bx-check-circle"></i>
                     </div>
 
                 </div>
@@ -226,7 +226,7 @@
             </div>
         </div>
 
-        <!-- Defeats -->
+        <!-- In queue -->
         <div class="col-12 col-sm-6 col-xl-3">
             <div class="dashboard-stat-card defeats-card">
                 <div class="stat-card-content">
@@ -269,7 +269,7 @@
             </div>
         </div>
 
-        <!-- Win Rate -->
+        <!-- Success rate -->
         <div class="col-12 col-sm-6 col-xl-3">
             <div class="dashboard-stat-card rate-card">
                 <div class="stat-card-content">
@@ -318,7 +318,7 @@
     <!-- ==================== CHARTS ==================== -->
     <div class="row g-4 dashboard-charts-row">
 
-        <!-- Games by day -->
+        <!-- Activity by day -->
         <div class="col-12 col-lg-8">
 
             <div class="dashboard-card h-100">
@@ -418,7 +418,7 @@
         </div>
 
 
-        <!-- Wins / Losses -->
+        <!-- Success / Failures -->
         <div class="col-12 col-lg-4">
 
             <div class="dashboard-card h-100">
@@ -435,7 +435,7 @@
 
                     <div>
                         <h5>
-                            <i class="bx bx-trophy"></i>
+                            <i class="bx bx-pie-chart-alt-2"></i>
                             @Localizer["WinsLosses"]
                         </h5>
 

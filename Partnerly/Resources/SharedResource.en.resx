@@ -878,27 +878,27 @@
   </data>
 
   <data name="Gamesplayed" xml:space="preserve">
-    <value>Games played</value>
+    <value>Agents created</value>
   </data>
 
   <data name="Victories" xml:space="preserve">
-    <value>Victories</value>
+    <value>Tasks done</value>
   </data>
 
   <data name="Defeats" xml:space="preserve">
-    <value>Defeats</value>
+    <value>In queue</value>
   </data>
 
   <data name="WinRate" xml:space="preserve">
-    <value>Win Rate</value>
+    <value>Success rate</value>
   </data>
 
   <data name="Gamesbyday" xml:space="preserve">
-    <value>Games by day</value>
+    <value>Activity by day</value>
   </data>
 
   <data name="WinsLosses" xml:space="preserve">
-    <value>Wins / Losses</value>
+    <value>Done / In queue</value>
   </data>
 
   <data name="Sendnotification" xml:space="preserve">
@@ -1302,7 +1302,7 @@
   </data>
 
   <data name="OverallGameResults" xml:space="preserve">
-    <value>Overall game results</value>
+    <value>Agent results</value>
   </data>
 
   <data name="Last7Days" xml:space="preserve">
@@ -1398,7 +1398,7 @@
   </data>
 
   <data name="Gamesbymonth" xml:space="preserve">
-    <value>Games by month</value>
+    <value>Activity by month</value>
   </data>
 
   <data name="Refresh" xml:space="preserve">
@@ -2017,7 +2017,7 @@
   </data>
 
   <data name="Games" xml:space="preserve">
-    <value>Games</value>
+    <value>Agents</value>
   </data>
 
   <data name="TasksByStatus" xml:space="preserve">
@@ -2269,23 +2269,27 @@
   </data>
 
   <data name="LandingHeroTitle" xml:space="preserve">
-    <value>Find your partner</value>
+    <value>Create AI agents</value>
   </data>
 
   <data name="LandingHeroSub" xml:space="preserve">
-    <value>Play smarter. Win with confidence.</value>
+    <value>For any task. Build them, then put them to work.</value>
   </data>
 
   <data name="LandingType1" xml:space="preserve">
-    <value>Find your partner...</value>
+    <value>It's this simple...</value>
   </data>
 
   <data name="LandingType2" xml:space="preserve">
-    <value>Play smarter...</value>
+    <value>Anyone can use them...</value>
   </data>
 
   <data name="LandingType3" xml:space="preserve">
-    <value>Join the game...</value>
+    <value>How do I start?</value>
+  </data>
+
+  <data name="LandingType4" xml:space="preserve">
+    <value>What is this?</value>
   </data>
 
   <data name="EmailVerified" xml:space="preserve">
@@ -2301,15 +2305,15 @@
   </data>
 
   <data name="LandingChatReply1" xml:space="preserve">
-    <value>Log in or sign up and I can keep helping you from there.</value>
+    <value>Sign in or create an account to start building your agents.</value>
   </data>
 
   <data name="LandingChatReply2" xml:space="preserve">
-    <value>Create an account or log in to continue this conversation.</value>
+    <value>Log in to create agents and run them on your tasks.</value>
   </data>
 
   <data name="LandingChatReply3" xml:space="preserve">
-    <value>Sign up if you are new, or log in if you already have an account — then I can answer in full.</value>
+    <value>New here? Sign up. Already with us? Log in — then we can set up your agents.</value>
   </data>
 
   <data name="ContinuewithApple" xml:space="preserve">
@@ -2390,6 +2394,86 @@
 
   <data name="DocsSettingsBody" xml:space="preserve">
     <value>System Settings hold language, timezone, Google sign-in, lockout, and mail-related flags. API secrets stay out of this screen.</value>
+  </data>
+
+  <data name="LandingPromptWhat" xml:space="preserve">
+    <value>What is this?</value>
+  </data>
+
+  <data name="LandingPromptStart" xml:space="preserve">
+    <value>How do I start?</value>
+  </data>
+
+  <data name="LandingPromptExample" xml:space="preserve">
+    <value>Show an example</value>
+  </data>
+
+  <data name="LandingPromptHow" xml:space="preserve">
+    <value>How does an agent work?</value>
+  </data>
+
+  <data name="LandingAnswerWhat" xml:space="preserve">
+    <value>This is a place to create AI agents for everyday work. You describe the job in plain language — the agent does it for you. No code, no setup maze.</value>
+  </data>
+
+  <data name="LandingAnswerStart" xml:space="preserve">
+    <value>Create an account, pick a task, and the agent starts. Watch the first result here. Sign in when you want to keep it and make more.</value>
+  </data>
+
+  <data name="LandingSlideExample1Title" xml:space="preserve">
+    <value>Inbox agent</value>
+  </data>
+
+  <data name="LandingSlideExample1Body" xml:space="preserve">
+    <value>Reads new mail and drafts a reply in your tone. You send it when it looks right.</value>
+  </data>
+
+  <data name="LandingSlideExample2Title" xml:space="preserve">
+    <value>Support agent</value>
+  </data>
+
+  <data name="LandingSlideExample2Body" xml:space="preserve">
+    <value>Turns a ticket into a short answer you can send or edit in one tap.</value>
+  </data>
+
+  <data name="LandingSlideExample3Title" xml:space="preserve">
+    <value>Briefing agent</value>
+  </data>
+
+  <data name="LandingSlideExample3Body" xml:space="preserve">
+    <value>Collects today’s updates into one message, so you start the day already caught up.</value>
+  </data>
+
+  <data name="LandingSlideHow1Title" xml:space="preserve">
+    <value>You describe the task</value>
+  </data>
+
+  <data name="LandingSlideHow1Body" xml:space="preserve">
+    <value>Write it like you would tell a colleague. The agent does not need special commands.</value>
+  </data>
+
+  <data name="LandingSlideHow2Title" xml:space="preserve">
+    <value>The agent runs it</value>
+  </data>
+
+  <data name="LandingSlideHow2Body" xml:space="preserve">
+    <value>It works in the background: reads what it needs, drafts, and prepares the result.</value>
+  </data>
+
+  <data name="LandingSlideHow3Title" xml:space="preserve">
+    <value>You get the result</value>
+  </data>
+
+  <data name="LandingSlideHow3Body" xml:space="preserve">
+    <value>The answer shows up here. Sign in to save the agent and run it again whenever you need.</value>
+  </data>
+
+  <data name="LandingSliderPrev" xml:space="preserve">
+    <value>Previous</value>
+  </data>
+
+  <data name="LandingSliderNext" xml:space="preserve">
+    <value>Next</value>
   </data>
 
 </root>
