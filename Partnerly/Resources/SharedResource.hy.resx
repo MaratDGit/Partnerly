@@ -705,6 +705,66 @@
     <value>Սյուների կարգավորումներ</value>
   </data>
 
+  <data name="Selected" xml:space="preserve">
+    <value>Ընտրված</value>
+  </data>
+
+  <data name="DataTableBulkDelete" xml:space="preserve">
+    <value>Ջնջել ընտրվածները</value>
+  </data>
+
+  <data name="DataTableBulkDeleteSelected" xml:space="preserve">
+    <value>Ընտրված</value>
+  </data>
+
+  <data name="DataTableBulkDeleteDeleted" xml:space="preserve">
+    <value>Ջնջված</value>
+  </data>
+
+  <data name="DataTableBulkDeleteRemaining" xml:space="preserve">
+    <value>Մնացած</value>
+  </data>
+
+  <data name="DataTableBulkDeleteStart" xml:space="preserve">
+    <value>Սկսել</value>
+  </data>
+
+  <data name="DataTableBulkDeleteStop" xml:space="preserve">
+    <value>Կանգնեցնել</value>
+  </data>
+
+  <data name="DataTableBulkDeleteStartConfirm" xml:space="preserve">
+    <value>Ջնջե՞լ {0} ընտրված գրառում։</value>
+  </data>
+
+  <data name="DataTableBulkDeleteStopConfirm" xml:space="preserve">
+    <value>Կանգնեցնե՞լ ջնջման գործընթացը։</value>
+  </data>
+
+  <data name="DataTableBulkDeleteProcessing" xml:space="preserve">
+    <value>Ջնջում</value>
+  </data>
+
+  <data name="DataTableBulkDeleteComplete" xml:space="preserve">
+    <value>Ջնջումն ավարտված է</value>
+  </data>
+
+  <data name="DataTableBulkDeleteFailed" xml:space="preserve">
+    <value>Չհաջողվեց ջնջել գրառումը։</value>
+  </data>
+
+  <data name="DataTableBulkDeleted" xml:space="preserve">
+    <value>Զանգվածային ջնջում</value>
+  </data>
+
+  <data name="DataTableBulkDeleteLog" xml:space="preserve">
+    <value>Զանգվածային ջնջում «{0}». ընտրված {1}, ջնջված {2}, մնացած {3}։</value>
+  </data>
+
+  <data name="DataTableBulkDeleteUnsupported" xml:space="preserve">
+    <value>Այս աղյուսակում զանգվածային ջնջում չի աջակցվում։</value>
+  </data>
+
   <data name="DataTableColumns" xml:space="preserve">
     <value>Սյուներ</value>
   </data>

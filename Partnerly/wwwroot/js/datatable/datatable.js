@@ -67,6 +67,7 @@
             modules.pagination,
             modules.inline,
             modules.actions,
+            modules.bulkDelete,
             modules.export,
             modules.resize,
         ];

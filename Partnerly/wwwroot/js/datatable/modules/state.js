@@ -38,7 +38,8 @@
 
                 filters: {},
 
-                selectedRows: []
+                selectedRows: [],
+                selectedRowKeys: {}
             };
         },
 

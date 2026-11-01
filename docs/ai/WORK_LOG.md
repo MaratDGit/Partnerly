@@ -4,6 +4,22 @@
 
 ---
 
+## 2026-11-01 — Корзина слева, видимый progress bar
+
+- **Суть:** иконка массового удаления перенесена в левую часть тулбара. Полоса прогресса в попапе теперь заполняется (цвет был `var(--dt-primary)`, а попап на `body` теряет токены таблицы).
+- **Сделано:** `_DataTable.cshtml` — кнопка в `toolbar-left`; CSS/JS — fill через `scaleX` и цвет `#696cff`.
+- **Сборка:** правки UI, `dotnet build` не запускался. `node --check` bulkDelete.js. Браузер в этой сессии недоступен.
+
+---
+
+## 2026-11-01 — Массовое удаление в DataTable
+
+- **Суть:** во всех таблицах есть колонка Selected (выкл. по умолчанию; у group members — включена). Справа в тулбаре иконка удаления по праву `datatable.bulk_delete` (Super и Administrator). Видна, когда колонка Selected включена в гриде и есть выбранные строки. Попап: выбранные / удалённые / оставшиеся, Start и Stop с подтверждением. После прогона — запись в системный журнал через `ILogService`.
+- **Сделано:** `DataTableColumn.HiddenSelected` / `VisibleSelected`; `PermissionCodes.DataTableBulkDelete` в `All`; `DataTablesController` DeleteRecord + LogBulkDelete; JS `bulkDelete.js`; тексты en/ru/hy. History-таблица ролей (`userAccessAuditTable`) Selected есть, массовое удаление нет.
+- **Сборка:** `dotnet build Partnerly.sln` — 0 ошибок, 112 предупреждений. `node --check` — ок. Браузер в этой сессии недоступен. Новое право появится после старта (`PermissionSeeder`).
+
+---
+
 ## 2026-11-01 — Тарифы, документация, меню на Docs
 
 - **Суть:** «Blot Academy» внизу меню заменён на кнопку тарифов со стеклянным попапом (Free 1 агент / Studio до 20 / Usage по ресурсам, текущий план и usage по дням). License в футере снят. Документация про ИИ-агентов. `/Documentation` наследует `_BaseController`, поэтому права меню заполняются.

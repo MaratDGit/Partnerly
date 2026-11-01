@@ -61,6 +61,9 @@
                                 String(id);
 
 
+                            ctx.state.selectedRowKeys =
+                                ctx.state.selectedRowKeys || {};
+
                             if (target.checked) {
 
                                 if (
@@ -68,6 +71,14 @@
                                 ) {
 
                                     ctx.state.selectedRows.push(id);
+                                }
+
+                                var row =
+                                    target.closest("tr");
+
+                                if (ctx.getRowKeys) {
+                                    ctx.state.selectedRowKeys[id] =
+                                        ctx.getRowKeys(row);
                                 }
 
                             } else {
@@ -79,10 +90,16 @@
                                             return selectedId !== id;
                                         }
                                     );
+
+                                delete ctx.state.selectedRowKeys[id];
                             }
 
 
                             ctx.updateSelectAllState();
+
+                            if (ctx.updateBulkDeleteButton) {
+                                ctx.updateBulkDeleteButton();
+                            }
                         }
                     );
                 };
@@ -146,6 +163,9 @@
                                 checkbox.checked =
                                     checked;
 
+                                ctx.state.selectedRowKeys =
+                                    ctx.state.selectedRowKeys || {};
+
 
                                 if (checked) {
 
@@ -154,6 +174,14 @@
                                     ) {
 
                                         ctx.state.selectedRows.push(id);
+                                    }
+
+                                    var row =
+                                        checkbox.closest("tr");
+
+                                    if (ctx.getRowKeys) {
+                                        ctx.state.selectedRowKeys[id] =
+                                            ctx.getRowKeys(row);
                                     }
 
                                 } else {
@@ -165,11 +193,17 @@
                                                 return selectedId !== id;
                                             }
                                         );
+
+                                    delete ctx.state.selectedRowKeys[id];
                                 }
                             }
 
 
                             ctx.updateSelectAllState();
+
+                            if (ctx.updateBulkDeleteButton) {
+                                ctx.updateBulkDeleteButton();
+                            }
                         }
                     );
                 };
@@ -575,6 +609,10 @@
                             '</tr>';
                         
                         ctx.updateSelectAllState();
+
+                        if (ctx.updateBulkDeleteButton) {
+                            ctx.updateBulkDeleteButton();
+                        }
 
                         return;
                     }
@@ -1059,6 +1097,10 @@
                         html;
 
                     ctx.updateSelectAllState();
+
+                    if (ctx.updateBulkDeleteButton) {
+                        ctx.updateBulkDeleteButton();
+                    }
 
                     if (ctx.bindInlineEditButtons) {
                         ctx.bindInlineEditButtons();

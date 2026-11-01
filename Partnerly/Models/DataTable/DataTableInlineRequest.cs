@@ -30,5 +30,17 @@
 
         public Dictionary<string, string?> Keys { get; set; }
             = new();
+
+        public Dictionary<string, string?> ParentKeys { get; set; }
+            = new();
+    }
+
+    public class DataTableBulkDeleteLogRequest
+    {
+        public string TableID { get; set; } = "";
+        public int Selected { get; set; }
+        public int Deleted { get; set; }
+        public int Remaining { get; set; }
+        public bool Stopped { get; set; }
     }
 }

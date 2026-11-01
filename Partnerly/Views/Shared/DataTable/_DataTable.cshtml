@@ -1,4 +1,5 @@
-﻿@using Partnerly.Models.DataTable
+﻿@using Partnerly.Models.Authorization
+@using Partnerly.Models.DataTable
 @model Partnerly.Models.DataTable.DataTableOptions
 @{
     var tablePermissions = ViewData["Permissions"] as HashSet<string>
@@ -28,6 +29,14 @@
 
     var hasRowActions = Model.Actions.Enabled && visibleActions.Any(x => x.Placement == DataTableActionPlacement.Row);
     var hasInlineColumns = inlineEditingEnabled && Model.Columns.Any(x => x.Visible && x.Editable && CanTable(x.Permission));
+
+    var hasSelectedColumn = tableColumns.Any(column =>
+        string.Equals(column.Field, "Selected", StringComparison.OrdinalIgnoreCase));
+
+    var bulkDeleteEnabled =
+        hasSelectedColumn &&
+        CanTable(PermissionCodes.DataTableBulkDelete) &&
+        !string.Equals(Model.Id, DataTableNames.userAccessAuditTable, StringComparison.Ordinal);
 }
 
 <div id="@Model.Id"
@@ -256,6 +265,22 @@
 
                     <span class="data-table-grid-action-icon">
                         <i class="bx bx-move-horizontal"></i>
+                    </span>
+
+                </button>
+            }
+
+            @if (bulkDeleteEnabled)
+            {
+                <button type="button"
+                        class="data-table-grid-action is-danger"
+                        data-table-bulk-delete
+                        hidden
+                        title="@Localizer["DataTableBulkDelete"]"
+                        aria-label="@Localizer["DataTableBulkDelete"]">
+
+                    <span class="data-table-grid-action-icon">
+                        <i class="bx bx-trash"></i>
                     </span>
 
                 </button>
@@ -747,6 +772,104 @@
         </div>
     }
 
+    @if (bulkDeleteEnabled)
+    {
+        <div class="modal fade"
+             id="@Model.Id-bulk-delete-modal"
+             tabindex="-1"
+             aria-hidden="true"
+             data-bs-backdrop="static"
+             data-bs-keyboard="false">
+
+            <div class="modal-dialog modal-dialog-centered">
+
+                <div class="modal-content data-table-filter-modal data-table-bulk-delete-modal">
+
+                    <div class="modal-header">
+
+                        <div class="data-table-filter-modal-title">
+
+                            <span class="data-table-filter-modal-title-icon">
+                                <i class="bx bx-trash"></i>
+                            </span>
+
+                            <span data-bulk-delete-title>
+                                @Localizer["DataTableBulkDelete"]
+                            </span>
+
+                        </div>
+
+                        <button type="button"
+                                class="btn-close"
+                                data-bulk-delete-close
+                                aria-label="@Localizer["Close"]">
+                        </button>
+
+                    </div>
+
+                    <div class="modal-body">
+
+                        <div class="data-table-bulk-delete-stats">
+
+                            <div class="data-table-bulk-delete-stat">
+                                <span class="data-table-bulk-delete-stat-value" data-bulk-delete-selected>0</span>
+                                <span class="data-table-bulk-delete-stat-label">@Localizer["DataTableBulkDeleteSelected"]</span>
+                            </div>
+
+                            <div class="data-table-bulk-delete-stat">
+                                <span class="data-table-bulk-delete-stat-value" data-bulk-delete-deleted>0</span>
+                                <span class="data-table-bulk-delete-stat-label">@Localizer["DataTableBulkDeleteDeleted"]</span>
+                            </div>
+
+                            <div class="data-table-bulk-delete-stat">
+                                <span class="data-table-bulk-delete-stat-value" data-bulk-delete-remaining>0</span>
+                                <span class="data-table-bulk-delete-stat-label">@Localizer["DataTableBulkDeleteRemaining"]</span>
+                            </div>
+
+                        </div>
+
+                        <div class="data-table-bulk-delete-progress">
+                            <div class="data-table-bulk-delete-progress-bar" data-bulk-delete-progress></div>
+                        </div>
+
+                        <div class="data-table-bulk-delete-status" data-bulk-delete-status></div>
+
+                    </div>
+
+                    <div class="modal-footer data-table-filter-modal-footer">
+
+                        <button type="button"
+                                class="btn btn-outline-danger"
+                                data-bulk-delete-stop
+                                disabled>
+
+                            <i class="bx bx-stop-circle"></i>
+                            @Localizer["DataTableBulkDeleteStop"]
+
+                        </button>
+
+                        <div class="data-table-filter-modal-footer-right">
+
+                            <button type="button"
+                                    class="btn btn-primary"
+                                    data-bulk-delete-start>
+
+                                <i class="bx bx-play"></i>
+                                @Localizer["DataTableBulkDeleteStart"]
+
+                            </button>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+    }
+
     @* 
         =========================================================
         DATATABLE CONFIGURATION
@@ -767,6 +890,13 @@
                             exportUrl = exportEnabled ? Model.ExportUrl : null,
                             autoLoad = Model.AutoLoad,
                             rememberState = Model.RememberState,
+                            bulkDelete = new
+                            {
+                                    enabled = bulkDeleteEnabled,
+                                    url = "/DataTables/DeleteRecord",
+                                    logUrl = "/DataTables/LogBulkDelete"
+                            },
+
                             columnResizeEnabled = Model.ColumnResizeEnabled,
                             columnResizeMinWidth = Model.ColumnResizeMinWidth,
                             columnReorderEnabled = Model.ColumnReorderEnabled,

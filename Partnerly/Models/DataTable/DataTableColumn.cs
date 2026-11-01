@@ -48,6 +48,23 @@ namespace Partnerly.Models.DataTable
             Alignment = DataTableAlignment.Center,
             Width = "52px"
         };
+
+        public static DataTableColumn HiddenSelected() => SelectedColumn(visible: false);
+
+        public static DataTableColumn VisibleSelected() => SelectedColumn(visible: true);
+
+        private static DataTableColumn SelectedColumn(bool visible) => new()
+        {
+            Field = "Selected",
+            Title = FieldsDisplayNames.Selected,
+            Type = DataTableColumnType.Boolean,
+            Visible = visible,
+            Searchable = false,
+            Exportable = false,
+            Editable = false,
+            Alignment = DataTableAlignment.Center,
+            Width = "52px"
+        };
     }
 
     public enum DataTableColumnType

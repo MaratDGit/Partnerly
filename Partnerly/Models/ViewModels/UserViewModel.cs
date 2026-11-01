@@ -265,15 +265,7 @@ namespace Partnerly.Models.ViewModels
                                 Visible = false,
                                 Permission = PermissionCodes.DataTableViewIds,
                             },
-                            new DataTableColumn
-                            {
-                                Field = nameof(Models.User.Selected),
-                                Type = DataTableColumnType.Boolean,
-                                Searchable = false,
-                                Exportable = false,
-                                Alignment = DataTableAlignment.Center,
-                                Visible = false,
-                            },
+                            DataTableColumn.HiddenSelected(),
                             new DataTableColumn
                             {
                                 Field = nameof(Models.User.FirstName),

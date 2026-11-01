@@ -112,6 +112,7 @@ namespace Partnerly.Models.ViewModels
                                 Visible = false,
                                 Permission = PermissionCodes.DataTableViewIds,
                             },
+                            DataTableColumn.HiddenSelected(),
                             
                             new DataTableColumn
                             {

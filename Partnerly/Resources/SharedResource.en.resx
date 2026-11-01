@@ -705,6 +705,66 @@
     <value>Column settings</value>
   </data>
 
+  <data name="Selected" xml:space="preserve">
+    <value>Selected</value>
+  </data>
+
+  <data name="DataTableBulkDelete" xml:space="preserve">
+    <value>Delete selected</value>
+  </data>
+
+  <data name="DataTableBulkDeleteSelected" xml:space="preserve">
+    <value>Selected</value>
+  </data>
+
+  <data name="DataTableBulkDeleteDeleted" xml:space="preserve">
+    <value>Deleted</value>
+  </data>
+
+  <data name="DataTableBulkDeleteRemaining" xml:space="preserve">
+    <value>Remaining</value>
+  </data>
+
+  <data name="DataTableBulkDeleteStart" xml:space="preserve">
+    <value>Start</value>
+  </data>
+
+  <data name="DataTableBulkDeleteStop" xml:space="preserve">
+    <value>Stop</value>
+  </data>
+
+  <data name="DataTableBulkDeleteStartConfirm" xml:space="preserve">
+    <value>Delete {0} selected records?</value>
+  </data>
+
+  <data name="DataTableBulkDeleteStopConfirm" xml:space="preserve">
+    <value>Stop the deletion process?</value>
+  </data>
+
+  <data name="DataTableBulkDeleteProcessing" xml:space="preserve">
+    <value>Deleting</value>
+  </data>
+
+  <data name="DataTableBulkDeleteComplete" xml:space="preserve">
+    <value>Deletion completed</value>
+  </data>
+
+  <data name="DataTableBulkDeleteFailed" xml:space="preserve">
+    <value>Unable to delete record.</value>
+  </data>
+
+  <data name="DataTableBulkDeleted" xml:space="preserve">
+    <value>Bulk delete</value>
+  </data>
+
+  <data name="DataTableBulkDeleteLog" xml:space="preserve">
+    <value>Bulk delete in {0}: selected {1}, deleted {2}, remaining {3}.</value>
+  </data>
+
+  <data name="DataTableBulkDeleteUnsupported" xml:space="preserve">
+    <value>Bulk delete is not supported for this table.</value>
+  </data>
+
   <data name="DataTableColumns" xml:space="preserve">
     <value>Columns</value>
   </data>

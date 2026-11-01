@@ -118,6 +118,7 @@ namespace Partnerly.Models.ViewModels
                                 Visible = false,
                                 Permission = PermissionCodes.DataTableViewIds,
                             },
+                            DataTableColumn.HiddenSelected(),
                             new DataTableColumn
                             {
                                 Field = nameof(Log.Action),
@@ -167,7 +168,8 @@ namespace Partnerly.Models.ViewModels
                                     new() { Value = LogActionsAttribute.SupportTicketDeleted, Label = FieldsDisplayNames.SupportTicketDeleted },
                                     new() { Value = LogActionsAttribute.SupportTicketUpdated, Label = FieldsDisplayNames.SupportTicketUpdated },
 
-                                    new() { Value = LogActionsAttribute.EmailSending, Label = FieldsDisplayNames.EmailSending }
+                                    new() { Value = LogActionsAttribute.EmailSending, Label = FieldsDisplayNames.EmailSending },
+                                    new() { Value = LogActionsAttribute.DataTableBulkDeleted, Label = FieldsDisplayNames.DataTableBulkDeleted }
                                 },
 
                             },

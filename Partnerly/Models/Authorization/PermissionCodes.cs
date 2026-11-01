@@ -48,6 +48,7 @@ namespace Partnerly.Models.Authorization
         public const string AiUse = "ai.use";
         public const string WebInspectorUse = "web_inspector.use";
         public const string DataTableViewIds = "datatable.view_ids";
+        public const string DataTableBulkDelete = "datatable.bulk_delete";
 
         public static readonly string[] All =
         {
@@ -63,7 +64,8 @@ namespace Partnerly.Models.Authorization
             AttachmentsView, AttachmentsManage,
             AiUse,
             WebInspectorUse,
-            DataTableViewIds
+            DataTableViewIds,
+            DataTableBulkDelete
         };
     }
 }

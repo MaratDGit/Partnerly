@@ -138,7 +138,18 @@
             note: @Html.Raw(Json.Serialize(Localizer["Note"].Value)),
             noteTitle: @Html.Raw(Json.Serialize(Localizer["Notetothedocument"].Value)),
             notePlaceholder: @Html.Raw(Json.Serialize(Localizer["Enteranote"].Value)),
-            ok: @Html.Raw(Json.Serialize(Localizer["OK"].Value))
+            ok: @Html.Raw(Json.Serialize(Localizer["OK"].Value)),
+            bulkDelete: @Html.Raw(Json.Serialize(Localizer["DataTableBulkDelete"].Value)),
+            bulkDeleteSelected: @Html.Raw(Json.Serialize(Localizer["DataTableBulkDeleteSelected"].Value)),
+            bulkDeleteDeleted: @Html.Raw(Json.Serialize(Localizer["DataTableBulkDeleteDeleted"].Value)),
+            bulkDeleteRemaining: @Html.Raw(Json.Serialize(Localizer["DataTableBulkDeleteRemaining"].Value)),
+            bulkDeleteStart: @Html.Raw(Json.Serialize(Localizer["DataTableBulkDeleteStart"].Value)),
+            bulkDeleteStop: @Html.Raw(Json.Serialize(Localizer["DataTableBulkDeleteStop"].Value)),
+            bulkDeleteStartConfirm: @Html.Raw(Json.Serialize(Localizer["DataTableBulkDeleteStartConfirm"].Value)),
+            bulkDeleteStopConfirm: @Html.Raw(Json.Serialize(Localizer["DataTableBulkDeleteStopConfirm"].Value)),
+            bulkDeleteProcessing: @Html.Raw(Json.Serialize(Localizer["DataTableBulkDeleteProcessing"].Value)),
+            bulkDeleteComplete: @Html.Raw(Json.Serialize(Localizer["DataTableBulkDeleteComplete"].Value)),
+            bulkDeleteFailed: @Html.Raw(Json.Serialize(Localizer["DataTableBulkDeleteFailed"].Value))
         };
 
         const attachementLocalization = {
@@ -179,6 +190,7 @@
     <script src="~/js/datatable/modules/pagination.js"></script>
     <script src="~/js/datatable/modules/inline.js"></script>
     <script src="~/js/datatable/modules/actions.js"></script>
+    <script src="~/js/datatable/modules/bulkDelete.js"></script>
     <script src="~/js/datatable/modules/export.js"></script>
 
     <script src="~/js/datatable/datatable.js"></script>

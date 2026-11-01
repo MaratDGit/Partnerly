@@ -705,6 +705,66 @@
     <value>Настройки колонок</value>
   </data>
 
+  <data name="Selected" xml:space="preserve">
+    <value>Выбрано</value>
+  </data>
+
+  <data name="DataTableBulkDelete" xml:space="preserve">
+    <value>Удалить выбранные</value>
+  </data>
+
+  <data name="DataTableBulkDeleteSelected" xml:space="preserve">
+    <value>Выбрано</value>
+  </data>
+
+  <data name="DataTableBulkDeleteDeleted" xml:space="preserve">
+    <value>Удалено</value>
+  </data>
+
+  <data name="DataTableBulkDeleteRemaining" xml:space="preserve">
+    <value>Осталось</value>
+  </data>
+
+  <data name="DataTableBulkDeleteStart" xml:space="preserve">
+    <value>Начать</value>
+  </data>
+
+  <data name="DataTableBulkDeleteStop" xml:space="preserve">
+    <value>Остановить</value>
+  </data>
+
+  <data name="DataTableBulkDeleteStartConfirm" xml:space="preserve">
+    <value>Удалить {0} выбранных записей?</value>
+  </data>
+
+  <data name="DataTableBulkDeleteStopConfirm" xml:space="preserve">
+    <value>Остановить процесс удаления?</value>
+  </data>
+
+  <data name="DataTableBulkDeleteProcessing" xml:space="preserve">
+    <value>Удаление</value>
+  </data>
+
+  <data name="DataTableBulkDeleteComplete" xml:space="preserve">
+    <value>Удаление завершено</value>
+  </data>
+
+  <data name="DataTableBulkDeleteFailed" xml:space="preserve">
+    <value>Не удалось удалить запись.</value>
+  </data>
+
+  <data name="DataTableBulkDeleted" xml:space="preserve">
+    <value>Массовое удаление</value>
+  </data>
+
+  <data name="DataTableBulkDeleteLog" xml:space="preserve">
+    <value>Массовое удаление в «{0}»: выбрано {1}, удалено {2}, осталось {3}.</value>
+  </data>
+
+  <data name="DataTableBulkDeleteUnsupported" xml:space="preserve">
+    <value>Массовое удаление для этой таблицы не поддерживается.</value>
+  </data>
+
   <data name="DataTableColumns" xml:space="preserve">
     <value>Колонки</value>
   </data>

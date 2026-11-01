@@ -45,6 +45,7 @@ namespace Partnerly.Descriptors.Attributes
         public const string SupportTicketUpdated = "FU";
 
         public const string EmailSending = "ES";
+        public const string DataTableBulkDeleted = "BD";
 
         public LogActionsAttribute()
             : base(
@@ -87,7 +88,9 @@ namespace Partnerly.Descriptors.Attributes
                 SupportTicketDeleted, FieldsDisplayNames.SupportTicketDeleted,
                 SupportTicketUpdated, FieldsDisplayNames.SupportTicketUpdated,
 
-                EmailSending, FieldsDisplayNames.EmailSending
+                EmailSending, FieldsDisplayNames.EmailSending,
+
+                DataTableBulkDeleted, FieldsDisplayNames.DataTableBulkDeleted
                 )
         { }
     }

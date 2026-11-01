@@ -146,9 +146,21 @@
                         );
 
                     if (
+                        ctx.state.selectedRowKeys
+                    ) {
+                        delete ctx.state.selectedRowKeys[String(id)];
+                    }
+
+                    if (
                         ctx.updateSelectAllState
                     ) {
                         ctx.updateSelectAllState();
+                    }
+
+                    if (
+                        ctx.updateBulkDeleteButton
+                    ) {
+                        ctx.updateBulkDeleteButton();
                     }
                 };
 

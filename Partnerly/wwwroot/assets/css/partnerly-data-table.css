@@ -3238,3 +3238,107 @@ html[data-theme="dark"] #dataTableNoteModal .modal-header .btn-close {
         background: rgba(255, 76, 81, 0.13);
     }
 
+.data-table-grid-action[hidden] {
+    display: none !important;
+}
+
+.data-table-grid-action.is-danger {
+    color: #ff4c51;
+}
+
+    .data-table-grid-action.is-danger:hover {
+        color: #ff4c51;
+        background: rgba(255, 76, 81, .08);
+        border-color: rgba(255, 76, 81, .28);
+        box-shadow: 0 3px 9px rgba(255, 76, 81, .08);
+    }
+
+html[data-theme="dark"] .data-table-grid-action.is-danger {
+    color: #ff7b80;
+}
+
+    html[data-theme="dark"] .data-table-grid-action.is-danger:hover {
+        color: #ff8b90;
+        background: rgba(255, 76, 81, .13);
+        border-color: rgba(255, 76, 81, .35);
+    }
+
+.data-table-bulk-delete-stats {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 10px;
+    margin-bottom: 16px;
+}
+
+.data-table-bulk-delete-stat {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 4px;
+    padding: 12px 8px;
+    border: 1px solid var(--dt-border);
+    border-radius: 10px;
+    background: #fff;
+}
+
+.data-table-bulk-delete-stat-value {
+    font-size: 22px;
+    font-weight: 650;
+    line-height: 1;
+    color: var(--dt-text);
+}
+
+.data-table-bulk-delete-stat-label {
+    font-size: 11px;
+    font-weight: 500;
+    color: var(--dt-text-light);
+    text-transform: uppercase;
+    letter-spacing: .04em;
+}
+
+.data-table-bulk-delete-progress {
+    height: 8px;
+    overflow: hidden;
+    margin-bottom: 12px;
+    border-radius: 999px;
+    background: rgba(105, 108, 255, .16);
+}
+
+.data-table-bulk-delete-progress-bar {
+    width: 100%;
+    height: 100%;
+    transform: scaleX(0);
+    transform-origin: left center;
+    border-radius: inherit;
+    background: #696cff;
+    transition: transform .25s ease;
+}
+
+.data-table-bulk-delete-status {
+    min-height: 18px;
+    color: var(--dt-text-light);
+    font-size: 12px;
+}
+
+html[data-theme="dark"] .data-table-bulk-delete-stat {
+    background: #151c2c;
+    border-color: #29344a;
+}
+
+html[data-theme="dark"] .data-table-bulk-delete-stat-value {
+    color: #edf2ff;
+}
+
+html[data-theme="dark"] .data-table-bulk-delete-stat-label,
+html[data-theme="dark"] .data-table-bulk-delete-status {
+    color: #8b97ad;
+}
+
+html[data-theme="dark"] .data-table-bulk-delete-progress {
+    background: rgba(129, 133, 255, .22);
+}
+
+html[data-theme="dark"] .data-table-bulk-delete-progress-bar {
+    background: #8185ff;
+}
+

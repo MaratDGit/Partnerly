@@ -201,6 +201,7 @@ namespace Partnerly.Models.ViewModels
                                 Visible = false,
                                 Permission = PermissionCodes.DataTableViewIds,
                             },
+                            DataTableColumn.HiddenSelected(),
                             new DataTableColumn
                             {
                                 Field = nameof(SupportTicket.TicketID),

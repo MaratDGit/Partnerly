@@ -578,6 +578,10 @@
                 applyVisibilityToDom();
                 saveVisibility();
                 refreshRows();
+
+                if (typeof ctx.updateBulkDeleteButton === "function") {
+                    ctx.updateBulkDeleteButton();
+                }
             }
 
 
@@ -754,6 +758,10 @@
                 applyVisibilityToDom();
                 refreshRows();
                 renderList();
+
+                if (typeof ctx.updateBulkDeleteButton === "function") {
+                    ctx.updateBulkDeleteButton();
+                }
             }
 
 

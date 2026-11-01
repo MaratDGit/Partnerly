@@ -123,6 +123,7 @@ namespace Partnerly.Models.ViewModels
                                 Visible = false,
                                 Permission = PermissionCodes.DataTableViewIds,
                             },
+                            DataTableColumn.HiddenSelected(),
                             new DataTableColumn
                             {
                                 Field = nameof(UserPermissionExt.UserId),
@@ -358,6 +359,7 @@ namespace Partnerly.Models.ViewModels
                                 Visible = false,
                                 Permission = PermissionCodes.DataTableViewIds,
                             },
+                            DataTableColumn.HiddenSelected(),
                             new DataTableColumn
                             {
                                 Field = nameof(AccessControlAuditLogExt.TargetUserId),

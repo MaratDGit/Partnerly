@@ -191,6 +191,7 @@ namespace Partnerly.Models.ViewModels
                                 Required = true,
                                 Permission = PermissionCodes.DataTableViewIds,
                             },
+                            DataTableColumn.HiddenSelected(),
 
                             new DataTableColumn
                             {
@@ -379,16 +380,7 @@ namespace Partnerly.Models.ViewModels
                                 IsKey = true,
                             },
 
-                            new DataTableColumn
-                            {
-                                Field = nameof(Models.UserGroupMemberExt.Selected),
-                                Type = DataTableColumnType.Boolean,
-                                Sortable = true,
-                                Searchable = false,
-                                Exportable = false,
-                                Editable = false,
-                                Alignment = DataTableAlignment.Center,
-                            },
+                            DataTableColumn.VisibleSelected(),
 
                             new DataTableColumn
                             {

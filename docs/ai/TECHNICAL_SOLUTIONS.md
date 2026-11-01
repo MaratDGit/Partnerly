@@ -4,6 +4,17 @@
 
 ---
 
+## TR-2026-11-01-01 — DataTable: массовое удаление
+
+- **Дата:** 2026-11-01
+- **Суть:** колонка Selected во всех DataTable (Visible=false, кроме group members). Иконка удаления справа в тулбаре по `datatable.bulk_delete` (Super/Administrator через `PermissionCodes.All`). Кнопка видна, если Selected включена в гриде и есть выбранные строки. Процесс по одной записи с Start/Stop и подтверждением; итог пишется в `Log` через `ILogService.CreateLogAsync` (`BD` / Information).
+- **Причина:** владелец попросил массовое удаление с прогрессом и журналом по существующим стандартам.
+- **Затрагивает:** `DataTableColumn.HiddenSelected`, `PermissionCodes.DataTableBulkDelete`, `DataTablesController`, `bulkDelete.js`, `_DataTable.cshtml`, реестр колонок ViewModel.
+- **Последствия:** селектор не требует поля Selected в БД (клиентский `selectedRows`). Удаление идёт существующими сервисами с теми же проверками, что и одиночное удаление. `userAccessAuditTable` без bulk delete. Миграция не нужна. Право появится после старта (`PermissionSeeder`).
+- **Альтернативы:** один POST со всем списком ID — отклонён, нельзя остановить процесс и показать счётчики.
+
+---
+
 ## TR-2026-10-31-04 — DataTable: ID по праву и колонка Note
 
 - **Дата:** 2026-10-31

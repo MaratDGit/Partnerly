@@ -7,6 +7,8 @@ namespace Partnerly.Descriptors.Messages
     {
         public static string Email => Messages.Get(nameof(Email));
         public static string Note => Messages.Get(nameof(Note));
+        public static string Selected => Messages.Get(nameof(Selected));
+        public static string DataTableBulkDeleted => Messages.Get(nameof(DataTableBulkDeleted));
         public static string Password => Messages.Get(nameof(Password));
         public static string NewPassword => Messages.Get(nameof(NewPassword));
         public static string ConfirmPassword => Messages.Get(nameof(ConfirmPassword));

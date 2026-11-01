@@ -177,6 +177,7 @@ namespace Partnerly.Models.ViewModels
                                 Visible = false,
                                 Permission = PermissionCodes.DataTableViewIds,
                             },
+                            DataTableColumn.HiddenSelected(),
                             new DataTableColumn
                             {
                                 Field = nameof(Models.Role.Name),
@@ -334,6 +335,7 @@ namespace Partnerly.Models.ViewModels
                                 Visible = false,
                                 Permission = PermissionCodes.DataTableViewIds,
                             },
+                            DataTableColumn.HiddenSelected(),
                             new DataTableColumn
                             {
                                 Field = nameof(Models.Authorization.RolePermissionExt.RoleId),
