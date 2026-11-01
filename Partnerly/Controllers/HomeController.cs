@@ -70,7 +70,7 @@ namespace Partnerly.Controllers
         [Authorize]
         public IActionResult Documentation()
         {
-            return View();
+            return RedirectToAction("Index", "Documentation");
         }
 
         public async Task<IActionResult> Maintenance()

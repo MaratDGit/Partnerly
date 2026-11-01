@@ -2361,7 +2361,7 @@
   </data>
 
   <data name="DocsLead" xml:space="preserve">
-    <value>Краткая карта экранов, которые сейчас есть в Partnerly. Это заглушка, а не финальная инструкция.</value>
+    <value>Partnerly — это создание ИИ-агентов, постановка им задач и автоматизация этой работы.</value>
   </data>
 
   <data name="DocsStartTitle" xml:space="preserve">
@@ -2369,7 +2369,15 @@
   </data>
 
   <data name="DocsStartBody" xml:space="preserve">
-    <value>Открывается Статистика. В боковом меню — Пользователи, Роли, Группы, Поддержка, Уведомления, Вложения и Настройки, в зависимости от прав.</value>
+    <value>Открывается Статистика. В боковом меню — инструменты, которые вам доступны, включая Тарифы для агентов, в зависимости от прав.</value>
+  </data>
+
+  <data name="DocsAgentsTitle" xml:space="preserve">
+    <value>Агенты и автоматизация</value>
+  </data>
+
+  <data name="DocsAgentsBody" xml:space="preserve">
+    <value>Создайте агента, назначьте задачу — платформа выполнит её. Текущий план, использование и действия по дням — в Тарифах внизу меню.</value>
   </data>
 
   <data name="DocsUsersTitle" xml:space="preserve">
@@ -2474,6 +2482,70 @@
 
   <data name="LandingSliderNext" xml:space="preserve">
     <value>Дальше</value>
+  </data>
+
+  <data name="Plans" xml:space="preserve">
+    <value>Тарифы</value>
+  </data>
+
+  <data name="UpgradePlan" xml:space="preserve">
+    <value>Сменить план</value>
+  </data>
+
+  <data name="PlansLead" xml:space="preserve">
+    <value>Начните с одного бесплатного агента. Расширьтесь до двадцати или платите только за ресурсы, которые агенты реально используют.</value>
+  </data>
+
+  <data name="CurrentPlan" xml:space="preserve">
+    <value>Текущий план</value>
+  </data>
+
+  <data name="PlanFree" xml:space="preserve">
+    <value>Бесплатный</value>
+  </data>
+
+  <data name="PlanFreePrice" xml:space="preserve">
+    <value>0 ₽</value>
+  </data>
+
+  <data name="PlanFreeBody" xml:space="preserve">
+    <value>Один ИИ-агент в комплекте. Хватит, чтобы создать его, поставить задачу и увидеть автоматизацию.</value>
+  </data>
+
+  <data name="PlanStudio" xml:space="preserve">
+    <value>Студия</value>
+  </data>
+
+  <data name="PlanStudioPrice" xml:space="preserve">
+    <value>До 20 агентов</value>
+  </data>
+
+  <data name="PlanStudioBody" xml:space="preserve">
+    <value>Несколько агентов рядом: поддержка, почта, сводки и другие задачи.</value>
+  </data>
+
+  <data name="PlanUsage" xml:space="preserve">
+    <value>По потреблению</value>
+  </data>
+
+  <data name="PlanUsagePrice" xml:space="preserve">
+    <value>Оплата за ресурсы</value>
+  </data>
+
+  <data name="PlanUsageBody" xml:space="preserve">
+    <value>Без жёсткого лимита агентов. Счёт идёт за вычисления и действия, которые выполняют ваши агенты.</value>
+  </data>
+
+  <data name="PlanAgentsUsage" xml:space="preserve">
+    <value>Использовано агентов</value>
+  </data>
+
+  <data name="PlanDailyActivity" xml:space="preserve">
+    <value>Действия агентов по дням</value>
+  </data>
+
+  <data name="PlanDailyActivityHint" xml:space="preserve">
+    <value>Когда агенты работают, каждое их действие появляется здесь по дням.</value>
   </data>
 
 </root>

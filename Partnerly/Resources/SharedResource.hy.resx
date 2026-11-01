@@ -2361,7 +2361,7 @@
   </data>
 
   <data name="DocsLead" xml:space="preserve">
-    <value>Partnerly-ի ներկայիս էկրանների կարճ քարտեզ։ Սա տեղապահ է, ոչ վերջնական ձեռնարկ։</value>
+    <value>Partnerly-ն AI գործակալներ ստեղծելու, նրանց առաջադրանքներ տալու և այդ աշխատանքը ավտոմատացնելու համար է։</value>
   </data>
 
   <data name="DocsStartTitle" xml:space="preserve">
@@ -2369,7 +2369,15 @@
   </data>
 
   <data name="DocsStartBody" xml:space="preserve">
-    <value>Բացվում է Վիճակագրությունը։ Կողային ընտրացանկում՝ Օգտատերեր, Դերեր, Խմբեր, Աջակցություն, Ծանուցումներ, Կցորդներ և Կարգավորումներ՝ ըստ իրավունքների։</value>
+    <value>Բացվում է Վիճակագրությունը։ Կողային ընտրացանկում երևում են ձեր իրավունքներով հասանելի գործիքները, այդ թվում՝ գործակալների Սակագները։</value>
+  </data>
+
+  <data name="DocsAgentsTitle" xml:space="preserve">
+    <value>Գործակալներ և ավտոմատացում</value>
+  </data>
+
+  <data name="DocsAgentsBody" xml:space="preserve">
+    <value>Ստեղծեք գործակալ, տվեք առաջադրանք, և հարթակը կկատարի այն։ Ընթացիկ պլանը, օգտագործումը և ըստ օրերի գործողությունները՝ ընտրացանկի ներքևի Սակագներում։</value>
   </data>
 
   <data name="DocsUsersTitle" xml:space="preserve">
@@ -2474,6 +2482,70 @@
 
   <data name="LandingSliderNext" xml:space="preserve">
     <value>Հաջորդ</value>
+  </data>
+
+  <data name="Plans" xml:space="preserve">
+    <value>Սակագներ</value>
+  </data>
+
+  <data name="UpgradePlan" xml:space="preserve">
+    <value>Թարմացնել պլանը</value>
+  </data>
+
+  <data name="PlansLead" xml:space="preserve">
+    <value>Սկսեք մեկ անվճար գործակալով։ Աճեք մինչև քսան, կամ վճարեք միայն այն ռեսուրսների համար, որոնք գործակալներն օգտագործում են։</value>
+  </data>
+
+  <data name="CurrentPlan" xml:space="preserve">
+    <value>Ընթացիկ պլան</value>
+  </data>
+
+  <data name="PlanFree" xml:space="preserve">
+    <value>Անվճար</value>
+  </data>
+
+  <data name="PlanFreePrice" xml:space="preserve">
+    <value>0 ֏</value>
+  </data>
+
+  <data name="PlanFreeBody" xml:space="preserve">
+    <value>Մեկ AI գործակալ ներառված է։ Բավարար է ստեղծելու, առաջադրանք տալու և ավտոմատացումը տեսնելու համար։</value>
+  </data>
+
+  <data name="PlanStudio" xml:space="preserve">
+    <value>Ստուդիա</value>
+  </data>
+
+  <data name="PlanStudioPrice" xml:space="preserve">
+    <value>Մինչև 20 գործակալ</value>
+  </data>
+
+  <data name="PlanStudioBody" xml:space="preserve">
+    <value>Գործակալների փոքր թիմ՝ աջակցություն, նամակներ, ամփոփումներ և այլ առաջադրանքներ։</value>
+  </data>
+
+  <data name="PlanUsage" xml:space="preserve">
+    <value>Ըստ սպառման</value>
+  </data>
+
+  <data name="PlanUsagePrice" xml:space="preserve">
+    <value>Վճար ռեսուրսների համար</value>
+  </data>
+
+  <data name="PlanUsageBody" xml:space="preserve">
+    <value>Գործակալների կոշտ սահման չկա։ Հաշվարկվում են այն հաշվարկներն ու գործողությունները, որոնք կատարում են ձեր գործակալները։</value>
+  </data>
+
+  <data name="PlanAgentsUsage" xml:space="preserve">
+    <value>Օգտագործված գործակալներ</value>
+  </data>
+
+  <data name="PlanDailyActivity" xml:space="preserve">
+    <value>Գործակալների գործողություններն ըստ օրերի</value>
+  </data>
+
+  <data name="PlanDailyActivityHint" xml:space="preserve">
+    <value>Երբ գործակալներն աշխատում են, նրանց յուրաքանչյուր գործողություն այստեղ երևում է ըստ օրերի։</value>
   </data>
 
 </root>

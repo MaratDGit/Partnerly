@@ -2361,7 +2361,7 @@
   </data>
 
   <data name="DocsLead" xml:space="preserve">
-    <value>A short map of the screens that exist in Partnerly today. Treat this as a placeholder, not the final manual.</value>
+    <value>Partnerly is for creating AI agents, giving them tasks, and letting them automate the work.</value>
   </data>
 
   <data name="DocsStartTitle" xml:space="preserve">
@@ -2369,7 +2369,15 @@
   </data>
 
   <data name="DocsStartBody" xml:space="preserve">
-    <value>You land on Statistics. The sidebar opens Users, Roles, Groups, Support, Notifications, Attachments, and Settings, depending on your permissions.</value>
+    <value>You land on Statistics. The sidebar opens the tools you can use — including Plans for your agents — according to your permissions.</value>
+  </data>
+
+  <data name="DocsAgentsTitle" xml:space="preserve">
+    <value>Agents and automation</value>
+  </data>
+
+  <data name="DocsAgentsBody" xml:space="preserve">
+    <value>Create an agent, assign a task, and the platform runs it. Your current plan, agent usage, and daily actions are in Plans at the bottom of the menu.</value>
   </data>
 
   <data name="DocsUsersTitle" xml:space="preserve">
@@ -2474,6 +2482,70 @@
 
   <data name="LandingSliderNext" xml:space="preserve">
     <value>Next</value>
+  </data>
+
+  <data name="Plans" xml:space="preserve">
+    <value>Plans</value>
+  </data>
+
+  <data name="UpgradePlan" xml:space="preserve">
+    <value>Upgrade plan</value>
+  </data>
+
+  <data name="PlansLead" xml:space="preserve">
+    <value>Start with one free agent. Grow to twenty, or pay only for the resources your agents use.</value>
+  </data>
+
+  <data name="CurrentPlan" xml:space="preserve">
+    <value>Current plan</value>
+  </data>
+
+  <data name="PlanFree" xml:space="preserve">
+    <value>Free</value>
+  </data>
+
+  <data name="PlanFreePrice" xml:space="preserve">
+    <value>$0</value>
+  </data>
+
+  <data name="PlanFreeBody" xml:space="preserve">
+    <value>One AI agent included. Enough to create it, assign a task, and see how automation works.</value>
+  </data>
+
+  <data name="PlanStudio" xml:space="preserve">
+    <value>Studio</value>
+  </data>
+
+  <data name="PlanStudioPrice" xml:space="preserve">
+    <value>Up to 20 agents</value>
+  </data>
+
+  <data name="PlanStudioBody" xml:space="preserve">
+    <value>Run a small team of agents side by side — support, inbox, briefings, and more.</value>
+  </data>
+
+  <data name="PlanUsage" xml:space="preserve">
+    <value>Usage</value>
+  </data>
+
+  <data name="PlanUsagePrice" xml:space="preserve">
+    <value>Pay for resources</value>
+  </data>
+
+  <data name="PlanUsageBody" xml:space="preserve">
+    <value>No fixed agent cap. You are billed for the compute and actions your agents consume.</value>
+  </data>
+
+  <data name="PlanAgentsUsage" xml:space="preserve">
+    <value>Agents used</value>
+  </data>
+
+  <data name="PlanDailyActivity" xml:space="preserve">
+    <value>Agent actions by day</value>
+  </data>
+
+  <data name="PlanDailyActivityHint" xml:space="preserve">
+    <value>When your agents run, every action they take shows up here by day.</value>
   </data>
 
 </root>

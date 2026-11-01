@@ -28,14 +28,8 @@
 
             <div class="partnerly-footer-links">
 
-                <a href="@TempData.Peek("licenseUrl")"
-                   target="_blank"
-                   rel="noopener noreferrer">
-                    @Localizer["License"]
-                </a>
-
-                <a asp-controller="Home"
-                   asp-action="Documentation">
+                <a asp-controller="Documentation"
+                   asp-action="Index">
                     @Localizer["Documentation"]
                 </a>
 

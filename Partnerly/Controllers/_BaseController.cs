@@ -75,6 +75,10 @@ namespace Partnerly.Controllers
                     ? SystemSettingsDefaults.ApplicationName
                     : setting.ApplicationName;
 
+                ViewBag.CurrentPlan = "free";
+                ViewBag.PlanAgentsUsed = 0;
+                ViewBag.PlanAgentsLimit = 1;
+
                 var permissionService = context.HttpContext.RequestServices.GetRequiredService<IPermissionService>();
                 ViewData["Permissions"] = await permissionService.GetEffectivePermissionCodesAsync(_currentUser.UserId);
             }

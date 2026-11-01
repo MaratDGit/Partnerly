@@ -1,0 +1,102 @@
+@using System.Globalization
+@using System.Linq
+@{
+    var currentPlan = ViewBag.CurrentPlan as string ?? "free";
+    var used = ViewBag.PlanAgentsUsed is int usedValue ? usedValue : 0;
+    var limit = ViewBag.PlanAgentsLimit is int limitValue ? limitValue : 1;
+    if (limit < 1)
+    {
+        limit = 1;
+    }
+    var usagePercent = Math.Min(100, (int)Math.Round(used * 100.0 / limit));
+    var culture = CultureInfo.CurrentUICulture;
+    var days = Enumerable.Range(0, 7)
+        .Select(offset => DateTime.UtcNow.Date.AddDays(-6 + offset))
+        .Select(date => new
+        {
+            Label = date.ToString("ddd", culture),
+            Count = 0
+        })
+        .ToArray();
+}
+
+<div id="partnerlyPlans"
+     class="partnerly-plans"
+     hidden
+     aria-hidden="true">
+    <div class="partnerly-plans-card"
+         role="dialog"
+         aria-modal="true"
+         aria-labelledby="partnerlyPlansTitle">
+
+        <button type="button"
+                class="partnerly-plans-close"
+                data-plans-close
+                aria-label="@Localizer["Close"]">
+            <i class="bx bx-x"></i>
+        </button>
+
+        <div class="partnerly-plans-head">
+            <p class="partnerly-plans-kicker">@Localizer["Plans"]</p>
+            <h2 id="partnerlyPlansTitle">@Localizer["UpgradePlan"]</h2>
+            <p class="partnerly-plans-lead">@Localizer["PlansLead"]</p>
+        </div>
+
+        <div class="partnerly-plans-current">
+            <div>
+                <span class="partnerly-plans-current-label">@Localizer["CurrentPlan"]</span>
+                <strong>@Localizer["PlanFree"]</strong>
+            </div>
+            <div class="partnerly-plans-usage">
+                <div class="partnerly-plans-usage-row">
+                    <span>@Localizer["PlanAgentsUsage"]</span>
+                    <span>@used / @limit</span>
+                </div>
+                <div class="partnerly-plans-usage-bar"
+                     role="progressbar"
+                     aria-valuemin="0"
+                     aria-valuemax="@limit"
+                     aria-valuenow="@used">
+                    <span style="width: @usagePercent%"></span>
+                </div>
+            </div>
+        </div>
+
+        <div class="partnerly-plans-activity">
+            <h3>@Localizer["PlanDailyActivity"]</h3>
+            <p>@Localizer["PlanDailyActivityHint"]</p>
+            <div class="partnerly-plans-days" aria-hidden="true">
+                @foreach (var day in days)
+                {
+                    <div class="partnerly-plans-day">
+                        <span class="partnerly-plans-day-bar">
+                            <span style="height: @(day.Count == 0 ? 6 : Math.Min(100, day.Count * 12))%"></span>
+                        </span>
+                        <small>@day.Label</small>
+                    </div>
+                }
+            </div>
+        </div>
+
+        <div class="partnerly-plans-grid">
+            <article class="partnerly-plan-card@(currentPlan == "free" ? " is-current" : "")">
+                <h3>@Localizer["PlanFree"]</h3>
+                <p class="partnerly-plan-price">@Localizer["PlanFreePrice"]</p>
+                <p>@Localizer["PlanFreeBody"]</p>
+                <span class="partnerly-plan-badge">@Localizer["CurrentPlan"]</span>
+            </article>
+
+            <article class="partnerly-plan-card">
+                <h3>@Localizer["PlanStudio"]</h3>
+                <p class="partnerly-plan-price">@Localizer["PlanStudioPrice"]</p>
+                <p>@Localizer["PlanStudioBody"]</p>
+            </article>
+
+            <article class="partnerly-plan-card">
+                <h3>@Localizer["PlanUsage"]</h3>
+                <p class="partnerly-plan-price">@Localizer["PlanUsagePrice"]</p>
+                <p>@Localizer["PlanUsageBody"]</p>
+            </article>
+        </div>
+    </div>
+</div>

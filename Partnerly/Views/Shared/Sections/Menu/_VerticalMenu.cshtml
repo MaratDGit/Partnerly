@@ -236,10 +236,10 @@
 
                     <!-- Documentation -->
 
-                    <li class="partnerly-menu-item @(currentPage.StartsWith("/Home/Documentation") ? "active" : "")">
+                    <li class="partnerly-menu-item @(currentPage.StartsWith("/Documentation") ? "active" : "")">
 
-                        <a asp-controller="Home"
-                           asp-action="Documentation"
+                        <a asp-controller="Documentation"
+                           asp-action="Index"
                            class="partnerly-menu-link">
 
                             <span class="partnerly-menu-icon">
@@ -506,11 +506,17 @@
 
         <div class="partnerly-sidebar-footer-content">
 
-            <span class="partnerly-sidebar-status"></span>
-
-            <span class="partnerly-sidebar-footer-text">
-                @TempData.Peek("authorName")
-            </span>
+            <button type="button"
+                    class="partnerly-plan-button"
+                    data-plans-open
+                    aria-haspopup="dialog"
+                    aria-controls="partnerlyPlans">
+                <i class="bx bx-diamond" aria-hidden="true"></i>
+                <span class="partnerly-sidebar-footer-text">
+                    <span>@Localizer["Plans"]</span>
+                    <small>@Localizer["PlanFree"]</small>
+                </span>
+            </button>
 
         </div>
 

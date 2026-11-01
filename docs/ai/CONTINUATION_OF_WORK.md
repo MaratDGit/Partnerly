@@ -18,7 +18,7 @@
 
 ## Последняя задача
 
-Форма Sign up: имя, email, пароль, terms. Телефон и confirm password сняты. Реферал только при `?reff=`. History, tabs, reorder, settings, ID/Note, language, копирайт агентов ещё не закоммичены.
+Внизу меню — Тарифы (стеклянный попап: Free / Studio / Usage, текущий план, usage). Футер без License. Документация про агентов. `/Documentation` через `_BaseController`, меню с правами. Оплата ещё не подключена. History, tabs, reorder, settings, ID/Note, language, копирайт агентов ещё не закоммичены.
 
 ## Уже сделано недавно
 

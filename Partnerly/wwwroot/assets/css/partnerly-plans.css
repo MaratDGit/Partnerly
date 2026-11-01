@@ -1,0 +1,314 @@
+.partnerly-plan-button {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    width: 100%;
+    padding: 8px 10px;
+    border: 1px solid rgba(99, 102, 241, 0.18);
+    border-radius: 12px;
+    background: rgba(255, 255, 255, 0.62);
+    color: inherit;
+    text-align: left;
+    cursor: pointer;
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+}
+
+    .partnerly-plan-button i {
+        font-size: 1.15rem;
+        color: #6366f1;
+    }
+
+    .partnerly-plan-button .partnerly-sidebar-footer-text {
+        display: flex;
+        flex-direction: column;
+        line-height: 1.2;
+        white-space: nowrap;
+    }
+
+        .partnerly-plan-button .partnerly-sidebar-footer-text small {
+            color: var(--partnerly-muted);
+            font-size: 0.68rem;
+        }
+
+    .partnerly-plan-button:hover,
+    .partnerly-plan-button:focus-visible {
+        border-color: rgba(99, 102, 241, 0.38);
+        background: rgba(255, 255, 255, 0.9);
+    }
+
+body.partnerly-sidebar-collapsed .partnerly-plan-button {
+    justify-content: center;
+    padding: 8px 0;
+}
+
+html[data-theme="dark"] .partnerly-plan-button {
+    background: rgba(22, 24, 48, 0.72);
+    border-color: rgba(167, 139, 250, 0.22);
+}
+
+    html[data-theme="dark"] .partnerly-plan-button i {
+        color: #c4b5fd;
+    }
+
+    html[data-theme="dark"] .partnerly-plan-button:hover,
+    html[data-theme="dark"] .partnerly-plan-button:focus-visible {
+        background: rgba(36, 38, 72, 0.92);
+    }
+
+.partnerly-plans {
+    position: fixed;
+    inset: 0;
+    z-index: 80;
+    display: flex;
+    align-items: flex-start;
+    justify-content: center;
+    padding: 72px 16px 24px;
+    background: rgba(238, 240, 248, 0.42);
+    backdrop-filter: blur(14px);
+    -webkit-backdrop-filter: blur(14px);
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+    transition: opacity 0.35s ease, visibility 0.35s ease;
+}
+
+    .partnerly-plans.is-open {
+        overflow: hidden;
+        overscroll-behavior: none;
+        opacity: 1;
+        visibility: visible;
+        pointer-events: auto;
+    }
+
+body.is-plans-open,
+body.is-plans-open .partnerly-layout-page,
+body.is-plans-open .partnerly-layout-main,
+body.is-plans-open .partnerly-layout-content {
+    overflow: hidden;
+}
+
+html[data-theme="dark"] .partnerly-plans.is-open {
+    background: rgba(7, 7, 18, 0.52);
+}
+
+.partnerly-plans-card {
+    position: relative;
+    width: min(920px, 100%);
+    max-height: calc(100dvh - 96px);
+    overflow: auto;
+    overscroll-behavior: contain;
+    touch-action: pan-y;
+    padding: 28px 24px 22px;
+    border-radius: 24px;
+    border: 1px solid rgba(99, 102, 241, 0.16);
+    background: rgba(255, 255, 255, 0.78);
+    box-shadow: 0 24px 80px rgba(49, 46, 129, 0.16);
+    backdrop-filter: blur(18px);
+    -webkit-backdrop-filter: blur(18px);
+}
+
+html[data-theme="dark"] .partnerly-plans-card {
+    background: rgba(18, 20, 42, 0.82);
+    border-color: rgba(167, 139, 250, 0.2);
+    box-shadow: 0 24px 80px rgba(0, 0, 0, 0.35);
+}
+
+.partnerly-plans-close {
+    position: absolute;
+    top: 14px;
+    right: 14px;
+    width: 36px;
+    height: 36px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border: 0;
+    border-radius: 50%;
+    color: #4338ca;
+    background: rgba(99, 102, 241, 0.1);
+    cursor: pointer;
+}
+
+html[data-theme="dark"] .partnerly-plans-close {
+    color: #c4b5fd;
+    background: rgba(167, 139, 250, 0.14);
+}
+
+.partnerly-plans-kicker {
+    margin: 0;
+    color: #6366f1;
+    font-size: 0.78rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+}
+
+.partnerly-plans-head h2 {
+    margin: 6px 0 8px;
+    font-size: 1.55rem;
+}
+
+.partnerly-plans-lead {
+    margin: 0;
+    max-width: 52ch;
+    color: var(--partnerly-muted);
+}
+
+.partnerly-plans-current {
+    display: grid;
+    grid-template-columns: minmax(140px, 180px) 1fr;
+    gap: 18px;
+    align-items: center;
+    margin: 22px 0 18px;
+    padding: 14px 16px;
+    border-radius: 16px;
+    background: rgba(99, 102, 241, 0.08);
+}
+
+.partnerly-plans-current-label {
+    display: block;
+    margin-bottom: 4px;
+    font-size: 0.75rem;
+    color: var(--partnerly-muted);
+}
+
+.partnerly-plans-usage-row {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 8px;
+    font-size: 0.85rem;
+}
+
+.partnerly-plans-usage-bar {
+    height: 8px;
+    overflow: hidden;
+    border-radius: 999px;
+    background: rgba(99, 102, 241, 0.16);
+}
+
+    .partnerly-plans-usage-bar span {
+        display: block;
+        height: 100%;
+        min-width: 0;
+        background: linear-gradient(90deg, #6366f1, #8b7cf8);
+    }
+
+.partnerly-plans-activity {
+    margin-bottom: 20px;
+}
+
+    .partnerly-plans-activity h3 {
+        margin: 0 0 4px;
+        font-size: 1rem;
+    }
+
+    .partnerly-plans-activity p {
+        margin: 0 0 12px;
+        color: var(--partnerly-muted);
+        font-size: 0.88rem;
+    }
+
+.partnerly-plans-days {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 8px;
+    height: 92px;
+}
+
+.partnerly-plans-day {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 6px;
+    min-width: 0;
+}
+
+.partnerly-plans-day-bar {
+    display: flex;
+    align-items: flex-end;
+    width: 100%;
+    height: 64px;
+    padding: 0 6px;
+    border-radius: 8px;
+    background: rgba(99, 102, 241, 0.06);
+}
+
+    .partnerly-plans-day-bar span {
+        display: block;
+        width: 100%;
+        min-height: 6px;
+        border-radius: 6px 6px 2px 2px;
+        background: #818cf8;
+    }
+
+.partnerly-plans-day small {
+    overflow: hidden;
+    max-width: 100%;
+    color: var(--partnerly-muted);
+    font-size: 0.68rem;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.partnerly-plans-grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 12px;
+}
+
+.partnerly-plan-card {
+    padding: 16px;
+    border-radius: 16px;
+    border: 1px solid rgba(99, 102, 241, 0.14);
+    background: rgba(255, 255, 255, 0.55);
+}
+
+    .partnerly-plan-card.is-current {
+        border-color: rgba(99, 102, 241, 0.45);
+        box-shadow: 0 0 0 1px rgba(99, 102, 241, 0.18);
+    }
+
+    .partnerly-plan-card h3 {
+        margin: 0;
+        font-size: 1.05rem;
+    }
+
+.partnerly-plan-price {
+    margin: 6px 0 8px;
+    color: #4338ca;
+    font-weight: 600;
+}
+
+.partnerly-plan-card p:last-of-type {
+    margin: 0;
+    color: var(--partnerly-muted);
+    font-size: 0.88rem;
+}
+
+.partnerly-plan-badge {
+    display: inline-block;
+    margin-top: 12px;
+    padding: 4px 8px;
+    border-radius: 999px;
+    background: rgba(99, 102, 241, 0.12);
+    color: #4338ca;
+    font-size: 0.72rem;
+}
+
+html[data-theme="dark"] .partnerly-plans-current,
+html[data-theme="dark"] .partnerly-plan-card,
+html[data-theme="dark"] .partnerly-plans-day-bar {
+    background: rgba(36, 38, 72, 0.55);
+}
+
+html[data-theme="dark"] .partnerly-plan-price,
+html[data-theme="dark"] .partnerly-plan-badge {
+    color: #c4b5fd;
+}
+
+@media (max-width: 800px) {
+    .partnerly-plans-current,
+    .partnerly-plans-grid {
+        grid-template-columns: 1fr;
+    }
+}
