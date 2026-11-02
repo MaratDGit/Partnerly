@@ -989,6 +989,10 @@
     <value>Continue with Google</value>
   </data>
 
+  <data name="ContinuewithEmail" xml:space="preserve">
+    <value>Continue with email</value>
+  </data>
+
   <data name="Or" xml:space="preserve">
     <value>Or</value>
   </data>

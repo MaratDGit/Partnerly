@@ -1221,6 +1221,14 @@ html[data-theme="dark"] .landing-auth-text-btn {
         color: #ddd6fe;
     }
 
+.landing-auth-form:not(.is-email) .landing-auth-fields {
+    display: none;
+}
+
+.landing-auth-form.is-email > .landing-auth-email {
+    display: none;
+}
+
 .landing-auth-submit,
 .landing-auth-google {
     width: 100%;
@@ -1234,6 +1242,10 @@ html[data-theme="dark"] .landing-auth-text-btn {
     font-size: 0.98rem;
     font-weight: 600;
     cursor: pointer;
+}
+
+.landing-auth-form:not(.is-email) > .landing-auth-email {
+    margin-bottom: 0;
 }
 
 .landing-auth-submit {

@@ -1,6 +1,11 @@
 @model Partnerly.Models.ViewModels.LoginViewModel
+@{
+    var showEmailFields = (ViewBag.AuthPanel as string) == "login"
+        && (!ViewData.ModelState.IsValid
+            || !string.IsNullOrWhiteSpace(ViewBag.EmailConfirmationMessage as string));
+}
 
-<form class="landing-auth-form"
+<form class="landing-auth-form@(showEmailFields ? " is-email" : "")"
       asp-controller="Account"
       asp-action="Login"
       method="post">
@@ -14,55 +19,64 @@
         </div>
     }
 
-    <div class="form-floating mb-3">
-        <input asp-for="Email"
-               class="form-control"
-               id="auth-login-email"
-               placeholder="@Localizer["Enteryouremailaddress"]"
-               autocomplete="email" />
-        <label asp-for="Email" for="auth-login-email"></label>
-        <span asp-validation-for="Email" class="landing-auth-error"></span>
-    </div>
+    <button type="button"
+            class="landing-auth-google landing-auth-email"
+            data-auth-email>
+        <i class="bx bx-envelope"></i>
+        <span>@Localizer["ContinuewithEmail"]</span>
+    </button>
 
-    <div class="mb-3 form-password-toggle">
-        <div class="form-floating input-group input-group-merge">
-            <input asp-for="Password"
-                   type="password"
-                   id="auth-login-password"
+    <div class="landing-auth-fields">
+        <div class="form-floating mb-3">
+            <input asp-for="Email"
                    class="form-control"
-                   placeholder="••••••••"
-                   autocomplete="current-password" />
-            <label asp-for="Password" for="auth-login-password"></label>
-            <span class="input-group-text cursor-pointer password-toggle-icon"
-                  role="button"
-                  tabindex="0"
-                  aria-label="Show password">
-                <i class="bx bx-hide"></i>
-            </span>
+                   id="auth-login-email"
+                   placeholder="@Localizer["Enteryouremailaddress"]"
+                   autocomplete="email" />
+            <label asp-for="Email" for="auth-login-email"></label>
+            <span asp-validation-for="Email" class="landing-auth-error"></span>
         </div>
-        <span asp-validation-for="Password" class="landing-auth-error"></span>
-    </div>
 
-    <div class="landing-auth-row">
-        <div class="form-check">
-            <input asp-for="RememberMe"
-                   class="form-check-input"
-                   id="auth-login-remember" />
-            <label asp-for="RememberMe"
-                   class="form-check-label"
-                   for="auth-login-remember"></label>
+        <div class="mb-3 form-password-toggle">
+            <div class="form-floating input-group input-group-merge">
+                <input asp-for="Password"
+                       type="password"
+                       id="auth-login-password"
+                       class="form-control"
+                       placeholder="••••••••"
+                       autocomplete="current-password" />
+                <label asp-for="Password" for="auth-login-password"></label>
+                <span class="input-group-text cursor-pointer password-toggle-icon"
+                      role="button"
+                      tabindex="0"
+                      aria-label="Show password">
+                    <i class="bx bx-hide"></i>
+                </span>
+            </div>
+            <span asp-validation-for="Password" class="landing-auth-error"></span>
         </div>
-        <button type="button"
-                class="landing-auth-text-btn"
-                data-auth="forgot">
-            @Localizer["Forgotyourpassword"]
+
+        <div class="landing-auth-row">
+            <div class="form-check">
+                <input asp-for="RememberMe"
+                       class="form-check-input"
+                       id="auth-login-remember" />
+                <label asp-for="RememberMe"
+                       class="form-check-label"
+                       for="auth-login-remember"></label>
+            </div>
+            <button type="button"
+                    class="landing-auth-text-btn"
+                    data-auth="forgot">
+                @Localizer["Forgotyourpassword"]
+            </button>
+        </div>
+
+        <button class="landing-auth-submit" type="submit">
+            <span>@Localizer["Login"]</span>
+            <i class="bx bx-right-arrow-alt"></i>
         </button>
     </div>
-
-    <button class="landing-auth-submit" type="submit">
-        <span>@Localizer["Login"]</span>
-        <i class="bx bx-right-arrow-alt"></i>
-    </button>
 </form>
 
 @if (ViewBag.GoogleLoginEnabled as bool? ?? true)

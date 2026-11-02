@@ -56,9 +56,38 @@
         }
     }
 
+    function collapseEmailForms() {
+        var forms = overlay.querySelectorAll(".landing-auth-form.is-email");
+        for (var i = 0; i < forms.length; i += 1) {
+            forms[i].classList.remove("is-email");
+        }
+    }
+
+    function revealEmailFields(form) {
+        if (!form) {
+            return;
+        }
+        form.classList.add("is-email");
+        focusActiveInput();
+    }
+
     function focusActiveInput() {
         window.requestAnimationFrame(function () {
-            var input = overlay.querySelector(".landing-auth-panel.is-active input:not([type='hidden']):not([readonly])");
+            var panel = overlay.querySelector(".landing-auth-panel.is-active");
+            if (!panel) {
+                return;
+            }
+
+            var form = panel.querySelector(".landing-auth-form");
+            if (form && !form.classList.contains("is-email")) {
+                var emailButton = form.querySelector("[data-auth-email]");
+                if (emailButton) {
+                    emailButton.focus();
+                }
+                return;
+            }
+
+            var input = panel.querySelector(".landing-auth-fields input:not([type='hidden']):not([readonly])");
             if (input) {
                 input.focus();
             }
@@ -182,6 +211,7 @@
         queuedPanel = null;
         flipping = false;
         resetFlipper();
+        collapseEmailForms();
         overlay.classList.remove("is-open");
         overlay.setAttribute("aria-hidden", "true");
         overlay.setAttribute("data-open", "");
@@ -212,6 +242,13 @@
         if (closer) {
             event.preventDefault();
             close();
+            return;
+        }
+
+        var emailTrigger = event.target.closest("[data-auth-email]");
+        if (emailTrigger && overlay.contains(emailTrigger)) {
+            event.preventDefault();
+            revealEmailFields(emailTrigger.closest(".landing-auth-form"));
             return;
         }
 

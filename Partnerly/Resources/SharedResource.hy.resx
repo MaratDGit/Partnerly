@@ -989,6 +989,10 @@
     <value>Շարունակել Google-ով</value>
   </data>
 
+  <data name="ContinuewithEmail" xml:space="preserve">
+    <value>Շարունակել էլփոստով</value>
+  </data>
+
   <data name="Or" xml:space="preserve">
     <value>Կամ</value>
   </data>
