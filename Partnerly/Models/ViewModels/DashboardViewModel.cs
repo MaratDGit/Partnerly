@@ -11,15 +11,33 @@
         public int PreviousVictories { get; set; }
         public int PreviousDefeats { get; set; }
 
-        public decimal WinRate =>
-            GamesPlayed == 0
-                ? 0
-                : Math.Round((decimal)Victories / GamesPlayed * 100, 1);
+        public int FailedRuns { get; set; }
+        public int PreviousFailedRuns { get; set; }
+        public int RunsQueued { get; set; }
+        public int RunsRunning { get; set; }
+        public int RunsWaiting { get; set; }
 
-        public decimal PreviousWinRate =>
-            PreviousGamesPlayed == 0
-                ? 0
-                : Math.Round((decimal)PreviousVictories / PreviousGamesPlayed * 100, 1);
+        public decimal WinRate
+        {
+            get
+            {
+                var completed = Victories + FailedRuns;
+                return completed == 0
+                    ? 0
+                    : Math.Round((decimal)Victories / completed * 100, 1);
+            }
+        }
+
+        public decimal PreviousWinRate
+        {
+            get
+            {
+                var completed = PreviousVictories + PreviousFailedRuns;
+                return completed == 0
+                    ? 0
+                    : Math.Round((decimal)PreviousVictories / completed * 100, 1);
+            }
+        }
 
         // Percentage changes
         public decimal GamesPlayedChange =>

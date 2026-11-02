@@ -1,0 +1,18 @@
+<div class="automation-hub-panel">
+    <p class="automation-create-kicker">@Localizer["Delete"]</p>
+    <h2>@Localizer["DeleteAutomation"]</h2>
+    <p class="automation-create-lead">@Localizer["ConfirmDelete"]</p>
+    <p class="fw-semibold" data-delete-name></p>
+    <form asp-action="DeleteConfirmed"
+          asp-controller="Automation"
+          method="post"
+          data-hub-ajax
+          data-hub-remove-row>
+        @Html.AntiForgeryToken()
+        <input type="hidden" name="id" value="" />
+        <div class="automation-create-actions">
+            <button type="button" class="btn btn-outline-secondary" data-automation-hub-close>@Localizer["Cancel"]</button>
+            <button type="submit" class="btn btn-outline-danger">@Localizer["Delete"]</button>
+        </div>
+    </form>
+</div>

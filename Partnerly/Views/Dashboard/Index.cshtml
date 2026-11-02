@@ -239,18 +239,8 @@
                         <h2 class="stat-value">@Model.Defeats</h2>
 
                         <div class="stat-description">
-                            <span class="@(Model.DefeatsImprovement
-                                          ? "stat-positive"
-                                          : "stat-negative")">
-
-                                <i class="bx @(Model.DefeatsChange <= 0
-                                               ? "bx-down-arrow-alt"
-                                               : "bx-up-arrow-alt")"></i>
-
-                                @Math.Abs(Model.DefeatsChange)%
-                            </span>
-
-                            <span>@Localizer["VsLastMonth"]</span>
+                            <span>@Model.RunsQueued @Localizer["Defeats"]</span>
+                            <span>· @Model.RunsRunning @Localizer["AutomationRunning"]</span>
                         </div>
                     </div>
 

@@ -2636,4 +2636,446 @@
     <value>Назначено вам</value>
   </data>
 
+  <data name="Automation" xml:space="preserve">
+    <value>Автоматизация</value>
+  </data>
+  <data name="AutomationDashboard" xml:space="preserve">
+    <value>Панель</value>
+  </data>
+  <data name="MyAutomations" xml:space="preserve">
+    <value>Мои автоматизации</value>
+  </data>
+  <data name="UntitledAutomation" xml:space="preserve">
+    <value>Без названия</value>
+  </data>
+  <data name="AutomationPublished" xml:space="preserve">
+    <value>Автоматизация опубликована</value>
+  </data>
+  <data name="AutomationQueued" xml:space="preserve">
+    <value>Запуск поставлен в очередь</value>
+  </data>
+  <data name="DeleteAutomation" xml:space="preserve">
+    <value>Удалить автоматизацию</value>
+  </data>
+  <data name="AutomationBuilder" xml:space="preserve">
+    <value>Редактор процесса</value>
+  </data>
+  <data name="AutomationTemplates" xml:space="preserve">
+    <value>Шаблоны</value>
+  </data>
+  <data name="AutomationConnections" xml:space="preserve">
+    <value>Подключения</value>
+  </data>
+  <data name="AutomationSettings" xml:space="preserve">
+    <value>Настройки</value>
+  </data>
+  <data name="AutomationActive" xml:space="preserve">
+    <value>Активные</value>
+  </data>
+  <data name="AutomationFailed" xml:space="preserve">
+    <value>Ошибки (24 ч)</value>
+  </data>
+  <data name="AutomationRunning" xml:space="preserve">
+    <value>Выполняются</value>
+  </data>
+  <data name="AutomationRecent" xml:space="preserve">
+    <value>Последние запуски</value>
+  </data>
+  <data name="AutomationEmptyRuns" xml:space="preserve">
+    <value>Запусков пока нет</value>
+  </data>
+  <data name="AutomationEmptyWebhooks" xml:space="preserve">
+    <value>Опубликуйте процесс с webhook-триггером, чтобы получить URL</value>
+  </data>
+  <data name="AutomationEmptyConnections" xml:space="preserve">
+    <value>HTTP-подключений пока нет</value>
+  </data>
+  <data name="Publish" xml:space="preserve">
+    <value>Опубликовать</value>
+  </data>
+  <data name="TestRun" xml:space="preserve">
+    <value>Тест</value>
+  </data>
+  <data name="RunNow" xml:space="preserve">
+    <value>Запуск</value>
+  </data>
+  <data name="NodePalette" xml:space="preserve">
+    <value>Блоки</value>
+  </data>
+  <data name="NodeProperties" xml:space="preserve">
+    <value>Свойства</value>
+  </data>
+  <data name="NoTemplates" xml:space="preserve">
+    <value>Шаблонов пока нет</value>
+  </data>
+  <data name="LimitsOnDefinition" xml:space="preserve">
+    <value>Лимиты запусков задаются в каждой автоматизации</value>
+  </data>
+  <data name="WebhookUrl" xml:space="preserve">
+    <value>URL webhook</value>
+  </data>
+  <data name="WebhookSecret" xml:space="preserve">
+    <value>Секрет HMAC</value>
+  </data>
+  <data name="AutomationSaved" xml:space="preserve">
+    <value>Сохранено</value>
+  </data>
+  <data name="Actions" xml:space="preserve">
+    <value>Действия</value>
+  </data>
+  <data name="UseTemplate" xml:space="preserve">
+    <value>Взять шаблон</value>
+  </data>
+  <data name="MaxConcurrentRuns" xml:space="preserve">
+    <value>Максимум параллельных запусков</value>
+  </data>
+  <data name="MaxRunsPerHour" xml:space="preserve">
+    <value>Максимум запусков в час</value>
+  </data>
+  <data name="RetryLimit" xml:space="preserve">
+    <value>Лимит повторов</value>
+  </data>
+  <data name="StepTimeoutSeconds" xml:space="preserve">
+    <value>Таймаут шага (сек)</value>
+  </data>
+  <data name="RunTimeoutSeconds" xml:space="preserve">
+    <value>Таймаут запуска (сек)</value>
+  </data>
+  <data name="BaseUrl" xml:space="preserve">
+    <value>Базовый URL</value>
+  </data>
+  <data name="AutomationInvalidConnection" xml:space="preserve">
+    <value>Укажите имя и публичный http(s) URL</value>
+  </data>
+  <data name="CreateAutomation" xml:space="preserve">
+    <value>Новая автоматизация</value>
+  </data>
+  <data name="CreateAutomationLead" xml:space="preserve">
+    <value>Дайте процессу имя. После сохранения откроется редактор.</value>
+  </data>
+  <data name="AutomationNameHelp" xml:space="preserve">
+    <value>Короткое имя, чтобы находить процесс в списке.</value>
+  </data>
+  <data name="AutomationDescriptionHelp" xml:space="preserve">
+    <value>Необязательно. Для чего эта автоматизация.</value>
+  </data>
+  <data name="StartFromTemplate" xml:space="preserve">
+    <value>Начать с шаблона</value>
+  </data>
+  <data name="StartFromTemplateHelp" xml:space="preserve">
+    <value>Необязательно. Можно оставить пустым и собрать шаги самим.</value>
+  </data>
+  <data name="BlankAutomation" xml:space="preserve">
+    <value>Пустой — шаги добавлю сам</value>
+  </data>
+  <data name="AutomationNameRequired" xml:space="preserve">
+    <value>Укажите имя автоматизации</value>
+  </data>
+  <data name="TriggerBlocks" xml:space="preserve">
+    <value>Когда это случится</value>
+  </data>
+  <data name="TriggerBlocksHelp" xml:space="preserve">
+    <value>Точка старта. Добавьте один триггер.</value>
+  </data>
+  <data name="ActionBlocks" xml:space="preserve">
+    <value>Что сделать</value>
+  </data>
+  <data name="ActionBlocksHelp" xml:space="preserve">
+    <value>Шаги, которые выполнятся после триггера.</value>
+  </data>
+  <data name="SelectNodeHint" xml:space="preserve">
+    <value>Выберите блок на схеме, чтобы настроить его.</value>
+  </data>
+  <data name="NodeNameHelp" xml:space="preserve">
+    <value>Подпись на схеме. Только буквы, цифры и подчёркивание.</value>
+  </data>
+  <data name="DelayAmount" xml:space="preserve">
+    <value>Сколько ждать</value>
+  </data>
+  <data name="DelayUnit" xml:space="preserve">
+    <value>Единица времени</value>
+  </data>
+  <data name="DelayHelp" xml:space="preserve">
+    <value>Процесс остановится на это время и продолжит сам. Не нужно писать 00:00:05.</value>
+  </data>
+  <data name="DelayTriggerHelp" xml:space="preserve">
+    <value>После публикации первый запуск подождёт это время и стартует один раз.</value>
+  </data>
+  <data name="DelaySeconds" xml:space="preserve">
+    <value>Секунды</value>
+  </data>
+  <data name="DelayMinutes" xml:space="preserve">
+    <value>Минуты</value>
+  </data>
+  <data name="DelayHours" xml:space="preserve">
+    <value>Часы</value>
+  </data>
+  <data name="DelayDays" xml:space="preserve">
+    <value>Дни</value>
+  </data>
+  <data name="WaitBeforeStart" xml:space="preserve">
+    <value>Пауза перед стартом</value>
+  </data>
+  <data name="WaitBeforeStartHelp" xml:space="preserve">
+    <value>Необязательная пауза после события, до первого шага.</value>
+  </data>
+  <data name="ScheduleKind" xml:space="preserve">
+    <value>Как часто</value>
+  </data>
+  <data name="ScheduleKindHelp" xml:space="preserve">
+    <value>Каждый день, каждую неделю или один раз.</value>
+  </data>
+  <data name="ScheduleTime" xml:space="preserve">
+    <value>Время дня</value>
+  </data>
+  <data name="ScheduleTimeHelp" xml:space="preserve">
+    <value>Местное время этой автоматизации (см. Настройки).</value>
+  </data>
+  <data name="ScheduleDate" xml:space="preserve">
+    <value>Запустить в</value>
+  </data>
+  <data name="IntervalMinutes" xml:space="preserve">
+    <value>Повторять каждые (минуты)</value>
+  </data>
+  <data name="IntervalMinutesHelp" xml:space="preserve">
+    <value>Минимум 1 минута. Следующий запуск считается от предыдущего.</value>
+  </data>
+  <data name="AutomationRecordType" xml:space="preserve">
+    <value>Тип записи</value>
+  </data>
+  <data name="EntityHelp" xml:space="preserve">
+    <value>С какой записью Partnerly работает этот шаг.</value>
+  </data>
+  <data name="EventName" xml:space="preserve">
+    <value>Имя события</value>
+  </data>
+  <data name="EventNameHelp" xml:space="preserve">
+    <value>Должно совпадать с событием системы, например UserCreated.</value>
+  </data>
+  <data name="WebhookTriggerHelp" xml:space="preserve">
+    <value>После публикации URL и секрет появятся в Подключениях.</value>
+  </data>
+  <data name="ManualTriggerHelp" xml:space="preserve">
+    <value>Запускается кнопками Запуск или Тест на этой странице.</value>
+  </data>
+  <data name="VariableName" xml:space="preserve">
+    <value>Имя переменной</value>
+  </data>
+  <data name="VariableValue" xml:space="preserve">
+    <value>Значение</value>
+  </data>
+  <data name="VariableNameHelp" xml:space="preserve">
+    <value>Буквы, цифры и подчёркивание. Потом {{vars.name}}.</value>
+  </data>
+  <data name="EmailTo" xml:space="preserve">
+    <value>Кому отправить</value>
+  </data>
+  <data name="EmailSubject" xml:space="preserve">
+    <value>Тема</value>
+  </data>
+  <data name="EmailBody" xml:space="preserve">
+    <value>Текст письма</value>
+  </data>
+  <data name="EmailTemplate" xml:space="preserve">
+    <value>Шаблон письма</value>
+  </data>
+  <data name="EmailTemplateHelp" xml:space="preserve">
+    <value>Необязательный код шаблона. Если указан, тема и текст ниже не используются.</value>
+  </data>
+  <data name="NotificationUser" xml:space="preserve">
+    <value>Id пользователя (необязательно)</value>
+  </data>
+  <data name="NotificationMessage" xml:space="preserve">
+    <value>Текст уведомления</value>
+  </data>
+  <data name="NotificationLink" xml:space="preserve">
+    <value>Ссылка (необязательно)</value>
+  </data>
+  <data name="NotificationType" xml:space="preserve">
+    <value>Тип уведомления</value>
+  </data>
+  <data name="HttpMethod" xml:space="preserve">
+    <value>HTTP-метод</value>
+  </data>
+  <data name="HttpUrl" xml:space="preserve">
+    <value>URL</value>
+  </data>
+  <data name="HttpBody" xml:space="preserve">
+    <value>Тело запроса</value>
+  </data>
+  <data name="HttpConnection" xml:space="preserve">
+    <value>Id сохранённого подключения</value>
+  </data>
+  <data name="HttpConnectionHelp" xml:space="preserve">
+    <value>Необязательно. Id из Подключений или полный публичный URL выше.</value>
+  </data>
+  <data name="WebhookBody" xml:space="preserve">
+    <value>JSON-тело</value>
+  </data>
+  <data name="WebhookSecretField" xml:space="preserve">
+    <value>Секрет подписи (необязательно)</value>
+  </data>
+  <data name="ChildAutomation" xml:space="preserve">
+    <value>Id дочерней автоматизации</value>
+  </data>
+  <data name="ChildAutomationHelp" xml:space="preserve">
+    <value>Должна быть вашей и опубликованной. Этот шаг не ждёт её окончания.</value>
+  </data>
+  <data name="ConditionLeft" xml:space="preserve">
+    <value>Левое значение</value>
+  </data>
+  <data name="ConditionOp" xml:space="preserve">
+    <value>Сравнение</value>
+  </data>
+  <data name="ConditionRight" xml:space="preserve">
+    <value>Правое значение</value>
+  </data>
+  <data name="ConditionHelp" xml:space="preserve">
+    <value>Можно {{vars.name}} или поля триггера. На схеме соедините выходы True и False.</value>
+  </data>
+  <data name="WaitUntilDeadline" xml:space="preserve">
+    <value>Сдаться после</value>
+  </data>
+  <data name="WaitUntilDeadlineHelp" xml:space="preserve">
+    <value>Необязательный дедлайн UTC. Пусто — проверять дальше.</value>
+  </data>
+  <data name="RecordFields" xml:space="preserve">
+    <value>Поля</value>
+  </data>
+  <data name="RecordFieldsHelp" xml:space="preserve">
+    <value>По одному в строке: email={{trigger.email}}</value>
+  </data>
+  <data name="RecordKey" xml:space="preserve">
+    <value>Какая запись</value>
+  </data>
+  <data name="RecordFilters" xml:space="preserve">
+    <value>Фильтры</value>
+  </data>
+  <data name="SwitchValue" xml:space="preserve">
+    <value>Значение для сравнения</value>
+  </data>
+  <data name="SwitchValueHelp" xml:space="preserve">
+    <value>Используется подходящий выход. Пустое значение идёт в default.</value>
+  </data>
+  <data name="CronExpression" xml:space="preserve">
+    <value>Cron-выражение</value>
+  </data>
+  <data name="CronExpressionHelp" xml:space="preserve">
+    <value>Пример: 0 9 * * * — каждый день в 09:00.</value>
+  </data>
+  <data name="ScheduleOnce" xml:space="preserve">
+    <value>Один раз, в дату</value>
+  </data>
+  <data name="ScheduleHourly" xml:space="preserve">
+    <value>Каждый час</value>
+  </data>
+  <data name="ScheduleDaily" xml:space="preserve">
+    <value>Каждый день</value>
+  </data>
+  <data name="ScheduleWeekly" xml:space="preserve">
+    <value>Каждую неделю</value>
+  </data>
+  <data name="ScheduleMonthly" xml:space="preserve">
+    <value>Каждый месяц</value>
+  </data>
+  <data name="ScheduleCron" xml:space="preserve">
+    <value>Cron-выражение</value>
+  </data>
+  <data name="NodeTypeManual" xml:space="preserve">
+    <value>Ручной запуск</value>
+  </data>
+  <data name="NodeTypeSchedule" xml:space="preserve">
+    <value>По расписанию</value>
+  </data>
+  <data name="NodeTypeInterval" xml:space="preserve">
+    <value>Интервал</value>
+  </data>
+  <data name="NodeTypeEntityCreated" xml:space="preserve">
+    <value>Запись создана</value>
+  </data>
+  <data name="NodeTypeEntityUpdated" xml:space="preserve">
+    <value>Запись изменена</value>
+  </data>
+  <data name="NodeTypeEntityDeleted" xml:space="preserve">
+    <value>Запись удалена</value>
+  </data>
+  <data name="NodeTypeWebhook" xml:space="preserve">
+    <value>Входящий webhook</value>
+  </data>
+  <data name="NodeTypeEvent" xml:space="preserve">
+    <value>Событие приложения</value>
+  </data>
+  <data name="NodeTypeDelay" xml:space="preserve">
+    <value>Пауза</value>
+  </data>
+  <data name="NodeTypeSendEmail" xml:space="preserve">
+    <value>Отправить письмо</value>
+  </data>
+  <data name="NodeTypeSendNotification" xml:space="preserve">
+    <value>Отправить уведомление</value>
+  </data>
+  <data name="NodeTypeCreateRecord" xml:space="preserve">
+    <value>Создать запись</value>
+  </data>
+  <data name="NodeTypeUpdateRecord" xml:space="preserve">
+    <value>Изменить запись</value>
+  </data>
+  <data name="NodeTypeFindRecord" xml:space="preserve">
+    <value>Найти запись</value>
+  </data>
+  <data name="NodeTypeDeleteRecord" xml:space="preserve">
+    <value>Удалить запись</value>
+  </data>
+  <data name="NodeTypeWaitUntil" xml:space="preserve">
+    <value>Ждать условие</value>
+  </data>
+  <data name="NodeTypeBranch" xml:space="preserve">
+    <value>Если / иначе</value>
+  </data>
+  <data name="NodeTypeSwitch" xml:space="preserve">
+    <value>Ветвление</value>
+  </data>
+  <data name="NodeTypeSetVariable" xml:space="preserve">
+    <value>Задать переменную</value>
+  </data>
+  <data name="NodeTypeHttpRequest" xml:space="preserve">
+    <value>HTTP-запрос</value>
+  </data>
+  <data name="NodeTypeExecuteWorkflow" xml:space="preserve">
+    <value>Запустить другую автоматизацию</value>
+  </data>
+  <data name="AutomationDashboardLead" xml:space="preserve">
+    <value>Что сейчас выполняется. Откройте процесс или создайте новый.</value>
+  </data>
+  <data name="MyAutomationsLead" xml:space="preserve">
+    <value>Ваши процессы. Создайте один — дальше настраивается на схеме.</value>
+  </data>
+  <data name="AutomationHistoryLead" xml:space="preserve">
+    <value>Все запуски и их статусы. Откройте строку, чтобы увидеть шаги.</value>
+  </data>
+  <data name="AutomationTemplatesLead" xml:space="preserve">
+    <value>Готовый процесс. Имя можно задать до открытия редактора.</value>
+  </data>
+  <data name="AutomationConnectionsLead" xml:space="preserve">
+    <value>URL webhook после публикации и сохранённые HTTP-базы для исходящих запросов.</value>
+  </data>
+  <data name="AutomationSettingsLead" xml:space="preserve">
+    <value>Часовой пояс, повторы и лимиты одного процесса. Сначала выберите процесс.</value>
+  </data>
+  <data name="AutomationBuilderLead" xml:space="preserve">
+    <value>Поставьте триггер, затем шаги. Выберите блок, чтобы заполнить, что он делает.</value>
+  </data>
+  <data name="AutomationRunLead" xml:space="preserve">
+    <value>Каждый шаг этого запуска по порядку.</value>
+  </data>
+  <data name="ReadyTemplates" xml:space="preserve">
+    <value>Готовые шаблоны</value>
+  </data>
+  <data name="AutomationEmptyDefinitions" xml:space="preserve">
+    <value>Автоматизаций пока нет</value>
+  </data>
+  <data name="Agents" xml:space="preserve">
+    <value>Агенты</value>
+  </data>
+
 </root>

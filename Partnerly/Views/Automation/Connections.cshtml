@@ -1,0 +1,92 @@
+@model Partnerly.Automation.Web.ViewModels.AutomationConnectionsViewModel
+@{
+    ViewData["Title"] = Localizer["AutomationConnections"].Value;
+}
+
+@section PageStyles {
+    <link rel="stylesheet" href="~/assets/css/automation-builder.css" asp-append-version="true" />
+}
+
+<div class="container-xxl flex-grow-1 container-p-y automation-page">
+    @await Html.PartialAsync("_Toast")
+    <div class="automation-page-head">
+        <div>
+            <p class="automation-kicker">@Localizer["Automation"]</p>
+            <h1>@Localizer["AutomationConnections"]</h1>
+            <p class="automation-lead">@Localizer["AutomationConnectionsLead"]</p>
+        </div>
+    </div>
+    @await Html.PartialAsync("~/Views/Shared/Automation/_AutomationNav.cshtml")
+
+    <div class="automation-glass mb-3">
+        <p class="automation-kicker">Webhook</p>
+        <h2 class="h5 mb-3">@Localizer["WebhookUrl"]</h2>
+        @if (Model.Webhooks.Count == 0)
+        {
+            <p class="automation-lead mb-0">@Localizer["AutomationEmptyWebhooks"]</p>
+        }
+        else
+        {
+            foreach (var hook in Model.Webhooks)
+            {
+                <div class="automation-connection">
+                    <div class="fw-semibold mb-1">@hook.AutomationName</div>
+                    <div class="form-text">@Localizer["WebhookUrl"]</div>
+                    <code class="automation-code">@hook.Url</code>
+                    @if (!string.IsNullOrEmpty(hook.Secret))
+                    {
+                        <div class="form-text mt-2">@Localizer["WebhookSecret"]</div>
+                        <code class="automation-code">@hook.Secret</code>
+                    }
+                </div>
+            }
+        }
+    </div>
+
+    <div class="automation-glass">
+        <p class="automation-kicker">HTTP</p>
+        <h2 class="h5 mb-3">@Localizer["BaseUrl"]</h2>
+        @if ((ViewData["Permissions"] as HashSet<string>)?.Contains("automation.connections") == true)
+        {
+            <form asp-action="CreateHttpConnection" method="post" class="row g-3 align-items-end mb-4">
+                @Html.AntiForgeryToken()
+                <div class="col-md-4">
+                    <label class="form-label">@Localizer["Name"]</label>
+                    <input class="form-control" name="name" maxlength="200" required />
+                </div>
+                <div class="col-md-6">
+                    <label class="form-label">@Localizer["BaseUrl"]</label>
+                    <input class="form-control" name="baseUrl" maxlength="500" placeholder="https://example.com" required />
+                    <div class="form-text">@Localizer["AutomationInvalidConnection"]</div>
+                </div>
+                <div class="col-md-2">
+                    <button type="submit" class="btn btn-primary w-100">@Localizer["Create"]</button>
+                </div>
+            </form>
+        }
+
+        @if (Model.HttpConnections.Count == 0)
+        {
+            <p class="automation-lead mb-0">@Localizer["AutomationEmptyConnections"]</p>
+        }
+        else
+        {
+            <ul class="list-unstyled mb-0">
+                @foreach (var item in Model.HttpConnections)
+                {
+                    <li class="d-flex justify-content-between align-items-center py-2 automation-connection">
+                        <span>@item.Name (@item.Kind)</span>
+                        @if ((ViewData["Permissions"] as HashSet<string>)?.Contains("automation.connections") == true)
+                        {
+                            <form asp-action="DeleteHttpConnection" method="post" class="m-0">
+                                @Html.AntiForgeryToken()
+                                <input type="hidden" name="id" value="@item.Id" />
+                                <button type="submit" class="btn btn-sm btn-outline-danger">@Localizer["Delete"]</button>
+                            </form>
+                        }
+                    </li>
+                }
+            </ul>
+        }
+    </div>
+</div>

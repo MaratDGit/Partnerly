@@ -14,6 +14,8 @@ using Partnerly.Infrastructure.Services;
 using Partnerly.Infrastructure.Services.HostedServices;
 using Partnerly.Infrastructure.Services.MiddlewareServices;
 using Partnerly.Helpers;
+using Partnerly.Automation.Hosting;
+using Partnerly.Automation.Integration;
 using Partnerly.Models;
 using Partnerly.Models.DataTable;
 using System.Globalization;
@@ -67,6 +69,7 @@ builder.Services.AddScoped<IAttachmentRepository, AttachmentRepository>();
 builder.Services.AddScoped<IFileStorageService, FileStorageService>();
 builder.Services.AddScoped<IInlineUpdateService, InlineUpdateService>();
 builder.Services.AddSingleton<IDataTableRegistry, DataTableRegistry>();
+builder.Services.AddPartnerlyAutomation(useDatabase: true);
 
 // Transient services
 builder.Services.AddTransient<IEmailSender, EmailSender>();
@@ -214,6 +217,9 @@ using (var scope = app.Services.CreateScope())
     eventBus.Subscribe<UserRegisteredEvent, UserRegisteredEventHandler>();
     eventBus.Subscribe<SupportTickedCreatedEvent, SupportTickedCreatedEventHandler>();
     eventBus.Subscribe<SupportTickedStatusChangedEvent, SupportTickedStatusChangedEventHandler>();
+    eventBus.Subscribe<UserRegisteredEvent, AutomationEventBridge>();
+    eventBus.Subscribe<SupportTickedCreatedEvent, AutomationEventBridge>();
+    eventBus.Subscribe<SupportTickedStatusChangedEvent, AutomationEventBridge>();
 }
 
 if (!app.Environment.IsDevelopment())
@@ -241,6 +247,7 @@ app.UseMiddleware<RoleChangeMiddleware>();
 
 // -------------------- HUBS --------------------
 app.MapHub<NotificationHub>("/notificationHub");
+app.MapHub<AutomationHub>("/automationHub");
 
 app.Run();
 

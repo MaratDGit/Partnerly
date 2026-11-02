@@ -111,6 +111,23 @@ FK `CreatedBy` → Users.Creator Restrict; `AssignedTo` → Users.Assigned Restr
 
 Очки / описание по пользователю. Контроллера нет.
 
+### Automation* (с 2026-11-02)
+
+Таблицы модуля Universal Automation. Классы в `Partnerly/Automation/Persistence/Entities`, Fluent в `Persistence/Configurations`. **Не** реализуют `IAuditableEntity`. Миграция `20261102134353_AddAutomationTables` создана и **применена на локальной БД** 2026-11-02. Прод и другие стенды не трогались.
+
+| Таблица | Назначение |
+|---------|------------|
+| Automations | определение, OwnerUserId, draft/published version, лимиты, TZ |
+| AutomationVersions | GraphJson, Number уникален с AutomationId |
+| AutomationTriggers | проекция trigger-узлов опубликованной версии |
+| AutomationWakeups | очередь due-работы + lease |
+| AutomationRuns | запуск, ContextJson, IdempotencyKey unique filter |
+| AutomationRunSteps | шаги, unique (RunId, NodeId, Attempt) |
+| AutomationConnections | http/webhook payload (Data Protection) |
+| AutomationTemplates | пресеты графа |
+
+FK: OwnerUserId → Users Restrict; Versions → Automations Cascade; Draft/Published version → NoAction (цикл); Wakeups → run/automation без cascade delete run.
+
 ## Связи (кратко)
 
 ```text
@@ -121,6 +138,7 @@ User 1—* Payment
 User 1—* Transaction
 UserGroup 1—* UserGroupMember *—1 User
 User 1—* SupportTicket (Creator / Assigned)
+User 1—* AutomationDefinition
 ```
 
 Fluent API **не** описывает явно все FK Payments/Transactions/Notifications — часть может быть по конвенции EF. При сомнении сверять snapshot.
@@ -142,6 +160,7 @@ Fluent API **не** описывает явно все FK Payments/Transactions/
 Удаление Role.Type: `20261024211314_deleteRoleType`.  
 Расширение SystemSettings + lockout пользователя: `20261030074752_ExpandSystemSettingsAndUserLockout` (создана, на локальной БД применена 2026-10-30).  
 Apple Sign In: `20261102092927_AddAppleSignIn` (создана, на локальной БД применена 2026-11-02).  
+Automation: `20261102134353_AddAutomationTables` (создана, на локальной БД применена 2026-11-02).  
 Есть `20250923122849_testMigration`.
 
 Полный список файлов — в каталоге; не все имена отражают фактический SQL без чтения файла.

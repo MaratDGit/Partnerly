@@ -1,0 +1,44 @@
+@model Partnerly.Automation.Web.ViewModels.AutomationHistoryPanelViewModel
+
+<div class="automation-hub-panel">
+    <p class="automation-create-kicker">@Localizer["History"]</p>
+    <h2>@Model.Definition.Name</h2>
+
+    <div class="table-responsive">
+        <table class="automation-hub-table automation-hub-table--compact">
+            <thead>
+                <tr>
+                    <th>@Localizer["Status"]</th>
+                    <th>@Localizer["Type"]</th>
+                    <th>@Localizer["CreatedDate"]</th>
+                </tr>
+            </thead>
+            <tbody>
+            @if (Model.Runs.Count == 0)
+            {
+                <tr>
+                    <td colspan="3" class="automation-hub-empty">@Localizer["AutomationEmptyRuns"]</td>
+                </tr>
+            }
+            else
+            {
+                foreach (var run in Model.Runs)
+                {
+                    <tr>
+                        <td>
+                            <button type="button"
+                                    class="automation-hub-link"
+                                    data-hub="run"
+                                    data-id="@run.Id">
+                                @run.Status
+                            </button>
+                        </td>
+                        <td>@run.TriggerType@(run.IsDryRun ? " · test" : "")</td>
+                        <td>@run.CreatedDate.ToString("dd.MM.yyyy HH:mm")</td>
+                    </tr>
+                }
+            }
+            </tbody>
+        </table>
+    </div>
+</div>

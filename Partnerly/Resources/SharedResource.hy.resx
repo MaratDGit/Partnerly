@@ -2636,4 +2636,446 @@
     <value>Նշանակված է ձեզ</value>
   </data>
 
+  <data name="Automation" xml:space="preserve">
+    <value>Ավտոմատացում</value>
+  </data>
+  <data name="AutomationDashboard" xml:space="preserve">
+    <value>Վահանակ</value>
+  </data>
+  <data name="MyAutomations" xml:space="preserve">
+    <value>Իմ ավտոմատացումները</value>
+  </data>
+  <data name="UntitledAutomation" xml:space="preserve">
+    <value>Անանուն</value>
+  </data>
+  <data name="AutomationPublished" xml:space="preserve">
+    <value>Ավտոմատացումը հրապարակված է</value>
+  </data>
+  <data name="AutomationQueued" xml:space="preserve">
+    <value>Գործարկումը հերթում է</value>
+  </data>
+  <data name="DeleteAutomation" xml:space="preserve">
+    <value>Ջնջել ավտոմատացումը</value>
+  </data>
+  <data name="AutomationBuilder" xml:space="preserve">
+    <value>Գործընթացի խմբագիր</value>
+  </data>
+  <data name="AutomationTemplates" xml:space="preserve">
+    <value>Կաղապարներ</value>
+  </data>
+  <data name="AutomationConnections" xml:space="preserve">
+    <value>Միացումներ</value>
+  </data>
+  <data name="AutomationSettings" xml:space="preserve">
+    <value>Կարգավորումներ</value>
+  </data>
+  <data name="AutomationActive" xml:space="preserve">
+    <value>Ակտիվ</value>
+  </data>
+  <data name="AutomationFailed" xml:space="preserve">
+    <value>Սխալներ (24 ժ)</value>
+  </data>
+  <data name="AutomationRunning" xml:space="preserve">
+    <value>Ընթացքում</value>
+  </data>
+  <data name="AutomationRecent" xml:space="preserve">
+    <value>Վերջին գործարկումներ</value>
+  </data>
+  <data name="AutomationEmptyRuns" xml:space="preserve">
+    <value>Գործարկումներ դեռ չկան</value>
+  </data>
+  <data name="AutomationEmptyWebhooks" xml:space="preserve">
+    <value>Webhook URL ստանալու համար հրապարակեք webhook տրիգերով գործընթաց</value>
+  </data>
+  <data name="AutomationEmptyConnections" xml:space="preserve">
+    <value>HTTP միացումներ դեռ չկան</value>
+  </data>
+  <data name="Publish" xml:space="preserve">
+    <value>Հրապարակել</value>
+  </data>
+  <data name="TestRun" xml:space="preserve">
+    <value>Թեստ</value>
+  </data>
+  <data name="RunNow" xml:space="preserve">
+    <value>Գործարկել</value>
+  </data>
+  <data name="NodePalette" xml:space="preserve">
+    <value>Բլոկներ</value>
+  </data>
+  <data name="NodeProperties" xml:space="preserve">
+    <value>Հատկություններ</value>
+  </data>
+  <data name="NoTemplates" xml:space="preserve">
+    <value>Կաղապարներ դեռ չկան</value>
+  </data>
+  <data name="LimitsOnDefinition" xml:space="preserve">
+    <value>Գործարկման սահմանները պահվում են յուրաքանչյուր ավտոմատացման վրա</value>
+  </data>
+  <data name="WebhookUrl" xml:space="preserve">
+    <value>Webhook URL</value>
+  </data>
+  <data name="WebhookSecret" xml:space="preserve">
+    <value>HMAC գաղտնիք</value>
+  </data>
+  <data name="AutomationSaved" xml:space="preserve">
+    <value>Պահված է</value>
+  </data>
+  <data name="Actions" xml:space="preserve">
+    <value>Գործողություններ</value>
+  </data>
+  <data name="UseTemplate" xml:space="preserve">
+    <value>Օգտագործել ձևանմուշը</value>
+  </data>
+  <data name="MaxConcurrentRuns" xml:space="preserve">
+    <value>Միաժամանակյա գործարկումների առավելագույնը</value>
+  </data>
+  <data name="MaxRunsPerHour" xml:space="preserve">
+    <value>Ժամում գործարկումների առավելագույնը</value>
+  </data>
+  <data name="RetryLimit" xml:space="preserve">
+    <value>Կրկնման սահման</value>
+  </data>
+  <data name="StepTimeoutSeconds" xml:space="preserve">
+    <value>Քայլի timeout (վրկ)</value>
+  </data>
+  <data name="RunTimeoutSeconds" xml:space="preserve">
+    <value>Գործարկման timeout (վրկ)</value>
+  </data>
+  <data name="BaseUrl" xml:space="preserve">
+    <value>Հիմնական URL</value>
+  </data>
+  <data name="AutomationInvalidConnection" xml:space="preserve">
+    <value>Նշեք անուն և հանրային http(s) URL</value>
+  </data>
+  <data name="CreateAutomation" xml:space="preserve">
+    <value>Նոր ավտոմատացում</value>
+  </data>
+  <data name="CreateAutomationLead" xml:space="preserve">
+    <value>Տվեք անուն։ Պահելուց հետո կբացվի խմբագիրը։</value>
+  </data>
+  <data name="AutomationNameHelp" xml:space="preserve">
+    <value>Կարճ անուն, որպեսզի ցանկում հեշտ գտնեք։</value>
+  </data>
+  <data name="AutomationDescriptionHelp" xml:space="preserve">
+    <value>Ոչ պարտադիր։ Ինչի համար է այս ավտոմատացումը։</value>
+  </data>
+  <data name="StartFromTemplate" xml:space="preserve">
+    <value>Սկսել կաղապարից</value>
+  </data>
+  <data name="StartFromTemplateHelp" xml:space="preserve">
+    <value>Ոչ պարտադիր։ Կարող եք դատարկ թողնել և քայլերն ինքներդ ավելացնել։</value>
+  </data>
+  <data name="BlankAutomation" xml:space="preserve">
+    <value>Դատարկ — քայլերը ես կավելացնեմ</value>
+  </data>
+  <data name="AutomationNameRequired" xml:space="preserve">
+    <value>Նշեք ավտոմատացման անունը</value>
+  </data>
+  <data name="TriggerBlocks" xml:space="preserve">
+    <value>Երբ սա տեղի ունենա</value>
+  </data>
+  <data name="TriggerBlocksHelp" xml:space="preserve">
+    <value>Մեկնարկի կետ։ Ավելացրեք մեկ տրիգեր։</value>
+  </data>
+  <data name="ActionBlocks" xml:space="preserve">
+    <value>Այնուհետև արա սա</value>
+  </data>
+  <data name="ActionBlocksHelp" xml:space="preserve">
+    <value>Քայլերը, որոնք կկատարվեն տրիգերից հետո։</value>
+  </data>
+  <data name="SelectNodeHint" xml:space="preserve">
+    <value>Ընտրեք բլոկը սխեմայի վրա՝ խմբագրելու համար։</value>
+  </data>
+  <data name="NodeNameHelp" xml:space="preserve">
+    <value>Մակագրություն սխեմայի վրա։ Միայն տառեր, թվեր և ընդգծում։</value>
+  </data>
+  <data name="DelayAmount" xml:space="preserve">
+    <value>Որքան սպասել</value>
+  </data>
+  <data name="DelayUnit" xml:space="preserve">
+    <value>Ժամանակի միավոր</value>
+  </data>
+  <data name="DelayHelp" xml:space="preserve">
+    <value>Գործընթացը կանգ է առնում այս ժամանակով, ապա շարունակում է ինքը։ 00:00:05 գրել պետք չէ։</value>
+  </data>
+  <data name="DelayTriggerHelp" xml:space="preserve">
+    <value>Հրապարակումից հետո առաջին գործարկումը սպասում է այսքան և մեկ անգամ սկսվում։</value>
+  </data>
+  <data name="DelaySeconds" xml:space="preserve">
+    <value>Վայրկյան</value>
+  </data>
+  <data name="DelayMinutes" xml:space="preserve">
+    <value>Րոպե</value>
+  </data>
+  <data name="DelayHours" xml:space="preserve">
+    <value>Ժամ</value>
+  </data>
+  <data name="DelayDays" xml:space="preserve">
+    <value>Օր</value>
+  </data>
+  <data name="WaitBeforeStart" xml:space="preserve">
+    <value>Սպասել մեկնարկից առաջ</value>
+  </data>
+  <data name="WaitBeforeStartHelp" xml:space="preserve">
+    <value>Ոչ պարտադիր դադար իրադարձությունից հետո՝ մինչ առաջին քայլը։</value>
+  </data>
+  <data name="ScheduleKind" xml:space="preserve">
+    <value>Որքան հաճախ</value>
+  </data>
+  <data name="ScheduleKindHelp" xml:space="preserve">
+    <value>Ամեն օր, ամեն շաբաթ կամ մեկ անգամ։</value>
+  </data>
+  <data name="ScheduleTime" xml:space="preserve">
+    <value>Օրվա ժամ</value>
+  </data>
+  <data name="ScheduleTimeHelp" xml:space="preserve">
+    <value>Այս ավտոմատացման տեղական ժամանակը (տես Կարգավորումներ)։</value>
+  </data>
+  <data name="ScheduleDate" xml:space="preserve">
+    <value>Գործարկել</value>
+  </data>
+  <data name="IntervalMinutes" xml:space="preserve">
+    <value>Կրկնել ամեն (րոպե)</value>
+  </data>
+  <data name="IntervalMinutesHelp" xml:space="preserve">
+    <value>Նվազագույնը 1 րոպե։ Հաջորդ գործարկումը հաշվվում է նախորդից։</value>
+  </data>
+  <data name="AutomationRecordType" xml:space="preserve">
+    <value>Գրառման տեսակ</value>
+  </data>
+  <data name="EntityHelp" xml:space="preserve">
+    <value>Partnerly-ի որ գրառման հետ է աշխատում այս քայլը։</value>
+  </data>
+  <data name="EventName" xml:space="preserve">
+    <value>Իրադարձության անուն</value>
+  </data>
+  <data name="EventNameHelp" xml:space="preserve">
+    <value>Պետք է համընկնի համակարգի իրադարձության հետ, օրինակ UserCreated։</value>
+  </data>
+  <data name="WebhookTriggerHelp" xml:space="preserve">
+    <value>Հրապարակումից հետո URL-ը և գաղտնիքը կերևան Միացումներում։</value>
+  </data>
+  <data name="ManualTriggerHelp" xml:space="preserve">
+    <value>Սկսվում է այս էջի Գործարկել կամ Թեստ կոճակներով։</value>
+  </data>
+  <data name="VariableName" xml:space="preserve">
+    <value>Փոփոխականի անուն</value>
+  </data>
+  <data name="VariableValue" xml:space="preserve">
+    <value>Արժեք</value>
+  </data>
+  <data name="VariableNameHelp" xml:space="preserve">
+    <value>Տառեր, թվեր և ընդգծում։ Հետո {{vars.name}}։</value>
+  </data>
+  <data name="EmailTo" xml:space="preserve">
+    <value>Ում ուղարկել</value>
+  </data>
+  <data name="EmailSubject" xml:space="preserve">
+    <value>Թեմա</value>
+  </data>
+  <data name="EmailBody" xml:space="preserve">
+    <value>Նամակի տեքստ</value>
+  </data>
+  <data name="EmailTemplate" xml:space="preserve">
+    <value>Նամակի կաղապար</value>
+  </data>
+  <data name="EmailTemplateHelp" xml:space="preserve">
+    <value>Ոչ պարտադիր կաղապարի կոդ։ Եթե նշված է, ներքևի թեման և տեքստը չեն օգտագործվում։</value>
+  </data>
+  <data name="NotificationUser" xml:space="preserve">
+    <value>Օգտատիրոջ id (ոչ պարտադիր)</value>
+  </data>
+  <data name="NotificationMessage" xml:space="preserve">
+    <value>Ծանուցման տեքստ</value>
+  </data>
+  <data name="NotificationLink" xml:space="preserve">
+    <value>Հղում (ոչ պարտադիր)</value>
+  </data>
+  <data name="NotificationType" xml:space="preserve">
+    <value>Ծանուցման տեսակ</value>
+  </data>
+  <data name="HttpMethod" xml:space="preserve">
+    <value>HTTP մեթոդ</value>
+  </data>
+  <data name="HttpUrl" xml:space="preserve">
+    <value>URL</value>
+  </data>
+  <data name="HttpBody" xml:space="preserve">
+    <value>Հարցման մարմին</value>
+  </data>
+  <data name="HttpConnection" xml:space="preserve">
+    <value>Պահված միացման id</value>
+  </data>
+  <data name="HttpConnectionHelp" xml:space="preserve">
+    <value>Ոչ պարտադիր։ Id-ն Միացումներից կամ լրիվ հանրային URL վերևում։</value>
+  </data>
+  <data name="WebhookBody" xml:space="preserve">
+    <value>JSON մարմին</value>
+  </data>
+  <data name="WebhookSecretField" xml:space="preserve">
+    <value>Ստորագրության գաղտնիք (ոչ պարտադիր)</value>
+  </data>
+  <data name="ChildAutomation" xml:space="preserve">
+    <value>Երեխա ավտոմատացման id</value>
+  </data>
+  <data name="ChildAutomationHelp" xml:space="preserve">
+    <value>Պետք է լինի ձերը և հրապարակված։ Այս քայլը չի սպասում ավարտին։</value>
+  </data>
+  <data name="ConditionLeft" xml:space="preserve">
+    <value>Ձախ արժեք</value>
+  </data>
+  <data name="ConditionOp" xml:space="preserve">
+    <value>Համեմատել</value>
+  </data>
+  <data name="ConditionRight" xml:space="preserve">
+    <value>Աջ արժեք</value>
+  </data>
+  <data name="ConditionHelp" xml:space="preserve">
+    <value>Կարող եք {{vars.name}} կամ տրիգերի դաշտեր։ Սխեմայի վրա միացրեք True և False ելքերը։</value>
+  </data>
+  <data name="WaitUntilDeadline" xml:space="preserve">
+    <value>Հանձնվել հետո</value>
+  </data>
+  <data name="WaitUntilDeadlineHelp" xml:space="preserve">
+    <value>Ոչ պարտադիր UTC վերջնաժամկետ։ Դատարկը շարունակում է ստուգել։</value>
+  </data>
+  <data name="RecordFields" xml:space="preserve">
+    <value>Դաշտեր</value>
+  </data>
+  <data name="RecordFieldsHelp" xml:space="preserve">
+    <value>Մեկ դաշտ մեկ տողում՝ email={{trigger.email}}</value>
+  </data>
+  <data name="RecordKey" xml:space="preserve">
+    <value>Որ գրառումը</value>
+  </data>
+  <data name="RecordFilters" xml:space="preserve">
+    <value>Զտիչներ</value>
+  </data>
+  <data name="SwitchValue" xml:space="preserve">
+    <value>Համեմատվող արժեք</value>
+  </data>
+  <data name="SwitchValueHelp" xml:space="preserve">
+    <value>Օգտագործվում է համապատասխան ելքը։ Դատարկը գնում է default։</value>
+  </data>
+  <data name="CronExpression" xml:space="preserve">
+    <value>Cron արտահայտություն</value>
+  </data>
+  <data name="CronExpressionHelp" xml:space="preserve">
+    <value>Օրինակ՝ 0 9 * * * ամեն օր 09:00։</value>
+  </data>
+  <data name="ScheduleOnce" xml:space="preserve">
+    <value>Մեկ անգամ, ամսաթվին</value>
+  </data>
+  <data name="ScheduleHourly" xml:space="preserve">
+    <value>Ամեն ժամ</value>
+  </data>
+  <data name="ScheduleDaily" xml:space="preserve">
+    <value>Ամեն օր</value>
+  </data>
+  <data name="ScheduleWeekly" xml:space="preserve">
+    <value>Ամեն շաբաթ</value>
+  </data>
+  <data name="ScheduleMonthly" xml:space="preserve">
+    <value>Ամեն ամիս</value>
+  </data>
+  <data name="ScheduleCron" xml:space="preserve">
+    <value>Cron արտահայտություն</value>
+  </data>
+  <data name="NodeTypeManual" xml:space="preserve">
+    <value>Ձեռքով մեկնարկ</value>
+  </data>
+  <data name="NodeTypeSchedule" xml:space="preserve">
+    <value>Ժամանակացույցով</value>
+  </data>
+  <data name="NodeTypeInterval" xml:space="preserve">
+    <value>Կրկնվող միջակայք</value>
+  </data>
+  <data name="NodeTypeEntityCreated" xml:space="preserve">
+    <value>Գրառումը ստեղծվեց</value>
+  </data>
+  <data name="NodeTypeEntityUpdated" xml:space="preserve">
+    <value>Գրառումը փոխվեց</value>
+  </data>
+  <data name="NodeTypeEntityDeleted" xml:space="preserve">
+    <value>Գրառումը ջնջվեց</value>
+  </data>
+  <data name="NodeTypeWebhook" xml:space="preserve">
+    <value>Մուտքային webhook</value>
+  </data>
+  <data name="NodeTypeEvent" xml:space="preserve">
+    <value>Հավելվածի իրադարձություն</value>
+  </data>
+  <data name="NodeTypeDelay" xml:space="preserve">
+    <value>Սպասել</value>
+  </data>
+  <data name="NodeTypeSendEmail" xml:space="preserve">
+    <value>Ուղարկել նամակ</value>
+  </data>
+  <data name="NodeTypeSendNotification" xml:space="preserve">
+    <value>Ուղարկել ծանուցում</value>
+  </data>
+  <data name="NodeTypeCreateRecord" xml:space="preserve">
+    <value>Ստեղծել գրառում</value>
+  </data>
+  <data name="NodeTypeUpdateRecord" xml:space="preserve">
+    <value>Թարմացնել գրառում</value>
+  </data>
+  <data name="NodeTypeFindRecord" xml:space="preserve">
+    <value>Գտնել գրառում</value>
+  </data>
+  <data name="NodeTypeDeleteRecord" xml:space="preserve">
+    <value>Ջնջել գրառում</value>
+  </data>
+  <data name="NodeTypeWaitUntil" xml:space="preserve">
+    <value>Սպասել պայմանին</value>
+  </data>
+  <data name="NodeTypeBranch" xml:space="preserve">
+    <value>Եթե / այլապես</value>
+  </data>
+  <data name="NodeTypeSwitch" xml:space="preserve">
+    <value>Ճյուղավորում</value>
+  </data>
+  <data name="NodeTypeSetVariable" xml:space="preserve">
+    <value>Սահմանել փոփոխական</value>
+  </data>
+  <data name="NodeTypeHttpRequest" xml:space="preserve">
+    <value>HTTP հարցում</value>
+  </data>
+  <data name="NodeTypeExecuteWorkflow" xml:space="preserve">
+    <value>Գործարկել այլ ավտոմատացում</value>
+  </data>
+  <data name="AutomationDashboardLead" xml:space="preserve">
+    <value>Ինչ է հիմա աշխատում։ Բացեք գործընթացը կամ ստեղծեք նորը։</value>
+  </data>
+  <data name="MyAutomationsLead" xml:space="preserve">
+    <value>Ձեր գործընթացները։ Ստեղծեք մեկը, ապա կարգավորեք սխեմայի վրա։</value>
+  </data>
+  <data name="AutomationHistoryLead" xml:space="preserve">
+    <value>Բոլոր գործարկումները և կարգավիճակները։ Բացեք տողը՝ քայլերը տեսնելու համար։</value>
+  </data>
+  <data name="AutomationTemplatesLead" xml:space="preserve">
+    <value>Պատրաստի գործընթաց։ Անունը կարող եք տալ խմբագրիչը բացելուց առաջ։</value>
+  </data>
+  <data name="AutomationConnectionsLead" xml:space="preserve">
+    <value>Webhook URL-ները հրապարակումից հետո և պահված HTTP հիմքերը ելքային հարցումների համար։</value>
+  </data>
+  <data name="AutomationSettingsLead" xml:space="preserve">
+    <value>Ժամային գոտի, կրկնումներ և սահմաններ մեկ գործընթացի համար։ Նախ ընտրեք գործընթացը։</value>
+  </data>
+  <data name="AutomationBuilderLead" xml:space="preserve">
+    <value>Դրեք տրիգեր, ապա քայլեր։ Ընտրեք բլոկը՝ լրացնելու ինչ պետք է անի։</value>
+  </data>
+  <data name="AutomationRunLead" xml:space="preserve">
+    <value>Այս գործարկման յուրաքանչյուր քայլը հերթով։</value>
+  </data>
+  <data name="ReadyTemplates" xml:space="preserve">
+    <value>Պատրաստի ձևանմուշներ</value>
+  </data>
+  <data name="AutomationEmptyDefinitions" xml:space="preserve">
+    <value>Ավտոմատացումներ դեռ չկան</value>
+  </data>
+  <data name="Agents" xml:space="preserve">
+    <value>Ագենտներ</value>
+  </data>
+
 </root>

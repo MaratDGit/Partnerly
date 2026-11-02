@@ -532,22 +532,21 @@ Webhook incoming не использует cookie; лимит и HMAC доста
 
 | Action | Право | UI |
 |---|---|---|
-| Index | view | Dashboard KPI + вкладки |
-| List | view | DataTable My Automations |
-| Builder / BuilderSave | create/edit | Drawflow |
-| Publish | publish | |
+| Index | view | Хаб: таблица автоматизаций + шаблоны (не DataTable) |
+| List / Templates / History / Settings / Connections / Builder / Delete / RunDetails | * | Редирект на Index (+ query для попапа) |
+| BuilderPanel / BuilderSave | view / edit | Drawflow в glass overlay |
+| Publish | publish | JSON из overlay |
 | ToggleActive | edit | |
 | Copy | create | |
-| Delete | delete | |
-| Run / Cancel | run | |
-| History / RunDetails | history | DataTable + шаги |
-| Templates | view | |
-| Connections | connections | |
-| Settings | manage | лимиты по умолчанию (опционально v1: страница-заглушка «используются поля определения») |
+| DeleteConfirmed | delete | confirm overlay |
+| Run / Cancel | run | JSON; шаги в overlay |
+| HistoryPanel / RunDetailsPanel | history | таблица запусков в overlay |
+| ConnectionsPanel | connections | overlay из билдера |
+| SettingsPanel / SettingsSave | view / edit | overlay |
 
-Меню: секция **Automation** после Tools, пункт Dashboard + My Automations (остальное с дашборда). Иконка `bx-bot`.
+Меню: секция **Automation** после Tools, один пункт на Index. Иконка `bx-bot`. History / Templates / Connections из меню убраны.
 
-Тексты только resx. StickyButtons на builder. Токены как у сайта, без site-wide glass.
+Тексты только resx. Строки хаба: History / Settings / Edit / Delete — иконки, открывают popup. Builder и Connections в том же glass-стиле. Создание — стеклянный popup, не GET-draft. Токены как у сайта, без site-wide glass на app-shell.
 
 Dry-run: кнопка Test в builder → `IsDryRun=true`.
 
@@ -604,7 +603,7 @@ UI и будущий AI Assistant вызывают **только** это. AI �
 | 7 | IDOR/SSRF/два пользователя, retry/cancel/recover. |
 | 8 | Отчёт. |
 
-PHASE 3 можно начинать по этому файлу без новых таблиц (интерфейсы + in-memory). Миграцию не создавать, пока не начат PHASE 4.
+**Статус 2026-11-02:** PHASE 3–7 плюс закрытие v1-дыр и UX (glass create, labeled delay, no sticky, хаб-таблица + попапы). Ядро, EF store, worker, коннекторы, UI (меню — только панель; Index без DataTable; Drawflow/history/settings/connections в overlay), входящий HMAC webhook, `execute_workflow` child enqueue, wait_until, 90 тестов. Миграция `20261102134353_AddAutomationTables` применена на локальной БД. Браузерная проверка UI не выполнялась. PHASE 8 — отчёт по запросу владельца.
 
 ---
 

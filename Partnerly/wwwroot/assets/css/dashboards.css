@@ -233,7 +233,6 @@ button.dashboards-kpi {
 }
 
 .dashboards-kpi:hover {
-    transform: translateY(-3px);
     border-color: rgba(105, 108, 255, 0.28);
     box-shadow: 0 10px 28px var(--partnerly-shadow);
 }

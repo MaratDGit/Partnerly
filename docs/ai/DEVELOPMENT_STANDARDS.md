@@ -70,6 +70,7 @@
 - Проверка права — `IPermissionService` / политика, не новое «если RoleName == Admin» (кроме уже существующих Super/Admin в middleware и `_BaseController`).
 - Файлы загрузок — через `IFileStorageService` / `IAttachmentService`, не произвольные пути вне `wwwroot/uploads`.
 - Антифоргери на POST форм.
+- Исходящий HTTP (инспектор и Automation) — `Partnerly.Helpers.PublicHttpGuard`: только http/https, не loopback/RFC1918/link-local/metadata. Sync `IsAllowed` не резолвит DNS; live-запросы — `IsAllowedAsync`.
 
 ## Сборка и проверка
 
@@ -77,11 +78,11 @@
 dotnet build "Partnerly.sln"
 ```
 
-Тестов нет. Для UI: сценарий пользователя на затронутых страницах.  
+Автотесты: `Partnerly.Automation.Tests` (xUnit, net6.0). Остальной монолит без тестов. Для UI: сценарий пользователя на затронутых страницах.  
 Не отмечать задачу выполненной без фактической проверки.
 
 ## Git и зависимости
 
 - Коммит/push по просьбе.
-- NuGet — не добавлять, если закрывается существующим пакетом (ClosedXML, ImageSharp, Handlebars, BCrypt уже есть).
+- NuGet — не добавлять, если закрывается существующим пакетом (ClosedXML, ImageSharp, Handlebars, BCrypt, Cronos уже есть).
 - Целевая версия — net6.0, не поднимать TFM без решения владельца.

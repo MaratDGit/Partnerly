@@ -1,0 +1,61 @@
+@using Partnerly.Helpers
+@model Partnerly.Automation.Web.ViewModels.AutomationSettingsViewModel
+@{
+    var definition = Model.Definition!;
+}
+
+<div class="automation-hub-panel">
+    <p class="automation-create-kicker">@Localizer["AutomationSettings"]</p>
+    <h2>@definition.Name</h2>
+
+    <form asp-action="SettingsSave"
+          asp-controller="Automation"
+          asp-route-id="@definition.Id"
+          method="post"
+          data-hub-ajax>
+        @Html.AntiForgeryToken()
+        <div class="mb-3">
+            <label class="form-label">@Localizer["TimeZone"]</label>
+            <select class="form-select" name="timeZoneId">
+                @foreach (var zone in TimeZoneHelper.Choices)
+                {
+                    if (string.Equals(zone.Id, definition.TimeZoneId, StringComparison.OrdinalIgnoreCase))
+                    {
+                        <option value="@zone.Id" selected>@zone.Label</option>
+                    }
+                    else
+                    {
+                        <option value="@zone.Id">@zone.Label</option>
+                    }
+                }
+            </select>
+            <div class="form-text">@Localizer["ScheduleTimeHelp"]</div>
+        </div>
+        <div class="row g-3">
+            <div class="col-md-4">
+                <label class="form-label">@Localizer["MaxConcurrentRuns"]</label>
+                <input class="form-control" type="number" min="1" max="20" name="maxConcurrentRuns" value="@definition.MaxConcurrentRuns" />
+            </div>
+            <div class="col-md-4">
+                <label class="form-label">@Localizer["MaxRunsPerHour"]</label>
+                <input class="form-control" type="number" min="1" max="1000" name="maxRunsPerHour" value="@definition.MaxRunsPerHour" />
+            </div>
+            <div class="col-md-4">
+                <label class="form-label">@Localizer["RetryLimit"]</label>
+                <input class="form-control" type="number" min="0" max="10" name="retryLimit" value="@definition.RetryLimit" />
+            </div>
+            <div class="col-md-6">
+                <label class="form-label">@Localizer["StepTimeoutSeconds"]</label>
+                <input class="form-control" type="number" min="1" max="300" name="stepTimeoutSeconds" value="@definition.StepTimeoutSeconds" />
+            </div>
+            <div class="col-md-6">
+                <label class="form-label">@Localizer["RunTimeoutSeconds"]</label>
+                <input class="form-control" type="number" min="1" max="86400" name="runTimeoutSeconds" value="@definition.RunTimeoutSeconds" />
+            </div>
+        </div>
+        <div class="automation-create-actions mt-4">
+            <button type="button" class="btn btn-outline-secondary" data-automation-hub-close>@Localizer["Cancel"]</button>
+            <button type="submit" class="btn btn-primary">@Localizer["Save"]</button>
+        </div>
+    </form>
+</div>

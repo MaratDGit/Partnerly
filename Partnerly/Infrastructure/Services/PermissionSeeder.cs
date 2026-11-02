@@ -17,13 +17,29 @@ namespace Partnerly.Infrastructure.Services
             PermissionCodes.SupportTicketsEdit,
             PermissionCodes.AttachmentsView,
             PermissionCodes.WebInspectorUse,
-            PermissionCodes.DataTableViewIds
+            PermissionCodes.DataTableViewIds,
+            PermissionCodes.AutomationView,
+            PermissionCodes.AutomationCreate,
+            PermissionCodes.AutomationEdit,
+            PermissionCodes.AutomationDelete,
+            PermissionCodes.AutomationPublish,
+            PermissionCodes.AutomationRun,
+            PermissionCodes.AutomationHistory,
+            PermissionCodes.AutomationConnections
         };
 
         private static readonly string[] UserRolePermissions =
         {
             PermissionCodes.SupportTicketsView,
-            PermissionCodes.SupportTicketsCreate
+            PermissionCodes.SupportTicketsCreate,
+            PermissionCodes.AutomationView,
+            PermissionCodes.AutomationCreate,
+            PermissionCodes.AutomationEdit,
+            PermissionCodes.AutomationDelete,
+            PermissionCodes.AutomationPublish,
+            PermissionCodes.AutomationRun,
+            PermissionCodes.AutomationHistory,
+            PermissionCodes.AutomationConnections
         };
 
         public static async Task SeedAsync(AppDbContext context)

@@ -20,7 +20,7 @@
 Controller  →  I*Service  →  I*Repository : Repository<T>  →  AppDbContext
 ```
 
-Регистрация в `Program.cs`: почти все сервисы и репозитории **Scoped**; `IEmailSender` и обработчики событий — **Transient**; `IEventBus`, `IDataTableRegistry`, `IUserIdProvider`, `IAuthorizationPolicyProvider` — **Singleton**.
+Регистрация в `Program.cs`: почти все сервисы и репозитории **Scoped**; `IEmailSender` и обработчики событий — **Transient**; `IEventBus`, `IDataTableRegistry`, `IUserIdProvider`, `IAuthorizationPolicyProvider` — **Singleton**. С 2026-11-02: `AddPartnerlyAutomation(useDatabase: true)` — EF store, Cronos, hosted `AutomationWorker`. Unit-тесты вызывают `AddPartnerlyAutomation()` без БД (in-memory).
 
 `AppDbContext` зависит от `ICurrentUserService` (для аудита в `SaveChangesAsync`).
 

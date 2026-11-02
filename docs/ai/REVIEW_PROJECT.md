@@ -24,6 +24,7 @@
 | DataTables.net | пакет 2.3.4 (в UI используется собственный JS-модуль в `wwwroot/js/datatable`) |
 | SignalR | `NotificationHub` |
 | OpenAI | `IOpenAIService` / `AIController` |
+| Cronos | 0.8.4 (Automation schedule expressions) |
 
 `Nullable` и implicit usings включены.
 
@@ -31,7 +32,8 @@
 
 ```text
 Partnerly.sln
-└── Partnerly/Partnerly.csproj     единственный проект
+├── Partnerly/Partnerly.csproj
+└── Partnerly.Automation.Tests/Partnerly.Automation.Tests.csproj   xUnit, net6.0 (PHASE 3)
 ```
 
 Основные каталоги проекта:
@@ -52,8 +54,9 @@ Partnerly.sln
 | `Resources/` | `.resx` локализации |
 | `Migrations/` | миграции EF |
 | `Helpers/`, `Descriptors/` | tag helper, атрибуты-справочники, сообщения |
+| `Automation/` | Universal Automation Engine (PHASE 4: EF + worker, без UI) |
 
-Тестовых проектов нет. Каталога `docs/ai/` до этой настройки не существовало. Уже был черновик корневого `AGENTS.md` (не в Git). `.github/copilot-instructions.md` содержит только Azure-правила Copilot и к архитектуре Partnerly не относится.
+Тестовый проект: `Partnerly.Automation.Tests`. Каталог `docs/ai/` — канонические документы агента. `.github/copilot-instructions.md` содержит только Azure-правила Copilot и к архитектуре Partnerly не относится.
 
 ## Основные модули
 

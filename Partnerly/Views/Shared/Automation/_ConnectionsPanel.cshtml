@@ -1,0 +1,90 @@
+@model Partnerly.Automation.Web.ViewModels.AutomationConnectionsViewModel
+@{
+    var canManage = (ViewData["Permissions"] as HashSet<string>)?.Contains("automation.connections") == true;
+}
+
+<div class="automation-hub-panel">
+    <p class="automation-create-kicker">@Localizer["AutomationConnections"]</p>
+    <h2>@Localizer["AutomationConnections"]</h2>
+
+    <div class="automation-hub-block">
+        <h3>Webhook</h3>
+        @if (Model.Webhooks.Count == 0)
+        {
+            <p class="automation-create-lead mb-0">@Localizer["AutomationEmptyWebhooks"]</p>
+        }
+        else
+        {
+            foreach (var hook in Model.Webhooks)
+            {
+                <div class="automation-connection">
+                    <div class="fw-semibold mb-1">@hook.AutomationName</div>
+                    <div class="form-text">@Localizer["WebhookUrl"]</div>
+                    <code class="automation-code">@hook.Url</code>
+                    @if (!string.IsNullOrEmpty(hook.Secret))
+                    {
+                        <div class="form-text mt-2">@Localizer["WebhookSecret"]</div>
+                        <code class="automation-code">@hook.Secret</code>
+                    }
+                </div>
+            }
+        }
+    </div>
+
+    <div class="automation-hub-block">
+        <h3>HTTP</h3>
+        @if (canManage)
+        {
+            <form asp-action="CreateHttpConnection"
+                  asp-controller="Automation"
+                  method="post"
+                  class="row g-3 align-items-end mb-4"
+                  data-hub-ajax
+                  data-hub-stay
+                  data-hub-reload="connections">
+                @Html.AntiForgeryToken()
+                <div class="col-md-4">
+                    <label class="form-label">@Localizer["Name"]</label>
+                    <input class="form-control" name="name" maxlength="200" required />
+                </div>
+                <div class="col-md-6">
+                    <label class="form-label">@Localizer["BaseUrl"]</label>
+                    <input class="form-control" name="baseUrl" maxlength="500" placeholder="https://example.com" required />
+                </div>
+                <div class="col-md-2">
+                    <button type="submit" class="btn btn-primary w-100">@Localizer["Create"]</button>
+                </div>
+            </form>
+        }
+
+        @if (Model.HttpConnections.Count == 0)
+        {
+            <p class="automation-create-lead mb-0">@Localizer["AutomationEmptyConnections"]</p>
+        }
+        else
+        {
+            <ul class="list-unstyled mb-0">
+                @foreach (var item in Model.HttpConnections)
+                {
+                    <li class="d-flex justify-content-between align-items-center py-2 automation-connection">
+                        <span>@item.Name (@item.Kind)</span>
+                        @if (canManage)
+                        {
+                            <form asp-action="DeleteHttpConnection"
+                                  asp-controller="Automation"
+                                  method="post"
+                                  class="m-0"
+                                  data-hub-ajax
+                                  data-hub-stay
+                                  data-hub-reload="connections">
+                                @Html.AntiForgeryToken()
+                                <input type="hidden" name="id" value="@item.Id" />
+                                <button type="submit" class="btn btn-sm btn-outline-danger">@Localizer["Delete"]</button>
+                            </form>
+                        }
+                    </li>
+                }
+            </ul>
+        }
+    </div>
+</div>

@@ -24,14 +24,15 @@
 - Скролл меню скрыт до hover; плавные вкладки Statistics — в рабочем дереве, **не закоммичено**.
 - DataTable Select all по центру колонки Selected — в рабочем дереве, **не закоммичено**.
 - DataTable: таблица на ширину контейнера, Selected первая 60px — в рабочем дереве, **не закоммичено**.
-- Apple Sign In на Login/Register — в этом коммите. Миграция `20261102092927_AddAppleSignIn` **применена** на локальной БД 2026-11-02. Ключи Apple пустые.
-- System Settings / My Settings: полная карточка, колонки, клик по switch — в этом коммите.
-- OpenNewCase / ViewCase (тикет для исполнителя + Save заметки) — в этом коммите.
-- Automation PHASE 1–2: `docs/ai/Automation/` (спека, анализ, ARCHITECTURE.md). Код движка ещё нет.
+- Apple Sign In на Login/Register — в коммите `a84fd0d` (на origin). Миграция `20261102092927_AddAppleSignIn` **применена** на локальной БД 2026-11-02. Ключи Apple пустые.
+- System Settings / My Settings: полная карточка, колонки, клик по switch — в `a84fd0d`.
+- OpenNewCase / ViewCase (тикет для исполнителя + Save заметки) — в `a84fd0d`.
+- Automation PHASE 1–2: `docs/ai/Automation/` (спека, анализ, ARCHITECTURE.md).
+- Automation PHASE 3–7 + закрытие v1 + UX (glass create, delay amount/unit, no sticky): в рабочем дереве, **не закоммичено**. Миграция `20261102134353_AddAutomationTables` **применена** на локальной БД 2026-11-02.
 
 ## Последняя задача
 
-PHASE 2 Automation: `docs/ai/Automation/ARCHITECTURE.md`. Решения PHASE 1 зафиксированы (не Hangfire, Drawflow, свои автоматизации у User/Employee). Движок не писать, пока не начат PHASE 3.
+Dropdown профиля: пункты как в левом меню (высота/шрифт/иконки). Dropdown языка чуть компактнее. Браузер не проверялся. Коммит не делался.
 
 ## Уже сделано недавно
 
@@ -53,7 +54,8 @@ PHASE 2 Automation: `docs/ai/Automation/ARCHITECTURE.md`. Решения PHASE 1
 
 ## Незавершённое и препятствия
 
-- Нет автотестов.
+- Автотесты есть только у Automation (`Partnerly.Automation.Tests`, 90). Остальной монолит без тестов (KI-011 частично).
+- `execute_workflow` ставит child и не ждёт его окончания (fire-and-forget).
 - Модули Payment/Transaction без UI.
 - KI-003 seed user на Admin, не Super — открыто.
 - Браузер в этой сессии недоступен — проверить dark: формы (Settings, System Preferences, тикет), Documentation, Privacy-попап, таблицы.
@@ -62,7 +64,9 @@ PHASE 2 Automation: `docs/ai/Automation/ARCHITECTURE.md`. Решения PHASE 1
 
 ## Рекомендуемый следующий шаг
 
-1. PHASE 3: папка `Partnerly/Automation/`, абстракции, registry, evaluator, executor на in-memory, unit-тесты ядра. Без EF-миграции и без UI.
-2. Не создавать миграцию, пока не PHASE 4 и нет явного ок на локальную БД.
+1. Коммит Automation (PHASE 3–7 + v1 + UX + хаб + Agents KPI + меню Agents/футер) — по просьбе владельца.
+2. Глазами: левое меню Agents, футер Documentation/Support, Statistics вкладка Agents, hover карточек без сдвига.
+3. PHASE 8 отчёт — только по просьбе.
+4. Другие стенды / прод — миграцию `AddAutomationTables` не применять без отдельного ок.
 
-Перед кодом снова прочитать `AGENTS.md` и этот файл.
+Перед кодом снова прочитать `AGENTS.md`, этот файл и `docs/ai/Automation/ARCHITECTURE.md`.

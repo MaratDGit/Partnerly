@@ -1,4 +1,10 @@
-﻿@{
+﻿@using System.Linq
+@using Partnerly.Automation.Abstractions
+@using Partnerly.Automation.Persistence
+@using Partnerly.Automation.Persistence.Entities
+@inject IAutomationStore AutomationStore
+@inject IAutomationAccessService AutomationAccess
+@{
     TempData.Keep();
 
     string currentPage = ViewContext.HttpContext.Request.Path.ToString();
@@ -14,6 +20,100 @@
         Can("notifications.view") ||
         Can("logs.view") ||
         Can("attachments.view");
+    Guid.TryParse(Context.Request.Query["edit"], out var editAgentId);
+    var agentMenu = new List<(Guid Id, string Name, bool Live, string Ago)>();
+    if (Can("automation.view") && AutomationAccess.CurrentUserId != Guid.Empty)
+    {
+        var agentsQuery = AutomationStore.QueryDefinitions().Where(item => !item.IsDeleted);
+        if (!AutomationAccess.CanManage)
+        {
+            var owner = AutomationAccess.CurrentUserId;
+            agentsQuery = agentsQuery.Where(item => item.OwnerUserId == owner);
+        }
+
+        var definitions = agentsQuery
+            .OrderBy(item => item.Name)
+            .Take(40)
+            .Select(item => new { item.Id, item.Name, item.UpdatedDate, item.CreatedDate })
+            .ToList();
+
+        var agentIds = definitions.Select(item => item.Id).ToList();
+        var liveIds = new HashSet<Guid>();
+        var lastAction = new Dictionary<Guid, DateTime>();
+        if (agentIds.Count > 0)
+        {
+            liveIds = AutomationStore.QueryRuns()
+                .Where(run => agentIds.Contains(run.AutomationId)
+                    && (run.Status == AutomationStatuses.Queued
+                        || run.Status == AutomationStatuses.Running
+                        || run.Status == AutomationStatuses.Waiting))
+                .Select(run => run.AutomationId)
+                .Distinct()
+                .ToList()
+                .ToHashSet();
+
+            lastAction = AutomationStore.QueryRuns()
+                .Where(run => agentIds.Contains(run.AutomationId))
+                .GroupBy(run => run.AutomationId)
+                .Select(group => new
+                {
+                    Id = group.Key,
+                    At = group.Max(run => run.EndedAt ?? run.StartedAt ?? run.CreatedDate)
+                })
+                .ToList()
+                .ToDictionary(item => item.Id, item => item.At);
+        }
+
+        string AgentAgo(DateTime at)
+        {
+            var utc = at.Kind == DateTimeKind.Local ? at.ToUniversalTime() : DateTime.SpecifyKind(at, DateTimeKind.Utc);
+            var span = DateTime.UtcNow - utc;
+            if (span.Ticks < 0)
+            {
+                span = TimeSpan.Zero;
+            }
+
+            if (span.TotalSeconds < 60)
+            {
+                return Math.Max(1, (int)span.TotalSeconds) + "s";
+            }
+
+            if (span.TotalMinutes < 60)
+            {
+                return (int)span.TotalMinutes + "m";
+            }
+
+            if (span.TotalHours < 24)
+            {
+                return (int)span.TotalHours + "h";
+            }
+
+            if (span.TotalDays < 7)
+            {
+                return (int)span.TotalDays + "d";
+            }
+
+            if (span.TotalDays < 30)
+            {
+                return (int)(span.TotalDays / 7) + "w";
+            }
+
+            if (span.TotalDays < 365)
+            {
+                return (int)(span.TotalDays / 30) + "mo";
+            }
+
+            return (int)(span.TotalDays / 365) + "y";
+        }
+
+        foreach (var item in definitions)
+        {
+            var at = lastAction.TryGetValue(item.Id, out var runAt)
+                ? runAt
+                : (item.UpdatedDate != default ? item.UpdatedDate : item.CreatedDate);
+            agentMenu.Add((item.Id, item.Name, liveIds.Contains(item.Id), AgentAgo(at)));
+        }
+    }
 }
 
 <aside id="partnerlySidebar" class="partnerly-sidebar">
@@ -99,7 +199,7 @@
                            class="partnerly-menu-link">
 
                             <span class="partnerly-menu-icon">
-                                <i class="bx bx-home-smile"></i>
+                                <i class="bx bx-bar-chart-alt-2"></i>
                             </span>
 
                             <span class="partnerly-menu-text">
@@ -110,7 +210,8 @@
 
                     </li>
 
-                    <li class="partnerly-menu-item @(currentPage.StartsWith("/Dashboard/ReferralTree") ? "active" : "")">
+                    <li class="partnerly-menu-item @(currentPage.StartsWith("/Dashboard/ReferralTree") ? "active" : "")"
+                        hidden>
 
                         <a asp-controller="Dashboard"
                            asp-action="ReferralTree"
@@ -139,7 +240,8 @@
             @if (Can("web_inspector.use"))
             {
             <li class="partnerly-menu-section-group"
-                data-menu-section-group="tools">
+                data-menu-section-group="tools"
+                hidden>
 
                 <button type="button"
                         class="partnerly-menu-section partnerly-menu-section-toggle"
@@ -180,83 +282,6 @@
 
             </li>
             }
-
-
-            <!-- ================================================= -->
-            <!-- MISCELLANEOUS -->
-            <!-- ================================================= -->
-
-            <li class="partnerly-menu-section-group"
-                data-menu-section-group="miscellaneous">
-
-                <button type="button"
-                        class="partnerly-menu-section partnerly-menu-section-toggle"
-                        data-menu-section="miscellaneous"
-                        aria-expanded="true">
-
-                    <span>
-                        @Localizer["Miscellaneous"]
-                    </span>
-
-                    <i class="bx bx-chevron-down partnerly-menu-section-arrow"></i>
-
-                </button>
-
-
-                <ul class="partnerly-menu-section-content"
-                    data-menu-section-content="miscellaneous">
-
-
-                    <!-- Support -->
-                    @if (Can("support_tickets.create"))
-                    {
-                    <li class="partnerly-menu-item @(currentPage.Contains("/SupportTickets/OpenNewCase") ? "active" : "")">
-
-                        <a asp-controller="SupportTickets"
-                           asp-action="OpenNewCase"
-                           class="partnerly-menu-link">
-
-                            <span class="partnerly-menu-icon">
-                                <i class="bx bx-support"></i>
-                            </span>
-
-                            <span class="partnerly-menu-text">
-                                @Localizer["Support"]
-                            </span>
-
-                            <span class="partnerly-menu-badge">
-                                24/7
-                            </span>
-
-                        </a>
-
-                    </li>
-                    }
-
-
-                    <!-- Documentation -->
-
-                    <li class="partnerly-menu-item @(currentPage.StartsWith("/Documentation") ? "active" : "")">
-
-                        <a asp-controller="Documentation"
-                           asp-action="Index"
-                           class="partnerly-menu-link">
-
-                            <span class="partnerly-menu-icon">
-                                <i class="bx bx-file"></i>
-                            </span>
-
-                            <span class="partnerly-menu-text">
-                                @Localizer["Documentation"]
-                            </span>
-
-                        </a>
-
-                    </li>
-
-                </ul>
-
-            </li>
 
 
             <!-- ================================================= -->
@@ -493,6 +518,99 @@
                 </li>
             }
 
+
+            <!-- ================================================= -->
+            <!-- AGENTS -->
+            <!-- ================================================= -->
+            @if (Can("automation.view"))
+            {
+            <li class="partnerly-menu-section-group partnerly-menu-agents"
+                data-menu-section-group="agents">
+
+                <div class="partnerly-menu-agents-header">
+
+                    <button type="button"
+                            class="partnerly-menu-section partnerly-menu-section-toggle"
+                            data-menu-section="agents"
+                            aria-expanded="true">
+
+                        <i class="bx bx-bot partnerly-menu-section-icon" aria-hidden="true"></i>
+
+                        <span>
+                            @Localizer["Agents"]
+                        </span>
+
+                        <i class="bx bx-chevron-down partnerly-menu-section-arrow"></i>
+
+                    </button>
+
+                    @if (Can("automation.create"))
+                    {
+                    <a asp-controller="Automation"
+                       asp-action="Index"
+                       asp-route-create="1"
+                       class="partnerly-menu-agents-add"
+                       data-open-create-automation
+                       title="@Localizer["Create"]"
+                       aria-label="@Localizer["Create"]">
+                        <i class="bx bx-plus" aria-hidden="true"></i>
+                    </a>
+                    }
+
+                </div>
+
+                <div class="partnerly-menu-item partnerly-menu-agents-collapsed-item @(currentPage.StartsWith("/Automation") && editAgentId == Guid.Empty ? "active" : "")">
+
+                    <a asp-controller="Automation"
+                       asp-action="Index"
+                       class="partnerly-menu-link"
+                       data-agents-open>
+
+                        <span class="partnerly-menu-icon">
+                            <i class="bx bx-bot"></i>
+                        </span>
+
+                        <span class="partnerly-menu-text">
+                            @Localizer["Agents"]
+                        </span>
+
+                    </a>
+
+                </div>
+
+                <ul class="partnerly-menu-section-content partnerly-menu-agents-sub"
+                    data-menu-section-content="agents">
+
+                    @foreach (var agent in agentMenu)
+                    {
+                    <li class="partnerly-menu-item partnerly-menu-agents-sub-item @(editAgentId == agent.Id ? "active" : "")"
+                        data-agent-id="@agent.Id">
+
+                        <a asp-controller="Automation"
+                           asp-action="Index"
+                           asp-route-edit="@agent.Id"
+                           class="partnerly-menu-link"
+                           title="@agent.Name">
+
+                            <span class="partnerly-menu-agents-dot @(agent.Live ? "is-on" : "is-off")"
+                                  aria-hidden="true"></span>
+
+                            <span class="partnerly-menu-text">
+                                @agent.Name
+                            </span>
+
+                            <span class="partnerly-menu-agents-ago">@agent.Ago</span>
+
+                        </a>
+
+                    </li>
+                    }
+
+                </ul>
+
+            </li>
+            }
+
         </ul>
 
     </div>
@@ -657,7 +775,7 @@
 
             const activeItem =
                 group.querySelector(
-                    '.partnerly-menu-item.active'
+                    '.partnerly-menu-section-content .partnerly-menu-item.active'
                 );
 
 
@@ -732,6 +850,174 @@
             );
 
         });
+
+
+        const agentsGroup = document.querySelector(
+            '[data-menu-section-group="agents"]'
+        );
+
+        if (agentsGroup) {
+
+            const agentsOpenLink = agentsGroup.querySelector(
+                '[data-agents-open]'
+            );
+
+            if (agentsOpenLink) {
+
+                agentsOpenLink.addEventListener(
+                    'click',
+                    function (event) {
+
+                        if (
+                            document.body.classList.contains(
+                                'partnerly-sidebar-collapsed'
+                            ) &&
+                            window.innerWidth > 1199.98
+                        ) {
+                            return;
+                        }
+
+                        const agentsButton = agentsGroup.querySelector(
+                            '[data-menu-section="agents"]'
+                        );
+
+                        if (agentsButton) {
+                            setSectionState(
+                                agentsGroup,
+                                true,
+                                true
+                            );
+                        }
+
+                        if (
+                            window.location.pathname.indexOf(
+                                '/Automation'
+                            ) === 0
+                        ) {
+                            event.preventDefault();
+                        }
+
+                    }
+                );
+
+            }
+
+            function agentNameOf(row) {
+
+                const text = row.querySelector(
+                    '.partnerly-menu-text'
+                );
+                return text ? text.textContent.trim() : '';
+
+            }
+
+            function sortAgentRows(list) {
+
+                const rows = Array.prototype.slice.call(
+                    list.querySelectorAll('[data-agent-id]')
+                );
+
+                rows.sort(function (left, right) {
+                    return agentNameOf(left).localeCompare(
+                        agentNameOf(right)
+                    );
+                });
+
+                rows.forEach(function (row) {
+                    list.appendChild(row);
+                });
+
+            }
+
+            window.PartnerlyAgentsMenu = {
+
+                add: function (item) {
+
+                    if (!item || !item.id) {
+                        return;
+                    }
+
+                    const list = agentsGroup.querySelector(
+                        '[data-menu-section-content="agents"]'
+                    );
+
+                    if (!list) {
+                        return;
+                    }
+
+                    const id = String(item.id);
+                    const name = item.name || '';
+                    let row = list.querySelector(
+                        '[data-agent-id="' + id + '"]'
+                    );
+
+                    if (!row) {
+
+                        row = document.createElement('li');
+                        row.className =
+                            'partnerly-menu-item partnerly-menu-agents-sub-item';
+                        row.setAttribute('data-agent-id', id);
+                        row.innerHTML =
+                            '<a href="/Automation?edit=' +
+                            encodeURIComponent(id) +
+                            '" class="partnerly-menu-link" title="">' +
+                            '<span class="partnerly-menu-agents-dot is-off" aria-hidden="true"></span>' +
+                            '<span class="partnerly-menu-text"></span>' +
+                            '<span class="partnerly-menu-agents-ago">1s</span>' +
+                            '</a>';
+                        list.appendChild(row);
+
+                    }
+
+                    const link = row.querySelector('.partnerly-menu-link');
+                    const text = row.querySelector('.partnerly-menu-text');
+
+                    if (link) {
+                        link.setAttribute('title', name);
+                        link.setAttribute(
+                            'href',
+                            '/Automation?edit=' + encodeURIComponent(id)
+                        );
+                    }
+
+                    if (text) {
+                        text.textContent = name;
+                    }
+
+                    sortAgentRows(list);
+                    setSectionState(agentsGroup, true, true);
+
+                },
+
+                rename: function (id, name) {
+
+                    if (!id) {
+                        return;
+                    }
+
+                    this.add({ id: id, name: name });
+
+                },
+
+                remove: function (id) {
+
+                    if (!id) {
+                        return;
+                    }
+
+                    const row = agentsGroup.querySelector(
+                        '[data-agent-id="' + String(id) + '"]'
+                    );
+
+                    if (row) {
+                        row.remove();
+                    }
+
+                }
+
+            };
+
+        }
 
     });
 

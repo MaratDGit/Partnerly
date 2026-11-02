@@ -74,6 +74,7 @@
     flex: 1 1 auto;
     min-width: 0;
     max-width: 300px;
+    margin-left: 20px;
 }
 
 .partnerly-site-search-icon {
@@ -292,7 +293,7 @@ html.partnerly-language-switching {
     right: 0;
     left: auto;
     min-width: 0;
-    padding: 8px;
+    padding: 6px;
     overflow: visible;
     border: 1px solid rgba(67, 89, 113, 0.10);
     border-radius: 16px;
@@ -331,7 +332,7 @@ html.partnerly-language-switching {
 .partnerly-language-menu form {
     margin: 0;
     flex: 1 1 0;
-    min-width: 64px;
+    min-width: 52px;
     height: 100%;
 }
 
@@ -342,10 +343,10 @@ html.partnerly-language-switching {
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    gap: 6px;
-    padding: 10px 12px 8px;
+    gap: 4px;
+    padding: 7px 8px 6px;
     border: 0;
-    border-radius: 12px;
+    border-radius: 10px;
     background: transparent;
     color: #8592a3;
     cursor: pointer;
@@ -397,13 +398,13 @@ html.partnerly-language-switching {
 
     .partnerly-language-option-flag img {
         display: block;
-        width: 28px;
-        height: 21px;
+        width: 22px;
+        height: 16px;
         object-fit: cover;
     }
 
 .partnerly-language-option-code {
-    font-size: 9px;
+    font-size: 8px;
     font-weight: 700;
     letter-spacing: 0.12em;
     line-height: 1;
@@ -747,11 +748,13 @@ html.partnerly-language-switching {
 .partnerly-user-menu .dropdown-item {
     display: flex;
     align-items: center;
-    min-height: 40px;
+    gap: 7px;
+    min-height: 34px;
+    padding: 4px 8px;
     border: 1px solid transparent;
     border-radius: 8px;
     color: #566a7f;
-    font-size: 0.84rem;
+    font-size: 0.81rem;
     font-weight: 500;
     transition: color .2s ease, background .2s ease, border-color .2s ease, box-shadow .2s ease;
 }
@@ -765,9 +768,11 @@ html.partnerly-language-switching {
     }
 
     .partnerly-user-menu .dropdown-item i {
-        width: 24px;
-        margin-right: 7px;
-        font-size: 19px;
+        width: 22px;
+        margin-right: 0;
+        font-size: 16px;
+        line-height: 1;
+        text-align: center;
     }
 
 .partnerly-user-menu .partnerly-logout:hover {

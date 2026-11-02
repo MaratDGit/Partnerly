@@ -1,0 +1,142 @@
+@model Partnerly.Automation.Web.ViewModels.AutomationDashboardViewModel
+@{
+    ViewData["Title"] = Localizer["Automation"].Value;
+    var perms = ViewData["Permissions"] as HashSet<string>;
+    bool Can(string code) => perms?.Contains(code) == true;
+    var canHistory = Can("automation.history") ? "true" : "false";
+    var canEdit = Can("automation.edit") ? "true" : "false";
+    var canDelete = Can("automation.delete") ? "true" : "false";
+}
+
+@section PageStyles {
+    <link rel="stylesheet" href="~/vendor/drawflow/drawflow.min.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/assets/css/automation-builder.css" asp-append-version="true" />
+}
+
+<div id="automationHubRoot"
+     class="container-xxl flex-grow-1 container-p-y automation-page"
+     data-active="@Localizer["Active"]"
+     data-inactive="@Localizer["Inactive"]"
+     data-empty="@Localizer["AutomationEmptyDefinitions"]"
+     data-history="@Localizer["History"]"
+     data-settings="@Localizer["Settings"]"
+     data-edit="@Localizer["Edit"]"
+     data-delete="@Localizer["Delete"]"
+     data-can-history="@canHistory"
+     data-can-edit="@canEdit"
+     data-can-delete="@canDelete">
+    @await Html.PartialAsync("_Toast")
+
+    <div class="automation-hub-toolbar">
+        <h1>@Localizer["Automation"]</h1>
+        @if (Can("automation.create"))
+        {
+            <button type="button" class="btn btn-primary" data-open-create-automation>
+                <i class="bx bx-plus"></i> @Localizer["Create"]
+            </button>
+        }
+    </div>
+
+    <div class="automation-glass automation-hub-table-wrap">
+        <table class="automation-hub-table">
+            <thead>
+                <tr>
+                    <th>@Localizer["Name"]</th>
+                    <th>@Localizer["Status"]</th>
+                    <th>@Localizer["UpdatedDate"]</th>
+                    <th class="automation-hub-actions-col">@Localizer["Actions"]</th>
+                </tr>
+            </thead>
+            <tbody data-hub-rows>
+            @if (Model.Definitions.Count == 0)
+            {
+                <tr data-hub-empty>
+                    <td colspan="4" class="automation-hub-empty">@Localizer["AutomationEmptyDefinitions"]</td>
+                </tr>
+            }
+            else
+            {
+                foreach (var item in Model.Definitions)
+                {
+                    <tr data-automation-row="@item.Id">
+                        <td>
+                            <div class="automation-hub-name">@item.Name</div>
+                            @if (!string.IsNullOrWhiteSpace(item.Description))
+                            {
+                                <div class="automation-hub-desc">@item.Description</div>
+                            }
+                        </td>
+                        <td>
+                            <span class="automation-hub-status @(item.IsActive ? "is-on" : "is-off")">
+                                @(item.IsActive ? Localizer["Active"] : Localizer["Inactive"])
+                            </span>
+                        </td>
+                        <td class="automation-hub-date">@item.UpdatedDate.ToString("dd.MM.yyyy HH:mm")</td>
+                        <td class="automation-hub-actions">
+                            @if (Can("automation.history"))
+                            {
+                                <button type="button" class="automation-hub-icon" data-hub="history" data-id="@item.Id" title="@Localizer["History"]" aria-label="@Localizer["History"]">
+                                    <i class="bx bx-history"></i>
+                                </button>
+                            }
+                            @if (Can("automation.edit"))
+                            {
+                                <button type="button" class="automation-hub-icon" data-hub="settings" data-id="@item.Id" title="@Localizer["Settings"]" aria-label="@Localizer["Settings"]">
+                                    <i class="bx bx-cog"></i>
+                                </button>
+                                <button type="button" class="automation-hub-icon" data-hub="edit" data-id="@item.Id" title="@Localizer["Edit"]" aria-label="@Localizer["Edit"]">
+                                    <i class="bx bx-edit"></i>
+                                </button>
+                            }
+                            @if (Can("automation.delete"))
+                            {
+                                <button type="button" class="automation-hub-icon is-danger" data-hub="delete" data-id="@item.Id" data-name="@item.Name" title="@Localizer["Delete"]" aria-label="@Localizer["Delete"]">
+                                    <i class="bx bx-trash"></i>
+                                </button>
+                            }
+                        </td>
+                    </tr>
+                }
+            }
+            </tbody>
+        </table>
+    </div>
+
+    <div class="automation-hub-templates">
+        <h2>@Localizer["ReadyTemplates"]</h2>
+        <div class="automation-hub-template-grid">
+            @foreach (var preset in Model.Presets)
+            {
+                <article class="automation-glass automation-hub-template">
+                    <h3>@preset.Name</h3>
+                    <p>@preset.Description</p>
+                    @if (Can("automation.create"))
+                    {
+                        <button type="button"
+                                class="btn btn-outline-secondary"
+                                data-open-create-automation
+                                data-template-id="@preset.Id"
+                                data-template-name="@preset.Name"
+                                data-template-description="@preset.Description">
+                            @Localizer["UseTemplate"]
+                        </button>
+                    }
+                </article>
+            }
+        </div>
+    </div>
+</div>
+
+<template id="automationDeleteTemplate">
+    @await Html.PartialAsync("~/Views/Shared/Automation/_DeletePanel.cshtml")
+</template>
+
+@await Html.PartialAsync("~/Views/Shared/Automation/_CreateAutomationPopup.cshtml")
+@await Html.PartialAsync("~/Views/Shared/Automation/_HubOverlay.cshtml")
+
+@section PageScripts {
+    <script src="~/vendor/drawflow/drawflow.min.js" asp-append-version="true"></script>
+    <script src="~/assets/js/automation/builder.js" asp-append-version="true"></script>
+    <script src="~/assets/js/automation/create-popup.js" asp-append-version="true"></script>
+    <script src="~/assets/js/automation/hub.js" asp-append-version="true"></script>
+}

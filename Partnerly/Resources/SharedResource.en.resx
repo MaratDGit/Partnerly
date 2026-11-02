@@ -2636,4 +2636,446 @@
     <value>Assigned to you</value>
   </data>
 
+  <data name="Automation" xml:space="preserve">
+    <value>Automation</value>
+  </data>
+  <data name="AutomationDashboard" xml:space="preserve">
+    <value>Dashboard</value>
+  </data>
+  <data name="MyAutomations" xml:space="preserve">
+    <value>My Automations</value>
+  </data>
+  <data name="UntitledAutomation" xml:space="preserve">
+    <value>Untitled</value>
+  </data>
+  <data name="AutomationPublished" xml:space="preserve">
+    <value>Automation published</value>
+  </data>
+  <data name="AutomationQueued" xml:space="preserve">
+    <value>Run queued</value>
+  </data>
+  <data name="DeleteAutomation" xml:space="preserve">
+    <value>Delete automation</value>
+  </data>
+  <data name="AutomationBuilder" xml:space="preserve">
+    <value>Workflow builder</value>
+  </data>
+  <data name="AutomationTemplates" xml:space="preserve">
+    <value>Templates</value>
+  </data>
+  <data name="AutomationConnections" xml:space="preserve">
+    <value>Connections</value>
+  </data>
+  <data name="AutomationSettings" xml:space="preserve">
+    <value>Settings</value>
+  </data>
+  <data name="AutomationActive" xml:space="preserve">
+    <value>Active</value>
+  </data>
+  <data name="AutomationFailed" xml:space="preserve">
+    <value>Failed (24h)</value>
+  </data>
+  <data name="AutomationRunning" xml:space="preserve">
+    <value>Running</value>
+  </data>
+  <data name="AutomationRecent" xml:space="preserve">
+    <value>Recent runs</value>
+  </data>
+  <data name="AutomationEmptyRuns" xml:space="preserve">
+    <value>No runs yet</value>
+  </data>
+  <data name="AutomationEmptyWebhooks" xml:space="preserve">
+    <value>Publish a workflow with a webhook trigger to get a URL</value>
+  </data>
+  <data name="AutomationEmptyConnections" xml:space="preserve">
+    <value>No HTTP connections yet</value>
+  </data>
+  <data name="Publish" xml:space="preserve">
+    <value>Publish</value>
+  </data>
+  <data name="TestRun" xml:space="preserve">
+    <value>Test</value>
+  </data>
+  <data name="RunNow" xml:space="preserve">
+    <value>Run</value>
+  </data>
+  <data name="NodePalette" xml:space="preserve">
+    <value>Blocks</value>
+  </data>
+  <data name="NodeProperties" xml:space="preserve">
+    <value>Properties</value>
+  </data>
+  <data name="NoTemplates" xml:space="preserve">
+    <value>No templates yet</value>
+  </data>
+  <data name="LimitsOnDefinition" xml:space="preserve">
+    <value>Run limits are stored on each automation</value>
+  </data>
+  <data name="WebhookUrl" xml:space="preserve">
+    <value>Webhook URL</value>
+  </data>
+  <data name="WebhookSecret" xml:space="preserve">
+    <value>HMAC secret</value>
+  </data>
+  <data name="AutomationSaved" xml:space="preserve">
+    <value>Saved</value>
+  </data>
+  <data name="Actions" xml:space="preserve">
+    <value>Actions</value>
+  </data>
+  <data name="UseTemplate" xml:space="preserve">
+    <value>Use template</value>
+  </data>
+  <data name="MaxConcurrentRuns" xml:space="preserve">
+    <value>Max concurrent runs</value>
+  </data>
+  <data name="MaxRunsPerHour" xml:space="preserve">
+    <value>Max runs per hour</value>
+  </data>
+  <data name="RetryLimit" xml:space="preserve">
+    <value>Retry limit</value>
+  </data>
+  <data name="StepTimeoutSeconds" xml:space="preserve">
+    <value>Step timeout (seconds)</value>
+  </data>
+  <data name="RunTimeoutSeconds" xml:space="preserve">
+    <value>Run timeout (seconds)</value>
+  </data>
+  <data name="BaseUrl" xml:space="preserve">
+    <value>Base URL</value>
+  </data>
+  <data name="AutomationInvalidConnection" xml:space="preserve">
+    <value>Enter a name and a public http(s) URL</value>
+  </data>
+  <data name="CreateAutomation" xml:space="preserve">
+    <value>New automation</value>
+  </data>
+  <data name="CreateAutomationLead" xml:space="preserve">
+    <value>Give it a name. After you save, the workflow editor opens.</value>
+  </data>
+  <data name="AutomationNameHelp" xml:space="preserve">
+    <value>A short name so you can find this process in the list.</value>
+  </data>
+  <data name="AutomationDescriptionHelp" xml:space="preserve">
+    <value>Optional. What this automation is for.</value>
+  </data>
+  <data name="StartFromTemplate" xml:space="preserve">
+    <value>Start from a template</value>
+  </data>
+  <data name="StartFromTemplateHelp" xml:space="preserve">
+    <value>Optional. Leave blank to build the steps yourself.</value>
+  </data>
+  <data name="BlankAutomation" xml:space="preserve">
+    <value>Empty — I will add the steps</value>
+  </data>
+  <data name="AutomationNameRequired" xml:space="preserve">
+    <value>Enter a name for the automation</value>
+  </data>
+  <data name="TriggerBlocks" xml:space="preserve">
+    <value>When this happens</value>
+  </data>
+  <data name="TriggerBlocksHelp" xml:space="preserve">
+    <value>The starting point. Add one trigger.</value>
+  </data>
+  <data name="ActionBlocks" xml:space="preserve">
+    <value>Then do this</value>
+  </data>
+  <data name="ActionBlocksHelp" xml:space="preserve">
+    <value>The steps that run after the trigger.</value>
+  </data>
+  <data name="SelectNodeHint" xml:space="preserve">
+    <value>Select a block on the canvas to edit it.</value>
+  </data>
+  <data name="NodeNameHelp" xml:space="preserve">
+    <value>Label on the canvas. Letters, digits and underscore only.</value>
+  </data>
+  <data name="DelayAmount" xml:space="preserve">
+    <value>Wait for</value>
+  </data>
+  <data name="DelayUnit" xml:space="preserve">
+    <value>Unit</value>
+  </data>
+  <data name="DelayHelp" xml:space="preserve">
+    <value>The workflow pauses for this time, then continues by itself.</value>
+  </data>
+  <data name="DelayTriggerHelp" xml:space="preserve">
+    <value>After you publish, the first run waits this long, then starts once.</value>
+  </data>
+  <data name="DelaySeconds" xml:space="preserve">
+    <value>Seconds</value>
+  </data>
+  <data name="DelayMinutes" xml:space="preserve">
+    <value>Minutes</value>
+  </data>
+  <data name="DelayHours" xml:space="preserve">
+    <value>Hours</value>
+  </data>
+  <data name="DelayDays" xml:space="preserve">
+    <value>Days</value>
+  </data>
+  <data name="WaitBeforeStart" xml:space="preserve">
+    <value>Wait before starting</value>
+  </data>
+  <data name="WaitBeforeStartHelp" xml:space="preserve">
+    <value>Optional pause after the event, before the first step.</value>
+  </data>
+  <data name="ScheduleKind" xml:space="preserve">
+    <value>How often</value>
+  </data>
+  <data name="ScheduleKindHelp" xml:space="preserve">
+    <value>Choose daily, weekly, or a one-off time.</value>
+  </data>
+  <data name="ScheduleTime" xml:space="preserve">
+    <value>Time of day</value>
+  </data>
+  <data name="ScheduleTimeHelp" xml:space="preserve">
+    <value>Local time of this automation (see Settings).</value>
+  </data>
+  <data name="ScheduleDate" xml:space="preserve">
+    <value>Run at</value>
+  </data>
+  <data name="IntervalMinutes" xml:space="preserve">
+    <value>Repeat every (minutes)</value>
+  </data>
+  <data name="IntervalMinutesHelp" xml:space="preserve">
+    <value>Minimum 1 minute. The next run is counted from the previous one.</value>
+  </data>
+  <data name="AutomationRecordType" xml:space="preserve">
+    <value>Record type</value>
+  </data>
+  <data name="EntityHelp" xml:space="preserve">
+    <value>Which Partnerly record this step uses.</value>
+  </data>
+  <data name="EventName" xml:space="preserve">
+    <value>Event name</value>
+  </data>
+  <data name="EventNameHelp" xml:space="preserve">
+    <value>Must match the event the system publishes, for example UserCreated.</value>
+  </data>
+  <data name="WebhookTriggerHelp" xml:space="preserve">
+    <value>After publish, the URL and secret appear on Connections.</value>
+  </data>
+  <data name="ManualTriggerHelp" xml:space="preserve">
+    <value>Starts when you click Run or Test on this page.</value>
+  </data>
+  <data name="VariableName" xml:space="preserve">
+    <value>Variable name</value>
+  </data>
+  <data name="VariableValue" xml:space="preserve">
+    <value>Value</value>
+  </data>
+  <data name="VariableNameHelp" xml:space="preserve">
+    <value>Letters, digits and underscore. Use later as {{vars.name}}.</value>
+  </data>
+  <data name="EmailTo" xml:space="preserve">
+    <value>Send to</value>
+  </data>
+  <data name="EmailSubject" xml:space="preserve">
+    <value>Subject</value>
+  </data>
+  <data name="EmailBody" xml:space="preserve">
+    <value>Message</value>
+  </data>
+  <data name="EmailTemplate" xml:space="preserve">
+    <value>Email template</value>
+  </data>
+  <data name="EmailTemplateHelp" xml:space="preserve">
+    <value>Optional template code. If set, subject and message below are ignored.</value>
+  </data>
+  <data name="NotificationUser" xml:space="preserve">
+    <value>User id (optional)</value>
+  </data>
+  <data name="NotificationMessage" xml:space="preserve">
+    <value>Notification text</value>
+  </data>
+  <data name="NotificationLink" xml:space="preserve">
+    <value>Link (optional)</value>
+  </data>
+  <data name="NotificationType" xml:space="preserve">
+    <value>Notification type</value>
+  </data>
+  <data name="HttpMethod" xml:space="preserve">
+    <value>HTTP method</value>
+  </data>
+  <data name="HttpUrl" xml:space="preserve">
+    <value>URL</value>
+  </data>
+  <data name="HttpBody" xml:space="preserve">
+    <value>Request body</value>
+  </data>
+  <data name="HttpConnection" xml:space="preserve">
+    <value>Saved connection id</value>
+  </data>
+  <data name="HttpConnectionHelp" xml:space="preserve">
+    <value>Optional. Copy the id from Connections, or paste a full public URL above.</value>
+  </data>
+  <data name="WebhookBody" xml:space="preserve">
+    <value>JSON body</value>
+  </data>
+  <data name="WebhookSecretField" xml:space="preserve">
+    <value>Signing secret (optional)</value>
+  </data>
+  <data name="ChildAutomation" xml:space="preserve">
+    <value>Child automation id</value>
+  </data>
+  <data name="ChildAutomationHelp" xml:space="preserve">
+    <value>Must belong to you and be published. This step does not wait for it to finish.</value>
+  </data>
+  <data name="ConditionLeft" xml:space="preserve">
+    <value>Left value</value>
+  </data>
+  <data name="ConditionOp" xml:space="preserve">
+    <value>Compare</value>
+  </data>
+  <data name="ConditionRight" xml:space="preserve">
+    <value>Right value</value>
+  </data>
+  <data name="ConditionHelp" xml:space="preserve">
+    <value>You can use {{vars.name}} or trigger fields. Connect True and False outputs on the canvas.</value>
+  </data>
+  <data name="WaitUntilDeadline" xml:space="preserve">
+    <value>Give up after</value>
+  </data>
+  <data name="WaitUntilDeadlineHelp" xml:space="preserve">
+    <value>Optional UTC deadline. Empty means keep checking.</value>
+  </data>
+  <data name="RecordFields" xml:space="preserve">
+    <value>Fields</value>
+  </data>
+  <data name="RecordFieldsHelp" xml:space="preserve">
+    <value>One field per line: email={{trigger.email}}</value>
+  </data>
+  <data name="RecordKey" xml:space="preserve">
+    <value>Which record</value>
+  </data>
+  <data name="RecordFilters" xml:space="preserve">
+    <value>Filters</value>
+  </data>
+  <data name="SwitchValue" xml:space="preserve">
+    <value>Value to match</value>
+  </data>
+  <data name="SwitchValueHelp" xml:space="preserve">
+    <value>The matching output is used. Empty value goes to the default output.</value>
+  </data>
+  <data name="CronExpression" xml:space="preserve">
+    <value>Cron expression</value>
+  </data>
+  <data name="CronExpressionHelp" xml:space="preserve">
+    <value>Example: 0 9 * * * for 09:00 every day.</value>
+  </data>
+  <data name="ScheduleOnce" xml:space="preserve">
+    <value>Once, at a date</value>
+  </data>
+  <data name="ScheduleHourly" xml:space="preserve">
+    <value>Every hour</value>
+  </data>
+  <data name="ScheduleDaily" xml:space="preserve">
+    <value>Every day</value>
+  </data>
+  <data name="ScheduleWeekly" xml:space="preserve">
+    <value>Every week</value>
+  </data>
+  <data name="ScheduleMonthly" xml:space="preserve">
+    <value>Every month</value>
+  </data>
+  <data name="ScheduleCron" xml:space="preserve">
+    <value>Cron expression</value>
+  </data>
+  <data name="NodeTypeManual" xml:space="preserve">
+    <value>Manual start</value>
+  </data>
+  <data name="NodeTypeSchedule" xml:space="preserve">
+    <value>On a schedule</value>
+  </data>
+  <data name="NodeTypeInterval" xml:space="preserve">
+    <value>Repeating interval</value>
+  </data>
+  <data name="NodeTypeEntityCreated" xml:space="preserve">
+    <value>Record created</value>
+  </data>
+  <data name="NodeTypeEntityUpdated" xml:space="preserve">
+    <value>Record updated</value>
+  </data>
+  <data name="NodeTypeEntityDeleted" xml:space="preserve">
+    <value>Record deleted</value>
+  </data>
+  <data name="NodeTypeWebhook" xml:space="preserve">
+    <value>Incoming webhook</value>
+  </data>
+  <data name="NodeTypeEvent" xml:space="preserve">
+    <value>App event</value>
+  </data>
+  <data name="NodeTypeDelay" xml:space="preserve">
+    <value>Wait</value>
+  </data>
+  <data name="NodeTypeSendEmail" xml:space="preserve">
+    <value>Send email</value>
+  </data>
+  <data name="NodeTypeSendNotification" xml:space="preserve">
+    <value>Send notification</value>
+  </data>
+  <data name="NodeTypeCreateRecord" xml:space="preserve">
+    <value>Create record</value>
+  </data>
+  <data name="NodeTypeUpdateRecord" xml:space="preserve">
+    <value>Update record</value>
+  </data>
+  <data name="NodeTypeFindRecord" xml:space="preserve">
+    <value>Find record</value>
+  </data>
+  <data name="NodeTypeDeleteRecord" xml:space="preserve">
+    <value>Delete record</value>
+  </data>
+  <data name="NodeTypeWaitUntil" xml:space="preserve">
+    <value>Wait until condition</value>
+  </data>
+  <data name="NodeTypeBranch" xml:space="preserve">
+    <value>If / else</value>
+  </data>
+  <data name="NodeTypeSwitch" xml:space="preserve">
+    <value>Switch</value>
+  </data>
+  <data name="NodeTypeSetVariable" xml:space="preserve">
+    <value>Set variable</value>
+  </data>
+  <data name="NodeTypeHttpRequest" xml:space="preserve">
+    <value>HTTP request</value>
+  </data>
+  <data name="NodeTypeExecuteWorkflow" xml:space="preserve">
+    <value>Run another automation</value>
+  </data>
+  <data name="AutomationDashboardLead" xml:space="preserve">
+    <value>See what is running. Open a workflow, or start a new one.</value>
+  </data>
+  <data name="MyAutomationsLead" xml:space="preserve">
+    <value>Your workflows. Create one, then edit it on the canvas.</value>
+  </data>
+  <data name="AutomationHistoryLead" xml:space="preserve">
+    <value>Every run, with its status. Open a row to see each step.</value>
+  </data>
+  <data name="AutomationTemplatesLead" xml:space="preserve">
+    <value>Start from a ready process. You can rename it before it opens in the editor.</value>
+  </data>
+  <data name="AutomationConnectionsLead" xml:space="preserve">
+    <value>Webhook URLs after you publish, and saved HTTP bases for outbound requests.</value>
+  </data>
+  <data name="AutomationSettingsLead" xml:space="preserve">
+    <value>Time zone, retries and limits for one workflow. Pick a workflow first.</value>
+  </data>
+  <data name="AutomationBuilderLead" xml:space="preserve">
+    <value>Drop a trigger, then the steps. Select a block to fill in what it should do.</value>
+  </data>
+  <data name="AutomationRunLead" xml:space="preserve">
+    <value>Each step of this run, in order.</value>
+  </data>
+  <data name="ReadyTemplates" xml:space="preserve">
+    <value>Ready templates</value>
+  </data>
+  <data name="AutomationEmptyDefinitions" xml:space="preserve">
+    <value>No automations yet</value>
+  </data>
+  <data name="Agents" xml:space="preserve">
+    <value>Agents</value>
+  </data>
+
 </root>

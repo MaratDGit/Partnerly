@@ -4,6 +4,157 @@
 
 ---
 
+## 2026-11-03 — Dropdown профиля как меню; язык чуть компактнее
+
+- **Суть:** владелец: в dropdown фото профиля размер пунктов как в левом меню; в dropdown языка пункты немного меньше.
+- **Сделано:** пункты профиля — `min-height: 34px`, шрифт `0.81rem`, иконки `16px`, padding как у `.partnerly-menu-link`. Язык: меньше padding, флаги `22×16`, код `8px`.
+- **Проверка:** CSS, сборку не запускал. Браузер недоступен. Коммит не делался.
+
+---
+
+## 2026-11-03 — Agents: плюс при закрытой секции; поиск в навбаре правее
+
+- **Суть:** владелец: при закрытой секции Agents оставить «+»; если само меню свёрнуто — как сейчас (пункт Agents). Поиск в навбаре чуть правее.
+- **Сделано:** «+» виден, пока сайдбар развёрнут, даже если секция Agents свёрнута. Пункт-иконка Agents только при `partnerly-sidebar-collapsed`. Поиск: `margin-left: 20px`.
+- **Проверка:** CSS, сборку не запускал. Браузер недоступен. Коммит не делался.
+
+---
+
+## 2026-11-03 — Меню Agents: live-список после create, закрытая секция как пункт
+
+- **Суть:** владелец: после добавления автоматизации submenu не обновлялся; если Agents закрыт и иконка секции не видна — не показывать «+», а пункт Agents как обычный menu item.
+- **Сделано:** `PartnerlyAgentsMenu.add/rename/remove` обновляет имена сразу после create/save/delete. Закрытая секция и свёрнутый сайдбар прячут заголовок с «+» и показывают пункт Agents с иконкой бота; клик раскрывает секцию (в узком сайдбаре ведёт на хаб).
+- **Проверка:** `dotnet build Partnerly.sln` — 0 Error(s) (isolated OutputPath). Браузер недоступен. Коммит не делался.
+
+---
+
+## 2026-11-03 — Меню: иконка Agents, без сдвига ширины, стрелки секций у текста
+
+- **Суть:** владелец: слева от Agents иконка; при наведении меню не менять ширину; стрелки открыть/закрыть сразу после текста и только при наведении на меню.
+- **Сделано:** у Agents `bx-bot`. Скроллбар больше не сжимает контент: `scrollbar-gutter: stable`, hover не трогает padding. Стрелки секций стоят сразу после подписи (`flex-start`), видны при hover/focus меню.
+- **Проверка:** `dotnet build Partnerly.sln` — 0 Error(s) (isolated OutputPath). Браузер недоступен. Коммит не делался.
+
+---
+
+## 2026-11-02 — Меню Agents: секция-текст, плюс, индикатор процесса, давность
+
+- **Суть:** владелец: Agents не пункт меню, а текст секции с открытием/закрытием; справа «+» на страницу Automation; у имён слева индикатор «в процессе», справа давность последнего действия (4d / 11m).
+- **Сделано:** заголовок как у Main/Settings, шеврон открывает список. «+» → `/Automation?create=1` (на хабе сразу попап создания). Имена: зелёная точка если run queued/running/waiting, иначе серая; справа compact ago по последнему run (иначе дата определения). Свёрнутый сайдбар прячет имена, оставляет «+».
+- **Проверка:** `dotnet build Partnerly.sln` — 0 Error(s) (isolated OutputPath). Браузер недоступен. Коммит не делался.
+
+---
+
+## 2026-11-02 — Меню: Statistics chart-иконка, Agents как пункт после Settings
+
+- **Суть:** владелец: иконка Statistics по смыслу имени; переименовать Automation → Agents; убрать dropdown-секцию Agents; сам пункт Agents — dropdown, имена автоматизаций — submenu без иконок; блок после Settings.
+- **Сделано:** Statistics — `bx-bar-chart-alt-2`. Секция-заголовок Agents снята. Пункт Agents (иконка бота) стоит после Settings, открывает хаб; стрелка раскрывает имена без иконок. Свёрнутый сайдбар прячет submenu.
+- **Проверка:** `dotnet build Partnerly.sln` — 0 Error(s) (isolated OutputPath). Браузер недоступен. Коммит не делался.
+
+---
+
+## 2026-11-02 — Меню Agents, Documentation/Support в футере
+
+- **Суть:** владелец: убрать из левого меню секции Documentation и Support; в футере чуть увеличить эти ссылки и добавить иконки; в меню добавить секцию Agents со списком имён автоматизаций и небольшим отступом сверху.
+- **Сделано:** секция Miscellaneous (Documentation + Support) снята с `_VerticalMenu`. Вместо Automation — секция Agents: хаб `/Automation` и до 40 видимых имён (`?edit={id}`). Отступ `.partnerly-menu-agents` 20px. Футер: `bx-file` / `bx-support`, шрифт ссылок 13px (мобильный 12px). Ключ resx `Agents`. Tasks в Settings не трогал — это админский список тикетов.
+- **Проверка:** `dotnet build Partnerly.sln` — 0 Error(s) (isolated OutputPath). Браузер недоступен. Коммит не делался.
+
+---
+
+## 2026-11-02 — Меню: пункты чуть меньше, Web Inspector и Referral Tree скрыты
+
+- **Суть:** владелец: немного уменьшить пункты меню; скрыть Web Inspector и Referral Tree.
+- **Сделано:** высота/шрифт/иконки пунктов уменьшены в `partnerly-layout.css`. Referral Tree и секция Tools (Web Inspector) остались в разметке с `hidden`. Страницы по URL не трогал.
+- **Проверка:** CSS/разметка, сборку не запускал. Браузер недоступен. Коммит не делался.
+
+---
+
+## 2026-11-02 — Statistics / Agents: живые KPI автоматизации; карточки без сдвига
+
+- **Суть:** владелец: на Dashboards секция Agents — реальные данные Automation; карточки на сайте не сдвигаются при hover.
+- **Сделано:** вкладка Agents больше не на случайных «играх». KPI: число автоматизаций, успешные запуски, очередь (queued/running/waiting), success rate по succeeded/(succeeded+failed). График и refresh (`GetStats` / `GetGamesByPeriod`) считают запуски из store с тем же фильтром владельца/manage. Hover `translateY` снят с dashboard/KPI/profile/referral карточек; в layout — страховка `transform: none`.
+- **Проверка:** `dotnet build Partnerly.sln` — 0 Error(s) (isolated OutputPath). Автотесты не гонял — движок не менялся. Браузер недоступен. Коммит не делался.
+
+---
+
+## 2026-11-02 — Automation hub: таблица + попапы, меню только панель
+
+- **Суть:** владелец: в левом меню оставить только панель автоматизации; на Index убрать тексты/табы, показать все автоматизации и кнопку создания; таблица в стиле Grok без DataTable; внизу готовые шаблоны; у строки History / Settings / Edit / Delete открывают popup; редактор процесса и подключения в том же стиле.
+- **Сделано:** меню Automation — один пункт на Index. Index: glass-таблица (имя, статус, дата, иконки действий) + Create + сетка шаблонов. History / Settings / Delete / Builder / Connections / Run details — стеклянные overlay (`BuilderPanel` и др.), не отдельные страницы. Старые GET List/History/Templates/Settings/Connections/Builder/Delete/RunDetails редиректят на Index. Create POST по AJAX сразу открывает билдер. DataTable для этого хаба не используется.
+- **Проверка:** `dotnet build Partnerly.sln` — 0 Error(s) (isolated OutputPath). Автотесты не гонял — логика движка не менялась. Браузер недоступен. Коммит не делался.
+
+---
+
+## 2026-11-02 — Automation: все экраны в стиле glass-create
+
+- **Суть:** владелец: все экраны автоматизации в стиле попапа создания (стекло, kicker, lead).
+- **Сделано:** общая `_AutomationNav` + `.automation-page` / `.automation-glass` на Dashboard, List, History, Templates, Connections, Settings, Builder, RunDetails. History больше не голый DataTable. Кнопки/поля как у create-popup. Site-wide glass не трогал.
+- **Проверка:** `dotnet build Partnerly.sln` (isolated OutputPath). Автотесты не гонял — логика движка не менялась. Браузер недоступен. Коммит не делался.
+
+---
+
+## 2026-11-02 — Automation UX: glass create, labeled delay, no sticky
+
+- **Суть:** владелец: завершить процесс; delay удобный (не JSON/`00:00:05`); новая автоматизация в стеклянном popup; после Save сразу билдер; sticky-кнопки убрать с экранов автоматизации.
+- **Сделано:** GET Create больше не создаёт Untitled. POST Create (имя, описание, опциональный шаблон) → Builder. Popup на Dashboard / My Automations / Templates. Delay: amount+unit (сек/мин/час/день), legacy TimeSpan/int секунд сохранён; число без `:` — секунды, не дни. Delay-триггер армится при publish (one-shot). Свойства узлов — подписанные поля, без Config textarea. Builder toolbar Back/Save/Publish/Test/Run без `_StickyButtons`.
+- **Решение:** TR-2026-11-02-11.
+- **Проверка:** `dotnet test Partnerly.Automation.Tests` — Passed 90, Failed 0 (isolated OutputPath). Браузер в этой сессии недоступен — UI глазами не кликался. Коммит не делался. PHASE 8 отчёт не писался.
+
+---
+
+## 2026-11-02 — Automation: закрытие функциональных дыр v1
+
+- **Суть:** владелец: отчёт не нужен, полностью завершить процесс автоматизации. Без коммита.
+- **Сделано:** `execute_workflow` ставит child run того же владельца (чужой id → not found). `wait_until` заново проверяет условие, по `until` падает без retry. Retry backoff 1..60 с; SSRF/IDOR/timeout не ретраятся. Лимиты/TZ на Settings. Шаблоны из каталога кода (не seed БД). HTTP connection: create/delete, `http_request` клеит baseUrl. Меню History/Templates/Connections. Heartbeat на каждом шаге, run timeout.
+- **Решение:** TR-2026-11-02-10.
+- **Проверка:** `dotnet test Partnerly.Automation.Tests` — Passed 81, Failed 0 (isolated OutputPath, живой Partnerly.exe). Браузер не проверялся. Коммит не делался. PHASE 8 отчёт не писался.
+
+---
+
+## 2026-11-02 — Automation PHASE 7: IDOR/SSRF, retry/cancel/recover
+
+- **Суть:** владелец: «idi dalshe», без коммита. PHASE 7 — тесты безопасности и исполнения: два пользователя, SSRF, retry до Fail, cancel queued/waiting, recover stale running, dry-run не зовёт email.
+- **Сделано:** чужой Get/Update/Publish/Delete/Enqueue/Copy → `KeyNotFoundException`; manage видит чужое, удалённое скрыто и от manage. `PublicHttpGuard` — localhost, RFC1918, CGNAT, metadata, IPv6 ULA, `IsAllowedAsync` на литералах. Live `http_request` на `127.0.0.1` падает без исходящего запроса. Retry `create_record` без коннектора: 3 attempt → Failed. Cancel снимает pending/leased wakeup run; Advance на terminal no-op. Worker поднимает stale Running. Dry-run: `IEmailSender` spy Calls=0; live mail Calls=1. Denylist binder расширен. Лимиты dispatcher MaxConcurrent / MaxRunsPerHour. `execute_workflow` режет depth≥3; enqueue child по-прежнему stub.
+- **Решение:** TR-2026-11-02-09.
+- **Проверка:** `dotnet test Partnerly.Automation.Tests` — Passed 75, Failed 0 (сборка в отдельный OutputPath: `Partnerly.exe` был занят живым процессом). Браузер не проверялся. Коммит не делался.
+
+---
+
+## 2026-11-02 — Automation PHASE 6: UI, Drawflow, входящий webhook
+
+- **Суть:** владелец: без коммита, идти дальше. PHASE 6 — дашборд, DataTable, билдер Drawflow, входящий webhook. Без AI.
+- **Сделано:** меню Automation (Dashboard + My Automations). `AutomationController`: KPI, список, билдер, publish/run/copy/delete, история, connections, templates/settings-заглушки. Drawflow 0.0.59 в `wwwroot/vendor/drawflow`. Входящий `POST /Automation/hooks/{webhookPublicId}` с HMAC, 404 на неизвестный id. Секрет webhook хранится через `ISecretProtector`. Тексты en/ru/hy.
+- **Решение:** TR-2026-11-02-08.
+- **Проверка:** `dotnet test Partnerly.Automation.Tests` — Passed 39, Failed 0. Браузер в этой сессии недоступен — UI глазами не кликался. Коммит не делался.
+
+---
+
+## 2026-11-02 — Automation PHASE 5: коннекторы и интеграция Partnerly
+
+- **Суть:** владелец: «nachinay» после паузы PHASE 5. Коннекторы, EventBridge, interceptor, email/notification, hub, права, PublicHttpGuard. Без UI/Drawflow (PHASE 6).
+- **Сделано:** User / support_ticket / notification / user_group / email_template коннекторы (видимость по владельцу автоматизации, не `IUserVisibilityService`). EventBus → `event` trigger; SaveChanges → `entity.*` после commit, skip при `RecursionGuard.Current > 0`. Реальные `IEmailSender` / `INotificationService` / CUD через существующие сервисы. HTTP/webhook: named client `AutomationOutbound` 20 с, max 256 KB, без redirect. `AutomationHub` `/automationHub`. Права `automation.*` + seeder Employee/User без `manage`. Access в приложении — `CurrentUserAutomationAccessService`. Общий `Helpers.PublicHttpGuard` для инспектора и Automation.
+- **Решение:** TR-2026-11-02-07.
+- **Проверка:** `dotnet test Partnerly.Automation.Tests` — Passed 36, Failed 0. Браузер не нужен (нет UI). Коммит не делался. Прод/другие стенды не трогались.
+
+---
+
+## 2026-11-02 — Automation PHASE 4: EF, Cronos, worker
+
+- **Суть:** владелец: идём дальше на следующий phase; ок на локальную миграцию. PHASE 4 — таблицы Automation*, планировщик, `IHostedService`. Без UI и без коннекторов.
+- **Сделано:** Fluent-конфиги, `AutomationStore`, `ScheduleArmer`, `WakeupLeaser`, `AutomationWorker` (poll 1 с, lease 30 с). Cronos 0.8.4 для cron + TZ через `TimeZoneHelper`. `Program.cs`: `AddPartnerlyAutomation(useDatabase: true)`. HTTP/authoring только ставит `queued` + wakeup; worker делает Advance. Тесты по-прежнему на in-memory. Миграция `20261102134353_AddAutomationTables` создана и **применена на локальной БД** 2026-11-02. Прод не трогался.
+- **Решение:** TR-2026-11-02-06.
+- **Проверка:** `dotnet test Partnerly.Automation.Tests` — Passed 32, Failed 0. `dotnet ef database update` — Done. Браузер не нужен. Коммит не делался.
+
+---
+
+## 2026-11-02 — Automation PHASE 3: ядро на in-memory
+
+- **Суть:** владелец: идти дальше по Universal Automation; при неясности перечитывать спеку и архитектуру. PHASE 3 — ядро без EF, без UI, без Hangfire/Cronos.
+- **Сделано:** `Partnerly/Automation/` — абстракции, registry, evaluator, binder, validator, executor, in-memory store, handlers, authoring/run, HMAC, HTTP guard, access. В `Program.cs` — `AddPartnerlyAutomation()`. Проект `Partnerly.Automation.Tests` (xUnit, net6.0) в `Partnerly.sln`. Миграций, worker, коннекторов, меню и Drawflow нет.
+- **Решение:** TR-2026-11-02-05.
+- **Проверка:** `dotnet test Partnerly.Automation.Tests` — Passed 30, Failed 0. Браузер не нужен (нет UI). Коммит/push не делались.
+
+---
+
 ## 2026-11-02 — Automation PHASE 2: архитектура
 
 - **Суть:** владелец: начинать следующий этап после PHASE 1.

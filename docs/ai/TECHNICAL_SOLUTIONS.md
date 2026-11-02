@@ -4,12 +4,111 @@
 
 ---
 
+## TR-2026-11-02-13 — Statistics Agents = живые Automation KPI
+
+- **Дата:** 2026-11-02
+- **Суть:** Вкладка Agents на Statistics больше не рисует случайные «игры». Числа и графики из `IAutomationStore` с фильтром владельца / `automation.manage`. Success rate = succeeded / (succeeded + failed). Очередь = queued + running + waiting.
+- **Причина:** владелец: карточки и KPI секции Agents на реальных данных автоматизации; карточки не сдвигать при hover.
+- **Затрагивает:** `DashboardController` Index/GetStats/GetGamesByPeriod, `DashboardViewModel`, `Views/Dashboard/Index.cshtml`, hover CSS (dashboard, dashboards, profile, referral, layout).
+- **Последствия:** JSON ключи `gamesPlayed`/`victories`/`defeats`/`winRate` сохранены для существующего `dashboard.js`. Без права `automation.view` — нули. Браузер не проверялся.
+- **Альтернативы:** отдельная вкладка Automation рядом с Agents — отклонено, секция уже называлась Agents.
+
+---
+
+## TR-2026-11-02-12 — Automation hub: одна панель, таблица, overlay вместо страниц
+
+- **Дата:** 2026-11-02
+- **Суть:** Экран автоматизации — Index-хаб. Список без DataTable, действия строки открывают glass popup, билдер Drawflow и подключения — в overlay того же стиля. Левое меню содержит только панель Automation.
+- **Причина:** владелец: убрать пункты History/Templates/Connections/My Automations; не водить пользователя по страницам; таблица как у Grok.
+- **Затрагивает:** `_VerticalMenu`, `AutomationController` (panel actions + AJAX JSON), `Index.cshtml`, partials `_BuilderPanel` / `_HistoryPanel` / `_SettingsPanel` / `_ConnectionsPanel` / `_RunDetailsPanel` / `_DeletePanel` / `_HubOverlay`, `hub.js`, `builder.js` init/destroy, `create-popup.js`, `automation-builder.css`, resx en/ru/hy.
+- **Последствия:** миграций нет. Старые URL редиректят на Index с query (`edit`, `history`, `settings`, `run`, `connections`, `delete`). DataTable-опции List/History остаются в коде, хаб их не рендерит. Браузер не проверялся.
+- **Альтернативы:** оставить DataTable на List — отклонено, владелец явно запретил DataTable на этом экране. Полноэкранные страницы билдера — отклонено, нужен popup.
+
+---
+
+## TR-2026-11-02-11 — Automation UX: glass create popup, delay amount/unit, no sticky
+
+- **Дата:** 2026-11-02
+- **Суть:** Создание автоматизации — стеклянный popup (имя, описание, опциональный шаблон); запись в БД только на POST Save, затем Builder. Delay в UI — число + единица; в графе `amount`/`unit`, движок ещё принимает legacy `delay`/`startAfter`. Число без двоеточия = секунды (`TimeSpan.TryParse("90")` иначе даёт 90 дней). Delay-триггер на publish ставит wakeup без `RunId`; republish отменяет только такие, не delay-шаги живых run. Sticky на билдере снят, кнопки в glass-toolbar.
+- **Причина:** владелец: пользователь не должен гадать JSON; после сохранения сразу панель; sticky с автоматизации убрать.
+- **Затрагивает:** `DelayDuration`, `DelayActionHandler`, `ScheduleArmer`, `AutomationWorker`, dispatcher startAfter, `AutomationController` Create GET/POST, Views Automation + `_CreateAutomationPopup`, `builder.js`, `create-popup.js`, `automation-builder.css`, resx en/ru/hy.
+- **Последствия:** миграций нет. GET `/Automation/Create` редиректит на List. Шаблоны по-прежнему код-каталог. Браузер не проверялся.
+- **Альтернативы:** Bootstrap modal — отклонено, владелец просил стеклянный стиль как landing/plans. Оставить Config JSON для «продвинутых» — отклонено, пользователь не должен гадать поля.
+
+---
+
+## TR-2026-11-02-10 — Automation v1: child workflow, wait_until, settings/templates/HTTP
+
+- **Дата:** 2026-11-02
+- **Суть:** `execute_workflow` — fire-and-forget enqueue child с `Depth+1`, тот же `OwnerUserId`, published+active; чужой/удалённый id как 404. Parent не ждёт конца child. `wait_until` не попадает в completed, пока condition false; `until` — permanent fail. `StepResult.Retryable=false` для SSRF, IDOR, timeout; transient (нет коннектора) по-прежнему retry + backoff 2^(attempt-1) сек, max 60. Шаблоны — код-каталог, не INSERT в `AutomationTemplates` (без разрешения на данные БД). HTTP connection payload через тот же `ISecretProtector`.
+- **Причина:** владелец попросил закрыть процесс автоматизации, не PHASE 8 отчёт.
+- **Затрагивает:** `ExecuteWorkflowActionHandler`, `WaitUntilActionHandler`, `StepResult`, authoring settings/templates, store connections, UI Templates/Settings/Connections, меню.
+- **Последствия:** миграций нет. Child не блокирует parent. Google/Telegram connections по-прежнему вне v1.
+- **Альтернативы:** синхронный Advance child в том же tick — отклонено, HTTP-запрос/worker не должен исполнять дерево вглубь; depth живёт на run.
+
+---
+
+## TR-2026-11-02-09 — Automation PHASE 7: IDOR 404, cancel wakeup, SSRF без retry-обхода
+
+- **Дата:** 2026-11-02
+- **Суть:** Чужой id по-прежнему `KeyNotFoundException` (как 404), не 403. Удалённое определение скрыто и от `automation.manage`. `CancelAsync` отменяет pending/leased wakeup этого run; `AdvanceAsync` не трогает already cancelled/succeeded/failed. SSRF на литералах IP режется `PublicHttpGuard.IsAllowedAsync` до HTTP-клиента; неудачный шаг всё ещё ретраится до `RetryLimit` (как create_record без коннектора). Dry-run не резолвит/не вызывает `IEmailSender`.
+- **Причина:** PHASE 7 ARCHITECTURE §18–19; wakeup после cancel иначе мог Advance waiting-run.
+- **Затрагивает:** `AutomationRunService`, `IAutomationStore` (`CancelPendingWakeupsForRunAsync`), `ExecuteWorkflowActionHandler` (depth), `Partnerly.Automation.Tests`.
+- **Последствия:** `execute_workflow` child enqueue всё ещё stub («PHASE 5»). Браузер PHASE 6 не проверялся. Миграций нет.
+- **Альтернативы:** не ретраить permanent SSRF — отклонено в v1, единый retry для любого StepFailed.
+
+---
+
+## TR-2026-11-02-08 — Automation PHASE 6: Razor UI + Drawflow + HMAC webhook
+
+- **Дата:** 2026-11-02
+- **Суть:** UI в `Automation/Web` + `Views/Automation`. Список — существующий DataTable. Билдер — вендорный Drawflow (MIT), граф по-прежнему `nodes[]+edges[]`; x/y только сохраняются. Входящий webhook без cookie: HMAC `X-Partnerly-Signature`, неизвестный publicId → 404. Секрет в `WebhookSecretHash` через Data Protection (поле не переименовывали, миграции нет).
+- **Причина:** архитектура PHASE 6; React Flow по-прежнему отказ.
+- **Затрагивает:** `Automation/Web`, `Views/Automation`, `_VerticalMenu`, SharedResource en/ru/hy, `wwwroot/vendor/drawflow`, `AutomationWebhookIngestService`.
+- **Последствия:** шаблоны и HTTP connections в v1 — страницы-заглушки. Drawflow-маппинг branch/switch портов упрощённый (`true`/`false`, `default`/`case:0`). Браузерная проверка UI в этой сессии не выполнялась.
+- **Альтернативы:** CDN Drawflow без вендора — отклонено, UI не должен падать без jsdelivr.
+
+---
+
+## TR-2026-11-02-07 — Automation PHASE 5: коннекторы и события Partnerly
+
+- **Дата:** 2026-11-02
+- **Суть:** Коннекторы вызывают существующие сервисы. Видимость — owner-based дубль правил Super/Admin/Employee/User, не `IUserVisibilityService` (он завязан на CurrentUser HTTP). CUD-триггеры с `SaveChanges` interceptor после успешного commit; EventBus даёт отдельные `event` имена (`UserRegistered`, `SupportTicketCreated`, `SupportTicketStatusChanged`), чтобы не дублировать `entity.created`. Interceptor молчит при `RecursionGuard.Current > 0`. `IAutomationChangeSink` optional в `AppDbContext` (LogService создаёт контекст без sink). `EntityRegistry` Scoped с коннекторами в приложении; в тестах — пустой Singleton. Email/HTTP/notification резолвятся из `context.Services`, чтобы dry-run тесты не требовали `IEmailSender`. Исходящий HTTP без auto-redirect.
+- **Причина:** архитектура PHASE 5; цикл AppDbContext → interceptor → store → AppDbContext снят через `IServiceProvider` в interceptor.
+- **Затрагивает:** `Partnerly/Automation/Connectors`, `Integration`, `Actions`, `Helpers/PublicHttpGuard`, `AppDbContext`, `PermissionCodes`, `PermissionSeeder`, `Program.cs`, `WebPageInspectorService`.
+- **Последствия:** UI Automation ещё нет (PHASE 6). Входящий webhook controller — PHASE 6. Права `automation.*` появятся у Employee/User при следующем старте seeder (только добавление недостающих). Миграций в PHASE 5 нет.
+- **Альтернативы:** вешать dispatcher на существующие EventBus handlers — отклонено, EventBus уже умеет несколько handlers.
+
+---
+
+## TR-2026-11-02-06 — Automation PHASE 4: SQL wakeup + Cronos
+
+- **Дата:** 2026-11-02
+- **Суть:** Состояние Automation в SQL Server. Worker `IHostedService` арендует `AutomationWakeups` (batch 10, lease 30 с, poll 1 с). Cron — пакет Cronos 0.8.4, TZ через существующий `TimeZoneHelper` (`Asia/Yerevan` → Windows `Caucasus Standard Time`). Тесты оставляют in-memory store; приложение — `AutomationStore` + worker. Authoring не исполняет граф в HTTP: только `queued` + wakeup `start`.
+- **Причина:** архитектура PHASE 4; Hangfire по-прежнему не берём.
+- **Затрагивает:** `Partnerly/Automation/Persistence`, `Scheduler`, `Hosting/AutomationWorker`, `AppDbContext`, Cronos 0.8.4, миграция `20261102134353_AddAutomationTables`.
+- **Последствия:** миграция применена только на локальной БД. EnsureCreated существующую БД не дополнит (KI-002). Другие стенды не трогались. Сущности Automation **не** реализуют `IAuditableEntity`, чтобы worker SaveChanges не перетирал аудит текущим HTTP-пользователем.
+- **Альтернативы:** Hangfire — отклонено в TR-2026-11-02-04.
+
+---
+
+## TR-2026-11-02-05 — Automation PHASE 3: in-memory ядро
+
+- **Дата:** 2026-11-02
+- **Суть:** PHASE 3 — движок в `Partnerly/Automation/` с `InMemoryAutomationStore`. Registry хранит `Type` handler’ов (Transient из scope), не экземпляры. Переменные — `{{path}}` через regex, не Handlebars (Handlebars уже в приложении; подключить на UI-шаблонах). Cron-выражения бросают `NotSupportedException` до PHASE 4/Cronos. Чужой id → `KeyNotFoundException` (как 404). Dry-run пропускает email/HTTP/CUD. Delay ставит wakeup, не `Task.Delay`. `JsonNode.DeepClone`/`DeepEquals` на net6.0 нет — helper `JsonNodes`. В `Program.cs` access-сервис с `Guid.Empty` до PHASE 5 (HTTP authoring ещё нет).
+- **Причина:** архитектура PHASE 3 запрещает миграцию и UI; ядро должно проверяться unit-тестами.
+- **Затрагивает:** `Partnerly/Automation/*`, `Partnerly.Automation.Tests`, `Program.cs` (`AddPartnerlyAutomation()`).
+- **Последствия:** unit-тесты остаются на in-memory. Приложение с PHASE 4 использует EF (TR-2026-11-02-06). KI-011 закрыт только для Automation.
+- **Альтернативы:** сразу EF InMemory — отклонено, миграция и worker — PHASE 4.
+
+---
+
 ## TR-2026-11-02-04 — Automation: SQL wakeup, не Hangfire; граф + Drawflow
 
 - **Дата:** 2026-11-02
 - **Суть:** Universal Automation Platform живёт в `Partnerly/Automation/`. Состояние run/wakeup в SQL Server; воркер `IHostedService` с арендой строк. Hangfire/Quartz не используются. Workflow — JSON граф nodes/edges. Редактор Drawflow (vanilla JS). Cronos для cron+TZ. Коннекторы User/Ticket/Notification/Group/EmailTemplate. User и Employee владеют своими автоматизациями.
 - **Причина:** Hangfire — очередь джобов, не state machine; React Flow ломает Razor-стек.
-- **Затрагивает:** пока только `docs/ai/Automation/*`. Код и миграции — PHASE 3–4.
+- **Затрагивает:** `docs/ai/Automation/*`. Код ядра — PHASE 3 (TR-2026-11-02-05). Миграции — PHASE 4.
 - **Последствия:** миграция `Automation*` только локально по явному «да». Прод не трогать. EnsureCreated существующую БД не дополнит (KI-002).
 - **Альтернативы:** Hangfire + continuations — отклонено; xyflow/React — отклонено.
 

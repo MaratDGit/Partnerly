@@ -1,0 +1,71 @@
+@model Partnerly.Automation.Web.ViewModels.AutomationRunDetailsViewModel
+@{
+    var canRun = (ViewData["Permissions"] as HashSet<string>)?.Contains("automation.run") == true;
+}
+
+<div class="automation-hub-panel">
+    <p class="automation-create-kicker">@Localizer["History"]</p>
+    <h2>@Model.Definition.Name</h2>
+    <p class="automation-create-lead">@Model.Run.Status · @Model.Run.TriggerType</p>
+
+    <div class="d-flex flex-wrap gap-2 mb-3">
+        <button type="button"
+                class="btn btn-outline-secondary"
+                data-hub="history"
+                data-id="@Model.Definition.Id">
+            @Localizer["Back"]
+        </button>
+        @if (Model.Run.Status is "queued" or "running" or "waiting" && canRun)
+        {
+            <form asp-action="Cancel"
+                  asp-controller="Automation"
+                  asp-route-id="@Model.Run.Id"
+                  method="post"
+                  class="m-0"
+                  data-hub-ajax
+                  data-hub-stay
+                  data-hub-reload-run="@Model.Run.Id">
+                @Html.AntiForgeryToken()
+                <button type="submit" class="btn btn-outline-danger">@Localizer["Canceled"]</button>
+            </form>
+        }
+    </div>
+
+    @if (!string.IsNullOrEmpty(Model.Run.Error))
+    {
+        <div class="alert alert-danger">@Model.Run.Error</div>
+    }
+
+    <div class="table-responsive">
+        <table class="automation-hub-table automation-hub-table--compact">
+            <thead>
+                <tr>
+                    <th>@Localizer["Name"]</th>
+                    <th>@Localizer["Type"]</th>
+                    <th>@Localizer["Status"]</th>
+                    <th>@Localizer["Error"]</th>
+                </tr>
+            </thead>
+            <tbody>
+            @if (Model.Steps.Count == 0)
+            {
+                <tr>
+                    <td colspan="4" class="automation-hub-empty">@Localizer["AutomationEmptyRuns"]</td>
+                </tr>
+            }
+            else
+            {
+                foreach (var step in Model.Steps)
+                {
+                    <tr>
+                        <td>@step.NodeId</td>
+                        <td>@step.ActionType</td>
+                        <td>@step.Status</td>
+                        <td>@step.Error</td>
+                    </tr>
+                }
+            }
+            </tbody>
+        </table>
+    </div>
+</div>

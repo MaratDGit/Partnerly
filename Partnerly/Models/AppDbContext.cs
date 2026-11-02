@@ -1,4 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Partnerly.Automation.Integration;
+using Partnerly.Automation.Persistence.Configurations;
+using Partnerly.Automation.Persistence.Entities;
 using Partnerly.Descriptors.Messages;
 using Partnerly.Helpers;
 using Partnerly.Infrastructure.Interfaces;
@@ -11,13 +14,16 @@ namespace Partnerly.Models
     {
         public bool SkipValidations { get; set; } = false;
         private readonly ICurrentUserService _currentUserService;
+        private readonly IAutomationChangeSink? _changeSink;
 
         public AppDbContext(
             DbContextOptions<AppDbContext> options,
-            ICurrentUserService currentUserService)
+            ICurrentUserService currentUserService,
+            IAutomationChangeSink? changeSink = null)
             : base(options)
         {
             _currentUserService = currentUserService;
+            _changeSink = changeSink;
         }
 
         public DbSet<User>? Users { get; set; }
@@ -38,6 +44,15 @@ namespace Partnerly.Models
         public DbSet<RolePermission> RolePermissions => Set<RolePermission>();
         public DbSet<UserPermission> UserPermissions => Set<UserPermission>();
         public DbSet<AccessControlAuditLog> AccessControlAuditLogs => Set<AccessControlAuditLog>();
+
+        public DbSet<AutomationDefinition> Automations => Set<AutomationDefinition>();
+        public DbSet<AutomationVersion> AutomationVersions => Set<AutomationVersion>();
+        public DbSet<AutomationTrigger> AutomationTriggers => Set<AutomationTrigger>();
+        public DbSet<AutomationWakeup> AutomationWakeups => Set<AutomationWakeup>();
+        public DbSet<AutomationRun> AutomationRuns => Set<AutomationRun>();
+        public DbSet<AutomationRunStep> AutomationRunSteps => Set<AutomationRunStep>();
+        public DbSet<AutomationConnection> AutomationConnections => Set<AutomationConnection>();
+        public DbSet<AutomationTemplate> AutomationTemplates => Set<AutomationTemplate>();
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -163,14 +178,22 @@ namespace Partnerly.Models
                 .HasMaxLength(100)
                 .IsRequired();
 
+            modelBuilder.ApplyConfigurationsFromAssembly(typeof(AutomationDefinitionConfiguration).Assembly);
 
             base.OnModelCreating(modelBuilder);
         }
 
         public override async Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
         {
+            var changes = _changeSink?.Capture(ChangeTracker)
+                          ?? (IReadOnlyList<AutomationEntityChange>)Array.Empty<AutomationEntityChange>();
+
             if (SkipValidations)
-                return await base.SaveChangesAsync(cancellationToken);
+            {
+                var skipped = await base.SaveChangesAsync(cancellationToken);
+                await PublishChangesAsync(changes, cancellationToken);
+                return skipped;
+            }
 
             var entries = ChangeTracker.Entries()
             .Where(e => e.Entity is IAuditableEntity &&
@@ -235,7 +258,16 @@ namespace Partnerly.Models
                     throw new ValidationException(String.Format(ErrorMessages.RequiredFieldsValidationFailed, result));
             }
 
-            return await base.SaveChangesAsync(cancellationToken);
+            var saved = await base.SaveChangesAsync(cancellationToken);
+            await PublishChangesAsync(changes, cancellationToken);
+            return saved;
+        }
+
+        private Task PublishChangesAsync(IReadOnlyList<AutomationEntityChange> changes, CancellationToken cancellationToken)
+        {
+            return _changeSink == null || changes.Count == 0
+                ? Task.CompletedTask
+                : _changeSink.PublishAsync(changes, cancellationToken);
         }
     }
 }

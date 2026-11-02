@@ -50,6 +50,16 @@ namespace Partnerly.Models.Authorization
         public const string DataTableViewIds = "datatable.view_ids";
         public const string DataTableBulkDelete = "datatable.bulk_delete";
 
+        public const string AutomationView = "automation.view";
+        public const string AutomationCreate = "automation.create";
+        public const string AutomationEdit = "automation.edit";
+        public const string AutomationDelete = "automation.delete";
+        public const string AutomationPublish = "automation.publish";
+        public const string AutomationRun = "automation.run";
+        public const string AutomationHistory = "automation.history";
+        public const string AutomationConnections = "automation.connections";
+        public const string AutomationManage = "automation.manage";
+
         public static readonly string[] All =
         {
             UsersView, UsersCreate, UsersEdit, UsersDelete, UsersManageRoles,
@@ -65,7 +75,9 @@ namespace Partnerly.Models.Authorization
             AiUse,
             WebInspectorUse,
             DataTableViewIds,
-            DataTableBulkDelete
+            DataTableBulkDelete,
+            AutomationView, AutomationCreate, AutomationEdit, AutomationDelete, AutomationPublish,
+            AutomationRun, AutomationHistory, AutomationConnections, AutomationManage
         };
     }
 }

@@ -242,7 +242,6 @@
 }
 
 .referral-tree-node:hover {
-    transform: translateY(-3px);
     box-shadow: 0 16px 30px rgba(50, 71, 92, 0.14);
     border-color: rgba(105, 108, 255, 0.4);
 }
