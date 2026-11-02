@@ -174,4 +174,6 @@ dotnet build "Partnerly.sln"
 | `docs/ai/WORK_LOG.md` | Журнал работ |
 | `docs/ai/CONTINUATION_OF_WORK.md` | Контекст следующей сессии |
 | `docs/ai/REPORT_TEMPLATE.md` | Шаблон отчёта |
+| `docs/ai/Automation/MASTER-SPECIFICATION.md` | Спецификация Universal Automation Platform |
+| `docs/ai/Automation/PHASE-1-ANALYSIS.md` | Анализ PHASE 1 и предложение архитектуры |
 | `docs/reports/` | Готовые отчёты |

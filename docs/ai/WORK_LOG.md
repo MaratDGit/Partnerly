@@ -4,6 +4,15 @@
 
 ---
 
+## 2026-11-02 — Automation PHASE 1: спецификация и анализ
+
+- **Суть:** владелец задал Universal Automation Platform; файл был только на локальном диске `F:\...\docs\ai\Automation\MASTER-SPECIFICATION.md`.
+- **Сделано:** спецификация в репозитории `docs/ai/Automation/MASTER-SPECIFICATION.md`; анализ Partnerly без правок кода — `docs/ai/Automation/PHASE-1-ANALYSIS.md`. Код приложения не менялся. Реализация ядра не начиналась (спека: стоп до проверки).
+- **Решения (предложение, не внедрялось):** не Hangfire; SQL wakeup + Cronos; граф nodes/edges; Drawflow; коннекторы User/Ticket/Notification/Group/EmailTemplate.
+- **Сборка / браузер:** не требовались (только markdown).
+
+---
+
 ## 2026-11-02 — ViewCase: Save в sticky для заметки
 
 - **Суть:** на View Case в sticky появилась кнопка Save, как на Edit User / System Settings. Неактивна, пока заметка не изменена. После OK в модалке заметки Save включается и пишет Note в SupportTicket, остаётся на ViewCase.
