@@ -621,13 +621,42 @@ html.partnerly-language-switching {
     box-shadow: 0 2px 8px rgba(50, 71, 92, 0.12);
 }
 
-.partnerly-user-menu {
+.partnerly-user-menu.dropdown-menu {
+    --bs-dropdown-min-width: 0;
+    display: block !important;
+    top: calc(100% + 10px);
+    right: 0;
+    left: auto;
     min-width: 245px;
     padding: 7px;
-    border: 1px solid #e7e9ed;
+    overflow: visible;
+    border: 1px solid rgba(99, 102, 241, 0.18);
     border-radius: 14px;
-    box-shadow: 0 12px 40px rgba(50, 71, 92, 0.14);
+    background: linear-gradient(180deg, rgba(255, 255, 255, 0.97), rgba(248, 249, 252, 0.94));
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.95), 0 16px 40px rgba(50, 71, 92, 0.16);
+    backdrop-filter: blur(22px);
+    -webkit-backdrop-filter: blur(22px);
+    visibility: hidden;
+    opacity: 0;
+    pointer-events: none;
+    transform: translateY(-8px) scale(0.96);
+    transform-origin: calc(100% - 22px) -8px;
+    transition:
+        opacity 0.2s ease,
+        transform 0.26s cubic-bezier(.2, .9, .22, 1),
+        visibility 0s linear 0.26s;
 }
+
+    .partnerly-user-menu.dropdown-menu.show {
+        visibility: visible;
+        opacity: 1;
+        pointer-events: auto;
+        transform: translateY(0) scale(1);
+        transition:
+            opacity 0.18s ease,
+            transform 0.26s cubic-bezier(.2, .9, .22, 1),
+            visibility 0s;
+    }
 
 .partnerly-user-header {
     display: flex;
@@ -647,6 +676,7 @@ html.partnerly-language-switching {
 
 .partnerly-user-info {
     min-width: 0;
+    flex: 1;
 }
 
 .partnerly-user-name {
@@ -660,28 +690,78 @@ html.partnerly-language-switching {
 }
 
 .partnerly-user-ref {
-    display: block;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    min-width: 0;
     margin-top: 2px;
     color: #a1acb8;
     font-size: 0.72rem;
-    white-space: nowrap;
+}
+
+.partnerly-user-ref-code {
+    min-width: 0;
     overflow: hidden;
     text-overflow: ellipsis;
+    white-space: nowrap;
 }
+
+.partnerly-user-ref-copy {
+    width: 22px;
+    height: 22px;
+    flex: 0 0 22px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0;
+    border: 1px solid transparent;
+    border-radius: 6px;
+    color: inherit;
+    background: transparent;
+    cursor: pointer;
+    transition: color .2s ease, background .2s ease, border-color .2s ease, box-shadow .2s ease;
+}
+
+    .partnerly-user-ref-copy i {
+        font-size: 14px;
+        line-height: 1;
+    }
+
+    .partnerly-user-ref-copy:hover,
+    .partnerly-user-ref-copy:focus-visible {
+        color: #696cff;
+        background: linear-gradient(180deg, rgba(255, 255, 255, 0.78), rgba(105, 108, 255, 0.10));
+        border-color: rgba(99, 102, 241, 0.18);
+        box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.88);
+        outline: none;
+    }
+
+    .partnerly-user-ref-copy.is-copied,
+    .partnerly-user-ref-copy.is-copied:hover {
+        color: #22c55e;
+        background: rgba(34, 197, 94, 0.12);
+        border-color: rgba(34, 197, 94, 0.22);
+        box-shadow: none;
+    }
 
 .partnerly-user-menu .dropdown-item {
     display: flex;
     align-items: center;
     min-height: 40px;
+    border: 1px solid transparent;
     border-radius: 8px;
     color: #566a7f;
     font-size: 0.84rem;
     font-weight: 500;
+    transition: color .2s ease, background .2s ease, border-color .2s ease, box-shadow .2s ease;
 }
 
-    .partnerly-user-menu .dropdown-item:hover {
-        background: rgba(105, 108, 255, 0.08);
+    .partnerly-user-menu .dropdown-item:hover,
+    .partnerly-user-menu .dropdown-item:focus {
         color: #696cff;
+        background: linear-gradient(180deg, rgba(255, 255, 255, 0.78), rgba(105, 108, 255, 0.10));
+        border-color: rgba(99, 102, 241, 0.18);
+        box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.88);
     }
 
     .partnerly-user-menu .dropdown-item i {
@@ -931,7 +1011,6 @@ html[data-theme="dark"] .partnerly-navbar-action {
    ========================================================= */
 
 html[data-theme="dark"] .partnerly-language-menu,
-html[data-theme="dark"] .partnerly-user-menu,
 html[data-theme="dark"] .partnerly-theme-menu {
     color: #c5cee0;
     background: #151c2c;
@@ -939,18 +1018,33 @@ html[data-theme="dark"] .partnerly-theme-menu {
     box-shadow: 0 12px 32px rgba(0, 0, 0, 0.30), 0 0 18px rgba(105, 108, 255, 0.08);
 }
 
+html[data-theme="dark"] .partnerly-user-menu.dropdown-menu {
+    color: #c5cee0;
+    background: linear-gradient(180deg, rgba(28, 34, 52, 0.96), rgba(18, 22, 40, 0.94));
+    border-color: rgba(167, 139, 250, 0.28);
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.10), 0 16px 40px rgba(0, 0, 0, 0.42);
+    backdrop-filter: blur(22px);
+    -webkit-backdrop-filter: blur(22px);
+}
+
     html[data-theme="dark"] .partnerly-user-menu .dropdown-item,
     html[data-theme="dark"] .partnerly-theme-menu .dropdown-item {
         color: #c5cee0;
     }
 
-        html[data-theme="dark"] .partnerly-user-menu .dropdown-item:hover,
         html[data-theme="dark"] .partnerly-theme-menu .dropdown-item:hover {
             color: #aeb1ff;
             background: rgba(129, 133, 255, 0.13);
         }
 
-        html[data-theme="dark"] .partnerly-user-menu .dropdown-item:focus,
+        html[data-theme="dark"] .partnerly-user-menu .dropdown-item:hover,
+        html[data-theme="dark"] .partnerly-user-menu .dropdown-item:focus {
+            color: #aeb1ff;
+            background: linear-gradient(180deg, rgba(255, 255, 255, 0.10), rgba(18, 22, 40, 0.42));
+            border-color: rgba(167, 139, 250, 0.22);
+            box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.14);
+        }
+
         html[data-theme="dark"] .partnerly-theme-menu .dropdown-item:focus {
             color: #edf2ff;
             background: rgba(129, 133, 255, 0.16);
@@ -1110,6 +1204,22 @@ html[data-theme="dark"] .partnerly-user-ref {
     color: #8996b0;
 }
 
+html[data-theme="dark"] .partnerly-user-ref-copy:hover,
+html[data-theme="dark"] .partnerly-user-ref-copy:focus-visible {
+    color: #55b7ff;
+    background: linear-gradient(180deg, rgba(255, 255, 255, 0.10), rgba(18, 22, 40, 0.42));
+    border-color: rgba(167, 139, 250, 0.22);
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.14);
+}
+
+html[data-theme="dark"] .partnerly-user-ref-copy.is-copied,
+html[data-theme="dark"] .partnerly-user-ref-copy.is-copied:hover {
+    color: #4ade80;
+    background: rgba(34, 197, 94, 0.16);
+    border-color: rgba(74, 222, 128, 0.28);
+    box-shadow: none;
+}
+
 html[data-theme="dark"] .partnerly-user-menu .dropdown-item i {
     color: #8996b0;
 }
@@ -1192,7 +1302,10 @@ html[data-theme="dark"] .badge-animate {
     .partnerly-notification-button i,
     .partnerly-language-button img,
     .partnerly-language-option,
-    .partnerly-language-menu.dropdown-menu {
+    .partnerly-language-menu.dropdown-menu,
+    .partnerly-user-menu.dropdown-menu,
+    .partnerly-user-ref-copy,
+    .partnerly-user-menu .dropdown-item {
         transition: none !important;
     }
 
@@ -1201,7 +1314,8 @@ html[data-theme="dark"] .badge-animate {
         transform: none;
     }
 
-    .partnerly-language-menu.dropdown-menu:not(.show) {
+    .partnerly-language-menu.dropdown-menu:not(.show),
+    .partnerly-user-menu.dropdown-menu:not(.show) {
         transform: none;
     }
 

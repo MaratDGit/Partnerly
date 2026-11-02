@@ -45,6 +45,12 @@
                 return;
             }
 
+            var scroller =
+                ctx.root.querySelector(
+                    ".table-responsive"
+                ) ||
+                table.parentElement;
+
             var headers =
                 headerRow.querySelectorAll("th");
 
@@ -183,6 +189,29 @@
             }
 
 
+            function isSelectedField(
+                field
+            ) {
+
+                return String(field || "")
+                    .toLowerCase() ===
+                    "selected";
+            }
+
+
+            function isColumnHidden(
+                column
+            ) {
+
+                return Boolean(
+                    column.header &&
+                    column.header.classList.contains(
+                        "data-table-col-hidden"
+                    )
+                );
+            }
+
+
             function getColumnConfig(
                 field
             ) {
@@ -286,7 +315,8 @@
 
 
             function normalizeWidth(
-                width
+                width,
+                field
             ) {
 
                 width =
@@ -298,59 +328,82 @@
                     width = minWidth;
                 }
 
-                return Math.max(
+                width = Math.max(
                     minWidth,
                     Math.round(width)
                 );
+
+                if (
+                    isSelectedField(field)
+                ) {
+                    width = Math.min(width, 60);
+                }
+
+                return width;
             }
 
 
             function setColumnWidth(
                 column,
+                width,
+                skipLayout
+            ) {
+
+                column.width =
+                    normalizeWidth(
+                        width,
+                        column.field
+                    );
+
+                if (!skipLayout) {
+                    applyLayout();
+                }
+            }
+
+
+            function applyDisplayWidth(
+                column,
                 width
             ) {
 
                 width =
-                    normalizeWidth(width);
-
-                column.width =
-                    width;
+                    normalizeWidth(
+                        width,
+                        column.field
+                    );
 
                 column.col.style.width =
                     width + "px";
 
-                /*
-                 * Keep the header explicitly
-                 * synchronized as well.
-                 */
-
                 column.header.style.width =
                     width + "px";
-            }
-
-
-            function getCurrentColumnWidth(
-                column
-            ) {
-
-                var width =
-                    column.col.getBoundingClientRect()
-                        .width;
 
                 if (
-                    !width ||
-                    width <= 0
+                    isSelectedField(
+                        column.field
+                    )
                 ) {
 
-                    width =
-                        column.header
-                            .getBoundingClientRect()
-                            .width;
+                    column.col.style.minWidth =
+                        "60px";
+                    column.col.style.maxWidth =
+                        "60px";
+                    column.header.style.minWidth =
+                        "60px";
+                    column.header.style.maxWidth =
+                        "60px";
                 }
+                else {
 
-                return normalizeWidth(
-                    width
-                );
+                    column.col.style.minWidth =
+                        "";
+                    column.col.style.maxWidth =
+                        "";
+                    column.header.style.minWidth =
+                        "";
+                    column.header.style.maxWidth =
+                        "";
+                }
             }
 
 
@@ -363,7 +416,8 @@
 
                         result[column.field] =
                             normalizeWidth(
-                                column.width
+                                column.width,
+                                column.field
                             );
                     }
                 );
@@ -441,7 +495,8 @@
 
                 width =
                     normalizeWidth(
-                        width
+                        width,
+                        field
                     );
 
 
@@ -464,7 +519,8 @@
 
                     width =
                         normalizeWidth(
-                            configuredWidth
+                            configuredWidth,
+                            field
                         );
                 }
 
@@ -566,18 +622,22 @@
 
                             column.width =
                                 normalizeWidth(
-                                    savedWidth
+                                    savedWidth,
+                                    column.field
                                 );
                         }
                     }
 
 
-                    setColumnWidth(
-                        column,
-                        column.width
-                    );
+                    column.width =
+                        normalizeWidth(
+                            column.width,
+                            column.field
+                        );
                 }
             );
+
+            applyLayout();
 
 
             /*
@@ -599,8 +659,8 @@
                      */
 
                     if (
-                        config &&
-                        config.resizable === false
+                        (config && config.resizable === false) ||
+                        isSelectedField(column.field)
                     ) {
                         return;
                     }
@@ -670,9 +730,7 @@
                                 event.clientX;
 
                             var startWidth =
-                                getCurrentColumnWidth(
-                                    column
-                                );
+                                column.width;
 
 
                             /*
@@ -709,7 +767,8 @@
 
                                 newWidth =
                                     normalizeWidth(
-                                        newWidth
+                                        newWidth,
+                                        column.field
                                     );
 
 
@@ -754,6 +813,8 @@
                                  * Save exact widths
                                  * after resize.
                                  */
+
+                                applyLayout();
 
                                 saveWidths(
                                     collectWidths()
@@ -903,27 +964,222 @@
             }
 
 
-            function syncTableWidth() {
+            var layoutLock = false;
 
-                var total = 0;
+
+            function applyLayout() {
+
+                if (layoutLock) {
+                    return;
+                }
+
+                var available = 0;
+
+                if (scroller) {
+                    available =
+                        scroller.clientWidth;
+                }
+
+                var visible = [];
+                var logicalTotal = 0;
 
                 columns.forEach(
                     function (column) {
 
-                        total += column.width;
+                        if (
+                            isColumnHidden(
+                                column
+                            )
+                        ) {
+
+                            applyDisplayWidth(
+                                column,
+                                column.width
+                            );
+
+                            return;
+                        }
+
+                        if (
+                            isSelectedField(
+                                column.field
+                            )
+                        ) {
+                            column.width = 60;
+                        }
+
+                        var logical =
+                            normalizeWidth(
+                                column.width,
+                                column.field
+                            );
+
+                        column.width =
+                            logical;
+
+                        visible.push({
+                            column: column,
+                            logical: logical
+                        });
+
+                        logicalTotal +=
+                            logical;
                     }
                 );
 
-                if (total > 0) {
+                var extra = 0;
+
+                if (
+                    available > 0 &&
+                    logicalTotal > 0
+                ) {
+                    extra =
+                        available -
+                        logicalTotal;
+                }
+
+                var extraTargets = [];
+                var extraBase = 0;
+
+                if (extra > 0) {
+
+                    for (
+                        var v = 0;
+                        v < visible.length;
+                        v++
+                    ) {
+
+                        var candidate =
+                            visible[v];
+
+                        if (
+                            isSelectedField(
+                                candidate.column.field
+                            ) ||
+                            candidate.column.field ===
+                            "__actions"
+                        ) {
+                            continue;
+                        }
+
+                        extraTargets.push(
+                            candidate
+                        );
+
+                        extraBase +=
+                            candidate.logical;
+                    }
+
+                    if (
+                        !extraTargets.length
+                    ) {
+
+                        for (
+                            var a = 0;
+                            a < visible.length;
+                            a++
+                        ) {
+
+                            if (
+                                !isSelectedField(
+                                    visible[a]
+                                        .column
+                                        .field
+                                )
+                            ) {
+
+                                extraTargets.push(
+                                    visible[a]
+                                );
+
+                                extraBase +=
+                                    visible[a]
+                                        .logical;
+                            }
+                        }
+                    }
+                }
+
+                var remainingExtra =
+                    extra > 0
+                        ? extra
+                        : 0;
+
+                visible.forEach(
+                    function (item) {
+
+                        var display =
+                            item.logical;
+
+                        var targetIndex =
+                            extraTargets.indexOf(
+                                item
+                            );
+
+                        if (
+                            extra > 0 &&
+                            targetIndex !== -1 &&
+                            extraBase > 0
+                        ) {
+
+                            var share;
+
+                            if (
+                                targetIndex ===
+                                extraTargets.length - 1
+                            ) {
+                                share =
+                                    remainingExtra;
+                            }
+                            else {
+
+                                share =
+                                    Math.floor(
+                                        extra *
+                                        (
+                                            item.logical /
+                                            extraBase
+                                        )
+                                    );
+
+                                remainingExtra -=
+                                    share;
+                            }
+
+                            display =
+                                item.logical +
+                                share;
+                        }
+
+                        applyDisplayWidth(
+                            item.column,
+                            display
+                        );
+                    }
+                );
+
+                var tableWidth =
+                    logicalTotal;
+
+                if (
+                    extra > 0 &&
+                    extraTargets.length &&
+                    available > 0
+                ) {
+                    tableWidth =
+                        available;
+                }
+
+                if (tableWidth > 0) {
 
                     table.style.width =
-                        total + "px";
+                        tableWidth + "px";
+
+                    table.style.minWidth =
+                        tableWidth + "px";
 
                     table.style.maxWidth =
                         "none";
-
-                    table.style.minWidth =
-                        total + "px";
                 }
             }
 
@@ -987,6 +1243,10 @@
             function measureActionsColumnWidth(
                 column
             ) {
+
+                layoutLock = true;
+
+                try {
 
                 var extra = 10;
 
@@ -1171,6 +1431,11 @@
                 }
 
                 return maxWidth + extra;
+
+                }
+                finally {
+                    layoutLock = false;
+                }
             }
 
 
@@ -1208,7 +1473,8 @@
                                     column,
                                     measureActionsColumnWidth(
                                         column
-                                    )
+                                    ),
+                                    true
                                 );
 
                                 return;
@@ -1276,12 +1542,13 @@
 
                             setColumnWidth(
                                 column,
-                                titleWidth + padding + extra
+                                titleWidth + padding + extra,
+                                true
                             );
                         }
                     );
 
-                    syncTableWidth();
+                    applyLayout();
 
                     saveWidths(
                         collectWidths()
@@ -1313,6 +1580,10 @@
              * =========================================================
              */
 
+            ctx.applyColumnLayout =
+                applyLayout;
+
+
             ctx.resetColumnWidths =
                 function () {
 
@@ -1334,6 +1605,31 @@
 
                     window.location.reload();
                 };
+
+
+            if (
+                window.ResizeObserver &&
+                scroller
+            ) {
+
+                var layoutObserver =
+                    new window.ResizeObserver(
+                        function () {
+                            applyLayout();
+                        }
+                    );
+
+                layoutObserver.observe(
+                    scroller
+                );
+            }
+            else {
+
+                window.addEventListener(
+                    "resize",
+                    applyLayout
+                );
+            }
         }
     };
 

@@ -12,6 +12,16 @@
         .Where(column => CanTable(column.Permission))
         .ToList();
 
+    var selectedColumnIndex = tableColumns.FindIndex(column =>
+        string.Equals(column.Field, "Selected", StringComparison.OrdinalIgnoreCase));
+
+    if (selectedColumnIndex > 0)
+    {
+        var selectedColumn = tableColumns[selectedColumnIndex];
+        tableColumns.RemoveAt(selectedColumnIndex);
+        tableColumns.Insert(0, selectedColumn);
+    }
+
     var visibleActions = (Model.Actions?.Items ?? new List<DataTableAction>())
         .Where(action => CanTable(action.Permission))
         .ToList();

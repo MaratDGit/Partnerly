@@ -685,10 +685,12 @@
                                             ) !== -1;
 
                                         html +=
-                                            '<td class="data-table-row-select-cell" ' +
+                                            '<td class="data-table-row-select-cell data-table-align-center" ' +
                                             'data-field="' +
                                             ctx.escapeHtml(column.field) +
                                             '">' +
+
+                                            '<div class="data-table-select-cell-inner">' +
 
                                             '<input type="checkbox" ' +
                                             'class="data-table-row-select" ' +
@@ -701,6 +703,8 @@
                                                     : ''
                                             ) +
                                             '>' +
+
+                                            '</div>' +
 
                                             '</td>';
 

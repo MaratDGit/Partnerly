@@ -62,8 +62,11 @@ namespace Partnerly.Models.DataTable
             Searchable = false,
             Exportable = false,
             Editable = false,
+            Sortable = false,
+            Resizable = false,
+            Reorderable = false,
             Alignment = DataTableAlignment.Center,
-            Width = "52px"
+            Width = "60px"
         };
     }
 

@@ -9,6 +9,8 @@
     --partnerly-primary-hover: rgba(105, 108, 255, 0.14);
     --partnerly-sidebar-width: 260px;
     --partnerly-sidebar-collapsed-width: 82px;
+    --partnerly-sidebar-pad-x: 12px;
+    --partnerly-sidebar-scroll-size: 8px;
     --partnerly-navbar-height: 60px;
     --partnerly-text: #566a7f;
     --partnerly-text-dark: #32475c;
@@ -240,30 +242,57 @@ body {
     min-height: 0;
     overflow-y: auto;
     overflow-x: hidden;
-    padding: 14px 12px 12px;
-    scrollbar-width: thin;
+    padding: 14px var(--partnerly-sidebar-pad-x) 12px;
+    scrollbar-width: none;
+    scrollbar-color: transparent transparent;
 }
 
 
     .partnerly-sidebar-content::-webkit-scrollbar {
-        width: 5px;
+        width: 0;
     }
 
 
     .partnerly-sidebar-content::-webkit-scrollbar-track {
+        margin: 10px 0;
         background: transparent;
     }
 
 
     .partnerly-sidebar-content::-webkit-scrollbar-thumb {
-        background: rgba(105, 108, 255, 0.18);
-        border-radius: 20px;
+        background: transparent;
+        border: 2px solid transparent;
+        border-radius: 999px;
+        background-clip: padding-box;
     }
 
 
-        .partnerly-sidebar-content::-webkit-scrollbar-thumb:hover {
-            background: rgba(105, 108, 255, 0.35);
-        }
+.partnerly-sidebar:hover .partnerly-sidebar-content,
+.partnerly-sidebar:focus-within .partnerly-sidebar-content {
+    padding-right: calc(var(--partnerly-sidebar-pad-x) - var(--partnerly-sidebar-scroll-size));
+    scrollbar-width: thin;
+    scrollbar-color: rgba(105, 108, 255, 0.5) transparent;
+}
+
+
+    .partnerly-sidebar:hover .partnerly-sidebar-content::-webkit-scrollbar,
+    .partnerly-sidebar:focus-within .partnerly-sidebar-content::-webkit-scrollbar {
+        width: var(--partnerly-sidebar-scroll-size);
+    }
+
+
+    .partnerly-sidebar:hover .partnerly-sidebar-content::-webkit-scrollbar-thumb,
+    .partnerly-sidebar:focus-within .partnerly-sidebar-content::-webkit-scrollbar-thumb {
+        background: linear-gradient(180deg, rgba(105, 108, 255, 0.62), rgba(167, 139, 250, 0.52));
+        background-clip: padding-box;
+    }
+
+
+    .partnerly-sidebar:hover .partnerly-sidebar-content::-webkit-scrollbar-thumb:hover,
+    .partnerly-sidebar:focus-within .partnerly-sidebar-content::-webkit-scrollbar-thumb:hover {
+        background: linear-gradient(180deg, rgba(105, 108, 255, 0.82), rgba(167, 139, 250, 0.72));
+        background-clip: padding-box;
+    }
 
 
 /* =========================================================
@@ -357,7 +386,7 @@ body {
     max-height: 1000px;
     overflow: hidden;
     opacity: 1;
-    transition: max-height .3s ease, opacity .2s ease;
+    transition: max-height .42s cubic-bezier(.22, 1, .36, 1), opacity .28s ease;
 }
 
 
@@ -402,6 +431,7 @@ body {
     align-items: center;
     gap: 9px;
     padding: 6px 10px;
+    border: 1px solid transparent;
     border-radius: 10px;
     text-decoration: none !important;
     color: var(--partnerly-text) !important;
@@ -409,14 +439,24 @@ body {
     font-weight: 500;
     white-space: nowrap;
     overflow: hidden;
-    transition: background-color .2s ease, color .2s ease, box-shadow .2s ease, transform .2s ease;
+    transition: background .32s ease, color .32s ease, box-shadow .32s ease, transform .32s ease, border-color .32s ease;
 }
 
 
     .partnerly-menu-link:hover {
         color: var(--partnerly-primary) !important;
-        background: var(--partnerly-primary-light);
+        background: linear-gradient(180deg, rgba(255, 255, 255, 0.78), rgba(105, 108, 255, 0.10));
+        border-color: rgba(99, 102, 241, 0.18);
+        box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.88);
+        backdrop-filter: blur(14px);
+        -webkit-backdrop-filter: blur(14px);
         transform: translateX(1px);
+    }
+
+    .partnerly-menu-link:hover .partnerly-menu-icon {
+        color: var(--partnerly-primary);
+        background: transparent;
+        box-shadow: none;
     }
 
 
@@ -465,21 +505,25 @@ body {
 
 .partnerly-menu-item.active .partnerly-menu-link {
     color: var(--partnerly-primary) !important;
-    background: var(--partnerly-primary-hover);
-    box-shadow: none;
+    background: linear-gradient(180deg, rgba(255, 255, 255, 0.86), rgba(105, 108, 255, 0.14));
+    border-color: rgba(99, 102, 241, 0.26);
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.92);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
 }
 
 
 .partnerly-menu-item.active .partnerly-menu-icon {
-    color: #fff;
-    background: var(--partnerly-primary);
-    box-shadow: 0 4px 10px rgba(105, 108, 255, 0.22);
-    border-radius: 7px;
+    color: var(--partnerly-primary);
+    background: transparent;
+    box-shadow: none;
+    border-radius: 0;
 }
 
 
 .partnerly-menu-item.active .partnerly-menu-link:hover {
     transform: none;
+    background: linear-gradient(180deg, rgba(255, 255, 255, 0.92), rgba(105, 108, 255, 0.16));
 }
 
 
@@ -670,23 +714,24 @@ body.partnerly-sidebar-collapsed
 
 body.partnerly-sidebar-collapsed
 .partnerly-menu-link {
+    flex-direction: column;
     justify-content: center;
-    gap: 0;
-    padding-left: 8px;
-    padding-right: 8px;
+    align-items: center;
+    gap: 2px;
+    min-height: 58px;
+    padding: 6px 4px 5px;
+    white-space: normal;
+    text-align: center;
 }
 
 
 @media (min-width: 1200px) {
     body.partnerly-sidebar-collapsed .partnerly-menu-link {
-        padding: 2px 0;
-        box-shadow: none;
+        padding: 6px 4px 5px;
         transform: none;
     }
 
     body.partnerly-sidebar-collapsed .partnerly-menu-link:hover {
-        background: transparent;
-        box-shadow: none;
         transform: none;
     }
 }
@@ -694,16 +739,43 @@ body.partnerly-sidebar-collapsed
 
 body.partnerly-sidebar-collapsed
 .partnerly-menu-icon {
+    width: 22px;
+    min-width: 22px;
+    height: 22px;
     margin: 0;
 }
 
 
-/* ---------------------------------------------------------
-   Hide text / badges / external icons
-   --------------------------------------------------------- */
+body.partnerly-sidebar-collapsed
+.partnerly-menu-icon i {
+    width: 16px;
+    height: 16px;
+    line-height: 16px;
+}
+
 
 body.partnerly-sidebar-collapsed
-.partnerly-menu-text,
+.partnerly-menu-text {
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    flex: 0 1 auto;
+    width: 100%;
+    max-width: 100%;
+    overflow: hidden;
+    font-size: 0.62rem;
+    font-weight: 600;
+    line-height: 1.15;
+    text-align: center;
+    white-space: normal;
+    word-break: break-word;
+}
+
+
+/* ---------------------------------------------------------
+   Hide badges / external icons
+   --------------------------------------------------------- */
+
 body.partnerly-sidebar-collapsed
 .partnerly-menu-badge,
 body.partnerly-sidebar-collapsed
@@ -1076,14 +1148,44 @@ Preserve natural page scrolling on smaller screens
     }
 
     body.partnerly-sidebar-collapsed .partnerly-menu-link {
+        flex-direction: row;
         justify-content: flex-start;
+        align-items: center;
         gap: 9px;
+        min-height: 40px;
         padding-left: 11px;
         padding-right: 11px;
+        white-space: nowrap;
+        text-align: left;
     }
 
     body.partnerly-sidebar-collapsed .partnerly-menu-icon {
+        width: 36px;
+        min-width: 36px;
+        height: 36px;
         margin: 0;
+    }
+
+    body.partnerly-sidebar-collapsed .partnerly-menu-icon i {
+        width: 19px;
+        height: 19px;
+        line-height: 19px;
+    }
+
+    body.partnerly-sidebar-collapsed .partnerly-menu-text {
+        display: block;
+        -webkit-line-clamp: unset;
+        -webkit-box-orient: unset;
+        flex: 1;
+        width: auto;
+        font-size: inherit;
+        font-weight: 500;
+        line-height: inherit;
+        text-align: left;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        word-break: normal;
     }
 
     body.partnerly-sidebar-collapsed .partnerly-sidebar-footer-content {
@@ -1159,8 +1261,9 @@ Preserve natural page scrolling on smaller screens
 
 
     .partnerly-sidebar-content {
-        padding-left: 10px;
-        padding-right: 10px;
+        --partnerly-sidebar-pad-x: 10px;
+        padding-left: var(--partnerly-sidebar-pad-x);
+        padding-right: var(--partnerly-sidebar-pad-x);
     }
 
 
@@ -1246,7 +1349,8 @@ input[type="radio"]:checked {
     }
 
     .partnerly-sidebar-content {
-        padding: 12px 10px;
+        --partnerly-sidebar-pad-x: 10px;
+        padding: 12px var(--partnerly-sidebar-pad-x);
     }
 
 }
@@ -1314,7 +1418,8 @@ input[type="radio"]:checked {
     }
 
     .partnerly-sidebar-content {
-        padding: 12px 10px;
+        --partnerly-sidebar-pad-x: 10px;
+        padding: 12px var(--partnerly-sidebar-pad-x);
     }
 
     .partnerly-sidebar-footer {
@@ -1593,12 +1698,21 @@ html[data-theme="dark"] {
             box-shadow: 0 0 15px rgba(105, 108, 255, 0.12);
         }
 
-        html[data-theme="dark"] .partnerly-sidebar-content::-webkit-scrollbar-thumb {
-            background: rgba(129, 133, 255, 0.25);
+        html[data-theme="dark"] .partnerly-sidebar:hover .partnerly-sidebar-content,
+        html[data-theme="dark"] .partnerly-sidebar:focus-within .partnerly-sidebar-content {
+            scrollbar-color: rgba(167, 139, 250, 0.55) transparent;
         }
 
-            html[data-theme="dark"] .partnerly-sidebar-content::-webkit-scrollbar-thumb:hover {
-                background: rgba(129, 133, 255, 0.45);
+        html[data-theme="dark"] .partnerly-sidebar:hover .partnerly-sidebar-content::-webkit-scrollbar-thumb,
+        html[data-theme="dark"] .partnerly-sidebar:focus-within .partnerly-sidebar-content::-webkit-scrollbar-thumb {
+            background: linear-gradient(180deg, rgba(129, 133, 255, 0.55), rgba(167, 139, 250, 0.5));
+            background-clip: padding-box;
+        }
+
+            html[data-theme="dark"] .partnerly-sidebar:hover .partnerly-sidebar-content::-webkit-scrollbar-thumb:hover,
+            html[data-theme="dark"] .partnerly-sidebar:focus-within .partnerly-sidebar-content::-webkit-scrollbar-thumb:hover {
+                background: linear-gradient(180deg, rgba(129, 133, 255, 0.78), rgba(167, 139, 250, 0.7));
+                background-clip: padding-box;
             }
 
         /* ---------------------------------------------------------
@@ -1615,28 +1729,42 @@ html[data-theme="dark"] {
 
             html[data-theme="dark"] .partnerly-menu-link:hover {
                 color: var(--partnerly-accent-blue) !important;
-                background: var(--partnerly-surface-hover);
-                box-shadow: inset 0 0 0 1px rgba(129, 133, 255, 0.08);
+                background: linear-gradient(180deg, rgba(255, 255, 255, 0.10), rgba(18, 22, 40, 0.42));
+                border-color: rgba(167, 139, 250, 0.22);
+                box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.14);
+                backdrop-filter: blur(14px);
+                -webkit-backdrop-filter: blur(14px);
+            }
+
+            html[data-theme="dark"] .partnerly-menu-link:hover .partnerly-menu-icon {
+                color: var(--partnerly-accent-blue);
+                background: transparent;
+                box-shadow: none;
             }
 
         html[data-theme="dark"] .partnerly-menu-item.active .partnerly-menu-link {
             color: var(--partnerly-accent-blue) !important;
-            background: rgba(105, 108, 255, 0.16);
-            box-shadow: none;
+            background: linear-gradient(180deg, rgba(255, 255, 255, 0.12), rgba(18, 22, 40, 0.55));
+            border-color: rgba(167, 139, 250, 0.28);
+            box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.16);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
         }
 
         @media (min-width: 1200px) {
             html[data-theme="dark"] body.partnerly-sidebar-collapsed .partnerly-menu-link:hover {
-                background: transparent;
-                box-shadow: none;
                 transform: none;
             }
         }
 
         html[data-theme="dark"] .partnerly-menu-item.active .partnerly-menu-icon {
-            color: #ffffff;
-            background: linear-gradient( 135deg, #4b83ff, #8965ef );
-            box-shadow: 0 0 16px rgba(105, 108, 255, 0.28);
+            color: var(--partnerly-accent-blue);
+            background: transparent;
+            box-shadow: none;
+        }
+
+        html[data-theme="dark"] .partnerly-menu-item.active .partnerly-menu-link:hover {
+            background: linear-gradient(180deg, rgba(255, 255, 255, 0.14), rgba(18, 22, 40, 0.62));
         }
 
         html[data-theme="dark"] .partnerly-menu-badge {

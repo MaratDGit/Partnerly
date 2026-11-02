@@ -199,6 +199,59 @@
             }
 
 
+            function isSelectedField(field) {
+
+                return String(field || "")
+                    .toLowerCase() ===
+                    "selected";
+            }
+
+
+            function pinSelectedItemsFirst(items) {
+
+                if (
+                    !items ||
+                    !items.length
+                ) {
+                    return items;
+                }
+
+                var selected = [];
+                var rest = [];
+
+                for (
+                    var i = 0;
+                    i < items.length;
+                    i++
+                ) {
+
+                    var item =
+                        items[i];
+
+                    var field =
+                        item &&
+                        item.field != null
+                            ? item.field
+                            : item;
+
+                    if (
+                        isSelectedField(
+                            field
+                        )
+                    ) {
+                        selected.push(item);
+                    }
+                    else {
+                        rest.push(item);
+                    }
+                }
+
+                return selected.concat(
+                    rest
+                );
+            }
+
+
             function isReorderableHeader(header) {
 
                 if (!header) {
@@ -210,7 +263,8 @@
 
                 if (
                     !field ||
-                    isActionsField(field)
+                    isActionsField(field) ||
+                    isSelectedField(field)
                 ) {
                     return false;
                 }
@@ -330,7 +384,9 @@
                     }
                 }
 
-                return next;
+                return pinSelectedItemsFirst(
+                    next
+                );
             }
 
 
@@ -436,6 +492,11 @@
                         next.push(current[c]);
                     }
                 }
+
+                next =
+                    pinSelectedItemsFirst(
+                        next
+                    );
 
                 for (
                     var n = 0;
@@ -825,8 +886,28 @@
                     return false;
                 }
 
+                if (
+                    isSelectedField(
+                        field
+                    )
+                ) {
+                    return false;
+                }
+
                 var beforeNode =
                     beforeHeader || null;
+
+                if (
+                    beforeNode &&
+                    isSelectedField(
+                        beforeNode.getAttribute(
+                            "data-field"
+                        )
+                    )
+                ) {
+                    beforeNode =
+                        beforeNode.nextElementSibling;
+                }
 
                 if (sourceHeader === beforeNode) {
                     return false;
@@ -951,7 +1032,8 @@
 
                     if (
                         !field ||
-                        isActionsField(field)
+                        isActionsField(field) ||
+                        isSelectedField(field)
                     ) {
                         continue;
                     }
@@ -1023,12 +1105,12 @@
             var savedOrder =
                 loadSavedOrder();
 
-            if (savedOrder) {
+            if (
+                options.columns &&
+                Array.isArray(options.columns)
+            ) {
 
-                if (
-                    options.columns &&
-                    Array.isArray(options.columns)
-                ) {
+                if (savedOrder) {
 
                     options.columns =
                         reorderArrayByFields(
@@ -1036,9 +1118,19 @@
                             savedOrder
                         );
                 }
+                else {
 
-                applyHeaderOrder(savedOrder);
+                    options.columns =
+                        pinSelectedItemsFirst(
+                            options.columns
+                        );
+                }
             }
+
+            applyHeaderOrder(
+                savedOrder ||
+                collectVisibleFields()
+            );
 
             if (headerDragEnabled) {
 

@@ -188,6 +188,9 @@
             <button type="button"
                     class="nav-link dropdown-toggle hide-arrow partnerly-user-button"
                     data-bs-toggle="dropdown"
+                    data-bs-display="static"
+                    data-bs-auto-close="outside"
+                    data-bs-offset="0,10"
                     aria-expanded="false">
 
                 <img src="@Url.Content(ViewBag?.UserPhotoUrl)"
@@ -216,9 +219,20 @@
                                 @ViewBag?.UserFullName
                             </p>
 
-                            <span class="partnerly-user-ref">
-                                @ViewBag?.UserRefCode
-                            </span>
+                            <div class="partnerly-user-ref">
+                                <span class="partnerly-user-ref-code">@ViewBag?.UserRefCode</span>
+                                @if (!string.IsNullOrWhiteSpace(ViewBag.UserRefCode as string))
+                                {
+                                    <button type="button"
+                                            class="partnerly-user-ref-copy"
+                                            data-copy-referral="@ViewBag.UserRefCode"
+                                            data-no-loader
+                                            title="@Localizer["Copyreferrallink"]"
+                                            aria-label="@Localizer["Copyreferrallink"]">
+                                        <i class="bx bx-copy"></i>
+                                    </button>
+                                }
+                            </div>
 
                         </div>
 
@@ -1518,6 +1532,46 @@ SIGNALR
 
         updateInput();
 
+    });
+
+    document.addEventListener("DOMContentLoaded", function () {
+        var copyBtn = document.querySelector("[data-copy-referral]");
+        if (!copyBtn) {
+            return;
+        }
+
+        copyBtn.addEventListener("click", function (event) {
+            event.preventDefault();
+            event.stopPropagation();
+
+            var code = copyBtn.getAttribute("data-copy-referral");
+            if (!code) {
+                return;
+            }
+
+            var url = window.location.origin + "/Account/Register?reff=" + encodeURIComponent(code);
+            var icon = copyBtn.querySelector("i");
+
+            function markCopied() {
+                copyBtn.classList.add("is-copied");
+                if (icon) {
+                    icon.classList.remove("bx-copy");
+                    icon.classList.add("bx-check");
+                }
+
+                window.setTimeout(function () {
+                    copyBtn.classList.remove("is-copied");
+                    if (icon) {
+                        icon.classList.remove("bx-check");
+                        icon.classList.add("bx-copy");
+                    }
+                }, 1600);
+            }
+
+            if (navigator.clipboard && navigator.clipboard.writeText) {
+                navigator.clipboard.writeText(url).then(markCopied);
+            }
+        });
     });
 
 </script>
