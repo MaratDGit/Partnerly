@@ -71,6 +71,10 @@ namespace Partnerly.Models.ViewModels
         public bool? EnableGoogleLogin { get; set; }
         public bool EnableGoogleLoginBool { get => EnableGoogleLogin ?? true; set => EnableGoogleLogin = value; }
 
+        [Display(Name = nameof(FieldsDisplayNames.EnableAppleLogin), ResourceType = typeof(FieldsDisplayNames))]
+        public bool? EnableAppleLogin { get; set; }
+        public bool EnableAppleLoginBool { get => EnableAppleLogin ?? true; set => EnableAppleLogin = value; }
+
         [Display(Name = nameof(FieldsDisplayNames.PersistentCookieDays), ResourceType = typeof(FieldsDisplayNames))]
         [Range(1, 365)]
         public int? PersistentCookieDays { get; set; }

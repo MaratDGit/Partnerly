@@ -1005,6 +1005,10 @@
     <value>Мы получили ваши данные через Google.</value>
   </data>
 
+  <data name="WereceivedyourdataviaApple" xml:space="preserve">
+    <value>Мы получили ваши данные через Apple.</value>
+  </data>
+
   <data name="Open" xml:space="preserve">
     <value>Открыто</value>
   </data>
@@ -1653,6 +1657,10 @@
     <value>Подтверждено через Google</value>
   </data>
 
+  <data name="VerifiedwithApple" xml:space="preserve">
+    <value>Подтверждено через Apple</value>
+  </data>
+
   <data name="Youraccountisready" xml:space="preserve">
     <value>Аккаунт готов</value>
   </data>
@@ -2216,6 +2224,10 @@
     <value>Вход через Google</value>
   </data>
 
+  <data name="EnableAppleLogin" xml:space="preserve">
+    <value>Вход через Apple</value>
+  </data>
+
   <data name="PersistentCookieDays" xml:space="preserve">
     <value>Запомнить меня (дней)</value>
   </data>
@@ -2310,6 +2322,10 @@
 
   <data name="GoogleLoginDisabled" xml:space="preserve">
     <value>Вход через Google отключён.</value>
+  </data>
+
+  <data name="AppleLoginDisabled" xml:space="preserve">
+    <value>Вход через Apple отключён.</value>
   </data>
 
   <data name="AiAssistantDisabled" xml:space="preserve">
@@ -2614,6 +2630,10 @@
 
   <data name="PlanDailyActivityHint" xml:space="preserve">
     <value>Когда агенты работают, каждое их действие появляется здесь по дням.</value>
+  </data>
+
+  <data name="AssignedToYou" xml:space="preserve">
+    <value>Назначено вам</value>
   </data>
 
 </root>

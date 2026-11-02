@@ -46,6 +46,13 @@ namespace Partnerly.Models.ViewModels
         [Display(Name = nameof(FieldsDisplayNames.AssignedTo), ResourceType = typeof(FieldsDisplayNames))]
         public string? AssignedToName { get; set; }
 
+        public string? CreatorEmail { get; set; }
+        public string? CreatorPhotoUrl { get; set; }
+        public string? AssignedToEmail { get; set; }
+        public string? AssignedToPhotoUrl { get; set; }
+        public bool IsAssignedToCurrentUser { get; set; }
+        public List<TicketFileItem> TicketFiles { get; set; } = new();
+
         [Display(Name = nameof(FieldsDisplayNames.IsRead), ResourceType = typeof(FieldsDisplayNames))]
         public bool? IsRead { get; set; } = false;
         public bool IsReadBool { get => IsRead ?? false; set => IsRead = value; }
@@ -416,5 +423,13 @@ namespace Partnerly.Models.ViewModels
 
             return options;
         }
+    }
+
+    public class TicketFileItem
+    {
+        public Guid Id { get; set; }
+        public string FileName { get; set; } = string.Empty;
+        public long FileSize { get; set; }
+        public string ContentType { get; set; } = string.Empty;
     }
 }

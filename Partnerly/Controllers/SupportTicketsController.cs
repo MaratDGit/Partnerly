@@ -19,6 +19,7 @@ namespace Partnerly.Controllers
     {
         protected readonly ISupportTicketService _supportTicketService;
         private readonly IInlineUpdateService _inlineUpdateService;
+        private readonly IAttachmentService _attachmentService;
         public SupportTicketsController(
             IEventBus eventBus, 
             ISupportTicketService supportTicketService, 
@@ -29,11 +30,13 @@ namespace Partnerly.Controllers
             ISystemSettingsService systemSettingsService,
             DataTableQueryService tableService, 
             IDataTableRegistry dataTableRegistry,
-            IInlineUpdateService inlineUpdateService)
+            IInlineUpdateService inlineUpdateService,
+            IAttachmentService attachmentService)
         : base(eventBus, userService, currentUser, logService, localizer, systemSettingsService, tableService, dataTableRegistry)
         {
             _supportTicketService = supportTicketService;
             _inlineUpdateService = inlineUpdateService;
+            _attachmentService = attachmentService;
         }
 
         [Authorize(Policy = "Permission:support_tickets.view")]
@@ -160,6 +163,20 @@ namespace Partnerly.Controllers
             return retval;
         }
 
+        private static string FormatTicketUserName(User? user)
+        {
+            if (user == null)
+            {
+                return string.Empty;
+            }
+
+            var name = $"{user.FirstName} {user.LastName}".Trim();
+            return string.IsNullOrWhiteSpace(name)
+                ? (user.Email ?? string.Empty)
+                : name;
+        }
+
+        [HttpGet]
         [Authorize(Policy = "Permission:support_tickets.view")]
         public async Task<IActionResult> ViewCase(Guid? id)
         {
@@ -171,15 +188,77 @@ namespace Partnerly.Controllers
             if (ticketAsView == null) return NotFound();
 
             var creator = await _userService.GetUserByIDAsync(ticketAsView.UserId);
-            ticketAsView.CreatorName = $"{creator?.FirstName} {creator?.LastName}";
+            ticketAsView.CreatorName = FormatTicketUserName(creator);
+            ticketAsView.CreatorEmail = creator?.Email;
+            ticketAsView.CreatorPhotoUrl = creator?.PhotoUrl;
 
             if (ticketAsView.AssignedTo != null)
             {
                 var assigned = await _userService.GetUserByIDAsync(ticketAsView.AssignedTo);
-                ticketAsView.AssignedToName = $"{assigned?.FirstName} {assigned?.LastName}";
+                ticketAsView.AssignedToName = FormatTicketUserName(assigned);
+                ticketAsView.AssignedToEmail = assigned?.Email;
+                ticketAsView.AssignedToPhotoUrl = assigned?.PhotoUrl;
             }
 
+            ticketAsView.IsAssignedToCurrentUser =
+                ticketAsView.AssignedTo != null &&
+                ticketAsView.AssignedTo == _currentUser.UserId;
+
+            if (ticketAsView.UpdatedBy != null)
+            {
+                var updater = await _userService.GetUserByIDAsync(ticketAsView.UpdatedBy);
+                ticketAsView.UpdatedByUserName = FormatTicketUserName(updater);
+            }
+
+            var files = await _attachmentService.GetAsync("SupportTicket", ticketAsView.Id);
+            ticketAsView.TicketFiles = files
+                .Select(file => new TicketFileItem
+                {
+                    Id = file.Id,
+                    FileName = file.FileName,
+                    FileSize = file.FileSize,
+                    ContentType = file.ContentType
+                })
+                .ToList();
+
             return View(ticketAsView);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        [Authorize(Policy = "Permission:support_tickets.edit")]
+        public async Task<IActionResult> ViewCase(Guid id, string? Note)
+        {
+            if (id == Guid.Empty)
+            {
+                return NotFound();
+            }
+
+            var ticket = await _supportTicketService.GetSupportTicketByIDAsync(id);
+            if (ticket == null)
+            {
+                return NotFound();
+            }
+
+            if (!await CanViewSupportTicketAsync(ticket))
+            {
+                return Forbid();
+            }
+
+            ticket.Note = Note;
+            var result = await _supportTicketService.UpdateSupportTicketAsync(ticket);
+            if (!result.Success)
+            {
+                foreach (var error in result.Errors)
+                {
+                    TempData["FormToast"] = error;
+                }
+
+                return RedirectToAction(nameof(ViewCase), new { id });
+            }
+
+            TempData["ToastMessage"] = Messages.RecordSaved;
+            return RedirectToAction(nameof(ViewCase), new { id });
         }
 
         [Authorize(Policy = "Permission:support_tickets.create")]

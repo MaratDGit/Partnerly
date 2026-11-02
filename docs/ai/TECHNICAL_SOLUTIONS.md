@@ -4,6 +4,17 @@
 
 ---
 
+## TR-2026-11-02-03 — Apple Sign In как Google
+
+- **Дата:** 2026-11-02
+- **Суть:** Sign in with Apple зеркалит Google: Challenge → `/signin-apple` → `AppleCallback` → вход или `AppleRegister`. `Users.AppleId`, флаг `EnableAppleLogin`. Ключи не в Git: `Authentication:Apple:ClientId` плюс либо `ClientSecret`, либо `TeamId`+`KeyId`+`PrivateKey` (.p8) в user-secrets / `secrets.json`.
+- **Причина:** владелец попросил Apple на Login/Register, ключей ещё нет.
+- **Затрагивает:** `AspNet.Security.OAuth.Apple` 6.0.15, `Program.cs`, `AccountController`, лендинг-попапы, System Preferences, миграция `20261102092927_AddAppleSignIn`.
+- **Последствия:** миграция применена на локальной БД 2026-11-02. Return URL в Apple Developer: `{BaseUrl}/signin-apple`. Другие стенды не трогались.
+- **Альтернативы:** только ClientId+ClientSecret без генерации JWT — поддерживается, если секрет уже выпущен.
+
+---
+
 ## TR-2026-11-02-02 — DataTable: логические ширины + добор до контейнера
 
 - **Дата:** 2026-11-02

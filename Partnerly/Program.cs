@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Authentication.Cookies;
+﻿using AspNet.Security.OAuth.Apple;
+using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Localization;
 using Microsoft.AspNetCore.SignalR;
@@ -12,6 +13,7 @@ using Partnerly.Infrastructure.Repositories;
 using Partnerly.Infrastructure.Services;
 using Partnerly.Infrastructure.Services.HostedServices;
 using Partnerly.Infrastructure.Services.MiddlewareServices;
+using Partnerly.Helpers;
 using Partnerly.Models;
 using Partnerly.Models.DataTable;
 using System.Globalization;
@@ -93,7 +95,7 @@ builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DbContext")));
 
 // Authentication
-builder.Services
+var authentication = builder.Services
     .AddAuthentication(options =>
     {
         options.DefaultAuthenticateScheme = CookieAuthenticationDefaults.AuthenticationScheme;
@@ -113,6 +115,41 @@ builder.Services
         options.ClientSecret =
             builder.Configuration["Authentication:Google:ClientSecret"]!;
     });
+
+if (ExternalLoginOptions.IsAppleConfigured(builder.Configuration))
+{
+    authentication.AddApple(ExternalLoginOptions.AppleScheme, options =>
+    {
+        // Fill Authentication:Apple:* in user-secrets or local secrets.json.
+        // ClientId is the Apple Services ID. Use either ClientSecret
+        // or TeamId + KeyId + PrivateKey (.p8) so the handler can
+        // generate the secret.
+        options.ClientId =
+            builder.Configuration["Authentication:Apple:ClientId"]!;
+
+        options.ClientSecret =
+            builder.Configuration["Authentication:Apple:ClientSecret"] ?? "";
+
+        options.TeamId =
+            builder.Configuration["Authentication:Apple:TeamId"] ?? "";
+
+        options.KeyId =
+            builder.Configuration["Authentication:Apple:KeyId"] ?? "";
+
+        var applePrivateKey =
+            builder.Configuration["Authentication:Apple:PrivateKey"];
+
+        options.GenerateClientSecret =
+            string.IsNullOrWhiteSpace(options.ClientSecret) &&
+            !string.IsNullOrWhiteSpace(applePrivateKey);
+
+        if (!string.IsNullOrWhiteSpace(applePrivateKey))
+        {
+            options.PrivateKey = (_, _) =>
+                Task.FromResult(applePrivateKey.AsMemory());
+        }
+    });
+}
 
 // EventBus (Singleton)
 builder.Services.AddSingleton<IEventBus, EventBus>();

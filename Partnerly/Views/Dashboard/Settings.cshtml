@@ -4,35 +4,31 @@
 @{
     ViewData["Title"] = "Settings";
     Layout = "_ContentNavbarLayout";
-
-    <link rel="stylesheet" href="~/assets/vendor/css/pages/page-mysettings.css" />
 }
-<div class="container-xxl flex-grow-1 container-p-y">
-<div class="settings-page">
 
-    <!-- =========================================================
-         HEADER
-         ========================================================= -->
-    <div class="settings-hero mb-4">
+@section PageStyles {
+    <link rel="stylesheet"
+          href="~/assets/vendor/css/pages/page-mysettings.css"
+          asp-append-version="true" />
+}
 
-        <div class="settings-hero-icon">
-            <i class="bx bx-cog"></i>
+<div class="card settings-card">
+
+    <div class="card-header">
+        <div class="settings-hero">
+            <div class="settings-hero-icon">
+                <i class="bx bx-cog"></i>
+            </div>
+            <div class="settings-hero-content">
+                <h5 class="mb-0">@Localizer["Settings"]</h5>
+                <p>
+                    @Localizer["Manageyourprofilepasswordandnotificationpreferences"]
+                </p>
+            </div>
         </div>
-
-        <div class="settings-hero-content">
-            <h4>@Localizer["Settings"]</h4>
-            <p>
-                @Localizer["Manageyourprofilepasswordandnotificationpreferences"]
-            </p>
-        </div>
-
     </div>
 
-
-    <!-- =========================================================
-         MAIN CARD
-         ========================================================= -->
-    <div class="settings-card">
+    <div class="card-body">
 
         <form id="settingsForm" asp-action="Settings">
 
@@ -41,37 +37,22 @@
                    name="ActiveTab"
                    value="@Model?.ActiveTab" />
 
-
-            <!-- =================================================
-                 STICKY ACTIONS
-                 ================================================= -->
             <div class="settings-actions">
-
                 @await Html.PartialAsync("_StickyButtons", Model.StickyButtons)
             </div>
 
-
-            <!-- =================================================
-                 SETTINGS BODY
-                 ================================================= -->
             <div class="settings-body">
 
-                <!-- =============================================
-                     NAVIGATION
-                     ============================================= -->
                 <div class="settings-navigation">
 
                     <div class="settings-navigation-title">
                         <small>@Localizer["Manageyouraccount"]</small>
                     </div>
 
-
                     <ul class="nav nav-pills settings-tabs"
                         role="tablist">
 
-                        <!-- Profile -->
                         <li class="nav-item" role="presentation">
-
                             <button type="button"
                                     class="nav-link active"
                                     role="tab"
@@ -79,26 +60,18 @@
                                     data-bs-target="#navs-justified-profile"
                                     aria-controls="navs-justified-profile"
                                     aria-selected="true">
-
                                 <span class="settings-tab-icon">
                                     <i class="bx bx-user"></i>
                                 </span>
-
                                 <span class="settings-tab-text">
                                     <strong>@Localizer["Profile"]</strong>
                                     <small>@Localizer["Personalinformation"]</small>
                                 </span>
-
                                 <i class="bx bx-chevron-right settings-tab-arrow"></i>
-
                             </button>
-
                         </li>
 
-
-                        <!-- Password -->
                         <li class="nav-item" role="presentation">
-
                             <button type="button"
                                     class="nav-link"
                                     role="tab"
@@ -106,26 +79,18 @@
                                     data-bs-target="#navs-justified-home"
                                     aria-controls="navs-justified-home"
                                     aria-selected="false">
-
                                 <span class="settings-tab-icon">
                                     <i class="bx bx-key"></i>
                                 </span>
-
                                 <span class="settings-tab-text">
                                     <strong>@Localizer["Changepassword"]</strong>
                                     <small>@Localizer["Updateyourpassword"]</small>
                                 </span>
-
                                 <i class="bx bx-chevron-right settings-tab-arrow"></i>
-
                             </button>
-
                         </li>
 
-
-                        <!-- Notifications -->
                         <li class="nav-item" role="presentation">
-
                             <button type="button"
                                     class="nav-link"
                                     role="tab"
@@ -133,454 +98,328 @@
                                     data-bs-target="#navs-justified-messages"
                                     aria-controls="navs-justified-messages"
                                     aria-selected="false">
-
                                 <span class="settings-tab-icon">
                                     <i class="bx bx-bell"></i>
                                 </span>
-
                                 <span class="settings-tab-text">
                                     <strong>@Localizer["Notifications"]</strong>
                                     <small>@Localizer["Notificationpreferences"]</small>
                                 </span>
-
                                 <i class="bx bx-chevron-right settings-tab-arrow"></i>
-
                             </button>
-
                         </li>
 
                     </ul>
 
                 </div>
 
-
-                <!-- =============================================
-                     TAB CONTENT
-                     ============================================= -->
                 <div class="settings-content">
 
                     <div class="tab-content">
 
-
-                        <!-- =================================================
-                             PROFILE
-                             ================================================= -->
                         <div class="tab-pane fade show active"
                              id="navs-justified-profile"
                              role="tabpanel">
 
                             <input type="hidden" asp-for="Id" />
 
-
                             <div class="settings-section-header">
-
                                 <div class="settings-section-icon">
                                     <i class="bx bx-user"></i>
                                 </div>
-
                                 <div>
                                     <h5>@Localizer["Profile"]</h5>
                                     <p>
                                         @Localizer["Updateyourpersonalinformation"]
                                     </p>
                                 </div>
-
                             </div>
 
+                            <div class="row g-4 settings-fields">
 
-                            <div class="settings-fields">
-
-
-                                <!-- First Name -->
-                                <div class="settings-field">
-
-                                    <div class="settings-field-icon">
-                                        <i class="bx bx-user"></i>
+                                <div class="col-12 col-md-6">
+                                    <div class="settings-field">
+                                        <div class="settings-field-icon">
+                                            <i class="bx bx-user"></i>
+                                        </div>
+                                        <div class="form-floating flex-grow-1">
+                                            <input asp-for="FirstName"
+                                                   class="form-control"
+                                                   id="firstName"
+                                                   name="firstName"
+                                                   placeholder="" />
+                                            <label asp-for="FirstName"></label>
+                                        </div>
                                     </div>
-
-                                    <div class="form-floating flex-grow-1">
-
-                                        <input asp-for="FirstName"
-                                               class="form-control"
-                                               id="firstName"
-                                               name="firstName"
-                                               placeholder="" />
-
-                                        <label asp-for="FirstName"></label>
-
-                                    </div>
-
+                                    <span asp-validation-for="FirstName"
+                                          class="text-danger settings-validation">
+                                    </span>
                                 </div>
 
-                                <span asp-validation-for="FirstName"
-                                      class="text-danger settings-validation">
-                                </span>
-
-
-                                <!-- Last Name -->
-                                <div class="settings-field">
-
-                                    <div class="settings-field-icon">
-                                        <i class="bx bx-user"></i>
+                                <div class="col-12 col-md-6">
+                                    <div class="settings-field">
+                                        <div class="settings-field-icon">
+                                            <i class="bx bx-user"></i>
+                                        </div>
+                                        <div class="form-floating flex-grow-1">
+                                            <input asp-for="LastName"
+                                                   class="form-control"
+                                                   id="lastName"
+                                                   name="lastName"
+                                                   placeholder="" />
+                                            <label asp-for="LastName"></label>
+                                        </div>
                                     </div>
-
-                                    <div class="form-floating flex-grow-1">
-
-                                        <input asp-for="LastName"
-                                               class="form-control"
-                                               id="lastName"
-                                               name="lastName"
-                                               placeholder="" />
-
-                                        <label asp-for="LastName"></label>
-
-                                    </div>
-
+                                    <span asp-validation-for="LastName"
+                                          class="text-danger settings-validation">
+                                    </span>
                                 </div>
 
-                                <span asp-validation-for="LastName"
-                                      class="text-danger settings-validation">
-                                </span>
-
-
-                                <!-- Phone -->
-                                <div class="settings-field">
-
-                                    <div class="settings-field-icon">
-                                        <i class="bx bx-phone"></i>
+                                <div class="col-12 col-md-6">
+                                    <div class="settings-field">
+                                        <div class="settings-field-icon">
+                                            <i class="bx bx-phone"></i>
+                                        </div>
+                                        <div class="form-floating flex-grow-1">
+                                            <input asp-for="Phone"
+                                                   class="form-control"
+                                                   id="phone"
+                                                   name="phone"
+                                                   placeholder="+37477123456" />
+                                            <label asp-for="Phone"></label>
+                                        </div>
                                     </div>
-
-                                    <div class="form-floating flex-grow-1">
-
-                                        <input asp-for="Phone"
-                                               class="form-control"
-                                               id="phone"
-                                               name="phone"
-                                               placeholder="+37477123456" />
-
-                                        <label asp-for="Phone"></label>
-
-                                    </div>
-
+                                    <span asp-validation-for="Phone"
+                                          class="text-danger settings-validation">
+                                    </span>
                                 </div>
 
-                                <span asp-validation-for="Phone"
-                                      class="text-danger settings-validation">
-                                </span>
-
-
-                                <!-- Email -->
-                                <div class="settings-field settings-field-readonly">
-
-                                    <div class="settings-field-icon">
-                                        <i class="bx bx-envelope"></i>
+                                <div class="col-12 col-md-6">
+                                    <div class="settings-field settings-field-readonly">
+                                        <div class="settings-field-icon">
+                                            <i class="bx bx-envelope"></i>
+                                        </div>
+                                        <div class="form-floating flex-grow-1">
+                                            <input asp-for="Email"
+                                                   class="form-control"
+                                                   id="email"
+                                                   name="email"
+                                                   readonly />
+                                            <label asp-for="Email"></label>
+                                        </div>
+                                        <div class="settings-readonly-badge">
+                                            <i class="bx bx-lock-alt"></i>
+                                        </div>
                                     </div>
-
-                                    <div class="form-floating flex-grow-1">
-
-                                        <input asp-for="Email"
-                                               class="form-control"
-                                               id="email"
-                                               name="email"
-                                               readonly />
-
-                                        <label asp-for="Email"></label>
-
-                                    </div>
-
-                                    <div class="settings-readonly-badge">
-                                        <i class="bx bx-lock-alt"></i>
-                                    </div>
-
+                                    <span asp-validation-for="Email"
+                                          class="text-danger settings-validation">
+                                    </span>
                                 </div>
 
-                                <span asp-validation-for="Email"
-                                      class="text-danger settings-validation">
-                                </span>
-
-
-                                <!-- Referral Code -->
-                                <div class="settings-field settings-field-readonly">
-
-                                    <div class="settings-field-icon">
-                                        <i class="bx bx-gift"></i>
+                                <div class="col-12 col-md-6">
+                                    <div class="settings-field settings-field-readonly">
+                                        <div class="settings-field-icon">
+                                            <i class="bx bx-gift"></i>
+                                        </div>
+                                        <div class="form-floating flex-grow-1">
+                                            <input asp-for="MyReferralCode"
+                                                   class="form-control"
+                                                   id="myReferralCode"
+                                                   name="myReferralCode"
+                                                   readonly
+                                                   placeholder="" />
+                                            <label asp-for="MyReferralCode"></label>
+                                        </div>
+                                        <div class="settings-readonly-badge">
+                                            <i class="bx bx-lock-alt"></i>
+                                        </div>
                                     </div>
-
-                                    <div class="form-floating flex-grow-1">
-
-                                        <input asp-for="MyReferralCode"
-                                               class="form-control"
-                                               id="myReferralCode"
-                                               name="myReferralCode"
-                                               readonly
-                                               placeholder="" />
-
-                                        <label asp-for="MyReferralCode"></label>
-
-                                    </div>
-
-                                    <div class="settings-readonly-badge">
-                                        <i class="bx bx-lock-alt"></i>
-                                    </div>
-
+                                    <span asp-validation-for="MyReferralCode"
+                                          class="text-danger settings-validation">
+                                    </span>
                                 </div>
-
-                                <span asp-validation-for="MyReferralCode"
-                                      class="text-danger settings-validation">
-                                </span>
 
                             </div>
 
                         </div>
 
-
-                        <!-- =================================================
-                             PASSWORD
-                             ================================================= -->
                         <div class="tab-pane fade"
                              id="navs-justified-home"
                              role="tabpanel">
 
-
                             <div class="settings-section-header">
-
                                 <div class="settings-section-icon password-icon">
                                     <i class="bx bx-lock-alt"></i>
                                 </div>
-
                                 <div>
                                     <h5>@Localizer["Changepassword"]</h5>
                                     <p>
                                         @Localizer["Keepsyouraccountsecurewithastrongpassword"]
                                     </p>
                                 </div>
-
                             </div>
 
-
                             <div class="password-security-box">
-
                                 <div class="password-security-icon">
                                     <i class="bx bx-shield-quarter"></i>
                                 </div>
-
                                 <div>
                                     <strong>@Localizer["Yourpasswordprotectsyouraccount"]</strong>
                                     <p>
                                         @Localizer["Useauniquepasswordthatyoudontuseanywhereelse"]
                                     </p>
                                 </div>
-
                             </div>
 
+                            <div class="row g-4 settings-fields password-fields">
 
-                            <div class="settings-fields password-fields">
-
-
-                                <!-- Old Password -->
-                                <div class="settings-password-field">
-
-                                    <div class="form-password-toggle">
-
-                                        <div class="form-floating input-group input-group-merge">
-
-                                            <input asp-for="OldPassword"
-                                                   type="password"
-                                                   id="oldPassword"
-                                                   class="form-control"
-                                                   name="oldPassword"
-                                                   placeholder="&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;"
-                                                   aria-describedby="password" />
-
-                                            <label asp-for="OldPassword"></label>
-
-                                            <span class="input-group-text cursor-pointer password-toggle-icon"
-                                                    role="button"
-                                                    tabindex="0"
-                                                    aria-label="Show password">
-                                                <i class="bx bx-hide"></i>
-                                            </span>
-
+                                <div class="col-12 col-md-6">
+                                    <div class="settings-password-field">
+                                        <div class="form-password-toggle">
+                                            <div class="form-floating input-group input-group-merge">
+                                                <input asp-for="OldPassword"
+                                                       type="password"
+                                                       id="oldPassword"
+                                                       class="form-control"
+                                                       name="oldPassword"
+                                                       placeholder="&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;"
+                                                       aria-describedby="password" />
+                                                <label asp-for="OldPassword"></label>
+                                                <span class="input-group-text cursor-pointer password-toggle-icon"
+                                                      role="button"
+                                                      tabindex="0"
+                                                      aria-label="Show password">
+                                                    <i class="bx bx-hide"></i>
+                                                </span>
+                                            </div>
                                         </div>
-
+                                        <span asp-validation-for="OldPassword"
+                                              class="text-danger settings-validation">
+                                        </span>
                                     </div>
-
-                                    <span asp-validation-for="OldPassword"
-                                          class="text-danger settings-validation">
-                                    </span>
-
                                 </div>
 
-
-                                <!-- New Password -->
-                                <div class="settings-password-field">
-
-                                    <div class="form-password-toggle">
-
-                                        <div class="form-floating input-group input-group-merge">
-
-                                            <input asp-for="Password"
-                                                   type="password"
-                                                   id="password"
-                                                   class="form-control"
-                                                   name="password"
-                                                   placeholder="&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;"
-                                                   aria-describedby="password" />
-
-                                            <label asp-for="Password"></label>
-
-                                            <span class="input-group-text cursor-pointer password-toggle-icon"
-                                                    role="button"
-                                                    tabindex="0"
-                                                    aria-label="Show password">
-                                                <i class="bx bx-hide"></i>
-                                            </span>
-
+                                <div class="col-12 col-md-6">
+                                    <div class="settings-password-field">
+                                        <div class="form-password-toggle">
+                                            <div class="form-floating input-group input-group-merge">
+                                                <input asp-for="Password"
+                                                       type="password"
+                                                       id="password"
+                                                       class="form-control"
+                                                       name="password"
+                                                       placeholder="&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;"
+                                                       aria-describedby="password" />
+                                                <label asp-for="Password"></label>
+                                                <span class="input-group-text cursor-pointer password-toggle-icon"
+                                                      role="button"
+                                                      tabindex="0"
+                                                      aria-label="Show password">
+                                                    <i class="bx bx-hide"></i>
+                                                </span>
+                                            </div>
                                         </div>
-
+                                        <span asp-validation-for="Password"
+                                              class="text-danger settings-validation">
+                                        </span>
                                     </div>
-
-                                    <span asp-validation-for="Password"
-                                          class="text-danger settings-validation">
-                                    </span>
-
                                 </div>
 
-
-                                <!-- Confirm Password -->
-                                <div class="settings-password-field">
-
-                                    <div class="form-password-toggle">
-
-                                        <div class="form-floating input-group input-group-merge">
-
-                                            <input asp-for="ConfirmPassword"
-                                                   type="password"
-                                                   id="confirmpassword"
-                                                   class="form-control"
-                                                   name="confirmpassword"
-                                                   placeholder="&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;"
-                                                   aria-describedby="password" />
-
-                                            <label asp-for="ConfirmPassword"></label>
-
-                                            <span class="input-group-text cursor-pointer password-toggle-icon"
-                                                    role="button"
-                                                    tabindex="0"
-                                                    aria-label="Show password">
-                                                <i class="bx bx-hide"></i>
-                                            </span>
-
+                                <div class="col-12 col-md-6">
+                                    <div class="settings-password-field">
+                                        <div class="form-password-toggle">
+                                            <div class="form-floating input-group input-group-merge">
+                                                <input asp-for="ConfirmPassword"
+                                                       type="password"
+                                                       id="confirmpassword"
+                                                       class="form-control"
+                                                       name="confirmpassword"
+                                                       placeholder="&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;"
+                                                       aria-describedby="password" />
+                                                <label asp-for="ConfirmPassword"></label>
+                                                <span class="input-group-text cursor-pointer password-toggle-icon"
+                                                      role="button"
+                                                      tabindex="0"
+                                                      aria-label="Show password">
+                                                    <i class="bx bx-hide"></i>
+                                                </span>
+                                            </div>
                                         </div>
-
+                                        <span asp-validation-for="ConfirmPassword"
+                                              class="text-danger settings-validation">
+                                        </span>
                                     </div>
-
-                                    <span asp-validation-for="ConfirmPassword"
-                                          class="text-danger settings-validation">
-                                    </span>
-
                                 </div>
 
                             </div>
 
                         </div>
 
-
-                        <!-- =================================================
-                             NOTIFICATIONS
-                             ================================================= -->
                         <div class="tab-pane fade"
                              id="navs-justified-messages"
                              role="tabpanel">
 
-
                             <div class="settings-section-header">
-
                                 <div class="settings-section-icon notification-icon">
                                     <i class="bx bx-bell"></i>
                                 </div>
-
                                 <div>
                                     <h5>@Localizer["Notifications"]</h5>
                                     <p>
                                         @Localizer["Choosehowyouwanttoreceivenotifications"]
                                     </p>
                                 </div>
-
                             </div>
 
+                            <div class="row g-4 notification-settings">
 
-                            <div class="notification-settings">
-
-
-                                <!-- Emails -->
-                                <div class="notification-option">
-
-                                    <div class="notification-option-icon email-icon">
-                                        <i class="bx bx-envelope"></i>
-                                    </div>
-
-                                    <div class="notification-option-content">
-
-                                        <label class="notification-title"
-                                               asp-for="AllowSendEmails">
-                                        </label>
-
-                                        <span>
-                                            @Localizer["Receiveimportantupdatesandmessagesbyemail"]
+                                <div class="col-12 col-md-6">
+                                    <label class="notification-option" for="allowSendEmails">
+                                        <span class="notification-option-icon email-icon">
+                                            <i class="bx bx-envelope"></i>
                                         </span>
-
-                                    </div>
-
-                                    <div class="form-check form-switch">
-
-                                        <input asp-for="AllowSendEmailsBool"
-                                               class="form-check-input"
-                                               type="checkbox"
-                                               id="allowSendEmails" />
-
-                                    </div>
-
+                                        <span class="notification-option-content">
+                                            <span class="notification-title">
+                                                @Localizer["AllowSendEmails"]
+                                            </span>
+                                            <span>
+                                                @Localizer["Receiveimportantupdatesandmessagesbyemail"]
+                                            </span>
+                                        </span>
+                                        <span class="form-check form-switch">
+                                            <input asp-for="AllowSendEmailsBool"
+                                                   class="form-check-input"
+                                                   type="checkbox"
+                                                   id="allowSendEmails" />
+                                        </span>
+                                    </label>
                                 </div>
 
-
-                                <!-- Notifications -->
-                                <div class="notification-option">
-
-                                    <div class="notification-option-icon notification-icon-small">
-                                        <i class="bx bx-bell"></i>
-                                    </div>
-
-                                    <div class="notification-option-content">
-
-                                        <label class="notification-title"
-                                               asp-for="AllowSendNotifications">
-                                        </label>
-
-                                        <span>
-                                            @Localizer["ReceiveNotificationsDirectlyInPartnerly"]
+                                <div class="col-12 col-md-6">
+                                    <label class="notification-option" for="allowSendNotifications">
+                                        <span class="notification-option-icon notification-icon-small">
+                                            <i class="bx bx-bell"></i>
                                         </span>
-
-                                        <span id="warningSpan"
-                                              class="notification-warning @(!Model.AllowSendNotificationsBool ? "" : "d-none")">
-
-                                            <i class="bx bx-error-circle"></i>
-
-                                            @Localizer["Youwillreceiveimportantnotifications"]
-
+                                        <span class="notification-option-content">
+                                            <span class="notification-title">
+                                                @Localizer["AllowSendNotifications"]
+                                            </span>
+                                            <span>
+                                                @Localizer["ReceiveNotificationsDirectlyInPartnerly"]
+                                            </span>
+                                            <span id="warningSpan"
+                                                  class="notification-warning @(!Model.AllowSendNotificationsBool ? "" : "d-none")">
+                                                <i class="bx bx-error-circle"></i>
+                                                @Localizer["Youwillreceiveimportantnotifications"]
+                                            </span>
                                         </span>
-
-                                    </div>
-
-                                    <div class="form-check form-switch">
-
-                                        <input asp-for="AllowSendNotificationsBool"
-                                               class="form-check-input"
-                                               type="checkbox"
-                                               id="allowSendNotifications" />
-
-                                    </div>
-
+                                        <span class="form-check form-switch">
+                                            <input asp-for="AllowSendNotificationsBool"
+                                                   class="form-check-input"
+                                                   type="checkbox"
+                                                   id="allowSendNotifications" />
+                                        </span>
+                                    </label>
                                 </div>
 
                             </div>
@@ -598,7 +437,6 @@
     </div>
 
 </div>
-</div>
 
 <script src="~/assets/js/form-change-tracker.js"></script>
 
@@ -606,15 +444,10 @@
 
     enableSaveOnChange("#settingsForm", "#btnSave");
 
-
     document.addEventListener('DOMContentLoaded', function () {
 
-        /* =====================================================
-           TAB MANAGEMENT
-           ===================================================== */
-
         const tabButtons =
-            document.querySelectorAll('[data-bs-toggle="tab"]');
+            document.querySelectorAll('#settingsForm [data-bs-toggle="tab"]');
 
         tabButtons.forEach(button => {
 
@@ -630,11 +463,6 @@
 
         });
 
-
-        /* =====================================================
-           RESTORE ACTIVE TAB
-           ===================================================== */
-
         const activeTabValue =
             document.getElementById('activeTab').value;
 
@@ -642,7 +470,7 @@
 
             const triggerEl =
                 document.querySelector(
-                    `[data-bs-target="${activeTabValue}"]`
+                    `#settingsForm [data-bs-target="${activeTabValue}"]`
                 );
 
             if (triggerEl) {
@@ -655,11 +483,6 @@
             }
 
         }
-
-
-        /* =====================================================
-           NOTIFICATION WARNING
-           ===================================================== */
 
         const checkbox =
             document.getElementById("allowSendNotifications");

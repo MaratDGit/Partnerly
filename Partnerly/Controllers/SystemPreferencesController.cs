@@ -75,6 +75,7 @@ namespace Partnerly.Controllers
                     setting.IsAiAssistantEnabled = model.IsAiAssistantEnabled;
                     setting.DefaultNewUserRoleId = model.DefaultNewUserRoleId;
                     setting.EnableGoogleLogin = model.EnableGoogleLogin;
+                    setting.EnableAppleLogin = model.EnableAppleLogin;
                     setting.PersistentCookieDays = model.PersistentCookieDays ?? SystemSettingsDefaults.PersistentCookieDays;
                     setting.SessionExpireMinutes = model.SessionExpireMinutes ?? SystemSettingsDefaults.SessionExpireMinutes;
                     setting.MaxProfilePhotoSizeMb = model.MaxProfilePhotoSizeMb ?? SystemSettingsDefaults.MaxProfilePhotoSizeMb;
@@ -123,6 +124,7 @@ namespace Partnerly.Controllers
             model.TimeZoneId = string.IsNullOrWhiteSpace(model.TimeZoneId) ? SystemSettingsDefaults.TimeZoneId : model.TimeZoneId;
             model.IsAiAssistantEnabled ??= true;
             model.EnableGoogleLogin ??= true;
+            model.EnableAppleLogin ??= true;
             model.PersistentCookieDays ??= SystemSettingsDefaults.PersistentCookieDays;
             model.SessionExpireMinutes ??= SystemSettingsDefaults.SessionExpireMinutes;
             model.MaxProfilePhotoSizeMb ??= SystemSettingsDefaults.MaxProfilePhotoSizeMb;

@@ -16,6 +16,9 @@ namespace Partnerly.Models
         #region GoogleId
         public string? GoogleId { get; set; }
         #endregion
+        #region AppleId
+        public string? AppleId { get; set; }
+        #endregion
 
         #region Email
         [Required]

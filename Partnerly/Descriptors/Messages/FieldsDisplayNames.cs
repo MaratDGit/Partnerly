@@ -64,6 +64,7 @@ namespace Partnerly.Descriptors.Messages
         public static string AiAssistantEnabled => Messages.Get(nameof(AiAssistantEnabled));
         public static string DefaultNewUserRole => Messages.Get(nameof(DefaultNewUserRole));
         public static string EnableGoogleLogin => Messages.Get(nameof(EnableGoogleLogin));
+        public static string EnableAppleLogin => Messages.Get(nameof(EnableAppleLogin));
         public static string PersistentCookieDays => Messages.Get(nameof(PersistentCookieDays));
         public static string SessionExpireMinutes => Messages.Get(nameof(SessionExpireMinutes));
         public static string MaxProfilePhotoSizeMb => Messages.Get(nameof(MaxProfilePhotoSizeMb));

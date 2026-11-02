@@ -102,6 +102,7 @@ namespace Partnerly.Infrastructure.Services
             target.IsAiAssistantEnabled = source.IsAiAssistantEnabled;
             target.DefaultNewUserRoleId = source.DefaultNewUserRoleId;
             target.EnableGoogleLogin = source.EnableGoogleLogin;
+            target.EnableAppleLogin = source.EnableAppleLogin;
             target.PersistentCookieDays = source.PersistentCookieDays;
             target.SessionExpireMinutes = source.SessionExpireMinutes;
             target.MaxProfilePhotoSizeMb = source.MaxProfilePhotoSizeMb;

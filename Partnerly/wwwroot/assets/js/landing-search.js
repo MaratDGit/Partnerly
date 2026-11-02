@@ -214,6 +214,11 @@
         if (authPanel) {
             link.href = "#";
             link.setAttribute("data-auth", authPanel);
+        } else if (url === "#") {
+            link.href = "#";
+            link.addEventListener("click", function (event) {
+                event.preventDefault();
+            });
         } else {
             link.href = url;
         }

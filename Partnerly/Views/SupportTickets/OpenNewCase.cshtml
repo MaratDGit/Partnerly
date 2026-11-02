@@ -2,15 +2,19 @@
 
 @{
     ViewData["Title"] = "Support";
+}
 
-    <link rel="stylesheet" href="~/assets/vendor/css/pages/page-newsupportticket.css" />
+@section PageStyles {
+    <link rel="stylesheet"
+          href="~/assets/vendor/css/pages/page-newsupportticket.css"
+          asp-append-version="true" />
 }
 
 <div class="container-xxl flex-grow-1 container-p-y">
 <div class="support-page">
 
     <!-- ==================== HEADER ==================== -->
-    <div class="support-header mb-4">
+    <div class="support-header mb-3">
         <div class="support-header-content">
 
             <div class="support-icon">
@@ -31,19 +35,21 @@
     <!-- ==================== ALERTS ==================== -->
     @if (TempData.Peek("SupportSuccess") != null)
     {
-        <div class="support-alert support-alert-success mb-4">
+        <div class="support-alert support-alert-success mb-3"
+             role="alert">
             <div class="support-alert-icon">
                 <i class="bx bx-check"></i>
             </div>
 
-            <div class="flex-grow-1">
+            <div class="support-alert-body">
                 <strong>@Localizer["Success"]</strong>
                 <div>@TempData["SupportSuccess"]</div>
             </div>
 
             <button type="button"
-                    class="btn-close"
-                    data-bs-dismiss="alert">
+                    class="btn-close support-alert-close"
+                    data-close-support-alert
+                    aria-label="@Localizer["Close"]">
             </button>
         </div>
 
@@ -52,19 +58,21 @@
 
     @if (TempData.Peek("CaseCreationLimit") != null)
     {
-        <div class="support-alert support-alert-danger mb-4">
+        <div class="support-alert support-alert-danger mb-3"
+             role="alert">
             <div class="support-alert-icon">
                 <i class="bx bx-error-circle"></i>
             </div>
 
-            <div class="flex-grow-1">
+            <div class="support-alert-body">
                 <strong>@Localizer["Error"]</strong>
                 <div>@TempData["CaseCreationLimit"]</div>
             </div>
 
             <button type="button"
-                    class="btn-close"
-                    data-bs-dismiss="alert">
+                    class="btn-close support-alert-close"
+                    data-close-support-alert
+                    aria-label="@Localizer["Close"]">
             </button>
         </div>
 
@@ -74,7 +82,7 @@
 
     <!-- ==================== CONTENT ==================== -->
 
-    <div class="row g-4">
+    <div class="row g-3">
 
         <!-- ==================== LEFT INFO ==================== -->
         <div class="col-12 col-lg-5 col-xl-4">
@@ -234,7 +242,7 @@
 
                             <textarea asp-for="Message"
                                       class="form-control"
-                                      rows="7"
+                                      rows="5"
                                       placeholder=@Localizer["Describeissueindetail"]></textarea>
 
                         </div>
@@ -259,12 +267,9 @@
 
 
                         <button type="submit"
-                                class="btn btn-primary support-submit-btn">
-
-                            <i class="bx bx-send me-1"></i>
-
+                                class="btn support-submit-btn">
+                            <i class="bx bx-send"></i>
                             @Localizer["Send"]
-
                         </button>
 
                     </div>
@@ -280,4 +285,18 @@
 </div>
 </div>
 
-
+<script>
+    document.querySelectorAll("[data-close-support-alert]").forEach(function (button) {
+        button.addEventListener("click", function (event) {
+            event.preventDefault();
+            var alertBox = button.closest(".support-alert");
+            if (!alertBox) {
+                return;
+            }
+            alertBox.classList.add("is-hiding");
+            window.setTimeout(function () {
+                alertBox.remove();
+            }, 180);
+        });
+    });
+</script>

@@ -12,12 +12,17 @@ namespace Partnerly.Controllers
         #region Services
         private readonly ILogger<HomeController> _logger;
         private readonly ISystemSettingsService _systemSettingsService;
+        private readonly IConfiguration _config;
         #endregion
         #region Constructor
-        public HomeController(ILogger<HomeController> logger, ISystemSettingsService systemSettingsService)
+        public HomeController(
+            ILogger<HomeController> logger,
+            ISystemSettingsService systemSettingsService,
+            IConfiguration config)
         {
             _logger = logger;
             _systemSettingsService = systemSettingsService;
+            _config = config;
         }
         #endregion
 
@@ -30,6 +35,8 @@ namespace Partnerly.Controllers
 
             var settings = await _systemSettingsService.GetCurrentAsync();
             ViewBag.GoogleLoginEnabled = settings?.EnableGoogleLogin != false;
+            ViewBag.AppleLoginEnabled = settings?.EnableAppleLogin != false;
+            ViewBag.AppleOAuthConfigured = ExternalLoginOptions.IsAppleConfigured(_config);
             ViewBag.ReturnUrl = returnUrl;
             ViewBag.AuthPanel = NormalizeAuthPanel(auth);
             ViewBag.InfoPanel = dialog == "privacy" ? "privacy" : null;

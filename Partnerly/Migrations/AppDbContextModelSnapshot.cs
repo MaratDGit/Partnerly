@@ -629,6 +629,9 @@ namespace Partnerly.Migrations
                         .IsRequired()
                         .HasColumnType("int");
 
+                    b.Property<bool?>("EnableAppleLogin")
+                        .HasColumnType("bit");
+
                     b.Property<bool?>("EnableEmailSending")
                         .HasColumnType("bit");
 
@@ -768,6 +771,9 @@ namespace Partnerly.Migrations
 
                     b.Property<bool?>("AllowSendNotifications")
                         .HasColumnType("bit");
+
+                    b.Property<string>("AppleId")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<decimal?>("Balance")
                         .HasColumnType("decimal(18,2)");

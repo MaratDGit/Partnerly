@@ -4,6 +4,70 @@
 
 ---
 
+## 2026-11-02 — ViewCase: Save в sticky для заметки
+
+- **Суть:** на View Case в sticky появилась кнопка Save, как на Edit User / System Settings. Неактивна, пока заметка не изменена. После OK в модалке заметки Save включается и пишет Note в SupportTicket, остаётся на ViewCase.
+- **Сделано:** `ViewCase.cshtml` — форма, hidden Note, ActionSave, `enableSaveOnChange`. POST `ViewCase` в контроллере обновляет только Note.
+- **Проверка:** `dotnet build` проекта в temp — 0 ошибок. Браузер не кликал.
+
+---
+
+## 2026-11-02 — ViewCase как рабочий экран тикета для исполнителя
+
+- **Суть:** View Case — рабочий экран задачи: номер, тема, цветной статус, шаги New → In progress → Closed, карточка обращения автора, заметка, исполнитель, даты, кто обновил, прочитано, вложения. Start/Close/Assign на виду. Карточка на всю область контента.
+- **Сделано:** `Views/SupportTickets/ViewCase.cshtml`, `page-viewcase.css`. Контроллер наполняет email/фото/файлы/`UpdatedBy` из существующих полей SupportTicket и Attachments. Ключ `AssignedToYou` в en/ru/hy. Новых колонок БД нет.
+- **Проверка:** `dotnet build` проекта в temp — 0 ошибок. Браузер не кликал.
+
+---
+
+## 2026-11-02 — OpenNewCase: компактнее, стекло Send, закрытие уведомления
+
+- **Суть:** карточки Open New Case чуть меньше. Кнопка Send в стеклянном стиле. После отправки баннер успеха/лимита закрывается по X (раньше `data-bs-dismiss="alert"` не работал — не было класса `alert`). Адатив mobile / tablet / laptop / desktop.
+- **Сделано:** `Views/SupportTickets/OpenNewCase.cshtml`, `page-newsupportticket.css`. Закрытие через `data-close-support-alert`.
+- **Проверка:** правки Razor/CSS. Браузер не кликал.
+
+---
+
+## 2026-11-02 — My Settings на всю область контента, как System Settings
+
+- **Суть:** страница My Settings занимает область контента как Roles/Users. Поля профиля и пароля в колонках вкладки. Переключатели уведомлений — две колонки, клик по карточке включает switch.
+- **Сделано:** `Views/Dashboard/Settings.cshtml` — убран `container-xxl`, карточка `.card.settings-card` прямой потомок layout; заголовок в `card-header`. CSS `page-mysettings.css`: без max-width 760px, `--settings-gap`, full-height ≥1200px, mobile/tablet/laptop/desktop.
+- **Проверка:** `dotnet build` проекта в temp — 0 ошибок. Браузер не кликал.
+
+---
+
+## 2026-11-02 — System Settings на всю область контента, переключатели в колонках
+
+- **Суть:** страница System Preferences занимает область контента как Roles/Users (карточка — прямой потомок `.partnerly-layout-content`). Переключатели больше не на всю ширину: ширина как у колонок вкладки. Клик по всей карточке включает/выключает switch. Отступы равные через `--settings-gap`.
+- **Сделано:** `Views/SystemPreferences/Index.cshtml` — убран `container-xxl`, заголовок в `card-header`, switch как `<label class="maintenance-setting">`. System/Mail: `col-12 col-md-6`; Access: `col-12 col-md-6 col-xl-4`. CSS: mobile / tablet / laptop / desktop.
+- **Проверка:** `dotnet build -p:UseAppHost=false` в temp — 0 ошибок. Копирование в `bin` не удалось — dll занят Partnerly/VS. Браузер не кликал.
+
+---
+
+## 2026-11-02 — Apple кнопка видна, без ключа клик ничего не делает
+
+- **Суть:** на Login/Register кнопка Apple снова видна. Пока ClientId пустой, клик не вызывает Challenge и не падает.
+- **Сделано:** кнопка `type="button"` без submit, если OAuth не настроен; AddApple по-прежнему только при ClientId.
+- **Проверка:** правки Razor/JS. Нужен перезапуск, если сайт уже запущен.
+
+---
+
+## 2026-11-02 — Apple без ClientId больше не валит старт
+
+- **Суть:** пустой `Authentication:Apple:ClientId` больше не регистрирует Apple OAuth, поэтому нет `ArgumentException: The 'ClientId' option must be provided`. Кнопка Apple скрыта, пока ключ не задан.
+- **Сделано:** `Program.cs` AddApple только если ClientId есть; `ExternalLoginOptions.IsAppleConfigured`; Login/Register не показывают Apple без ключа.
+- **Проверка:** сборка в temp — 0 ошибок. Нужен перезапуск приложения (dll был занят Partnerly/VS).
+
+---
+
+## 2026-11-02 — Apple Sign In на Login/Register
+
+- **Суть:** вход через Apple по той же схеме, что Google: кнопки на попапах Login/Register, callback, страница дорегистрации, переключатель в System Preferences. Ключи в Git пустые.
+- **Сделано:** пакет `AspNet.Security.OAuth.Apple` 6.0.15; `Authentication:Apple` в `appsettings.json` (ClientId, ClientSecret, TeamId, KeyId, PrivateKey — пустые); `Program.cs` AddApple; `AccountController` AppleLogin/Callback/Register; `User.AppleId`; `SystemSettings.EnableAppleLogin`; миграция `20261102092927_AddAppleSignIn` **применена** на локальной БД 2026-11-02.
+- **Проверка:** `dotnet build -p:UseAppHost=false` — 0 ошибок. `dotnet ef database update` — миграция применена (AppleId, EnableAppleLogin). Браузер не кликал. Живой вход через Apple без ключей не проверялся.
+
+---
+
 ## 2026-11-02 — DataTable: таблица на всю ширину, Selected первая 60px
 
 - **Суть:** колонки стартуют с ширин из кода/сохранения. Если в `.table-responsive` остаётся место, оно пропорционально делится между видимыми колоками, кроме Selected и Actions. Таблица занимает ширину контейнера. Если сумма больше контейнера — горизонтальный скролл. Selected, если видна, всегда первая, не тянется, max 60px, не переставляется.

@@ -119,6 +119,7 @@ namespace Partnerly.Models
                         IsAiAssistantEnabled = true,
                         DefaultNewUserRoleId = userRoleId,
                         EnableGoogleLogin = true,
+                        EnableAppleLogin = true,
                         PersistentCookieDays = Partnerly.Helpers.SystemSettingsDefaults.PersistentCookieDays,
                         SessionExpireMinutes = Partnerly.Helpers.SystemSettingsDefaults.SessionExpireMinutes,
                         MaxProfilePhotoSizeMb = Partnerly.Helpers.SystemSettingsDefaults.MaxProfilePhotoSizeMb,

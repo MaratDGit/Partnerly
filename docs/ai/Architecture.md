@@ -152,6 +152,7 @@ MapHub /notificationHub
 
 - SMTP (`IEmailSender`).
 - Google OAuth.
+- Apple Sign In (`AspNet.Security.OAuth.Apple`; ключи — пустые плейсхолдеры в `appsettings.json`).
 - OpenAI HTTP (`OpenAIService`).
 - Файловая система `wwwroot/uploads`.
 

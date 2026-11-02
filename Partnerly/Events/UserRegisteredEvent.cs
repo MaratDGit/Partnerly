@@ -83,6 +83,10 @@ namespace Partnerly.Events
                         { 
                             
                         }
+                        else if (@event.RegisteredWithResource == "Apple")
+                        {
+
+                        }
 
                         if (!string.IsNullOrEmpty(templateName) && !string.IsNullOrEmpty(confirmationLink))
                         {

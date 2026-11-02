@@ -17,6 +17,8 @@
         };
     Layout = "_LandingLayout";
     var googleEnabled = ViewBag.GoogleLoginEnabled as bool? ?? true;
+    var appleEnabled = ViewBag.AppleLoginEnabled as bool? ?? true;
+    var appleConfigured = ViewBag.AppleOAuthConfigured as bool? ?? false;
     var typePhrases = new[]
     {
         Localizer["LandingType1"].Value,
@@ -126,7 +128,7 @@
               data-slider-prev="@Localizer["LandingSliderPrev"]"
               data-slider-next="@Localizer["LandingSliderNext"]"
               data-google-url="@(googleEnabled ? Url.Action("GoogleLogin", "Account") : "")"
-              data-apple-url="@Url.Action("AppleLogin", "Account")"
+              data-apple-url="@(appleEnabled ? (appleConfigured ? Url.Action("AppleLogin", "Account") : "#") : "")"
               data-google-label="@Localizer["ContinuewithGoogle"]"
               data-apple-label="@Localizer["ContinuewithApple"]"
               data-login-label="@Localizer["Login"]"

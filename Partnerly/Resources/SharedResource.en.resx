@@ -1005,6 +1005,10 @@
     <value>We received your data via Google.</value>
   </data>
 
+  <data name="WereceivedyourdataviaApple" xml:space="preserve">
+    <value>We received your data via Apple.</value>
+  </data>
+
   <data name="Open" xml:space="preserve">
     <value>Open</value>
   </data>
@@ -1653,6 +1657,10 @@
     <value>Verified with Google</value>
   </data>
 
+  <data name="VerifiedwithApple" xml:space="preserve">
+    <value>Verified with Apple</value>
+  </data>
+
   <data name="Youraccountisready" xml:space="preserve">
     <value>Your account is ready</value>
   </data>
@@ -2216,6 +2224,10 @@
     <value>Google sign-in</value>
   </data>
 
+  <data name="EnableAppleLogin" xml:space="preserve">
+    <value>Apple sign-in</value>
+  </data>
+
   <data name="PersistentCookieDays" xml:space="preserve">
     <value>Remember me (days)</value>
   </data>
@@ -2310,6 +2322,10 @@
 
   <data name="GoogleLoginDisabled" xml:space="preserve">
     <value>Google sign-in is disabled.</value>
+  </data>
+
+  <data name="AppleLoginDisabled" xml:space="preserve">
+    <value>Apple sign-in is disabled.</value>
   </data>
 
   <data name="AiAssistantDisabled" xml:space="preserve">
@@ -2614,6 +2630,10 @@
 
   <data name="PlanDailyActivityHint" xml:space="preserve">
     <value>When your agents run, every action they take shows up here by day.</value>
+  </data>
+
+  <data name="AssignedToYou" xml:space="preserve">
+    <value>Assigned to you</value>
   </data>
 
 </root>

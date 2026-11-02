@@ -1,63 +1,59 @@
 ﻿/* =========================================================
    SYSTEM PREFERENCES
-   ========================================================= */
-
-.system-preferences-page {
-    padding-bottom: 30px;
-}
-
-
-/* =========================================================
-   PAGE HEADER
-   ========================================================= */
-
-.system-preferences-header {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    margin-bottom: 24px;
-}
-
-.system-preferences-title {
-    display: flex;
-    align-items: center;
-    gap: 14px;
-}
-
-    .system-preferences-title h4 {
-        margin: 0;
-        font-weight: 600;
-        color: #384551;
-    }
-
-.system-preferences-icon {
-    width: 48px;
-    height: 48px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    border-radius: 12px;
-    background: rgba(105, 108, 255, 0.10);
-    color: #696cff;
-    font-size: 24px;
-    flex-shrink: 0;
-}
-
-
-/* =========================================================
-   MAIN CARD
+   Direct .card child of .partnerly-layout-content —
+   fills remaining height at ≥1200px like Roles / Users.
    ========================================================= */
 
 .system-preferences-card {
+    width: 100%;
     border: 1px solid rgba(67, 89, 113, 0.08);
     border-radius: 16px;
     box-shadow: 0 4px 18px rgba(67, 89, 113, 0.06);
     overflow: hidden;
 }
 
-    .system-preferences-card .card-body {
-        padding: 28px;
+    .system-preferences-card > .card-header {
+        display: flex;
+        align-items: center;
+        min-height: 64px;
+        padding: 16px 24px;
+        background: transparent;
+        border-bottom: 1px solid rgba(67, 89, 113, 0.08);
     }
+
+    .system-preferences-card > .card-body {
+        padding: 20px 24px 24px;
+    }
+
+
+/* =========================================================
+   PAGE HEADER
+   ========================================================= */
+
+.system-preferences-title {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+    .system-preferences-title h5 {
+        margin: 0;
+        font-weight: 600;
+        color: #384551;
+    }
+
+.system-preferences-icon {
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 10px;
+    background: rgba(105, 108, 255, 0.10);
+    color: #696cff;
+    font-size: 22px;
+    flex-shrink: 0;
+}
 
 
 /* =========================================================
@@ -65,7 +61,7 @@
    ========================================================= */
 
 .system-settings-tabs {
-    margin-top: 10px;
+    margin-top: 4px;
 }
 
 
@@ -76,7 +72,7 @@
         flex-wrap: wrap;
         align-items: stretch;
         gap: 6px;
-        padding: 0 4px;
+        padding: 0;
         border-bottom: 1px solid rgba(67, 89, 113, 0.10);
     }
 
@@ -131,8 +127,19 @@
     }
 
 .settings-tab-content {
-    padding: 28px 8px 12px;
+    --settings-gap: 1.5rem;
+    display: flex;
+    flex-direction: column;
+    gap: var(--settings-gap);
+    padding: var(--settings-gap) 0 0;
 }
+
+    .settings-tab-content > .row {
+        --bs-gutter-x: var(--settings-gap);
+        --bs-gutter-y: 0;
+        margin-top: 0;
+        row-gap: var(--settings-gap);
+    }
 
 
 /* =========================================================
@@ -177,32 +184,51 @@
    MAINTENANCE MODE
    ========================================================= */
 
-.maintenance-setting {
+label.maintenance-setting {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    gap: 20px;
-    padding: 20px;
+    gap: 16px;
+    width: 100%;
+    height: 100%;
+    min-height: 72px;
+    margin: 0;
+    padding: 16px 18px;
     border: 1px solid rgba(67, 89, 113, 0.07);
     border-radius: 12px;
     background: #f8f8fc;
+    color: inherit;
+    cursor: pointer;
+    user-select: none;
+    box-sizing: border-box;
     transition: border-color .2s ease, box-shadow .2s ease, background-color .2s ease;
 }
 
-    .maintenance-setting:hover {
+    label.maintenance-setting:hover {
         border-color: rgba(105, 108, 255, 0.16);
         box-shadow: 0 4px 14px rgba(67, 89, 113, 0.05);
+    }
+
+    label.maintenance-setting:has(.form-check-input:checked) {
+        background: rgba(105, 108, 255, 0.06);
+        border-color: rgba(105, 108, 255, 0.22);
+    }
+
+    label.maintenance-setting:has(.form-check-input:focus-visible) {
+        box-shadow: 0 0 0 0.15rem rgba(105, 108, 255, 0.15);
     }
 
 .maintenance-setting-info {
     display: flex;
     align-items: center;
-    gap: 14px;
+    gap: 12px;
+    min-width: 0;
+    flex: 1 1 auto;
 }
 
 .maintenance-icon {
-    width: 42px;
-    height: 42px;
+    width: 40px;
+    height: 40px;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -217,11 +243,17 @@
     color: #384551;
     font-size: 14px;
     font-weight: 600;
+    line-height: 1.35;
+    overflow-wrap: anywhere;
 }
 
 .maintenance-setting .form-check {
+    display: flex;
+    align-items: center;
+    flex: 0 0 auto;
     margin: 0;
     padding-left: 0;
+    min-height: 0;
 }
 
 .maintenance-setting .form-check-input {
@@ -229,6 +261,7 @@
     height: 24px;
     margin: 0;
     cursor: pointer;
+    flex-shrink: 0;
     box-shadow: none;
 }
 
@@ -249,7 +282,7 @@
 .settings-field {
     display: flex;
     align-items: center;
-    gap: 10px;
+    gap: 12px;
 }
 
 .settings-field-icon {
@@ -422,6 +455,11 @@
         font-size: 15px;
     }
 
+.scrolling-text-hint.settings-tab-hint {
+    margin-top: 0;
+    margin-left: 0;
+}
+
 
 /* =========================================================
    FORM VALIDATION STATES
@@ -455,45 +493,37 @@
 
 
 /* =========================================================
-   MOBILE
+   MOBILE  (< 768)
    ========================================================= */
 
 @media (max-width: 767.98px) {
 
-    .system-preferences-page {
-        padding-bottom: 20px;
-    }
-
-    .system-preferences-header {
-        margin-bottom: 18px;
-    }
-
-    .system-preferences-title {
-        align-items: flex-start;
+    .system-preferences-card > .card-header {
+        min-height: 56px;
+        padding: 12px 16px;
     }
 
     .system-preferences-icon {
-        width: 42px;
-        height: 42px;
-        font-size: 21px;
-    }
-
-    .system-preferences-title h4 {
+        width: 36px;
+        height: 36px;
         font-size: 18px;
+        border-radius: 9px;
     }
 
-
-    /* Card */
-
-    .system-preferences-card .card-body {
-        padding: 20px;
+    .system-preferences-title {
+        gap: 10px;
     }
 
+        .system-preferences-title h5 {
+            font-size: 16px;
+        }
 
-    /* Tabs */
+    .system-preferences-card > .card-body {
+        padding: 16px;
+    }
 
     .system-settings-tabs {
-        margin-top: 5px;
+        margin-top: 0;
     }
 
         .system-settings-tabs .nav-tabs {
@@ -501,6 +531,7 @@
             overflow-x: auto;
             scrollbar-width: none;
             padding: 0;
+            gap: 4px;
         }
 
             .system-settings-tabs .nav-tabs::-webkit-scrollbar {
@@ -512,8 +543,8 @@
         }
 
         .system-settings-tabs .nav-link {
-            min-height: 44px;
-            padding: 10px 14px;
+            min-height: 42px;
+            padding: 8px 12px;
             font-size: 12px;
         }
 
@@ -521,32 +552,29 @@
                 font-size: 17px;
             }
 
-
-    /* Tab content */
-
     .settings-tab-content {
-        padding: 22px 4px 10px;
+        --settings-gap: 1rem;
     }
 
     .settings-tab-header {
-        margin-bottom: 20px;
+        margin-bottom: 16px;
     }
-
-
-    /* Maintenance */
 
     .maintenance-setting {
-        align-items: flex-start;
-        flex-direction: column;
-        padding: 18px;
+        min-height: 64px;
+        padding: 12px 14px;
+        gap: 12px;
     }
 
-        .maintenance-setting .form-check {
-            margin-left: 56px;
-        }
+    .maintenance-icon {
+        width: 36px;
+        height: 36px;
+        font-size: 18px;
+    }
 
-
-    /* Security fields */
+    .maintenance-title {
+        font-size: 13px;
+    }
 
     .settings-field {
         gap: 8px;
@@ -558,15 +586,14 @@
         font-size: 17px;
     }
 
-    .settings-field .form-control {
+    .settings-field .form-control,
+    .settings-field .form-select {
         height: 52px;
     }
 
-
-    /* Notifications */
-
     .scrolling-text-box {
         flex-direction: column;
+        gap: 8px;
     }
 
     .scrolling-text-icon {
@@ -577,13 +604,7 @@
         width: 100%;
     }
 
-
-    /* Validation */
-
-    .validation-message {
-        margin-left: 0;
-    }
-
+    .validation-message,
     .scrolling-text-hint {
         margin-left: 0;
     }
@@ -591,18 +612,22 @@
 
 
 /* =========================================================
-   VERY SMALL SCREENS
+   VERY SMALL SCREENS  (< 420)
    ========================================================= */
 
-@media (max-width: 420px) {
+@media (max-width: 419.98px) {
 
-    .system-preferences-card .card-body {
-        padding: 16px;
+    .system-preferences-card > .card-header {
+        padding: 10px 12px;
+    }
+
+    .system-preferences-card > .card-body {
+        padding: 12px;
     }
 
     .system-settings-tabs .nav-link {
-        padding-left: 11px;
-        padding-right: 11px;
+        padding-left: 10px;
+        padding-right: 10px;
     }
 
         .system-settings-tabs .nav-link span {
@@ -615,12 +640,109 @@
         }
 
     .settings-tab-content {
-        padding-left: 0;
-        padding-right: 0;
+        --settings-gap: 0.75rem;
     }
 
     .maintenance-setting {
-        padding: 16px;
+        min-height: 56px;
+        padding: 10px 12px;
+        gap: 10px;
+        border-radius: 10px;
+    }
+
+    .maintenance-icon {
+        width: 32px;
+        height: 32px;
+        font-size: 16px;
+        border-radius: 8px;
+    }
+
+    .maintenance-setting .form-check-input {
+        width: 40px;
+        height: 22px;
+    }
+}
+
+
+/* =========================================================
+   TABLET  (768 – 991)
+   ========================================================= */
+
+@media (min-width: 768px) and (max-width: 991.98px) {
+
+    .system-preferences-card > .card-header {
+        padding: 14px 20px;
+    }
+
+    .system-preferences-card > .card-body {
+        padding: 18px 20px 20px;
+    }
+
+    .settings-tab-content {
+        --settings-gap: 1.25rem;
+    }
+
+    .maintenance-setting {
+        padding: 14px 16px;
+        min-height: 68px;
+    }
+}
+
+
+/* =========================================================
+   LAPTOP  (992 – 1199)  and compact 13" (1200 – 1366)
+   ========================================================= */
+
+@media (min-width: 992px) and (max-width: 1366.98px) {
+
+    .system-preferences-card > .card-header {
+        min-height: 58px;
+        padding: 12px 20px;
+    }
+
+    .system-preferences-card > .card-body {
+        padding: 16px 20px 20px;
+    }
+
+    .settings-tab-content {
+        --settings-gap: 1.25rem;
+    }
+
+    .maintenance-setting {
+        min-height: 68px;
+        padding: 14px 16px;
+    }
+
+    .system-settings-tabs .nav-link {
+        min-height: 42px;
+        padding: 9px 14px;
+        font-size: 13px;
+    }
+}
+
+
+/* =========================================================
+   DESKTOP  (≥ 1400)
+   ========================================================= */
+
+@media (min-width: 1400px) {
+
+    .system-preferences-card > .card-header {
+        min-height: 68px;
+        padding: 16px 28px;
+    }
+
+    .system-preferences-card > .card-body {
+        padding: 24px 28px 28px;
+    }
+
+    .settings-tab-content {
+        --settings-gap: 1.5rem;
+    }
+
+    .maintenance-setting {
+        min-height: 76px;
+        padding: 16px 20px;
     }
 }
 
@@ -629,7 +751,7 @@
    DARK THEME — SYSTEM PREFERENCES
    ========================================================= */
 
-html[data-theme="dark"] .system-preferences-title h4 {
+html[data-theme="dark"] .system-preferences-title h5 {
     color: var(--partnerly-text-dark, #edf2ff);
 }
 
@@ -647,7 +769,12 @@ html[data-theme="dark"] .system-preferences-card {
     box-shadow: 0 6px 24px rgba(0, 0, 0, 0.16);
 }
 
-    html[data-theme="dark"] .system-preferences-card .card-body {
+    html[data-theme="dark"] .system-preferences-card > .card-header {
+        background: transparent;
+        border-bottom-color: var(--partnerly-border, #29344a);
+    }
+
+    html[data-theme="dark"] .system-preferences-card > .card-body {
         color: var(--partnerly-text, #c5cee0);
     }
 
@@ -699,6 +826,11 @@ html[data-theme="dark"] .maintenance-setting {
         background: rgba(32, 42, 64, 0.72);
         border-color: rgba(129, 133, 255, 0.35);
         box-shadow: 0 4px 18px rgba(105, 108, 255, 0.07);
+    }
+
+    html[data-theme="dark"] .maintenance-setting:has(.form-check-input:checked) {
+        background: rgba(105, 108, 255, 0.12);
+        border-color: rgba(129, 133, 255, 0.38);
     }
 
 html[data-theme="dark"] .maintenance-icon {

@@ -82,6 +82,7 @@ Partnerly.sln
 - **SQL Server** — строка `ConnectionStrings:DbContext` (значение не документируется).
 - **SMTP** — секция `EmailSettings` в конфигурации.
 - **Google OAuth** — `Authentication:Google:*` (в Git — пустые плейсхолдеры; локально user-secrets / Development).
+- **Apple Sign In** — `Authentication:Apple:*` (ClientId, ClientSecret или TeamId+KeyId+PrivateKey; в Git — пустые плейсхолдеры).
 - **OpenAI** — `OpenAI:ApiKey` из user-secrets или `secrets.json`; модель в `appsettings.json`.
 - **SignalR** — `/notificationHub`, идентификатор пользователя = `ClaimTypes.NameIdentifier`.
 - **Локальные файлы** — `wwwroot/uploads/attachments`, `wwwroot/uploads/profiles`.

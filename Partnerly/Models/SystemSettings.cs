@@ -64,6 +64,8 @@ namespace Partnerly.Models
 
         public bool? EnableGoogleLogin { get; set; }
 
+        public bool? EnableAppleLogin { get; set; }
+
         public int? PersistentCookieDays { get; set; }
 
         public int? SessionExpireMinutes { get; set; }

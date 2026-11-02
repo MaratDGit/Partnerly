@@ -413,17 +413,16 @@ namespace Partnerly.Controllers
 
         [HttpGet]
         [ActionName(nameof(AppleLogin))]
-        public IActionResult AppleLoginGet(string? returnUrl = null)
+        public Task<IActionResult> AppleLoginGet(string? returnUrl = null)
         {
-            return AppleLogin(returnUrl);
+            return StartAppleLoginAsync(returnUrl);
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult AppleLogin(string? returnUrl = null)
+        public Task<IActionResult> AppleLogin(string? returnUrl = null)
         {
-            // Apple Sign In is not wired yet; send the guest to the login page.
-            return RedirectToAction(nameof(Login), new { returnUrl });
+            return StartAppleLoginAsync(returnUrl);
         }
 
         [HttpGet]
@@ -557,6 +556,164 @@ namespace Partnerly.Controllers
             var user = new User
             {
                 GoogleId = model.GoogleId,
+                Email = model.Email,
+                FirstName = model.FirstName,
+                LastName = model.LastName,
+                EmailConfirmed = true,
+
+                PasswordHash = null,
+            };
+
+            await _userService.CreateUserAsync(user);
+
+            var createdUser = await _userService.GetUserByEmailAsync(model.Email);
+
+            if (createdUser == null)
+            {
+                return RedirectToAction(nameof(Login));
+            }
+
+            await SignInUserAsync(createdUser, true);
+
+            if (!string.IsNullOrEmpty(model.ReturnUrl) && Url.IsLocalUrl(model.ReturnUrl))
+            {
+                return Redirect(model.ReturnUrl);
+            }
+
+            return RedirectToAction("Index", "Home");
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> AppleRegister(
+            string appleId,
+            string email,
+            string? firstName,
+            string? lastName,
+            string? returnUrl)
+        {
+            if (!await IsAppleLoginEnabledAsync())
+                return RedirectToAction(nameof(Login));
+
+            await PopulateAuthSettingsAsync();
+
+            var model = new AppleRegisterViewModel
+            {
+                AppleId = appleId,
+                Email = email,
+                FirstName = firstName,
+                LastName = lastName,
+                ReturnUrl = returnUrl
+            };
+
+            return View(model);
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> AppleCallback(string? returnUrl = null)
+        {
+            if (!await IsAppleLoginEnabledAsync())
+                return RedirectToAction(nameof(Login));
+
+            var result = await HttpContext.AuthenticateAsync(ExternalLoginOptions.AppleScheme);
+
+            if (!result.Succeeded || result.Principal == null)
+            {
+                return RedirectToAction(nameof(Login));
+            }
+
+            var principal = result.Principal;
+
+            var appleId = principal.FindFirstValue(
+                ClaimTypes.NameIdentifier);
+
+            var email = principal.FindFirstValue(
+                ClaimTypes.Email);
+
+            var firstName = principal.FindFirstValue(
+                ClaimTypes.GivenName);
+
+            var lastName = principal.FindFirstValue(
+                ClaimTypes.Surname);
+
+            if (string.IsNullOrWhiteSpace(appleId) ||
+                string.IsNullOrWhiteSpace(email))
+            {
+                return RedirectToAction(nameof(Login));
+            }
+
+            var user = await _userService.GetUserByEmailAsync(email);
+
+            if (user == null)
+            {
+                return RedirectToAction(
+                        nameof(AppleRegister),
+                        new
+                        {
+                            appleId,
+                            email,
+                            firstName,
+                            lastName,
+                            returnUrl
+                        });
+            }
+
+            if (user.IsDeleted == true || user.IsBlocked == true)
+            {
+                return RedirectToAction(nameof(Login));
+            }
+
+            if (await IsUserLockedOutAsync(user))
+            {
+                return RedirectToAction(nameof(Login));
+            }
+
+            if (user.Role == null)
+            {
+                return RedirectToAction(nameof(Login));
+            }
+
+            await SignInUserAsync(user, true);
+
+            if (string.IsNullOrEmpty(user.AppleId))
+            {
+                user.AppleId = appleId;
+
+                await _userService.UpdateUserAsync(user, user.Id);
+            }
+
+            if (!string.IsNullOrEmpty(returnUrl) &&
+                Url.IsLocalUrl(returnUrl))
+            {
+                return Redirect(returnUrl);
+            }
+
+            return RedirectToAction("Index", "Home");
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> AppleRegister(AppleRegisterViewModel model)
+        {
+            if (!await IsAppleLoginEnabledAsync())
+                return RedirectToAction(nameof(Login));
+
+            if (!ModelState.IsValid)
+            {
+                await PopulateAuthSettingsAsync();
+                return View(model);
+            }
+
+            var existingUser = await _userService.GetUserByEmailAsync(model.Email);
+
+            if (existingUser != null)
+            {
+                ModelState.AddModelError("Email", ErrorMessages.UserWithEmailAlreadyExists);
+                return View(model);
+            }
+
+            var user = new User
+            {
+                AppleId = model.AppleId,
                 Email = model.Email,
                 FirstName = model.FirstName,
                 LastName = model.LastName,
@@ -790,6 +947,8 @@ namespace Partnerly.Controllers
         {
             var settings = await _systemSettingsService.GetCurrentAsync();
             ViewBag.GoogleLoginEnabled = settings?.EnableGoogleLogin != false;
+            ViewBag.AppleLoginEnabled = settings?.EnableAppleLogin != false;
+            ViewBag.AppleOAuthConfigured = ExternalLoginOptions.IsAppleConfigured(_config);
 
             var appName = settings?.ApplicationName;
             if (string.IsNullOrWhiteSpace(appName))
@@ -818,10 +977,37 @@ namespace Partnerly.Controllers
             return Challenge(properties, "Google");
         }
 
+        private async Task<IActionResult> StartAppleLoginAsync(string? returnUrl)
+        {
+            if (!await IsAppleLoginEnabledAsync())
+                return RedirectToAction("Index", "Home");
+
+            var redirectUrl = Url.Action(
+                nameof(AppleCallback),
+                "Account",
+                new { returnUrl });
+
+            var properties = new AuthenticationProperties
+            {
+                RedirectUri = redirectUrl
+            };
+
+            return Challenge(properties, ExternalLoginOptions.AppleScheme);
+        }
+
         private async Task<bool> IsGoogleLoginEnabledAsync()
         {
             var settings = await _systemSettingsService.GetCurrentAsync();
             return settings?.EnableGoogleLogin != false;
+        }
+
+        private async Task<bool> IsAppleLoginEnabledAsync()
+        {
+            if (!ExternalLoginOptions.IsAppleConfigured(_config))
+                return false;
+
+            var settings = await _systemSettingsService.GetCurrentAsync();
+            return settings?.EnableAppleLogin != false;
         }
 
         private async Task<bool> IsUserLockedOutAsync(User user)

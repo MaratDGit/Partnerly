@@ -59,6 +59,7 @@ namespace Partnerly.Descriptors.Messages
         public static string FileTooLarge => Messages.Get(nameof(FileTooLarge));
         public static string FileExtensionNotAllowed => Messages.Get(nameof(FileExtensionNotAllowed));
         public static string GoogleLoginDisabled => Messages.Get(nameof(GoogleLoginDisabled));
+        public static string AppleLoginDisabled => Messages.Get(nameof(AppleLoginDisabled));
         public static string AiAssistantDisabled => Messages.Get(nameof(AiAssistantDisabled));
         public static string Photosavedsuccessfully => Messages.Get(nameof(Photosavedsuccessfully));
         public static string Selectatleastoneuser => Messages.Get(nameof(Selectatleastoneuser));

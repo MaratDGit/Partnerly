@@ -1005,6 +1005,10 @@
     <value>Ձեր տվյալները ստացել ենք Google-ից։</value>
   </data>
 
+  <data name="WereceivedyourdataviaApple" xml:space="preserve">
+    <value>Ձեր տվյալները ստացել ենք Apple-ից։</value>
+  </data>
+
   <data name="Open" xml:space="preserve">
     <value>Բաց</value>
   </data>
@@ -1653,6 +1657,10 @@
     <value>Հաստատված է Google-ի միջոցով</value>
   </data>
 
+  <data name="VerifiedwithApple" xml:space="preserve">
+    <value>Հաստատված է Apple-ի միջոցով</value>
+  </data>
+
   <data name="Youraccountisready" xml:space="preserve">
     <value>Հաշիվը պատրաստ է</value>
   </data>
@@ -2216,6 +2224,10 @@
     <value>Google մուտք</value>
   </data>
 
+  <data name="EnableAppleLogin" xml:space="preserve">
+    <value>Apple մուտք</value>
+  </data>
+
   <data name="PersistentCookieDays" xml:space="preserve">
     <value>Հիշել ինձ (օր)</value>
   </data>
@@ -2310,6 +2322,10 @@
 
   <data name="GoogleLoginDisabled" xml:space="preserve">
     <value>Google մուտքն անջատված է։</value>
+  </data>
+
+  <data name="AppleLoginDisabled" xml:space="preserve">
+    <value>Apple մուտքն անջատված է։</value>
   </data>
 
   <data name="AiAssistantDisabled" xml:space="preserve">
@@ -2614,6 +2630,10 @@
 
   <data name="PlanDailyActivityHint" xml:space="preserve">
     <value>Երբ գործակալներն աշխատում են, նրանց յուրաքանչյուր գործողություն այստեղ երևում է ըստ օրերի։</value>
+  </data>
+
+  <data name="AssignedToYou" xml:space="preserve">
+    <value>Նշանակված է ձեզ</value>
   </data>
 
 </root>

@@ -1305,6 +1305,12 @@ html[data-theme="dark"] .landing-auth-google {
         border-color: rgba(167, 139, 250, 0.42);
     }
 
+.landing-auth-providers {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
 .landing-auth-divider {
     display: flex;
     align-items: center;

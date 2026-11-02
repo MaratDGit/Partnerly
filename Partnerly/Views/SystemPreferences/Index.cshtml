@@ -13,717 +13,739 @@
           asp-append-version="true" />
 }
 
-<div class="container-xxl flex-grow-1 container-p-y">
-<div class="system-preferences-page">
+<div class="card system-preferences-card">
 
-    <div class="system-preferences-header">
-
+    <div class="card-header">
         <div class="system-preferences-title">
-
             <div class="system-preferences-icon">
                 <i class="bx bx-cog"></i>
             </div>
-
-            <div>
-                <h4 class="mb-1">
-                    @Localizer["Settings"]
-                </h4>
-            </div>
-
+            <h5 class="mb-0">
+                @Localizer["Settings"]
+            </h5>
         </div>
-
     </div>
 
+    <div class="card-body">
 
-    <div class="card system-preferences-card">
+        <form id="systemPreferencesForm"
+              asp-action="Edit">
 
-        <div class="card-body">
+            @await Html.PartialAsync("_StickyButtons", Model.StickyButtons)
 
-            <form id="systemPreferencesForm"
-                  asp-action="Edit">
+            <input type="hidden"
+                   asp-for="Id" />
 
-                @await Html.PartialAsync("_StickyButtons", Model.StickyButtons)
-
-                <input type="hidden"
-                       asp-for="Id" />
-
-                <input type="hidden"
-                       id="hiddenNote"
-                       asp-for="Note" />
+            <input type="hidden"
+                   id="hiddenNote"
+                   asp-for="Note" />
 
 
-                <div class="system-settings-tabs">
+            <div class="system-settings-tabs">
 
-                    <ul class="nav nav-tabs"
-                        id="systemSettingsTabs"
-                        role="tablist">
+                <ul class="nav nav-tabs"
+                    id="systemSettingsTabs"
+                    role="tablist">
 
-                        <li class="nav-item" role="presentation">
-                            <button class="nav-link active"
-                                    id="system-tab"
-                                    data-bs-toggle="tab"
-                                    data-bs-target="#system-tab-pane"
-                                    type="button"
-                                    role="tab"
-                                    aria-controls="system-tab-pane"
-                                    aria-selected="true">
-                                <i class="bx bx-server"></i>
-                                <span>@Localizer["System"]</span>
-                            </button>
-                        </li>
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link active"
+                                id="system-tab"
+                                data-bs-toggle="tab"
+                                data-bs-target="#system-tab-pane"
+                                type="button"
+                                role="tab"
+                                aria-controls="system-tab-pane"
+                                aria-selected="true">
+                            <i class="bx bx-server"></i>
+                            <span>@Localizer["System"]</span>
+                        </button>
+                    </li>
 
-                        <li class="nav-item" role="presentation">
-                            <button class="nav-link"
-                                    id="access-tab"
-                                    data-bs-toggle="tab"
-                                    data-bs-target="#access-tab-pane"
-                                    type="button"
-                                    role="tab"
-                                    aria-controls="access-tab-pane"
-                                    aria-selected="false">
-                                <i class="bx bx-lock-alt"></i>
-                                <span>@Localizer["Access"]</span>
-                            </button>
-                        </li>
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link"
+                                id="access-tab"
+                                data-bs-toggle="tab"
+                                data-bs-target="#access-tab-pane"
+                                type="button"
+                                role="tab"
+                                aria-controls="access-tab-pane"
+                                aria-selected="false">
+                            <i class="bx bx-lock-alt"></i>
+                            <span>@Localizer["Access"]</span>
+                        </button>
+                    </li>
 
-                        <li class="nav-item" role="presentation">
-                            <button class="nav-link"
-                                    id="mail-tab"
-                                    data-bs-toggle="tab"
-                                    data-bs-target="#mail-tab-pane"
-                                    type="button"
-                                    role="tab"
-                                    aria-controls="mail-tab-pane"
-                                    aria-selected="false">
-                                <i class="bx bx-envelope"></i>
-                                <span>@Localizer["Mailandnotifications"]</span>
-                            </button>
-                        </li>
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link"
+                                id="mail-tab"
+                                data-bs-toggle="tab"
+                                data-bs-target="#mail-tab-pane"
+                                type="button"
+                                role="tab"
+                                aria-controls="mail-tab-pane"
+                                aria-selected="false">
+                            <i class="bx bx-envelope"></i>
+                            <span>@Localizer["Mailandnotifications"]</span>
+                        </button>
+                    </li>
 
-                        <li class="nav-item" role="presentation">
-                            <button class="nav-link"
-                                    id="files-tab"
-                                    data-bs-toggle="tab"
-                                    data-bs-target="#files-tab-pane"
-                                    type="button"
-                                    role="tab"
-                                    aria-controls="files-tab-pane"
-                                    aria-selected="false">
-                                <i class="bx bx-paperclip"></i>
-                                <span>@Localizer["Files"]</span>
-                            </button>
-                        </li>
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link"
+                                id="files-tab"
+                                data-bs-toggle="tab"
+                                data-bs-target="#files-tab-pane"
+                                type="button"
+                                role="tab"
+                                aria-controls="files-tab-pane"
+                                aria-selected="false">
+                            <i class="bx bx-paperclip"></i>
+                            <span>@Localizer["Files"]</span>
+                        </button>
+                    </li>
 
-                        <li class="nav-item" role="presentation">
-                            <button class="nav-link"
-                                    id="tickets-tab"
-                                    data-bs-toggle="tab"
-                                    data-bs-target="#tickets-tab-pane"
-                                    type="button"
-                                    role="tab"
-                                    aria-controls="tickets-tab-pane"
-                                    aria-selected="false">
-                                <i class="bx bx-support"></i>
-                                <span>@Localizer["Tasks"]</span>
-                            </button>
-                        </li>
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link"
+                                id="tickets-tab"
+                                data-bs-toggle="tab"
+                                data-bs-target="#tickets-tab-pane"
+                                type="button"
+                                role="tab"
+                                aria-controls="tickets-tab-pane"
+                                aria-selected="false">
+                            <i class="bx bx-support"></i>
+                            <span>@Localizer["Tasks"]</span>
+                        </button>
+                    </li>
 
-                    </ul>
+                </ul>
 
 
-                    <div class="tab-content"
-                         id="systemSettingsTabContent">
+                <div class="tab-content"
+                     id="systemSettingsTabContent">
 
-                        <div class="tab-pane fade show active"
-                             id="system-tab-pane"
-                             role="tabpanel"
-                             aria-labelledby="system-tab"
-                             tabindex="0">
+                    <div class="tab-pane fade show active"
+                         id="system-tab-pane"
+                         role="tabpanel"
+                         aria-labelledby="system-tab"
+                         tabindex="0">
 
-                            <div class="settings-tab-content">
+                        <div class="settings-tab-content">
 
-                                <div class="maintenance-setting">
-                                    <div class="maintenance-setting-info">
-                                        <div class="maintenance-icon">
-                                            <i class="bx bx-wrench"></i>
-                                        </div>
-                                        <div>
-                                            <div class="maintenance-title">
+                            <div class="row g-4">
+
+                                <div class="col-12 col-md-6">
+                                    <label class="maintenance-setting" for="isMaintenanceMode">
+                                        <span class="maintenance-setting-info">
+                                            <span class="maintenance-icon">
+                                                <i class="bx bx-wrench"></i>
+                                            </span>
+                                            <span class="maintenance-title">
                                                 @Localizer["MaintenanceMode"]
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="form-check form-switch">
-                                        <input asp-for="IsMaintenanceModeBool"
-                                               class="form-check-input"
-                                               type="checkbox"
-                                               id="isMaintenanceMode" />
-                                    </div>
+                                            </span>
+                                        </span>
+                                        <span class="form-check form-switch">
+                                            <input asp-for="IsMaintenanceModeBool"
+                                                   class="form-check-input"
+                                                   type="checkbox"
+                                                   id="isMaintenanceMode" />
+                                        </span>
+                                    </label>
                                 </div>
 
-                                <div class="maintenance-setting mt-3">
-                                    <div class="maintenance-setting-info">
-                                        <div class="maintenance-icon">
-                                            <i class="bx bx-bot"></i>
-                                        </div>
-                                        <div>
-                                            <div class="maintenance-title">
+                                <div class="col-12 col-md-6">
+                                    <label class="maintenance-setting" for="isAiAssistantEnabled">
+                                        <span class="maintenance-setting-info">
+                                            <span class="maintenance-icon">
+                                                <i class="bx bx-bot"></i>
+                                            </span>
+                                            <span class="maintenance-title">
                                                 @Localizer["AiAssistantEnabled"]
-                                            </div>
+                                            </span>
+                                        </span>
+                                        <span class="form-check form-switch">
+                                            <input asp-for="IsAiAssistantEnabledBool"
+                                                   class="form-check-input"
+                                                   type="checkbox"
+                                                   id="isAiAssistantEnabled" />
+                                        </span>
+                                    </label>
+                                </div>
+
+                            </div>
+
+                            <div class="row g-4">
+
+                                <div class="col-12 col-md-6 col-xl-6">
+                                    <div class="settings-field">
+                                        <div class="settings-field-icon">
+                                            <i class="bx bx-text"></i>
                                         </div>
-                                    </div>
-                                    <div class="form-check form-switch">
-                                        <input asp-for="IsAiAssistantEnabledBool"
-                                               class="form-check-input"
-                                               type="checkbox"
-                                               id="isAiAssistantEnabled" />
+                                        <div class="form-floating flex-grow-1">
+                                            <input asp-for="ApplicationName"
+                                                   class="form-control"
+                                                   id="applicationName"
+                                                   placeholder="@Localizer["ApplicationName"]" />
+                                            <label asp-for="ApplicationName"></label>
+                                        </div>
                                     </div>
                                 </div>
 
-                                <div class="row g-4 mt-1">
-
-                                    <div class="col-xl-6 col-md-6">
-                                        <div class="settings-field">
-                                            <div class="settings-field-icon">
-                                                <i class="bx bx-text"></i>
-                                            </div>
-                                            <div class="form-floating flex-grow-1">
-                                                <input asp-for="ApplicationName"
-                                                       class="form-control"
-                                                       id="applicationName"
-                                                       placeholder="@Localizer["ApplicationName"]" />
-                                                <label asp-for="ApplicationName"></label>
-                                            </div>
+                                <div class="col-12 col-md-6 col-xl-3">
+                                    <div class="settings-field">
+                                        <div class="settings-field-icon">
+                                            <i class="bx bx-globe"></i>
+                                        </div>
+                                        <div class="form-floating flex-grow-1">
+                                            <select asp-for="DefaultLanguage"
+                                                    asp-items="Model.LanguageOptions"
+                                                    class="form-select"
+                                                    id="defaultLanguage">
+                                            </select>
+                                            <label asp-for="DefaultLanguage"></label>
                                         </div>
                                     </div>
+                                </div>
 
-                                    <div class="col-xl-3 col-md-6">
-                                        <div class="settings-field">
-                                            <div class="settings-field-icon">
-                                                <i class="bx bx-globe"></i>
-                                            </div>
-                                            <div class="form-floating flex-grow-1">
-                                                <select asp-for="DefaultLanguage"
-                                                        asp-items="Model.LanguageOptions"
-                                                        class="form-select"
-                                                        id="defaultLanguage">
-                                                </select>
-                                                <label asp-for="DefaultLanguage"></label>
-                                            </div>
+                                <div class="col-12 col-md-6 col-xl-3">
+                                    <div class="settings-field">
+                                        <div class="settings-field-icon">
+                                            <i class="bx bx-time"></i>
+                                        </div>
+                                        <div class="form-floating flex-grow-1">
+                                            <select asp-for="TimeZoneId"
+                                                    asp-items="Model.TimeZoneOptions"
+                                                    class="form-select"
+                                                    id="timeZoneId">
+                                            </select>
+                                            <label asp-for="TimeZoneId"></label>
                                         </div>
                                     </div>
+                                </div>
 
-                                    <div class="col-xl-3 col-md-6">
-                                        <div class="settings-field">
-                                            <div class="settings-field-icon">
-                                                <i class="bx bx-time"></i>
-                                            </div>
-                                            <div class="form-floating flex-grow-1">
-                                                <select asp-for="TimeZoneId"
-                                                        asp-items="Model.TimeZoneOptions"
-                                                        class="form-select"
-                                                        id="timeZoneId">
-                                                </select>
-                                                <label asp-for="TimeZoneId"></label>
-                                            </div>
+                                <div class="col-12">
+                                    <div class="scrolling-text-box">
+                                        <div class="scrolling-text-icon">
+                                            <i class="bx bx-error-circle"></i>
+                                        </div>
+                                        <div class="form-floating flex-grow-1">
+                                            <textarea asp-for="MaintenanceMessage"
+                                                      id="maintenanceMessage"
+                                                      class="form-control scrolling-textarea"
+                                                      rows="4"
+                                                      placeholder="@Localizer["MaintenanceMessage"]"></textarea>
+                                            <label asp-for="MaintenanceMessage"></label>
                                         </div>
                                     </div>
-
-                                    <div class="col-12">
-                                        <div class="scrolling-text-box">
-                                            <div class="scrolling-text-icon">
-                                                <i class="bx bx-error-circle"></i>
-                                            </div>
-                                            <div class="form-floating flex-grow-1">
-                                                <textarea asp-for="MaintenanceMessage"
-                                                          id="maintenanceMessage"
-                                                          class="form-control scrolling-textarea"
-                                                          rows="4"
-                                                          placeholder="@Localizer["MaintenanceMessage"]"></textarea>
-                                                <label asp-for="MaintenanceMessage"></label>
-                                            </div>
-                                        </div>
-                                        <div class="scrolling-text-hint">
-                                            <i class="bx bx-info-circle"></i>
-                                            <span>@Localizer["MaintenanceMessageHint"]</span>
-                                        </div>
+                                    <div class="scrolling-text-hint">
+                                        <i class="bx bx-info-circle"></i>
+                                        <span>@Localizer["MaintenanceMessageHint"]</span>
                                     </div>
-
                                 </div>
 
                             </div>
 
                         </div>
 
+                    </div>
 
-                        <div class="tab-pane fade"
-                             id="access-tab-pane"
-                             role="tabpanel"
-                             aria-labelledby="access-tab"
-                             tabindex="0">
 
-                            <div class="settings-tab-content">
+                    <div class="tab-pane fade"
+                         id="access-tab-pane"
+                         role="tabpanel"
+                         aria-labelledby="access-tab"
+                         tabindex="0">
 
-                                <div class="maintenance-setting">
-                                    <div class="maintenance-setting-info">
-                                        <div class="maintenance-icon">
-                                            <i class="bx bxl-google"></i>
-                                        </div>
-                                        <div>
-                                            <div class="maintenance-title">
+                        <div class="settings-tab-content">
+
+                            <div class="row g-4">
+
+                                <div class="col-12 col-md-6 col-xl-4">
+                                    <label class="maintenance-setting" for="enableGoogleLogin">
+                                        <span class="maintenance-setting-info">
+                                            <span class="maintenance-icon">
+                                                <i class="bx bxl-google"></i>
+                                            </span>
+                                            <span class="maintenance-title">
                                                 @Localizer["EnableGoogleLogin"]
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="form-check form-switch">
-                                        <input asp-for="EnableGoogleLoginBool"
-                                               class="form-check-input"
-                                               type="checkbox"
-                                               id="enableGoogleLogin" />
-                                    </div>
+                                            </span>
+                                        </span>
+                                        <span class="form-check form-switch">
+                                            <input asp-for="EnableGoogleLoginBool"
+                                                   class="form-check-input"
+                                                   type="checkbox"
+                                                   id="enableGoogleLogin" />
+                                        </span>
+                                    </label>
                                 </div>
 
-                                <div class="row g-4 mt-1">
-
-                                    <div class="col-xl-4 col-md-6">
-                                        <div class="settings-field">
-                                            <div class="settings-field-icon">
-                                                <i class="bx bx-user-plus"></i>
-                                            </div>
-                                            <div class="form-floating flex-grow-1 position-relative">
-                                                <input type="hidden"
-                                                       asp-for="DefaultNewUserRoleId"
-                                                       id="defaultNewUserRoleId" />
-                                                <input asp-for="DefaultNewUserRoleName"
-                                                       id="defaultNewUserRoleName"
-                                                       class="form-control lookup-input pe-5"
-                                                       placeholder=" "
-                                                       data-lookup="true"
-                                                       data-lookup-source="/Roles/GetLookupList"
-                                                       data-lookup-title="@Localizer["Roles"]"
-                                                       data-edit-url-base=""
-                                                       data-lookup-column-names="name:@Localizer["Name"],isActive:@Localizer["IsActive"]"
-                                                       data-lookup-display-field="name"
-                                                       data-lookup-param="fieldName"
-                                                       data-lookup-param-value="RoleName"
-                                                       data-lookup-target-id="defaultNewUserRoleId"
-                                                       readonly />
-                                                <label asp-for="DefaultNewUserRoleName"></label>
-                                                <i class="bx bx-x settings-lookup-clear"
-                                                   data-clear-lookup
-                                                   title="@Localizer["None"]"></i>
-                                                <i class="bx bx-search lookup-icon"></i>
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                    <div class="col-xl-4 col-md-6">
-                                        <div class="settings-field">
-                                            <div class="settings-field-icon">
-                                                <i class="bx bx-cookie"></i>
-                                            </div>
-                                            <div class="form-floating flex-grow-1">
-                                                <input asp-for="PersistentCookieDays"
-                                                       class="form-control"
-                                                       id="persistentCookieDays"
-                                                       placeholder="@Localizer["PersistentCookieDays"]" />
-                                                <label asp-for="PersistentCookieDays"></label>
-                                            </div>
-                                        </div>
-                                        <span asp-validation-for="PersistentCookieDays" class="text-danger validation-message"></span>
-                                    </div>
-
-                                    <div class="col-xl-4 col-md-6">
-                                        <div class="settings-field">
-                                            <div class="settings-field-icon">
-                                                <i class="bx bx-timer"></i>
-                                            </div>
-                                            <div class="form-floating flex-grow-1">
-                                                <input asp-for="SessionExpireMinutes"
-                                                       class="form-control"
-                                                       id="sessionExpireMinutes"
-                                                       placeholder="@Localizer["SessionExpireMinutes"]" />
-                                                <label asp-for="SessionExpireMinutes"></label>
-                                            </div>
-                                        </div>
-                                        <span asp-validation-for="SessionExpireMinutes" class="text-danger validation-message"></span>
-                                    </div>
-
-                                    <div class="col-xl-4 col-md-6">
-                                        <div class="settings-field">
-                                            <div class="settings-field-icon">
-                                                <i class="bx bx-image"></i>
-                                            </div>
-                                            <div class="form-floating flex-grow-1">
-                                                <input asp-for="MaxProfilePhotoSizeMb"
-                                                       class="form-control"
-                                                       id="maxProfilePhotoSizeMb"
-                                                       placeholder="@Localizer["MaxProfilePhotoSizeMb"]" />
-                                                <label asp-for="MaxProfilePhotoSizeMb"></label>
-                                            </div>
-                                        </div>
-                                        <span asp-validation-for="MaxProfilePhotoSizeMb" class="text-danger validation-message"></span>
-                                    </div>
-
-                                    <div class="col-xl-4 col-md-6">
-                                        <div class="settings-field">
-                                            <div class="settings-field-icon">
-                                                <i class="bx bx-error"></i>
-                                            </div>
-                                            <div class="form-floating flex-grow-1">
-                                                <input asp-for="MaxFailedLoginAttempts"
-                                                       class="form-control"
-                                                       id="maxFailedLoginAttempts"
-                                                       placeholder="@Localizer["MaxFailedLoginAttempts"]" />
-                                                <label asp-for="MaxFailedLoginAttempts"></label>
-                                            </div>
-                                        </div>
-                                        <span asp-validation-for="MaxFailedLoginAttempts" class="text-danger validation-message"></span>
-                                        <div class="scrolling-text-hint">
-                                            <i class="bx bx-info-circle"></i>
-                                            <span>@Localizer["MaxFailedLoginAttemptsHint"]</span>
-                                        </div>
-                                    </div>
-
-                                    <div class="col-xl-4 col-md-6">
-                                        <div class="settings-field">
-                                            <div class="settings-field-icon">
-                                                <i class="bx bx-time-five"></i>
-                                            </div>
-                                            <div class="form-floating flex-grow-1">
-                                                <input asp-for="LockoutDurationMinutes"
-                                                       class="form-control"
-                                                       id="lockoutDurationMinutes"
-                                                       placeholder="@Localizer["LockoutDurationMinutes"]" />
-                                                <label asp-for="LockoutDurationMinutes"></label>
-                                            </div>
-                                        </div>
-                                        <span asp-validation-for="LockoutDurationMinutes" class="text-danger validation-message"></span>
-                                    </div>
-
-                                    <div class="col-xl-4 col-md-6">
-                                        <div class="settings-field">
-                                            <div class="settings-field-icon">
-                                                <i class="bx bx-envelope"></i>
-                                            </div>
-                                            <div class="form-floating flex-grow-1">
-                                                <input asp-for="EmailConfirmationTokenExpiredAtHours"
-                                                       class="form-control"
-                                                       id="emailConfirmationTokenExpiredAtHours"
-                                                       placeholder="@Localizer["EmailConfirmationTokenHours"]" />
-                                                <label asp-for="EmailConfirmationTokenExpiredAtHours"></label>
-                                            </div>
-                                        </div>
-                                        <span asp-validation-for="EmailConfirmationTokenExpiredAtHours" class="text-danger validation-message"></span>
-                                    </div>
-
-                                    <div class="col-xl-4 col-md-6">
-                                        <div class="settings-field">
-                                            <div class="settings-field-icon">
-                                                <i class="bx bx-lock-open-alt"></i>
-                                            </div>
-                                            <div class="form-floating flex-grow-1">
-                                                <input asp-for="ForgotPasswordTokenExpiredAtHours"
-                                                       class="form-control"
-                                                       id="forgotPasswordTokenExpiredAtHours"
-                                                       placeholder="@Localizer["ForgotPasswordTokenExpiredAtHours"]" />
-                                                <label asp-for="ForgotPasswordTokenExpiredAtHours"></label>
-                                            </div>
-                                        </div>
-                                        <span asp-validation-for="ForgotPasswordTokenExpiredAtHours" class="text-danger validation-message"></span>
-                                    </div>
-
-                                    <div class="col-xl-4 col-md-6">
-                                        <div class="settings-field">
-                                            <div class="settings-field-icon">
-                                                <i class="bx bx-wifi"></i>
-                                            </div>
-                                            <div class="form-floating flex-grow-1">
-                                                <input asp-for="OnlineStatusAutoRefreshMinute"
-                                                       class="form-control"
-                                                       id="onlineStatusAutoRefreshMinute"
-                                                       placeholder="@Localizer["Onlinestatusautoupdateinterval"]" />
-                                                <label asp-for="OnlineStatusAutoRefreshMinute"></label>
-                                            </div>
-                                        </div>
-                                        <span asp-validation-for="OnlineStatusAutoRefreshMinute" class="text-danger validation-message"></span>
-                                    </div>
-
+                                <div class="col-12 col-md-6 col-xl-4">
+                                    <label class="maintenance-setting" for="enableAppleLogin">
+                                        <span class="maintenance-setting-info">
+                                            <span class="maintenance-icon">
+                                                <i class="bx bxl-apple"></i>
+                                            </span>
+                                            <span class="maintenance-title">
+                                                @Localizer["EnableAppleLogin"]
+                                            </span>
+                                        </span>
+                                        <span class="form-check form-switch">
+                                            <input asp-for="EnableAppleLoginBool"
+                                                   class="form-check-input"
+                                                   type="checkbox"
+                                                   id="enableAppleLogin" />
+                                        </span>
+                                    </label>
                                 </div>
 
                             </div>
 
-                        </div>
+                            <div class="row g-4">
 
-
-                        <div class="tab-pane fade"
-                             id="mail-tab-pane"
-                             role="tabpanel"
-                             aria-labelledby="mail-tab"
-                             tabindex="0">
-
-                            <div class="settings-tab-content">
-
-                                <div class="maintenance-setting">
-                                    <div class="maintenance-setting-info">
-                                        <div class="maintenance-icon">
-                                            <i class="bx bx-mail-send"></i>
+                                <div class="col-12 col-md-6 col-xl-4">
+                                    <div class="settings-field">
+                                        <div class="settings-field-icon">
+                                            <i class="bx bx-user-plus"></i>
                                         </div>
-                                        <div>
-                                            <div class="maintenance-title">@Localizer["EnableEmailSending"]</div>
+                                        <div class="form-floating flex-grow-1 position-relative">
+                                            <input type="hidden"
+                                                   asp-for="DefaultNewUserRoleId"
+                                                   id="defaultNewUserRoleId" />
+                                            <input asp-for="DefaultNewUserRoleName"
+                                                   id="defaultNewUserRoleName"
+                                                   class="form-control lookup-input pe-5"
+                                                   placeholder=" "
+                                                   data-lookup="true"
+                                                   data-lookup-source="/Roles/GetLookupList"
+                                                   data-lookup-title="@Localizer["Roles"]"
+                                                   data-edit-url-base=""
+                                                   data-lookup-column-names="name:@Localizer["Name"],isActive:@Localizer["IsActive"]"
+                                                   data-lookup-display-field="name"
+                                                   data-lookup-param="fieldName"
+                                                   data-lookup-param-value="RoleName"
+                                                   data-lookup-target-id="defaultNewUserRoleId"
+                                                   readonly />
+                                            <label asp-for="DefaultNewUserRoleName"></label>
+                                            <i class="bx bx-x settings-lookup-clear"
+                                               data-clear-lookup
+                                               title="@Localizer["None"]"></i>
+                                            <i class="bx bx-search lookup-icon"></i>
                                         </div>
-                                    </div>
-                                    <div class="form-check form-switch">
-                                        <input asp-for="EnableEmailSendingBool" class="form-check-input" type="checkbox" id="enableEmailSending" />
                                     </div>
                                 </div>
 
-                                <div class="maintenance-setting mt-3">
-                                    <div class="maintenance-setting-info">
-                                        <div class="maintenance-icon">
-                                            <i class="bx bx-bell"></i>
+                                <div class="col-12 col-md-6 col-xl-4">
+                                    <div class="settings-field">
+                                        <div class="settings-field-icon">
+                                            <i class="bx bx-cookie"></i>
                                         </div>
-                                        <div>
-                                            <div class="maintenance-title">@Localizer["EnableNotifications"]</div>
+                                        <div class="form-floating flex-grow-1">
+                                            <input asp-for="PersistentCookieDays"
+                                                   class="form-control"
+                                                   id="persistentCookieDays"
+                                                   placeholder="@Localizer["PersistentCookieDays"]" />
+                                            <label asp-for="PersistentCookieDays"></label>
                                         </div>
                                     </div>
-                                    <div class="form-check form-switch">
-                                        <input asp-for="EnableNotificationsBool" class="form-check-input" type="checkbox" id="enableNotifications" />
+                                    <span asp-validation-for="PersistentCookieDays" class="text-danger validation-message"></span>
+                                </div>
+
+                                <div class="col-12 col-md-6 col-xl-4">
+                                    <div class="settings-field">
+                                        <div class="settings-field-icon">
+                                            <i class="bx bx-timer"></i>
+                                        </div>
+                                        <div class="form-floating flex-grow-1">
+                                            <input asp-for="SessionExpireMinutes"
+                                                   class="form-control"
+                                                   id="sessionExpireMinutes"
+                                                   placeholder="@Localizer["SessionExpireMinutes"]" />
+                                            <label asp-for="SessionExpireMinutes"></label>
+                                        </div>
+                                    </div>
+                                    <span asp-validation-for="SessionExpireMinutes" class="text-danger validation-message"></span>
+                                </div>
+
+                                <div class="col-12 col-md-6 col-xl-4">
+                                    <div class="settings-field">
+                                        <div class="settings-field-icon">
+                                            <i class="bx bx-image"></i>
+                                        </div>
+                                        <div class="form-floating flex-grow-1">
+                                            <input asp-for="MaxProfilePhotoSizeMb"
+                                                   class="form-control"
+                                                   id="maxProfilePhotoSizeMb"
+                                                   placeholder="@Localizer["MaxProfilePhotoSizeMb"]" />
+                                            <label asp-for="MaxProfilePhotoSizeMb"></label>
+                                        </div>
+                                    </div>
+                                    <span asp-validation-for="MaxProfilePhotoSizeMb" class="text-danger validation-message"></span>
+                                </div>
+
+                                <div class="col-12 col-md-6 col-xl-4">
+                                    <div class="settings-field">
+                                        <div class="settings-field-icon">
+                                            <i class="bx bx-error"></i>
+                                        </div>
+                                        <div class="form-floating flex-grow-1">
+                                            <input asp-for="MaxFailedLoginAttempts"
+                                                   class="form-control"
+                                                   id="maxFailedLoginAttempts"
+                                                   placeholder="@Localizer["MaxFailedLoginAttempts"]" />
+                                            <label asp-for="MaxFailedLoginAttempts"></label>
+                                        </div>
+                                    </div>
+                                    <span asp-validation-for="MaxFailedLoginAttempts" class="text-danger validation-message"></span>
+                                    <div class="scrolling-text-hint">
+                                        <i class="bx bx-info-circle"></i>
+                                        <span>@Localizer["MaxFailedLoginAttemptsHint"]</span>
                                     </div>
                                 </div>
 
-                                <div class="maintenance-setting mt-3">
-                                    <div class="maintenance-setting-info">
-                                        <div class="maintenance-icon">
-                                            <i class="bx bx-user-check"></i>
+                                <div class="col-12 col-md-6 col-xl-4">
+                                    <div class="settings-field">
+                                        <div class="settings-field-icon">
+                                            <i class="bx bx-time-five"></i>
                                         </div>
-                                        <div>
-                                            <div class="maintenance-title">@Localizer["EmailAdminOnNewRegistration"]</div>
+                                        <div class="form-floating flex-grow-1">
+                                            <input asp-for="LockoutDurationMinutes"
+                                                   class="form-control"
+                                                   id="lockoutDurationMinutes"
+                                                   placeholder="@Localizer["LockoutDurationMinutes"]" />
+                                            <label asp-for="LockoutDurationMinutes"></label>
                                         </div>
                                     </div>
-                                    <div class="form-check form-switch">
-                                        <input asp-for="EmailAdminOnNewRegistrationBool" class="form-check-input" type="checkbox" id="emailAdminOnNewRegistration" />
-                                    </div>
+                                    <span asp-validation-for="LockoutDurationMinutes" class="text-danger validation-message"></span>
                                 </div>
 
-                                <div class="maintenance-setting mt-3">
-                                    <div class="maintenance-setting-info">
-                                        <div class="maintenance-icon">
-                                            <i class="bx bx-news"></i>
-                                        </div>
-                                        <div>
-                                            <div class="maintenance-title">@Localizer["EmailAdminOnNewTicket"]</div>
-                                        </div>
-                                    </div>
-                                    <div class="form-check form-switch">
-                                        <input asp-for="EmailAdminOnNewTicketBool" class="form-check-input" type="checkbox" id="emailAdminOnNewTicket" />
-                                    </div>
-                                </div>
-
-                                <div class="maintenance-setting mt-3">
-                                    <div class="maintenance-setting-info">
-                                        <div class="maintenance-icon">
+                                <div class="col-12 col-md-6 col-xl-4">
+                                    <div class="settings-field">
+                                        <div class="settings-field-icon">
                                             <i class="bx bx-envelope"></i>
                                         </div>
-                                        <div>
-                                            <div class="maintenance-title">@Localizer["DefaultAllowSendEmails"]</div>
+                                        <div class="form-floating flex-grow-1">
+                                            <input asp-for="EmailConfirmationTokenExpiredAtHours"
+                                                   class="form-control"
+                                                   id="emailConfirmationTokenExpiredAtHours"
+                                                   placeholder="@Localizer["EmailConfirmationTokenHours"]" />
+                                            <label asp-for="EmailConfirmationTokenExpiredAtHours"></label>
                                         </div>
                                     </div>
-                                    <div class="form-check form-switch">
-                                        <input asp-for="DefaultAllowSendEmailsBool" class="form-check-input" type="checkbox" id="defaultAllowSendEmails" />
-                                    </div>
+                                    <span asp-validation-for="EmailConfirmationTokenExpiredAtHours" class="text-danger validation-message"></span>
                                 </div>
 
-                                <div class="maintenance-setting mt-3">
-                                    <div class="maintenance-setting-info">
-                                        <div class="maintenance-icon">
-                                            <i class="bx bx-notification"></i>
+                                <div class="col-12 col-md-6 col-xl-4">
+                                    <div class="settings-field">
+                                        <div class="settings-field-icon">
+                                            <i class="bx bx-lock-open-alt"></i>
                                         </div>
-                                        <div>
-                                            <div class="maintenance-title">@Localizer["DefaultAllowSendNotifications"]</div>
+                                        <div class="form-floating flex-grow-1">
+                                            <input asp-for="ForgotPasswordTokenExpiredAtHours"
+                                                   class="form-control"
+                                                   id="forgotPasswordTokenExpiredAtHours"
+                                                   placeholder="@Localizer["ForgotPasswordTokenExpiredAtHours"]" />
+                                            <label asp-for="ForgotPasswordTokenExpiredAtHours"></label>
                                         </div>
                                     </div>
-                                    <div class="form-check form-switch">
-                                        <input asp-for="DefaultAllowSendNotificationsBool" class="form-check-input" type="checkbox" id="defaultAllowSendNotifications" />
-                                    </div>
+                                    <span asp-validation-for="ForgotPasswordTokenExpiredAtHours" class="text-danger validation-message"></span>
                                 </div>
 
-                                <div class="row g-4 mt-1">
-                                    <div class="col-xl-6">
-                                        <div class="settings-field">
-                                            <div class="settings-field-icon">
-                                                <i class="bx bx-at"></i>
-                                            </div>
-                                            <div class="form-floating flex-grow-1">
-                                                <input asp-for="AdminNotificationEmail"
-                                                       class="form-control"
-                                                       id="adminNotificationEmail"
-                                                       placeholder="@Localizer["AdminNotificationEmail"]" />
-                                                <label asp-for="AdminNotificationEmail"></label>
-                                            </div>
+                                <div class="col-12 col-md-6 col-xl-4">
+                                    <div class="settings-field">
+                                        <div class="settings-field-icon">
+                                            <i class="bx bx-wifi"></i>
                                         </div>
-                                        <span asp-validation-for="AdminNotificationEmail" class="text-danger validation-message"></span>
+                                        <div class="form-floating flex-grow-1">
+                                            <input asp-for="OnlineStatusAutoRefreshMinute"
+                                                   class="form-control"
+                                                   id="onlineStatusAutoRefreshMinute"
+                                                   placeholder="@Localizer["Onlinestatusautoupdateinterval"]" />
+                                            <label asp-for="OnlineStatusAutoRefreshMinute"></label>
+                                        </div>
                                     </div>
-                                </div>
-
-                                <div class="scrolling-text-box mt-4">
-                                    <div class="scrolling-text-icon">
-                                        <i class="bx bx-message-square-dots"></i>
-                                    </div>
-                                    <div class="form-floating flex-grow-1">
-                                        <textarea asp-for="ScrollingText"
-                                                  id="message"
-                                                  class="form-control scrolling-textarea"
-                                                  rows="5"
-                                                  placeholder="@Localizer["ScrollingText"]"></textarea>
-                                        <label asp-for="ScrollingText"></label>
-                                    </div>
-                                </div>
-
-                                <span asp-validation-for="ScrollingText" class="text-danger validation-message"></span>
-
-                                <div class="scrolling-text-hint">
-                                    <i class="bx bx-info-circle"></i>
-                                    <span>@Localizer["ScrollingTextDescription"]</span>
+                                    <span asp-validation-for="OnlineStatusAutoRefreshMinute" class="text-danger validation-message"></span>
                                 </div>
 
                             </div>
 
                         </div>
 
+                    </div>
 
-                        <div class="tab-pane fade"
-                             id="files-tab-pane"
-                             role="tabpanel"
-                             aria-labelledby="files-tab"
-                             tabindex="0">
 
-                            <div class="settings-tab-content">
+                    <div class="tab-pane fade"
+                         id="mail-tab-pane"
+                         role="tabpanel"
+                         aria-labelledby="mail-tab"
+                         tabindex="0">
 
-                                <div class="row g-4">
+                        <div class="settings-tab-content">
 
-                                    <div class="col-xl-4 col-md-6">
-                                        <div class="settings-field">
-                                            <div class="settings-field-icon">
-                                                <i class="bx bx-hdd"></i>
-                                            </div>
-                                            <div class="form-floating flex-grow-1">
-                                                <input asp-for="MaxAttachmentSizeMb"
-                                                       class="form-control"
-                                                       id="maxAttachmentSizeMb"
-                                                       placeholder="@Localizer["MaxAttachmentSizeMb"]" />
-                                                <label asp-for="MaxAttachmentSizeMb"></label>
-                                            </div>
+                            <div class="row g-4">
+
+                                <div class="col-12 col-md-6">
+                                    <label class="maintenance-setting" for="enableEmailSending">
+                                        <span class="maintenance-setting-info">
+                                            <span class="maintenance-icon">
+                                                <i class="bx bx-mail-send"></i>
+                                            </span>
+                                            <span class="maintenance-title">@Localizer["EnableEmailSending"]</span>
+                                        </span>
+                                        <span class="form-check form-switch">
+                                            <input asp-for="EnableEmailSendingBool" class="form-check-input" type="checkbox" id="enableEmailSending" />
+                                        </span>
+                                    </label>
+                                </div>
+
+                                <div class="col-12 col-md-6">
+                                    <label class="maintenance-setting" for="enableNotifications">
+                                        <span class="maintenance-setting-info">
+                                            <span class="maintenance-icon">
+                                                <i class="bx bx-bell"></i>
+                                            </span>
+                                            <span class="maintenance-title">@Localizer["EnableNotifications"]</span>
+                                        </span>
+                                        <span class="form-check form-switch">
+                                            <input asp-for="EnableNotificationsBool" class="form-check-input" type="checkbox" id="enableNotifications" />
+                                        </span>
+                                    </label>
+                                </div>
+
+                                <div class="col-12 col-md-6">
+                                    <label class="maintenance-setting" for="emailAdminOnNewRegistration">
+                                        <span class="maintenance-setting-info">
+                                            <span class="maintenance-icon">
+                                                <i class="bx bx-user-check"></i>
+                                            </span>
+                                            <span class="maintenance-title">@Localizer["EmailAdminOnNewRegistration"]</span>
+                                        </span>
+                                        <span class="form-check form-switch">
+                                            <input asp-for="EmailAdminOnNewRegistrationBool" class="form-check-input" type="checkbox" id="emailAdminOnNewRegistration" />
+                                        </span>
+                                    </label>
+                                </div>
+
+                                <div class="col-12 col-md-6">
+                                    <label class="maintenance-setting" for="emailAdminOnNewTicket">
+                                        <span class="maintenance-setting-info">
+                                            <span class="maintenance-icon">
+                                                <i class="bx bx-news"></i>
+                                            </span>
+                                            <span class="maintenance-title">@Localizer["EmailAdminOnNewTicket"]</span>
+                                        </span>
+                                        <span class="form-check form-switch">
+                                            <input asp-for="EmailAdminOnNewTicketBool" class="form-check-input" type="checkbox" id="emailAdminOnNewTicket" />
+                                        </span>
+                                    </label>
+                                </div>
+
+                                <div class="col-12 col-md-6">
+                                    <label class="maintenance-setting" for="defaultAllowSendEmails">
+                                        <span class="maintenance-setting-info">
+                                            <span class="maintenance-icon">
+                                                <i class="bx bx-envelope"></i>
+                                            </span>
+                                            <span class="maintenance-title">@Localizer["DefaultAllowSendEmails"]</span>
+                                        </span>
+                                        <span class="form-check form-switch">
+                                            <input asp-for="DefaultAllowSendEmailsBool" class="form-check-input" type="checkbox" id="defaultAllowSendEmails" />
+                                        </span>
+                                    </label>
+                                </div>
+
+                                <div class="col-12 col-md-6">
+                                    <label class="maintenance-setting" for="defaultAllowSendNotifications">
+                                        <span class="maintenance-setting-info">
+                                            <span class="maintenance-icon">
+                                                <i class="bx bx-notification"></i>
+                                            </span>
+                                            <span class="maintenance-title">@Localizer["DefaultAllowSendNotifications"]</span>
+                                        </span>
+                                        <span class="form-check form-switch">
+                                            <input asp-for="DefaultAllowSendNotificationsBool" class="form-check-input" type="checkbox" id="defaultAllowSendNotifications" />
+                                        </span>
+                                    </label>
+                                </div>
+
+                            </div>
+
+                            <div class="row g-4">
+
+                                <div class="col-12 col-md-6 col-xl-6">
+                                    <div class="settings-field">
+                                        <div class="settings-field-icon">
+                                            <i class="bx bx-at"></i>
                                         </div>
-                                        <span asp-validation-for="MaxAttachmentSizeMb" class="text-danger validation-message"></span>
+                                        <div class="form-floating flex-grow-1">
+                                            <input asp-for="AdminNotificationEmail"
+                                                   class="form-control"
+                                                   id="adminNotificationEmail"
+                                                   placeholder="@Localizer["AdminNotificationEmail"]" />
+                                            <label asp-for="AdminNotificationEmail"></label>
+                                        </div>
                                     </div>
+                                    <span asp-validation-for="AdminNotificationEmail" class="text-danger validation-message"></span>
+                                </div>
 
-                                    <div class="col-xl-8 col-md-6">
-                                        <div class="settings-field">
-                                            <div class="settings-field-icon">
-                                                <i class="bx bx-extension"></i>
-                                            </div>
-                                            <div class="form-floating flex-grow-1">
-                                                <input asp-for="AllowedAttachmentExtensions"
-                                                       class="form-control"
-                                                       id="allowedAttachmentExtensions"
-                                                       placeholder="@Localizer["AllowedAttachmentExtensions"]" />
-                                                <label asp-for="AllowedAttachmentExtensions"></label>
-                                            </div>
+                                <div class="col-12">
+                                    <div class="scrolling-text-box">
+                                        <div class="scrolling-text-icon">
+                                            <i class="bx bx-message-square-dots"></i>
                                         </div>
-                                        <span asp-validation-for="AllowedAttachmentExtensions" class="text-danger validation-message"></span>
-                                        <div class="scrolling-text-hint">
-                                            <i class="bx bx-info-circle"></i>
-                                            <span>@Localizer["AllowedAttachmentExtensionsHint"]</span>
+                                        <div class="form-floating flex-grow-1">
+                                            <textarea asp-for="ScrollingText"
+                                                      id="message"
+                                                      class="form-control scrolling-textarea"
+                                                      rows="5"
+                                                      placeholder="@Localizer["ScrollingText"]"></textarea>
+                                            <label asp-for="ScrollingText"></label>
                                         </div>
                                     </div>
-
+                                    <span asp-validation-for="ScrollingText" class="text-danger validation-message"></span>
+                                    <div class="scrolling-text-hint">
+                                        <i class="bx bx-info-circle"></i>
+                                        <span>@Localizer["ScrollingTextDescription"]</span>
+                                    </div>
                                 </div>
 
                             </div>
 
                         </div>
 
+                    </div>
 
-                        <div class="tab-pane fade"
-                             id="tickets-tab-pane"
-                             role="tabpanel"
-                             aria-labelledby="tickets-tab"
-                             tabindex="0">
 
-                            <div class="settings-tab-content">
+                    <div class="tab-pane fade"
+                         id="files-tab-pane"
+                         role="tabpanel"
+                         aria-labelledby="files-tab"
+                         tabindex="0">
 
-                                <div class="scrolling-text-hint mb-3">
-                                    <i class="bx bx-info-circle"></i>
-                                    <span>@Localizer["TicketAutoAssignHint"]</span>
+                        <div class="settings-tab-content">
+
+                            <div class="row g-4">
+
+                                <div class="col-12 col-md-6 col-xl-4">
+                                    <div class="settings-field">
+                                        <div class="settings-field-icon">
+                                            <i class="bx bx-hdd"></i>
+                                        </div>
+                                        <div class="form-floating flex-grow-1">
+                                            <input asp-for="MaxAttachmentSizeMb"
+                                                   class="form-control"
+                                                   id="maxAttachmentSizeMb"
+                                                   placeholder="@Localizer["MaxAttachmentSizeMb"]" />
+                                            <label asp-for="MaxAttachmentSizeMb"></label>
+                                        </div>
+                                    </div>
+                                    <span asp-validation-for="MaxAttachmentSizeMb" class="text-danger validation-message"></span>
                                 </div>
 
-                                <div class="row g-4">
-
-                                    <div class="col-xl-6 col-md-6">
-                                        <div class="settings-field">
-                                            <div class="settings-field-icon">
-                                                <i class="bx bx-user"></i>
-                                            </div>
-                                            <div class="form-floating flex-grow-1 position-relative">
-                                                <input type="hidden"
-                                                       asp-for="TicketAutoAssignUserId"
-                                                       id="ticketAutoAssignUserId" />
-                                                <input asp-for="TicketAutoAssignUserName"
-                                                       id="ticketAutoAssignUserName"
-                                                       class="form-control lookup-input pe-5"
-                                                       placeholder=" "
-                                                       data-lookup="true"
-                                                       data-lookup-source="/Users/GetLookupList"
-                                                       data-lookup-title="@Localizer["Users"]"
-                                                       data-edit-url-base=""
-                                                       data-lookup-column-names="name:@Localizer["Name"],email:@Localizer["Email"]"
-                                                       data-lookup-display-field="name"
-                                                       data-lookup-param="fieldName"
-                                                       data-lookup-param-value="Name"
-                                                       data-lookup-target-id="ticketAutoAssignUserId"
-                                                       readonly />
-                                                <label asp-for="TicketAutoAssignUserName"></label>
-                                                <i class="bx bx-x settings-lookup-clear"
-                                                   data-clear-lookup
-                                                   title="@Localizer["None"]"></i>
-                                                <i class="bx bx-search lookup-icon"></i>
-                                            </div>
+                                <div class="col-12 col-md-6 col-xl-8">
+                                    <div class="settings-field">
+                                        <div class="settings-field-icon">
+                                            <i class="bx bx-extension"></i>
+                                        </div>
+                                        <div class="form-floating flex-grow-1">
+                                            <input asp-for="AllowedAttachmentExtensions"
+                                                   class="form-control"
+                                                   id="allowedAttachmentExtensions"
+                                                   placeholder="@Localizer["AllowedAttachmentExtensions"]" />
+                                            <label asp-for="AllowedAttachmentExtensions"></label>
                                         </div>
                                     </div>
+                                    <span asp-validation-for="AllowedAttachmentExtensions" class="text-danger validation-message"></span>
+                                    <div class="scrolling-text-hint">
+                                        <i class="bx bx-info-circle"></i>
+                                        <span>@Localizer["AllowedAttachmentExtensionsHint"]</span>
+                                    </div>
+                                </div>
 
-                                    <div class="col-xl-6 col-md-6">
-                                        <div class="settings-field">
-                                            <div class="settings-field-icon">
-                                                <i class="bx bx-group"></i>
-                                            </div>
-                                            <div class="form-floating flex-grow-1 position-relative">
-                                                <input type="hidden"
-                                                       asp-for="TicketAutoAssignRoleId"
-                                                       id="ticketAutoAssignRoleId" />
-                                                <input asp-for="TicketAutoAssignRoleName"
-                                                       id="ticketAutoAssignRoleName"
-                                                       class="form-control lookup-input pe-5"
-                                                       placeholder=" "
-                                                       data-lookup="true"
-                                                       data-lookup-source="/Roles/GetLookupList"
-                                                       data-lookup-title="@Localizer["Roles"]"
-                                                       data-edit-url-base=""
-                                                       data-lookup-column-names="name:@Localizer["Name"],isActive:@Localizer["IsActive"]"
-                                                       data-lookup-display-field="name"
-                                                       data-lookup-param="fieldName"
-                                                       data-lookup-param-value="RoleName"
-                                                       data-lookup-target-id="ticketAutoAssignRoleId"
-                                                       readonly />
-                                                <label asp-for="TicketAutoAssignRoleName"></label>
-                                                <i class="bx bx-x settings-lookup-clear"
-                                                   data-clear-lookup
-                                                   title="@Localizer["None"]"></i>
-                                                <i class="bx bx-search lookup-icon"></i>
-                                            </div>
+                            </div>
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="tab-pane fade"
+                         id="tickets-tab-pane"
+                         role="tabpanel"
+                         aria-labelledby="tickets-tab"
+                         tabindex="0">
+
+                        <div class="settings-tab-content">
+
+                            <div class="row g-4">
+
+                                <div class="col-12">
+                                    <div class="scrolling-text-hint settings-tab-hint">
+                                        <i class="bx bx-info-circle"></i>
+                                        <span>@Localizer["TicketAutoAssignHint"]</span>
+                                    </div>
+                                </div>
+
+                                <div class="col-12 col-md-6">
+                                    <div class="settings-field">
+                                        <div class="settings-field-icon">
+                                            <i class="bx bx-user"></i>
+                                        </div>
+                                        <div class="form-floating flex-grow-1 position-relative">
+                                            <input type="hidden"
+                                                   asp-for="TicketAutoAssignUserId"
+                                                   id="ticketAutoAssignUserId" />
+                                            <input asp-for="TicketAutoAssignUserName"
+                                                   id="ticketAutoAssignUserName"
+                                                   class="form-control lookup-input pe-5"
+                                                   placeholder=" "
+                                                   data-lookup="true"
+                                                   data-lookup-source="/Users/GetLookupList"
+                                                   data-lookup-title="@Localizer["Users"]"
+                                                   data-edit-url-base=""
+                                                   data-lookup-column-names="name:@Localizer["Name"],email:@Localizer["Email"]"
+                                                   data-lookup-display-field="name"
+                                                   data-lookup-param="fieldName"
+                                                   data-lookup-param-value="Name"
+                                                   data-lookup-target-id="ticketAutoAssignUserId"
+                                                   readonly />
+                                            <label asp-for="TicketAutoAssignUserName"></label>
+                                            <i class="bx bx-x settings-lookup-clear"
+                                               data-clear-lookup
+                                               title="@Localizer["None"]"></i>
+                                            <i class="bx bx-search lookup-icon"></i>
                                         </div>
                                     </div>
+                                </div>
 
+                                <div class="col-12 col-md-6">
+                                    <div class="settings-field">
+                                        <div class="settings-field-icon">
+                                            <i class="bx bx-group"></i>
+                                        </div>
+                                        <div class="form-floating flex-grow-1 position-relative">
+                                            <input type="hidden"
+                                                   asp-for="TicketAutoAssignRoleId"
+                                                   id="ticketAutoAssignRoleId" />
+                                            <input asp-for="TicketAutoAssignRoleName"
+                                                   id="ticketAutoAssignRoleName"
+                                                   class="form-control lookup-input pe-5"
+                                                   placeholder=" "
+                                                   data-lookup="true"
+                                                   data-lookup-source="/Roles/GetLookupList"
+                                                   data-lookup-title="@Localizer["Roles"]"
+                                                   data-edit-url-base=""
+                                                   data-lookup-column-names="name:@Localizer["Name"],isActive:@Localizer["IsActive"]"
+                                                   data-lookup-display-field="name"
+                                                   data-lookup-param="fieldName"
+                                                   data-lookup-param-value="RoleName"
+                                                   data-lookup-target-id="ticketAutoAssignRoleId"
+                                                   readonly />
+                                            <label asp-for="TicketAutoAssignRoleName"></label>
+                                            <i class="bx bx-x settings-lookup-clear"
+                                               data-clear-lookup
+                                               title="@Localizer["None"]"></i>
+                                            <i class="bx bx-search lookup-icon"></i>
+                                        </div>
+                                    </div>
                                 </div>
 
                             </div>
@@ -734,13 +756,12 @@
 
                 </div>
 
-            </form>
+            </div>
 
-        </div>
+        </form>
 
     </div>
 
-</div>
 </div>
 
 

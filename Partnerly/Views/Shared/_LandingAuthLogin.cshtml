@@ -79,20 +79,53 @@
     </div>
 </form>
 
-@if (ViewBag.GoogleLoginEnabled as bool? ?? true)
+@{
+    var googleLoginEnabled = ViewBag.GoogleLoginEnabled as bool? ?? true;
+    var appleLoginEnabled = ViewBag.AppleLoginEnabled as bool? ?? true;
+    var appleOAuthConfigured = ViewBag.AppleOAuthConfigured as bool? ?? false;
+}
+
+@if (googleLoginEnabled || appleLoginEnabled)
 {
     <div class="landing-auth-divider">
         <span>@Localizer["Or"]</span>
     </div>
 
-    <form asp-controller="Account" asp-action="GoogleLogin" method="post">
-        @Html.AntiForgeryToken()
-        <input type="hidden" name="returnUrl" value="@ViewBag.ReturnUrl" />
-        <button type="submit" class="landing-auth-google">
-            <i class="bx bxl-google"></i>
-            <span>@Localizer["ContinuewithGoogle"]</span>
-        </button>
-    </form>
+    <div class="landing-auth-providers">
+        @if (googleLoginEnabled)
+        {
+            <form asp-controller="Account" asp-action="GoogleLogin" method="post">
+                @Html.AntiForgeryToken()
+                <input type="hidden" name="returnUrl" value="@ViewBag.ReturnUrl" />
+                <button type="submit" class="landing-auth-google">
+                    <i class="bx bxl-google"></i>
+                    <span>@Localizer["ContinuewithGoogle"]</span>
+                </button>
+            </form>
+        }
+
+        @if (appleLoginEnabled)
+        {
+            if (appleOAuthConfigured)
+            {
+                <form asp-controller="Account" asp-action="AppleLogin" method="post">
+                    @Html.AntiForgeryToken()
+                    <input type="hidden" name="returnUrl" value="@ViewBag.ReturnUrl" />
+                    <button type="submit" class="landing-auth-google landing-auth-apple">
+                        <i class="bx bxl-apple"></i>
+                        <span>@Localizer["ContinuewithApple"]</span>
+                    </button>
+                </form>
+            }
+            else
+            {
+                <button type="button" class="landing-auth-google landing-auth-apple">
+                    <i class="bx bxl-apple"></i>
+                    <span>@Localizer["ContinuewithApple"]</span>
+                </button>
+            }
+        }
+    </div>
 }
 
 <p class="landing-auth-switch">

@@ -271,6 +271,7 @@ namespace Partnerly.Infrastructure.Services
             newUser.PhotoUrl = Constants.DefaultUserProfilePhotoPath;
             newUser.Note = user.Note;
             newUser.GoogleId = user.GoogleId;
+            newUser.AppleId = user.AppleId;
 
             if (!string.IsNullOrEmpty(newUser.FirstName))
             {
@@ -283,6 +284,12 @@ namespace Partnerly.Infrastructure.Services
                 if (newUser.GoogleId != null && newUser.PasswordHash == null)
                 {
                     withResource = "Google";
+                    var generatedPassword = PasswordGenerator.Generate();
+                    newUser.PasswordHash = BCrypt.Net.BCrypt.HashPassword(generatedPassword);
+                }
+                else if (newUser.AppleId != null && newUser.PasswordHash == null)
+                {
+                    withResource = "Apple";
                     var generatedPassword = PasswordGenerator.Generate();
                     newUser.PasswordHash = BCrypt.Net.BCrypt.HashPassword(generatedPassword);
                 }

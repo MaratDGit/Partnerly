@@ -1,0 +1,114 @@
+@model Partnerly.Models.ViewModels.AppleRegisterViewModel
+
+@{
+    Layout = "_BlankLayout";
+    ViewData["Title"] = Localizer["Completeregistration"].Value;
+}
+
+@section PageStyles {
+    <link rel="stylesheet"
+          href="~/assets/vendor/css/pages/page-auth.css"
+          asp-append-version="true">
+}
+
+<div class="partnerly-auth-page partnerly-auth-page-single">
+    <div class="partnerly-auth-form">
+        <div class="auth-form-container auth-result-container google-register-container">
+
+            <div class="auth-result-logo">
+                <a asp-controller="Home" asp-action="Index" class="auth-logo">
+                    @await Html.PartialAsync("_SiteLogo", "googleReg")
+                    <span>@TempData.Peek("appName")</span>
+                </a>
+            </div>
+
+            <div class="google-register-icon">
+                <i class="bx bxl-apple"></i>
+            </div>
+
+            <div class="auth-form-header">
+
+                <h2>@Localizer["Completeregistration"]</h2>
+
+                <p>
+                    @Localizer["WereceivedyourdataviaApple"]
+                </p>
+
+            </div>
+
+            <div class="google-account-card">
+
+                <div class="google-account-avatar">
+                    @if (!string.IsNullOrEmpty(Model.FirstName))
+                    {
+                        @Model.FirstName.Substring(0, 1).ToUpper()
+                    }
+                    else
+                    {
+                        <i class="bx bx-user"></i>
+                    }
+                </div>
+
+                <div class="google-account-info">
+
+                    <strong>
+                        @Model.FirstName @Model.LastName
+                    </strong>
+
+                    <span>
+                        @Model.Email
+                    </span>
+
+                    <small>
+                        <i class="bx bx-check-circle"></i>
+                        @Localizer["VerifiedwithApple"]
+                    </small>
+
+                </div>
+
+            </div>
+
+            <form asp-action="AppleRegister"
+                  asp-controller="Account"
+                  method="post">
+
+                @Html.AntiForgeryToken()
+
+                <input asp-for="AppleId"
+                       type="hidden" />
+
+                <input asp-for="ReturnUrl"
+                       type="hidden" />
+
+                <input asp-for="FirstName"
+                       type="hidden" />
+
+                <input asp-for="LastName"
+                       type="hidden" />
+
+                <input asp-for="Email"
+                       type="hidden" />
+
+                <button type="submit"
+                        class="btn auth-primary-btn">
+
+                    <span>@Localizer["Completeregistration"]</span>
+                    <i class="bx bx-check"></i>
+
+                </button>
+
+            </form>
+
+            <div class="auth-bottom-text">
+                <a asp-controller="Account"
+                   asp-action="Login">
+
+                    <i class="bx bx-left-arrow-alt"></i>
+                    @Localizer["Login"]
+
+                </a>
+            </div>
+
+        </div>
+    </div>
+</div>
