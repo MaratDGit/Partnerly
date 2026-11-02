@@ -703,7 +703,35 @@
     renderFields(null);
     };
 
-    if (!document.getElementById("automationHubRoot") && document.getElementById("drawflow")) {
-        window.initAutomationBuilder(window.automationBuilder);
+    function configFromDom() {
+        var form = document.getElementById("automationBuilderForm");
+        if (!form) {
+            return window.automationBuilder || {};
+        }
+        var graphEl = document.getElementById("automationBuilderGraph");
+        var i18nEl = document.getElementById("automationBuilderI18n");
+        var graph = {};
+        var i18n = {};
+        try {
+            graph = JSON.parse(graphEl ? graphEl.textContent || "{}" : "{}");
+        } catch (err) {
+            graph = {};
+        }
+        try {
+            i18n = JSON.parse(i18nEl ? i18nEl.textContent || "{}" : "{}");
+        } catch (err) {
+            i18n = {};
+        }
+        return {
+            id: form.getAttribute("data-builder-id"),
+            graph: graph,
+            catalogUrl: form.getAttribute("data-catalog-url"),
+            saveUrl: form.getAttribute("data-save-url"),
+            i18n: i18n
+        };
+    }
+
+    if (document.getElementById("drawflow") && !document.getElementById("automationHubRoot")) {
+        window.initAutomationBuilder(configFromDom());
     }
 })();

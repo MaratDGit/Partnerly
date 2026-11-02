@@ -660,6 +660,7 @@ html[data-theme="dark"] .automation-create-card .btn-outline-secondary {
     background: rgba(255, 255, 255, 0.78);
     color: #6366f1;
     cursor: pointer;
+    text-decoration: none;
     backdrop-filter: blur(12px);
     -webkit-backdrop-filter: blur(12px);
 }
@@ -667,6 +668,8 @@ html[data-theme="dark"] .automation-create-card .btn-outline-secondary {
 .automation-hub-icon:hover {
     background: rgba(99, 102, 241, 0.12);
     border-color: rgba(99, 102, 241, 0.28);
+    color: inherit;
+    text-decoration: none;
 }
 
 .automation-hub-icon.is-danger {
@@ -810,4 +813,75 @@ html[data-theme="dark"] .automation-hub-status.is-on {
         max-height: calc(100dvh - 16px);
         padding: 14px 12px 12px;
     }
+
+    .automation-builder-page .automation-builder,
+    .automation-builder-page .automation-canvas {
+        min-height: 420px;
+    }
+}
+
+.automation-builder-page .automation-toolbar {
+    gap: 8px;
+    margin-bottom: 12px;
+    padding: 8px 10px;
+    border-radius: 16px;
+}
+
+.automation-builder-page .automation-page-head .btn,
+.automation-builder-page .automation-toolbar .btn {
+    min-height: 28px;
+    padding: 3px 10px;
+    font-size: 12px;
+    font-weight: 600;
+    line-height: 1.2;
+    border-radius: 10px;
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.72);
+}
+
+.automation-builder-page .automation-toolbar .btn-primary {
+    box-shadow: 0 4px 10px rgba(99, 102, 241, 0.22), inset 0 1px 0 rgba(255, 255, 255, 0.35);
+}
+
+.automation-builder-page .automation-toolbar-fields .form-control {
+    min-height: 28px;
+    padding: 4px 9px;
+    font-size: 12px;
+    border-radius: 10px;
+}
+
+.automation-builder-page .automation-builder,
+.automation-builder-page .automation-canvas {
+    min-height: calc(100vh - 250px);
+}
+
+.automation-builder-page .automation-palette,
+.automation-builder-page .automation-props {
+    border-radius: 16px;
+    padding: 10px;
+}
+
+.automation-builder-page .automation-palette button {
+    margin: 0 0 6px;
+    padding: 6px 8px;
+    border: 1px solid rgba(99, 102, 241, 0.16);
+    border-radius: 10px;
+    background: rgba(255, 255, 255, 0.72);
+    font-size: 12px;
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+}
+
+html.dark-style .automation-builder-page .automation-page-head .btn,
+html.dark-style .automation-builder-page .automation-toolbar .btn,
+html[data-theme="dark"] .automation-builder-page .automation-page-head .btn,
+html[data-theme="dark"] .automation-builder-page .automation-toolbar .btn {
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.08);
+}
+
+html.dark-style .automation-builder-page .automation-palette button,
+html[data-theme="dark"] .automation-builder-page .automation-palette button {
+    background: rgba(24, 28, 52, 0.88);
+    border-color: rgba(167, 139, 250, 0.22);
 }

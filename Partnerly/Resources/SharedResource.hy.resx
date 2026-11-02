@@ -3077,5 +3077,11 @@
   <data name="Agents" xml:space="preserve">
     <value>Ագենտներ</value>
   </data>
+  <data name="Rename" xml:space="preserve">
+    <value>Վերանվանել</value>
+  </data>
+  <data name="Pause" xml:space="preserve">
+    <value>Դադարեցնել</value>
+  </data>
 
 </root>

@@ -21,7 +21,17 @@
         Can("logs.view") ||
         Can("attachments.view");
     Guid.TryParse(Context.Request.Query["edit"], out var editAgentId);
-    var agentMenu = new List<(Guid Id, string Name, bool Live, string Ago)>();
+    if (editAgentId == Guid.Empty)
+    {
+        var pathParts = currentPage.Split('/', StringSplitOptions.RemoveEmptyEntries);
+        if (pathParts.Length >= 3 &&
+            string.Equals(pathParts[0], "Automation", StringComparison.OrdinalIgnoreCase) &&
+            string.Equals(pathParts[1], "Builder", StringComparison.OrdinalIgnoreCase))
+        {
+            Guid.TryParse(pathParts[2], out editAgentId);
+        }
+    }
+    var agentMenu = new List<(Guid Id, string Name, bool Active, string Ago)>();
     if (Can("automation.view") && AutomationAccess.CurrentUserId != Guid.Empty)
     {
         var agentsQuery = AutomationStore.QueryDefinitions().Where(item => !item.IsDeleted);
@@ -34,24 +44,13 @@
         var definitions = agentsQuery
             .OrderBy(item => item.Name)
             .Take(40)
-            .Select(item => new { item.Id, item.Name, item.UpdatedDate, item.CreatedDate })
+            .Select(item => new { item.Id, item.Name, item.IsActive, item.UpdatedDate, item.CreatedDate })
             .ToList();
 
         var agentIds = definitions.Select(item => item.Id).ToList();
-        var liveIds = new HashSet<Guid>();
         var lastAction = new Dictionary<Guid, DateTime>();
         if (agentIds.Count > 0)
         {
-            liveIds = AutomationStore.QueryRuns()
-                .Where(run => agentIds.Contains(run.AutomationId)
-                    && (run.Status == AutomationStatuses.Queued
-                        || run.Status == AutomationStatuses.Running
-                        || run.Status == AutomationStatuses.Waiting))
-                .Select(run => run.AutomationId)
-                .Distinct()
-                .ToList()
-                .ToHashSet();
-
             lastAction = AutomationStore.QueryRuns()
                 .Where(run => agentIds.Contains(run.AutomationId))
                 .GroupBy(run => run.AutomationId)
@@ -111,7 +110,7 @@
             var at = lastAction.TryGetValue(item.Id, out var runAt)
                 ? runAt
                 : (item.UpdatedDate != default ? item.UpdatedDate : item.CreatedDate);
-            agentMenu.Add((item.Id, item.Name, liveIds.Contains(item.Id), AgentAgo(at)));
+            agentMenu.Add((item.Id, item.Name, item.IsActive, AgentAgo(at)));
         }
     }
 }
@@ -525,7 +524,20 @@
             @if (Can("automation.view"))
             {
             <li class="partnerly-menu-section-group partnerly-menu-agents"
-                data-menu-section-group="agents">
+                data-menu-section-group="agents"
+                data-can-agent-edit="@(Can("automation.edit") ? "true" : "false")"
+                data-can-agent-delete="@(Can("automation.delete") ? "true" : "false")"
+                data-url-rename="@Url.Action("Rename", "Automation")"
+                data-url-toggle="@Url.Action("ToggleActive", "Automation")"
+                data-url-delete="@Url.Action("DeleteConfirmed", "Automation")"
+                data-i18n-rename="@Localizer["Rename"]"
+                data-i18n-pause="@Localizer["Pause"]"
+                data-i18n-start="@Localizer["Start"]"
+                data-i18n-delete="@Localizer["Delete"]"
+                data-i18n-confirm-delete="@Localizer["ConfirmDelete"]">
+                <form hidden data-agents-token>
+                    @Html.AntiForgeryToken()
+                </form>
 
                 <div class="partnerly-menu-agents-header">
 
@@ -584,15 +596,16 @@
                     @foreach (var agent in agentMenu)
                     {
                     <li class="partnerly-menu-item partnerly-menu-agents-sub-item @(editAgentId == agent.Id ? "active" : "")"
-                        data-agent-id="@agent.Id">
+                        data-agent-id="@agent.Id"
+                        data-agent-active="@(agent.Active ? "true" : "false")">
 
                         <a asp-controller="Automation"
-                           asp-action="Index"
-                           asp-route-edit="@agent.Id"
+                           asp-action="Builder"
+                           asp-route-id="@agent.Id"
                            class="partnerly-menu-link"
                            title="@agent.Name">
 
-                            <span class="partnerly-menu-agents-dot @(agent.Live ? "is-on" : "is-off")"
+                            <span class="partnerly-menu-agents-dot @(agent.Active ? "is-on" : "is-off")"
                                   aria-hidden="true"></span>
 
                             <span class="partnerly-menu-text">
@@ -642,6 +655,37 @@
 
 </aside>
 
+@if (Can("automation.view"))
+{
+<div id="partnerlyAgentsDelete"
+     class="partnerly-agents-delete"
+     hidden
+     aria-hidden="true">
+    <div class="partnerly-agents-delete-card" role="dialog" aria-modal="true" aria-labelledby="partnerlyAgentsDeleteTitle">
+        <button type="button"
+                class="partnerly-agents-delete-close"
+                data-agents-delete-close
+                aria-label="@Localizer["Close"]">
+            <i class="bx bx-x"></i>
+        </button>
+        <p class="partnerly-agents-delete-kicker">@Localizer["Delete"]</p>
+        <h2 id="partnerlyAgentsDeleteTitle">@Localizer["DeleteAutomation"]</h2>
+        <p class="partnerly-agents-delete-lead">@Localizer["ConfirmDelete"]</p>
+        <p class="partnerly-agents-delete-name" data-agents-delete-name></p>
+        <form asp-action="DeleteConfirmed"
+              asp-controller="Automation"
+              method="post"
+              data-agents-delete-form>
+            @Html.AntiForgeryToken()
+            <input type="hidden" name="id" value="" data-agents-delete-id />
+            <div class="partnerly-agents-delete-actions">
+                <button type="button" class="btn btn-outline-secondary" data-agents-delete-close>@Localizer["Cancel"]</button>
+                <button type="submit" class="btn btn-outline-danger">@Localizer["Delete"]</button>
+            </div>
+        </form>
+    </div>
+</div>
+}
 
 <!-- Mobile overlay -->
 
@@ -957,11 +1001,17 @@
                         row.className =
                             'partnerly-menu-item partnerly-menu-agents-sub-item';
                         row.setAttribute('data-agent-id', id);
+                        row.setAttribute(
+                            'data-agent-active',
+                            item.isActive === false ? 'false' : 'true'
+                        );
                         row.innerHTML =
-                            '<a href="/Automation?edit=' +
+                            '<a href="/Automation/Builder/' +
                             encodeURIComponent(id) +
                             '" class="partnerly-menu-link" title="">' +
-                            '<span class="partnerly-menu-agents-dot is-off" aria-hidden="true"></span>' +
+                            '<span class="partnerly-menu-agents-dot ' +
+                            (item.isActive === false ? 'is-off' : 'is-on') +
+                            '" aria-hidden="true"></span>' +
                             '<span class="partnerly-menu-text"></span>' +
                             '<span class="partnerly-menu-agents-ago">1s</span>' +
                             '</a>';
@@ -976,12 +1026,18 @@
                         link.setAttribute('title', name);
                         link.setAttribute(
                             'href',
-                            '/Automation?edit=' + encodeURIComponent(id)
+                            '/Automation/Builder/' + encodeURIComponent(id)
                         );
                     }
 
                     if (text) {
                         text.textContent = name;
+                    }
+
+                    if (item.isActive === false) {
+                        this.setActive(id, false);
+                    } else if (item.isActive === true) {
+                        this.setActive(id, true);
                     }
 
                     sortAgentRows(list);
@@ -1013,9 +1069,435 @@
                         row.remove();
                     }
 
+                },
+
+                setActive: function (id, isActive) {
+
+                    if (!id) {
+                        return;
+                    }
+
+                    const row = agentsGroup.querySelector(
+                        '[data-agent-id="' + String(id) + '"]'
+                    );
+
+                    if (!row) {
+                        return;
+                    }
+
+                    row.setAttribute(
+                        'data-agent-active',
+                        isActive ? 'true' : 'false'
+                    );
+
+                    const dot = row.querySelector(
+                        '.partnerly-menu-agents-dot'
+                    );
+
+                    if (dot) {
+                        dot.classList.toggle('is-on', !!isActive);
+                        dot.classList.toggle('is-off', !isActive);
+                    }
+
                 }
 
             };
+
+            const list = agentsGroup.querySelector(
+                '[data-menu-section-content="agents"]'
+            );
+            const canEdit =
+                agentsGroup.getAttribute('data-can-agent-edit') === 'true';
+            const canDelete =
+                agentsGroup.getAttribute('data-can-agent-delete') === 'true';
+
+            if (list && (canEdit || canDelete)) {
+
+                const context = document.createElement('div');
+                context.className = 'partnerly-agents-context';
+                context.hidden = true;
+                context.innerHTML =
+                    '<button type="button" data-agent-action="rename"></button>' +
+                    '<button type="button" data-agent-action="pause"></button>' +
+                    '<button type="button" data-agent-action="start"></button>' +
+                    '<button type="button" data-agent-action="delete" class="is-danger"></button>';
+                context.querySelector('[data-agent-action="rename"]').textContent =
+                    agentsGroup.getAttribute('data-i18n-rename') || 'Rename';
+                context.querySelector('[data-agent-action="pause"]').textContent =
+                    agentsGroup.getAttribute('data-i18n-pause') || 'Pause';
+                context.querySelector('[data-agent-action="start"]').textContent =
+                    agentsGroup.getAttribute('data-i18n-start') || 'Start';
+                context.querySelector('[data-agent-action="delete"]').textContent =
+                    agentsGroup.getAttribute('data-i18n-delete') || 'Delete';
+                document.body.appendChild(context);
+
+                let contextRow = null;
+                let renamingInput = null;
+
+                function agentToken() {
+                    const input = agentsGroup.querySelector(
+                        'input[name="__RequestVerificationToken"]'
+                    );
+                    return input ? input.value : '';
+                }
+
+                function hideContext() {
+                    context.hidden = true;
+                    contextRow = null;
+                }
+
+                function placeContext(x, y) {
+                    context.hidden = false;
+                    const width = context.offsetWidth;
+                    const height = context.offsetHeight;
+                    const left = Math.min(
+                        x,
+                        window.innerWidth - width - 8
+                    );
+                    const top = Math.min(
+                        y,
+                        window.innerHeight - height - 8
+                    );
+                    context.style.left = Math.max(8, left) + 'px';
+                    context.style.top = Math.max(8, top) + 'px';
+                }
+
+                function postAgent(url, extra) {
+                    const data = new FormData();
+                    if (extra) {
+                        Object.keys(extra).forEach(function (key) {
+                            data.append(key, extra[key]);
+                        });
+                    }
+                    return fetch(url, {
+                        method: 'POST',
+                        body: data,
+                        credentials: 'same-origin',
+                        headers: {
+                            'X-Requested-With': 'XMLHttpRequest',
+                            'RequestVerificationToken': agentToken()
+                        }
+                    }).then(function (response) {
+                        return response.text().then(function (text) {
+                            let payload = {};
+                            try {
+                                payload = text ? JSON.parse(text) : {};
+                            } catch (err) {
+                                payload = { message: text };
+                            }
+                            if (!response.ok || payload.success === false) {
+                                throw new Error(
+                                    payload.message ||
+                                    response.statusText ||
+                                    'Error'
+                                );
+                            }
+                            return payload;
+                        });
+                    });
+                }
+
+                function actionUrl(kind, id) {
+                    const base =
+                        agentsGroup.getAttribute('data-url-' + kind) || '';
+                    return base.replace(/\/?$/, '/') + encodeURIComponent(id);
+                }
+
+                function finishRename(input, save) {
+                    if (!input || input !== renamingInput) {
+                        return;
+                    }
+                    const row = input.closest('[data-agent-id]');
+                    const text = row
+                        ? row.querySelector('.partnerly-menu-text')
+                        : null;
+                    const previous = input.getAttribute('data-previous') || '';
+                    const next = (input.value || '').trim();
+                    renamingInput = null;
+                    input.remove();
+                    if (text) {
+                        text.hidden = false;
+                    }
+                    if (row) {
+                        row.classList.remove('is-renaming');
+                    }
+                    if (!save || !row || !next || next === previous) {
+                        if (text && !next) {
+                            text.textContent = previous;
+                        }
+                        return;
+                    }
+                    if (text) {
+                        text.textContent = next;
+                    }
+                    postAgent(actionUrl('rename', row.getAttribute('data-agent-id')), {
+                        name: next
+                    }).then(function (payload) {
+                        window.PartnerlyAgentsMenu.rename(
+                            payload.id,
+                            payload.name || next
+                        );
+                        const form = document.getElementById(
+                            'automationBuilderForm'
+                        );
+                        if (
+                            form &&
+                            form.getAttribute('data-builder-id') ===
+                                String(payload.id)
+                        ) {
+                            const nameInput = form.querySelector(
+                                'input[name="name"]'
+                            );
+                            if (nameInput) {
+                                nameInput.value = payload.name || next;
+                            }
+                        }
+                    }).catch(function () {
+                        if (text) {
+                            text.textContent = previous;
+                        }
+                    });
+                }
+
+                function startRename(row) {
+                    if (!row || renamingInput) {
+                        finishRename(renamingInput, true);
+                    }
+                    const text = row.querySelector('.partnerly-menu-text');
+                    const link = row.querySelector('.partnerly-menu-link');
+                    if (!text || !link) {
+                        return;
+                    }
+                    const input = document.createElement('input');
+                    input.type = 'text';
+                    input.className = 'partnerly-menu-agents-rename';
+                    input.maxLength = 200;
+                    input.value = text.textContent.trim();
+                    input.setAttribute('data-previous', input.value);
+                    text.hidden = true;
+                    link.insertBefore(input, text);
+                    row.classList.add('is-renaming');
+                    renamingInput = input;
+                    input.focus();
+                    input.select();
+                    input.addEventListener('keydown', function (event) {
+                        if (event.key === 'Enter') {
+                            event.preventDefault();
+                            input.blur();
+                        } else if (event.key === 'Escape') {
+                            event.preventDefault();
+                            finishRename(input, false);
+                        }
+                    });
+                    input.addEventListener('blur', function () {
+                        finishRename(input, true);
+                    });
+                    link.addEventListener('click', function blockNav(event) {
+                        if (row.classList.contains('is-renaming')) {
+                            event.preventDefault();
+                        } else {
+                            link.removeEventListener('click', blockNav);
+                        }
+                    });
+                }
+
+                list.addEventListener('contextmenu', function (event) {
+                    const row = event.target.closest('[data-agent-id]');
+                    if (!row || !list.contains(row)) {
+                        return;
+                    }
+                    event.preventDefault();
+                    if (renamingInput) {
+                        finishRename(renamingInput, true);
+                    }
+                    contextRow = row;
+                    const active =
+                        row.getAttribute('data-agent-active') !== 'false';
+                    const renameBtn = context.querySelector(
+                        '[data-agent-action="rename"]'
+                    );
+                    const pauseBtn = context.querySelector(
+                        '[data-agent-action="pause"]'
+                    );
+                    const startBtn = context.querySelector(
+                        '[data-agent-action="start"]'
+                    );
+                    const deleteBtn = context.querySelector(
+                        '[data-agent-action="delete"]'
+                    );
+                    renameBtn.hidden = !canEdit;
+                    pauseBtn.hidden = !canEdit || !active;
+                    startBtn.hidden = !canEdit || active;
+                    deleteBtn.hidden = !canDelete;
+                    placeContext(event.clientX, event.clientY);
+                });
+
+                context.addEventListener('click', function (event) {
+                    const button = event.target.closest('[data-agent-action]');
+                    if (!button || !contextRow) {
+                        return;
+                    }
+                    const action = button.getAttribute('data-agent-action');
+                    const row = contextRow;
+                    const id = row.getAttribute('data-agent-id');
+                    hideContext();
+                    if (action === 'rename') {
+                        startRename(row);
+                        return;
+                    }
+                    if (action === 'pause' || action === 'start') {
+                        const nextActive = action === 'start';
+                        postAgent(actionUrl('toggle', id), {
+                            isActive: nextActive ? 'true' : 'false'
+                        }).then(function (payload) {
+                            const active = payload.isActive === true ||
+                                payload.isActive === 'true' ||
+                                nextActive;
+                            window.PartnerlyAgentsMenu.setActive(id, active);
+                            if (
+                                window.PartnerlyAutomationHub &&
+                                window.PartnerlyAutomationHub.setActive
+                            ) {
+                                window.PartnerlyAutomationHub.setActive(
+                                    id,
+                                    active
+                                );
+                            }
+                        }).catch(function () { });
+                        return;
+                    }
+                    if (action === 'delete') {
+                        openAgentsDelete(id, agentNameOf(row));
+                    }
+                });
+
+                const deleteRoot = document.getElementById(
+                    'partnerlyAgentsDelete'
+                );
+                const deleteForm = deleteRoot
+                    ? deleteRoot.querySelector('[data-agents-delete-form]')
+                    : null;
+                const deleteName = deleteRoot
+                    ? deleteRoot.querySelector('[data-agents-delete-name]')
+                    : null;
+                const deleteIdInput = deleteRoot
+                    ? deleteRoot.querySelector('[data-agents-delete-id]')
+                    : null;
+
+                function setAgentsDeleteOpen(open) {
+                    if (!deleteRoot) {
+                        return;
+                    }
+                    deleteRoot.hidden = !open;
+                    deleteRoot.classList.toggle('is-open', open);
+                    deleteRoot.setAttribute(
+                        'aria-hidden',
+                        open ? 'false' : 'true'
+                    );
+                    document.body.classList.toggle(
+                        'is-agents-delete-open',
+                        open
+                    );
+                }
+
+                function openAgentsDelete(id, name) {
+                    if (!deleteRoot || !deleteForm) {
+                        return;
+                    }
+                    if (deleteIdInput) {
+                        deleteIdInput.value = id;
+                    }
+                    if (deleteName) {
+                        deleteName.textContent = name || '';
+                    }
+                    deleteForm.setAttribute('data-delete-id', id);
+                    if (deleteRoot.parentNode !== document.body) {
+                        document.body.appendChild(deleteRoot);
+                    }
+                    setAgentsDeleteOpen(true);
+                }
+
+                function closeAgentsDelete() {
+                    setAgentsDeleteOpen(false);
+                }
+
+                if (deleteRoot) {
+                    deleteRoot.addEventListener('click', function (event) {
+                        if (
+                            event.target === deleteRoot ||
+                            event.target.closest('[data-agents-delete-close]')
+                        ) {
+                            event.preventDefault();
+                            closeAgentsDelete();
+                        }
+                    });
+                }
+
+                if (deleteForm) {
+                    deleteForm.addEventListener('submit', function (event) {
+                        event.preventDefault();
+                        const id =
+                            (deleteIdInput && deleteIdInput.value) ||
+                            deleteForm.getAttribute('data-delete-id');
+                        if (!id) {
+                            return;
+                        }
+                        const submitButton = deleteForm.querySelector(
+                            'button[type="submit"]'
+                        );
+                        if (submitButton) {
+                            submitButton.disabled = true;
+                        }
+                        postAgent(actionUrl('delete', id), { id: id })
+                            .then(function () {
+                                closeAgentsDelete();
+                                window.PartnerlyAgentsMenu.remove(id);
+                                if (
+                                    window.PartnerlyAutomationHub &&
+                                    window.PartnerlyAutomationHub.removeRow
+                                ) {
+                                    window.PartnerlyAutomationHub.removeRow(id);
+                                }
+                                const path = window.location.pathname || '';
+                                if (
+                                    path.indexOf(
+                                        '/Automation/Builder/' + id
+                                    ) === 0
+                                ) {
+                                    window.location.href = '/Automation';
+                                }
+                            })
+                            .catch(function () { })
+                            .then(function () {
+                                if (submitButton) {
+                                    submitButton.disabled = false;
+                                }
+                            });
+                    });
+                }
+
+                document.addEventListener('mousedown', function (event) {
+                    if (
+                        !context.hidden &&
+                        !context.contains(event.target)
+                    ) {
+                        hideContext();
+                    }
+                });
+
+                document.addEventListener('keydown', function (event) {
+                    if (event.key === 'Escape') {
+                        hideContext();
+                        if (deleteRoot && deleteRoot.classList.contains('is-open')) {
+                            closeAgentsDelete();
+                        }
+                    }
+                });
+
+                window.addEventListener('scroll', hideContext, true);
+                window.addEventListener('resize', hideContext);
+
+            }
 
         }
 

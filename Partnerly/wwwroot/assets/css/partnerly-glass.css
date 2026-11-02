@@ -1,0 +1,492 @@
+/* Partnerly glass overlays: modals, DataTable chrome, delete confirm */
+
+:root {
+    --partnerly-glass-bg: rgba(255, 255, 255, 0.78);
+    --partnerly-glass-bg-strong: rgba(255, 255, 255, 0.88);
+    --partnerly-glass-border: rgba(99, 102, 241, 0.18);
+    --partnerly-glass-line: rgba(99, 102, 241, 0.12);
+    --partnerly-glass-shadow: 0 18px 50px rgba(49, 46, 129, 0.12);
+    --partnerly-glass-inset: inset 0 1px 0 rgba(255, 255, 255, 0.82);
+    --partnerly-glass-overlay: rgba(238, 240, 248, 0.48);
+    --partnerly-glass-radius: 28px;
+    --partnerly-glass-radius-sm: 14px;
+    --partnerly-glass-blur: 16px;
+}
+
+html[data-theme="dark"] {
+    --partnerly-glass-bg: rgba(18, 20, 42, 0.82);
+    --partnerly-glass-bg-strong: rgba(24, 28, 52, 0.9);
+    --partnerly-glass-border: rgba(167, 139, 250, 0.22);
+    --partnerly-glass-line: rgba(167, 139, 250, 0.14);
+    --partnerly-glass-shadow: 0 18px 50px rgba(0, 0, 0, 0.38);
+    --partnerly-glass-inset: inset 0 1px 0 rgba(255, 255, 255, 0.08);
+    --partnerly-glass-overlay: rgba(10, 12, 28, 0.58);
+}
+
+
+/* =========================================================
+   SYSTEM MODALS
+   ========================================================= */
+
+.modal-backdrop {
+    background-color: var(--partnerly-glass-overlay) !important;
+    backdrop-filter: blur(14px);
+    -webkit-backdrop-filter: blur(14px);
+}
+
+    .modal-backdrop.show {
+        opacity: 1 !important;
+    }
+
+.modal-content,
+#noteModal .modal-content,
+#attachmentsModal .modal-content,
+#sendGroupMessageModal .modal-content,
+#previewModal .modal-content,
+#previewModal .email-preview-content,
+#dataTableNoteModal .modal-content {
+    overflow: hidden;
+    border: 1px solid var(--partnerly-glass-border) !important;
+    border-radius: var(--partnerly-glass-radius) !important;
+    background: var(--partnerly-glass-bg) !important;
+    box-shadow: var(--partnerly-glass-shadow), var(--partnerly-glass-inset) !important;
+    backdrop-filter: blur(var(--partnerly-glass-blur));
+    -webkit-backdrop-filter: blur(var(--partnerly-glass-blur));
+}
+
+.modal-header,
+.modal-body,
+.modal-footer,
+#noteModal .modal-header,
+#noteModal .modal-body,
+#noteModal .modal-footer,
+#attachmentsModal .modal-header,
+#attachmentsModal .modal-body,
+#attachmentsModal .modal-footer,
+#sendGroupMessageModal .modal-header,
+#sendGroupMessageModal .modal-body,
+#sendGroupMessageModal .modal-footer,
+#previewModal .email-preview-header,
+#previewModal .email-preview-body,
+#previewModal .email-preview-footer,
+#dataTableNoteModal .modal-header,
+#dataTableNoteModal .modal-body,
+#dataTableNoteModal .modal-footer {
+    background: transparent !important;
+    border-color: var(--partnerly-glass-line) !important;
+}
+
+.modal-header .btn-close,
+#noteModal .modal-header .btn-close,
+#attachmentsModal .modal-header .btn-close,
+#sendGroupMessageModal .modal-header .btn-close,
+#previewModal .email-preview-header .btn-close,
+#dataTableNoteModal .modal-header .btn-close {
+    width: 36px !important;
+    height: 36px !important;
+    min-width: 36px;
+    min-height: 36px;
+    padding: 0;
+    margin: 0;
+    border: 1px solid var(--partnerly-glass-border) !important;
+    border-radius: 50% !important;
+    opacity: 1;
+    background-color: var(--partnerly-glass-bg-strong) !important;
+    box-shadow: var(--partnerly-glass-inset);
+}
+
+    .modal-header .btn-close:hover,
+    #noteModal .modal-header .btn-close:hover,
+    #attachmentsModal .modal-header .btn-close:hover,
+    #sendGroupMessageModal .modal-header .btn-close:hover,
+    #previewModal .email-preview-header .btn-close:hover,
+    #dataTableNoteModal .modal-header .btn-close:hover {
+        background-color: rgba(105, 108, 255, 0.10) !important;
+    }
+
+.modal-footer .btn,
+#noteModal .modal-footer .btn,
+#attachmentsModal .modal-footer .btn,
+#sendGroupMessageModal .modal-footer .btn,
+#previewModal .email-preview-footer .btn,
+#dataTableNoteModal .modal-footer .btn {
+    min-height: 36px;
+    border-radius: 12px;
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    box-shadow: var(--partnerly-glass-inset);
+}
+
+.modal-content .form-control,
+.modal-content .form-select,
+.modal-content textarea,
+#noteModal #noteText,
+#dataTableNoteModal #dataTableNoteText,
+#sendGroupMessageModal textarea {
+    background: var(--partnerly-glass-bg-strong) !important;
+    border-color: var(--partnerly-glass-border) !important;
+    box-shadow: var(--partnerly-glass-inset);
+}
+
+    .modal-content .form-control:focus,
+    .modal-content .form-select:focus,
+    .modal-content textarea:focus,
+    #noteModal #noteText:focus,
+    #dataTableNoteModal #dataTableNoteText:focus {
+        border-color: rgba(105, 108, 255, 0.50) !important;
+        background: var(--partnerly-glass-bg-strong) !important;
+        box-shadow: 0 0 0 3px rgba(105, 108, 255, 0.09), var(--partnerly-glass-inset) !important;
+    }
+
+
+/* =========================================================
+   DELETE CONFIRMATION
+   ========================================================= */
+
+.delete-confirmation-page {
+    min-height: calc(100vh - 180px);
+}
+
+.delete-confirmation-card,
+.card.delete-confirmation-card,
+html[data-theme="dark"] .delete-confirmation-card {
+    overflow: hidden;
+    border: 1px solid var(--partnerly-glass-border) !important;
+    border-radius: var(--partnerly-glass-radius) !important;
+    background: var(--partnerly-glass-bg) !important;
+    box-shadow: var(--partnerly-glass-shadow), var(--partnerly-glass-inset) !important;
+    backdrop-filter: blur(var(--partnerly-glass-blur));
+    -webkit-backdrop-filter: blur(var(--partnerly-glass-blur));
+}
+
+.delete-confirmation-header,
+.delete-confirmation-body,
+html[data-theme="dark"] .delete-confirmation-header {
+    background: transparent !important;
+    border-color: var(--partnerly-glass-line) !important;
+}
+
+.delete-confirmation-actions .btn {
+    min-height: 36px;
+    border-radius: 12px !important;
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    box-shadow: var(--partnerly-glass-inset);
+}
+
+.delete-confirmation-actions .btn-outline-secondary {
+    color: #5f61e6;
+    background: rgba(255, 255, 255, 0.72) !important;
+    border-color: var(--partnerly-glass-border) !important;
+}
+
+html[data-theme="dark"] .delete-confirmation-actions .btn-outline-secondary {
+    color: #c4c6ff;
+    background: rgba(24, 28, 52, 0.88) !important;
+}
+
+
+/* =========================================================
+   LOOKUP POPUP
+   ========================================================= */
+
+.lookup-modal {
+    background: var(--partnerly-glass-overlay) !important;
+    backdrop-filter: blur(14px);
+    -webkit-backdrop-filter: blur(14px);
+}
+
+.lookup-content,
+html[data-theme="dark"] .lookup-content {
+    border: 1px solid var(--partnerly-glass-border) !important;
+    border-radius: var(--partnerly-glass-radius) !important;
+    background: var(--partnerly-glass-bg) !important;
+    box-shadow: var(--partnerly-glass-shadow), var(--partnerly-glass-inset) !important;
+    backdrop-filter: blur(var(--partnerly-glass-blur));
+    -webkit-backdrop-filter: blur(var(--partnerly-glass-blur));
+}
+
+.lookup-header,
+.lookup-body,
+html[data-theme="dark"] .lookup-header,
+html[data-theme="dark"] .lookup-body {
+    background: transparent !important;
+    border-color: var(--partnerly-glass-line) !important;
+}
+
+.lookup-close {
+    width: 36px !important;
+    height: 36px !important;
+    border: 1px solid var(--partnerly-glass-border) !important;
+    border-radius: 50% !important;
+    background: var(--partnerly-glass-bg-strong) !important;
+    box-shadow: var(--partnerly-glass-inset);
+}
+
+    .lookup-close:hover {
+        background: rgba(255, 76, 81, 0.10) !important;
+    }
+
+#lookupSearch {
+    background: var(--partnerly-glass-bg-strong) !important;
+    border-color: var(--partnerly-glass-border) !important;
+}
+
+
+/* =========================================================
+   DATATABLE POPUPS
+   ========================================================= */
+
+.data-table-filter-modal,
+.data-table-columns-panel,
+.data-table-export-menu,
+.data-table-modal-multiselect-dropdown,
+.sticky-buttons .left-buttons .dropdown-menu,
+html[data-theme="dark"] .data-table-filter-modal,
+html[data-theme="dark"] .data-table-columns-panel,
+html[data-theme="dark"] .data-table-export-menu {
+    border: 1px solid var(--partnerly-glass-border) !important;
+    background: var(--partnerly-glass-bg) !important;
+    box-shadow: var(--partnerly-glass-shadow), var(--partnerly-glass-inset) !important;
+    backdrop-filter: blur(var(--partnerly-glass-blur));
+    -webkit-backdrop-filter: blur(var(--partnerly-glass-blur));
+}
+
+.data-table-filter-modal {
+    border-radius: var(--partnerly-glass-radius) !important;
+}
+
+.data-table-columns-panel,
+.data-table-export-menu,
+.data-table-modal-multiselect-dropdown,
+.sticky-buttons .left-buttons .dropdown-menu {
+    border-radius: var(--partnerly-glass-radius-sm) !important;
+}
+
+.data-table-filter-modal .modal-header,
+.data-table-filter-modal .modal-body,
+.data-table-filter-modal-footer,
+.data-table-columns-panel-header,
+.data-table-columns-panel-body,
+.data-table-columns-panel-footer,
+html[data-theme="dark"] .data-table-filter-modal .modal-header,
+html[data-theme="dark"] .data-table-filter-modal .modal-body,
+html[data-theme="dark"] .data-table-filter-modal-footer,
+html[data-theme="dark"] .data-table-columns-panel-header,
+html[data-theme="dark"] .data-table-columns-panel-body,
+html[data-theme="dark"] .data-table-columns-panel-footer {
+    background: transparent !important;
+    border-color: var(--partnerly-glass-line) !important;
+}
+
+.data-table-filter-modal .modal-header .btn-close,
+.data-table-columns-panel-close,
+html[data-theme="dark"] .data-table-filter-modal .modal-header .btn-close,
+html[data-theme="dark"] .data-table-columns-panel-close {
+    border: 1px solid var(--partnerly-glass-border) !important;
+    border-radius: 50% !important;
+    background: var(--partnerly-glass-bg-strong) !important;
+}
+
+.data-table-columns-item {
+    background: transparent !important;
+}
+
+.data-table-modal-filter .form-control,
+.data-table-modal-filter .form-select,
+.data-table-modal-multiselect-button {
+    background: var(--partnerly-glass-bg-strong) !important;
+    border-color: var(--partnerly-glass-border) !important;
+    box-shadow: var(--partnerly-glass-inset);
+}
+
+    .data-table-modal-filter .form-control:focus,
+    .data-table-modal-filter .form-select:focus {
+        background: var(--partnerly-glass-bg-strong) !important;
+        border-color: rgba(105, 108, 255, 0.50) !important;
+    }
+
+
+/* =========================================================
+   DATATABLE TOOLBAR + COLUMN BUTTONS
+   ========================================================= */
+
+.data-table-grid-action,
+.data-table-header .data-table-toolbar-left > .btn,
+.data-table-filter-modal-footer .btn,
+.data-table-columns-panel-footer .btn,
+.data-table-actions .btn,
+.data-table-inline-edit,
+.data-table-inline-save,
+.data-table-inline-cancel,
+.data-table-note-btn {
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    box-shadow: var(--partnerly-glass-inset);
+    transform: none !important;
+}
+
+.data-table-grid-action,
+html[data-theme="dark"] .data-table-grid-action {
+    background: var(--partnerly-glass-bg-strong) !important;
+    border-color: var(--partnerly-glass-border) !important;
+}
+
+    .data-table-grid-action:hover,
+    .data-table-grid-action:active,
+    html[data-theme="dark"] .data-table-grid-action:hover {
+        transform: none !important;
+        background: rgba(105, 108, 255, 0.10) !important;
+        border-color: rgba(99, 102, 241, 0.28) !important;
+    }
+
+.data-table-grid-action.has-filters,
+.data-table-grid-action.is-open {
+    background: rgba(105, 108, 255, 0.14) !important;
+    border-color: rgba(105, 108, 255, 0.35) !important;
+}
+
+.data-table-actions .btn,
+.data-table-inline-edit,
+.data-table-inline-cancel,
+html[data-theme="dark"] .data-table-actions .btn-outline-secondary,
+html[data-theme="dark"] .data-table-inline-cancel {
+    background: var(--partnerly-glass-bg-strong) !important;
+    border-color: var(--partnerly-glass-border) !important;
+}
+
+.data-table-actions .btn-outline-primary,
+.data-table-inline-edit,
+html[data-theme="dark"] .data-table-actions .btn-outline-primary,
+html[data-theme="dark"] .data-table-inline-edit {
+    color: #5f61e6 !important;
+    background: rgba(105, 108, 255, 0.12) !important;
+    border-color: rgba(105, 108, 255, 0.28) !important;
+}
+
+.data-table-actions .btn-outline-danger,
+html[data-theme="dark"] .data-table-actions .btn-outline-danger {
+    color: #e63940 !important;
+    background: rgba(255, 76, 81, 0.10) !important;
+    border-color: rgba(255, 76, 81, 0.24) !important;
+}
+
+html[data-theme="dark"] .data-table-actions .btn-outline-primary,
+html[data-theme="dark"] .data-table-inline-edit {
+    color: #c4c6ff !important;
+}
+
+html[data-theme="dark"] .data-table-actions .btn-outline-danger {
+    color: #ff9aa0 !important;
+}
+
+.data-table-note-btn {
+    border: 1px solid var(--partnerly-glass-border) !important;
+    background: var(--partnerly-glass-bg-strong) !important;
+}
+
+    .data-table-note-btn:hover {
+        transform: none !important;
+        background: rgba(105, 108, 255, 0.10) !important;
+    }
+
+    .data-table-note-btn.is-filled {
+        color: #b58100 !important;
+        background: rgba(255, 171, 0, 0.16) !important;
+        border-color: rgba(255, 171, 0, 0.28) !important;
+    }
+
+.data-table-header .data-table-toolbar-left > .btn,
+.data-table-filter-modal-footer .btn,
+.data-table-columns-panel-footer .btn {
+    border-radius: 12px;
+}
+
+
+/* =========================================================
+   DATATABLE BADGES
+   ========================================================= */
+
+.data-table-wrapper table tbody td .data-table-badge,
+.data-table-wrapper table tbody td .badge {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 22px;
+    padding: 2px 9px;
+    border: 1px solid var(--partnerly-glass-border) !important;
+    border-radius: 999px !important;
+    background: var(--partnerly-glass-bg) !important;
+    box-shadow: var(--partnerly-glass-inset);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.02em;
+}
+
+.data-table-wrapper table tbody td .bg-label-success,
+.data-table-wrapper table tbody td .data-table-badge.bg-label-success {
+    color: #0f9d58 !important;
+    background: rgba(40, 199, 111, 0.16) !important;
+    border-color: rgba(40, 199, 111, 0.28) !important;
+}
+
+.data-table-wrapper table tbody td .bg-label-warning,
+.data-table-wrapper table tbody td .data-table-badge.bg-label-warning {
+    color: #b58100 !important;
+    background: rgba(255, 171, 0, 0.16) !important;
+    border-color: rgba(255, 171, 0, 0.28) !important;
+}
+
+.data-table-wrapper table tbody td .bg-label-danger,
+.data-table-wrapper table tbody td .data-table-badge.bg-label-danger {
+    color: #d9484e !important;
+    background: rgba(255, 76, 81, 0.14) !important;
+    border-color: rgba(255, 76, 81, 0.26) !important;
+}
+
+.data-table-wrapper table tbody td .bg-label-info,
+.data-table-wrapper table tbody td .data-table-badge.bg-label-info,
+.data-table-wrapper table tbody td .bg-label-secondary,
+.data-table-wrapper table tbody td .data-table-badge.bg-label-secondary,
+.data-table-wrapper table tbody td .bg-label-primary,
+.data-table-wrapper table tbody td .data-table-badge.bg-label-primary {
+    color: #5f61e6 !important;
+    background: rgba(105, 108, 255, 0.14) !important;
+    border-color: rgba(105, 108, 255, 0.26) !important;
+}
+
+html[data-theme="dark"] .data-table-wrapper table tbody td .bg-label-success,
+html[data-theme="dark"] .data-table-wrapper table tbody td .data-table-badge.bg-label-success {
+    color: #7ee2ad !important;
+}
+
+html[data-theme="dark"] .data-table-wrapper table tbody td .bg-label-warning,
+html[data-theme="dark"] .data-table-wrapper table tbody td .data-table-badge.bg-label-warning {
+    color: #ffd27a !important;
+}
+
+html[data-theme="dark"] .data-table-wrapper table tbody td .bg-label-danger,
+html[data-theme="dark"] .data-table-wrapper table tbody td .data-table-badge.bg-label-danger {
+    color: #ff9aa0 !important;
+}
+
+html[data-theme="dark"] .data-table-wrapper table tbody td .bg-label-info,
+html[data-theme="dark"] .data-table-wrapper table tbody td .bg-label-secondary,
+html[data-theme="dark"] .data-table-wrapper table tbody td .bg-label-primary,
+html[data-theme="dark"] .data-table-wrapper table tbody td .data-table-badge.bg-label-info,
+html[data-theme="dark"] .data-table-wrapper table tbody td .data-table-badge.bg-label-secondary,
+html[data-theme="dark"] .data-table-wrapper table tbody td .data-table-badge.bg-label-primary {
+    color: #c4c6ff !important;
+}
+
+html[data-theme="dark"] .data-table-actions .btn-outline-primary:hover,
+html[data-theme="dark"] .data-table-inline-edit:hover {
+    background: rgba(129, 133, 255, 0.22) !important;
+}
+
+html[data-theme="dark"] .data-table-note-btn.is-filled {
+    color: #ffd27a !important;
+    background: rgba(255, 171, 0, 0.16) !important;
+}

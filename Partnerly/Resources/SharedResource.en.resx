@@ -3077,5 +3077,11 @@
   <data name="Agents" xml:space="preserve">
     <value>Agents</value>
   </data>
+  <data name="Rename" xml:space="preserve">
+    <value>Rename</value>
+  </data>
+  <data name="Pause" xml:space="preserve">
+    <value>Pause</value>
+  </data>
 
 </root>

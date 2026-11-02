@@ -88,7 +88,7 @@
 
 ## KI-011 — Нет автотестов
 
-- **Статус:** частично закрыто (2026-11-02) — есть `Partnerly.Automation.Tests` (xUnit, net6.0, 90 тестов после UX delay/create). Остальной монолит без тестов.
+- **Статус:** частично закрыто (2026-11-03) — есть `Partnerly.Automation.Tests` (xUnit, net6.0, 91 тестов). Остальной монолит без тестов.
 - **Суть:** раньше в решении был только `Partnerly.csproj`.
 - **Компоненты:** решение; Automation покрыт PHASE 3–7 + child workflow / wait_until / settings / templates / HTTP + labeled delay / glass create.
 - **Журнал:** 2026-11-02 — Automation PHASE 3–7, закрытие v1, UX create/delay

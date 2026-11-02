@@ -182,11 +182,39 @@ namespace Partnerly.Automation.Authoring
             await _scheduler.ArmPublishedAsync(definition, draft, cancellationToken);
         }
 
-        public async Task ToggleActiveAsync(Guid automationId, CancellationToken cancellationToken = default)
+        public async Task<bool> ToggleActiveAsync(Guid automationId, bool? isActive = null, CancellationToken cancellationToken = default)
         {
             var definition = await RequireAsync(automationId, cancellationToken);
-            definition.IsActive = !definition.IsActive;
+            var next = isActive ?? !definition.IsActive;
+            definition.IsActive = next;
             await TouchAsync(definition, cancellationToken);
+            if (!next)
+            {
+                await _store.CancelPendingWakeupsAsync(
+                    definition.Id,
+                    new[]
+                    {
+                        AutomationStatuses.WakeupStart,
+                        AutomationStatuses.WakeupSchedule,
+                        AutomationStatuses.WakeupInterval
+                    },
+                    cancellationToken);
+                await _store.CancelPendingWakeupsAsync(
+                    definition.Id,
+                    new[] { AutomationStatuses.WakeupDelay },
+                    cancellationToken,
+                    onlyWithoutRun: true);
+            }
+            else if (definition.PublishedVersionId != null)
+            {
+                var published = await _store.GetVersionAsync(definition.PublishedVersionId.Value, cancellationToken);
+                if (published != null)
+                {
+                    await _scheduler.ArmPublishedAsync(definition, published, cancellationToken);
+                }
+            }
+
+            return definition.IsActive;
         }
 
         public async Task DeleteAsync(Guid automationId, CancellationToken cancellationToken = default)

@@ -26,13 +26,6 @@
     <script type="application/json" id="automationBuilderGraph">@Html.Raw(string.IsNullOrWhiteSpace(Model.GraphJson) ? "{}" : Model.GraphJson)</script>
     <script type="application/json" id="automationBuilderI18n">@await Html.PartialAsync("~/Views/Shared/Automation/_BuilderI18n.cshtml")</script>
 
-    <div class="automation-hub-panel-head">
-        <div>
-            <p class="automation-create-kicker">@Localizer["AutomationBuilder"]</p>
-            <h2>@Model.Name</h2>
-        </div>
-    </div>
-
     <div class="automation-toolbar">
         <div class="automation-toolbar-fields">
             <input class="form-control automation-builder-name" name="name" value="@Model.Name" maxlength="200" aria-label="@Localizer["Name"]" />

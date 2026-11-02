@@ -76,6 +76,24 @@ namespace Partnerly.Automation.Tests
                 adminHost.GetRequiredService<IAutomationAuthoringService>().GetAsync(created.Id));
         }
 
+        [Fact]
+        public async Task ToggleActive_can_pause_and_start()
+        {
+            var owner = Guid.NewGuid();
+            await using var host = AutomationTestHost.Create(owner);
+            var authoring = host.GetRequiredService<IAutomationAuthoringService>();
+            var created = await authoring.CreateDraftAsync(owner, "bot");
+            Assert.True(created.IsActive);
+
+            var paused = await authoring.ToggleActiveAsync(created.Id, false);
+            Assert.False(paused);
+            Assert.False((await authoring.GetAsync(created.Id)).IsActive);
+
+            var started = await authoring.ToggleActiveAsync(created.Id, true);
+            Assert.True(started);
+            Assert.True((await authoring.GetAsync(created.Id)).IsActive);
+        }
+
         private static WorkflowGraph LinearManualGraph() => WorkflowGraph.Parse(@"{
           ""schemaVersion"": 1,
           ""nodes"": [

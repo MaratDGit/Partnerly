@@ -533,8 +533,9 @@ Webhook incoming не использует cookie; лимит и HMAC доста
 | Action | Право | UI |
 |---|---|---|
 | Index | view | Хаб: таблица автоматизаций + шаблоны (не DataTable) |
-| List / Templates / History / Settings / Connections / Builder / Delete / RunDetails | * | Редирект на Index (+ query для попапа) |
-| BuilderPanel / BuilderSave | view / edit | Drawflow в glass overlay |
+| List / Templates / History / Settings / Connections / Delete / RunDetails | * | Редирект на Index (+ query для попапа) |
+| Builder | view | Полная страница редактора процесса, не popup |
+| BuilderPanel / BuilderSave | view / edit | Partial билдера; Save с полной страницы |
 | Publish | publish | JSON из overlay |
 | ToggleActive | edit | |
 | Copy | create | |
@@ -546,7 +547,7 @@ Webhook incoming не использует cookie; лимит и HMAC доста
 
 Меню: секция **Automation** после Tools, один пункт на Index. Иконка `bx-bot`. History / Templates / Connections из меню убраны.
 
-Тексты только resx. Строки хаба: History / Settings / Edit / Delete — иконки, открывают popup. Builder и Connections в том же glass-стиле. Создание — стеклянный popup, не GET-draft. Токены как у сайта, без site-wide glass на app-shell.
+Тексты только resx. Строки хаба: History / Settings / Delete — иконки, открывают popup. Edit ведёт на `/Automation/Builder/{id}`. Connections — overlay с билдера. Создание — стеклянный popup, затем страница билдера. Токены как у сайта, без site-wide glass на app-shell.
 
 Dry-run: кнопка Test в builder → `IsDryRun=true`.
 

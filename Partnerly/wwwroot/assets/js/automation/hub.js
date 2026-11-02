@@ -4,7 +4,7 @@
     var root = document.getElementById("automationHubRoot");
     var overlay = document.getElementById("automationHub");
     var nested = document.getElementById("automationHubNested");
-    if (!root || !overlay || !nested) {
+    if (!overlay || !nested) {
         return;
     }
 
@@ -12,12 +12,12 @@
     var nestedCard = nested.querySelector("[data-hub-card]");
     var mainBody = overlay.querySelector("[data-hub-body]");
     var nestedBody = nested.querySelector("[data-hub-body]");
-    var rowsHost = root.querySelector("[data-hub-rows]");
+    var rowsHost = root ? root.querySelector("[data-hub-rows]") : null;
     var deleteTemplate = document.getElementById("automationDeleteTemplate");
     var loading = false;
 
     function attr(name, fallback) {
-        return root.getAttribute(name) || fallback || "";
+        return (root && root.getAttribute(name)) || fallback || "";
     }
 
     function can(name) {
@@ -94,7 +94,8 @@
 
     function closeSlot(useNested) {
         var target = slot(useNested);
-        if (!useNested && typeof window.destroyAutomationBuilder === "function") {
+        if (!useNested && target.body && target.body.querySelector("#automationBuilderForm")
+            && typeof window.destroyAutomationBuilder === "function") {
             window.destroyAutomationBuilder();
         }
         if (target.body) {
@@ -122,7 +123,8 @@
     function showHtml(html, options) {
         options = options || {};
         var target = slot(!!options.nested);
-        if (!options.nested && typeof window.destroyAutomationBuilder === "function") {
+        if (!options.nested && target.body && target.body.querySelector("#automationBuilderForm")
+            && typeof window.destroyAutomationBuilder === "function") {
             window.destroyAutomationBuilder();
         }
         if (target.card) {
@@ -190,7 +192,11 @@
     }
 
     function openBuilder(id) {
-        return loadPanel("/Automation/BuilderPanel/" + id, { size: "wide" });
+        if (!id) {
+            return Promise.resolve();
+        }
+        window.location.href = "/Automation/Builder/" + encodeURIComponent(id);
+        return Promise.resolve();
     }
 
     function openHistory(id) {
@@ -252,6 +258,16 @@
         return button;
     }
 
+    function iconLink(href, title, icon) {
+        var link = document.createElement("a");
+        link.className = "automation-hub-icon";
+        link.href = href;
+        link.title = title;
+        link.setAttribute("aria-label", title);
+        link.innerHTML = '<i class="' + icon + '"></i>';
+        return link;
+    }
+
     function renderRow(item) {
         var tr = document.createElement("tr");
         tr.setAttribute("data-automation-row", item.id);
@@ -276,7 +292,7 @@
         }
         if (can("data-can-edit")) {
             actions.appendChild(iconButton("settings", item.id, attr("data-settings"), "bx bx-cog"));
-            actions.appendChild(iconButton("edit", item.id, attr("data-edit"), "bx bx-edit"));
+            actions.appendChild(iconLink("/Automation/Builder/" + item.id, attr("data-edit"), "bx bx-edit"));
         }
         if (can("data-can-delete")) {
             actions.appendChild(iconButton("delete", item.id, attr("data-delete"), "bx bx-trash", "is-danger", item.name));
@@ -327,14 +343,14 @@
         var id = form.getAttribute("data-builder-id");
         var nameInput = form.querySelector('input[name="name"]');
         var descInput = form.querySelector('input[name="description"]');
+        if (id && nameInput && window.PartnerlyAgentsMenu) {
+            window.PartnerlyAgentsMenu.rename(id, nameInput.value);
+        }
         var row = rowsHost && id ? rowsHost.querySelector('[data-automation-row="' + id + '"]') : null;
         if (!row || !nameInput) {
             return;
         }
         row.querySelector(".automation-hub-name").textContent = nameInput.value;
-        if (window.PartnerlyAgentsMenu) {
-            window.PartnerlyAgentsMenu.rename(id, nameInput.value);
-        }
         var descEl = row.querySelector(".automation-hub-desc");
         if (descInput && descInput.value) {
             if (!descEl) {
@@ -458,6 +474,23 @@
         }
     });
 
+    function setActive(id, isActive) {
+        if (!rowsHost || !id) {
+            return;
+        }
+        var row = rowsHost.querySelector('[data-automation-row="' + id + '"]');
+        if (!row) {
+            return;
+        }
+        var status = row.querySelector(".automation-hub-status");
+        if (!status) {
+            return;
+        }
+        status.classList.toggle("is-on", !!isActive);
+        status.classList.toggle("is-off", !isActive);
+        status.textContent = isActive ? attr("data-active") : attr("data-inactive");
+    }
+
     window.PartnerlyAutomationHub = {
         openBuilder: openBuilder,
         openHistory: openHistory,
@@ -465,29 +498,32 @@
         openConnections: openConnections,
         addRow: addRow,
         removeRow: removeRow,
+        setActive: setActive,
         toast: toast,
         close: closeTop
     };
 
-    var params = new URLSearchParams(window.location.search);
-    var editId = params.get("edit");
-    var historyId = params.get("history");
-    var settingsId = params.get("settings");
-    var runId = params.get("run");
-    var deleteId = params.get("delete");
-    if (editId) {
-        openBuilder(editId);
-    } else if (historyId) {
-        openHistory(historyId);
-    } else if (settingsId) {
-        openSettings(settingsId);
-    } else if (runId) {
-        openRun(runId);
-    } else if (params.get("connections")) {
-        openConnections();
-    } else if (deleteId) {
-        var row = rowsHost.querySelector('[data-automation-row="' + deleteId + '"]');
-        var name = row ? (row.querySelector(".automation-hub-name") || {}).textContent : "";
-        openDelete(deleteId, name);
+    if (root) {
+        var params = new URLSearchParams(window.location.search);
+        var editId = params.get("edit");
+        var historyId = params.get("history");
+        var settingsId = params.get("settings");
+        var runId = params.get("run");
+        var deleteId = params.get("delete");
+        if (editId) {
+            openBuilder(editId);
+        } else if (historyId) {
+            openHistory(historyId);
+        } else if (settingsId) {
+            openSettings(settingsId);
+        } else if (runId) {
+            openRun(runId);
+        } else if (params.get("connections")) {
+            openConnections();
+        } else if (deleteId) {
+            var row = rowsHost.querySelector('[data-automation-row="' + deleteId + '"]');
+            var name = row ? (row.querySelector(".automation-hub-name") || {}).textContent : "";
+            openDelete(deleteId, name);
+        }
     }
 })();

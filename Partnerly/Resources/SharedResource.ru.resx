@@ -3077,5 +3077,11 @@
   <data name="Agents" xml:space="preserve">
     <value>Агенты</value>
   </data>
+  <data name="Rename" xml:space="preserve">
+    <value>Переименовать</value>
+  </data>
+  <data name="Pause" xml:space="preserve">
+    <value>Приостановить</value>
+  </data>
 
 </root>

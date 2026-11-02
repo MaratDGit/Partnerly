@@ -249,11 +249,11 @@
         border-color: rgba(105, 108, 255, .25);
         color: var(--dt-primary);
         box-shadow: 0 3px 9px rgba(105, 108, 255, .08);
-        transform: translateY(-1px);
+        transform: none;
     }
 
     .data-table-grid-action:active {
-        transform: translateY(0);
+        transform: none;
         box-shadow: none;
     }
 

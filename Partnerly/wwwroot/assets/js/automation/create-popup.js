@@ -140,11 +140,9 @@
                 }
                 if (window.PartnerlyAutomationHub) {
                     window.PartnerlyAutomationHub.addRow(payload);
-                    if (payload.id) {
-                        window.PartnerlyAutomationHub.openBuilder(payload.id);
-                    }
-                } else if (payload.id) {
-                    window.location.href = "/Automation?edit=" + encodeURIComponent(payload.id);
+                }
+                if (payload.id) {
+                    window.location.href = "/Automation/Builder/" + encodeURIComponent(payload.id);
                 }
             }).catch(function (err) {
                 if (window.PartnerlyAutomationHub && window.PartnerlyAutomationHub.toast) {

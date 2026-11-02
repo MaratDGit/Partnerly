@@ -59,6 +59,11 @@ namespace Partnerly.Automation.Web
         [Authorize(Policy = "Permission:automation.view")]
         public IActionResult Index()
         {
+            if (Guid.TryParse(Request.Query["edit"], out var editId) && editId != Guid.Empty)
+            {
+                return RedirectToAction(nameof(Builder), new { id = editId });
+            }
+
             var model = new AutomationDashboardViewModel
             {
                 Definitions = VisibleDefinitions().OrderByDescending(item => item.UpdatedDate).ToList(),
@@ -120,7 +125,7 @@ namespace Partnerly.Automation.Web
                 created = await _authoring.GetAsync(created.Id);
 
                 await _logService.CreateLogAsync("AC", LogTypeAttribute.Information, "Automation created");
-                return OkPayload(DefinitionPayload(created), nameof(Index), new { edit = created.Id });
+                return OkPayload(DefinitionPayload(created), nameof(Builder), new { id = created.Id });
             }
             catch (KeyNotFoundException)
             {
@@ -129,9 +134,16 @@ namespace Partnerly.Automation.Web
         }
 
         [Authorize(Policy = "Permission:automation.view")]
-        public IActionResult Builder(Guid id)
+        public async Task<IActionResult> Builder(Guid id)
         {
-            return RedirectToAction(nameof(Index), new { edit = id });
+            try
+            {
+                return View(await BuildBuilderAsync(id));
+            }
+            catch (KeyNotFoundException)
+            {
+                return NotFound();
+            }
         }
 
         [HttpGet]
@@ -158,7 +170,7 @@ namespace Partnerly.Automation.Web
                 await _authoring.UpdateMetaAsync(id, name, description);
                 await _authoring.UpdateGraphAsync(id, WorkflowGraph.Parse(graphJson ?? "{}"));
                 await _logService.CreateLogAsync("AM", LogTypeAttribute.Information, "Automation graph saved");
-                return OkPayload(new { success = true, id, message = _localizer["AutomationSaved"].Value }, nameof(Index), new { edit = id });
+                return OkPayload(new { success = true, id, message = _localizer["AutomationSaved"].Value }, nameof(Builder), new { id });
             }
             catch (KeyNotFoundException)
             {
@@ -166,7 +178,7 @@ namespace Partnerly.Automation.Web
             }
             catch (Exception ex)
             {
-                return Fail(ex.Message, nameof(Index), new { edit = id });
+                return Fail(ex.Message, nameof(Builder), new { id });
             }
         }
 
@@ -179,7 +191,7 @@ namespace Partnerly.Automation.Web
             {
                 await _authoring.PublishAsync(id);
                 await _logService.CreateLogAsync("AH", LogTypeAttribute.Information, "Automation published");
-                return OkPayload(new { success = true, id, message = _localizer["AutomationPublished"].Value }, nameof(Index), new { edit = id });
+                return OkPayload(new { success = true, id, message = _localizer["AutomationPublished"].Value }, nameof(Builder), new { id });
             }
             catch (KeyNotFoundException)
             {
@@ -187,19 +199,48 @@ namespace Partnerly.Automation.Web
             }
             catch (InvalidOperationException ex)
             {
-                return Fail(ex.Message, nameof(Index), new { edit = id });
+                return Fail(ex.Message, nameof(Builder), new { id });
             }
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
         [Authorize(Policy = "Permission:automation.edit")]
-        public async Task<IActionResult> ToggleActive(Guid id)
+        public async Task<IActionResult> Rename(Guid id, string name)
+        {
+            if (string.IsNullOrWhiteSpace(name))
+            {
+                return Fail(_localizer["AutomationNameRequired"].Value, nameof(Index));
+            }
+
+            try
+            {
+                var definition = await _authoring.GetAsync(id);
+                var trimmed = name.Trim();
+                if (trimmed.Length > 200)
+                {
+                    trimmed = trimmed.Substring(0, 200);
+                }
+
+                await _authoring.UpdateMetaAsync(id, trimmed, definition.Description);
+                await _logService.CreateLogAsync("AM", LogTypeAttribute.Information, "Automation renamed");
+                return OkPayload(new { success = true, id, name = trimmed }, nameof(Index));
+            }
+            catch (KeyNotFoundException)
+            {
+                return NotFound();
+            }
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        [Authorize(Policy = "Permission:automation.edit")]
+        public async Task<IActionResult> ToggleActive(Guid id, bool? isActive = null)
         {
             try
             {
-                await _authoring.ToggleActiveAsync(id);
-                return OkPayload(new { success = true, id }, nameof(Index));
+                var active = await _authoring.ToggleActiveAsync(id, isActive);
+                return OkPayload(new { success = true, id, isActive = active }, nameof(Index));
             }
             catch (KeyNotFoundException)
             {
@@ -215,7 +256,7 @@ namespace Partnerly.Automation.Web
             try
             {
                 var copy = await _authoring.CopyAsync(id, _access.CurrentUserId);
-                return OkPayload(DefinitionPayload(copy), nameof(Index), new { edit = copy.Id });
+                return OkPayload(DefinitionPayload(copy), nameof(Builder), new { id = copy.Id });
             }
             catch (KeyNotFoundException)
             {
@@ -266,7 +307,7 @@ namespace Partnerly.Automation.Web
             }
             catch (InvalidOperationException ex)
             {
-                return Fail(ex.Message, nameof(Index), new { edit = id });
+                return Fail(ex.Message, nameof(Builder), new { id });
             }
         }
 
@@ -379,7 +420,7 @@ namespace Partnerly.Automation.Web
             {
                 var created = await _authoring.CreateFromTemplateAsync(_access.CurrentUserId, templateId);
                 await _logService.CreateLogAsync("AC", LogTypeAttribute.Information, "Automation from template");
-                return OkPayload(DefinitionPayload(created), nameof(Index), new { edit = created.Id });
+                return OkPayload(DefinitionPayload(created), nameof(Builder), new { id = created.Id });
             }
             catch (KeyNotFoundException)
             {

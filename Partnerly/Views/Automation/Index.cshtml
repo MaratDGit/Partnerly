@@ -9,7 +9,6 @@
 }
 
 @section PageStyles {
-    <link rel="stylesheet" href="~/vendor/drawflow/drawflow.min.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/assets/css/automation-builder.css" asp-append-version="true" />
 }
 
@@ -84,9 +83,9 @@
                                 <button type="button" class="automation-hub-icon" data-hub="settings" data-id="@item.Id" title="@Localizer["Settings"]" aria-label="@Localizer["Settings"]">
                                     <i class="bx bx-cog"></i>
                                 </button>
-                                <button type="button" class="automation-hub-icon" data-hub="edit" data-id="@item.Id" title="@Localizer["Edit"]" aria-label="@Localizer["Edit"]">
+                                <a class="automation-hub-icon" asp-action="Builder" asp-route-id="@item.Id" title="@Localizer["Edit"]" aria-label="@Localizer["Edit"]">
                                     <i class="bx bx-edit"></i>
-                                </button>
+                                </a>
                             }
                             @if (Can("automation.delete"))
                             {
@@ -135,8 +134,6 @@
 @await Html.PartialAsync("~/Views/Shared/Automation/_HubOverlay.cshtml")
 
 @section PageScripts {
-    <script src="~/vendor/drawflow/drawflow.min.js" asp-append-version="true"></script>
-    <script src="~/assets/js/automation/builder.js" asp-append-version="true"></script>
     <script src="~/assets/js/automation/create-popup.js" asp-append-version="true"></script>
     <script src="~/assets/js/automation/hub.js" asp-append-version="true"></script>
 }

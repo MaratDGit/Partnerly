@@ -4,6 +4,54 @@
 
 ---
 
+## 2026-11-03 — Коммит и push: glass UI, Builder-страница, Agents controls
+
+- **Суть:** владелец: сделать commit и push накопленной работы после glass/Builder/Agents.
+- **Сделано:** коммит и push ветки `Cursor-Agent` (SHA допишу после git). В коммите: `partnerly-glass.css`, Builder как страница, context-меню Agents, индикатор `IsActive`, Delete-попап.
+- **Проверка:** `dotnet build Partnerly.sln` — 0 Error(s) (isolated, ранее в сессии). Браузер недоступен.
+
+---
+
+## 2026-11-03 — Agents: свечение индикатора по IsActive; Delete — glass-попап
+
+- **Суть:** владелец: точка слева от имени агента светится если активен, не светится если на паузе; Delete из context-меню открывает попап удаления автоматизации, не `window.confirm`.
+- **Сделано:** индикатор рисуется по `IsActive` (`.is-on` пульсирует, `.is-off` серый без glow). Pause/Start обновляют точку сразу. Delete открывает `#partnerlyAgentsDelete` (glass) и шлёт `POST /Automation/DeleteConfirmed/{id}`; строка уходит из меню и с хаба.
+- **Проверка:** `dotnet build Partnerly.sln` — 0 Error(s) (isolated OutputPath). Тесты не гонял — движок не менялся. Браузер недоступен. Коммит не делался.
+
+---
+
+## 2026-11-03 — Agents: right-click rename / pause / start / delete
+
+- **Суть:** владелец: в submenu Agents по правому клику — Rename (применяется при клике в другое место), Приостановить если active, Start если пауза, Delete; все должно работать.
+- **Сделано:** контекстное glass-меню. Rename — инлайн, save на blur/Enter, Escape отменяет. Pause/Start пишут `IsActive` (не toggle вслепую); при паузе снимаются schedule-wakeup, при старте published снова вооружается. Delete — confirm + `DeleteConfirmed`. Права `automation.edit` / `delete`.
+- **Проверка:** `dotnet build Partnerly.sln` — 0 Error(s). `dotnet test Partnerly.Automation.Tests` — 91 Passed. Браузер недоступен. Коммит не делался.
+
+---
+
+## 2026-11-03 — Редактор процесса — страница, не popup; кнопки мелкие glass
+
+- **Суть:** владелец: редактор процесса не попап; кнопки в нём маленькие и стеклянные.
+- **Сделано:** `GET /Automation/Builder/{id}` снова полная страница. Хаб Edit, меню Agents, create и `?edit=` ведут туда. Settings/Connections/Run остаются overlay поверх страницы. Тулбар и палитра — компактные glass-кнопки.
+- **Проверка:** `dotnet build Partnerly.sln` — 0 Error(s) (isolated OutputPath). Браузер недоступен. Коммит не делался.
+
+---
+
+## 2026-11-03 — Glass: DataTable, DeletePartial, системные попапы
+
+- **Суть:** владелец: после коммита все DataTable-попапы, кнопки тулбара, badge и кнопки в колонках, DeletePartial и системные попапы — в стеклянном стиле как create-automation.
+- **Сделано:** слой `partnerly-glass.css` после DataTable CSS. Покрыты Bootstrap `.modal`, note/attachments/send-group/email-preview/DataTable-note, фильтр/колонки/экспорт/bulk-delete, lookup, `_DeleteConfirmation`. Кнопки тулбара и колонок, badge — pill glass. App-shell (меню, карточки страниц) не трогал.
+- **Проверка:** `dotnet build Partnerly.sln` — 0 Error(s) (isolated OutputPath). Браузер недоступен. Второй коммит не делался.
+
+---
+
+## 2026-11-03 — Коммит Automation + меню Agents
+
+- **Суть:** владелец: сделать коммит накопленной работы.
+- **Сделано:** `b406307` на `Cursor-Agent` — Automation PHASE 3–7, хаб, Agents KPI, меню Agents/футер, тесты, миграция `AddAutomationTables`. Push не делался.
+- **Проверка:** коммит создан. Секреты в коммит не входили.
+
+---
+
 ## 2026-11-03 — Dropdown профиля как меню; язык чуть компактнее
 
 - **Суть:** владелец: в dropdown фото профиля размер пунктов как в левом меню; в dropdown языка пункты немного меньше.

@@ -1,123 +1,11 @@
 @model Partnerly.Automation.Web.ViewModels.AutomationBuilderViewModel
 @{
     ViewData["Title"] = Localizer["AutomationBuilder"].Value;
-    var canPublish = (ViewData["Permissions"] as HashSet<string>)?.Contains("automation.publish") == true;
-    var canRun = (ViewData["Permissions"] as HashSet<string>)?.Contains("automation.run") == true;
-    var canEdit = (ViewData["Permissions"] as HashSet<string>)?.Contains("automation.edit") == true;
 }
 
 @section PageStyles {
     <link rel="stylesheet" href="~/vendor/drawflow/drawflow.min.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/assets/css/automation-builder.css" asp-append-version="true" />
-}
-
-@section PageScripts {
-    <script src="~/vendor/drawflow/drawflow.min.js" asp-append-version="true"></script>
-    <script>
-        window.automationBuilder = {
-            id: @Html.Raw(Json.Serialize(Model.Id)),
-            graph: @Html.Raw(Model.GraphJson),
-            catalogUrl: @Html.Raw(Json.Serialize(Url.Action("Catalog", "Automation"))),
-            saveUrl: @Html.Raw(Json.Serialize(Url.Action("BuilderSave", "Automation", new { id = Model.Id }))),
-            i18n: {
-                saved: @Html.Raw(Json.Serialize(Localizer["AutomationSaved"].Value)),
-                selectNode: @Html.Raw(Json.Serialize(Localizer["SelectNodeHint"].Value)),
-                triggerBlocks: @Html.Raw(Json.Serialize(Localizer["TriggerBlocks"].Value)),
-                actionBlocks: @Html.Raw(Json.Serialize(Localizer["ActionBlocks"].Value)),
-                nodeName: @Html.Raw(Json.Serialize(Localizer["Name"].Value)),
-                nodeNameHelp: @Html.Raw(Json.Serialize(Localizer["NodeNameHelp"].Value)),
-                delayAmount: @Html.Raw(Json.Serialize(Localizer["DelayAmount"].Value)),
-                delayUnit: @Html.Raw(Json.Serialize(Localizer["DelayUnit"].Value)),
-                delayHelp: @Html.Raw(Json.Serialize(Localizer["DelayHelp"].Value)),
-                delayTriggerHelp: @Html.Raw(Json.Serialize(Localizer["DelayTriggerHelp"].Value)),
-                seconds: @Html.Raw(Json.Serialize(Localizer["DelaySeconds"].Value)),
-                minutes: @Html.Raw(Json.Serialize(Localizer["DelayMinutes"].Value)),
-                hours: @Html.Raw(Json.Serialize(Localizer["DelayHours"].Value)),
-                days: @Html.Raw(Json.Serialize(Localizer["DelayDays"].Value)),
-                waitBeforeStart: @Html.Raw(Json.Serialize(Localizer["WaitBeforeStart"].Value)),
-                waitBeforeStartHelp: @Html.Raw(Json.Serialize(Localizer["WaitBeforeStartHelp"].Value)),
-                scheduleKind: @Html.Raw(Json.Serialize(Localizer["ScheduleKind"].Value)),
-                scheduleKindHelp: @Html.Raw(Json.Serialize(Localizer["ScheduleKindHelp"].Value)),
-                scheduleTime: @Html.Raw(Json.Serialize(Localizer["ScheduleTime"].Value)),
-                scheduleTimeHelp: @Html.Raw(Json.Serialize(Localizer["ScheduleTimeHelp"].Value)),
-                scheduleDate: @Html.Raw(Json.Serialize(Localizer["ScheduleDate"].Value)),
-                intervalMinutes: @Html.Raw(Json.Serialize(Localizer["IntervalMinutes"].Value)),
-                intervalMinutesHelp: @Html.Raw(Json.Serialize(Localizer["IntervalMinutesHelp"].Value)),
-                entity: @Html.Raw(Json.Serialize(Localizer["AutomationRecordType"].Value)),
-                entityHelp: @Html.Raw(Json.Serialize(Localizer["EntityHelp"].Value)),
-                eventName: @Html.Raw(Json.Serialize(Localizer["EventName"].Value)),
-                eventNameHelp: @Html.Raw(Json.Serialize(Localizer["EventNameHelp"].Value)),
-                webhookTriggerHelp: @Html.Raw(Json.Serialize(Localizer["WebhookTriggerHelp"].Value)),
-                manualHelp: @Html.Raw(Json.Serialize(Localizer["ManualTriggerHelp"].Value)),
-                variableName: @Html.Raw(Json.Serialize(Localizer["VariableName"].Value)),
-                variableValue: @Html.Raw(Json.Serialize(Localizer["VariableValue"].Value)),
-                variableNameHelp: @Html.Raw(Json.Serialize(Localizer["VariableNameHelp"].Value)),
-                emailTo: @Html.Raw(Json.Serialize(Localizer["EmailTo"].Value)),
-                emailSubject: @Html.Raw(Json.Serialize(Localizer["EmailSubject"].Value)),
-                emailBody: @Html.Raw(Json.Serialize(Localizer["EmailBody"].Value)),
-                emailTemplate: @Html.Raw(Json.Serialize(Localizer["EmailTemplate"].Value)),
-                emailTemplateHelp: @Html.Raw(Json.Serialize(Localizer["EmailTemplateHelp"].Value)),
-                notificationUser: @Html.Raw(Json.Serialize(Localizer["NotificationUser"].Value)),
-                notificationMessage: @Html.Raw(Json.Serialize(Localizer["NotificationMessage"].Value)),
-                notificationLink: @Html.Raw(Json.Serialize(Localizer["NotificationLink"].Value)),
-                notificationType: @Html.Raw(Json.Serialize(Localizer["NotificationType"].Value)),
-                httpMethod: @Html.Raw(Json.Serialize(Localizer["HttpMethod"].Value)),
-                httpUrl: @Html.Raw(Json.Serialize(Localizer["HttpUrl"].Value)),
-                httpBody: @Html.Raw(Json.Serialize(Localizer["HttpBody"].Value)),
-                httpConnection: @Html.Raw(Json.Serialize(Localizer["HttpConnection"].Value)),
-                httpConnectionHelp: @Html.Raw(Json.Serialize(Localizer["HttpConnectionHelp"].Value)),
-                webhookUrl: @Html.Raw(Json.Serialize(Localizer["WebhookUrl"].Value)),
-                webhookBody: @Html.Raw(Json.Serialize(Localizer["WebhookBody"].Value)),
-                webhookSecret: @Html.Raw(Json.Serialize(Localizer["WebhookSecretField"].Value)),
-                childAutomation: @Html.Raw(Json.Serialize(Localizer["ChildAutomation"].Value)),
-                childAutomationHelp: @Html.Raw(Json.Serialize(Localizer["ChildAutomationHelp"].Value)),
-                conditionLeft: @Html.Raw(Json.Serialize(Localizer["ConditionLeft"].Value)),
-                conditionOp: @Html.Raw(Json.Serialize(Localizer["ConditionOp"].Value)),
-                conditionRight: @Html.Raw(Json.Serialize(Localizer["ConditionRight"].Value)),
-                conditionHelp: @Html.Raw(Json.Serialize(Localizer["ConditionHelp"].Value)),
-                waitUntilDeadline: @Html.Raw(Json.Serialize(Localizer["WaitUntilDeadline"].Value)),
-                waitUntilDeadlineHelp: @Html.Raw(Json.Serialize(Localizer["WaitUntilDeadlineHelp"].Value)),
-                recordFields: @Html.Raw(Json.Serialize(Localizer["RecordFields"].Value)),
-                recordFieldsHelp: @Html.Raw(Json.Serialize(Localizer["RecordFieldsHelp"].Value)),
-                recordKey: @Html.Raw(Json.Serialize(Localizer["RecordKey"].Value)),
-                recordFilters: @Html.Raw(Json.Serialize(Localizer["RecordFilters"].Value)),
-                switchValue: @Html.Raw(Json.Serialize(Localizer["SwitchValue"].Value)),
-                switchValueHelp: @Html.Raw(Json.Serialize(Localizer["SwitchValueHelp"].Value)),
-                cronExpression: @Html.Raw(Json.Serialize(Localizer["CronExpression"].Value)),
-                cronExpressionHelp: @Html.Raw(Json.Serialize(Localizer["CronExpressionHelp"].Value)),
-                kindOnce: @Html.Raw(Json.Serialize(Localizer["ScheduleOnce"].Value)),
-                kindHourly: @Html.Raw(Json.Serialize(Localizer["ScheduleHourly"].Value)),
-                kindDaily: @Html.Raw(Json.Serialize(Localizer["ScheduleDaily"].Value)),
-                kindWeekly: @Html.Raw(Json.Serialize(Localizer["ScheduleWeekly"].Value)),
-                kindMonthly: @Html.Raw(Json.Serialize(Localizer["ScheduleMonthly"].Value)),
-                kindCron: @Html.Raw(Json.Serialize(Localizer["ScheduleCron"].Value)),
-                types: {
-                    manual: @Html.Raw(Json.Serialize(Localizer["NodeTypeManual"].Value)),
-                    schedule: @Html.Raw(Json.Serialize(Localizer["NodeTypeSchedule"].Value)),
-                    interval: @Html.Raw(Json.Serialize(Localizer["NodeTypeInterval"].Value)),
-                    "entity.created": @Html.Raw(Json.Serialize(Localizer["NodeTypeEntityCreated"].Value)),
-                    "entity.updated": @Html.Raw(Json.Serialize(Localizer["NodeTypeEntityUpdated"].Value)),
-                    "entity.deleted": @Html.Raw(Json.Serialize(Localizer["NodeTypeEntityDeleted"].Value)),
-                    webhook: @Html.Raw(Json.Serialize(Localizer["NodeTypeWebhook"].Value)),
-                    event: @Html.Raw(Json.Serialize(Localizer["NodeTypeEvent"].Value)),
-                    delay: @Html.Raw(Json.Serialize(Localizer["NodeTypeDelay"].Value)),
-                    send_email: @Html.Raw(Json.Serialize(Localizer["NodeTypeSendEmail"].Value)),
-                    send_notification: @Html.Raw(Json.Serialize(Localizer["NodeTypeSendNotification"].Value)),
-                    create_record: @Html.Raw(Json.Serialize(Localizer["NodeTypeCreateRecord"].Value)),
-                    update_record: @Html.Raw(Json.Serialize(Localizer["NodeTypeUpdateRecord"].Value)),
-                    find_record: @Html.Raw(Json.Serialize(Localizer["NodeTypeFindRecord"].Value)),
-                    delete_record: @Html.Raw(Json.Serialize(Localizer["NodeTypeDeleteRecord"].Value)),
-                    wait_until: @Html.Raw(Json.Serialize(Localizer["NodeTypeWaitUntil"].Value)),
-                    branch: @Html.Raw(Json.Serialize(Localizer["NodeTypeBranch"].Value)),
-                    "switch": @Html.Raw(Json.Serialize(Localizer["NodeTypeSwitch"].Value)),
-                    set_variable: @Html.Raw(Json.Serialize(Localizer["NodeTypeSetVariable"].Value)),
-                    http_request: @Html.Raw(Json.Serialize(Localizer["NodeTypeHttpRequest"].Value)),
-                    execute_workflow: @Html.Raw(Json.Serialize(Localizer["NodeTypeExecuteWorkflow"].Value))
-                }
-            }
-        };
-    </script>
-    <script src="~/assets/js/automation/builder.js" asp-append-version="true"></script>
 }
 
 <div class="container-xxl flex-grow-1 container-p-y automation-page automation-builder-page">
@@ -128,62 +16,15 @@
             <h1>@Localizer["AutomationBuilder"]</h1>
             <p class="automation-lead">@Localizer["AutomationBuilderLead"]</p>
         </div>
+        <a class="btn btn-outline-secondary" asp-action="Index">@Localizer["Back"]</a>
     </div>
-    @await Html.PartialAsync("~/Views/Shared/Automation/_AutomationNav.cshtml")
-    <form asp-action="BuilderSave" asp-route-id="@Model.Id" method="post" id="automationBuilderForm">
-        @Html.AntiForgeryToken()
-        <input type="hidden" name="graphJson" id="graphJson" value="@Model.GraphJson" />
-
-        <div class="automation-toolbar">
-            <a class="btn btn-outline-secondary" asp-action="List">@Localizer["Back"]</a>
-            <div class="automation-toolbar-fields">
-                <input class="form-control automation-builder-name" name="name" value="@Model.Name" maxlength="200" aria-label="@Localizer["Name"]" />
-                <input class="form-control" name="description" value="@Model.Description" maxlength="500" placeholder="@Localizer["Description"]" aria-label="@Localizer["Description"]" />
-            </div>
-            <div class="automation-toolbar-actions">
-                <a class="btn btn-outline-secondary" asp-action="Settings" asp-route-id="@Model.Id">@Localizer["AutomationSettings"]</a>
-                @if (canEdit)
-                {
-                    <button type="submit" class="btn btn-primary">@Localizer["Save"]</button>
-                }
-                @if (canPublish)
-                {
-                    <button type="submit" formaction="@Url.Action("Publish", new { id = Model.Id })" class="btn btn-outline-primary">
-                        @Localizer["Publish"]
-                    </button>
-                }
-                @if (canRun)
-                {
-                    <button type="submit" formaction="@Url.Action("Run", new { id = Model.Id, dryRun = true })" class="btn btn-outline-secondary">
-                        @Localizer["TestRun"]
-                    </button>
-                    <button type="submit" formaction="@Url.Action("Run", new { id = Model.Id, dryRun = false })" class="btn btn-primary">
-                        @Localizer["RunNow"]
-                    </button>
-                }
-            </div>
-        </div>
-
-        <div class="automation-builder">
-            <aside class="automation-palette">
-                <h6>@Localizer["TriggerBlocks"]</h6>
-                <p class="automation-hint">@Localizer["TriggerBlocksHelp"]</p>
-                <div data-palette-triggers></div>
-                <h6 class="mt-3">@Localizer["ActionBlocks"]</h6>
-                <p class="automation-hint">@Localizer["ActionBlocksHelp"]</p>
-                <div data-palette-actions></div>
-            </aside>
-            <div id="drawflow" class="automation-canvas"></div>
-            <aside class="automation-props">
-                <h6>@Localizer["NodeProperties"]</h6>
-                <p class="automation-hint" data-prop-empty>@Localizer["SelectNodeHint"]</p>
-                <div data-prop-form hidden>
-                    <label class="form-label">@Localizer["Name"]</label>
-                    <input class="form-control mb-1" data-prop-name />
-                    <div class="form-text mb-3">@Localizer["NodeNameHelp"]</div>
-                    <div data-prop-fields></div>
-                </div>
-            </aside>
-        </div>
-    </form>
+    @await Html.PartialAsync("~/Views/Shared/Automation/_BuilderPanel.cshtml", Model)
 </div>
+
+@await Html.PartialAsync("~/Views/Shared/Automation/_HubOverlay.cshtml")
+
+@section PageScripts {
+    <script src="~/vendor/drawflow/drawflow.min.js" asp-append-version="true"></script>
+    <script src="~/assets/js/automation/builder.js" asp-append-version="true"></script>
+    <script src="~/assets/js/automation/hub.js" asp-append-version="true"></script>
+}

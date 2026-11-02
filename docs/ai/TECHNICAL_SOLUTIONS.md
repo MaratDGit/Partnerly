@@ -4,6 +4,50 @@
 
 ---
 
+## TR-2026-11-03-04 — Индикатор агента = IsActive; Delete — glass-попап
+
+- **Дата:** 2026-11-03
+- **Суть:** Точка слева от имени в меню Agents светится при `IsActive=true` и тухнет на паузе. Delete из context-меню открывает glass-попап `#partnerlyAgentsDelete` (на любой странице, не только хаб) и удаляет через `DeleteConfirmed`.
+- **Причина:** владелец явно сменил смысл индикатора с live-run на active/paused и отказался от `window.confirm`.
+- **Затрагивает:** `_VerticalMenu`, `partnerly-layout.css`.
+- **Последствия:** live-run больше не красит точку. Попап живёт в layout, чтобы Delete работал вне `/Automation`. Браузер не проверялся.
+- **Альтернативы:** переиспользовать hub overlay `_DeletePanel` — отклонено, `hub.js` есть только на Index.
+
+---
+
+## TR-2026-11-03-03 — Agents context menu: rename / pause / start / delete
+
+- **Дата:** 2026-11-03
+- **Суть:** Правый клик по имени агента в левом меню открывает glass-меню. Rename сохраняется с blur. Pause/Start задают `IsActive` явно через `ToggleActive(isActive)`. Delete подтверждается и зовёт `DeleteConfirmed`.
+- **Причина:** владелец: кнопки в submenu агентов, и они должны реально работать.
+- **Затрагивает:** `IAutomationAuthoringService.ToggleActiveAsync`, `AutomationAuthoringService`, `AutomationController.Rename/ToggleActive`, `_VerticalMenu`, `partnerly-layout.css`, `hub.js.setActive`, resx en/ru/hy.
+- **Последствия:** пауза отменяет schedule/interval/start wakeup; старт published снова `ArmPublishedAsync`. Индикатор слева — `IsActive` (см. TR-2026-11-03-04), не live-run. Браузер не проверялся.
+- **Альтернативы:** только toggle без желаемого состояния — отклонено, UI показывает Pause или Start.
+
+---
+
+## TR-2026-11-03-02 — Редактор процесса — страница, не overlay
+
+- **Дата:** 2026-11-03
+- **Суть:** Drawflow-редактор открывается как `/Automation/Builder/{id}`, не glass-popup на хабе. Кнопки тулбара и блоки палитры — мелкие стеклянные. Settings / Connections / детали run остаются overlay на этой странице.
+- **Причина:** владелец: «редактор процесса пусть не будет попапом».
+- **Затрагивает:** `AutomationController.Builder`, `Builder.cshtml`, `_BuilderPanel`, `hub.js`, `create-popup.js`, `builder.js`, `_VerticalMenu`, `automation-builder.css`.
+- **Последствия:** старый `/Automation?edit={id}` редиректит на Builder. Хаб больше не грузит Drawflow. Браузер не проверялся.
+- **Альтернативы:** оставить wide overlay — отклонено явно.
+
+---
+
+## TR-2026-11-03-01 — Glass попапы и DataTable chrome, не app-shell
+
+- **Дата:** 2026-11-03
+- **Суть:** Системные попапы и DataTable (фильтр, колонки, экспорт, bulk-delete, lookup, note, DeletePartial, кнопки тулбара/колонок, badge) используют тот же glass, что create-automation: полупрозрачный фон, blur 16px, радиус 28px, индиго-бордер. Слой `partnerly-glass.css` грузится последним после `partnerly-data-table.css`.
+- **Причина:** владелец явно попросил стекло на всех DataTable-попапах/кнопках/badge и на всех системных попапах. Ранее общий glass app-shell откатывался — сайдбар и карточки страниц не трогаем.
+- **Затрагивает:** `partnerly-glass.css`, `_CommonMasterLayout`, `_DeleteConfirmation`, hover transform у `.data-table-grid-action`.
+- **Последствия:** миграций нет. Гостевой лендинг (`_LandingLayout`) слой не подключает. Браузер не проверялся.
+- **Альтернативы:** править каждый page-css по отдельности — отклонено, один поздний слой перекрывает #fff/#151c2c.
+
+---
+
 ## TR-2026-11-02-13 — Statistics Agents = живые Automation KPI
 
 - **Дата:** 2026-11-02
