@@ -8,12 +8,12 @@
 - Приложение: ASP.NET Core MVC, .NET 6, монолит `Partnerly/Partnerly.csproj`.
 - Документация агента на месте.
 - Коммит `b406307` — Automation PHASE 3–7 + хаб + Agents KPI + меню Agents/футер + тесты + миграция `20261102134353_AddAutomationTables`.
-- Следующий коммит (этот) — glass попапы/DataTable, Builder как страница, Agents context menu, индикатор `IsActive`, Delete glass-попап. SHA допишу после коммита.
+- Коммит `7788ec1` — glass попапы/DataTable, Builder как страница, Agents context menu, индикатор `IsActive`, Delete glass-попап.
 - Миграция Automation **применена** на локальной БД 2026-11-02. Другие стенды / прод — не трогать без отдельного ок.
 
 ## Последняя задача
 
-Владелец: commit и push. В коммите: glass UI, `/Automation/Builder/{id}`, Agents rename/pause/start, индикатор `IsActive`, Delete-попап.
+Владелец: commit и push. Коммит `7788ec1` на `Cursor-Agent`; push на `origin/Cursor-Agent`.
 
 ## Уже сделано недавно
 
@@ -41,7 +41,7 @@
 - Модули Payment/Transaction без UI.
 - KI-003 seed user на Admin, не Super — открыто.
 - Браузер в этой сессии недоступен — проверить glass: DataTable фильтр/колонки/экспорт/удаление, DeletePartial, note/attachments, lookup, dark theme.
-- Privacy/Docs, Automation, меню — в `b406307`; glass/Builder/Agents — в следующем коммите этой сессии. Push по просьбе владельца (сейчас).
+- Privacy/Docs, Automation, меню — `b406307`; glass/Builder/Agents — `7788ec1`. Push `Cursor-Agent` по просьбе владельца.
 
 ## Рекомендуемый следующий шаг
 

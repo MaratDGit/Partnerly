@@ -7,7 +7,7 @@
 ## 2026-11-03 — Коммит и push: glass UI, Builder-страница, Agents controls
 
 - **Суть:** владелец: сделать commit и push накопленной работы после glass/Builder/Agents.
-- **Сделано:** коммит и push ветки `Cursor-Agent` (SHA допишу после git). В коммите: `partnerly-glass.css`, Builder как страница, context-меню Agents, индикатор `IsActive`, Delete-попап.
+- **Сделано:** коммит `7788ec1` на `Cursor-Agent` — `partnerly-glass.css`, Builder как страница, context-меню Agents, индикатор `IsActive`, Delete-попап. Push на `origin/Cursor-Agent`.
 - **Проверка:** `dotnet build Partnerly.sln` — 0 Error(s) (isolated, ранее в сессии). Браузер недоступен.
 
 ---
