@@ -4,6 +4,17 @@
 
 ---
 
+## TR-2026-11-02-04 — Automation: SQL wakeup, не Hangfire; граф + Drawflow
+
+- **Дата:** 2026-11-02
+- **Суть:** Universal Automation Platform живёт в `Partnerly/Automation/`. Состояние run/wakeup в SQL Server; воркер `IHostedService` с арендой строк. Hangfire/Quartz не используются. Workflow — JSON граф nodes/edges. Редактор Drawflow (vanilla JS). Cronos для cron+TZ. Коннекторы User/Ticket/Notification/Group/EmailTemplate. User и Employee владеют своими автоматизациями.
+- **Причина:** Hangfire — очередь джобов, не state machine; React Flow ломает Razor-стек.
+- **Затрагивает:** пока только `docs/ai/Automation/*`. Код и миграции — PHASE 3–4.
+- **Последствия:** миграция `Automation*` только локально по явному «да». Прод не трогать. EnsureCreated существующую БД не дополнит (KI-002).
+- **Альтернативы:** Hangfire + continuations — отклонено; xyflow/React — отклонено.
+
+---
+
 ## TR-2026-11-02-03 — Apple Sign In как Google
 
 - **Дата:** 2026-11-02

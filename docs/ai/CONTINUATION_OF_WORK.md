@@ -27,10 +27,11 @@
 - Apple Sign In на Login/Register — в этом коммите. Миграция `20261102092927_AddAppleSignIn` **применена** на локальной БД 2026-11-02. Ключи Apple пустые.
 - System Settings / My Settings: полная карточка, колонки, клик по switch — в этом коммите.
 - OpenNewCase / ViewCase (тикет для исполнителя + Save заметки) — в этом коммите.
+- Automation PHASE 1–2: `docs/ai/Automation/` (спека, анализ, ARCHITECTURE.md). Код движка ещё нет.
 
 ## Последняя задача
 
-PHASE 1 Automation: спецификация и архитектурный анализ в `docs/ai/Automation/`. Код не писать, пока владелец не подтвердит отчёт (Hangfire нет, Drawflow, миграции только локально, роль User — свои автоматизации?).
+PHASE 2 Automation: `docs/ai/Automation/ARCHITECTURE.md`. Решения PHASE 1 зафиксированы (не Hangfire, Drawflow, свои автоматизации у User/Employee). Движок не писать, пока не начат PHASE 3.
 
 ## Уже сделано недавно
 
@@ -61,7 +62,7 @@ PHASE 1 Automation: спецификация и архитектурный ан�
 
 ## Рекомендуемый следующий шаг
 
-1. Проверить `docs/ai/Automation/PHASE-1-ANALYSIS.md` и дать «да» / правки.
-2. После «да» — PHASE 2 (`ARCHITECTURE.md`), затем ядро. Не писать движок до проверки.
+1. PHASE 3: папка `Partnerly/Automation/`, абстракции, registry, evaluator, executor на in-memory, unit-тесты ядра. Без EF-миграции и без UI.
+2. Не создавать миграцию, пока не PHASE 4 и нет явного ок на локальную БД.
 
 Перед кодом снова прочитать `AGENTS.md` и этот файл.

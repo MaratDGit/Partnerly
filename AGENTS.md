@@ -176,4 +176,5 @@ dotnet build "Partnerly.sln"
 | `docs/ai/REPORT_TEMPLATE.md` | Шаблон отчёта |
 | `docs/ai/Automation/MASTER-SPECIFICATION.md` | Спецификация Universal Automation Platform |
 | `docs/ai/Automation/PHASE-1-ANALYSIS.md` | Анализ PHASE 1 и предложение архитектуры |
+| `docs/ai/Automation/ARCHITECTURE.md` | Архитектура модуля Automation (PHASE 2) |
 | `docs/reports/` | Готовые отчёты |

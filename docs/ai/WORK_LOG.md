@@ -4,6 +4,15 @@
 
 ---
 
+## 2026-11-02 — Automation PHASE 2: архитектура
+
+- **Суть:** владелец: начинать следующий этап после PHASE 1.
+- **Сделано:** `docs/ai/Automation/ARCHITECTURE.md` — каталоги, таблицы/поля, GraphJson, коды trigger/action, worker, права, коннекторы, SignalR, UI-контракт. Код `Partnerly/Automation/` и миграции не создавались (это PHASE 3–4).
+- **Решение:** TR-2026-11-02-04.
+- **Сборка / браузер:** не нужны (документы).
+
+---
+
 ## 2026-11-02 — Automation PHASE 1: спецификация и анализ
 
 - **Суть:** владелец задал Universal Automation Platform; файл был только на локальном диске `F:\...\docs\ai\Automation\MASTER-SPECIFICATION.md`.
