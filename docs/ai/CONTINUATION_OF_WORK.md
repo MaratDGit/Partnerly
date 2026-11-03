@@ -10,11 +10,12 @@
 - Коммит `b406307` — Automation PHASE 3–7 + хаб + Agents KPI + меню Agents/футер + тесты + миграция `20261102134353_AddAutomationTables`.
 - Коммит `7788ec1` — glass попапы/DataTable, Builder как страница, Agents context menu, индикатор `IsActive`, Delete glass-попап.
 - Коммит `5ef721a` — OpenNewCase/My Settings попапы, My Profile без вкладок, поля 40px, unused Automation views удалены.
+- Коммит `7909aa8` — гид автоматизации, 10 шаблонов, studio-билдер, светлее overlay попапов. Push на `origin/Cursor-Agent`.
 - Миграция Automation **применена** на локальной БД 2026-11-02. Другие стенды / прод — не трогать без отдельного ок.
 
 ## Последняя задача
 
-Builder: футер сайта снова на месте; right click / long-press по карточке — меню Properties + Delete; фон за системными попапами светлее (`--partnerly-glass-overlay` 0.26 / 0.36, blur 6px). Коммит не делался. Браузер недоступен.
+Коммит `7909aa8` и push `origin/Cursor-Agent`. Браузер по-прежнему недоступен.
 
 ## Уже сделано недавно
 
@@ -46,7 +47,7 @@ Builder: футер сайта снова на месте; right click / long-pr
 - Модули Payment/Transaction без UI.
 - KI-003 seed user на Admin, не Super — открыто.
 - Браузер в этой сессии недоступен — проверить glass: DataTable фильтр/колонки/экспорт/удаление, DeletePartial, note/attachments, lookup, dark theme.
-- Privacy/Docs, Automation, меню — `b406307`; glass/Builder/Agents — `7788ec1`; попапы Settings/Support и компактные поля — `5ef721a`. Push `Cursor-Agent` по просьбе владельца.
+- Privacy/Docs, Automation, меню — `b406307`; glass/Builder/Agents — `7788ec1`; попапы Settings/Support и компактные поля — `5ef721a`; docs/шаблоны/studio-билдер — `7909aa8`. Push `Cursor-Agent` по просьбе владельца.
 - `/Documentation` содержит гид по триггерам и действиям; черновик DocsDraftNote больше не показывается. Проверки в браузере не было.
 
 ## Рекомендуемый следующий шаг

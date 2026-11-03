@@ -10,7 +10,7 @@
 - **Суть:** фон за системными попапами (modal-backdrop, lookup, create-automation, plans, login, My Settings, OpenNewCase, Agents delete) берёт `--partnerly-glass-overlay` / `--partnerly-glass-overlay-blur`. Light `rgba(238,240,248,0.26)`, dark `rgba(10,12,28,0.36)`, blur 6px — страница за попапом читается.
 - **Причина:** владелец: прежний фон (≈0.48/0.58 + blur 14px) слишком хмурый.
 - **Затрагивает:** `partnerly-glass.css` и fallback в page-css попапов.
-- **Последствия:** один рычаг на все glass-оверлеи. Браузер не проверялся. Коммит не делался.
+- **Последствия:** один рычаг на все glass-оверлеи. Браузер не проверялся. Коммит `7909aa8`.
 
 ---
 
@@ -20,7 +20,7 @@
 - **Суть:** перетаскивание пустого места двигает весь граф только если первый CSS-класс контейнера — `parent-drawflow` или клик попал в `.drawflow`. `#drawflow` поэтому начинается с `parent-drawflow`, затем `automation-canvas`.
 - **Причина:** Drawflow 0.0.59 в `click()` берёт `ele_selected.classList[0]`, не `classList.contains`.
 - **Затрагивает:** `_BuilderPanel.cshtml`, холст билдера.
-- **Последствия:** класс `automation-canvas` нельзя ставить первым. Коммит не делался.
+- **Последствия:** класс `automation-canvas` нельзя ставить первым. Коммит `7909aa8`.
 
 ---
 
@@ -30,7 +30,7 @@
 - **Суть:** как настраивать каждый триггер и каждое действие описано на `/Documentation` (футер) и дублируется в правой панели редактора процесса для выбранного блока. Источник полей — схемы билдера и обработчики, не черновик DocsDraftNote.
 - **Причина:** владелец: документация в системе, чтобы было понятно, как настраивать каждое действие.
 - **Затрагивает:** `_DocsContent`, `_BuilderI18n`, `builder.js`, resx en/ru/hy, стили Documentation и билдера.
-- **Последствия:** имена событий в справке совпадают с `AutomationEventBridge` (UserRegistered, SupportTicketCreated, SupportTicketStatusChanged). Create/Update/Delete в тексте ограничены тем, что реально умеют коннекторы. Коммит не делался. Браузер не проверялся.
+- **Последствия:** имена событий в справке совпадают с `AutomationEventBridge` (UserRegistered, SupportTicketCreated, SupportTicketStatusChanged). Create/Update/Delete в тексте ограничены тем, что реально умеют коннекторы. Коммит `7909aa8`. Браузер не проверялся.
 - **Альтернативы:** только docs/ai для агента — отклонено, нужна документация в приложении.
 
 ---
