@@ -4,6 +4,14 @@
 
 ---
 
+## 2026-11-03 — Коммит и push: попапы Settings/Support, компактные поля
+
+- **Суть:** владелец: сделать commit и push.
+- **Сделано:** коммит `5ef721a` на `Cursor-Agent` — glass OpenNewCase и My Settings, My Profile без вкладок/My Team, поля 40px, удалены unused Automation views. Push на `origin/Cursor-Agent`.
+- **Проверка:** коммит создан. Секреты в коммит не входили.
+
+---
+
 ## 2026-11-03 — OpenNewCase: иконка Message как у Subject
 
 - **Суть:** владелец: в Subject иконка нормальная, в Message — нет.

@@ -4,17 +4,17 @@
 
 ## Текущее состояние
 
-- Ветка: `Cursor-Agent` (tracking `origin/Cursor-Agent`), **ahead of origin**.
+- Ветка: `Cursor-Agent` (tracking `origin/Cursor-Agent`).
 - Приложение: ASP.NET Core MVC, .NET 6, монолит `Partnerly/Partnerly.csproj`.
 - Документация агента на месте.
 - Коммит `b406307` — Automation PHASE 3–7 + хаб + Agents KPI + меню Agents/футер + тесты + миграция `20261102134353_AddAutomationTables`.
 - Коммит `7788ec1` — glass попапы/DataTable, Builder как страница, Agents context menu, индикатор `IsActive`, Delete glass-попап.
-- OpenNewCase — glass-попап, без поля User. My Profile без вкладок/My Team. My Settings — попап, save on close. Поля системы 40px. Неиспользуемые Automation-views удалены.
+- Коммит `5ef721a` — OpenNewCase/My Settings попапы, My Profile без вкладок, поля 40px, unused Automation views удалены.
 - Миграция Automation **применена** на локальной БД 2026-11-02. Другие стенды / прод — не трогать без отдельного ок.
 
 ## Последняя задача
 
-Коммит и push накопленной работы: OpenNewCase/My Settings попапы, My Profile без вкладок, компактные поля, удаление unused Automation pages.
+Коммит `5ef721a` и push `Cursor-Agent`. Браузер недоступен.
 
 ## Уже сделано недавно
 
@@ -42,7 +42,7 @@
 - Модули Payment/Transaction без UI.
 - KI-003 seed user на Admin, не Super — открыто.
 - Браузер в этой сессии недоступен — проверить glass: DataTable фильтр/колонки/экспорт/удаление, DeletePartial, note/attachments, lookup, dark theme.
-- Privacy/Docs, Automation, меню — `b406307`; glass/Builder/Agents — `7788ec1`. Push `Cursor-Agent` по просьбе владельца.
+- Privacy/Docs, Automation, меню — `b406307`; glass/Builder/Agents — `7788ec1`; попапы Settings/Support и компактные поля — `5ef721a`. Push `Cursor-Agent` по просьбе владельца.
 
 ## Рекомендуемый следующий шаг
 
