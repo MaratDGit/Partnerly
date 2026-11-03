@@ -10,9 +10,9 @@
     justify-content: center;
     align-items: center;
     padding: 20px;
-    background: rgba(67, 89, 113, 0.42);
-    backdrop-filter: blur(3px);
-    -webkit-backdrop-filter: blur(3px);
+    background: var(--partnerly-glass-overlay, rgba(238, 240, 248, 0.26));
+    backdrop-filter: blur(var(--partnerly-glass-overlay-blur, 6px));
+    -webkit-backdrop-filter: blur(var(--partnerly-glass-overlay-blur, 6px));
     z-index: 1050;
     animation: lookupBackdropIn .18s ease;
 }

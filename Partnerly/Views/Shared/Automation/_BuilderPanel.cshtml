@@ -5,6 +5,7 @@
     var canRun = perms?.Contains("automation.run") == true;
     var canEdit = perms?.Contains("automation.edit") == true;
     var canConnections = perms?.Contains("automation.connections") == true;
+    var canLiveRun = canRun && Model.IsPublished;
 }
 
 <form asp-action="BuilderSave"
@@ -16,72 +17,104 @@
       data-hub-ajax
       data-hub-stay
       data-builder-id="@Model.Id"
+      data-can-edit="@(canEdit ? "true" : "false")"
       data-catalog-url="@Url.Action("Catalog", "Automation")"
       data-save-url="@Url.Action("BuilderSave", "Automation", new { id = Model.Id })"
       data-publish-url="@Url.Action("Publish", "Automation", new { id = Model.Id })"
       data-run-url="@Url.Action("Run", "Automation", new { id = Model.Id, dryRun = false })"
       data-test-url="@Url.Action("Run", "Automation", new { id = Model.Id, dryRun = true })">
     @Html.AntiForgeryToken()
+    <input type="hidden" name="name" value="@Model.Name" />
+    <input type="hidden" name="description" value="@Model.Description" />
     <input type="hidden" name="graphJson" id="graphJson" value="@Model.GraphJson" />
     <script type="application/json" id="automationBuilderGraph">@Html.Raw(string.IsNullOrWhiteSpace(Model.GraphJson) ? "{}" : Model.GraphJson)</script>
     <script type="application/json" id="automationBuilderI18n">@await Html.PartialAsync("~/Views/Shared/Automation/_BuilderI18n.cshtml")</script>
 
-    <div class="automation-toolbar">
-        <div class="automation-toolbar-fields">
-            <input class="form-control automation-builder-name" name="name" value="@Model.Name" maxlength="200" aria-label="@Localizer["Name"]" />
-            <input class="form-control" name="description" value="@Model.Description" maxlength="500" placeholder="@Localizer["Description"]" aria-label="@Localizer["Description"]" />
-        </div>
-        <div class="automation-toolbar-actions">
-            <button type="button" class="btn btn-outline-secondary" data-hub="settings" data-id="@Model.Id" data-hub-nested>
-                @Localizer["AutomationSettings"]
-            </button>
-            @if (canConnections)
-            {
-                <button type="button" class="btn btn-outline-secondary" data-hub="connections" data-hub-nested>
-                    @Localizer["AutomationConnections"]
+    <div class="automation-builder">
+        <div class="automation-canvas-wrap">
+            <div id="drawflow" class="parent-drawflow automation-canvas"></div>
+            <aside class="automation-props" data-props-panel hidden>
+                <div class="automation-props-head">
+                    <h6>@Localizer["NodeProperties"]</h6>
+                    <button type="button" class="automation-props-close" data-props-close title="@Localizer["Close"]" aria-label="@Localizer["Close"]">
+                        <i class="bx bx-x" aria-hidden="true"></i>
+                    </button>
+                </div>
+                <p class="automation-hint" data-prop-empty>@Localizer["SelectNodeHint"]</p>
+                <div class="automation-props-body">
+                    <div data-prop-form hidden>
+                        <label class="form-label">@Localizer["Name"]</label>
+                        <input class="form-control mb-1" data-prop-name />
+                        <div class="form-text mb-3">@Localizer["NodeNameHelp"]</div>
+                        <div data-prop-fields></div>
+                    </div>
+                </div>
+            </aside>
+            <div class="automation-zoom" role="group" aria-label="@Localizer["FitView"]">
+                <button type="button" class="automation-zoom-btn" data-zoom-out title="@Localizer["ZoomOut"]" aria-label="@Localizer["ZoomOut"]">−</button>
+                <span class="automation-zoom-label" data-zoom-label>100%</span>
+                <button type="button" class="automation-zoom-btn" data-zoom-in title="@Localizer["ZoomIn"]" aria-label="@Localizer["ZoomIn"]">+</button>
+                <button type="button" class="automation-zoom-btn" data-zoom-fit title="@Localizer["FitView"]" aria-label="@Localizer["FitView"]">
+                    <i class="bx bx-target-lock" aria-hidden="true"></i>
                 </button>
-            }
-            @if (canEdit)
-            {
-                <button type="submit" class="btn btn-primary">@Localizer["Save"]</button>
-            }
-            @if (canPublish)
-            {
-                <button type="submit" formaction="@Url.Action("Publish", "Automation", new { id = Model.Id })" class="btn btn-outline-primary">
-                    @Localizer["Publish"]
-                </button>
-            }
-            @if (canRun)
-            {
-                <button type="submit" formaction="@Url.Action("Run", "Automation", new { id = Model.Id, dryRun = true })" class="btn btn-outline-secondary">
-                    @Localizer["TestRun"]
-                </button>
-                <button type="submit" formaction="@Url.Action("Run", "Automation", new { id = Model.Id, dryRun = false })" class="btn btn-primary">
-                    @Localizer["RunNow"]
-                </button>
-            }
+            </div>
         </div>
     </div>
 
-    <div class="automation-builder">
-        <aside class="automation-palette">
-            <h6>@Localizer["TriggerBlocks"]</h6>
-            <p class="automation-hint">@Localizer["TriggerBlocksHelp"]</p>
-            <div data-palette-triggers></div>
-            <h6 class="mt-3">@Localizer["ActionBlocks"]</h6>
-            <p class="automation-hint">@Localizer["ActionBlocksHelp"]</p>
-            <div data-palette-actions></div>
-        </aside>
-        <div id="drawflow" class="automation-canvas"></div>
-        <aside class="automation-props">
-            <h6>@Localizer["NodeProperties"]</h6>
-            <p class="automation-hint" data-prop-empty>@Localizer["SelectNodeHint"]</p>
-            <div data-prop-form hidden>
-                <label class="form-label">@Localizer["Name"]</label>
-                <input class="form-control mb-1" data-prop-name />
-                <div class="form-text mb-3">@Localizer["NodeNameHelp"]</div>
-                <div data-prop-fields></div>
+    <div class="automation-toolbar">
+        <div class="automation-add" data-add-menu>
+            <button type="button" class="automation-add-toggle" data-add-toggle aria-expanded="false">@Localizer["BuilderMenu"]</button>
+            <div class="automation-add-panel" hidden>
+                <a class="automation-add-item" asp-action="Index">@Localizer["Back"]</a>
+                <button type="button" class="automation-add-item" data-hub="settings" data-id="@Model.Id" data-hub-nested>
+                    @Localizer["AutomationSettings"]
+                </button>
+                <button type="button"
+                        class="automation-add-item"
+                        data-hub="connections"
+                        data-hub-nested
+                        disabled="@(canConnections ? null : "disabled")">
+                    @Localizer["AutomationConnections"]
+                </button>
+                <button type="submit" class="automation-add-item" disabled="@(canEdit ? null : "disabled")">
+                    @Localizer["Save"]
+                </button>
+                <button type="submit"
+                        class="automation-add-item"
+                        formaction="@Url.Action("Publish", "Automation", new { id = Model.Id })"
+                        disabled="@(canPublish ? null : "disabled")">
+                    @Localizer["Publish"]
+                </button>
+                <button type="submit"
+                        class="automation-add-item"
+                        formaction="@Url.Action("Run", "Automation", new { id = Model.Id, dryRun = true })"
+                        disabled="@(canRun ? null : "disabled")">
+                    @Localizer["TestRun"]
+                </button>
+                <button type="submit"
+                        class="automation-add-item"
+                        formaction="@Url.Action("Run", "Automation", new { id = Model.Id, dryRun = false })"
+                        disabled="@(canLiveRun ? null : "disabled")"
+                        title="@(canLiveRun || !canRun ? null : Localizer["AutomationRunNeedsPublish"].Value)">
+                    @Localizer["RunNow"]
+                </button>
             </div>
-        </aside>
+        </div>
+        <div class="automation-add" data-add-menu>
+            <button type="button"
+                    class="automation-add-toggle"
+                    data-add-toggle
+                    aria-expanded="false"
+                    title="@Localizer["TriggerBlocksHelp"]">@Localizer["AddTrigger"]</button>
+            <div class="automation-add-panel" data-palette-triggers hidden></div>
+        </div>
+        <div class="automation-add" data-add-menu>
+            <button type="button"
+                    class="automation-add-toggle"
+                    data-add-toggle
+                    aria-expanded="false"
+                    title="@Localizer["ActionBlocksHelp"]">@Localizer["AddAction"]</button>
+            <div class="automation-add-panel" data-palette-actions hidden></div>
+        </div>
     </div>
 </form>

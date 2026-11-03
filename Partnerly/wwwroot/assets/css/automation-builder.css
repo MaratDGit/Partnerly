@@ -1,68 +1,213 @@
 .automation-builder-page {
-    min-height: calc(100vh - 140px);
+    display: flex;
+    flex-direction: column;
+    min-height: 0;
+    height: 100%;
+    width: 100%;
+    overflow: hidden;
+    padding: 0;
+    background: #e7e9f2;
 }
 
-.automation-builder-name {
-    min-width: 180px;
-    max-width: 280px;
+.automation-hub-builder {
+    position: relative;
+    display: block;
+    min-height: 0;
+    height: 100%;
+    width: 100%;
+    overflow: hidden;
+}
+
+.automation-builder-page .automation-hub-builder {
+    flex: 1 1 auto;
 }
 
 .automation-toolbar {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 50;
     display: flex;
     flex-wrap: wrap;
     align-items: center;
-    gap: 10px;
-    margin-bottom: 14px;
-    padding: 12px 14px;
+    gap: 4px 16px;
+    margin: 0;
+    padding: 10px 16px;
+    border: 0;
+    border-radius: 0;
+    background: transparent;
+    box-shadow: none;
+    overflow: visible;
+    pointer-events: none;
+}
+
+.automation-toolbar > * {
+    pointer-events: auto;
+}
+
+.automation-add {
+    position: relative;
+}
+
+.automation-add-toggle {
+    margin: 0;
+    padding: 4px 2px;
+    border: 0;
+    background: transparent;
+    color: #1e1b4b;
+    font-size: 13px;
+    font-weight: 600;
+    line-height: 1.2;
+    cursor: pointer;
+}
+
+.automation-add-toggle::after {
+    content: "";
+    display: inline-block;
+    width: 0;
+    height: 0;
+    margin-left: 6px;
+    border-left: 4px solid transparent;
+    border-right: 4px solid transparent;
+    border-top: 5px solid currentColor;
+    opacity: 0.55;
+    vertical-align: middle;
+}
+
+.automation-add.is-open .automation-add-toggle::after {
+    transform: rotate(180deg);
+}
+
+.automation-add-panel {
+    position: absolute;
+    top: calc(100% + 6px);
+    left: 0;
+    z-index: 60;
+    min-width: 220px;
+    max-height: min(360px, 70vh);
+    overflow: auto;
+    padding: 8px;
+    border-radius: 14px;
     border: 1px solid rgba(99, 102, 241, 0.16);
-    border-radius: 22px;
-    background: rgba(255, 255, 255, 0.78);
-    box-shadow: 0 12px 32px rgba(49, 46, 129, 0.08);
-    backdrop-filter: blur(16px);
-    -webkit-backdrop-filter: blur(16px);
+    background: rgba(255, 255, 255, 0.96);
+    backdrop-filter: blur(18px);
+    -webkit-backdrop-filter: blur(18px);
 }
 
-.automation-toolbar-fields {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 8px;
-    flex: 1 1 280px;
+.automation-add-panel button,
+.automation-add-item {
+    display: block;
+    width: 100%;
+    margin: 0 0 4px;
+    border: 0;
+    border-radius: 10px;
+    background: transparent;
+    color: #1e1b4b;
+    text-align: left;
+    padding: 8px 10px;
+    font-size: 13px;
+    font-weight: 500;
+    line-height: 1.25;
+    text-decoration: none;
+    cursor: pointer;
 }
 
-.automation-toolbar-actions {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 8px;
-    margin-left: auto;
+.automation-add-panel button:last-child,
+.automation-add-item:last-child {
+    margin-bottom: 0;
+}
+
+.automation-add-panel button:hover:not(:disabled),
+.automation-add-item:hover:not(:disabled) {
+    background: rgba(99, 102, 241, 0.1);
+    color: inherit;
+    text-decoration: none;
+}
+
+.automation-add-panel button:disabled,
+.automation-add-item:disabled {
+    opacity: 0.42;
+    cursor: not-allowed;
+    pointer-events: none;
 }
 
 .automation-builder {
-    display: grid;
-    grid-template-columns: 220px minmax(0, 1fr) 300px;
-    gap: 12px;
-    min-height: 560px;
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+    display: flex;
+    flex-direction: column;
+    min-height: 0;
+    gap: 0;
 }
 
-.automation-palette,
 .automation-props {
-    background: rgba(255, 255, 255, 0.78);
-    border: 1px solid rgba(99, 102, 241, 0.16);
-    border-radius: 22px;
-    padding: 14px;
-    backdrop-filter: blur(16px);
-    -webkit-backdrop-filter: blur(16px);
+    position: absolute;
+    top: 12px;
+    right: 12px;
+    z-index: 30;
+    display: none;
+    flex-direction: column;
+    width: min(320px, calc(100% - 24px));
+    max-height: calc(100% - 24px);
+    min-height: 0;
+    overflow: hidden;
+    padding: 12px 12px 10px;
+    border-radius: 16px;
+    border: 1px solid rgba(99, 102, 241, 0.18);
+    background: rgba(255, 255, 255, 0.92);
+    backdrop-filter: blur(18px) saturate(1.2);
+    -webkit-backdrop-filter: blur(18px) saturate(1.2);
+    box-shadow: none;
+    pointer-events: auto;
 }
 
-.automation-palette button {
-    display: block;
-    width: 100%;
-    margin: 0 0 8px;
+.automation-props.is-open {
+    display: flex;
+}
+
+.automation-props-head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+    margin-bottom: 6px;
+}
+
+.automation-props-close {
+    width: 28px;
+    height: 28px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0;
+    padding: 0;
     border: 0;
-    border-radius: 14px;
-    background: rgba(245, 245, 249, 0.92);
-    color: #566a7f;
-    text-align: left;
-    padding: 8px 10px;
+    border-radius: 8px;
+    background: transparent;
+    color: inherit;
+    cursor: pointer;
+}
+
+.automation-props-close:hover {
+    background: rgba(99, 102, 241, 0.1);
+}
+
+.automation-props-body {
+    flex: 1 1 auto;
+    min-height: 0;
+    overflow-x: hidden;
+    overflow-y: auto;
+}
+
+.automation-props h6 {
+    margin: 0;
+    font-size: 0.78rem;
+    font-weight: 700;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    color: #6366f1;
 }
 
 .automation-hint {
@@ -72,29 +217,267 @@
     margin-bottom: 10px;
 }
 
+.automation-docs {
+    white-space: pre-line;
+    margin: 12px 0 8px;
+    padding: 10px 12px;
+    border-radius: 14px;
+    border: 1px solid rgba(99, 102, 241, 0.16);
+    background: rgba(105, 108, 255, 0.06);
+    font-size: 0.78rem;
+    line-height: 1.4;
+    color: #566a7f;
+}
+
+.automation-docs-link {
+    display: inline-block;
+    margin: 0 0 4px;
+    font-size: 0.78rem;
+    font-weight: 600;
+    color: #696cff;
+    text-decoration: none;
+}
+
+.automation-canvas-wrap {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+    min-height: 0;
+    height: 100%;
+    flex: 1 1 auto;
+    isolation: isolate;
+}
+
 .automation-canvas {
-    min-height: 560px;
-    border: 1px solid rgba(99, 102, 241, 0.14);
-    border-radius: 22px;
-    background: rgba(248, 248, 251, 0.9);
+    min-height: 0;
+    height: 100%;
+    flex: 1 1 auto;
+    border: 0;
+    border-radius: 0;
+    overflow: hidden;
+    background-color: #e7e9f2;
+    background-image: radial-gradient(rgba(49, 46, 129, 0.16) 1.15px, transparent 1.2px);
+    background-size: 18px 18px;
+    box-shadow: none;
+    position: relative;
+    z-index: 0;
+    isolation: isolate;
+    touch-action: none;
+    cursor: grab;
+    user-select: none;
+}
+
+.automation-canvas.is-panning,
+.automation-canvas.is-panning .drawflow {
+    cursor: grabbing;
+}
+
+.automation-node-menu {
+    position: absolute;
+    z-index: 40;
+    min-width: 160px;
+    padding: 6px;
+    border-radius: 12px;
+    border: 1px solid rgba(99, 102, 241, 0.18);
+    background: rgba(255, 255, 255, 0.96);
+    box-shadow: 0 10px 28px rgba(49, 46, 129, 0.16);
+    pointer-events: auto;
+}
+
+.automation-node-menu[hidden] {
+    display: none;
+}
+
+.automation-node-menu button {
+    display: block;
+    width: 100%;
+    margin: 0;
+    padding: 8px 10px;
+    border: 0;
+    border-radius: 8px;
+    background: transparent;
+    color: #1e1b4b;
+    font-size: 13px;
+    font-weight: 500;
+    text-align: left;
+    cursor: pointer;
+}
+
+.automation-node-menu button:hover {
+    background: rgba(99, 102, 241, 0.1);
+}
+
+.automation-node-menu button.is-danger {
+    color: #e11d48;
+}
+
+html.dark-style .automation-node-menu,
+html[data-theme="dark"] .automation-node-menu {
+    background: rgba(18, 20, 42, 0.96);
+    border-color: rgba(167, 139, 250, 0.22);
+    box-shadow: 0 10px 28px rgba(0, 0, 0, 0.4);
+}
+
+html.dark-style .automation-node-menu button,
+html[data-theme="dark"] .automation-node-menu button {
+    color: #edf0ff;
+}
+
+html.dark-style .automation-node-menu button.is-danger,
+html[data-theme="dark"] .automation-node-menu button.is-danger {
+    color: #fb7185;
+}
+
+.automation-zoom {
+    position: absolute;
+    right: 10px;
+    bottom: 10px;
+    z-index: 20;
+    pointer-events: auto;
+    display: inline-flex;
+    align-items: center;
+    gap: 2px;
+    padding: 4px;
+    border-radius: 14px;
+    border: 1px solid rgba(99, 102, 241, 0.16);
+    background: rgba(255, 255, 255, 0.78);
+    box-shadow: none;
+    backdrop-filter: blur(14px);
+    -webkit-backdrop-filter: blur(14px);
+    user-select: none;
+}
+
+.automation-zoom-btn {
+    width: 30px;
+    height: 30px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0;
+    padding: 0;
+    border: 0;
+    border-radius: 10px;
+    background: transparent;
+    color: #1e1b4b;
+    font-size: 16px;
+    font-weight: 650;
+    line-height: 1;
+    cursor: pointer;
+}
+
+.automation-zoom-btn:hover {
+    background: rgba(99, 102, 241, 0.12);
+}
+
+.automation-zoom-label {
+    min-width: 42px;
+    padding: 0 4px;
+    text-align: center;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.02em;
+    color: #4338ca;
+}
+
+.automation-canvas .parent-drawflow,
+.automation-canvas .drawflow {
+    width: 100%;
+    height: 100%;
+    background: transparent;
+    cursor: grab;
+}
+
+.automation-canvas .drawflow-node,
+.automation-canvas .auto-node {
+    cursor: pointer;
+}
+
+#drawflow .drawflow-node {
+    background: transparent;
+    border: 0;
+    padding: 0;
+    width: auto;
+    min-height: 0;
+    box-shadow: none;
+}
+
+#drawflow .drawflow-node.selected {
+    background: transparent;
+    box-shadow: none;
+    z-index: 4;
+}
+
+#drawflow .drawflow-node .input,
+#drawflow .drawflow-node .output {
+    width: 12px;
+    height: 12px;
+    background: #a5b4fc;
+    border: 2px solid #eef2ff;
+    box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.22);
+}
+
+#drawflow .connection .main-path {
+    stroke: #8b93ff;
+    stroke-width: 2.4px;
 }
 
 .drawflow .auto-node {
-    min-width: 140px;
-    padding: 8px 10px;
+    position: relative;
+    min-width: 176px;
+    padding: 12px 14px 11px;
     border-radius: 14px;
-    background: rgba(255, 255, 255, 0.94);
-    border: 1px solid #d9dee3;
+    background: rgba(255, 255, 255, 0.58);
+    border: 1px solid rgba(255, 255, 255, 0.78);
+    box-shadow: none;
+    color: #12141f;
+    backdrop-filter: blur(18px) saturate(1.35);
+    -webkit-backdrop-filter: blur(18px) saturate(1.35);
+    transition: border-color 0.16s ease, background 0.16s ease;
 }
 
 .drawflow .auto-node--trigger {
-    border-color: #696cff;
+    border-color: rgba(99, 102, 241, 0.55);
+    box-shadow: none;
+}
+
+.drawflow-node.selected .auto-node,
+.drawflow .auto-node.is-selected {
+    border-color: #4f46e5;
+    background: rgba(255, 255, 255, 0.82);
+    box-shadow: none;
+    outline: 2px solid #4f46e5;
+    outline-offset: 0;
 }
 
 .drawflow .auto-node-kind {
     display: block;
+    margin-bottom: 2px;
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: #4338ca;
+}
+
+.drawflow .auto-node-type {
+    display: block;
+    font-size: 13px;
+    font-weight: 700;
+    line-height: 1.25;
+    color: #12141f;
+}
+
+.drawflow .auto-node-name:empty {
+    display: none;
+}
+
+.drawflow .auto-node-name {
+    display: block;
+    margin-top: 4px;
     font-size: 11px;
-    color: #697a8d;
+    font-weight: 600;
+    color: #3f4560;
 }
 
 .automation-create {
@@ -105,9 +488,9 @@
     align-items: flex-start;
     justify-content: center;
     padding: 72px 16px 24px;
-    background: rgba(238, 240, 248, 0.42);
-    backdrop-filter: blur(14px);
-    -webkit-backdrop-filter: blur(14px);
+    background: var(--partnerly-glass-overlay, rgba(238, 240, 248, 0.26));
+    backdrop-filter: blur(var(--partnerly-glass-overlay-blur, 6px));
+    -webkit-backdrop-filter: blur(var(--partnerly-glass-overlay-blur, 6px));
     opacity: 0;
     visibility: hidden;
     pointer-events: none;
@@ -182,36 +565,125 @@ body.is-automation-create-open .partnerly-layout-content {
     gap: 8px;
 }
 
-html.dark-style .automation-toolbar,
-html.dark-style .automation-palette,
+html.dark-style .automation-builder-page,
+html[data-theme="dark"] .automation-builder-page {
+    background: #0c0d14;
+}
+
 html.dark-style .automation-props,
+html.dark-style .automation-add-panel,
 html.dark-style .automation-create-card,
-html[data-theme="dark"] .automation-toolbar,
-html[data-theme="dark"] .automation-palette,
 html[data-theme="dark"] .automation-props,
+html[data-theme="dark"] .automation-add-panel,
 html[data-theme="dark"] .automation-create-card {
-    background: rgba(18, 20, 42, 0.82);
+    background: rgba(18, 20, 42, 0.92);
     border-color: rgba(167, 139, 250, 0.22);
     color: #e6e6f1;
 }
 
-html.dark-style .automation-canvas,
-html[data-theme="dark"] .automation-canvas {
-    background: #232333;
-    border-color: rgba(167, 139, 250, 0.18);
+html.dark-style .automation-add-toggle,
+html[data-theme="dark"] .automation-add-toggle {
+    color: #edf0ff;
 }
 
-html.dark-style .automation-palette button,
-html[data-theme="dark"] .automation-palette button {
-    background: rgba(50, 50, 73, 0.92);
-    color: #e6e6f1;
+html.dark-style .automation-add-item,
+html.dark-style .automation-add-panel button,
+html[data-theme="dark"] .automation-add-item,
+html[data-theme="dark"] .automation-add-panel button {
+    color: #edf0ff;
+}
+
+html.dark-style .automation-canvas,
+html[data-theme="dark"] .automation-canvas {
+    background-color: #0c0d14;
+    background-image: radial-gradient(rgba(199, 200, 255, 0.2) 1.15px, transparent 1.2px);
+    background-size: 18px 18px;
+    border-color: transparent;
+}
+
+html.dark-style .automation-add-panel button,
+html[data-theme="dark"] .automation-add-panel button {
+    background: transparent;
+    border-color: transparent;
+    color: #edf0ff;
+    box-shadow: none;
+}
+
+html.dark-style .automation-add-panel button:hover:not(:disabled),
+html[data-theme="dark"] .automation-add-panel button:hover:not(:disabled) {
+    background: rgba(167, 139, 250, 0.16);
 }
 
 html.dark-style .drawflow .auto-node,
 html[data-theme="dark"] .drawflow .auto-node {
-    background: #2b2c40;
-    border-color: #444564;
-    color: #e6e6f1;
+    background: rgba(18, 20, 36, 0.58);
+    border-color: rgba(255, 255, 255, 0.16);
+    color: #f4f5ff;
+    box-shadow: none;
+}
+
+html.dark-style .drawflow .auto-node-kind,
+html[data-theme="dark"] .drawflow .auto-node-kind {
+    color: #c7d2fe;
+}
+
+html.dark-style .drawflow .auto-node-type,
+html[data-theme="dark"] .drawflow .auto-node-type {
+    color: #f4f5ff;
+}
+
+html.dark-style .drawflow .auto-node-name,
+html[data-theme="dark"] .drawflow .auto-node-name {
+    color: #c5c7db;
+}
+
+html.dark-style .drawflow-node.selected .auto-node,
+html.dark-style .drawflow .auto-node.is-selected,
+html[data-theme="dark"] .drawflow-node.selected .auto-node,
+html[data-theme="dark"] .drawflow .auto-node.is-selected {
+    background: rgba(28, 32, 58, 0.82);
+    border-color: #a5b4fc;
+    box-shadow: none;
+    outline-color: #a5b4fc;
+}
+
+html.dark-style .automation-props h6,
+html[data-theme="dark"] .automation-props h6 {
+    color: #c7c8ff;
+}
+
+html.dark-style .automation-zoom,
+html[data-theme="dark"] .automation-zoom {
+    background: rgba(18, 20, 42, 0.82);
+    border-color: rgba(167, 139, 250, 0.22);
+}
+
+html.dark-style .automation-zoom-btn,
+html.dark-style .automation-zoom-label,
+html[data-theme="dark"] .automation-zoom-btn,
+html[data-theme="dark"] .automation-zoom-label {
+    color: #eef2ff;
+}
+
+html.dark-style .automation-hub-template-size,
+html[data-theme="dark"] .automation-hub-template-size {
+    color: #c7c8ff;
+    border-color: rgba(167, 139, 250, 0.28);
+    background: rgba(105, 108, 255, 0.16);
+}
+
+html.dark-style .automation-hub-template-size.is-medium,
+html[data-theme="dark"] .automation-hub-template-size.is-medium {
+    color: #81f4b0;
+    border-color: rgba(40, 199, 111, 0.32);
+    background: rgba(40, 199, 111, 0.14);
+}
+
+html.dark-style .automation-hub-template-size.is-large,
+html[data-theme="dark"] .automation-hub-template-size.is-large {
+    color: #ffd19a;
+    border-color: rgba(255, 159, 67, 0.36);
+    background: rgba(255, 159, 67, 0.16);
 }
 
 html.dark-style .automation-hint,
@@ -221,9 +693,21 @@ html[data-theme="dark"] .automation-create-lead {
     color: #b2b2c4;
 }
 
+html.dark-style .automation-docs,
+html[data-theme="dark"] .automation-docs {
+    color: #cfd0e6;
+    background: rgba(105, 108, 255, 0.12);
+    border-color: rgba(167, 139, 250, 0.24);
+}
+
+html.dark-style .automation-docs-link,
+html[data-theme="dark"] .automation-docs-link {
+    color: #c7c8ff;
+}
+
 html.dark-style .automation-create.is-open,
 html[data-theme="dark"] .automation-create.is-open {
-    background: rgba(7, 7, 18, 0.52);
+    background: var(--partnerly-glass-overlay, rgba(10, 12, 28, 0.36));
 }
 
 html.dark-style .automation-create-close,
@@ -233,9 +717,97 @@ html[data-theme="dark"] .automation-create-close {
     border-color: rgba(167, 139, 250, 0.22);
 }
 
+html:has(.automation-builder-page) .partnerly-layout-page,
+html:has(.automation-builder-page) .partnerly-layout-main {
+    height: 100vh;
+    height: 100dvh;
+    overflow: hidden;
+}
+
+html:has(.automation-builder-page) .partnerly-layout-main {
+    min-height: 0;
+}
+
+html:has(.automation-builder-page) .partnerly-layout-content {
+    display: flex;
+    flex-direction: column;
+    flex: 1 1 auto;
+    min-height: 0;
+    padding: 0 !important;
+    overflow: hidden;
+    scrollbar-gutter: auto;
+}
+
+html:has(.automation-builder-page) .automation-builder-page {
+    display: flex;
+    flex-direction: column;
+    flex: 1 1 auto;
+    width: 100%;
+    max-width: none;
+    min-width: 0;
+    min-height: 0;
+    height: 100%;
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+}
+
+@media (min-width: 992px) {
+    .partnerly-layout-content:has(.automation-builder-page) {
+        overflow: hidden;
+        display: flex;
+        flex-direction: column;
+        padding: 0;
+    }
+}
+
 @media (max-width: 991.98px) {
+    .partnerly-layout-content:has(.automation-builder-page) {
+        padding: 0;
+        overflow: hidden;
+        display: flex;
+        flex-direction: column;
+    }
+
     .automation-builder {
-        grid-template-columns: 1fr;
+        inset: 0;
+    }
+
+    .automation-builder-page,
+    .automation-builder-page .automation-hub-builder {
+        height: 100%;
+        overflow: hidden;
+    }
+
+    .automation-canvas-wrap {
+        min-height: 0;
+        height: 100%;
+    }
+
+    .automation-canvas {
+        min-height: 0;
+        height: 100%;
+    }
+
+    .automation-props {
+        top: auto;
+        right: 0;
+        bottom: 0;
+        left: 0;
+        width: 100%;
+        max-height: min(72vh, 520px);
+        border-radius: 18px 18px 0 0;
+    }
+
+    .automation-zoom {
+        right: 8px;
+        bottom: 8px;
+    }
+
+    .automation-add-panel {
+        left: 0;
+        right: auto;
+        min-width: min(240px, calc(100vw - 24px));
     }
 }
 
@@ -246,6 +818,11 @@ html[data-theme="dark"] .automation-create-close {
     --auto-glass: rgba(255, 255, 255, 0.78);
     --auto-border: rgba(99, 102, 241, 0.16);
     min-height: calc(100vh - 140px);
+}
+
+.automation-page.automation-builder-page {
+    min-height: 0;
+    height: 100%;
 }
 
 .automation-page-head {
@@ -547,21 +1124,22 @@ html[data-theme="dark"] .automation-create-card .btn-outline-secondary {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    gap: 12px;
-    margin-bottom: 16px;
+    gap: 10px;
+    margin-bottom: 12px;
 }
 
 .automation-hub-toolbar h1 {
     margin: 0;
-    font-size: 1.55rem;
+    font-size: 1.28rem;
     font-weight: 650;
     letter-spacing: -0.02em;
     color: var(--auto-text);
 }
 
 .automation-hub-table-wrap {
-    padding: 8px 10px 12px;
-    overflow: hidden;
+    padding: 4px 6px 8px;
+    overflow: auto;
+    border-radius: 18px;
 }
 
 .automation-hub-table {
@@ -573,10 +1151,11 @@ html[data-theme="dark"] .automation-create-card .btn-outline-secondary {
 
 .automation-hub-table th,
 .automation-hub-table td {
-    padding: 14px 12px;
+    padding: 8px 10px;
     text-align: left;
     border-bottom: 1px solid rgba(99, 102, 241, 0.1);
     vertical-align: middle;
+    font-size: 0.8125rem;
 }
 
 .automation-hub-table th {
@@ -651,11 +1230,11 @@ html[data-theme="dark"] .automation-create-card .btn-outline-secondary {
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    width: 32px;
-    height: 32px;
-    margin: 0 0 0 4px;
+    width: 28px;
+    height: 28px;
+    margin: 0 0 0 3px;
     padding: 0;
-    border-radius: 10px;
+    border-radius: 9px;
     border: 1px solid rgba(99, 102, 241, 0.16);
     background: rgba(255, 255, 255, 0.78);
     color: #6366f1;
@@ -687,32 +1266,77 @@ html[data-theme="dark"] .automation-create-card .btn-outline-secondary {
 }
 
 .automation-hub-templates {
-    margin-top: 22px;
+    margin-top: 16px;
 }
 
 .automation-hub-templates h2 {
-    margin: 0 0 12px;
-    font-size: 1.05rem;
+    margin: 0 0 8px;
+    font-size: 0.98rem;
     font-weight: 650;
     color: var(--auto-text);
 }
 
 .automation-hub-template-grid {
     display: grid;
-    grid-template-columns: repeat(3, minmax(0, 1fr));
-    gap: 12px;
+    grid-template-columns: repeat(auto-fill, minmax(min(100%, 196px), 1fr));
+    gap: 8px;
+}
+
+.automation-hub-template {
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+    height: 100%;
+    padding: 12px 12px 10px;
+    border-radius: 16px;
 }
 
 .automation-hub-template h3 {
-    margin: 0 0 6px;
-    font-size: 1.05rem;
+    margin: 0 0 4px;
+    font-size: 0.9rem;
     font-weight: 650;
+    line-height: 1.25;
+}
+
+.automation-hub-template-size {
+    display: inline-block;
+    margin: 0 0 6px;
+    padding: 1px 7px;
+    border-radius: 999px;
+    font-size: 10px;
+    font-weight: 650;
+    letter-spacing: 0.02em;
+    border: 1px solid rgba(99, 102, 241, 0.2);
+    background: rgba(105, 108, 255, 0.08);
+    color: #5a5fef;
+}
+
+.automation-hub-template-size.is-medium {
+    border-color: rgba(40, 199, 111, 0.28);
+    background: rgba(40, 199, 111, 0.1);
+    color: #1f9d57;
+}
+
+.automation-hub-template-size.is-large {
+    border-color: rgba(255, 159, 67, 0.32);
+    background: rgba(255, 159, 67, 0.12);
+    color: #d97706;
 }
 
 .automation-hub-template p {
-    margin: 0 0 14px;
+    margin: 0 0 10px;
     color: var(--auto-muted);
-    min-height: 2.6em;
+    font-size: 0.75rem;
+    line-height: 1.35;
+    flex: 1 1 auto;
+}
+
+.automation-hub-template .btn {
+    align-self: flex-start;
+    min-height: 30px;
+    padding: 4px 10px;
+    font-size: 0.75rem;
+    border-radius: 10px;
 }
 
 .automation-hub-card {
@@ -746,6 +1370,7 @@ html[data-theme="dark"] .automation-create-card .btn-outline-secondary {
     min-height: 0;
 }
 
+.automation-hub-card.is-wide .automation-canvas-wrap,
 .automation-hub-card.is-wide .automation-canvas {
     min-height: 0;
     height: 100%;
@@ -804,84 +1429,74 @@ html[data-theme="dark"] .automation-hub-status.is-on {
 }
 
 @media (max-width: 991.98px) {
-    .automation-hub-template-grid {
-        grid-template-columns: 1fr;
-    }
-
     .automation-hub-card.is-wide {
         height: calc(100dvh - 16px);
         max-height: calc(100dvh - 16px);
         padding: 14px 12px 12px;
     }
+}
 
-    .automation-builder-page .automation-builder,
-    .automation-builder-page .automation-canvas {
-        min-height: 420px;
+@media (max-width: 767.98px) {
+    .automation-hub-toolbar {
+        flex-wrap: wrap;
+        margin-bottom: 10px;
+    }
+
+    .automation-hub-toolbar h1 {
+        font-size: 1.12rem;
+    }
+
+    .automation-hub-template-grid {
+        grid-template-columns: repeat(auto-fill, minmax(min(100%, 158px), 1fr));
+        gap: 8px;
+    }
+
+    .automation-hub-date {
+        white-space: nowrap;
     }
 }
 
-.automation-builder-page .automation-toolbar {
-    gap: 8px;
-    margin-bottom: 12px;
-    padding: 8px 10px;
-    border-radius: 16px;
+@media (max-width: 575.98px) {
+    .automation-hub-template-grid {
+        grid-template-columns: 1fr 1fr;
+    }
+
+    .automation-hub-table th:nth-child(3),
+    .automation-hub-table td:nth-child(3) {
+        display: none;
+    }
+
+    .automation-hub-desc {
+        display: none;
+    }
+
+    .automation-hub-actions {
+        white-space: nowrap;
+    }
 }
 
-.automation-builder-page .automation-page-head .btn,
+@media (max-width: 419.98px) {
+    .automation-hub-template-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
 .automation-builder-page .automation-toolbar .btn {
-    min-height: 28px;
-    padding: 3px 10px;
+    min-height: 32px;
+    padding: 4px 12px;
     font-size: 12px;
     font-weight: 600;
     line-height: 1.2;
     border-radius: 10px;
-    backdrop-filter: blur(10px);
-    -webkit-backdrop-filter: blur(10px);
-    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.72);
+    white-space: nowrap;
+    box-shadow: none;
 }
 
-.automation-builder-page .automation-toolbar .btn-primary {
-    box-shadow: 0 4px 10px rgba(99, 102, 241, 0.22), inset 0 1px 0 rgba(255, 255, 255, 0.35);
+.automation-builder-page .automation-toolbar .btn-primary:not(:disabled) {
+    box-shadow: none;
 }
 
-.automation-builder-page .automation-toolbar-fields .form-control {
-    min-height: 28px;
-    padding: 4px 9px;
-    font-size: 12px;
-    border-radius: 10px;
-}
-
-.automation-builder-page .automation-builder,
-.automation-builder-page .automation-canvas {
-    min-height: calc(100vh - 250px);
-}
-
-.automation-builder-page .automation-palette,
-.automation-builder-page .automation-props {
-    border-radius: 16px;
-    padding: 10px;
-}
-
-.automation-builder-page .automation-palette button {
-    margin: 0 0 6px;
-    padding: 6px 8px;
-    border: 1px solid rgba(99, 102, 241, 0.16);
-    border-radius: 10px;
-    background: rgba(255, 255, 255, 0.72);
-    font-size: 12px;
-    backdrop-filter: blur(10px);
-    -webkit-backdrop-filter: blur(10px);
-}
-
-html.dark-style .automation-builder-page .automation-page-head .btn,
 html.dark-style .automation-builder-page .automation-toolbar .btn,
-html[data-theme="dark"] .automation-builder-page .automation-page-head .btn,
 html[data-theme="dark"] .automation-builder-page .automation-toolbar .btn {
-    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.08);
-}
-
-html.dark-style .automation-builder-page .automation-palette button,
-html[data-theme="dark"] .automation-builder-page .automation-palette button {
-    background: rgba(24, 28, 52, 0.88);
-    border-color: rgba(167, 139, 250, 0.22);
+    box-shadow: none;
 }

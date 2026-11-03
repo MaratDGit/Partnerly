@@ -2461,7 +2461,7 @@
   </data>
 
   <data name="DocsAgentsBody" xml:space="preserve">
-    <value>Ստեղծեք գործակալ, տվեք առաջադրանք, և հարթակը կկատարի այն։ Ընթացիկ պլանը, օգտագործումը և ըստ օրերի գործողությունները՝ ընտրացանկի ներքևի Սակագներում։</value>
+    <value>Գործակալները ձախ ընտրացանկում են։ Ստեղծեք մեկը, բացեք գործընթացի խմբագրիչը, դրեք ձգան և գործողություններ, պահեք և հրապարակեք։ Agents ցանկի Pause-ը կանգնեցնում է առանց ջնջելու։ Պլանի սահմանները՝ ընտրացանկի ներքևի Սակագներում։ Յուրաքանչյուր բլոկի լրացումը՝ ստորև։</value>
   </data>
 
   <data name="DocsUsersTitle" xml:space="preserve">
@@ -2486,6 +2486,160 @@
 
   <data name="DocsSettingsBody" xml:space="preserve">
     <value>Համակարգի կարգավորումներում են լեզուն, ժամային գոտին, Google մուտքը, արգելափակումը և փոստի դրոշները։ API գաղտնիքները այս էկրանին չեն։</value>
+  </data>
+
+  <data name="DocsAutomationHowTitle" xml:space="preserve">
+    <value>Ինչպես հավաքել գործակալ</value>
+  </data>
+  <data name="DocsAutomationHowBody" xml:space="preserve">
+    <value>Ընտրացանկում բացեք Agents, ապա +։ Անվանեք և բացեք գործընթացի խմբագրիչը։
+Կտավին մեկ ձգան, ապա գործողությունները հերթով։ Բլոկի վրա սեղմելիս աջ վահանակում լրացնում եք դաշտերը։ Նույն հուշումը երևում է դաշտերի տակ, ամբողջական ուղեցույցը այս էջն է։
+Հաճախ պահեք։ Publish-ը թույլ է տալիս աշխատել։ Pause-ը Agents ցանկում կանգնեցնում է առանց ջնջելու։
+Run / Test-ը գործարկում է ձեռքով մեկնարկը։ Connections-ում հրապարակումից հետո երևում են մուտքային webhook-ի URL-ը և պահված HTTP հիմքերը։</value>
+  </data>
+  <data name="DocsVariablesTitle" xml:space="preserve">
+    <value>Արժեքները դաշտերում</value>
+  </data>
+  <data name="DocsVariablesBody" xml:space="preserve">
+    <value>Տեղադրիչները գրեք կրկնակի փակագծերով։
+{{trigger.email}} — մեկնարկի իրադարձության դաշտ։
+{{vars.order_id}} — «Սահմանել փոփոխական»-ի արժեք։
+{{steps.BlockName.result.email}} — նախորդ քայլի արդյունք։ Բլոկի անունը՝ տառեր, թվեր և ընդգծում։
+Find record-ը տողը դնում է մեկ մակարդակ խոր՝ {{steps.FindUser.result.result.email}}։
+Գաղտնաբառեր, թոքեններ և API գաղտնիքներ այս ճանապարհով չեն կարդացվում։</value>
+  </data>
+  <data name="DocsRecordsTitle" xml:space="preserve">
+    <value>Գրառման տեսակներ</value>
+  </data>
+  <data name="DocsRecordsBody" xml:space="preserve">
+    <value>User — որոնում և փոփոխում։ Դաշտեր՝ id, email, firstName, lastName, lastActivity, isBlocked, emailConfirmed, roleId, myReferralCode, referrerId, isOnlayn։
+Support ticket — որոնում, ստեղծում, փոփոխում, ջնջում։ Դաշտեր՝ id, ticketId, subject, message, status, userId, assignedTo, note։
+Notification — որոնում և ստեղծում։ Դաշտեր՝ id, type, message, userId, link։
+User group — որոնում։ Դաշտեր՝ id, name։
+Email template — որոնում։ Դաշտեր՝ id, name, subject։</value>
+  </data>
+  <data name="DocsTriggersTitle" xml:space="preserve">
+    <value>Ձգաններ — երբ է սկսվում</value>
+  </data>
+  <data name="DocsTriggerManual" xml:space="preserve">
+    <value>Լրացուցիչ դաշտեր չկան։ Սկսվում է Run կամ Test կոճակով։ Հարմար է, քանի դեռ հավաքում եք գործընթացը։</value>
+  </data>
+  <data name="DocsTriggerSchedule" xml:space="preserve">
+    <value>Որքան հաճախ՝ մեկ անգամ (այն ժամանակ ամսաթիվ և ժամ), ամեն ժամ / օր / շաբաթ / ամիս (օրվա ժամը) կամ cron (օրինակ 0 9 * * *՝ ամեն օր 09:00)։
+Publish-ից հետո Partnerly-ն արթնացնում է գործակալին այդ ժամին։ Ժամային գոտին՝ գործակալի կարգավորումներում։ Գործակալը պետք է ակտիվ լինի։</value>
+  </data>
+  <data name="DocsTriggerInterval" xml:space="preserve">
+    <value>Կրկնել ամեն (րոպե) — նվազագույնը 1։ Հաջորդ գործարկումը հաշվվում է նախորդից։ Աշխատում է Publish-ից հետո, քանի դեռ գործակալը ակտիվ է։</value>
+  </data>
+  <data name="DocsTriggerEntityCreated" xml:space="preserve">
+    <value>Գրառման տեսակ՝ User, դիմում, ծանուցում, խումբ կամ նամակի կաղապար։
+Սպասել մեկնարկից առաջ՝ ոչ պարտադիր քանակ և միավոր։
+Աշխատում է գրառում ստեղծելիս։ Նոր տողի դաշտերը՝ {{trigger.…}}։</value>
+  </data>
+  <data name="DocsTriggerEntityUpdated" xml:space="preserve">
+    <value>Նույն գրառման տեսակը և ոչ պարտադիր սպասումը մեկնարկից առաջ։ Աշխատում է գրառումը պահելիս։ Փոփոխված դաշտերը՝ {{trigger.…}}։</value>
+  </data>
+  <data name="DocsTriggerEntityDeleted" xml:space="preserve">
+    <value>Նույն գրառման տեսակը և ոչ պարտադիր սպասումը մեկնարկից առաջ։ Աշխատում է գրառումը ջնջելիս։</value>
+  </data>
+  <data name="DocsTriggerEvent" xml:space="preserve">
+    <value>Իրադարձության անունը պետք է լինի ճիշտ մեկը՝
+UserRegistered — {{trigger.id}}, {{trigger.email}}, {{trigger.firstName}}, {{trigger.lastName}}։
+SupportTicketCreated — {{trigger.id}}, {{trigger.ticketId}}, {{trigger.subject}}, {{trigger.status}}, {{trigger.type}}։
+SupportTicketStatusChanged — {{trigger.id}}, {{trigger.ticketId}}, {{trigger.status}}։
+Մեկնարկից առաջ սպասելը պարտադիր չէ։</value>
+  </data>
+  <data name="DocsTriggerWebhook" xml:space="preserve">
+    <value>Publish-ից հետո Connections-ից պատճենեք URL-ը և HMAC գաղտնիքը։
+Կանչող կողմը ուղարկում է POST՝ X-Partnerly-Signature վերնագրով։
+Մեկնարկից առաջ սպասելը պարտադիր չէ։ Մարմնի դաշտերը՝ {{trigger.…}}։</value>
+  </data>
+  <data name="DocsTriggerDelayTitle" xml:space="preserve">
+    <value>Հետաձգված մեկնարկ</value>
+  </data>
+  <data name="DocsTriggerDelay" xml:space="preserve">
+    <value>Սպասել — թիվ, նվազագույնը 1։ Միավոր՝ վայրկյան, րոպե, ժամ կամ օր։
+Գործընթացը սկսվում է միայն այս սպասումից հետո։ Սա առաջին բլոկն է, երբ պետք է հետաձգել հենց մեկնարկը, ոչ թե Delay գործողությունը շղթայի մեջտեղում։</value>
+  </data>
+  <data name="DocsActionsTitle" xml:space="preserve">
+    <value>Գործողություններ — ինչպես կարգավորել յուրաքանչյուր քայլ</value>
+  </data>
+  <data name="DocsActionDelay" xml:space="preserve">
+    <value>Սպասել — թիվ, նվազագույնը 1։
+Միավոր՝ վայրկյան, րոպե, ժամ կամ օր։
+Գործարկումը կանգ է առնում, ապա ինքն է շարունակում։ Սա քայլ է գործընթացի մեջտեղում։</value>
+  </data>
+  <data name="DocsActionSetVariable" xml:space="preserve">
+    <value>Փոփոխականի անուն՝ տառեր, թվեր, ընդգծում։
+Արժեք՝ ցանկացած տեքստ, տեղադրիչները թույլատրվում են։
+Հետո կարդացվում է որպես {{vars.այդ_անուն}}։</value>
+  </data>
+  <data name="DocsActionSendEmail" xml:space="preserve">
+    <value>Ում — պարտադիր էլ․ հասցե։ Կարելի է {{trigger.email}}։
+Նամակի կաղապար — Email templates-ի ոչ պարտադիր կոդ։ Եթե լրացված է, Subject և Message-ը անտեսվում են։
+Վերնագիր / Հաղորդագրություն — երբ կաղապարը դատարկ է։ Լռելյայն վերնագիրը Partnerly է։</value>
+  </data>
+  <data name="DocsActionSendNotification" xml:space="preserve">
+    <value>Ծանուցման տեքստ — հավելվածի հաղորդագրություն։
+User id (ոչ պարտադիր) — օգտատիրոջ GUID։ Դատարկ դաշտը ուղարկում է գործակալի սեփականատիրոջը։
+Ծանուցման տեսակ — պիտակ (լռելյայն System)։
+Հղում (ոչ պարտադիր) — URL ծանուցումից։</value>
+  </data>
+  <data name="DocsActionHttpRequest" xml:space="preserve">
+    <value>HTTP մեթոդ — GET, POST, PUT, PATCH կամ DELETE։
+URL — հանրային http/https, կամ ուղի, եթե լրացված է պահված միացման id-ն (Connections-ից)։
+Հարցման մարմին — միայն POST, PUT, PATCH-ի համար։ GET և DELETE-ը անտեսում են այն։
+Մասնավոր և տեղային հասցեները արգելափակվում են։</value>
+  </data>
+  <data name="DocsActionWebhook" xml:space="preserve">
+    <value>Webhook URL — հանրային http/https։ Partnerly-ն ուղարկում է POST։
+JSON մարմին — հարցման մարմին, տեղադրիչները թույլատրվում են։
+Ստորագրության գաղտնիք (ոչ պարտադիր) — եթե լրացված է, ավելանում է X-Partnerly-Signature վերնագիրը (HMAC-SHA256)։
+URL-ի նույն կանոնները, ինչ HTTP request-ում։</value>
+  </data>
+  <data name="DocsActionExecuteWorkflow" xml:space="preserve">
+    <value>Երեխա ավտոմատացման id — ձեր մեկ այլ հրապարակված գործակալի GUID։
+Քայլը սկսում է այն և չի սպասում ավարտին։</value>
+  </data>
+  <data name="DocsActionBranch" xml:space="preserve">
+    <value>Ձախ արժեք, Համեմատել, Աջ արժեք։
+Օպերատորներ՝ equals, not equals, contains, greater than, less than, is empty, is not empty, changed։
+Ձախ և աջ դաշտերում կարելի է տեղադրիչներ։
+Բլոկից երկու ելք՝ առաջինը True, երկրորդը False։</value>
+  </data>
+  <data name="DocsActionWaitUntil" xml:space="preserve">
+    <value>Նույն պայմանի դաշտերը, ինչ Branch-ում, գումարած Հանձնվել հետո (ոչ պարտադիր վերջնաժամկետ)։
+Գործարկումը սպասում է, մինչև պայմանը ճիշտ լինի կամ ժամկետը լրանա։ Դատարկ վերջնաժամկետը շարունակում է ստուգել։</value>
+  </data>
+  <data name="DocsActionSwitch" xml:space="preserve">
+    <value>Համեմատման արժեք — տեղադրիչները թույլատրվում են։
+Դատարկ արժեքը գնում է առաջին ելք (default)։ Երկրորդ ելքը մյուս դեպքն է։</value>
+  </data>
+  <data name="DocsActionCreateRecord" xml:space="preserve">
+    <value>Գրառման տեսակ, ապա Դաշտեր (տողով, օրինակ subject=Hello)։
+Ստեղծումը աշխատում է միայն դիմումի (subject, message, status, userId, assignedTo, note) և ծանուցման (type, message, userId, link) համար։
+User, խումբ և նամակի կաղապար այստեղ չեն ստեղծվում։</value>
+  </data>
+  <data name="DocsActionUpdateRecord" xml:space="preserve">
+    <value>Գրառման տեսակ։
+Որ գրառումը — բանալի տողով, օրինակ id={{trigger.id}}։
+Դաշտեր — ինչ փոխել։
+Փոփոխումը աշխատում է User-ի (firstName, lastName, isBlocked) և դիմումի (subject, status, assignedTo, note) համար։</value>
+  </data>
+  <data name="DocsActionFindRecord" xml:space="preserve">
+    <value>Գրառման տեսակ և Ֆիլտրեր (տողով, օրինակ email={{trigger.email}} կամ id={{trigger.id}})։
+Աշխատում է User, դիմում, ծանուցում, խումբ և նամակի կաղապարի համար։
+Բլոկի անունը՝ տառեր և թվեր։ Գտնված տողը՝ {{steps.BlockName.result.result.email}}։</value>
+  </data>
+  <data name="DocsActionDeleteRecord" xml:space="preserve">
+    <value>Գրառման տեսակ և Որ գրառումը (բանալի տողով, օրինակ id={{trigger.id}})։
+Ջնջումը թույլատրվում է դիմումի համար։</value>
+  </data>
+  <data name="DocsOpenGuide" xml:space="preserve">
+    <value>Ամբողջական կարգավորման ուղեցույց</value>
+  </data>
+  <data name="NodeTypeWebhookAction" xml:space="preserve">
+    <value>Ելքային webhook</value>
   </data>
 
   <data name="LandingPromptWhat" xml:space="preserve">
@@ -2648,6 +2802,9 @@
   <data name="UntitledAutomation" xml:space="preserve">
     <value>Անանուն</value>
   </data>
+  <data name="AutomationRunNeedsPublish" xml:space="preserve">
+    <value>Նախ հրապարակեք գործակալը</value>
+  </data>
   <data name="AutomationPublished" xml:space="preserve">
     <value>Ավտոմատացումը հրապարակված է</value>
   </data>
@@ -2783,6 +2940,15 @@
   <data name="ActionBlocksHelp" xml:space="preserve">
     <value>Քայլերը, որոնք կկատարվեն տրիգերից հետո։</value>
   </data>
+  <data name="AddTrigger" xml:space="preserve">
+    <value>Տրիգեր</value>
+  </data>
+  <data name="AddAction" xml:space="preserve">
+    <value>Գործողություն</value>
+  </data>
+  <data name="BuilderMenu" xml:space="preserve">
+    <value>Մենյու</value>
+  </data>
   <data name="SelectNodeHint" xml:space="preserve">
     <value>Ընտրեք բլոկը սխեմայի վրա՝ խմբագրելու համար։</value>
   </data>
@@ -2850,7 +3016,7 @@
     <value>Իրադարձության անուն</value>
   </data>
   <data name="EventNameHelp" xml:space="preserve">
-    <value>Պետք է համընկնի համակարգի իրադարձության հետ, օրինակ UserCreated։</value>
+    <value>Ճիշտ մեկը՝ UserRegistered, SupportTicketCreated կամ SupportTicketStatusChanged։</value>
   </data>
   <data name="WebhookTriggerHelp" xml:space="preserve">
     <value>Հրապարակումից հետո URL-ը և գաղտնիքը կերևան Միացումներում։</value>
@@ -2867,8 +3033,14 @@
   <data name="VariableNameHelp" xml:space="preserve">
     <value>Տառեր, թվեր և ընդգծում։ Հետո {{vars.name}}։</value>
   </data>
+  <data name="VariableValueHelp" xml:space="preserve">
+    <value>Ցանկացած տեքստ։ Տեղադրիչները {{…}} փոխարինվում են քայլի ժամանակ։</value>
+  </data>
   <data name="EmailTo" xml:space="preserve">
     <value>Ում ուղարկել</value>
+  </data>
+  <data name="EmailToHelp" xml:space="preserve">
+    <value>Պարտադիր։ Էլ․ հասցե կամ {{trigger.email}}։</value>
   </data>
   <data name="EmailSubject" xml:space="preserve">
     <value>Թեմա</value>
@@ -2885,6 +3057,9 @@
   <data name="NotificationUser" xml:space="preserve">
     <value>Օգտատիրոջ id (ոչ պարտադիր)</value>
   </data>
+  <data name="NotificationUserHelp" xml:space="preserve">
+    <value>Օգտատիրոջ GUID։ Դատարկ դաշտը ուղարկում է այս գործակալի սեփականատիրոջը։</value>
+  </data>
   <data name="NotificationMessage" xml:space="preserve">
     <value>Ծանուցման տեքստ</value>
   </data>
@@ -2900,8 +3075,14 @@
   <data name="HttpUrl" xml:space="preserve">
     <value>URL</value>
   </data>
+  <data name="HttpUrlHelp" xml:space="preserve">
+    <value>Հանրային http/https, կամ ուղի, եթե լրացված է պահված միացման id-ն։</value>
+  </data>
   <data name="HttpBody" xml:space="preserve">
     <value>Հարցման մարմին</value>
+  </data>
+  <data name="HttpBodyHelp" xml:space="preserve">
+    <value>Միայն POST, PUT և PATCH-ի համար։ GET և DELETE-ը անտեսում են այս դաշտը։</value>
   </data>
   <data name="HttpConnection" xml:space="preserve">
     <value>Պահված միացման id</value>
@@ -2912,8 +3093,17 @@
   <data name="WebhookBody" xml:space="preserve">
     <value>JSON մարմին</value>
   </data>
+  <data name="WebhookUrlHelp" xml:space="preserve">
+    <value>Հանրային http/https։ Partnerly-ն ուղարկում է POST։</value>
+  </data>
+  <data name="WebhookBodyHelp" xml:space="preserve">
+    <value>Հարցման մարմին։ Տեղադրիչները {{…}} թույլատրվում են։</value>
+  </data>
   <data name="WebhookSecretField" xml:space="preserve">
     <value>Ստորագրության գաղտնիք (ոչ պարտադիր)</value>
+  </data>
+  <data name="WebhookSecretHelp" xml:space="preserve">
+    <value>Եթե լրացված է, հարցմանը ավելանում է X-Partnerly-Signature վերնագիրը։</value>
   </data>
   <data name="ChildAutomation" xml:space="preserve">
     <value>Երեխա ավտոմատացման id</value>
@@ -2947,6 +3137,9 @@
   </data>
   <data name="RecordKey" xml:space="preserve">
     <value>Որ գրառումը</value>
+  </data>
+  <data name="RecordKeyHelp" xml:space="preserve">
+    <value>Դաշտ տողով, որը գտնում է գրառումը, օրինակ id={{trigger.id}}։</value>
   </data>
   <data name="RecordFilters" xml:space="preserve">
     <value>Զտիչներ</value>
@@ -3070,6 +3263,75 @@
   </data>
   <data name="ReadyTemplates" xml:space="preserve">
     <value>Պատրաստի ձևանմուշներ</value>
+  </data>
+  <data name="TplSizeSmall" xml:space="preserve">
+    <value>Փոքր</value>
+  </data>
+  <data name="TplSizeMedium" xml:space="preserve">
+    <value>Միջին</value>
+  </data>
+  <data name="TplSizeLarge" xml:space="preserve">
+    <value>Մեծ</value>
+  </data>
+  <data name="TplManualFlag" xml:space="preserve">
+    <value>Ձեռքով դրոշ</value>
+  </data>
+  <data name="TplManualFlagBody" xml:space="preserve">
+    <value>Ձեռքով գործարկում, փոփոխական ready=yes։</value>
+  </data>
+  <data name="TplDelayThenFlag" xml:space="preserve">
+    <value>Սպասում և դրոշ</value>
+  </data>
+  <data name="TplDelayThenFlagBody" xml:space="preserve">
+    <value>Սպասում է 5 վայրկյան, ապա done=1։</value>
+  </data>
+  <data name="TplDailyMarker" xml:space="preserve">
+    <value>Ամենօրյա նշան</value>
+  </data>
+  <data name="TplDailyMarkerBody" xml:space="preserve">
+    <value>Ամեն օր 09:00։ Գրում է ran=1։</value>
+  </data>
+  <data name="TplWelcomePing" xml:space="preserve">
+    <value>Ողջույն</value>
+  </data>
+  <data name="TplWelcomePingBody" xml:space="preserve">
+    <value>Օգտատեր գրանցվելիս ծանուցում է սեփականատիրոջը անունով և էլ․ հասցեով։</value>
+  </data>
+  <data name="TplHourlyPulse" xml:space="preserve">
+    <value>Ժամային զարկ</value>
+  </data>
+  <data name="TplHourlyPulseBody" xml:space="preserve">
+    <value>Ամեն 60 րոպեն մեկ պահում է գործարկման ժամը lastPulse-ում։</value>
+  </data>
+  <data name="TplNewTicketAlert" xml:space="preserve">
+    <value>Նոր դիմում</value>
+  </data>
+  <data name="TplNewTicketAlertBody" xml:space="preserve">
+    <value>Նոր տոմս՝ համարը փոփոխականում, ծանուցում, նամակ notify@example.com։ Հասցեն փոխեք։</value>
+  </data>
+  <data name="TplInboundWebhook" xml:space="preserve">
+    <value>Մուտքային webhook</value>
+  </data>
+  <data name="TplInboundWebhookBody" xml:space="preserve">
+    <value>Publish-ից հետո POST Connections-ի URL-ին։ Պահում է source և run id, ապա ծանուցում է սեփականատիրոջը։</value>
+  </data>
+  <data name="TplWeekdayBriefing" xml:space="preserve">
+    <value>Աշխատանքային բրիֆինգ</value>
+  </data>
+  <data name="TplWeekdayBriefingBody" xml:space="preserve">
+    <value>Cron 09:00 երկ–ուրբ՝ դրոշ, ծանուցում, նամակ notify@example.com։ Հասցեն փոխեք։</value>
+  </data>
+  <data name="TplNewUserOnboarding" xml:space="preserve">
+    <value>Օգտատիրոջ օնբորդինգ</value>
+  </data>
+  <data name="TplNewUserOnboardingBody" xml:space="preserve">
+    <value>UserRegistered՝ 2 րոպե սպասում, ողջույնի նամակ, ծանուցում օգտատիրոջը, էլ․ հասցեի դեպքում՝ օնբորդինգի տոմս։</value>
+  </data>
+  <data name="TplTicketTriage" xml:space="preserve">
+    <value>Դիմումների տեսակավորում</value>
+  </data>
+  <data name="TplTicketTriageBody" xml:space="preserve">
+    <value>Նոր տոմս՝ փոփոխականներ, ծանուցում, New ճյուղ (նամակ և գրառում) կամ որոնում + HTTP + ելքային webhook։ Փոխեք notify@example.com և webhook URL-ը։</value>
   </data>
   <data name="AutomationEmptyDefinitions" xml:space="preserve">
     <value>Ավտոմատացումներ դեռ չկան</value>

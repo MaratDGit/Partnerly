@@ -7,7 +7,8 @@
     --partnerly-glass-line: rgba(99, 102, 241, 0.12);
     --partnerly-glass-shadow: 0 18px 50px rgba(49, 46, 129, 0.12);
     --partnerly-glass-inset: inset 0 1px 0 rgba(255, 255, 255, 0.82);
-    --partnerly-glass-overlay: rgba(238, 240, 248, 0.48);
+    --partnerly-glass-overlay: rgba(238, 240, 248, 0.26);
+    --partnerly-glass-overlay-blur: 6px;
     --partnerly-glass-radius: 28px;
     --partnerly-glass-radius-sm: 14px;
     --partnerly-glass-blur: 16px;
@@ -20,7 +21,11 @@ html[data-theme="dark"] {
     --partnerly-glass-line: rgba(167, 139, 250, 0.14);
     --partnerly-glass-shadow: 0 18px 50px rgba(0, 0, 0, 0.38);
     --partnerly-glass-inset: inset 0 1px 0 rgba(255, 255, 255, 0.08);
-    --partnerly-glass-overlay: rgba(10, 12, 28, 0.58);
+    --partnerly-glass-overlay: rgba(10, 12, 28, 0.36);
+}
+
+html.dark-style {
+    --partnerly-glass-overlay: rgba(10, 12, 28, 0.36);
 }
 
 
@@ -30,8 +35,8 @@ html[data-theme="dark"] {
 
 .modal-backdrop {
     background-color: var(--partnerly-glass-overlay) !important;
-    backdrop-filter: blur(14px);
-    -webkit-backdrop-filter: blur(14px);
+    backdrop-filter: blur(var(--partnerly-glass-overlay-blur, 6px));
+    -webkit-backdrop-filter: blur(var(--partnerly-glass-overlay-blur, 6px));
 }
 
     .modal-backdrop.show {
@@ -192,8 +197,8 @@ html[data-theme="dark"] .delete-confirmation-actions .btn-outline-secondary {
 
 .lookup-modal {
     background: var(--partnerly-glass-overlay) !important;
-    backdrop-filter: blur(14px);
-    -webkit-backdrop-filter: blur(14px);
+    backdrop-filter: blur(var(--partnerly-glass-overlay-blur, 6px));
+    -webkit-backdrop-filter: blur(var(--partnerly-glass-overlay-blur, 6px));
 }
 
 .lookup-content,

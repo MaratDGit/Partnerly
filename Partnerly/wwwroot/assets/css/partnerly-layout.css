@@ -539,9 +539,9 @@ body {
     align-items: flex-start;
     justify-content: center;
     padding: 72px 16px 24px;
-    background: var(--partnerly-glass-overlay, rgba(238, 240, 248, 0.48));
-    backdrop-filter: blur(14px);
-    -webkit-backdrop-filter: blur(14px);
+    background: var(--partnerly-glass-overlay, rgba(238, 240, 248, 0.26));
+    backdrop-filter: blur(var(--partnerly-glass-overlay-blur, 6px));
+    -webkit-backdrop-filter: blur(var(--partnerly-glass-overlay-blur, 6px));
     opacity: 0;
     visibility: hidden;
     pointer-events: none;
@@ -2128,7 +2128,7 @@ html[data-theme="dark"] {
                     }
 
         html[data-theme="dark"] .partnerly-agents-delete {
-            background: var(--partnerly-glass-overlay, rgba(10, 12, 28, 0.58));
+            background: var(--partnerly-glass-overlay, rgba(10, 12, 28, 0.36));
         }
 
         html[data-theme="dark"] .partnerly-agents-delete-card {
@@ -2378,6 +2378,35 @@ html[data-theme="dark"] {
         font-weight: 700;
     }
 
+    .legal-copy h4 {
+        margin: 16px 0 6px;
+        font-size: 0.95rem;
+        font-weight: 650;
+        scroll-margin-top: 88px;
+    }
+
+    .legal-copy .docs-setup {
+        white-space: pre-line;
+    }
+
+    .legal-copy .docs-toc {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 6px 8px;
+        margin: 0 0 16px;
+    }
+
+    .legal-copy .docs-toc a {
+        display: inline-block;
+        padding: 4px 10px;
+        border-radius: 999px;
+        border: 1px solid rgba(105, 108, 255, 0.22);
+        background: rgba(105, 108, 255, 0.08);
+        color: var(--partnerly-primary, #696cff);
+        font-size: 0.8rem;
+        text-decoration: none;
+    }
+
     .legal-copy .legal-draft {
         display: inline-block;
         margin-bottom: 16px;
@@ -2394,8 +2423,15 @@ html[data-theme="dark"] .legal-copy p {
     color: var(--partnerly-text-dark, #f7f9ff);
 }
 
-html[data-theme="dark"] .legal-copy h3 {
+html[data-theme="dark"] .legal-copy h3,
+html[data-theme="dark"] .legal-copy h4 {
     color: #ffffff;
+}
+
+html[data-theme="dark"] .legal-copy .docs-toc a {
+    color: #c7c8ff;
+    border-color: rgba(167, 139, 250, 0.28);
+    background: rgba(105, 108, 255, 0.16);
 }
 
 /* ---------------------------------------------------------

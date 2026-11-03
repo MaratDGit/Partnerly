@@ -8,16 +8,8 @@
     <link rel="stylesheet" href="~/assets/css/automation-builder.css" asp-append-version="true" />
 }
 
-<div class="container-xxl flex-grow-1 container-p-y automation-page automation-builder-page">
+<div class="automation-page automation-builder-page">
     @await Html.PartialAsync("_Toast")
-    <div class="automation-page-head">
-        <div>
-            <p class="automation-kicker">@Localizer["Automation"]</p>
-            <h1>@Localizer["AutomationBuilder"]</h1>
-            <p class="automation-lead">@Localizer["AutomationBuilderLead"]</p>
-        </div>
-        <a class="btn btn-outline-secondary" asp-action="Index">@Localizer["Back"]</a>
-    </div>
     @await Html.PartialAsync("~/Views/Shared/Automation/_BuilderPanel.cshtml", Model)
 </div>
 

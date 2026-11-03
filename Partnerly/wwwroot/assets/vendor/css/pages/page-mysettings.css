@@ -12,9 +12,9 @@
     padding-right: max(16px, env(safe-area-inset-right, 0px));
     padding-bottom: max(16px, env(safe-area-inset-bottom, 0px));
     padding-left: max(16px, env(safe-area-inset-left, 0px));
-    background: var(--partnerly-glass-overlay, rgba(238, 240, 248, 0.48));
-    backdrop-filter: blur(14px);
-    -webkit-backdrop-filter: blur(14px);
+    background: var(--partnerly-glass-overlay, rgba(238, 240, 248, 0.26));
+    backdrop-filter: blur(var(--partnerly-glass-overlay-blur, 6px));
+    -webkit-backdrop-filter: blur(var(--partnerly-glass-overlay-blur, 6px));
     opacity: 0;
     visibility: hidden;
     pointer-events: none;
@@ -350,7 +350,7 @@ body.is-my-settings-open .partnerly-layout-content {
 }
 
 html[data-theme="dark"] .my-settings {
-    background: var(--partnerly-glass-overlay, rgba(10, 12, 28, 0.58));
+    background: var(--partnerly-glass-overlay, rgba(10, 12, 28, 0.36));
 }
 
 html[data-theme="dark"] .my-settings-card {

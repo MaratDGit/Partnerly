@@ -2461,7 +2461,7 @@
   </data>
 
   <data name="DocsAgentsBody" xml:space="preserve">
-    <value>Create an agent, assign a task, and the platform runs it. Your current plan, agent usage, and daily actions are in Plans at the bottom of the menu.</value>
+    <value>Agents live in the sidebar. Create one, open the process editor, put a trigger then actions, save and publish. Pause from the list if you do not want it to run. Plan limits are in Plans at the bottom of the menu. How to fill each block is below.</value>
   </data>
 
   <data name="DocsUsersTitle" xml:space="preserve">
@@ -2486,6 +2486,160 @@
 
   <data name="DocsSettingsBody" xml:space="preserve">
     <value>System Settings hold language, timezone, Google sign-in, lockout, and mail-related flags. API secrets stay out of this screen.</value>
+  </data>
+
+  <data name="DocsAutomationHowTitle" xml:space="preserve">
+    <value>How to build an agent</value>
+  </data>
+  <data name="DocsAutomationHowBody" xml:space="preserve">
+    <value>Open Agents in the sidebar, then +. Name the agent and open the process editor.
+Put one trigger on the canvas, then actions in order. Click a block — the right panel is where you fill its fields. The same help is under those fields, and the full guide is this page.
+Save often. Publish so it can run. Pause from the Agents list to stop it without deleting.
+Run / Test starts a Manual start. Connections shows inbound webhook URLs after publish and saved HTTP bases.</value>
+  </data>
+  <data name="DocsVariablesTitle" xml:space="preserve">
+    <value>Values in fields</value>
+  </data>
+  <data name="DocsVariablesBody" xml:space="preserve">
+    <value>Write placeholders with double curly braces.
+{{trigger.email}} — a field from the start event.
+{{vars.order_id}} — a value from Set variable.
+{{steps.BlockName.result.email}} — output of a previous step. Name the block with letters, digits and underscore.
+Find record stores the row one level deeper: {{steps.FindUser.result.result.email}}.
+Passwords, tokens and API secrets cannot be read this way.</value>
+  </data>
+  <data name="DocsRecordsTitle" xml:space="preserve">
+    <value>Record types</value>
+  </data>
+  <data name="DocsRecordsBody" xml:space="preserve">
+    <value>User — find and update. Fields: id, email, firstName, lastName, lastActivity, isBlocked, emailConfirmed, roleId, myReferralCode, referrerId, isOnlayn.
+Support ticket — find, create, update, delete. Fields: id, ticketId, subject, message, status, userId, assignedTo, note.
+Notification — find and create. Fields: id, type, message, userId, link.
+User group — find. Fields: id, name.
+Email template — find. Fields: id, name, subject.</value>
+  </data>
+  <data name="DocsTriggersTitle" xml:space="preserve">
+    <value>Triggers — when it starts</value>
+  </data>
+  <data name="DocsTriggerManual" xml:space="preserve">
+    <value>No extra fields. Starts when you click Run or Test. Use this while you are building.</value>
+  </data>
+  <data name="DocsTriggerSchedule" xml:space="preserve">
+    <value>How often — Once, at a date (then Run at), Every hour / day / week / month (then Time of day), or Cron expression (example 0 9 * * * for 09:00 every day).
+After Publish, Partnerly wakes the agent at that time. Time zone is on the agent Settings overlay. Keep the agent active.</value>
+  </data>
+  <data name="DocsTriggerInterval" xml:space="preserve">
+    <value>Repeat every (minutes) — minimum 1. The next run is counted from the previous one. Works after Publish while the agent is active.</value>
+  </data>
+  <data name="DocsTriggerEntityCreated" xml:space="preserve">
+    <value>Record type — User, Support ticket, Notification, User group, or Email template.
+Wait before starting — optional amount and unit.
+Fires when that record is created. Fields of the new row are in {{trigger.…}}.</value>
+  </data>
+  <data name="DocsTriggerEntityUpdated" xml:space="preserve">
+    <value>Same Record type and optional Wait before starting as created. Fires when that record is saved. Changed fields are in {{trigger.…}}.</value>
+  </data>
+  <data name="DocsTriggerEntityDeleted" xml:space="preserve">
+    <value>Same Record type and optional Wait before starting. Fires when that record is deleted.</value>
+  </data>
+  <data name="DocsTriggerEvent" xml:space="preserve">
+    <value>Event name must be exactly one of:
+UserRegistered — {{trigger.id}}, {{trigger.email}}, {{trigger.firstName}}, {{trigger.lastName}}.
+SupportTicketCreated — {{trigger.id}}, {{trigger.ticketId}}, {{trigger.subject}}, {{trigger.status}}, {{trigger.type}}.
+SupportTicketStatusChanged — {{trigger.id}}, {{trigger.ticketId}}, {{trigger.status}}.
+Wait before starting is optional.</value>
+  </data>
+  <data name="DocsTriggerWebhook" xml:space="preserve">
+    <value>After Publish, copy the URL and HMAC secret from Connections.
+The caller sends POST with header X-Partnerly-Signature.
+Wait before starting is optional. The body fields are in {{trigger.…}}.</value>
+  </data>
+  <data name="DocsTriggerDelayTitle" xml:space="preserve">
+    <value>Delayed start</value>
+  </data>
+  <data name="DocsTriggerDelay" xml:space="preserve">
+    <value>Wait for — number, at least 1. Unit — seconds, minutes, hours, or days.
+The workflow starts only after this wait. Use this as the first block when the start itself should be delayed — not the Delay action in the middle of the flow.</value>
+  </data>
+  <data name="DocsActionsTitle" xml:space="preserve">
+    <value>Actions — how to configure each step</value>
+  </data>
+  <data name="DocsActionDelay" xml:space="preserve">
+    <value>Wait for — number, at least 1.
+Unit — seconds, minutes, hours, or days.
+The run pauses, then continues by itself. This is a step in the middle of the flow.</value>
+  </data>
+  <data name="DocsActionSetVariable" xml:space="preserve">
+    <value>Variable name — letters, digits, underscore.
+Value — any text, placeholders allowed.
+Later steps read it as {{vars.that_name}}.</value>
+  </data>
+  <data name="DocsActionSendEmail" xml:space="preserve">
+    <value>Send to — required email. Placeholders such as {{trigger.email}} are allowed.
+Email template — optional code from Email templates. If set, Subject and Message below are ignored.
+Subject / Message — used when the template is empty. Default subject is Partnerly.</value>
+  </data>
+  <data name="DocsActionSendNotification" xml:space="preserve">
+    <value>Notification text — the in-app message.
+User id (optional) — a user GUID. Empty sends to the agent owner.
+Notification type — a label (default System).
+Link (optional) — URL opened from the notification.</value>
+  </data>
+  <data name="DocsActionHttpRequest" xml:space="preserve">
+    <value>HTTP method — GET, POST, PUT, PATCH or DELETE.
+URL — a public http/https address, or a path if Saved connection id is filled (copy the id from Connections).
+Request body — only for POST, PUT, PATCH. GET and DELETE ignore it.
+Private or local addresses are blocked.</value>
+  </data>
+  <data name="DocsActionWebhook" xml:space="preserve">
+    <value>Webhook URL — public http/https. Partnerly sends POST.
+JSON body — request body, placeholders allowed.
+Signing secret (optional) — if set, the request includes header X-Partnerly-Signature (HMAC-SHA256).
+Same public-URL rule as HTTP request.</value>
+  </data>
+  <data name="DocsActionExecuteWorkflow" xml:space="preserve">
+    <value>Child automation id — GUID of another agent you own that is published.
+This step starts it and does not wait for it to finish.</value>
+  </data>
+  <data name="DocsActionBranch" xml:space="preserve">
+    <value>Left value, Compare, Right value.
+Operators: equals, not equals, contains, greater than, less than, is empty, is not empty, changed.
+Placeholders allowed in Left and Right.
+Connect two links from the block: first output is True, second is False.</value>
+  </data>
+  <data name="DocsActionWaitUntil" xml:space="preserve">
+    <value>Same condition fields as Branch, plus Give up after (optional deadline).
+The run waits until the condition is true or the deadline passes. Empty deadline keeps checking.</value>
+  </data>
+  <data name="DocsActionSwitch" xml:space="preserve">
+    <value>Value to match — placeholders allowed.
+Empty value uses the first output (default). Connect the second output for the other case.</value>
+  </data>
+  <data name="DocsActionCreateRecord" xml:space="preserve">
+    <value>Record type, then Fields (one per line, for example subject=Hello).
+Create works only for Support ticket (subject, message, status, userId, assignedTo, note) and Notification (type, message, userId, link).
+User, User group and Email template cannot be created here.</value>
+  </data>
+  <data name="DocsActionUpdateRecord" xml:space="preserve">
+    <value>Record type.
+Which record — one key per line, for example id={{trigger.id}}.
+Fields — values to change.
+Update works for User (firstName, lastName, isBlocked) and Support ticket (subject, status, assignedTo, note).</value>
+  </data>
+  <data name="DocsActionFindRecord" xml:space="preserve">
+    <value>Record type and Filters (one per line, for example email={{trigger.email}} or id={{trigger.id}}).
+Works for User, Support ticket, Notification, User group and Email template.
+Name the block with letters and digits. The found row is {{steps.BlockName.result.result.email}}.</value>
+  </data>
+  <data name="DocsActionDeleteRecord" xml:space="preserve">
+    <value>Record type and Which record (one key per line, for example id={{trigger.id}}).
+Delete is allowed for Support ticket.</value>
+  </data>
+  <data name="DocsOpenGuide" xml:space="preserve">
+    <value>Full setup guide</value>
+  </data>
+  <data name="NodeTypeWebhookAction" xml:space="preserve">
+    <value>Send webhook</value>
   </data>
 
   <data name="LandingPromptWhat" xml:space="preserve">
@@ -2648,6 +2802,9 @@
   <data name="UntitledAutomation" xml:space="preserve">
     <value>Untitled</value>
   </data>
+  <data name="AutomationRunNeedsPublish" xml:space="preserve">
+    <value>Publish this agent before a live run</value>
+  </data>
   <data name="AutomationPublished" xml:space="preserve">
     <value>Automation published</value>
   </data>
@@ -2783,6 +2940,15 @@
   <data name="ActionBlocksHelp" xml:space="preserve">
     <value>The steps that run after the trigger.</value>
   </data>
+  <data name="AddTrigger" xml:space="preserve">
+    <value>Trigger</value>
+  </data>
+  <data name="AddAction" xml:space="preserve">
+    <value>Action</value>
+  </data>
+  <data name="BuilderMenu" xml:space="preserve">
+    <value>Menu</value>
+  </data>
   <data name="SelectNodeHint" xml:space="preserve">
     <value>Select a block on the canvas to edit it.</value>
   </data>
@@ -2850,7 +3016,7 @@
     <value>Event name</value>
   </data>
   <data name="EventNameHelp" xml:space="preserve">
-    <value>Must match the event the system publishes, for example UserCreated.</value>
+    <value>Must be exactly UserRegistered, SupportTicketCreated, or SupportTicketStatusChanged.</value>
   </data>
   <data name="WebhookTriggerHelp" xml:space="preserve">
     <value>After publish, the URL and secret appear on Connections.</value>
@@ -2867,8 +3033,14 @@
   <data name="VariableNameHelp" xml:space="preserve">
     <value>Letters, digits and underscore. Use later as {{vars.name}}.</value>
   </data>
+  <data name="VariableValueHelp" xml:space="preserve">
+    <value>Any text. Placeholders {{…}} are replaced when the step runs.</value>
+  </data>
   <data name="EmailTo" xml:space="preserve">
     <value>Send to</value>
+  </data>
+  <data name="EmailToHelp" xml:space="preserve">
+    <value>Required. An email address, or {{trigger.email}}.</value>
   </data>
   <data name="EmailSubject" xml:space="preserve">
     <value>Subject</value>
@@ -2885,6 +3057,9 @@
   <data name="NotificationUser" xml:space="preserve">
     <value>User id (optional)</value>
   </data>
+  <data name="NotificationUserHelp" xml:space="preserve">
+    <value>User GUID. Leave empty to notify the owner of this agent.</value>
+  </data>
   <data name="NotificationMessage" xml:space="preserve">
     <value>Notification text</value>
   </data>
@@ -2900,8 +3075,14 @@
   <data name="HttpUrl" xml:space="preserve">
     <value>URL</value>
   </data>
+  <data name="HttpUrlHelp" xml:space="preserve">
+    <value>Public http/https URL, or a path if Saved connection id is set.</value>
+  </data>
   <data name="HttpBody" xml:space="preserve">
     <value>Request body</value>
+  </data>
+  <data name="HttpBodyHelp" xml:space="preserve">
+    <value>Used for POST, PUT and PATCH only. GET and DELETE ignore this field.</value>
   </data>
   <data name="HttpConnection" xml:space="preserve">
     <value>Saved connection id</value>
@@ -2912,8 +3093,17 @@
   <data name="WebhookBody" xml:space="preserve">
     <value>JSON body</value>
   </data>
+  <data name="WebhookUrlHelp" xml:space="preserve">
+    <value>Public http/https URL. Partnerly sends POST.</value>
+  </data>
+  <data name="WebhookBodyHelp" xml:space="preserve">
+    <value>Request body. Placeholders {{…}} are allowed.</value>
+  </data>
   <data name="WebhookSecretField" xml:space="preserve">
     <value>Signing secret (optional)</value>
+  </data>
+  <data name="WebhookSecretHelp" xml:space="preserve">
+    <value>If set, the request includes header X-Partnerly-Signature.</value>
   </data>
   <data name="ChildAutomation" xml:space="preserve">
     <value>Child automation id</value>
@@ -2947,6 +3137,9 @@
   </data>
   <data name="RecordKey" xml:space="preserve">
     <value>Which record</value>
+  </data>
+  <data name="RecordKeyHelp" xml:space="preserve">
+    <value>One field per line that finds the row, for example id={{trigger.id}}.</value>
   </data>
   <data name="RecordFilters" xml:space="preserve">
     <value>Filters</value>
@@ -3070,6 +3263,75 @@
   </data>
   <data name="ReadyTemplates" xml:space="preserve">
     <value>Ready templates</value>
+  </data>
+  <data name="TplSizeSmall" xml:space="preserve">
+    <value>Small</value>
+  </data>
+  <data name="TplSizeMedium" xml:space="preserve">
+    <value>Medium</value>
+  </data>
+  <data name="TplSizeLarge" xml:space="preserve">
+    <value>Large</value>
+  </data>
+  <data name="TplManualFlag" xml:space="preserve">
+    <value>Manual flag</value>
+  </data>
+  <data name="TplManualFlagBody" xml:space="preserve">
+    <value>Run by hand and set a variable ready=yes.</value>
+  </data>
+  <data name="TplDelayThenFlag" xml:space="preserve">
+    <value>Delay then flag</value>
+  </data>
+  <data name="TplDelayThenFlagBody" xml:space="preserve">
+    <value>Wait five seconds, then set done=1.</value>
+  </data>
+  <data name="TplDailyMarker" xml:space="preserve">
+    <value>Daily marker</value>
+  </data>
+  <data name="TplDailyMarkerBody" xml:space="preserve">
+    <value>Every day at 09:00. Stores ran=1.</value>
+  </data>
+  <data name="TplWelcomePing" xml:space="preserve">
+    <value>Welcome ping</value>
+  </data>
+  <data name="TplWelcomePingBody" xml:space="preserve">
+    <value>When a user registers, notify the agent owner with name and email.</value>
+  </data>
+  <data name="TplHourlyPulse" xml:space="preserve">
+    <value>Hourly pulse</value>
+  </data>
+  <data name="TplHourlyPulseBody" xml:space="preserve">
+    <value>Every 60 minutes, store the last run time in lastPulse.</value>
+  </data>
+  <data name="TplNewTicketAlert" xml:space="preserve">
+    <value>New ticket alert</value>
+  </data>
+  <data name="TplNewTicketAlertBody" xml:space="preserve">
+    <value>On a new support ticket: save the number, notify, then email notify@example.com. Change that address.</value>
+  </data>
+  <data name="TplInboundWebhook" xml:space="preserve">
+    <value>Inbound webhook</value>
+  </data>
+  <data name="TplInboundWebhookBody" xml:space="preserve">
+    <value>After publish, POST to the Connections URL. Stores source and run id, then notifies the owner.</value>
+  </data>
+  <data name="TplWeekdayBriefing" xml:space="preserve">
+    <value>Weekday briefing</value>
+  </data>
+  <data name="TplWeekdayBriefingBody" xml:space="preserve">
+    <value>Cron 09:00 Monday–Friday: flag, in-app ping, email notify@example.com. Change that address.</value>
+  </data>
+  <data name="TplNewUserOnboarding" xml:space="preserve">
+    <value>New user onboarding</value>
+  </data>
+  <data name="TplNewUserOnboardingBody" xml:space="preserve">
+    <value>UserRegistered: wait 2 minutes, welcome email, notify the user, then if email is present open a support ticket.</value>
+  </data>
+  <data name="TplTicketTriage" xml:space="preserve">
+    <value>Ticket triage desk</value>
+  </data>
+  <data name="TplTicketTriageBody" xml:space="preserve">
+    <value>New ticket: variables, notify, branch on New (email + follow-up note) or find + HTTP + outbound webhook. Replace notify@example.com and the webhook URL.</value>
   </data>
   <data name="AutomationEmptyDefinitions" xml:space="preserve">
     <value>No automations yet</value>

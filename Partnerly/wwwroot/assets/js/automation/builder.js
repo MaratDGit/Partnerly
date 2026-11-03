@@ -37,6 +37,10 @@
 
         editor = new Drawflow(root);
         editor.reroute = true;
+        editor.zoom = 1;
+        editor.zoom_min = 0.2;
+        editor.zoom_max = 1.8;
+        editor.zoom_value = 0.08;
         editor.start();
 
     var selectedId = null;
@@ -110,17 +114,17 @@
         delay: delayFields("delayHelp", true),
         set_variable: [
             { key: "name", type: "text", label: t("variableName"), help: t("variableNameHelp") },
-            { key: "value", type: "text", label: t("variableValue") }
+            { key: "value", type: "text", label: t("variableValue"), help: t("variableValueHelp") }
         ],
         send_email: [
-            { key: "to", type: "text", label: t("emailTo") },
+            { key: "to", type: "text", label: t("emailTo"), help: t("emailToHelp") },
             { key: "template", type: "text", label: t("emailTemplate"), help: t("emailTemplateHelp") },
             { key: "subject", type: "text", label: t("emailSubject") },
             { key: "body", type: "textarea", label: t("emailBody") }
         ],
         send_notification: [
             { key: "message", type: "textarea", label: t("notificationMessage") },
-            { key: "userId", type: "text", label: t("notificationUser") },
+            { key: "userId", type: "text", label: t("notificationUser"), help: t("notificationUserHelp") },
             { key: "notificationType", type: "text", label: t("notificationType") },
             { key: "link", type: "text", label: t("notificationLink") }
         ],
@@ -133,14 +137,14 @@
                     return { value: item, label: item };
                 })
             },
-            { key: "url", type: "text", label: t("httpUrl") },
+            { key: "url", type: "text", label: t("httpUrl"), help: t("httpUrlHelp") },
             { key: "connectionId", type: "text", label: t("httpConnection"), help: t("httpConnectionHelp") },
-            { key: "body", type: "textarea", label: t("httpBody") }
+            { key: "body", type: "textarea", label: t("httpBody"), help: t("httpBodyHelp") }
         ],
         webhook_action: [
-            { key: "url", type: "text", label: t("webhookUrl") },
-            { key: "body", type: "textarea", label: t("webhookBody") },
-            { key: "secret", type: "text", label: t("webhookSecret") }
+            { key: "url", type: "text", label: t("webhookUrl"), help: t("webhookUrlHelp") },
+            { key: "body", type: "textarea", label: t("webhookBody"), help: t("webhookBodyHelp") },
+            { key: "secret", type: "text", label: t("webhookSecret"), help: t("webhookSecretHelp") }
         ],
         execute_workflow: [
             { key: "automationId", type: "text", label: t("childAutomation"), help: t("childAutomationHelp") }
@@ -156,7 +160,7 @@
         ],
         update_record: [
             { key: "entity", type: "select", label: t("entity"), help: t("entityHelp"), options: ENTITIES },
-            { key: "key", type: "pairs", label: t("recordKey") },
+            { key: "key", type: "pairs", label: t("recordKey"), help: t("recordKeyHelp") },
             { key: "fields", type: "pairs", label: t("recordFields"), help: t("recordFieldsHelp") }
         ],
         find_record: [
@@ -165,7 +169,7 @@
         ],
         delete_record: [
             { key: "entity", type: "select", label: t("entity"), help: t("entityHelp"), options: ENTITIES },
-            { key: "key", type: "pairs", label: t("recordKey") }
+            { key: "key", type: "pairs", label: t("recordKey"), help: t("recordKeyHelp") }
         ]
     };
 
@@ -259,7 +263,7 @@
         return '<div class="auto-node auto-node--' + (data.kind || "action") + '">' +
             '<span class="auto-node-kind">' + (data.kind === "trigger" ? t("triggerBlocks", "When") : t("actionBlocks", "Then")) + "</span>" +
             '<strong class="auto-node-type">' + typeLabel(data.type, data.type) + "</strong>" +
-            '<span class="auto-node-name d-block">' + (data.name || "") + "</span></div>";
+            '<span class="auto-node-name">' + (data.name || "") + "</span></div>";
     }
 
     function outputsFor(type) {
@@ -279,15 +283,25 @@
         return null;
     }
 
+    function dropPoint() {
+        var rect = root.getBoundingClientRect();
+        var zoom = editor.zoom || 1;
+        return {
+            x: ((rect.width * 0.42) - (editor.canvas_x || 0)) / zoom,
+            y: ((rect.height * 0.36) - (editor.canvas_y || 0)) / zoom
+        };
+    }
+
     function addNode(data, x, y) {
         var inputs = data.kind === "trigger" ? 0 : 1;
         var outputs = outputsFor(data.type);
+        var point = (x == null || y == null) ? dropPoint() : null;
         return editor.addNode(
             slug(data.type),
             inputs,
             outputs,
-            x || 80,
-            y || 80,
+            x == null ? point.x : x,
+            y == null ? point.y : y,
             slug(data.kind + "-" + data.type),
             data,
             nodeHtml(data));
@@ -555,6 +569,40 @@
             }
             host.appendChild(wrap);
         });
+        appendDocs(host, data);
+    }
+
+    function docsKey(data) {
+        if (!data) {
+            return "";
+        }
+        if (data.type === "delay" && data.kind === "trigger") {
+            return "delay_trigger";
+        }
+        if (data.type === "webhook" && data.kind === "action") {
+            return "webhook_action";
+        }
+        return data.type;
+    }
+
+    function appendDocs(host, data) {
+        var docs = i18n.docs || {};
+        var key = docsKey(data);
+        var text = docs[key] || "";
+        if (text) {
+            var box = document.createElement("p");
+            box.className = "automation-docs";
+            box.textContent = text;
+            host.appendChild(box);
+        }
+        var url = i18n.docsUrl;
+        if (url) {
+            var link = document.createElement("a");
+            link.className = "automation-docs-link";
+            link.href = url + (key ? "#docs-" + encodeURIComponent(key) : "");
+            link.textContent = t("docsLink", "How to fill these fields");
+            host.appendChild(link);
+        }
     }
 
     function readFieldsInto(data) {
@@ -618,19 +666,279 @@
         }
     }
 
-    editor.on("nodeSelected", function (id) {
+    function markSelected(id) {
+        Array.prototype.forEach.call(root.querySelectorAll(".auto-node.is-selected"), function (el) {
+            el.classList.remove("is-selected");
+        });
+        if (!id) {
+            return;
+        }
+        var inner = root.querySelector("#node-" + id + " .auto-node");
+        if (inner) {
+            inner.classList.add("is-selected");
+        }
+    }
+
+    function isCompactProps() {
+        return window.matchMedia("(max-width: 991.98px)").matches;
+    }
+
+    function propsPanel() {
+        return q("[data-props-panel]");
+    }
+
+    function showProps() {
+        var panel = propsPanel();
+        if (!panel) {
+            return;
+        }
+        panel.hidden = false;
+        panel.classList.add("is-open");
+    }
+
+    function hideProps() {
+        var panel = propsPanel();
+        if (!panel) {
+            return;
+        }
+        panel.hidden = true;
+        panel.classList.remove("is-open");
+    }
+
+    function clearEditorSelection() {
+        if (editor.node_selected) {
+            editor.node_selected.classList.remove("selected");
+            editor.node_selected = null;
+        }
+        selectedId = null;
+        markSelected(null);
+        renderFields(null);
+        hideProps();
+    }
+
+    var nodeMenu = document.createElement("div");
+    nodeMenu.className = "automation-node-menu";
+    nodeMenu.hidden = true;
+    var propsItem = document.createElement("button");
+    propsItem.type = "button";
+    propsItem.textContent = t("nodeProperties", "Properties");
+    var deleteItem = document.createElement("button");
+    deleteItem.type = "button";
+    deleteItem.className = "is-danger";
+    deleteItem.textContent = t("delete", "Delete");
+    nodeMenu.appendChild(propsItem);
+    nodeMenu.appendChild(deleteItem);
+    var menuHost = root.closest(".automation-canvas-wrap") || root;
+    menuHost.appendChild(nodeMenu);
+    var menuNodeId = null;
+
+    function hideNodeMenu() {
+        nodeMenu.hidden = true;
+        menuNodeId = null;
+    }
+
+    function showNodeMenu(clientX, clientY, id) {
+        var form = document.getElementById("automationBuilderForm");
+        var canEdit = !form || form.getAttribute("data-can-edit") !== "false";
+        deleteItem.hidden = !canEdit;
+        menuNodeId = id;
+        nodeMenu.hidden = false;
+        var hostRect = menuHost.getBoundingClientRect();
+        var left = clientX - hostRect.left;
+        var top = clientY - hostRect.top;
+        nodeMenu.style.left = "0px";
+        nodeMenu.style.top = "0px";
+        var menuRect = nodeMenu.getBoundingClientRect();
+        left = Math.max(8, Math.min(left, hostRect.width - menuRect.width - 8));
+        top = Math.max(8, Math.min(top, hostRect.height - menuRect.height - 8));
+        nodeMenu.style.left = left + "px";
+        nodeMenu.style.top = top + "px";
+    }
+
+    function selectNodeElement(id, nodeEl) {
         selectedId = id;
+        markSelected(id);
+        if (editor.node_selected && editor.node_selected !== nodeEl) {
+            editor.node_selected.classList.remove("selected");
+        }
+        editor.node_selected = nodeEl;
+        nodeEl.classList.add("selected");
         var node = editor.getNodeFromId(id);
         renderFields(node.data);
+    }
+
+    editor.on("nodeSelected", function (id) {
+        hideNodeMenu();
+        selectedId = id;
+        markSelected(id);
+        var node = editor.getNodeFromId(id);
+        renderFields(node.data);
+        if (!isCompactProps()) {
+            showProps();
+        }
     });
 
     editor.on("nodeUnselected", function () {
+        hideNodeMenu();
         selectedId = null;
+        markSelected(null);
         renderFields(null);
+        hideProps();
+    });
+
+    function onPropsClose(event) {
+        event.preventDefault();
+        event.stopPropagation();
+        persistSelected();
+        clearEditorSelection();
+    }
+
+    function onNodeContext(event) {
+        var nodeEl = event.target.closest(".drawflow-node");
+        if (!nodeEl || !root.contains(nodeEl)) {
+            return;
+        }
+        event.preventDefault();
+        event.stopPropagation();
+        if (typeof event.stopImmediatePropagation === "function") {
+            event.stopImmediatePropagation();
+        }
+        clearPress();
+        var id = nodeEl.id.replace("node-", "");
+        selectNodeElement(id, nodeEl);
+        showNodeMenu(event.clientX, event.clientY, id);
+    }
+    root.addEventListener("contextmenu", onNodeContext, true);
+    cleanupFns.push(function () {
+        root.removeEventListener("contextmenu", onNodeContext, true);
+    });
+
+    propsItem.addEventListener("click", function (event) {
+        event.preventDefault();
+        hideNodeMenu();
+        showProps();
+    });
+    deleteItem.addEventListener("click", function (event) {
+        event.preventDefault();
+        var id = menuNodeId;
+        hideNodeMenu();
+        if (!id || !editor) {
+            return;
+        }
+        persistSelected();
+        try {
+            editor.removeNodeId("node-" + id);
+        } catch (err) { }
+        selectedId = null;
+        markSelected(null);
+        renderFields(null);
+        hideProps();
+        syncHidden();
+    });
+    function onDocHideMenu(event) {
+        if (nodeMenu.hidden) {
+            return;
+        }
+        if (event.target && nodeMenu.contains(event.target)) {
+            return;
+        }
+        hideNodeMenu();
+    }
+    function onKeyHideMenu(event) {
+        if (event.key === "Escape") {
+            hideNodeMenu();
+        }
+    }
+    document.addEventListener("click", onDocHideMenu);
+    document.addEventListener("keydown", onKeyHideMenu);
+    menuHost.addEventListener("wheel", hideNodeMenu, { passive: true });
+    cleanupFns.push(function () {
+        document.removeEventListener("click", onDocHideMenu);
+        document.removeEventListener("keydown", onKeyHideMenu);
+        menuHost.removeEventListener("wheel", hideNodeMenu);
+        hideNodeMenu();
+        if (nodeMenu.parentNode) {
+            nodeMenu.parentNode.removeChild(nodeMenu);
+        }
+    });
+
+    var pressTimer = null;
+    function clearPress() {
+        if (pressTimer) {
+            window.clearTimeout(pressTimer);
+            pressTimer = null;
+        }
+    }
+    function onTouchStart(event) {
+        if (!isCompactProps()) {
+            return;
+        }
+        var nodeEl = event.target.closest(".drawflow-node");
+        if (!nodeEl) {
+            return;
+        }
+        var touch = event.touches && event.touches[0];
+        var clientX = touch ? touch.clientX : 0;
+        var clientY = touch ? touch.clientY : 0;
+        var id = nodeEl.id.replace("node-", "");
+        pressTimer = window.setTimeout(function () {
+            pressTimer = null;
+            selectNodeElement(id, nodeEl);
+            showNodeMenu(clientX, clientY, id);
+        }, 520);
+    }
+    root.addEventListener("touchstart", onTouchStart, { passive: true });
+    root.addEventListener("touchmove", clearPress, { passive: true });
+    root.addEventListener("touchend", clearPress);
+    root.addEventListener("touchcancel", clearPress);
+    cleanupFns.push(function () {
+        clearPress();
+        root.removeEventListener("touchstart", onTouchStart);
+        root.removeEventListener("touchmove", clearPress);
+        root.removeEventListener("touchend", clearPress);
+        root.removeEventListener("touchcancel", clearPress);
+    });
+
+    function onPanStart(event) {
+        var target = event.target;
+        if (!target) {
+            return;
+        }
+        var first = target.classList && target.classList[0];
+        if (first === "parent-drawflow" || first === "drawflow" || first === "automation-canvas") {
+            root.classList.add("is-panning");
+        }
+    }
+    function onPanEnd() {
+        root.classList.remove("is-panning");
+    }
+    root.addEventListener("mousedown", onPanStart);
+    window.addEventListener("mouseup", onPanEnd);
+    cleanupFns.push(function () {
+        root.removeEventListener("mousedown", onPanStart);
+        window.removeEventListener("mouseup", onPanEnd);
+        onPanEnd();
     });
 
     var props = q(".automation-props");
     if (props) {
+        function stopCanvasPointer(event) {
+            if (event.target && event.target.closest && event.target.closest("[data-props-close]")) {
+                return;
+            }
+            event.stopPropagation();
+        }
+        ["pointerdown", "mousedown", "touchstart"].forEach(function (name) {
+            props.addEventListener(name, stopCanvasPointer);
+            cleanupFns.push(function () {
+                props.removeEventListener(name, stopCanvasPointer);
+            });
+        });
+        props.addEventListener("click", function (event) {
+            if (event.target && event.target.closest && event.target.closest("[data-props-close]")) {
+                onPropsClose(event);
+            }
+        });
         props.addEventListener("change", persistSelected);
         props.addEventListener("blur", persistSelected, true);
         cleanupFns.push(function () {
@@ -656,6 +964,63 @@
         syncHidden();
     };
 
+    function closeAddMenus() {
+        Array.prototype.forEach.call(document.querySelectorAll("[data-add-menu].is-open"), function (menu) {
+            menu.classList.remove("is-open");
+            var panel = menu.querySelector(".automation-add-panel");
+            var toggle = menu.querySelector("[data-add-toggle]");
+            if (panel) {
+                panel.hidden = true;
+            }
+            if (toggle) {
+                toggle.setAttribute("aria-expanded", "false");
+            }
+        });
+    }
+
+    function onAddToggle(event) {
+        var toggle = event.target.closest("[data-add-toggle]");
+        if (!toggle) {
+            return;
+        }
+        event.preventDefault();
+        var menu = toggle.closest("[data-add-menu]");
+        if (!menu) {
+            return;
+        }
+        var willOpen = !menu.classList.contains("is-open");
+        closeAddMenus();
+        if (!willOpen) {
+            return;
+        }
+        menu.classList.add("is-open");
+        var panel = menu.querySelector(".automation-add-panel");
+        if (panel) {
+            panel.hidden = false;
+        }
+        toggle.setAttribute("aria-expanded", "true");
+    }
+
+    function onDocumentPointer(event) {
+        if (event.target.closest("[data-add-menu]")) {
+            return;
+        }
+        closeAddMenus();
+    }
+
+    var toolbar = q(".automation-toolbar");
+    if (toolbar) {
+        toolbar.addEventListener("click", onAddToggle);
+        cleanupFns.push(function () {
+            toolbar.removeEventListener("click", onAddToggle);
+        });
+    }
+    document.addEventListener("click", onDocumentPointer);
+    cleanupFns.push(function () {
+        document.removeEventListener("click", onDocumentPointer);
+        closeAddMenus();
+    });
+
     var triggersHost = q("[data-palette-triggers]");
     var actionsHost = q("[data-palette-actions]");
     if (triggersHost) {
@@ -675,19 +1040,26 @@
                 if (!container) {
                     return;
                 }
+                var canEdit = !builderForm || builderForm.getAttribute("data-can-edit") !== "false";
                 (list || []).forEach(function (item) {
                     var button = document.createElement("button");
                     button.type = "button";
+                    button.className = "automation-add-item";
                     button.textContent = typeLabel(item.type, item.displayName || item.type);
+                    button.disabled = !canEdit;
                     button.addEventListener("click", function () {
+                        if (!canEdit) {
+                            return;
+                        }
                         addNode({
                             id: "n" + Date.now(),
                             kind: item.kind,
                             type: item.type,
                             name: slug(item.type) + editor.getNodesFromName(slug(item.type)).length,
                             config: defaultConfig(item.type, item.kind)
-                        }, 160, 120);
+                        });
                         syncHidden();
+                        closeAddMenus();
                     });
                     container.appendChild(button);
                 });
@@ -696,11 +1068,124 @@
             bind(catalog.actions, actionsHost);
         });
 
+    function zoomLabel() {
+        var label = q("[data-zoom-label]");
+        if (label) {
+            label.textContent = Math.round((editor.zoom || 1) * 100) + "%";
+        }
+    }
+
+    function applyCanvasTransform() {
+        if (!editor.precanvas) {
+            return;
+        }
+        editor.precanvas.style.transform = "translate(" + (editor.canvas_x || 0) + "px, " + (editor.canvas_y || 0) + "px) scale(" + (editor.zoom || 1) + ")";
+    }
+
+    function applyZoom(next) {
+        var min = editor.zoom_min || 0.2;
+        var max = editor.zoom_max || 1.8;
+        editor.zoom = Math.max(min, Math.min(max, next));
+        if (typeof editor.zoom_refresh === "function") {
+            editor.zoom_refresh();
+        } else {
+            applyCanvasTransform();
+        }
+        zoomLabel();
+    }
+
+    function fitView() {
+        var nodes = root.querySelectorAll(".drawflow-node");
+        if (!nodes.length) {
+            applyZoom(1);
+            editor.canvas_x = 0;
+            editor.canvas_y = 0;
+            applyCanvasTransform();
+            return;
+        }
+        var minX = Infinity;
+        var minY = Infinity;
+        var maxX = -Infinity;
+        var maxY = -Infinity;
+        Array.prototype.forEach.call(nodes, function (el) {
+            minX = Math.min(minX, el.offsetLeft);
+            minY = Math.min(minY, el.offsetTop);
+            maxX = Math.max(maxX, el.offsetLeft + el.offsetWidth);
+            maxY = Math.max(maxY, el.offsetTop + el.offsetHeight);
+        });
+        var pad = 56;
+        var width = Math.max(maxX - minX + pad * 2, 1);
+        var height = Math.max(maxY - minY + pad * 2, 1);
+        var area = root.getBoundingClientRect();
+        var zoom = Math.min(area.width / width, area.height / height, 1);
+        applyZoom(zoom);
+        editor.canvas_x = (area.width - width * editor.zoom) / 2 - (minX - pad) * editor.zoom;
+        editor.canvas_y = (area.height - height * editor.zoom) / 2 - (minY - pad) * editor.zoom;
+        applyCanvasTransform();
+    }
+
+    editor.on("zoom", zoomLabel);
+
+    var zoomInBtn = q("[data-zoom-in]");
+    var zoomOutBtn = q("[data-zoom-out]");
+    var zoomFitBtn = q("[data-zoom-fit]");
+    function onZoomIn(event) {
+        event.preventDefault();
+        if (typeof editor.zoom_in === "function") {
+            editor.zoom_in();
+        } else {
+            applyZoom((editor.zoom || 1) + (editor.zoom_value || 0.08));
+        }
+        zoomLabel();
+    }
+    function onZoomOut(event) {
+        event.preventDefault();
+        if (typeof editor.zoom_out === "function") {
+            editor.zoom_out();
+        } else {
+            applyZoom((editor.zoom || 1) - (editor.zoom_value || 0.08));
+        }
+        zoomLabel();
+    }
+    function onZoomFit(event) {
+        event.preventDefault();
+        fitView();
+    }
+    if (zoomInBtn) {
+        zoomInBtn.addEventListener("click", onZoomIn);
+        cleanupFns.push(function () { zoomInBtn.removeEventListener("click", onZoomIn); });
+    }
+    if (zoomOutBtn) {
+        zoomOutBtn.addEventListener("click", onZoomOut);
+        cleanupFns.push(function () { zoomOutBtn.removeEventListener("click", onZoomOut); });
+    }
+    if (zoomFitBtn) {
+        zoomFitBtn.addEventListener("click", onZoomFit);
+        cleanupFns.push(function () { zoomFitBtn.removeEventListener("click", onZoomFit); });
+    }
+
+    var wrap = root.closest(".automation-canvas-wrap") || root;
+    function onWheel(event) {
+        if (event.target && event.target.closest && event.target.closest(".automation-props, .automation-zoom, .automation-add-panel")) {
+            return;
+        }
+        event.preventDefault();
+        event.stopPropagation();
+        var step = editor.zoom_value || 0.08;
+        applyZoom((editor.zoom || 1) + (event.deltaY < 0 ? step : -step));
+    }
+    wrap.addEventListener("wheel", onWheel, { passive: false, capture: true });
+    cleanupFns.push(function () {
+        wrap.removeEventListener("wheel", onWheel, true);
+    });
+
     if (config.graph) {
         importGraph(typeof config.graph === "string" ? JSON.parse(config.graph) : config.graph);
+        window.setTimeout(fitView, 0);
     }
     syncHidden();
     renderFields(null);
+    zoomLabel();
     };
 
     function configFromDom() {

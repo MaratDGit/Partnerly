@@ -49,9 +49,14 @@
                     <option value="">@Localizer["BlankAutomation"]</option>
                     @foreach (var preset in presets)
                     {
+                        var title = Localizer[preset.NameKey].Value;
+                        var lead = Localizer[preset.DescriptionKey].Value;
+                        var sizeKey = preset.Size == "large"
+                            ? "TplSizeLarge"
+                            : preset.Size == "medium" ? "TplSizeMedium" : "TplSizeSmall";
                         <option value="@preset.Id"
-                                data-name="@preset.Name"
-                                data-description="@preset.Description">@preset.Name</option>
+                                data-name="@title"
+                                data-description="@lead">@title (@Localizer[sizeKey])</option>
                     }
                 </select>
                 <div class="form-text">@Localizer["StartFromTemplateHelp"]</div>

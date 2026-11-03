@@ -106,17 +106,23 @@
         <div class="automation-hub-template-grid">
             @foreach (var preset in Model.Presets)
             {
+                var title = Localizer[preset.NameKey].Value;
+                var lead = Localizer[preset.DescriptionKey].Value;
+                var sizeKey = preset.Size == "large"
+                    ? "TplSizeLarge"
+                    : preset.Size == "medium" ? "TplSizeMedium" : "TplSizeSmall";
                 <article class="automation-glass automation-hub-template">
-                    <h3>@preset.Name</h3>
-                    <p>@preset.Description</p>
+                    <span class="automation-hub-template-size is-@preset.Size">@Localizer[sizeKey]</span>
+                    <h3>@title</h3>
+                    <p>@lead</p>
                     @if (Can("automation.create"))
                     {
                         <button type="button"
                                 class="btn btn-outline-secondary"
                                 data-open-create-automation
                                 data-template-id="@preset.Id"
-                                data-template-name="@preset.Name"
-                                data-template-description="@preset.Description">
+                                data-template-name="@title"
+                                data-template-description="@lead">
                             @Localizer["UseTemplate"]
                         </button>
                     }

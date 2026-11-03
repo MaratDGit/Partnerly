@@ -64,9 +64,9 @@ html[data-theme="dark"] .partnerly-plan-button {
     align-items: flex-start;
     justify-content: center;
     padding: 72px 16px 24px;
-    background: rgba(238, 240, 248, 0.42);
-    backdrop-filter: blur(14px);
-    -webkit-backdrop-filter: blur(14px);
+    background: var(--partnerly-glass-overlay, rgba(238, 240, 248, 0.26));
+    backdrop-filter: blur(var(--partnerly-glass-overlay-blur, 6px));
+    -webkit-backdrop-filter: blur(var(--partnerly-glass-overlay-blur, 6px));
     opacity: 0;
     visibility: hidden;
     pointer-events: none;
@@ -93,7 +93,7 @@ body.is-plans-open .sticky-buttons {
 }
 
 html[data-theme="dark"] .partnerly-plans.is-open {
-    background: rgba(7, 7, 18, 0.52);
+    background: var(--partnerly-glass-overlay, rgba(10, 12, 28, 0.36));
 }
 
 .partnerly-plans-card {

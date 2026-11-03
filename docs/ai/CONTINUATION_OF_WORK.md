@@ -1,6 +1,6 @@
 # Продолжение работы
 
-Обновлено: 2026-11-03 (ночь, Asia/Yerevan).
+Обновлено: 2026-11-03 (день, Asia/Yerevan).
 
 ## Текущее состояние
 
@@ -14,7 +14,7 @@
 
 ## Последняя задача
 
-Коммит `5ef721a` и push `Cursor-Agent`. Браузер недоступен.
+Builder: футер сайта снова на месте; right click / long-press по карточке — меню Properties + Delete; фон за системными попапами светлее (`--partnerly-glass-overlay` 0.26 / 0.36, blur 6px). Коммит не делался. Браузер недоступен.
 
 ## Уже сделано недавно
 
@@ -25,6 +25,10 @@
 - Футер Documentation/Support с иконками; Statistics chart-иконка.
 - Navbar: поиск правее; dropdown профиля как меню; язык компактнее.
 - Statistics Agents — живые KPI автоматизации.
+- `/Documentation` — гид по триггерам и действиям агента (en/ru/hy); та же подсказка в правой панели билдера.
+- Готовые шаблоны: 10 штук (малые/средние/большие), en/ru/hy, на хабе Agents и в попапе создания.
+- Билдер: zoom −/+ / fit / колесо; полноэкранный холст после сайдбара, футер сайта виден; dropdown Trigger/Action, свойства overlay; right click / long-press карточки — Properties + Delete; glass-карточки, pan пустого места, фон light/dark.
+- Overlay системных попапов светлее: `--partnerly-glass-overlay` 0.26 light / 0.36 dark, blur 6px (TR-2026-11-03-09).
 
 ## Важные нюансы
 
@@ -37,16 +41,17 @@
 
 ## Незавершённое и препятствия
 
-- Автотесты есть только у Automation (`Partnerly.Automation.Tests`, 91). Остальной монолит без тестов (KI-011 частично).
+- Автотесты есть только у Automation (`Partnerly.Automation.Tests`, ранее 94). Остальной монолит без тестов (KI-011 частично).
 - `execute_workflow` ставит child и не ждёт его окончания (fire-and-forget).
 - Модули Payment/Transaction без UI.
 - KI-003 seed user на Admin, не Super — открыто.
 - Браузер в этой сессии недоступен — проверить glass: DataTable фильтр/колонки/экспорт/удаление, DeletePartial, note/attachments, lookup, dark theme.
 - Privacy/Docs, Automation, меню — `b406307`; glass/Builder/Agents — `7788ec1`; попапы Settings/Support и компактные поля — `5ef721a`. Push `Cursor-Agent` по просьбе владельца.
+- `/Documentation` содержит гид по триггерам и действиям; черновик DocsDraftNote больше не показывается. Проверки в браузере не было.
 
 ## Рекомендуемый следующий шаг
 
-1. Глазами: OpenNewCase попап (футер + прямой URL, phone/tablet/desktop, dark, успех/лимит/валидация).
+1. Глазами: Builder — футер, right click Delete на карточке, холст после меню; попапы системы — страница за ними читается. Хаб Agents и `/Documentation` тоже ещё не смотрели.
 2. PHASE 8 отчёт — только по просьбе.
 3. Другие стенды / прод — миграцию `AddAutomationTables` не применять без отдельного ок.
 

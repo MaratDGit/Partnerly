@@ -2461,7 +2461,7 @@
   </data>
 
   <data name="DocsAgentsBody" xml:space="preserve">
-    <value>Создайте агента, назначьте задачу — платформа выполнит её. Текущий план, использование и действия по дням — в Тарифах внизу меню.</value>
+    <value>Агенты — в левом меню. Создайте агента, откройте редактор процесса, поставьте триггер и действия, сохраните и опубликуйте. Пауза в списке Agents останавливает запуск без удаления. Лимиты плана — в Тарифах внизу меню. Как заполнять каждый блок — ниже.</value>
   </data>
 
   <data name="DocsUsersTitle" xml:space="preserve">
@@ -2486,6 +2486,160 @@
 
   <data name="DocsSettingsBody" xml:space="preserve">
     <value>В системных настройках — язык, часовой пояс, вход через Google, блокировка и флаги почты. Секреты API на этот экран не выносятся.</value>
+  </data>
+
+  <data name="DocsAutomationHowTitle" xml:space="preserve">
+    <value>Как собрать агента</value>
+  </data>
+  <data name="DocsAutomationHowBody" xml:space="preserve">
+    <value>В меню откройте Agents, затем +. Дайте имя и откройте редактор процесса.
+На холст — один триггер, затем действия по порядку. Клик по блоку открывает поля справа. Та же подсказка показывается под полями, полный гид — эта страница.
+Сохраняйте часто. Publish включает запуск. Pause в списке Agents останавливает без удаления.
+Run / Test запускает ручной старт. Connections после публикации показывает URL входящего webhook и сохранённые HTTP-базы.</value>
+  </data>
+  <data name="DocsVariablesTitle" xml:space="preserve">
+    <value>Значения в полях</value>
+  </data>
+  <data name="DocsVariablesBody" xml:space="preserve">
+    <value>Плейсхолдеры пишите в двойных фигурных скобках.
+{{trigger.email}} — поле из события старта.
+{{vars.order_id}} — значение из «Задать переменную».
+{{steps.BlockName.result.email}} — результат предыдущего шага. Имя блока — буквы, цифры и подчёркивание.
+Find record кладёт строку на уровень глубже: {{steps.FindUser.result.result.email}}.
+Пароли, токены и секреты API так прочитать нельзя.</value>
+  </data>
+  <data name="DocsRecordsTitle" xml:space="preserve">
+    <value>Типы записей</value>
+  </data>
+  <data name="DocsRecordsBody" xml:space="preserve">
+    <value>User — поиск и изменение. Поля: id, email, firstName, lastName, lastActivity, isBlocked, emailConfirmed, roleId, myReferralCode, referrerId, isOnlayn.
+Support ticket — поиск, создание, изменение, удаление. Поля: id, ticketId, subject, message, status, userId, assignedTo, note.
+Notification — поиск и создание. Поля: id, type, message, userId, link.
+User group — поиск. Поля: id, name.
+Email template — поиск. Поля: id, name, subject.</value>
+  </data>
+  <data name="DocsTriggersTitle" xml:space="preserve">
+    <value>Триггеры — когда запускается</value>
+  </data>
+  <data name="DocsTriggerManual" xml:space="preserve">
+    <value>Дополнительных полей нет. Срабатывает по кнопке Run или Test. Удобно, пока собираете процесс.</value>
+  </data>
+  <data name="DocsTriggerSchedule" xml:space="preserve">
+    <value>Как часто — один раз (тогда дата и время), каждый час / день / неделю / месяц (тогда время суток) или cron (пример 0 9 * * * — каждый день в 09:00).
+После Publish Partnerly будит агента в это время. Часовой пояс — в настройках агента. Агент должен быть активен.</value>
+  </data>
+  <data name="DocsTriggerInterval" xml:space="preserve">
+    <value>Повторять каждые (минуты) — минимум 1. Следующий запуск считается от предыдущего. Работает после Publish, пока агент активен.</value>
+  </data>
+  <data name="DocsTriggerEntityCreated" xml:space="preserve">
+    <value>Тип записи — User, обращение, уведомление, группа или шаблон письма.
+Ждать перед стартом — необязательные количество и единица.
+Срабатывает при создании записи. Поля новой строки — в {{trigger.…}}.</value>
+  </data>
+  <data name="DocsTriggerEntityUpdated" xml:space="preserve">
+    <value>Тот же тип записи и необязательная пауза перед стартом. Срабатывает при сохранении записи. Изменённые поля — в {{trigger.…}}.</value>
+  </data>
+  <data name="DocsTriggerEntityDeleted" xml:space="preserve">
+    <value>Тот же тип записи и необязательная пауза перед стартом. Срабатывает при удалении записи.</value>
+  </data>
+  <data name="DocsTriggerEvent" xml:space="preserve">
+    <value>Имя события должно быть ровно одним из:
+UserRegistered — {{trigger.id}}, {{trigger.email}}, {{trigger.firstName}}, {{trigger.lastName}}.
+SupportTicketCreated — {{trigger.id}}, {{trigger.ticketId}}, {{trigger.subject}}, {{trigger.status}}, {{trigger.type}}.
+SupportTicketStatusChanged — {{trigger.id}}, {{trigger.ticketId}}, {{trigger.status}}.
+Пауза перед стартом необязательна.</value>
+  </data>
+  <data name="DocsTriggerWebhook" xml:space="preserve">
+    <value>После Publish скопируйте URL и HMAC-секрет в Connections.
+Вызывающая сторона шлёт POST с заголовком X-Partnerly-Signature.
+Пауза перед стартом необязательна. Поля тела — в {{trigger.…}}.</value>
+  </data>
+  <data name="DocsTriggerDelayTitle" xml:space="preserve">
+    <value>Отложенный старт</value>
+  </data>
+  <data name="DocsTriggerDelay" xml:space="preserve">
+    <value>Ждать — число, минимум 1. Единица — секунды, минуты, часы или дни.
+Процесс стартует только после этой паузы. Это первый блок, если задержать нужно сам старт — не действие Delay в середине цепочки.</value>
+  </data>
+  <data name="DocsActionsTitle" xml:space="preserve">
+    <value>Действия — как настроить каждый шаг</value>
+  </data>
+  <data name="DocsActionDelay" xml:space="preserve">
+    <value>Ждать — число, минимум 1.
+Единица — секунды, минуты, часы или дни.
+Запуск встаёт на паузу и сам продолжается. Это шаг в середине процесса.</value>
+  </data>
+  <data name="DocsActionSetVariable" xml:space="preserve">
+    <value>Имя переменной — буквы, цифры, подчёркивание.
+Значение — любой текст, плейсхолдеры можно.
+Дальше читается как {{vars.это_имя}}.</value>
+  </data>
+  <data name="DocsActionSendEmail" xml:space="preserve">
+    <value>Кому — обязательный email. Можно {{trigger.email}}.
+Шаблон письма — необязательный код из Email templates. Если заполнен, Тема и Сообщение ниже игнорируются.
+Тема / Сообщение — если шаблон пустой. Тема по умолчанию — Partnerly.</value>
+  </data>
+  <data name="DocsActionSendNotification" xml:space="preserve">
+    <value>Текст уведомления — сообщение в приложении.
+User id (необязательно) — GUID пользователя. Пустое поле шлёт владельцу агента.
+Тип уведомления — метка (по умолчанию System).
+Ссылка (необязательно) — URL из уведомления.</value>
+  </data>
+  <data name="DocsActionHttpRequest" xml:space="preserve">
+    <value>HTTP-метод — GET, POST, PUT, PATCH или DELETE.
+URL — публичный http/https или путь, если заполнен id сохранённого подключения (из Connections).
+Тело запроса — только для POST, PUT, PATCH. GET и DELETE его игнорируют.
+Частные и локальные адреса блокируются.</value>
+  </data>
+  <data name="DocsActionWebhook" xml:space="preserve">
+    <value>URL webhook — публичный http/https. Partnerly шлёт POST.
+JSON-тело — тело запроса, плейсхолдеры можно.
+Секрет подписи (необязательно) — если задан, в запрос добавляется заголовок X-Partnerly-Signature (HMAC-SHA256).
+Те же правила URL, что у HTTP request.</value>
+  </data>
+  <data name="DocsActionExecuteWorkflow" xml:space="preserve">
+    <value>Id дочерней автоматизации — GUID другого вашего опубликованного агента.
+Шаг запускает его и не ждёт окончания.</value>
+  </data>
+  <data name="DocsActionBranch" xml:space="preserve">
+    <value>Левое значение, Сравнить, Правое значение.
+Операторы: equals, not equals, contains, greater than, less than, is empty, is not empty, changed.
+В левом и правом можно плейсхолдеры.
+С блока два выхода: первый — True, второй — False.</value>
+  </data>
+  <data name="DocsActionWaitUntil" xml:space="preserve">
+    <value>Те же поля условия, что у Branch, плюс Сдаться после (необязательный дедлайн).
+Запуск ждёт, пока условие станет истинным или выйдет срок. Пустой дедлайн — ждать дальше.</value>
+  </data>
+  <data name="DocsActionSwitch" xml:space="preserve">
+    <value>Значение для сравнения — плейсхолдеры можно.
+Пустое значение идёт в первый выход (default). Второй выход — другой случай.</value>
+  </data>
+  <data name="DocsActionCreateRecord" xml:space="preserve">
+    <value>Тип записи, затем Поля (по строке, например subject=Hello).
+Создание работает только для обращения (subject, message, status, userId, assignedTo, note) и уведомления (type, message, userId, link).
+User, группу и шаблон письма здесь создать нельзя.</value>
+  </data>
+  <data name="DocsActionUpdateRecord" xml:space="preserve">
+    <value>Тип записи.
+Какая запись — ключ по строке, например id={{trigger.id}}.
+Поля — что изменить.
+Изменение работает для User (firstName, lastName, isBlocked) и обращения (subject, status, assignedTo, note).</value>
+  </data>
+  <data name="DocsActionFindRecord" xml:space="preserve">
+    <value>Тип записи и Фильтры (по строке, например email={{trigger.email}} или id={{trigger.id}}).
+Работает для User, обращения, уведомления, группы и шаблона письма.
+Имя блока — буквы и цифры. Найденная строка: {{steps.BlockName.result.result.email}}.</value>
+  </data>
+  <data name="DocsActionDeleteRecord" xml:space="preserve">
+    <value>Тип записи и Какая запись (ключ по строке, например id={{trigger.id}}).
+Удаление разрешено для обращения.</value>
+  </data>
+  <data name="DocsOpenGuide" xml:space="preserve">
+    <value>Полный гид по настройке</value>
+  </data>
+  <data name="NodeTypeWebhookAction" xml:space="preserve">
+    <value>Исходящий webhook</value>
   </data>
 
   <data name="LandingPromptWhat" xml:space="preserve">
@@ -2648,6 +2802,9 @@
   <data name="UntitledAutomation" xml:space="preserve">
     <value>Без названия</value>
   </data>
+  <data name="AutomationRunNeedsPublish" xml:space="preserve">
+    <value>Сначала опубликуйте агента</value>
+  </data>
   <data name="AutomationPublished" xml:space="preserve">
     <value>Автоматизация опубликована</value>
   </data>
@@ -2783,6 +2940,15 @@
   <data name="ActionBlocksHelp" xml:space="preserve">
     <value>Шаги, которые выполнятся после триггера.</value>
   </data>
+  <data name="AddTrigger" xml:space="preserve">
+    <value>Триггер</value>
+  </data>
+  <data name="AddAction" xml:space="preserve">
+    <value>Действие</value>
+  </data>
+  <data name="BuilderMenu" xml:space="preserve">
+    <value>Меню</value>
+  </data>
   <data name="SelectNodeHint" xml:space="preserve">
     <value>Выберите блок на схеме, чтобы настроить его.</value>
   </data>
@@ -2850,7 +3016,7 @@
     <value>Имя события</value>
   </data>
   <data name="EventNameHelp" xml:space="preserve">
-    <value>Должно совпадать с событием системы, например UserCreated.</value>
+    <value>Ровно одно из: UserRegistered, SupportTicketCreated или SupportTicketStatusChanged.</value>
   </data>
   <data name="WebhookTriggerHelp" xml:space="preserve">
     <value>После публикации URL и секрет появятся в Подключениях.</value>
@@ -2867,8 +3033,14 @@
   <data name="VariableNameHelp" xml:space="preserve">
     <value>Буквы, цифры и подчёркивание. Потом {{vars.name}}.</value>
   </data>
+  <data name="VariableValueHelp" xml:space="preserve">
+    <value>Любой текст. Плейсхолдеры {{…}} подставляются при выполнении шага.</value>
+  </data>
   <data name="EmailTo" xml:space="preserve">
     <value>Кому отправить</value>
+  </data>
+  <data name="EmailToHelp" xml:space="preserve">
+    <value>Обязательно. Email или {{trigger.email}}.</value>
   </data>
   <data name="EmailSubject" xml:space="preserve">
     <value>Тема</value>
@@ -2885,6 +3057,9 @@
   <data name="NotificationUser" xml:space="preserve">
     <value>Id пользователя (необязательно)</value>
   </data>
+  <data name="NotificationUserHelp" xml:space="preserve">
+    <value>GUID пользователя. Пустое поле — владельцу этого агента.</value>
+  </data>
   <data name="NotificationMessage" xml:space="preserve">
     <value>Текст уведомления</value>
   </data>
@@ -2900,8 +3075,14 @@
   <data name="HttpUrl" xml:space="preserve">
     <value>URL</value>
   </data>
+  <data name="HttpUrlHelp" xml:space="preserve">
+    <value>Публичный http/https или путь, если задан id сохранённого подключения.</value>
+  </data>
   <data name="HttpBody" xml:space="preserve">
     <value>Тело запроса</value>
+  </data>
+  <data name="HttpBodyHelp" xml:space="preserve">
+    <value>Только для POST, PUT и PATCH. GET и DELETE это поле игнорируют.</value>
   </data>
   <data name="HttpConnection" xml:space="preserve">
     <value>Id сохранённого подключения</value>
@@ -2912,8 +3093,17 @@
   <data name="WebhookBody" xml:space="preserve">
     <value>JSON-тело</value>
   </data>
+  <data name="WebhookUrlHelp" xml:space="preserve">
+    <value>Публичный http/https. Partnerly шлёт POST.</value>
+  </data>
+  <data name="WebhookBodyHelp" xml:space="preserve">
+    <value>Тело запроса. Можно плейсхолдеры {{…}}.</value>
+  </data>
   <data name="WebhookSecretField" xml:space="preserve">
     <value>Секрет подписи (необязательно)</value>
+  </data>
+  <data name="WebhookSecretHelp" xml:space="preserve">
+    <value>Если задан, в запрос добавляется заголовок X-Partnerly-Signature.</value>
   </data>
   <data name="ChildAutomation" xml:space="preserve">
     <value>Id дочерней автоматизации</value>
@@ -2947,6 +3137,9 @@
   </data>
   <data name="RecordKey" xml:space="preserve">
     <value>Какая запись</value>
+  </data>
+  <data name="RecordKeyHelp" xml:space="preserve">
+    <value>Поле по строке, которое находит запись, например id={{trigger.id}}.</value>
   </data>
   <data name="RecordFilters" xml:space="preserve">
     <value>Фильтры</value>
@@ -3070,6 +3263,75 @@
   </data>
   <data name="ReadyTemplates" xml:space="preserve">
     <value>Готовые шаблоны</value>
+  </data>
+  <data name="TplSizeSmall" xml:space="preserve">
+    <value>Малый</value>
+  </data>
+  <data name="TplSizeMedium" xml:space="preserve">
+    <value>Средний</value>
+  </data>
+  <data name="TplSizeLarge" xml:space="preserve">
+    <value>Большой</value>
+  </data>
+  <data name="TplManualFlag" xml:space="preserve">
+    <value>Ручной флаг</value>
+  </data>
+  <data name="TplManualFlagBody" xml:space="preserve">
+    <value>Запуск вручную, переменная ready=yes.</value>
+  </data>
+  <data name="TplDelayThenFlag" xml:space="preserve">
+    <value>Пауза и флаг</value>
+  </data>
+  <data name="TplDelayThenFlagBody" xml:space="preserve">
+    <value>Ждёт 5 секунд, затем done=1.</value>
+  </data>
+  <data name="TplDailyMarker" xml:space="preserve">
+    <value>Ежедневная метка</value>
+  </data>
+  <data name="TplDailyMarkerBody" xml:space="preserve">
+    <value>Каждый день в 09:00. Пишет ran=1.</value>
+  </data>
+  <data name="TplWelcomePing" xml:space="preserve">
+    <value>Приветствие</value>
+  </data>
+  <data name="TplWelcomePingBody" xml:space="preserve">
+    <value>При регистрации пользователя — уведомление владельцу с именем и почтой.</value>
+  </data>
+  <data name="TplHourlyPulse" xml:space="preserve">
+    <value>Часовой пульс</value>
+  </data>
+  <data name="TplHourlyPulseBody" xml:space="preserve">
+    <value>Каждые 60 минут сохраняет время запуска в lastPulse.</value>
+  </data>
+  <data name="TplNewTicketAlert" xml:space="preserve">
+    <value>Новое обращение</value>
+  </data>
+  <data name="TplNewTicketAlertBody" xml:space="preserve">
+    <value>Новый тикет: номер в переменную, уведомление, письмо на notify@example.com. Адрес замените.</value>
+  </data>
+  <data name="TplInboundWebhook" xml:space="preserve">
+    <value>Входящий webhook</value>
+  </data>
+  <data name="TplInboundWebhookBody" xml:space="preserve">
+    <value>После Publish POST на URL из Connections. Пишет source и id запуска, затем уведомляет владельца.</value>
+  </data>
+  <data name="TplWeekdayBriefing" xml:space="preserve">
+    <value>Будничный брифинг</value>
+  </data>
+  <data name="TplWeekdayBriefingBody" xml:space="preserve">
+    <value>Cron 09:00 пн–пт: флаг, уведомление, письмо на notify@example.com. Адрес замените.</value>
+  </data>
+  <data name="TplNewUserOnboarding" xml:space="preserve">
+    <value>Онбординг пользователя</value>
+  </data>
+  <data name="TplNewUserOnboardingBody" xml:space="preserve">
+    <value>UserRegistered: пауза 2 минуты, приветственное письмо, уведомление пользователю, при наличии почты — тикет онбординга.</value>
+  </data>
+  <data name="TplTicketTriage" xml:space="preserve">
+    <value>Разбор обращений</value>
+  </data>
+  <data name="TplTicketTriageBody" xml:space="preserve">
+    <value>Новый тикет: переменные, уведомление, ветка New (письмо и запись) или поиск + HTTP + исходящий webhook. Замените notify@example.com и URL webhook.</value>
   </data>
   <data name="AutomationEmptyDefinitions" xml:space="preserve">
     <value>Автоматизаций пока нет</value>
