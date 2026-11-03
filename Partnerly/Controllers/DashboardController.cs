@@ -172,7 +172,6 @@ namespace Partnerly.Controllers
             if (_currentUser.UserId != null)
             { 
                 var user = await _userService.GetUserByIDAsync(_currentUser.UserId);
-                var referrals = await _userService.GetReferralsAsync(user?.Id);
 
                 if (user != null)
                 {
@@ -186,14 +185,6 @@ namespace Partnerly.Controllers
                     model.MyReferralCode = user.MyReferralCode;
                     model.ReferrerName = $"{referrer?.FirstName} {referrer?.LastName}";
                     model.CreatedDate = user.CreatedDate;
-
-                    if (referrals != null && referrals.Count() > 0)
-                    {
-                        foreach (var referral in referrals)
-                        {
-                            model.Refferals.Add(new UserViewModel { FirstName = referral.FirstName, LastName = referral.LastName, PhotoUrl = referral.PhotoUrl, Id = referral.Id, CreatedDate = referral.CreatedDate, Phone = referral.Phone });
-                        }
-                    }
                 }
             }
 
@@ -218,14 +209,23 @@ namespace Partnerly.Controllers
                 MyReferralCode = user.MyReferralCode,
             };
 
-            return View(userAsView);
+            return SettingsResult(userAsView);
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Settings(Guid id, MySettingsViewModel model)
         {
-            if (id != model.Id) return NotFound();
+            model ??= new MySettingsViewModel();
+            if (id == Guid.Empty)
+            {
+                id = model.Id;
+            }
+
+            if (id != model.Id)
+            {
+                return IsAjax() ? SettingsJson(false, "Not found") : NotFound();
+            }
 
             bool passwordChanged = model.OldPassword != null || model.Password != null || model.ConfirmPassword != null;
 
@@ -239,7 +239,7 @@ namespace Partnerly.Controllers
                         if (!BCrypt.Net.BCrypt.Verify(model.OldPassword, user.PasswordHash) || user.IsDeleted)
                         {
                             ModelState.AddModelError("OldPassword", ErrorMessages.IncorrectPassword);
-                            return View(model);
+                            return SettingsInvalid(model);
                         }
                     }
 
@@ -247,7 +247,7 @@ namespace Partnerly.Controllers
                     if (userSameEmail != null && userSameEmail.Id != user.Id)
                     {
                         ModelState.AddModelError("Email", ErrorMessages.UserWithEmailAlreadyExists);
-                        return View(model);
+                        return SettingsInvalid(model);
                     }
                     else if (!string.IsNullOrEmpty(model.Phone))
                     {
@@ -255,17 +255,17 @@ namespace Partnerly.Controllers
                         if (userSamePhone != null && userSamePhone.Id != user.Id)
                         {
                             ModelState.AddModelError("Phone", ErrorMessages.UserWithPhoneAlreadyExists);
-                            return View(model);
+                            return SettingsInvalid(model);
                         }
 
                         var error = ModelState["Phone"]?.Errors.FirstOrDefault()?.ErrorMessage;
                         if (error != null)
                         {
                             ModelState.AddModelError("Phone", error);
-                            return View(model);
+                            return SettingsInvalid(model);
                         }
                     }
-                    
+
                     user.FirstName = model.FirstName;
                     user.LastName = model.LastName;
                     user.Phone = model.Phone;
@@ -285,14 +285,59 @@ namespace Partnerly.Controllers
                         {
                             ModelState.AddModelError("", error);
                         }
-                        return View(model);
+                        return SettingsInvalid(model);
+                    }
+
+                    if (IsAjax())
+                    {
+                        return SettingsJson(true, Messages.RecordSaved);
                     }
 
                     TempData["ToastMessage"] = Messages.RecordSaved;
                     return RedirectToAction("Settings", new { });
                 }
             }
-            return View(model);
+            return SettingsInvalid(model);
+        }
+
+        private bool IsAjax()
+        {
+            return string.Equals(
+                Request.Headers["X-Requested-With"],
+                "XMLHttpRequest",
+                StringComparison.OrdinalIgnoreCase);
+        }
+
+        private IActionResult SettingsResult(MySettingsViewModel model)
+        {
+            if (IsAjax())
+            {
+                return PartialView("~/Views/Shared/Dashboard/_MySettingsPopup.cshtml", model);
+            }
+
+            ViewBag.MySettingsStandalone = true;
+            return View("Settings", model);
+        }
+
+        private IActionResult SettingsJson(bool success, string? message, Dictionary<string, string>? errors = null)
+        {
+            return Json(new { success, message, errors });
+        }
+
+        private IActionResult SettingsInvalid(MySettingsViewModel model)
+        {
+            if (IsAjax())
+            {
+                var errors = ModelState
+                    .Where(item => item.Value != null && item.Value.Errors.Count > 0)
+                    .ToDictionary(
+                        item => item.Key,
+                        item => item.Value!.Errors[0].ErrorMessage);
+                var message = errors.Values.FirstOrDefault();
+                return SettingsJson(false, message, errors);
+            }
+
+            return SettingsResult(model);
         }
 
         private AutomationDashboardSnapshot BuildAutomationSnapshot()

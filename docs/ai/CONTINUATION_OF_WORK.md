@@ -9,11 +9,12 @@
 - Документация агента на месте.
 - Коммит `b406307` — Automation PHASE 3–7 + хаб + Agents KPI + меню Agents/футер + тесты + миграция `20261102134353_AddAutomationTables`.
 - Коммит `7788ec1` — glass попапы/DataTable, Builder как страница, Agents context menu, индикатор `IsActive`, Delete glass-попап.
+- OpenNewCase — glass-попап, без поля User. My Profile без вкладок/My Team. My Settings — попап, save on close. Поля системы 40px. Неиспользуемые Automation-views удалены.
 - Миграция Automation **применена** на локальной БД 2026-11-02. Другие стенды / прод — не трогать без отдельного ок.
 
 ## Последняя задача
 
-Владелец: commit и push. Коммит `7788ec1` на `Cursor-Agent`; push на `origin/Cursor-Agent`.
+Коммит и push накопленной работы: OpenNewCase/My Settings попапы, My Profile без вкладок, компактные поля, удаление unused Automation pages.
 
 ## Уже сделано недавно
 
@@ -45,7 +46,7 @@
 
 ## Рекомендуемый следующий шаг
 
-1. Глазами: индикатор Agents, Delete glass-попап, right-click, Builder-страница, glass попапы.
+1. Глазами: OpenNewCase попап (футер + прямой URL, phone/tablet/desktop, dark, успех/лимит/валидация).
 2. PHASE 8 отчёт — только по просьбе.
 3. Другие стенды / прод — миграцию `AddAutomationTables` не применять без отдельного ок.
 

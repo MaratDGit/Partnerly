@@ -503,11 +503,34 @@
 
 
 .profile-referral-btn {
-    flex-shrink: 1;
-    border-radius: 9px;
-    padding: 9px 15px;
-    box-shadow: 0 4px 10px rgba(105, 108, 255, .18);
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    flex-shrink: 0;
+    min-height: 28px;
+    padding: 4px 10px;
+    border: 1px solid rgba(99, 102, 241, 0.22);
+    border-radius: 8px;
+    color: #4338ca;
+    background: rgba(255, 255, 255, 0.78);
+    box-shadow: 0 2px 8px rgba(105, 108, 255, .12);
+    font-size: 12px;
+    font-weight: 600;
+    line-height: 1.2;
+    white-space: nowrap;
 }
+
+    .profile-referral-btn i {
+        font-size: 14px;
+        line-height: 1;
+    }
+
+    .profile-referral-btn:hover,
+    .profile-referral-btn:focus-visible {
+        color: #4f46e5;
+        background: rgba(255, 255, 255, 0.96);
+        border-color: rgba(99, 102, 241, 0.4);
+    }
 
 
 /* =========================================================
@@ -1319,7 +1342,8 @@
 
 
     .profile-referral-btn {
-        width: 100%;
+        width: auto;
+        max-width: 100%;
     }
 
 
@@ -1773,8 +1797,18 @@ html[data-theme="dark"] .team-members-header > div > span {
 }
 
 html[data-theme="dark"] .profile-referral-btn {
-    box-shadow: 0 4px 16px rgba(105,108,255,.22);
+    color: #edf0ff;
+    background: rgba(22, 24, 48, 0.78);
+    border-color: rgba(167, 139, 250, 0.28);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.18);
 }
+
+    html[data-theme="dark"] .profile-referral-btn:hover,
+    html[data-theme="dark"] .profile-referral-btn:focus-visible {
+        color: #c4b5fd;
+        background: rgba(36, 38, 72, 0.96);
+        border-color: rgba(167, 139, 250, 0.42);
+    }
 
 /* Tabs */
 

@@ -4,6 +4,28 @@
 
 ---
 
+## TR-2026-11-03-06 — My Settings как glass-попап, save on close
+
+- **Дата:** 2026-11-03
+- **Суть:** My Settings больше не страница со sticky buttons. Навбар открывает glass-оверлей. Close / Escape / клик по фону делают тот же POST, что Save; ошибки оставляют попап открытым.
+- **Причина:** владелец явно: попап, без sticky, закрытие = сохранение.
+- **Затрагивает:** `DashboardController.Settings`, `_MySettingsPopup`, `open-my-settings.js`, `page-mysettings.css`, `_NavbarPartial`, `_CommonMasterLayout`.
+- **Последствия:** прямая ссылка `/Dashboard/Settings` тоже попап. Логика пароля (пусто = не менять) не менялась. Header — один заголовок Settings; левое меню без квадратных иконок; поля в одну колонку; скролл только в секции полей. Браузер не проверялся.
+- **Альтернативы:** оставить sticky Save внутри попапа — отклонено явно.
+
+---
+
+## TR-2026-11-03-05 — OpenNewCase как glass-попап
+
+- **Дата:** 2026-11-03
+- **Суть:** Создание обращения в поддержку — стеклянный оверлей, не двухколоночная страница. Футер Support перехватывает переход и открывает попап на текущей странице (AJAX GET/POST). Прямой URL `/SupportTickets/OpenNewCase` показывает тот же попап. Карточка адаптивна: desktop ≤520px, tablet, phone sheet с safe-area.
+- **Причина:** владелец: страница OpenNewCase должна быть попапом как другие, с адаптивкой на все устройства.
+- **Затрагивает:** `SupportTicketsController.OpenNewCase`, `_OpenNewCasePopup`, `open-support-case.js`, `page-newsupportticket.css`, `_Footer`, `_CommonMasterLayout`.
+- **Последствия:** без JS футер по-прежнему ведёт на `/SupportTickets/OpenNewCase`. Право `support_tickets.create` не менялось. Браузер не проверялся.
+- **Альтернативы:** оставить полноэкранную страницу со glass-карточкой — отклонено явно.
+
+---
+
 ## TR-2026-11-03-04 — Индикатор агента = IsActive; Delete — glass-попап
 
 - **Дата:** 2026-11-03

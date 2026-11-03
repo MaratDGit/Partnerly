@@ -1,0 +1,128 @@
+@model Partnerly.Models.ViewModels.SupportTicketViewModel
+@{
+    var standalone = ViewBag.SupportCaseStandalone as bool? == true;
+    var limitMessage = ViewBag.CaseCreationLimit as string
+        ?? TempData.Peek("CaseCreationLimit") as string;
+    var successMessage = TempData.Peek("SupportSuccess") as string;
+    if (successMessage != null)
+    {
+        TempData.Remove("SupportSuccess");
+    }
+    if (!standalone && TempData.Peek("CaseCreationLimit") != null)
+    {
+        TempData.Remove("CaseCreationLimit");
+    }
+}
+
+<div id="partnerlySupportCase"
+     class="support-case@(standalone ? " is-open" : "")"
+     hidden="@(standalone ? null : "hidden")"
+     data-support-standalone="@(standalone ? "true" : "false")"
+     aria-hidden="@(standalone ? "false" : "true")">
+    <div class="support-case-card"
+         role="dialog"
+         aria-modal="true"
+         aria-labelledby="partnerlySupportCaseTitle">
+        <button type="button"
+                class="support-case-close"
+                data-support-case-close
+                aria-label="@Localizer["Close"]">
+            <i class="bx bx-x"></i>
+        </button>
+
+        <h2 id="partnerlySupportCaseTitle">@Localizer["Openasupportcase"]</h2>
+        <p class="support-case-lead">@Localizer["Supportformdescription"]</p>
+
+        <div class="support-case-alerts" data-support-case-alerts>
+            @if (!string.IsNullOrWhiteSpace(successMessage))
+            {
+                <div class="support-alert support-alert-success" role="alert">
+                    <div class="support-alert-icon">
+                        <i class="bx bx-check"></i>
+                    </div>
+                    <div class="support-alert-body">
+                        <strong>@Localizer["Success"]</strong>
+                        <div>@successMessage</div>
+                    </div>
+                    <button type="button"
+                            class="btn-close support-alert-close"
+                            data-close-support-alert
+                            aria-label="@Localizer["Close"]">
+                    </button>
+                </div>
+            }
+            @if (!string.IsNullOrWhiteSpace(limitMessage))
+            {
+                <div class="support-alert support-alert-danger" role="alert">
+                    <div class="support-alert-icon">
+                        <i class="bx bx-error-circle"></i>
+                    </div>
+                    <div class="support-alert-body">
+                        <strong>@Localizer["Error"]</strong>
+                        <div>@limitMessage</div>
+                    </div>
+                    <button type="button"
+                            class="btn-close support-alert-close"
+                            data-close-support-alert
+                            aria-label="@Localizer["Close"]">
+                    </button>
+                </div>
+            }
+        </div>
+
+        <form asp-action="OpenNewCase"
+              asp-controller="SupportTickets"
+              method="post"
+              class="support-form"
+              data-support-case-form>
+            @Html.AntiForgeryToken()
+            <input asp-for="UserId" hidden />
+            <input asp-for="Status" hidden />
+
+            <div class="support-field">
+                <label asp-for="Subject" class="form-label"></label>
+                <div class="support-input-wrapper">
+                    <i class="bx bx-heading"></i>
+                    <input asp-for="Subject"
+                           class="form-control"
+                           placeholder="@Localizer["Brieflydescribeyourissue"]"
+                           maxlength="50"
+                           autocomplete="off" />
+                </div>
+                <span asp-validation-for="Subject" class="text-danger" data-valmsg="Subject"></span>
+            </div>
+
+            <div class="support-field">
+                <label asp-for="Message" class="form-label"></label>
+                <div class="support-textarea-wrapper">
+                    <i class="bx bx-message-detail"></i>
+                    <textarea asp-for="Message"
+                              class="form-control"
+                              rows="5"
+                              placeholder="@Localizer["Describeissueindetail"]"></textarea>
+                </div>
+                <span asp-validation-for="Message" class="text-danger" data-valmsg="Message"></span>
+            </div>
+
+            <div class="support-form-footer">
+                <div class="support-security">
+                    <i class="bx bx-lock-alt"></i>
+                    <span>@Localizer["Yourinformationissecure"]</span>
+                </div>
+                <div class="support-case-actions">
+                    <button type="button"
+                            class="btn btn-outline-secondary"
+                            data-support-case-close>
+                        @Localizer["Cancel"]
+                    </button>
+                    <button type="submit"
+                            class="btn support-submit-btn"
+                            disabled="@(string.IsNullOrWhiteSpace(limitMessage) ? null : "disabled")">
+                        <i class="bx bx-send"></i>
+                        @Localizer["Send"]
+                    </button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>

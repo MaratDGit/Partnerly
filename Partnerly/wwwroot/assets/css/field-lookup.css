@@ -363,7 +363,7 @@
 
 .lookup-input {
     width: 100%;
-    padding-right: 42px;
+    padding-right: 32px !important;
 }
 
 
@@ -373,19 +373,20 @@
 
 .lookup-icon {
     position: absolute;
-    right: 15px;
-    top: 50%;
-    width: 24px;
-    height: 24px;
+    right: 8px;
+    top: 20px;
+    width: 18px;
+    height: 18px;
     display: flex;
     align-items: center;
     justify-content: center;
     transform: translateY(-50%);
     color: #8592a3;
-    font-size: 20px;
+    font-size: 16px;
+    line-height: 1;
     cursor: pointer;
     z-index: 2;
-    border-radius: 6px;
+    border-radius: 4px;
     transition: color .2s ease, background-color .2s ease, transform .2s ease;
 }
 

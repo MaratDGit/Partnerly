@@ -51,15 +51,13 @@ namespace Partnerly.Controllers
         [Authorize(Policy = "Permission:support_tickets.create")]
         public async Task<IActionResult> OpenNewCase()
         {
-            var user = await _userService.GetUserByIDAsync(_currentUser.UserId);
-            SupportTicketViewModel model = new SupportTicketViewModel { UserId = _currentUser.UserId, CreatorName = $"{user?.FirstName} {user?.LastName} / {user?.MyReferralCode}", Status = SupportTicketStatusAttribute.New };
-
+            var model = await BuildOpenNewCaseModelAsync();
             if (await HasLimitExpired(_currentUser.UserId))
             {
-                TempData["CaseCreationLimit"] = Messages.CaseCreationLimit;
+                ViewBag.CaseCreationLimit = Messages.CaseCreationLimit;
             }
 
-            return View(model);
+            return OpenNewCaseResult(model);
         }
 
         [Authorize(Policy = "Permission:support_tickets.edit")]
@@ -107,10 +105,18 @@ namespace Partnerly.Controllers
         [Authorize(Policy = "Permission:support_tickets.create")]
         public async Task<IActionResult> OpenNewCase(SupportTicketViewModel model)
         {
+            model ??= new SupportTicketViewModel();
+            await FillOpenNewCaseModelAsync(model);
+
             if (await HasLimitExpired(_currentUser.UserId))
             {
-                TempData["CaseCreationLimit"] = Messages.CaseCreationLimit;
-                return View(model);
+                ViewBag.CaseCreationLimit = Messages.CaseCreationLimit;
+                if (IsAjax())
+                {
+                    return OpenNewCaseJson(false, Messages.CaseCreationLimit);
+                }
+
+                return OpenNewCaseResult(model);
             }
 
             if (ModelState.IsValid)
@@ -120,12 +126,12 @@ namespace Partnerly.Controllers
                 if (user == null)
                 {
                     ModelState.AddModelError("Subject", "Error");
-                    return View(model);
+                    return OpenNewCaseInvalid(model);
                 }
 
                 SupportTicket newTicket = new SupportTicket();
-                newTicket.Subject = model?.Subject;
-                newTicket.Message = model?.Message;
+                newTicket.Subject = model.Subject;
+                newTicket.Message = model.Message;
                 newTicket.UserId = model.UserId;
 
                 var result = await _supportTicketService.CreateSupportTicketAsync(newTicket);
@@ -135,13 +141,80 @@ namespace Partnerly.Controllers
                     {
                         ModelState.AddModelError("Subject", error);
                     }
-                    return View(model);
+                    return OpenNewCaseInvalid(model);
+                }
+
+                if (IsAjax())
+                {
+                    return OpenNewCaseJson(true, Messages.SupportSuccess);
                 }
 
                 TempData["SupportSuccess"] = Messages.SupportSuccess;
                 return RedirectToAction(nameof(OpenNewCase));
             }
-            return View(model);
+
+            return OpenNewCaseInvalid(model);
+        }
+
+        private bool IsAjax()
+        {
+            return string.Equals(
+                Request.Headers["X-Requested-With"],
+                "XMLHttpRequest",
+                StringComparison.OrdinalIgnoreCase);
+        }
+
+        private async Task<SupportTicketViewModel> BuildOpenNewCaseModelAsync()
+        {
+            var model = new SupportTicketViewModel
+            {
+                UserId = _currentUser.UserId,
+                Status = SupportTicketStatusAttribute.New
+            };
+            await FillOpenNewCaseModelAsync(model);
+            return model;
+        }
+
+        private async Task FillOpenNewCaseModelAsync(SupportTicketViewModel model)
+        {
+            var user = await _userService.GetUserByIDAsync(_currentUser.UserId);
+            model.UserId = _currentUser.UserId;
+            model.Status = string.IsNullOrWhiteSpace(model.Status)
+                ? SupportTicketStatusAttribute.New
+                : model.Status;
+            model.CreatorName = $"{user?.FirstName} {user?.LastName} / {user?.MyReferralCode}";
+        }
+
+        private IActionResult OpenNewCaseResult(SupportTicketViewModel model)
+        {
+            if (IsAjax())
+            {
+                return PartialView("~/Views/Shared/Support/_OpenNewCasePopup.cshtml", model);
+            }
+
+            ViewBag.SupportCaseStandalone = true;
+            return View("OpenNewCase", model);
+        }
+
+        private IActionResult OpenNewCaseJson(bool success, string? message, Dictionary<string, string>? errors = null)
+        {
+            return Json(new { success, message, errors });
+        }
+
+        private IActionResult OpenNewCaseInvalid(SupportTicketViewModel model)
+        {
+            if (IsAjax())
+            {
+                var errors = ModelState
+                    .Where(item => item.Value != null && item.Value.Errors.Count > 0)
+                    .ToDictionary(
+                        item => item.Key,
+                        item => item.Value!.Errors[0].ErrorMessage);
+                var message = errors.Values.FirstOrDefault();
+                return OpenNewCaseJson(false, message, errors);
+            }
+
+            return OpenNewCaseResult(model);
         }
 
         public async Task<bool> HasLimitExpired(Guid? userID)

@@ -1,5 +1,459 @@
-﻿/* Direct .card child of .partnerly-layout-content —
-   fills remaining height at ≥1200px like Roles / Users. */
+﻿/* Glass My Settings popup */
+
+.my-settings {
+    position: fixed;
+    inset: 0;
+    z-index: 1320;
+    display: flex;
+    align-items: flex-start;
+    justify-content: center;
+    padding: 48px 16px 16px;
+    padding-top: max(24px, env(safe-area-inset-top, 0px));
+    padding-right: max(16px, env(safe-area-inset-right, 0px));
+    padding-bottom: max(16px, env(safe-area-inset-bottom, 0px));
+    padding-left: max(16px, env(safe-area-inset-left, 0px));
+    background: var(--partnerly-glass-overlay, rgba(238, 240, 248, 0.48));
+    backdrop-filter: blur(14px);
+    -webkit-backdrop-filter: blur(14px);
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+    transition: opacity 0.28s ease, visibility 0.28s ease;
+}
+
+    .my-settings.is-open {
+        opacity: 1;
+        visibility: visible;
+        pointer-events: auto;
+        overflow: hidden;
+        overscroll-behavior: contain;
+    }
+
+    .my-settings[hidden] {
+        display: none !important;
+    }
+
+    .my-settings.is-open[hidden] {
+        display: flex !important;
+    }
+
+body.is-my-settings-open,
+body.is-my-settings-open .partnerly-layout-page,
+body.is-my-settings-open .partnerly-layout-main,
+body.is-my-settings-open .partnerly-layout-content {
+    overflow: hidden;
+}
+
+.my-settings-card {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    width: 720px;
+    height: 640px;
+    max-width: calc(100vw - 32px);
+    max-height: calc(100vh - 32px);
+    max-height: calc(100dvh - 32px);
+    overflow: hidden;
+    margin: auto;
+    padding: 16px 16px 12px;
+    border: 1px solid var(--partnerly-glass-border, rgba(99, 102, 241, 0.18));
+    border-radius: var(--partnerly-glass-radius, 28px);
+    background: var(--partnerly-glass-bg, rgba(255, 255, 255, 0.78));
+    box-shadow: var(--partnerly-glass-shadow, 0 18px 50px rgba(49, 46, 129, 0.12)), var(--partnerly-glass-inset, inset 0 1px 0 rgba(255, 255, 255, 0.82));
+    backdrop-filter: blur(var(--partnerly-glass-blur, 16px));
+    -webkit-backdrop-filter: blur(var(--partnerly-glass-blur, 16px));
+}
+
+.my-settings-close {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    width: 32px;
+    height: 32px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0;
+    border: 0;
+    border-radius: 50%;
+    color: #312e81;
+    background: transparent;
+    cursor: pointer;
+}
+
+.my-settings.is-saving .my-settings-close {
+    opacity: 0.55;
+    pointer-events: none;
+}
+
+.my-settings-card h2 {
+    flex: 0 0 auto;
+    margin: 0 0 8px;
+    padding-right: 36px;
+    font-size: 1.05rem;
+    font-weight: 650;
+}
+
+.my-settings-alerts {
+    flex: 0 0 auto;
+    margin-bottom: 10px;
+}
+
+    .my-settings-alerts:empty {
+        display: none;
+        margin: 0;
+    }
+
+.my-settings-card #settingsForm {
+    display: flex;
+    flex-direction: column;
+    flex: 1 1 auto;
+    min-height: 0;
+    overflow: hidden;
+}
+
+.my-settings-card .settings-body {
+    display: flex;
+    flex-direction: row;
+    align-items: stretch;
+    flex: 1 1 auto;
+    min-height: 0;
+    overflow: hidden;
+    border: 0;
+    border-radius: 14px;
+    background: transparent;
+}
+
+.my-settings-card .settings-navigation {
+    flex: 0 0 168px;
+    width: 168px;
+    padding: 4px 8px 4px 0;
+    overflow: hidden;
+    background: transparent;
+    border: 0;
+}
+
+.my-settings-card .settings-tabs {
+    flex-direction: column;
+    flex-wrap: nowrap;
+    gap: 4px;
+    overflow: hidden;
+}
+
+.my-settings-card .settings-tabs .nav-item {
+    width: 100%;
+    flex: 0 0 auto;
+    min-width: 0;
+}
+
+.my-settings-card .settings-tabs .nav-link {
+    justify-content: flex-start;
+    align-items: center;
+    text-align: left;
+    gap: 8px;
+    padding: 8px 10px;
+}
+
+.my-settings-card .settings-tab-icon {
+    width: 18px;
+    height: 18px;
+    font-size: 16px;
+}
+
+.my-settings-card .settings-tab-text {
+    text-align: left;
+}
+
+.my-settings-card .settings-content {
+    display: flex;
+    flex-direction: column;
+    flex: 1 1 auto;
+    min-width: 0;
+    min-height: 0;
+    overflow: hidden;
+    padding: 4px 2px 4px 8px;
+}
+
+.my-settings-card .tab-content {
+    display: flex;
+    flex-direction: column;
+    flex: 1 1 auto;
+    min-height: 0;
+    overflow: hidden;
+}
+
+.my-settings-card .tab-pane {
+    min-height: 0;
+}
+
+    .my-settings-card .tab-pane.show.active {
+        display: flex;
+        flex-direction: column;
+        flex: 1 1 auto;
+        min-height: 0;
+        overflow: hidden;
+        height: 100%;
+    }
+
+.my-settings-card .settings-section-header,
+.my-settings-card .password-security-box {
+    flex: 0 0 auto;
+}
+
+.my-settings-card .settings-fields,
+.my-settings-card .notification-settings {
+    flex: 1 1 auto;
+    min-height: 0;
+    align-content: flex-start;
+    overflow-x: hidden;
+    overflow-y: auto;
+    overscroll-behavior: contain;
+    -webkit-overflow-scrolling: touch;
+    padding-right: 4px;
+}
+
+.my-settings-card .settings-actions {
+    display: none !important;
+}
+
+.my-settings-card .settings-section-header {
+    gap: 8px;
+    padding-bottom: 8px;
+    margin-bottom: 8px;
+    border: 0;
+}
+
+.my-settings-card .settings-section-icon {
+    width: 22px;
+    height: 22px;
+    border-radius: 0;
+    background: transparent;
+    font-size: 16px;
+}
+
+.my-settings-card .settings-section-header h5 {
+    margin: 0;
+    font-size: 0.8125rem;
+}
+
+.my-settings-card .settings-section-header p,
+.my-settings-card .password-security-box {
+    display: none;
+}
+
+.my-settings-card .settings-content {
+    --settings-gap: 6px;
+}
+
+.my-settings-card .settings-fields,
+.my-settings-card .notification-settings {
+    --settings-gap: 6px;
+    --bs-gutter-x: 0;
+    --bs-gutter-y: 0;
+    row-gap: 6px;
+    margin-top: 0;
+}
+
+.my-settings-card .settings-field {
+    gap: 8px;
+    height: auto;
+}
+
+.my-settings-card .settings-field-icon,
+.my-settings-card .settings-section-icon,
+.my-settings-card .settings-section-icon.password-icon,
+.my-settings-card .settings-section-icon.notification-icon,
+.my-settings-card .notification-option-icon,
+.my-settings-card .notification-option-icon.email-icon,
+.my-settings-card .notification-option-icon.notification-icon-small {
+    display: inline-flex;
+    width: auto;
+    height: auto;
+    min-width: 0;
+    min-height: 0;
+    margin: 0;
+    padding: 0;
+    border: 0;
+    border-radius: 0;
+    background: transparent;
+    box-shadow: none;
+    font-size: 15px;
+    line-height: 1;
+    align-self: center;
+}
+
+.my-settings-card .settings-readonly-badge {
+    width: 22px;
+    font-size: 13px;
+}
+
+.my-settings-card .settings-validation {
+    display: none;
+    margin: 2px 0 0;
+    font-size: 10px;
+}
+
+.my-settings-card .settings-validation.field-validation-error {
+    display: block;
+}
+
+.my-settings-card .form-floating > .form-control,
+.my-settings-card .form-floating > .form-control:not(:placeholder-shown),
+.my-settings-card .form-floating > .form-control:focus {
+    height: 40px;
+    min-height: 40px;
+    padding: 0.9rem 0.7rem 0.25rem;
+    font-size: 0.8125rem;
+    border-radius: 8px;
+}
+
+.my-settings-card .form-floating > label {
+    padding: 0.55rem 0.7rem;
+    font-size: 0.75rem;
+}
+
+.my-settings-card .settings-password-field .input-group-text {
+    height: 40px;
+    padding: 0 8px;
+    font-size: 14px;
+    border-radius: 0 8px 8px 0;
+}
+
+.my-settings-card label.notification-option {
+    height: auto;
+    min-height: 0;
+    padding: 6px 8px;
+    gap: 8px;
+    border: 0;
+    border-radius: 8px;
+    background: rgba(105, 108, 255, 0.05);
+}
+
+.my-settings-card .notification-title {
+    margin-bottom: 1px;
+    font-size: 12px;
+}
+
+.my-settings-card .notification-option-content > span:not(.notification-warning) {
+    font-size: 10px;
+    line-height: 1.35;
+}
+
+.my-settings-card .notification-option .form-check-input {
+    width: 36px;
+    height: 20px;
+}
+
+.my-settings-card .notification-warning {
+    margin-top: 3px;
+    font-size: 10px;
+}
+
+html[data-theme="dark"] .my-settings {
+    background: var(--partnerly-glass-overlay, rgba(10, 12, 28, 0.58));
+}
+
+html[data-theme="dark"] .my-settings-card {
+    background: var(--partnerly-glass-bg, rgba(18, 20, 42, 0.82));
+    border-color: var(--partnerly-glass-border, rgba(167, 139, 250, 0.22));
+    color: #e6e6f1;
+}
+
+html[data-theme="dark"] .my-settings-close {
+    color: #edf0ff;
+    background: transparent;
+}
+
+html[data-theme="dark"] .my-settings-card h2 {
+    color: #edf2ff;
+}
+
+html[data-theme="dark"] .my-settings-card .settings-body {
+    background: transparent;
+}
+
+html[data-theme="dark"] .my-settings-card label.notification-option {
+    background: rgba(105, 108, 255, 0.08);
+    border: 0;
+}
+
+@media (max-width: 767.98px) {
+    .my-settings {
+        align-items: flex-end;
+        padding: 10px;
+        padding-top: max(10px, env(safe-area-inset-top, 0px));
+        padding-bottom: max(10px, env(safe-area-inset-bottom, 0px));
+    }
+
+    .my-settings-card {
+        width: 100%;
+        max-width: 100%;
+        height: calc(100dvh - 20px);
+        max-height: calc(100dvh - 20px);
+        margin: 0;
+        padding: 14px 12px 10px;
+        border-radius: 22px 22px 16px 16px;
+    }
+
+    .my-settings-card .settings-body {
+        flex-direction: column;
+    }
+
+    .my-settings-card .settings-navigation {
+        display: flex;
+        flex: 0 0 auto;
+        width: 100%;
+        justify-content: center;
+        padding: 2px 0 10px;
+        border: 0;
+    }
+
+    .my-settings-card .settings-tabs {
+        flex-direction: row;
+        justify-content: center;
+        align-items: center;
+        gap: 14px;
+        width: auto;
+    }
+
+    .my-settings-card .settings-tabs .nav-item {
+        width: auto;
+        flex: 0 0 auto;
+        min-width: 0;
+    }
+
+    .my-settings-card .settings-tabs .nav-link {
+        width: 44px;
+        height: 44px;
+        padding: 0;
+        justify-content: center;
+        align-items: center;
+        gap: 0;
+        border-radius: 50%;
+        background: transparent;
+    }
+
+        .my-settings-card .settings-tabs .nav-link:hover,
+        .my-settings-card .settings-tabs .nav-link.active {
+            background: rgba(105, 108, 255, 0.14);
+        }
+
+    .my-settings-card .settings-tab-icon {
+        width: 22px;
+        height: 22px;
+        font-size: 22px;
+    }
+
+    .my-settings-card .settings-tab-text {
+        display: none;
+    }
+
+    .my-settings-card .settings-content {
+        padding: 4px 0 0;
+    }
+}
+
+/* Inner settings layout */
 
 .settings-card {
     width: 100%;
@@ -151,14 +605,14 @@
         width: 100%;
         display: flex;
         align-items: center;
-        gap: 12px;
-        padding: 12px;
+        gap: 8px;
+        padding: 8px 10px;
         border: 0;
-        border-radius: 11px;
+        border-radius: 10px;
         background: transparent;
         color: #697a8d;
         text-align: left;
-        transition: background .2s ease, color .2s ease, transform .2s ease;
+        transition: background .2s ease, color .2s ease;
     }
 
         .settings-tabs .nav-link:hover {
@@ -172,53 +626,42 @@
         }
 
 .settings-tab-icon {
-    width: 38px;
-    height: 38px;
+    width: auto;
+    height: auto;
     flex-shrink: 0;
-    display: flex;
+    display: inline-flex;
     align-items: center;
     justify-content: center;
-    border-radius: 9px;
-    background: #fff;
-    font-size: 19px;
-    box-shadow: 0 2px 7px rgba(67, 89, 113, 0.06);
+    margin: 0;
+    padding: 0;
+    border: 0;
+    border-radius: 0;
+    background: transparent;
+    box-shadow: none;
+    font-size: 16px;
+    line-height: 1;
+    color: inherit;
 }
 
 .settings-tabs .nav-link.active .settings-tab-icon {
-    background: #696cff;
-    color: #fff;
+    background: transparent;
+    color: inherit;
+    box-shadow: none;
 }
 
 .settings-tab-text {
     min-width: 0;
-    display: flex;
-    flex-direction: column;
-}
-
-    .settings-tab-text strong {
-        font-size: 13px;
-        font-weight: 600;
-        line-height: 1.3;
-    }
-
-    .settings-tab-text small {
-        margin-top: 2px;
-        color: #a1a7b3;
-        font-size: 10px;
-    }
-
-.settings-tabs .nav-link.active .settings-tab-text small {
-    color: rgba(105, 108, 255, 0.7);
+    display: block;
+    font-size: 13px;
+    font-weight: 600;
+    line-height: 1.3;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 
 .settings-tab-arrow {
-    margin-left: auto;
-    font-size: 17px;
-    opacity: .35;
-}
-
-.settings-tabs .nav-link.active .settings-tab-arrow {
-    opacity: 1;
+    display: none;
 }
 
 
@@ -305,25 +748,25 @@
     width: 100%;
 }
 
-.settings-field {
+.my-settings-card .settings-field {
     display: flex;
     align-items: stretch;
     gap: 12px;
     margin-top: 0;
-    height: 100%;
+    height: auto;
 }
 
-.settings-field-icon {
-    width: 43px;
-    height: 56px;
+.my-settings-card .settings-field-icon {
+    width: auto;
+    height: auto;
     flex-shrink: 0;
-    display: flex;
+    display: inline-flex;
     align-items: center;
     justify-content: center;
-    border-radius: 10px;
-    background: #f7f7fa;
+    border-radius: 0;
+    background: transparent;
     color: #8a93a2;
-    font-size: 19px;
+    font-size: 15px;
 }
 
 .settings-field .form-floating {
@@ -594,22 +1037,17 @@ label.notification-option {
         }
 
         .settings-tabs .nav-link {
-            flex-direction: column;
+            flex-direction: row;
             justify-content: center;
             gap: 6px;
-            padding: 10px 8px;
-            min-height: 72px;
+            padding: 8px 6px;
+            min-height: 0;
         }
 
-    .settings-tab-text small,
-    .settings-tab-arrow {
-        display: none;
-    }
-
-    .settings-tab-text strong {
+    .settings-tab-text {
         font-size: 12px;
-        text-align: center;
-        overflow-wrap: anywhere;
+        text-align: left;
+        white-space: nowrap;
     }
 
     .settings-content {
@@ -661,7 +1099,7 @@ label.notification-option {
         padding: 16px;
     }
 
-    .settings-field-icon {
+    .my-settings-card .settings-field-icon {
         display: none;
     }
 
@@ -800,27 +1238,19 @@ html[data-theme="dark"] .settings-tabs .nav-link {
     }
 
 html[data-theme="dark"] .settings-tab-icon {
-    background: #202a40;
-    color: var(--partnerly-text, #c5cee0);
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.14);
+    background: transparent;
+    color: inherit;
+    box-shadow: none;
 }
 
 html[data-theme="dark"] .settings-tabs .nav-link.active .settings-tab-icon {
-    background: linear-gradient(135deg, #696cff, #8b5cf6);
-    color: #fff;
-    box-shadow: 0 0 15px rgba(105, 108, 255, 0.24);
-}
-
-html[data-theme="dark"] .settings-tab-text strong {
+    background: transparent;
     color: inherit;
+    box-shadow: none;
 }
 
-html[data-theme="dark"] .settings-tab-text small {
-    color: var(--partnerly-muted, #8996b0);
-}
-
-html[data-theme="dark"] .settings-tabs .nav-link.active .settings-tab-text small {
-    color: #aeb0ff;
+html[data-theme="dark"] .settings-tab-text {
+    color: inherit;
 }
 
 /* Section header */
@@ -854,8 +1284,8 @@ html[data-theme="dark"] .settings-section-icon {
 
 /* Fields */
 
-html[data-theme="dark"] .settings-field-icon {
-    background: rgba(105, 108, 255, 0.12);
+html[data-theme="dark"] .my-settings-card .settings-field-icon {
+    background: transparent;
     color: var(--partnerly-primary, #8185ff);
 }
 
@@ -1104,4 +1534,45 @@ html[data-theme="dark"] .settings-field .form-control:-webkit-autofill:focus {
         min-height: 92px;
         padding: 16px 20px;
     }
+}
+
+/* Popup compact overrides — win over later page media queries */
+.my-settings-card .settings-content .row {
+    --settings-gap: 6px;
+    --bs-gutter-x: 0;
+    --bs-gutter-y: 0;
+    row-gap: 6px;
+    align-content: flex-start;
+    margin-top: 0;
+}
+
+.my-settings-card .settings-field,
+.my-settings-card .settings-password-field,
+.my-settings-card label.notification-option {
+    height: auto;
+    min-height: 0;
+}
+
+.my-settings-card label.notification-option {
+    padding: 6px 8px;
+}
+
+html[data-theme="dark"] .my-settings-card .settings-section-icon,
+html[data-theme="dark"] .my-settings-card .settings-section-icon.password-icon,
+html[data-theme="dark"] .my-settings-card .settings-section-icon.notification-icon,
+html[data-theme="dark"] .my-settings-card .settings-field-icon,
+html[data-theme="dark"] .my-settings-card .notification-option-icon,
+html[data-theme="dark"] .my-settings-card .notification-option-icon.email-icon,
+html[data-theme="dark"] .my-settings-card .notification-option-icon.notification-icon-small {
+    background: transparent;
+    box-shadow: none;
+    border-radius: 0;
+}
+
+html[data-theme="dark"] .my-settings-card label.notification-option,
+html[data-theme="dark"] .my-settings-card label.notification-option:hover,
+html[data-theme="dark"] .my-settings-card label.notification-option:has(.form-check-input:checked) {
+    min-height: 0;
+    padding: 6px 8px;
+    border: 0;
 }

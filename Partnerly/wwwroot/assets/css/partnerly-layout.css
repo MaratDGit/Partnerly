@@ -2424,3 +2424,67 @@ html[data-theme="dark"] .legal-copy h3 {
 .automation-hub-template:hover {
     transform: none;
 }
+
+/* Compact fields — same size as My Settings popup */
+.form-control:not(textarea):not([type="file"]):not(.form-control-lg):not(.form-control-sm),
+.form-select:not([multiple]):not(.form-select-lg):not(.form-select-sm) {
+    height: 40px;
+    min-height: 40px;
+    padding: 0.4rem 0.7rem;
+    font-size: 0.8125rem;
+    border-radius: 8px;
+}
+
+textarea.form-control:not(.form-control-lg) {
+    min-height: 80px;
+    height: auto;
+    padding: 0.55rem 0.7rem;
+    font-size: 0.8125rem;
+    border-radius: 8px;
+}
+
+.form-floating > .form-control,
+.form-floating > .form-control-plaintext,
+.form-floating > .form-select {
+    height: 40px;
+    min-height: 40px;
+    font-size: 0.8125rem;
+    border-radius: 8px;
+}
+
+.form-floating > .form-control,
+.form-floating > .form-control:focus,
+.form-floating > .form-control:not(:placeholder-shown),
+.form-floating > .form-control-plaintext,
+.form-floating > .form-control-plaintext:focus,
+.form-floating > .form-control-plaintext:not(:placeholder-shown) {
+    padding: 0.9rem 0.7rem 0.25rem;
+}
+
+.form-floating > textarea.form-control {
+    height: auto;
+    min-height: 80px;
+    padding: 1.15rem 0.7rem 0.4rem;
+}
+
+.form-floating > label {
+    padding: 0.55rem 0.7rem;
+    font-size: 0.75rem;
+}
+
+.input-group-text {
+    min-height: 40px;
+    height: 40px;
+    padding: 0 8px;
+    font-size: 0.8125rem;
+}
+
+    .input-group-text i,
+    .password-toggle-icon i {
+        font-size: 15px;
+        line-height: 1;
+    }
+
+.form-label {
+    font-size: 0.8125rem;
+}
