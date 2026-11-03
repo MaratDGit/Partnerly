@@ -208,7 +208,7 @@ using (var scope = app.Services.CreateScope())
 
     // 1. Initialize database
     var context = services.GetRequiredService<AppDbContext>();
-    DbInitializer.Initialize(context);
+    DbInitializer.Initialize(context, builder.Configuration["SeedUser:Password"]);
 
     await PermissionSeeder.SeedAsync(context);
 

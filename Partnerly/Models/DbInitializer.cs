@@ -5,7 +5,9 @@ namespace Partnerly.Models
 {
     public static class DbInitializer
     {
-        public static void Initialize(AppDbContext context)
+        // seedUserPassword comes from SeedUser:Password (user-secrets or local secrets.json).
+        // It is only needed when the database has no users yet.
+        public static void Initialize(AppDbContext context, string? seedUserPassword)
         {
             context.Database.EnsureCreated();
 
@@ -31,11 +33,17 @@ namespace Partnerly.Models
 
             if (context.Users != null && context.Users.Count() == 0 && !context.Users.Any(u => u.Email == Constants.SuperUserEmail))
             {
+                if (string.IsNullOrWhiteSpace(seedUserPassword))
+                {
+                    throw new InvalidOperationException(
+                        "SeedUser:Password is not configured. Set it in user-secrets or secrets.json before creating an empty database.");
+                }
+
                 context.Users.Add(new User
                 {
                     Id = adminUserId,
                     Email = Constants.SuperUserEmail,
-                    PasswordHash = BCrypt.Net.BCrypt.HashPassword(Constants.SuperUserPassword),
+                    PasswordHash = BCrypt.Net.BCrypt.HashPassword(seedUserPassword),
                     FirstName = Constants.SuperUserFirstName,
                     LastName = Constants.SuperUserLastName,
                     Phone = Constants.SuperUserPhone,

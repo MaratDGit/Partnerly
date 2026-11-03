@@ -545,7 +545,7 @@ Webhook incoming не использует cookie; лимит и HMAC доста
 | ConnectionsPanel | connections | overlay из билдера |
 | SettingsPanel / SettingsSave | view / edit | overlay |
 
-Меню: секция **Automation** после Tools, один пункт на Index. Иконка `bx-bot`. History / Templates / Connections из меню убраны.
+Меню: секция **Agents** (сверка 2026-11-03) — ссылка на Index, плюс (создание), live-список автоматизаций пользователя с индикатором `IsActive` и давностью последнего запуска, контекстное меню rename / toggle / delete. History / Templates / Connections из меню убраны.
 
 Тексты только resx. Строки хаба: History / Settings / Delete — иконки, открывают popup. Edit ведёт на `/Automation/Builder/{id}`. Connections — overlay с билдера. Создание — стеклянный popup, затем страница билдера. Токены как у сайта, без site-wide glass на app-shell.
 
@@ -604,7 +604,7 @@ UI и будущий AI Assistant вызывают **только** это. AI �
 | 7 | IDOR/SSRF/два пользователя, retry/cancel/recover. |
 | 8 | Отчёт. |
 
-**Статус 2026-11-02:** PHASE 3–7 плюс закрытие v1-дыр и UX (glass create, labeled delay, no sticky, хаб-таблица + попапы). Ядро, EF store, worker, коннекторы, UI (меню — только панель; Index без DataTable; Drawflow/history/settings/connections в overlay), входящий HMAC webhook, `execute_workflow` child enqueue, wait_until, 90 тестов. Миграция `20261102134353_AddAutomationTables` применена на локальной БД. Браузерная проверка UI не выполнялась. PHASE 8 — отчёт по запросу владельца.
+**Статус 2026-11-02:** PHASE 3–7 плюс закрытие v1-дыр и UX (glass create, labeled delay, no sticky, хаб-таблица + попапы). Ядро, EF store, worker, коннекторы, UI (меню — только панель; Index без DataTable; Drawflow/history/settings/connections в overlay), входящий HMAC webhook, `execute_workflow` child enqueue, wait_until, 94 теста (зелёные на 2026-11-03). Миграция `20261102134353_AddAutomationTables` применена на локальной БД. Браузерная проверка UI не выполнялась. PHASE 8 — отчёт по запросу владельца.
 
 ---
 

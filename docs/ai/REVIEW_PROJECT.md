@@ -1,11 +1,11 @@
 # Обзор проекта Partnerly
 
-Дата сверки с кодом: 2026-10-25.  
-Статус: подтверждено по исходникам текущего дерева `Cursor-Agent`, если не указано иное.
+Дата сверки с кодом: 2026-11-03 (ветка `Claude-Agent`, создана от `Cursor-Agent` на `34c5046`).  
+Статус: подтверждено по исходникам, если не указано иное.
 
 ## Назначение
 
-Веб-приложение для внутренней работы с пользователями и администрирования: регистрация и вход (пароль и Google), роли и права, группы пользователей, уведомления (в т.ч. SignalR), обращения в поддержку, вложения, шаблоны писем, системные настройки, журнал действий. В модели также заложены платежи и транзакции, но экранов под них нет.
+Веб-приложение для внутренней работы с пользователями и администрирования: регистрация и вход (пароль, Google, Apple), роли и права, группы пользователей, уведомления (в т.ч. SignalR), обращения в поддержку, вложения, шаблоны писем, системные настройки, журнал действий, автоматизации (агенты) с визуальным редактором процессов. В модели также заложены платежи и транзакции, но экранов под них нет.
 
 Продуктовое имя: `SystemSettings.ApplicationName`, запасной вариант `AppSettings:AppName` («Belote»). Код и решение называются Partnerly.
 
@@ -16,13 +16,14 @@
 | Целевой фреймворк | `net6.0` |
 | ASP.NET Core MVC | контроллеры + Razor Views |
 | Entity Framework Core + SQL Server | 6.0.0 |
-| Аутентификация | Cookie + `Microsoft.AspNetCore.Authentication.Google` 6.0.36 |
+| Аутентификация | Cookie + `Microsoft.AspNetCore.Authentication.Google` 6.0.36 + `AspNet.Security.OAuth.Apple` 6.0.15 (регистрируется, только если Apple настроен) |
 | Пароли | BCrypt.Net-Next 4.0.3 |
-| Excel / CSV | ClosedXML 0.105.1, EPPlus 8.2.0, свой экспорт DataTable |
+| Excel / CSV | ClosedXML 0.105.1, свой экспорт DataTable |
 | Письма | SMTP через `IEmailSender`, шаблоны Handlebars.Net 2.1.6 |
-| Изображения | SixLabors.ImageSharp 3.1.11 и связанные пакеты |
-| DataTables.net | пакет 2.3.4 (в UI используется собственный JS-модуль в `wwwroot/js/datatable`) |
-| SignalR | `NotificationHub` |
+| Изображения | SixLabors.ImageSharp 3.1.11, ImageSharp.Drawing 2.1.7, Fonts 2.1.3 |
+| Таблицы | собственный JS-модуль `wwwroot/js/datatable` (NuGet DataTables.net в csproj нет) |
+| Редактор процессов | Drawflow (vendor `wwwroot/vendor/drawflow`) |
+| SignalR | `NotificationHub`, `AutomationHub` |
 | OpenAI | `IOpenAIService` / `AIController` |
 | Cronos | 0.8.4 (Automation schedule expressions) |
 
@@ -54,9 +55,9 @@ Partnerly.sln
 | `Resources/` | `.resx` локализации |
 | `Migrations/` | миграции EF |
 | `Helpers/`, `Descriptors/` | tag helper, атрибуты-справочники, сообщения |
-| `Automation/` | Universal Automation Engine (PHASE 4: EF + worker, без UI) |
+| `Automation/` | Universal Automation Engine: ядро, EF store, worker, коннекторы, триггеры, `Web/` (контроллеры, ViewModels) |
 
-Тестовый проект: `Partnerly.Automation.Tests`. Каталог `docs/ai/` — канонические документы агента. `.github/copilot-instructions.md` содержит только Azure-правила Copilot и к архитектуре Partnerly не относится.
+Тестовый проект: `Partnerly.Automation.Tests` (94 теста, зелёные на 2026-11-03). Каталог `docs/ai/` — канонические документы агента. `.cursor/rules/` — краткие правила для Cursor. `tools/partnerly-web-inspector-extension` — unpacked Chrome-расширение для веб-инспектора. `.github/copilot-instructions.md` содержит только Azure-правила Copilot и к архитектуре Partnerly не относится.
 
 ## Основные модули
 
@@ -79,6 +80,10 @@ Partnerly.sln
 | AI | `AIController` | прокси к OpenAI |
 | Веб-инспектор | `WebInspectorController` | загрузка страницы, HTML и видимые данные (`/WebInspector`) |
 | Поиск | `SearchController` | глобальный поиск в навбаре по разделам и данным (`/Search/Query`) |
+| Документация | `DocumentationController` | `/Documentation` — гид по триггерам и действиям агента (view `Views/Home/Documentation.cshtml`) |
+| DataTable-действия | `DataTablesController` | удаление строки и журнал массового удаления (`datatable.bulk_delete`) |
+| Автоматизации (Agents) | `AutomationController` (`Automation/Web`) | хаб, шаблоны, билдер `/Automation/Builder/{id}`, запуски, история, подключения |
+| Входящие webhook | `AutomationHooksController` | `POST /Automation/hooks/{webhookPublicId}`, анонимно, проверка HMAC |
 
 ## Важные зависимости и интеграции
 
@@ -97,6 +102,6 @@ Partnerly.sln
 ## Чего в репозитории нет (факт)
 
 - Отдельного API-проекта и SPA.
-- Автотестов.
+- Автотестов вне модуля Automation.
 - Контроллеров Payments / Transactions.
 - Каталога `.github/workflows` в репозитории нет. `.github/copilot-instructions.md` — только заметки Azure для Copilot.

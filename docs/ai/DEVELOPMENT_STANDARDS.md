@@ -4,7 +4,7 @@
 
 ## Именование
 
-- Пространства: `Partnerly.Controllers`, `Partnerly.Models`, `Partnerly.Models.ViewModels`, `Partnerly.Models.DataTable`, `Partnerly.Models.Authorization`, `Partnerly.Infrastructure.*`, `Partnerly.Events`, `Partnerly.Hubs`, `Partnerly.Helpers`, `Partnerly.Descriptors.*`.
+- Пространства: `Partnerly.Controllers`, `Partnerly.Models`, `Partnerly.Models.ViewModels`, `Partnerly.Models.DataTable`, `Partnerly.Models.Authorization`, `Partnerly.Infrastructure.*`, `Partnerly.Events`, `Partnerly.Hubs`, `Partnerly.Helpers`, `Partnerly.Descriptors.*`, `Partnerly.Automation.*` (Abstractions, Engine, Persistence, Web и т.д.).
 - Сущности: единственное число, PascalCase (`User`, `SupportTicket`).
 - Интерфейсы: `I` + имя (`IUserService`, `IUserRepository`).
 - Контроллеры: `{Сущность}Controller`, множественное число ресурса (`UsersController`).

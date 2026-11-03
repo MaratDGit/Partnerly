@@ -4,6 +4,16 @@
 
 ---
 
+## TR-2026-11-03-10 — Пароли SMTP и seed-пользователя только в secrets
+
+- **Дата:** 2026-11-03
+- **Суть:** `EmailSettings:Password` и новый ключ `SeedUser:Password` живут в user-secrets или локальном `Partnerly/secrets.json` (gitignore). В `appsettings.json` — пустые плейсхолдеры. Константа `Constants.SuperUserPassword` удалена; `DbInitializer.Initialize(context, seedUserPassword)` получает пароль из `builder.Configuration["SeedUser:Password"]`.
+- **Причина:** владелец: перенести все пароли в соответствующее место (KI-009).
+- **Затрагивает:** `appsettings.json`, `Constants.cs`, `DbInitializer.cs`, `Program.cs`.
+- **Последствия:** на существующей БД ничего не меняется (seed-блок выполняется только при 0 пользователей). На пустой БД без `SeedUser:Password` старт падает с `InvalidOperationException` и понятным текстом. Старые значения остаются в истории Git — нужна смена паролей.
+
+---
+
 ## TR-2026-11-03-09 — Overlay попапов светлее через CSS-переменные
 
 - **Дата:** 2026-11-03

@@ -4,7 +4,7 @@
 
 ## Текущее состояние
 
-- Ветка: `Cursor-Agent` (tracking `origin/Cursor-Agent`).
+- Ветка: `Claude-Agent` (tracking `origin/Claude-Agent`), создана 2026-11-03 от `Cursor-Agent` (`34c5046`). `Cursor-Agent` больше не трогаем без просьбы.
 - Приложение: ASP.NET Core MVC, .NET 6, монолит `Partnerly/Partnerly.csproj`.
 - Документация агента на месте.
 - Коммит `b406307` — Automation PHASE 3–7 + хаб + Agents KPI + меню Agents/футер + тесты + миграция `20261102134353_AddAutomationTables`.
@@ -15,7 +15,7 @@
 
 ## Последняя задача
 
-Коммит `7909aa8` и push `origin/Cursor-Agent`. Браузер по-прежнему недоступен.
+Сверка md-документов с кодом (2026-11-03): AGENTS, REVIEW_PROJECT, Architecture, Automation/ARCHITECTURE, KNOWN_ISSUES, DEVELOPMENT_STANDARDS. Тесты Automation 94/94. Изменения документов не закоммичены. Встроенный браузер в этой сессии доступен.
 
 ## Уже сделано недавно
 
@@ -42,7 +42,8 @@
 
 ## Незавершённое и препятствия
 
-- Автотесты есть только у Automation (`Partnerly.Automation.Tests`, ранее 94). Остальной монолит без тестов (KI-011 частично).
+- KI-009: пароли SMTP и seed перенесены в `secrets.json` (TR-2026-11-03-10), не закоммичено. Осталось владельцу: сменить оба пароля — старые значения в истории Git. После рестарта приложения проверить отправку письма.
+- Автотесты есть только у Automation (`Partnerly.Automation.Tests`, 94, зелёные 2026-11-03). Если приложение запущено — собирать с `-p:OutDir` во временную папку. Остальной монолит без тестов (KI-011 частично).
 - `execute_workflow` ставит child и не ждёт его окончания (fire-and-forget).
 - Модули Payment/Transaction без UI.
 - KI-003 seed user на Admin, не Super — открыто.

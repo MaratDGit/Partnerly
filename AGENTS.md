@@ -81,10 +81,11 @@ Partnerly — монолитное веб-приложение ASP.NET Core MVC 
 
 - Слои внутри одного проекта: Controllers → Services → Repositories → `AppDbContext`.
 - Интерфейсы: `Infrastructure/Interfaces`. Реализации: `Infrastructure/Services`, `Infrastructure/Repositories`.
-- Большинство админских экранов наследуют `_BaseController` с `[Authorize]`. `AccountController`, `HomeController`, `AIController`, `LanguageController` — отдельные контроллеры.
+- Большинство админских экранов наследуют `_BaseController` с `[Authorize]`. `AccountController`, `HomeController`, `AIController`, `LanguageController`, `SearchController`, `AutomationHooksController` (анонимный входящий webhook с HMAC) — отдельные контроллеры.
 - Списки — собственная система DataTable (регистрация опций в ViewModel, запросы через `DataTableQueryService`). Это не SPA.
-- Права: политики `Permission:{code}` → `PermissionPolicyProvider` + `PermissionAuthorizationHandler` + `IPermissionService`. Покрытие политиками **неполное**: часть GET помечена, часть POST — нет. Старый `HasPermision` в `_BaseController` всегда возвращает `true`.
-- События: внутрипроцессный `IEventBus` / `EventBus`.
+- Права: политики `Permission:{code}` → `PermissionPolicyProvider` + `PermissionAuthorizationHandler` + `IPermissionService`. Политики стоят на CRUD/Data/Export основных модулей и на `AutomationController` (`automation.*`). Видимость записей — `IUserVisibilityService`. Старый `HasPermision` удалён (2026-10-25).
+- События: внутрипроцессный `IEventBus` / `EventBus`; `AutomationEventBridge` подписан на те же события и запускает автоматизации.
+- Модуль Automation (меню «Agents»): код в `Partnerly/Automation` (свой `AutomationController` в `Automation/Web`), hosted `AutomationWorker`, хаб `/automationHub`, редактор Drawflow на `/Automation/Builder/{id}`. Подробности: `docs/ai/Automation/ARCHITECTURE.md`.
 - UI: Razor, layout по умолчанию `_ContentNavbarLayout`, локализация `en` / `ru` / `hy`.
 - Платежи (`Payment`) и транзакции (`Transaction`) есть в модели, контроллеров под них нет.
 
@@ -103,9 +104,9 @@ Partnerly — монолитное веб-приложение ASP.NET Core MVC 
 ## Секреты и безопасность
 
 - Живые ключи: `dotnet user-secrets` и локальный `Partnerly/secrets.json` (в `.gitignore`).
-- В `appsettings.json` для Google OAuth оставляй пустые плейсхолдеры.
+- В `appsettings.json` для Google / Apple OAuth, `EmailSettings:Password` и `SeedUser:Password` оставляй пустые плейсхолдеры. Живые значения — в `secrets.json` / user-secrets.
 - Не коммить `secrets.json`, `.env`, ключи API, пароли seed-пользователя.
-- В коде есть seed-учётные данные в `Constants` — не дублируй их в документации.
+- Пароль seed-пользователя читается из `SeedUser:Password`, в коде его нет. Email и имя seed-пользователя — в `Constants`, не дублируй их в документации.
 
 ## Сборка и проверка
 
@@ -114,6 +115,8 @@ dotnet build "Partnerly.sln"
 ```
 
 С 2026-11-02: `dotnet test "Partnerly.Automation.Tests/Partnerly.Automation.Tests.csproj"`. Остальной монолит без тестов.
+
+Если у владельца запущено приложение, `Partnerly.exe` в `bin` заблокирован и сборка падает на копировании (MSB3027). Не останавливай его процесс — собирай во временную папку: `-p:OutDir=<временная папка>\` (без переноса `obj`).
 
 ## Git
 
@@ -178,3 +181,4 @@ dotnet build "Partnerly.sln"
 | `docs/ai/Automation/PHASE-1-ANALYSIS.md` | Анализ PHASE 1 и предложение архитектуры |
 | `docs/ai/Automation/ARCHITECTURE.md` | Архитектура модуля Automation (PHASE 2) |
 | `docs/reports/` | Готовые отчёты |
+| `.cursor/rules/*.mdc` | Краткие правила для Cursor; дублируют этот файл, при изменении правил держать в согласии |

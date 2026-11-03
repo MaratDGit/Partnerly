@@ -150,7 +150,7 @@ Fluent API **не** описывает явно все FK Payments/Transactions/
 
 **Факт:** Guid супер-роли и `adminRoleId` **разные**. Суперпользователь привязывается к роли Admin, не к Super-роли.
 
-Пароль и email seed заданы в `Constants` — в этот документ не копируются.
+Email seed задан в `Constants`, пароль — в конфигурации `SeedUser:Password` (secrets.json / user-secrets, с 2026-11-03). Значения в этот документ не копируются. На пустой БД без `SeedUser:Password` старт падает с `InvalidOperationException`.
 
 ## Миграции
 

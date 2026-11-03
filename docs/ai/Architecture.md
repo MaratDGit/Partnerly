@@ -1,6 +1,6 @@
 # Архитектура Partnerly
 
-Сверка с кодом: 2026-10-25. Предположения помечены отдельно.
+Сверка с кодом: 2026-11-03. Предположения помечены отдельно.
 
 ## Общая схема
 
@@ -36,7 +36,9 @@ Controller  →  I*Service  →  I*Repository : Repository<T>  →  AppDbContext
 - `UserVisibility` / `CanViewUserAsync` — видимость записей по роли. Тикет: `CanViewSupportTicketAsync` — автор из видимых **или** текущий пользователь = `AssignedTo`.
 - Старый `HasPermision` / RoleType удалён (2026-10-25). Права — через политики `Permission:`.
 
-Контроллеры **без** `_BaseController`: `AccountController`, `HomeController`, `AIController` (`[Authorize]` + `ai.use` на Ask), `LanguageController`, `SearchController` (`[Authorize]`, поиск по секциям и данным).
+Контроллеры **без** `_BaseController`: `AccountController`, `HomeController`, `AIController` (`[Authorize]` + `ai.use` на Ask), `LanguageController`, `SearchController` (`[Authorize]`, поиск по секциям и данным), `AutomationHooksController` (`[AllowAnonymous]`, `[IgnoreAntiforgeryToken]`, входящий webhook с HMAC).
+
+На `_BaseController` также: `DocumentationController` (`/Documentation`), `DataTablesController` (удаление строки и журнал массового удаления, `datatable.bulk_delete`), `AutomationController` в `Partnerly/Automation/Web` (политики `automation.view/create/edit/publish/delete/run/history/connections`).
 
 Политики `Permission:*` стоят на CRUD/Data/Export модулей Users, Roles, UserGroups, SupportTickets, Notifications, EmailTemplates, Logs, SystemPreferences, Attachments (список), AI, Web inspector (`web_inspector.use`). MarkAsRead / Upload к своему тикету — без глобального manage. Dashboard / MyProfile / ReferralTree — только `[Authorize]`. Statistics (`DashboardController.Index`) и бывшие модульные дашборды — одна страница: вкладки Games (первая) / Users / Tasks / Roles / Groups / Notifications; KPI модулей через `IInsightsDashboardService` по `*.view` и `VisibleUserIds()`. `/Dashboard/Dashboards` редирект на Index. В Roles: превью фото в Users by role (макс. 5) и Permissions by role. Дерево рефералов: `DashboardController.ReferralTree` + `GetReferralTree`; корень — текущий пользователь или тот, кого можно видеть (`CanViewUser` / своя downline). Super скрыт от остальных. Схема БД не меняется (`User.ReferrerId`). Веб-инспектор: `WebInspectorController` + unpacked Chrome extension `tools/partnerly-web-inspector-extension` — живое окно сайта слева, realtime DOM/индикаторы справа. Серверный fetch для live-потока не используется. Право `web_inspector.use`.
 
@@ -104,6 +106,7 @@ Controller  →  I*Service  →  I*Repository : Repository<T>  →  AppDbContext
 - `UserRegisteredEvent` → `UserRegisteredEventHandler`
 - `SupportTickedCreatedEvent` → `SupportTickedCreatedEventHandler`
 - `SupportTickedStatusChangedEvent` → `SupportTickedStatusChangedEventHandler`
+- те же три события → `AutomationEventBridge` (запуск автоматизаций по триггерам)
 
 Это не очередь сообщений и не outbox.
 
@@ -113,6 +116,8 @@ Controller  →  I*Service  →  I*Repository : Repository<T>  →  AppDbContext
 - `UpdateLastActivityMiddleware` — обновление активности.
 - `NotificationHub` (`/notificationHub`) + `CustomUserIdProvider`.
 - `NotificationService` использует `IHubContext<NotificationHub>`.
+- `AutomationWorker` (hosted, из `AddPartnerlyAutomation`) — wakeup-очередь с lease, Cronos-расписания.
+- `AutomationHub` (`/automationHub`) — события запусков только владельцу автоматизации.
 
 ## Интерфейс
 
@@ -123,6 +128,7 @@ Controller  →  I*Service  →  I*Repository : Repository<T>  →  AppDbContext
 - Open New Case — glass-попап (`_OpenNewCasePopup`, `open-support-case.js`), как create-automation: футер Support открывает оверлей на текущей странице; прямой `/SupportTickets/OpenNewCase` тоже попап. Адатив phone / tablet / desktop.
 - My Settings — glass-попап (`_MySettingsPopup`, `open-my-settings.js`). Sticky buttons нет; закрытие (X / Escape / фон) сохраняет тем же POST, что Save.
 - Локализация: `AddLocalization` + `Resources/SharedResource.{en,ru,hy}.resx`, культуры `en`, `ru`, `hy`, default `en`. Смена языка: AJAX POST `Language/SetLanguage` (cookie `.AspNetCore.Culture`), затем подмена HTML текущей страницы без navigation reload (`partnerly-language.js`). Без JS — обычный POST + redirect.
+- Меню (`Views/Shared/Sections/Menu/_VerticalMenu.cshtml`): секция **Agents** с live-списком автоматизаций, плюсом, индикатором `IsActive` и контекстным меню (rename / toggle / delete). Список берётся прямо во view через `IAutomationStore` + `IAutomationAccessService` (своё / все при `automation.manage`).
 - `RequiredLabelTagHelper` — обязательные поля в формах.
 - Тема / vendor CSS: `wwwroot/assets` (шаблон админки). Свой код: `wwwroot/assets/css/site.css`, `wwwroot/js/datatable`.
 
@@ -139,13 +145,13 @@ Controller  →  I*Service  →  I*Repository : Repository<T>  →  AppDbContext
 
 ```text
 UseRequestLocalization
-EnsureCreated + PermissionSeeder + подписки EventBus (при старте, не middleware)
+EnsureCreated + PermissionSeeder + подписки EventBus и AutomationEventBridge (при старте, не middleware)
 UseExceptionHandler / HSTS (не Development)
 UseHttpsRedirection, UseStaticFiles
 UseRouting, UseAuthentication, UseAuthorization
 MapControllerRoute
 UpdateLastActivityMiddleware, MaintenanceMiddleware, RoleChangeMiddleware
-MapHub /notificationHub
+MapHub /notificationHub, MapHub /automationHub
 ```
 
 **Предположение:** регистрация трёх middleware после `MapControllerRoute` может влиять на то, для каких запросов они выполняются. Это нужно проверять эмпирически, не считать доказанным отказом.

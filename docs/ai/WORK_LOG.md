@@ -4,6 +4,24 @@
 
 ---
 
+## 2026-11-03 — Пароли перенесены в secrets.json
+
+- **Суть:** владелец: переместить все пароли в соответствующее место.
+- **Сделано:** SMTP `EmailSettings:Password` из `appsettings.json` и пароль seed-пользователя из `Constants.cs` перенесены скриптом (без вывода значений) в локальный `Partnerly/secrets.json` (gitignore; бэкап прежнего файла — во временной папке сессии). В `appsettings.json` — пустые `EmailSettings:Password` и новый `SeedUser:Password`. `Constants.SuperUserPassword` удалён, `DbInitializer.Initialize` принимает пароль из `SeedUser:Password` и бросает понятное исключение, если на пустой БД он не задан.
+- **Проверка:** `dotnet build Partnerly.sln` с `-p:OutDir` во временную папку — 0 Error(s), 110 Warning(s). `git grep SuperUserPassword` — пусто. Запуск приложения и отправка письма не проверялись (приложение у владельца запущено на старой сборке).
+- **Файлы:** `appsettings.json`, `Constants.cs`, `DbInitializer.cs`, `Program.cs`, `AGENTS.md`, `DATABASE.md`, `KNOWN_ISSUES.md`, `TECHNICAL_SOLUTIONS.md`, `CONTINUATION_OF_WORK.md`.
+
+---
+
+## 2026-11-03 — Ветка Claude-Agent и сверка документации с кодом
+
+- **Суть:** владелец: создать ветку `Claude-Agent` от `Cursor-Agent` и сделать push; изучить проект и привести md-документы в соответствие с кодом.
+- **Сделано:** ветка `Claude-Agent` от `34c5046`, push на `origin/Claude-Agent`. Документы сверены с `Program.cs`, csproj, контроллерами, меню, `DbInitializer`, `appsettings.json` (только наличие значений). Исправлено: в `AGENTS.md` — устаревшие фразы про неполное покрытие политиками и `HasPermision`; добавлены контроллеры без базы, Automation, обход заблокированного `Partnerly.exe`, `.cursor/rules`. `REVIEW_PROJECT.md` — убраны EPPlus и DataTables.net (их нет в csproj), добавлены Apple, Drawflow, `AutomationHub`, модули Documentation / DataTables / Automation / webhook, тесты. `Architecture.md` — контроллеры, `AutomationEventBridge`, worker, hub, меню Agents. `Automation/ARCHITECTURE.md` — меню Agents, 94 теста. `KNOWN_ISSUES.md` — KI-009 подтверждён (SMTP-пароль в отслеживаемом `appsettings.json`), KI-011 94 теста, KI-012 закрыт.
+- **Проверка:** `dotnet test Partnerly.Automation.Tests` с `-p:OutDir` во временную папку (обычный `bin` заблокирован запущенным приложением) — 94/94 Passed. Код приложения не менялся. Браузер не использовался.
+- **Файлы:** `AGENTS.md`, `docs/ai/REVIEW_PROJECT.md`, `Architecture.md`, `DEVELOPMENT_STANDARDS.md`, `KNOWN_ISSUES.md`, `Automation/ARCHITECTURE.md`, `CONTINUATION_OF_WORK.md`, этот журнал.
+
+---
+
 ## 2026-11-03 — Коммит и push: docs, шаблоны, studio-билдер
 
 - **Суть:** владелец: сделать commit и push.
