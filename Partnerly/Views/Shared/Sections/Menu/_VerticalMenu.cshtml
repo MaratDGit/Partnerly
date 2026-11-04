@@ -44,7 +44,7 @@
         var definitions = agentsQuery
             .OrderBy(item => item.Name)
             .Take(40)
-            .Select(item => new { item.Id, item.Name, item.IsActive, item.UpdatedDate, item.CreatedDate })
+            .Select(item => new { item.Id, item.Name, Live = item.IsActive && item.PublishedVersionId != null, item.UpdatedDate, item.CreatedDate })
             .ToList();
 
         var agentIds = definitions.Select(item => item.Id).ToList();
@@ -110,7 +110,7 @@
             var at = lastAction.TryGetValue(item.Id, out var runAt)
                 ? runAt
                 : (item.UpdatedDate != default ? item.UpdatedDate : item.CreatedDate);
-            agentMenu.Add((item.Id, item.Name, item.IsActive, AgentAgo(at)));
+            agentMenu.Add((item.Id, item.Name, item.Live, AgentAgo(at)));
         }
     }
 }
@@ -208,6 +208,27 @@
                         </a>
 
                     </li>
+
+                    @if (Can("automation.connections"))
+                    {
+                    <li class="partnerly-menu-item partnerly-menu-integrations @(currentPage.StartsWith("/Integrations") ? "active" : "")">
+
+                        <a asp-controller="Integrations"
+                           asp-action="Index"
+                           class="partnerly-menu-link">
+
+                            <span class="partnerly-menu-icon">
+                                <i class="bx bx-plug"></i>
+                            </span>
+
+                            <span class="partnerly-menu-text">
+                                @Localizer["Integrations"]
+                            </span>
+
+                        </a>
+
+                    </li>
+                    }
 
                     <li class="partnerly-menu-item @(currentPage.StartsWith("/Dashboard/ReferralTree") ? "active" : "")"
                         hidden>
@@ -632,27 +653,6 @@
             </li>
             }
 
-            @if (Can("automation.connections"))
-            {
-            <li class="partnerly-menu-item partnerly-menu-integrations @(currentPage.StartsWith("/Integrations") ? "active" : "")">
-
-                <a asp-controller="Integrations"
-                   asp-action="Index"
-                   class="partnerly-menu-link">
-
-                    <span class="partnerly-menu-icon">
-                        <i class="bx bx-plug"></i>
-                    </span>
-
-                    <span class="partnerly-menu-text">
-                        @Localizer["Integrations"]
-                    </span>
-
-                </a>
-
-            </li>
-            }
-
         </ul>
 
     </div>
@@ -1032,14 +1032,14 @@
                         row.setAttribute('data-agent-id', id);
                         row.setAttribute(
                             'data-agent-active',
-                            item.isActive === false ? 'false' : 'true'
+                            item.isLive === true ? 'true' : 'false'
                         );
                         row.innerHTML =
                             '<a href="/Automation/Builder/' +
                             encodeURIComponent(id) +
                             '" class="partnerly-menu-link" title="">' +
                             '<span class="partnerly-menu-agents-dot ' +
-                            (item.isActive === false ? 'is-off' : 'is-on') +
+                            (item.isLive === true ? 'is-on' : 'is-off') +
                             '" aria-hidden="true"></span>' +
                             '<span class="partnerly-menu-text"></span>' +
                             '<span class="partnerly-menu-agents-ago">1s</span>' +
@@ -1063,10 +1063,10 @@
                         text.textContent = name;
                     }
 
-                    if (item.isActive === false) {
-                        this.setActive(id, false);
-                    } else if (item.isActive === true) {
+                    if (item.isLive === true) {
                         this.setActive(id, true);
+                    } else if (item.isLive === false) {
+                        this.setActive(id, false);
                     }
 
                     sortAgentRows(list);
@@ -1382,7 +1382,11 @@
                             const active = payload.isActive === true ||
                                 payload.isActive === 'true' ||
                                 nextActive;
-                            window.PartnerlyAgentsMenu.setActive(id, active);
+                            // Menu dot lights only for an active AND published agent.
+                            const live = payload.isLive === true ||
+                                payload.isLive === 'true';
+                            window.PartnerlyAgentsMenu.setActive(id, live);
+                            window.dispatchEvent(new CustomEvent('partnerly:automation-changed'));
                             if (
                                 window.PartnerlyAutomationHub &&
                                 window.PartnerlyAutomationHub.setActive

@@ -3754,4 +3754,70 @@ User, группу и шаблон письма здесь создать нел
   <data name="AutomationPublishBeforeRun" xml:space="preserve">
     <value>Есть неопубликованные изменения. Опубликуйте агента, затем запустите.</value>
   </data>
+  <data name="Notemplate" xml:space="preserve">
+    <value>Без шаблона (ввести вручную)</value>
+  </data>
+  <data name="Sending" xml:space="preserve">
+    <value>Отправка…</value>
+  </data>
+  <data name="AgentStateRunning" xml:space="preserve">
+    <value>Выполняется</value>
+  </data>
+  <data name="AgentStateLive" xml:space="preserve">
+    <value>Работает</value>
+  </data>
+  <data name="AgentStatePaused" xml:space="preserve">
+    <value>На паузе</value>
+  </data>
+  <data name="AgentStateDraft" xml:space="preserve">
+    <value>Черновик</value>
+  </data>
+  <data name="AgentFlagPublished" xml:space="preserve">
+    <value>Опубликован</value>
+  </data>
+  <data name="AgentFlagNotPublished" xml:space="preserve">
+    <value>Не опубликован</value>
+  </data>
+  <data name="AgentFlagActive" xml:space="preserve">
+    <value>Активен</value>
+  </data>
+  <data name="AgentFlagInactive" xml:space="preserve">
+    <value>Не активен</value>
+  </data>
+  <data name="AgentFlagChanges" xml:space="preserve">
+    <value>Есть неопубликованные правки</value>
+  </data>
+  <data name="AgentLastRun" xml:space="preserve">
+    <value>Последний запуск</value>
+  </data>
+  <data name="AgentNoRuns" xml:space="preserve">
+    <value>Запусков ещё не было</value>
+  </data>
+  <data name="AgentRunsNow" xml:space="preserve">
+    <value>Выполняется: {0}</value>
+  </data>
+  <data name="AgentRunQueued" xml:space="preserve">
+    <value>В очереди</value>
+  </data>
+  <data name="AgentRunRunning" xml:space="preserve">
+    <value>Выполняется</value>
+  </data>
+  <data name="AgentRunWaiting" xml:space="preserve">
+    <value>Ожидание</value>
+  </data>
+  <data name="AgentRunSucceeded" xml:space="preserve">
+    <value>Успешно</value>
+  </data>
+  <data name="AgentRunFailed" xml:space="preserve">
+    <value>Ошибка</value>
+  </data>
+  <data name="AgentRunCancelled" xml:space="preserve">
+    <value>Отменён</value>
+  </data>
+  <data name="UseShort" xml:space="preserve">
+    <value>Использовать</value>
+  </data>
+  <data name="AgentPublishFirst" xml:space="preserve">
+    <value>Сначала опубликуйте изменения</value>
+  </data>
 </root>

@@ -397,6 +397,7 @@
             });
         }).then(function (payload) {
             toast(payload.message);
+            window.dispatchEvent(new CustomEvent("partnerly:automation-changed", { detail: { url: url } }));
             if (form.hasAttribute("data-hub-remove-row")) {
                 removeRow((form.querySelector('input[name="id"]') || {}).value);
             }

@@ -44,8 +44,15 @@ html.dark-style .integrations-page {
 
 .integrations-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
-    gap: 20px;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    align-items: start;
+    gap: 16px;
+}
+
+@media (max-width: 1099.98px) {
+    .integrations-grid {
+        grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    }
 }
 
 .integrations-card {
@@ -63,7 +70,7 @@ html.dark-style .integrations-page {
 }
 
 .integrations-card:hover {
-    transform: translateY(-2px);
+    transform: none;
 }
 
 .integrations-card-head {
@@ -554,4 +561,98 @@ body.is-integrations-dialog-open {
     .integrations-dialog {
         border-radius: var(--partnerly-glass-radius-sm);
     }
+}
+
+/* ---- Compact glass layout (2026-11-04) ---- */
+.integrations-page {
+    --int-glass-bg: rgba(255, 255, 255, 0.55);
+    --int-glass-bg-hover: rgba(255, 255, 255, 0.8);
+    --int-glass-border: rgba(99, 102, 241, 0.2);
+    --int-glass-tint: linear-gradient(135deg, rgba(99, 102, 241, 0.26), rgba(139, 92, 246, 0.18));
+    --int-glass-tint-hover: linear-gradient(135deg, rgba(99, 102, 241, 0.38), rgba(139, 92, 246, 0.28));
+    --int-glass-text: #4338ca;
+}
+
+html[data-theme="dark"] .integrations-page,
+html.dark-style .integrations-page {
+    --int-glass-bg: rgba(255, 255, 255, 0.06);
+    --int-glass-bg-hover: rgba(255, 255, 255, 0.13);
+    --int-glass-border: rgba(167, 139, 250, 0.26);
+    --int-glass-text: #e0e7ff;
+}
+
+.integrations-head {
+    justify-content: flex-end;
+    margin-bottom: 14px;
+}
+
+.integrations-card {
+    position: relative;
+}
+
+.integrations-card-head {
+    padding-right: 110px;
+}
+
+.integrations-page .integrations-connect {
+    position: absolute;
+    top: 14px;
+    right: 14px;
+    margin: 0;
+    align-self: auto;
+}
+
+/* All buttons on the page: small, glass. */
+.integrations-page .btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    padding: 4px 12px;
+    border: 1px solid var(--int-glass-border);
+    border-radius: 10px;
+    background: var(--int-glass-bg);
+    color: var(--int-text);
+    font-size: 0.8125rem;
+    font-weight: 600;
+    line-height: 1.4;
+    box-shadow: 0 4px 12px rgba(49, 46, 129, 0.08), var(--partnerly-glass-inset, inset 0 1px 0 rgba(255, 255, 255, 0.6));
+    backdrop-filter: blur(14px) saturate(140%);
+    -webkit-backdrop-filter: blur(14px) saturate(140%);
+    transition: transform 0.15s ease, background 0.15s ease, border-color 0.15s ease;
+}
+
+.integrations-page .btn:hover,
+.integrations-page .btn:focus-visible {
+    transform: translateY(-1px);
+    border-color: rgba(99, 102, 241, 0.45);
+    background: var(--int-glass-bg-hover);
+    color: var(--int-text);
+    text-decoration: none;
+}
+
+.integrations-page .btn-primary {
+    border-color: rgba(99, 102, 241, 0.42);
+    background: var(--int-glass-tint);
+    color: var(--int-glass-text);
+}
+
+.integrations-page .btn-primary:hover,
+.integrations-page .btn-primary:focus-visible {
+    border-color: rgba(99, 102, 241, 0.62);
+    background: var(--int-glass-tint-hover);
+    color: var(--int-glass-text);
+    box-shadow: 0 8px 18px rgba(99, 102, 241, 0.22), var(--partnerly-glass-inset, inset 0 1px 0 rgba(255, 255, 255, 0.6));
+}
+
+.integrations-page .btn:disabled {
+    opacity: 0.5;
+    transform: none;
+}
+
+/* No movement on hover. */
+.integrations-page .btn:hover,
+.integrations-page .btn:focus-visible,
+.integrations-page .btn-primary:hover,
+.integrations-page .btn-primary:focus-visible {
+    transform: none;
 }

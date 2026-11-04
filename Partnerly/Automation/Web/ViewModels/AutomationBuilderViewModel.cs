@@ -8,5 +8,9 @@ namespace Partnerly.Automation.Web.ViewModels
         public string GraphJson { get; set; } = "{}";
         public bool IsPublished { get; set; }
         public bool IsActive { get; set; }
+        public bool HasUnpublishedChanges { get; set; }
+        public int RunningCount { get; set; }
+        public string? LastRunStatus { get; set; }
+        public string? LastRunAtUtc { get; set; }
     }
 }

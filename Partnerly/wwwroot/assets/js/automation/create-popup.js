@@ -17,6 +17,7 @@
 
     function open(options) {
         options = options || {};
+        setMode(false);
         overlay.hidden = false;
         overlay.classList.add("is-open");
         overlay.setAttribute("aria-hidden", "false");
@@ -36,7 +37,53 @@
         }
     }
 
+    var editId = null;
+    var titleEl = document.getElementById("automationCreateTitle");
+
+    function setMode(editing, id) {
+        editId = editing ? id : null;
+        overlay.classList.toggle("is-edit", !!editing);
+        overlay.querySelectorAll("[data-create-only]").forEach(function (el) { el.hidden = !!editing; });
+        if (titleEl) {
+            titleEl.textContent = titleEl.getAttribute(editing ? "data-edit-title" : "data-create-title") || titleEl.textContent;
+        }
+        if (form) {
+            form.setAttribute("action", form.getAttribute(editing ? "data-edit-url" : "data-create-url") || form.action);
+            var hidden = form.querySelector('input[name="id"]');
+            if (editing) {
+                if (!hidden) {
+                    hidden = document.createElement("input");
+                    hidden.type = "hidden";
+                    hidden.name = "id";
+                    form.appendChild(hidden);
+                }
+                hidden.value = id;
+            } else if (hidden) {
+                hidden.remove();
+            }
+        }
+    }
+
+    // Edit only the name and description of an existing automation.
+    function edit(id, name, description) {
+        setMode(true, id);
+        overlay.hidden = false;
+        overlay.classList.add("is-open");
+        overlay.setAttribute("aria-hidden", "false");
+        document.body.classList.add("is-automation-create-open");
+        if (nameInput) {
+            nameInput.value = name || "";
+            window.setTimeout(function () { nameInput.focus(); }, 40);
+        }
+        if (descriptionInput) {
+            descriptionInput.value = description || "";
+        }
+    }
+
+    window.PartnerlyAutomationCreate = { edit: edit };
+
     function close() {
+        setMode(false);
         overlay.classList.remove("is-open");
         overlay.setAttribute("aria-hidden", "true");
         overlay.hidden = true;
@@ -134,7 +181,14 @@
                     return payload;
                 });
             }).then(function (payload) {
+                var wasEdit = !!editId;
                 close();
+                if (wasEdit) {
+                    if (window.PartnerlyAutomationHub) {
+                        window.PartnerlyAutomationHub.addRow(payload);
+                    }
+                    return;
+                }
                 if (window.PartnerlyAgentsMenu) {
                     window.PartnerlyAgentsMenu.add(payload);
                 }
@@ -155,6 +209,20 @@
                     submitButton.disabled = false;
                 }
             });
+        });
+    }
+
+    // A click on a grid row (not on its action buttons) opens the name/description popup.
+    var hubRoot = document.getElementById("automationHubRoot");
+    if (hubRoot && hubRoot.getAttribute("data-can-edit") === "true") {
+        hubRoot.addEventListener("click", function (event) {
+            var row = event.target.closest("tr[data-automation-row]");
+            if (!row || event.target.closest("a, button, .automation-hub-actions")) {
+                return;
+            }
+            var nameEl = row.querySelector(".automation-hub-name");
+            var descEl = row.querySelector(".automation-hub-desc");
+            edit(row.getAttribute("data-automation-row"), nameEl ? nameEl.textContent : "", descEl ? descEl.textContent : "");
         });
     }
 

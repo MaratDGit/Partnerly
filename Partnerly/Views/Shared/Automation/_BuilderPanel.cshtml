@@ -18,6 +18,10 @@
       data-hub-stay
       data-builder-id="@Model.Id"
       data-can-edit="@(canEdit ? "true" : "false")"
+      data-can-publish="@(canPublish ? "true" : "false")"
+      data-can-run="@(canRun ? "true" : "false")"
+      data-can-connections="@(canConnections ? "true" : "false")"
+      data-toggle-url="@Url.Action("ToggleActive", "Automation", new { id = Model.Id })"
       data-catalog-url="@Url.Action("Catalog", "Automation")"
       data-save-url="@Url.Action("BuilderSave", "Automation", new { id = Model.Id })"
       data-publish-url="@Url.Action("Publish", "Automation", new { id = Model.Id })"
@@ -33,6 +37,47 @@
     <div class="automation-builder">
         <div class="automation-canvas-wrap">
             <div id="drawflow" class="parent-drawflow automation-canvas"></div>
+            <div class="automation-status"
+                 data-status-card
+                 data-state-url="@Url.Action("State", "Automation", new { id = Model.Id })"
+                 data-automation-id="@Model.Id"
+                 data-published="@(Model.IsPublished ? "true" : "false")"
+                 data-active="@(Model.IsActive ? "true" : "false")"
+                 data-changes="@(Model.HasUnpublishedChanges ? "true" : "false")"
+                 data-running="@Model.RunningCount"
+                 data-last-status="@Model.LastRunStatus"
+                 data-last-at="@Model.LastRunAtUtc"
+                 data-l-publish-first="@Localizer["AgentPublishFirst"]"
+                 data-l-running="@Localizer["AgentStateRunning"]"
+                 data-l-live="@Localizer["AgentStateLive"]"
+                 data-l-paused="@Localizer["AgentStatePaused"]"
+                 data-l-draft="@Localizer["AgentStateDraft"]"
+                 data-l-published="@Localizer["AgentFlagPublished"]"
+                 data-l-notpublished="@Localizer["AgentFlagNotPublished"]"
+                 data-l-active="@Localizer["AgentFlagActive"]"
+                 data-l-inactive="@Localizer["AgentFlagInactive"]"
+                 data-l-changes="@Localizer["AgentFlagChanges"]"
+                 data-l-lastrun="@Localizer["AgentLastRun"]"
+                 data-l-noruns="@Localizer["AgentNoRuns"]"
+                 data-l-runsnow="@Localizer["AgentRunsNow"]"
+                 data-l-queued="@Localizer["AgentRunQueued"]"
+                 data-l-runrunning="@Localizer["AgentRunRunning"]"
+                 data-l-waiting="@Localizer["AgentRunWaiting"]"
+                 data-l-succeeded="@Localizer["AgentRunSucceeded"]"
+                 data-l-failed="@Localizer["AgentRunFailed"]"
+                 data-l-cancelled="@Localizer["AgentRunCancelled"]"
+                 role="status" aria-live="polite">
+                <div class="automation-status-main">
+                    <span class="automation-status-dot" data-status-dot aria-hidden="true"></span>
+                    <strong data-status-label></strong>
+                </div>
+                <div class="automation-status-chips">
+                    <span class="automation-status-chip" data-chip="published"></span>
+                    <span class="automation-status-chip" data-chip="active"></span>
+                    <span class="automation-status-chip is-warn" data-chip="changes" hidden></span>
+                </div>
+                <div class="automation-status-run" data-status-run></div>
+            </div>
             <aside class="automation-props" data-props-panel hidden>
                 <div class="automation-props-head">
                     <h6>@Localizer["NodeProperties"]</h6>
@@ -65,38 +110,51 @@
         <div class="automation-add" data-add-menu>
             <button type="button" class="automation-add-toggle" data-add-toggle aria-expanded="false">@Localizer["BuilderMenu"]</button>
             <div class="automation-add-panel" hidden>
-                <a class="automation-add-item" asp-action="Index">@Localizer["Back"]</a>
-                <button type="button" class="automation-add-item" data-hub="settings" data-id="@Model.Id" data-hub-nested>
-                    @Localizer["AutomationSettings"]
-                </button>
-                <button type="button"
-                        class="automation-add-item"
-                        data-hub="connections"
-                        data-hub-nested
-                        disabled="@(canConnections ? null : "disabled")">
-                    @Localizer["AutomationConnections"]
-                </button>
-                <button type="submit" class="automation-add-item" disabled="@(canEdit ? null : "disabled")">
+                <a class="automation-add-item" data-act="back" asp-action="Index">@Localizer["Back"]</a>
+                <button type="submit" class="automation-add-item" data-act="save" disabled="@(canEdit ? null : "disabled")">
                     @Localizer["Save"]
                 </button>
                 <button type="submit"
                         class="automation-add-item"
+                        data-act="publish"
                         formaction="@Url.Action("Publish", "Automation", new { id = Model.Id })"
                         disabled="@(canPublish ? null : "disabled")">
                     @Localizer["Publish"]
                 </button>
                 <button type="submit"
                         class="automation-add-item"
+                        data-act="test"
                         formaction="@Url.Action("Run", "Automation", new { id = Model.Id, dryRun = true })"
                         disabled="@(canRun ? null : "disabled")">
                     @Localizer["TestRun"]
                 </button>
                 <button type="submit"
                         class="automation-add-item"
+                        data-act="run"
                         formaction="@Url.Action("Run", "Automation", new { id = Model.Id, dryRun = false })"
                         disabled="@(canLiveRun ? null : "disabled")"
                         title="@(canLiveRun || !canRun ? null : Localizer["AutomationRunNeedsPublish"].Value)">
                     @Localizer["RunNow"]
+                </button>
+                <button type="button"
+                        class="automation-add-item"
+                        data-act="toggle"
+                        data-l-start="@Localizer["Start"]"
+                        data-l-pause="@Localizer["Pause"]"
+                        disabled="@(canEdit && Model.IsPublished ? null : "disabled")">
+                    @(Model.IsActive ? Localizer["Pause"] : Localizer["Start"])
+                </button>
+                <button type="button" class="automation-add-item" data-act="settings" data-hub="settings" data-id="@Model.Id" data-hub-nested
+                        disabled="@(canEdit ? null : "disabled")">
+                    @Localizer["AutomationSettings"]
+                </button>
+                <button type="button"
+                        class="automation-add-item"
+                        data-act="connections"
+                        data-hub="connections"
+                        data-hub-nested
+                        disabled="@(canConnections ? null : "disabled")">
+                    @Localizer["AutomationConnections"]
                 </button>
             </div>
         </div>

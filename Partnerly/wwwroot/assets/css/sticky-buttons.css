@@ -1505,8 +1505,57 @@ html[data-theme="dark"] .sticky-buttons .btn-attachement:focus-visible {
 
 #sendGroupMessageModal .send-group-recipients {
     margin: 0 0 14px;
-    color: #697a8d;
+    color: #2f3d4f;
     font-size: 13px;
+}
+
+#sendGroupMessageModal #sendGroupTemplate {
+    min-height: 44px;
+    padding: 0 40px 0 14px;
+    border: 1px solid #d9dee3;
+    border-radius: 9px;
+    color: #384551;
+    background-color: #f8f9fc;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 16 16'%3E%3Cpath fill='none' stroke='%23697a8d' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.8' d='m4 6 4 4 4-4'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 14px center;
+    background-size: 16px;
+    cursor: pointer;
+    transition: border-color .15s ease, box-shadow .15s ease, background-color .15s ease;
+}
+
+#sendGroupMessageModal #sendGroupTemplate:hover {
+    border-color: #b9c1f2;
+    background-color: #fff;
+}
+
+#sendGroupMessageModal #sendGroupTemplate:focus {
+    border-color: #696cff;
+    background-color: #fff;
+    box-shadow: 0 0 0 3px rgba(105, 108, 255, 0.14);
+}
+
+#sendGroupMessageModal #sendGroupTemplateWrap > label {
+    font-weight: 500;
+    color: #2f3d4f;
+}
+
+#sendGroupMessageModal #sendGroupTemplateInfo {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    padding: 3px 10px;
+    border-radius: 999px;
+    color: #566a7f;
+    background: rgba(105, 108, 255, 0.1);
+}
+
+#sendGroupMessageModal #sendGroupTemplateInfo.d-none {
+    display: none;
+}
+
+#sendGroupMessageModal .form-control[readonly] {
+    background-color: #f5f6fa;
 }
 
 #sendGroupMessageModal .form-floating > .form-control {
@@ -1601,4 +1650,34 @@ html[data-theme="dark"] #sendGroupMessageModal .form-floating > .form-control:fo
 
 html[data-theme="dark"] #sendGroupMessageModal .form-floating > label {
     color: #8996b0;
+}
+
+html[data-theme="dark"] #sendGroupMessageModal .send-group-recipients,
+html[data-theme="dark"] #sendGroupMessageModal #sendGroupTemplateWrap > label {
+    color: #d5def5;
+}
+
+html[data-theme="dark"] #sendGroupMessageModal #sendGroupTemplate {
+    color: #edf2ff;
+    background-color: #111a2b;
+    border-color: #35425b;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 16 16'%3E%3Cpath fill='none' stroke='%238996b0' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.8' d='m4 6 4 4 4-4'/%3E%3C/svg%3E");
+}
+
+html[data-theme="dark"] #sendGroupMessageModal #sendGroupTemplate:hover {
+    border-color: #5b6590;
+}
+
+html[data-theme="dark"] #sendGroupMessageModal #sendGroupTemplate:focus {
+    border-color: #8185ff;
+    box-shadow: 0 0 0 3px rgba(129, 133, 255, 0.14);
+}
+
+html[data-theme="dark"] #sendGroupMessageModal #sendGroupTemplateInfo {
+    color: #c3cdea;
+    background: rgba(129, 133, 255, 0.16);
+}
+
+html[data-theme="dark"] #sendGroupMessageModal .form-control[readonly] {
+    background-color: #0e1626;
 }

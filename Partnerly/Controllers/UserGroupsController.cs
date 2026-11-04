@@ -22,6 +22,8 @@ namespace Partnerly.Controllers
         private readonly IInlineUpdateService _inlineUpdateService;
         private readonly INotificationService _notificationService;
         private readonly IEmailSender _emailSender;
+        private readonly IEmailTemplateService _emailTemplateService;
+        private readonly IAttachmentService _attachmentService;
 
         public UserGroupsController(
             IEventBus eventBus, 
@@ -35,13 +37,17 @@ namespace Partnerly.Controllers
             DataTableQueryService tableService, 
             IDataTableRegistry dataTableRegistry,
             INotificationService notificationService,
-            IEmailSender emailSender)
+            IEmailSender emailSender,
+            IEmailTemplateService emailTemplateService,
+            IAttachmentService attachmentService)
         : base(eventBus, userService, currentUser, logService, localizer, systemSettingsService, tableService, dataTableRegistry)
         {
             _userGroupService = userGroupService;
             _inlineUpdateService = inlineUpdateService;
             _notificationService = notificationService;
             _emailSender = emailSender;
+            _emailTemplateService = emailTemplateService;
+            _attachmentService = attachmentService;
         }
 
         #region Index / Create / Edit / Delete
@@ -571,6 +577,33 @@ namespace Partnerly.Controllers
             return await SendToSelectedMembersAsync(request, sendNotification: false, sendEmail: true);
         }
 
+        [HttpGet]
+        [Authorize(Policy = "Permission:user_groups.edit")]
+        [Authorize(Policy = "Permission:email_templates.view")]
+        public async Task<IActionResult> EmailTemplates()
+        {
+            var templates = (await _emailTemplateService.GetAllTemplatesAsync())
+                .Where(t => t != null)
+                .OrderBy(t => t!.Name)
+                .ToList();
+
+            var result = new List<object>();
+            foreach (var t in templates)
+            {
+                var attachments = await _attachmentService.GetAsync("EmailTemplate", t!.Id);
+                result.Add(new
+                {
+                    id = t.Id,
+                    name = t.Name,
+                    subject = t.Subject,
+                    body = t.BodyHtml,
+                    attachments = attachments.Count
+                });
+            }
+
+            return Json(result);
+        }
+
         private async Task<IActionResult> SendToSelectedMembersAsync(
             SendToGroupMembersRequest request,
             bool sendNotification,
@@ -597,14 +630,24 @@ namespace Partnerly.Controllers
                 return BadRequest(new { success = false, message = ErrorMessages.Selectatleastoneuser });
             }
 
+            EmailTemplate? template = null;
+            if (sendEmail && request.TemplateId.HasValue)
+            {
+                template = await _emailTemplateService.GetTemplateByIDAsync(request.TemplateId);
+                if (template == null || string.IsNullOrWhiteSpace(template.Name))
+                {
+                    return NotFound(new { success = false, message = ErrorMessages.NotFound });
+                }
+            }
+
             var message = request.Message?.Trim();
-            if (string.IsNullOrWhiteSpace(message))
+            if (template == null && string.IsNullOrWhiteSpace(message))
             {
                 return BadRequest(new { success = false, message = ErrorMessages.FieldRequired });
             }
 
             var subject = request.Subject?.Trim();
-            if (sendEmail && string.IsNullOrWhiteSpace(subject))
+            if (sendEmail && template == null && string.IsNullOrWhiteSpace(subject))
             {
                 return BadRequest(new { success = false, message = ErrorMessages.FieldRequired });
             }
@@ -616,8 +659,8 @@ namespace Partnerly.Controllers
 
             var sent = 0;
             var skipped = 0;
-            var htmlBody = sendEmail
-                ? WebUtility.HtmlEncode(message).Replace("\r\n", "<br />").Replace("\n", "<br />")
+            var htmlBody = sendEmail && template == null
+                ? WebUtility.HtmlEncode(message!).Replace("\r\n", "<br />").Replace("\n", "<br />")
                 : null;
 
             foreach (var userId in userIds)
@@ -665,7 +708,19 @@ namespace Partnerly.Controllers
 
                     try
                     {
-                        await _emailSender.SendEmailWithoutTemplateAsync(user.Email, subject, htmlBody);
+                        if (template != null)
+                        {
+                            await _emailSender.SendEmailWithTemplateAsync(template.Name, user.Email, new
+                            {
+                                UserName = $"{user.FirstName} {user.LastName}".Trim(),
+                                user.Email,
+                                GroupName = group.Name
+                            });
+                        }
+                        else
+                        {
+                            await _emailSender.SendEmailWithoutTemplateAsync(user.Email, subject, htmlBody);
+                        }
                         sent++;
                     }
                     catch

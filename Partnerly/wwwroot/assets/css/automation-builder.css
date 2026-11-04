@@ -161,13 +161,13 @@
 
 .automation-props {
     position: absolute;
-    top: 12px;
+    top: 78px;
     right: 12px;
-    z-index: 30;
+    z-index: 60;
     display: none;
     flex-direction: column;
     width: min(320px, calc(100% - 24px));
-    max-height: calc(100% - 24px);
+    max-height: calc(100% - 90px);
     min-height: 0;
     overflow: hidden;
     padding: 12px 12px 10px;
@@ -1261,7 +1261,6 @@ html[data-theme="dark"] .automation-hub-page {
 }
 
 .automation-hub-primary:hover {
-    transform: translateY(-1px);
     border-color: rgba(99, 102, 241, 0.6);
     background: linear-gradient(135deg, rgba(99, 102, 241, 0.36), rgba(139, 92, 246, 0.26));
     box-shadow: 0 10px 24px rgba(99, 102, 241, 0.24), var(--partnerly-glass-inset, inset 0 1px 0 rgba(255, 255, 255, 0.6));
@@ -1272,7 +1271,6 @@ html[data-theme="dark"] .automation-hub-page {
 }
 
 .automation-hub-secondary:hover {
-    transform: translateY(-1px);
     border-color: rgba(99, 102, 241, 0.4);
     background: var(--hub-glass-bg-hover);
     color: var(--auto-text);
@@ -1447,7 +1445,6 @@ html[data-theme="dark"] .automation-hub-status.is-off { color: #a1a1b5; }
     border-color: rgba(99, 102, 241, 0.38);
     color: #6366f1;
     text-decoration: none;
-    transform: translateY(-1px);
 }
 
 .automation-hub-icon.is-primary {
@@ -1570,7 +1567,6 @@ html[data-theme="dark"] .automation-hub-icon:not(.is-primary):not(.is-danger) {
 }
 
 .automation-hub-template:hover {
-    transform: translateY(-3px);
     border-color: color-mix(in srgb, var(--tpl-accent) 45%, transparent);
     box-shadow: 0 16px 36px rgba(49, 46, 129, 0.16);
 }
@@ -2026,4 +2022,417 @@ html[data-theme="dark"] .automation-builder-page .automation-toolbar .btn {
     color: var(--auto-muted, #697a8d);
     font-size: 0.75rem;
     text-transform: capitalize;
+}
+
+/* Live status card: small, translucent, top-right of the canvas. */
+.automation-status {
+    --st-dot: #94a3b8;
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    z-index: 35;
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    max-width: 230px;
+    padding: 8px 10px;
+    border-radius: 12px;
+    border: 1px solid rgba(99, 102, 241, 0.18);
+    background: rgba(255, 255, 255, 0.5);
+    color: #1e1b4b;
+    font-size: 0.72rem;
+    line-height: 1.3;
+    box-shadow: 0 6px 16px rgba(49, 46, 129, 0.08);
+    backdrop-filter: blur(14px) saturate(140%);
+    -webkit-backdrop-filter: blur(14px) saturate(140%);
+    pointer-events: auto;
+}
+
+.automation-status-main {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 0.8rem;
+}
+
+.automation-status-dot {
+    width: 8px;
+    height: 8px;
+    flex: 0 0 auto;
+    border-radius: 50%;
+    background: var(--st-dot);
+}
+
+.automation-status[data-state="live"] { --st-dot: #22c55e; }
+.automation-status[data-state="running"] { --st-dot: #6366f1; }
+.automation-status[data-state="paused"] { --st-dot: #f59e0b; }
+.automation-status[data-state="draft"] { --st-dot: #94a3b8; }
+
+.automation-status[data-state="live"] .automation-status-dot,
+.automation-status[data-state="running"] .automation-status-dot {
+    box-shadow: 0 0 0 3px color-mix(in srgb, var(--st-dot) 25%, transparent), 0 0 8px var(--st-dot);
+    animation: automation-status-pulse 1.8s ease-in-out infinite;
+}
+
+@keyframes automation-status-pulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.55; }
+}
+
+.automation-status-chips {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 4px;
+}
+
+.automation-status-chip {
+    padding: 1px 7px;
+    border-radius: 999px;
+    background: rgba(99, 102, 241, 0.12);
+    color: #4338ca;
+    font-size: 0.68rem;
+    font-weight: 600;
+    white-space: nowrap;
+}
+
+.automation-status-chip.is-on { background: rgba(34, 197, 94, 0.16); color: #15803d; }
+.automation-status-chip.is-off { background: rgba(148, 163, 184, 0.2); color: #64748b; }
+.automation-status-chip.is-warn { background: rgba(245, 158, 11, 0.18); color: #b45309; }
+
+.automation-status-run {
+    color: #64748b;
+    font-size: 0.68rem;
+}
+
+.automation-status-run .is-failed { color: #dc2626; }
+.automation-status-run .is-succeeded { color: #15803d; }
+
+html.dark-style .automation-status,
+html[data-theme="dark"] .automation-status {
+    background: rgba(18, 20, 42, 0.5);
+    border-color: rgba(167, 139, 250, 0.26);
+    color: #eef2ff;
+    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.3);
+}
+
+html.dark-style .automation-status-chip,
+html[data-theme="dark"] .automation-status-chip { background: rgba(167, 139, 250, 0.2); color: #e0e7ff; }
+html.dark-style .automation-status-chip.is-on,
+html[data-theme="dark"] .automation-status-chip.is-on { background: rgba(34, 197, 94, 0.2); color: #86efac; }
+html.dark-style .automation-status-chip.is-off,
+html[data-theme="dark"] .automation-status-chip.is-off { background: rgba(148, 163, 184, 0.18); color: #cbd5e1; }
+html.dark-style .automation-status-chip.is-warn,
+html[data-theme="dark"] .automation-status-chip.is-warn { background: rgba(245, 158, 11, 0.2); color: #fcd34d; }
+html.dark-style .automation-status-run,
+html[data-theme="dark"] .automation-status-run { color: #a5b4fc; }
+html.dark-style .automation-status-run .is-succeeded,
+html[data-theme="dark"] .automation-status-run .is-succeeded { color: #86efac; }
+html.dark-style .automation-status-run .is-failed,
+html[data-theme="dark"] .automation-status-run .is-failed { color: #fca5a5; }
+
+/* ---- Agents hub: compact grid + buttons, wide short template cards (2026-11-04) ---- */
+.automation-hub-stat {
+    padding: 3px 10px;
+    font-size: 0.75rem;
+}
+
+.automation-hub-primary,
+.automation-hub-secondary,
+.automation-hub-template-use {
+    min-height: 30px;
+    padding: 4px 14px;
+    border-radius: 10px;
+    font-size: 0.8rem;
+}
+
+.automation-hub-table th,
+.automation-hub-table td {
+    padding: 7px 12px;
+    font-size: 0.8rem;
+}
+
+.automation-hub-table th {
+    padding-top: 9px;
+    padding-bottom: 7px;
+    font-size: 0.66rem;
+}
+
+.automation-hub-avatar {
+    width: 28px;
+    height: 28px;
+    border-radius: 9px;
+    font-size: 1rem;
+}
+
+.automation-hub-row-main {
+    gap: 10px;
+}
+
+.automation-hub-icon {
+    width: 28px;
+    height: 28px;
+    border-radius: 9px;
+}
+
+.automation-hub-icon i {
+    font-size: 1rem;
+}
+
+/* Long descriptions are cut to one line; the full text is in the row popup. */
+.automation-hub-cell-main {
+    width: 55%;
+    max-width: 0;
+}
+
+.automation-hub-name,
+.automation-hub-desc {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow-wrap: normal;
+}
+
+.automation-hub-desc {
+    font-size: 0.74rem;
+}
+
+[data-can-edit="true"] .automation-hub-table tbody tr[data-automation-row] {
+    cursor: pointer;
+}
+
+.automation-hub-template-grid {
+    grid-template-columns: repeat(auto-fill, minmax(min(100%, 340px), 1fr));
+    gap: 10px;
+}
+
+.automation-hub-template {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    grid-template-areas:
+        "title logos"
+        "desc  use"
+        "meta  use";
+    align-items: center;
+    gap: 3px 12px;
+    height: auto;
+    padding: 12px 14px 10px;
+    border-radius: 14px;
+}
+
+.automation-hub-template::before {
+    height: 3px;
+}
+
+.automation-hub-template h3 {
+    grid-area: title;
+    margin: 0;
+    font-size: 0.9rem;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.automation-hub-template p {
+    grid-area: desc;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    font-size: 0.76rem;
+    line-height: 1.35;
+}
+
+.automation-hub-template-meta {
+    grid-area: meta;
+    gap: 8px;
+    font-size: 0.7rem;
+}
+
+.automation-hub-template-size {
+    padding: 0 7px;
+    font-size: 10px;
+}
+
+.automation-hub-template-use {
+    grid-area: use;
+    align-self: center;
+    min-height: 28px;
+    margin: 0;
+    padding: 3px 16px;
+}
+
+.automation-hub-template-logos {
+    grid-area: logos;
+    display: inline-flex;
+    gap: 3px;
+    justify-self: end;
+}
+
+.automation-hub-logo {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 20px;
+    height: 20px;
+    border-radius: 6px;
+    color: #fff;
+    font-size: 0.8rem;
+    background: linear-gradient(135deg, #6366f1, #8b5cf6);
+}
+
+.automation-hub-logo.is-telegram { background: linear-gradient(135deg, #37aee2, #1e96c8); }
+.automation-hub-logo.is-google { background: linear-gradient(135deg, #4285f4 0%, #34a853 55%, #fbbc05 100%); }
+.automation-hub-logo.is-whatsapp { background: linear-gradient(135deg, #5be584, #1fa855); }
+
+/* ---- Agents hub: narrower, centered page; adapts down to phones (2026-11-04) ---- */
+.automation-hub-page.container-xxl {
+    width: 100%;
+    max-width: 1080px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+@media (max-width: 991.98px) {
+    .automation-hub-page.container-xxl {
+        max-width: 100%;
+    }
+}
+
+@media (max-width: 767.98px) {
+    /* Rows turn into cards here, so undo the desktop ellipsis column sizing. */
+    .automation-hub-table td.automation-hub-cell-main {
+        width: 100%;
+        max-width: none;
+    }
+
+    .automation-hub-template-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .automation-hub-hero {
+        gap: 10px;
+    }
+
+    .automation-hub-stats {
+        gap: 6px;
+    }
+}
+
+@media (max-width: 420px) {
+    .automation-hub-template {
+        grid-template-columns: minmax(0, 1fr);
+        grid-template-areas:
+            "title"
+            "logos"
+            "desc"
+            "meta"
+            "use";
+    }
+
+    .automation-hub-template-logos {
+        justify-self: start;
+    }
+
+    .automation-hub-template-use {
+        justify-self: stretch;
+        margin-top: 4px;
+    }
+
+    .automation-hub-filters {
+        width: 100%;
+    }
+}
+
+/* Template cards: 3 per row on desktop, 2 on tablets, 1 on phones. */
+.automation-hub-template-grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+@media (max-width: 991.98px) {
+    .automation-hub-template-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+}
+
+@media (max-width: 767.98px) {
+    .automation-hub-template-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+/* Slightly taller template cards + breathing room above the footer. */
+.automation-hub-template {
+    min-height: 104px;
+    padding: 16px 16px 14px;
+    row-gap: 6px;
+}
+
+.automation-hub-templates {
+    padding-bottom: 40px;
+}
+
+/* ---- Agents hub: crisper text (2026-11-04) ----
+   Blur came from faint grey text at small sizes on see-through glass.
+   Darker secondary text, slightly larger sizes, firmer card backgrounds. */
+.automation-hub-page {
+    --auto-muted: #475569;
+    --auto-glass: rgba(255, 255, 255, 0.9);
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-rendering: optimizeLegibility;
+}
+
+html.dark-style .automation-hub-page,
+html[data-theme="dark"] .automation-hub-page {
+    --auto-text: #f1f5ff;
+    --auto-muted: #c3cbea;
+    --auto-glass: rgba(24, 26, 52, 0.88);
+}
+
+.automation-hub-page .automation-glass {
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+}
+
+.automation-hub-table td { font-size: 0.85rem; }
+.automation-hub-table th { font-size: 0.7rem; color: var(--auto-muted); }
+.automation-hub-name { font-weight: 600; }
+.automation-hub-desc { font-size: 0.79rem; }
+.automation-hub-stat { font-size: 0.78rem; }
+.automation-hub-primary,
+.automation-hub-secondary,
+.automation-hub-template-use { font-size: 0.83rem; }
+.automation-hub-filter { font-size: 0.82rem; color: var(--auto-text); }
+.automation-hub-template h3 { font-size: 0.95rem; }
+.automation-hub-template p { font-size: 0.8rem; line-height: 1.4; }
+.automation-hub-template-meta { font-size: 0.74rem; }
+.automation-hub-status { font-weight: 600; }
+
+/* ---- Dropdown items: disabled state ---- */
+.automation-add-item:disabled,
+.automation-add-item.is-disabled {
+    opacity: 0.45;
+    cursor: not-allowed;
+    pointer-events: none;
+}
+
+/* ---- "Configured" check on cards ---- */
+.drawflow .auto-node .auto-node-check {
+    position: absolute;
+    top: 7px;
+    right: 8px;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    width: 17px;
+    height: 17px;
+    border-radius: 50%;
+    background: #22c55e;
+    color: #fff;
+    font-size: 0.8rem;
+    box-shadow: 0 2px 6px rgba(34, 197, 94, 0.4);
+}
+
+.drawflow .auto-node.is-configured .auto-node-check {
+    display: inline-flex;
 }

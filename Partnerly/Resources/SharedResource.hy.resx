@@ -3754,4 +3754,70 @@ User, խումբ և նամակի կաղապար այստեղ չեն ստեղծվ
   <data name="AutomationPublishBeforeRun" xml:space="preserve">
     <value>Կան չհրապարակված փոփոխություններ։ Հրապարակեք գործակալը, ապա գործարկեք։</value>
   </data>
+  <data name="Notemplate" xml:space="preserve">
+    <value>Առանց ձևանմուշի (մուտքագրել ձեռքով)</value>
+  </data>
+  <data name="Sending" xml:space="preserve">
+    <value>Ուղարկվում է…</value>
+  </data>
+  <data name="AgentStateRunning" xml:space="preserve">
+    <value>Կատարվում է</value>
+  </data>
+  <data name="AgentStateLive" xml:space="preserve">
+    <value>Աշխատում է</value>
+  </data>
+  <data name="AgentStatePaused" xml:space="preserve">
+    <value>Դադարեցված է</value>
+  </data>
+  <data name="AgentStateDraft" xml:space="preserve">
+    <value>Սևագիր</value>
+  </data>
+  <data name="AgentFlagPublished" xml:space="preserve">
+    <value>Հրապարակված</value>
+  </data>
+  <data name="AgentFlagNotPublished" xml:space="preserve">
+    <value>Չհրապարակված</value>
+  </data>
+  <data name="AgentFlagActive" xml:space="preserve">
+    <value>Ակտիվ</value>
+  </data>
+  <data name="AgentFlagInactive" xml:space="preserve">
+    <value>Ոչ ակտիվ</value>
+  </data>
+  <data name="AgentFlagChanges" xml:space="preserve">
+    <value>Չհրապարակված փոփոխություններ</value>
+  </data>
+  <data name="AgentLastRun" xml:space="preserve">
+    <value>Վերջին գործարկում</value>
+  </data>
+  <data name="AgentNoRuns" xml:space="preserve">
+    <value>Գործարկումներ դեռ չկան</value>
+  </data>
+  <data name="AgentRunsNow" xml:space="preserve">
+    <value>Կատարվում է՝ {0}</value>
+  </data>
+  <data name="AgentRunQueued" xml:space="preserve">
+    <value>Հերթում</value>
+  </data>
+  <data name="AgentRunRunning" xml:space="preserve">
+    <value>Կատարվում է</value>
+  </data>
+  <data name="AgentRunWaiting" xml:space="preserve">
+    <value>Սպասում</value>
+  </data>
+  <data name="AgentRunSucceeded" xml:space="preserve">
+    <value>Հաջող</value>
+  </data>
+  <data name="AgentRunFailed" xml:space="preserve">
+    <value>Սխալ</value>
+  </data>
+  <data name="AgentRunCancelled" xml:space="preserve">
+    <value>Չեղարկված</value>
+  </data>
+  <data name="UseShort" xml:space="preserve">
+    <value>Օգտագործել</value>
+  </data>
+  <data name="AgentPublishFirst" xml:space="preserve">
+    <value>Սկզբում հրապարակեք փոփոխությունները</value>
+  </data>
 </root>

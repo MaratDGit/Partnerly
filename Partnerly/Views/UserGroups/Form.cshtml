@@ -124,6 +124,17 @@
                         @Localizer["Selectatleastoneuser"]
                     </p>
 
+                    <div class="mb-3 d-none" id="sendGroupTemplateWrap">
+                        <label class="form-label small mb-1" for="sendGroupTemplate">@Localizer["EmailTemplate"]</label>
+                        <select class="form-select form-select-sm" id="sendGroupTemplate">
+                            <option value="">@Localizer["Notemplate"]</option>
+                        </select>
+                        <div class="small text-muted mt-1 d-none" id="sendGroupTemplateInfo">
+                            <i class="bx bx-paperclip"></i>
+                            @Localizer["Attachments"]: <span id="sendGroupTemplateAttachments">0</span>
+                        </div>
+                    </div>
+
                     <div class="form-floating mb-3 d-none" id="sendGroupSubjectWrap">
                         <input type="text"
                                class="form-control"
@@ -173,8 +184,11 @@
                 emailTitle: @Html.Raw(Json.Serialize(Localizer["Sendanemail"].Value)),
                 recipients: @Html.Raw(Json.Serialize(Localizer["Selectedusers"].Value)),
                 selectUsers: @Html.Raw(Json.Serialize(Localizer["Selectatleastoneuser"].Value)),
-                required: @Html.Raw(Json.Serialize(Localizer["FieldRequired"].Value))
+                required: @Html.Raw(Json.Serialize(Localizer["FieldRequired"].Value)),
+                sending: @Html.Raw(Json.Serialize(Localizer["Sending"].Value))
             };
+            const templatesUrl = "@Url.Action("EmailTemplates", "UserGroups")";
+            let templates = null;
 
             let sendMode = "notification";
 
@@ -252,6 +266,62 @@
                 toast.show();
             }
 
+            function htmlToText(html) {
+                const doc = new DOMParser().parseFromString(html || "", "text/html");
+                doc.querySelectorAll("style,script").forEach(function (el) { el.remove(); });
+                return (doc.body.textContent || "").replace(/\n{3,}/g, "\n\n").trim();
+            }
+
+            function currentTemplate() {
+                const select = document.getElementById("sendGroupTemplate");
+                if (!select || !select.value || !templates) {
+                    return null;
+                }
+                return templates.find(function (t) { return t.id === select.value; }) || null;
+            }
+
+            function applyTemplate() {
+                const t = currentTemplate();
+                const subjectEl = document.getElementById("sendGroupSubject");
+                const messageEl = document.getElementById("sendGroupMessage");
+                const info = document.getElementById("sendGroupTemplateInfo");
+                const count = document.getElementById("sendGroupTemplateAttachments");
+
+                if (subjectEl) {
+                    subjectEl.readOnly = !!t;
+                    if (t) { subjectEl.value = t.subject || ""; }
+                }
+                if (messageEl) {
+                    messageEl.readOnly = !!t;
+                    if (t) { messageEl.value = htmlToText(t.body); }
+                }
+                if (info) {
+                    info.classList.toggle("d-none", !t);
+                }
+                if (count) {
+                    count.textContent = t ? String(t.attachments) : "0";
+                }
+            }
+
+            async function loadTemplates() {
+                if (templates) {
+                    return;
+                }
+                const select = document.getElementById("sendGroupTemplate");
+                try {
+                    const response = await fetch(templatesUrl, { credentials: "same-origin" });
+                    templates = response.ok ? await response.json() : [];
+                } catch (error) {
+                    templates = [];
+                }
+                templates.forEach(function (t) {
+                    const option = document.createElement("option");
+                    option.value = t.id;
+                    option.textContent = t.name;
+                    select.appendChild(option);
+                });
+            }
+
             window.prepareGroupSend = function (mode) {
                 sendMode = mode === "email" ? "email" : "notification";
 
@@ -277,6 +347,18 @@
                     subjectWrap.classList.toggle("d-none", sendMode !== "email");
                 }
 
+                const templateWrap = document.getElementById("sendGroupTemplateWrap");
+                if (templateWrap) {
+                    templateWrap.classList.toggle("d-none", sendMode !== "email");
+                }
+                if (sendMode === "email") {
+                    loadTemplates();
+                } else {
+                    const select = document.getElementById("sendGroupTemplate");
+                    if (select) { select.value = ""; }
+                    applyTemplate();
+                }
+
                 if (recipients) {
                     recipients.textContent = selected.length === 0
                         ? labels.selectUsers
@@ -287,6 +369,11 @@
             document.addEventListener("DOMContentLoaded", function () {
                 const sendBtn = document.getElementById("sendGroupMessageBtn");
                 const modal = document.getElementById("sendGroupMessageModal");
+
+                const templateSelect = document.getElementById("sendGroupTemplate");
+                if (templateSelect) {
+                    templateSelect.addEventListener("change", applyTemplate);
+                }
 
                 if (modal) {
                     document.body.appendChild(modal);
@@ -312,13 +399,25 @@
                     const subjectEl = document.getElementById("sendGroupSubject");
                     const message = messageEl ? messageEl.value.trim() : "";
                     const subject = subjectEl ? subjectEl.value.trim() : "";
+                    const template = sendMode === "email" ? currentTemplate() : null;
 
-                    if (!message || (sendMode === "email" && !subject)) {
+                    if (!template && (!message || (sendMode === "email" && !subject))) {
                         showClientToast(labels.required, true);
                         return;
                     }
 
+                    const originalBtnHtml = sendBtn.innerHTML;
+                    const lockEls = modal.querySelectorAll("input, textarea, select, .btn-close, [data-bs-dismiss=modal]");
+                    sendBtn.innerHTML = '<span class="spinner-border spinner-border-sm me-1" role="status" aria-hidden="true"></span>' +
+                        '<span class="send-group-sending"></span>';
+                    sendBtn.querySelector(".send-group-sending").textContent = labels.sending;
                     sendBtn.disabled = true;
+                    lockEls.forEach(function (el) { el.disabled = true; });
+                    const modalInstance = bootstrap.Modal.getInstance(modal);
+                    if (modalInstance && modalInstance._config) {
+                        modalInstance._config.backdrop = "static";
+                        modalInstance._config.keyboard = false;
+                    }
 
                     try {
                         const url = sendMode === "email"
@@ -335,7 +434,8 @@
                                 groupId: groupId,
                                 userIds: userIds,
                                 subject: subject,
-                                message: message
+                                message: message,
+                                templateId: template ? template.id : null
                             })
                         });
 
@@ -352,6 +452,10 @@
                                 instance.hide();
                             }
 
+                            if (templateSelect) {
+                                templateSelect.value = "";
+                            }
+                            applyTemplate();
                             if (messageEl) {
                                 messageEl.value = "";
                             }
@@ -363,7 +467,14 @@
                         console.error(error);
                         showClientToast(labels.required, true);
                     } finally {
+                        lockEls.forEach(function (el) { el.disabled = false; });
                         sendBtn.disabled = false;
+                        sendBtn.innerHTML = originalBtnHtml;
+                        const inst = bootstrap.Modal.getInstance(modal);
+                        if (inst && inst._config) {
+                            inst._config.backdrop = true;
+                            inst._config.keyboard = true;
+                        }
                     }
                 });
             });

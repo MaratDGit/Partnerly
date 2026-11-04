@@ -16,10 +16,6 @@
     @Html.AntiForgeryToken()
 
     <header class="integrations-head">
-        <div>
-            <h1>@Localizer["Integrations"]</h1>
-            <p>@Localizer["IntegrationsIntro"]</p>
-        </div>
         <a class="btn btn-outline-primary integrations-head-link" asp-controller="Automation" asp-action="Index">
             <i class="bx bx-bot" aria-hidden="true"></i> @Localizer["Agents"]
         </a>
@@ -34,6 +30,9 @@
     <div class="integrations-grid">
         @* ---------- Telegram ---------- *@
         <section class="integrations-card" data-service="telegram">
+            <button type="button" class="btn btn-primary integrations-connect" data-int-open="telegram">
+                <i class="bx bx-plus" aria-hidden="true"></i> @Localizer["IntegrationConnect"]
+            </button>
             <div class="integrations-card-head">
                 <span class="integrations-logo is-telegram"><i class="bx bxl-telegram" aria-hidden="true"></i></span>
                 <div>
@@ -46,13 +45,13 @@
                 <li>@Localizer["IntegrationTelegramFeature2"]</li>
             </ul>
             @await Html.PartialAsync("~/Views/Integrations/_ConnectionList.cshtml", Model.Telegram)
-            <button type="button" class="btn btn-primary integrations-connect" data-int-open="telegram">
-                <i class="bx bx-plus" aria-hidden="true"></i> @Localizer["IntegrationConnect"]
-            </button>
         </section>
 
         @* ---------- Google ---------- *@
         <section class="integrations-card" data-service="google">
+            <button type="button" class="btn btn-primary integrations-connect" data-int-open="google" disabled="@(Model.GoogleConfigured ? null : "disabled")">
+                <i class="bx bx-plus" aria-hidden="true"></i> @Localizer["IntegrationConnect"]
+            </button>
             <div class="integrations-card-head">
                 <span class="integrations-logo is-google"><i class="bx bxl-google" aria-hidden="true"></i></span>
                 <div>
@@ -70,13 +69,13 @@
                 <div class="integrations-note is-warn">@Localizer["IntegrationGoogleNotConfigured"]</div>
             }
             @await Html.PartialAsync("~/Views/Integrations/_ConnectionList.cshtml", Model.Google)
-            <button type="button" class="btn btn-primary integrations-connect" data-int-open="google" disabled="@(Model.GoogleConfigured ? null : "disabled")">
-                <i class="bx bx-plus" aria-hidden="true"></i> @Localizer["IntegrationConnect"]
-            </button>
         </section>
 
         @* ---------- WhatsApp ---------- *@
         <section class="integrations-card" data-service="whatsapp">
+            <button type="button" class="btn btn-primary integrations-connect" data-int-open="whatsapp">
+                <i class="bx bx-plus" aria-hidden="true"></i> @Localizer["IntegrationConnect"]
+            </button>
             <div class="integrations-card-head">
                 <span class="integrations-logo is-whatsapp"><i class="bx bxl-whatsapp" aria-hidden="true"></i></span>
                 <div>
@@ -89,9 +88,6 @@
                 <li>@Localizer["IntegrationWhatsAppFeature2"]</li>
             </ul>
             @await Html.PartialAsync("~/Views/Integrations/_ConnectionList.cshtml", Model.WhatsApp)
-            <button type="button" class="btn btn-primary integrations-connect" data-int-open="whatsapp">
-                <i class="bx bx-plus" aria-hidden="true"></i> @Localizer["IntegrationConnect"]
-            </button>
         </section>
     </div>
 

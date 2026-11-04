@@ -3754,4 +3754,70 @@ Delete is allowed for Support ticket.</value>
   <data name="AutomationPublishBeforeRun" xml:space="preserve">
     <value>You have unpublished changes. Publish the agent, then run it.</value>
   </data>
+  <data name="Notemplate" xml:space="preserve">
+    <value>No template (write manually)</value>
+  </data>
+  <data name="Sending" xml:space="preserve">
+    <value>Sending…</value>
+  </data>
+  <data name="AgentStateRunning" xml:space="preserve">
+    <value>Running</value>
+  </data>
+  <data name="AgentStateLive" xml:space="preserve">
+    <value>Live</value>
+  </data>
+  <data name="AgentStatePaused" xml:space="preserve">
+    <value>Paused</value>
+  </data>
+  <data name="AgentStateDraft" xml:space="preserve">
+    <value>Draft</value>
+  </data>
+  <data name="AgentFlagPublished" xml:space="preserve">
+    <value>Published</value>
+  </data>
+  <data name="AgentFlagNotPublished" xml:space="preserve">
+    <value>Not published</value>
+  </data>
+  <data name="AgentFlagActive" xml:space="preserve">
+    <value>Active</value>
+  </data>
+  <data name="AgentFlagInactive" xml:space="preserve">
+    <value>Inactive</value>
+  </data>
+  <data name="AgentFlagChanges" xml:space="preserve">
+    <value>Unpublished changes</value>
+  </data>
+  <data name="AgentLastRun" xml:space="preserve">
+    <value>Last run</value>
+  </data>
+  <data name="AgentNoRuns" xml:space="preserve">
+    <value>No runs yet</value>
+  </data>
+  <data name="AgentRunsNow" xml:space="preserve">
+    <value>{0} running</value>
+  </data>
+  <data name="AgentRunQueued" xml:space="preserve">
+    <value>Queued</value>
+  </data>
+  <data name="AgentRunRunning" xml:space="preserve">
+    <value>Running</value>
+  </data>
+  <data name="AgentRunWaiting" xml:space="preserve">
+    <value>Waiting</value>
+  </data>
+  <data name="AgentRunSucceeded" xml:space="preserve">
+    <value>Succeeded</value>
+  </data>
+  <data name="AgentRunFailed" xml:space="preserve">
+    <value>Failed</value>
+  </data>
+  <data name="AgentRunCancelled" xml:space="preserve">
+    <value>Cancelled</value>
+  </data>
+  <data name="UseShort" xml:space="preserve">
+    <value>Use</value>
+  </data>
+  <data name="AgentPublishFirst" xml:space="preserve">
+    <value>Publish the changes first</value>
+  </data>
 </root>

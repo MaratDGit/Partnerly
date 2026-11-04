@@ -19,10 +19,12 @@
         </button>
 
         <p class="automation-create-kicker">@Localizer["Automation"]</p>
-        <h2 id="automationCreateTitle">@Localizer["CreateAutomation"]</h2>
-        <p class="automation-create-lead">@Localizer["CreateAutomationLead"]</p>
+        <h2 id="automationCreateTitle" data-create-title="@Localizer["CreateAutomation"]" data-edit-title="@Localizer["Edit"]">@Localizer["CreateAutomation"]</h2>
+        <p class="automation-create-lead" data-create-only>@Localizer["CreateAutomationLead"]</p>
 
-        <form asp-controller="Automation" asp-action="Create" method="post" class="automation-create-form">
+        <form asp-controller="Automation" asp-action="Create" method="post" class="automation-create-form"
+              data-create-url="@Url.Action("Create", "Automation")"
+              data-edit-url="@Url.Action("UpdateMeta", "Automation")">
             @Html.AntiForgeryToken()
             <div class="mb-3">
                 <label class="form-label" for="automationCreateName">@Localizer["Name"]</label>
@@ -43,7 +45,7 @@
                           rows="3"></textarea>
                 <div class="form-text">@Localizer["AutomationDescriptionHelp"]</div>
             </div>
-            <div class="mb-4">
+            <div class="mb-4" data-create-only>
                 <label class="form-label" for="automationCreateTemplate">@Localizer["StartFromTemplate"]</label>
                 <select id="automationCreateTemplate" class="form-select" name="templateId">
                     <option value="">@Localizer["BlankAutomation"]</option>

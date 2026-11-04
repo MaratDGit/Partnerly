@@ -304,7 +304,87 @@
         return '<div class="auto-node auto-node--' + (data.kind || "action") + '">' +
             '<span class="auto-node-kind">' + (data.kind === "trigger" ? t("triggerBlocks", "When") : t("actionBlocks", "Then")) + "</span>" +
             '<strong class="auto-node-type">' + typeLabel(data.type, data.type) + "</strong>" +
-            '<span class="auto-node-name">' + (data.name || "") + "</span></div>";
+            '<span class="auto-node-name">' + (data.name || "") + "</span>" +
+            '<span class="auto-node-check" title="' + t("nodeConfigured", "Configured") + '" aria-hidden="true"><i class="bx bx-check"></i></span></div>';
+    }
+
+    // ---- "configured" check on cards -------------------------------------
+    function filled(value) {
+        if (value == null) { return false; }
+        if (Array.isArray(value)) { return value.length > 0; }
+        if (typeof value === "number") { return isFinite(value); }
+        if (typeof value === "object") { return Object.keys(value).length > 0; }
+        return String(value).trim() !== "";
+    }
+
+    var CONFIG_RULES = {
+        manual: function () { return true; },
+        webhook: function () { return true; },
+        schedule: function (c) {
+            var kind = c.scheduleKind || "daily";
+            if (kind === "once") { return filled(c.at); }
+            if (kind === "cron") { return filled(c.expression); }
+            return filled(c.time);
+        },
+        interval: function (c) { return Number(c.minutes) > 0; },
+        event: function (c) { return filled(c.event); },
+        "entity.created": function (c) { return filled(c.entity); },
+        "entity.updated": function (c) { return filled(c.entity); },
+        "entity.deleted": function (c) { return filled(c.entity); },
+        delay: function (c) { return Number(c.amount) > 0; },
+        set_variable: function (c) { return filled(c.name); },
+        send_email: function (c) { return filled(c.to) && (filled(c.template) || (filled(c.subject) && filled(c.body))); },
+        send_notification: function (c) { return filled(c.message); },
+        http_request: function (c) { return filled(c.url); },
+        webhook_action: function (c) { return filled(c.url); },
+        execute_workflow: function (c) { return filled(c.automationId); },
+        branch: function (c) { return !!c.condition && filled(c.condition.left); },
+        wait_until: function (c) { return !!c.condition && filled(c.condition.left); },
+        "switch": function (c) { return filled(c.value); },
+        create_record: function (c) { return filled(c.entity) && filled(c.fields); },
+        update_record: function (c) { return filled(c.entity) && filled(c.key) && filled(c.fields); },
+        find_record: function (c) { return filled(c.entity); },
+        delete_record: function (c) { return filled(c.entity) && filled(c.key); }
+    };
+
+    var INTEGRATION_PREFIX = /^(telegram|sheets|gmail|drive|whatsapp)\./;
+
+    function settingsReady(data) {
+        var config = normalizeDelay(JSON.parse(JSON.stringify(data.config || {})));
+        var type = data.type;
+        if (INTEGRATION_PREFIX.test(type)) {
+            if (!filled(config.connectionId)) { return false; }
+            if (/\.message_received$/.test(type)) { return true; }
+            return Object.keys(config).some(function (key) {
+                return key !== "connectionId" && key !== "parseMode" && key !== "format" && filled(config[key]);
+            });
+        }
+        var rule = CONFIG_RULES[type];
+        return rule ? !!rule(config) : true;
+    }
+
+    function connectionCount(map) {
+        var total = 0;
+        Object.keys(map || {}).forEach(function (key) {
+            total += (map[key].connections || []).length;
+        });
+        return total;
+    }
+
+    // Settings filled in AND the card is wired into the flow.
+    function refreshChecks() {
+        if (!editor || importing) { return; }
+        var exported = editor.export();
+        var home = exported.drawflow && exported.drawflow.Home && exported.drawflow.Home.data ? exported.drawflow.Home.data : {};
+        Object.keys(home).forEach(function (key) {
+            var node = home[key];
+            var data = node.data || {};
+            var wired = data.kind === "trigger" ? connectionCount(node.outputs) > 0 : connectionCount(node.inputs) > 0;
+            var inner = root.querySelector("#node-" + node.id + " .auto-node");
+            if (inner) {
+                inner.classList.toggle("is-configured", wired && settingsReady(data));
+            }
+        });
     }
 
     function outputsFor(type) {
@@ -391,6 +471,15 @@
     }
 
     function importGraph(graph) {
+        importing = true;
+        try {
+            importGraphInner(graph);
+        } finally {
+            importing = false;
+        }
+    }
+
+    function importGraphInner(graph) {
         editor.clear();
         if (!graph || !graph.nodes) {
             return;
@@ -415,12 +504,42 @@
         });
     }
 
+    var importing = false;
+    var savedFull = "";
+    var savedLogic = "";
+
+    function logicJson(graph) {
+        return JSON.stringify({
+            nodes: graph.nodes.map(function (n) { return { id: n.id, kind: n.kind, type: n.type, name: n.name, config: n.config }; }),
+            edges: graph.edges.map(function (e) { return { from: e.from, to: e.to, port: e.port }; })
+        });
+    }
+
     function syncHidden() {
         var input = q("#graphJson") || document.getElementById("graphJson");
         if (input) {
             input.value = JSON.stringify(exportGraph());
         }
+        refreshChecks();
+        window.dispatchEvent(new CustomEvent("partnerly:builder-changed"));
     }
+
+    window.PartnerlyBuilder = {
+        markSaved: function () {
+            var graph = exportGraph();
+            savedFull = JSON.stringify(graph);
+            savedLogic = logicJson(graph);
+        },
+        isDirty: function () { return JSON.stringify(exportGraph()) !== savedFull; },
+        isLogicDirty: function () { return logicJson(exportGraph()) !== savedLogic; },
+        stats: function () {
+            var graph = exportGraph();
+            return {
+                hasTrigger: graph.nodes.some(function (n) { return n.kind === "trigger"; }),
+                hasAction: graph.nodes.some(function (n) { return n.kind === "action"; })
+            };
+        }
+    };
 
     function getByPath(object, path) {
         if (!path) {
@@ -1048,6 +1167,10 @@
     function onAddToggle(event) {
         var toggle = event.target.closest("[data-add-toggle]");
         if (!toggle) {
+            // Picking any item of the dropdown closes it.
+            if (event.target.closest(".automation-add-panel .automation-add-item")) {
+                closeAddMenus();
+            }
             return;
         }
         event.preventDefault();
@@ -1271,7 +1394,14 @@
         importGraph(typeof config.graph === "string" ? JSON.parse(config.graph) : config.graph);
         window.setTimeout(fitView, 0);
     }
+    ["nodeCreated", "nodeRemoved", "nodeMoved", "connectionCreated", "connectionRemoved"].forEach(function (name) {
+        editor.on(name, function () {
+            if (!importing) { syncHidden(); }
+        });
+    });
     syncHidden();
+    window.PartnerlyBuilder.markSaved();
+    window.dispatchEvent(new CustomEvent("partnerly:builder-changed"));
     renderFields(null);
     zoomLabel();
     };

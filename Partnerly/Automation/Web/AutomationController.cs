@@ -205,6 +205,41 @@ namespace Partnerly.Automation.Web
             }
         }
 
+        // Name + description only (the popup opened from a row of the Agents grid).
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        [Authorize(Policy = "Permission:automation.edit")]
+        public async Task<IActionResult> UpdateMeta(Guid id, string name, string? description)
+        {
+            if (string.IsNullOrWhiteSpace(name))
+            {
+                return Fail(_localizer["AutomationNameRequired"].Value, nameof(Index));
+            }
+
+            try
+            {
+                var trimmed = name.Trim();
+                if (trimmed.Length > 200)
+                {
+                    trimmed = trimmed.Substring(0, 200);
+                }
+
+                var text = string.IsNullOrWhiteSpace(description) ? null : description.Trim();
+                if (text != null && text.Length > 500)
+                {
+                    text = text.Substring(0, 500);
+                }
+
+                await _authoring.UpdateMetaAsync(id, trimmed, text);
+                await _logService.CreateLogAsync("AM", LogTypeAttribute.Information, "Automation details updated");
+                return OkPayload(DefinitionPayload(await _authoring.GetAsync(id)), nameof(Index));
+            }
+            catch (KeyNotFoundException)
+            {
+                return NotFound();
+            }
+        }
+
         [HttpPost]
         [ValidateAntiForgeryToken]
         [Authorize(Policy = "Permission:automation.edit")]
@@ -242,7 +277,9 @@ namespace Partnerly.Automation.Web
             try
             {
                 var active = await _authoring.ToggleActiveAsync(id, isActive);
-                return OkPayload(new { success = true, id, isActive = active }, nameof(Index));
+                var definition = await _store.GetDefinitionAsync(id);
+                var live = active && definition?.PublishedVersionId != null;
+                return OkPayload(new { success = true, id, isActive = active, isLive = live }, nameof(Index));
             }
             catch (KeyNotFoundException)
             {
@@ -611,12 +648,49 @@ namespace Partnerly.Automation.Web
             return graph.ToJson();
         }
 
-        private async Task<AutomationBuilderViewModel> BuildBuilderAsync(Guid id)
+        // Live state for the status card in the builder (also served by State()).
+        [HttpGet]
+        [Authorize(Policy = "Permission:automation.view")]
+        public async Task<IActionResult> State(Guid id)
+        {
+            try
+            {
+                var model = await BuildBuilderAsync(id, includeGraph: false);
+                return Json(new
+                {
+                    name = model.Name,
+                    isPublished = model.IsPublished,
+                    isActive = model.IsActive,
+                    hasChanges = model.HasUnpublishedChanges,
+                    running = model.RunningCount,
+                    lastStatus = model.LastRunStatus,
+                    lastAt = model.LastRunAtUtc
+                });
+            }
+            catch (KeyNotFoundException)
+            {
+                return NotFound();
+            }
+        }
+
+        private async Task<AutomationBuilderViewModel> BuildBuilderAsync(Guid id, bool includeGraph = true)
         {
             var definition = await _authoring.GetAsync(id);
             var draft = await _authoring.GetDraftVersionAsync(id);
+            var runs = _store.QueryRuns()
+                .Where(run => run.AutomationId == id)
+                .OrderByDescending(run => run.CreatedDate)
+                .Take(50)
+                .ToList();
+            var last = runs.FirstOrDefault();
             return new AutomationBuilderViewModel
             {
+                HasUnpublishedChanges = await HasUnpublishedChangesAsync(id),
+                RunningCount = runs.Count(run => run.Status is AutomationStatuses.Queued or AutomationStatuses.Running or AutomationStatuses.Waiting),
+                LastRunStatus = last?.Status,
+                LastRunAtUtc = last == null
+                    ? null
+                    : DateTime.SpecifyKind(last.EndedAt ?? last.StartedAt ?? last.CreatedDate, DateTimeKind.Utc).ToString("O"),
                 Id = definition.Id,
                 Name = definition.Name,
                 Description = definition.Description,
@@ -758,6 +832,7 @@ namespace Partnerly.Automation.Web
                 name = item.Name,
                 description = item.Description ?? string.Empty,
                 isActive = item.IsActive,
+                isLive = item.IsActive && item.PublishedVersionId != null,
                 updatedDate = item.UpdatedDate.ToString("dd.MM.yyyy HH:mm")
             };
         }

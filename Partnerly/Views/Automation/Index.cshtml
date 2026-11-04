@@ -15,6 +15,15 @@
         "whatsapp" => "bxl-whatsapp",
         _ => "bx-bot"
     };
+    (string Icon, string Css) ServiceLogo(string service) => service switch
+    {
+        "Telegram" => ("bxl-telegram", "is-telegram"),
+        "WhatsApp" => ("bxl-whatsapp", "is-whatsapp"),
+        "Google Sheets" => ("bx-spreadsheet", "is-google"),
+        "Gmail" => ("bxl-gmail", "is-google"),
+        "Google Drive" => ("bxl-google-cloud", "is-google"),
+        _ => ("bx-plug", "")
+    };
     string CategoryLabel(string category) => category switch
     {
         "telegram" => "Telegram",
@@ -160,18 +169,19 @@
                     ? "TplSizeLarge"
                     : preset.Size == "medium" ? "TplSizeMedium" : "TplSizeSmall";
                 <article class="automation-glass automation-hub-template is-@preset.Category" data-template-category="@preset.Category">
-                    <div class="automation-hub-template-top">
-                        <span class="automation-hub-template-icon is-@preset.Category" aria-hidden="true"><i class="bx @CategoryIcon(preset.Category)"></i></span>
-                        <span class="automation-hub-template-size is-@preset.Size">@Localizer[sizeKey]</span>
-                    </div>
                     <h3>@title</h3>
+                    <div class="automation-hub-template-logos">
+                        <span class="automation-hub-logo" title="Partnerly" aria-hidden="true"><i class="bx bx-bot"></i></span>
+                        @foreach (var service in preset.Services)
+                        {
+                            var logo = ServiceLogo(service);
+                            <span class="automation-hub-logo @logo.Css" title="@service"><i class="bx @logo.Icon" aria-hidden="true"></i></span>
+                        }
+                    </div>
                     <p>@lead</p>
                     <div class="automation-hub-template-meta">
                         <span><i class="bx bx-git-commit" aria-hidden="true"></i> @Localizer["AutomationHubSteps"]: @preset.StepCount</span>
-                        @foreach (var service in preset.Services)
-                        {
-                            <span class="automation-hub-chip">@service</span>
-                        }
+                        <span class="automation-hub-template-size is-@preset.Size">@Localizer[sizeKey]</span>
                     </div>
                     @if (Can("automation.create"))
                     {
@@ -181,7 +191,7 @@
                                 data-template-id="@preset.Id"
                                 data-template-name="@title"
                                 data-template-description="@lead">
-                            @Localizer["UseTemplate"] <i class="bx bx-right-arrow-alt" aria-hidden="true"></i>
+                            @Localizer["UseShort"]
                         </button>
                     }
                 </article>
