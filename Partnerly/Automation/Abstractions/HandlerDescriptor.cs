@@ -6,5 +6,7 @@ namespace Partnerly.Automation.Abstractions
         public string Kind { get; set; } = "action";
         public string DisplayName { get; set; } = string.Empty;
         public bool HasSideEffects { get; set; }
+        public string? Group { get; set; }
+        public string? ConnectionKind { get; set; }
     }
 }

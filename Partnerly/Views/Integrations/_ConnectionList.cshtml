@@ -1,0 +1,71 @@
+@model List<Partnerly.Integrations.Web.IntegrationCardItem>
+
+@if (Model.Count == 0)
+{
+    <p class="integrations-empty">@Localizer["IntegrationNoConnections"]</p>
+}
+else
+{
+    <ul class="integrations-list">
+        @foreach (var item in Model)
+        {
+            <li class="integrations-item" data-connection="@item.Id">
+                <div class="integrations-item-main">
+                    <span class="integrations-dot @(item.Status.Ok ? "is-ok" : "is-error")"
+                          title="@(item.Status.Ok ? Localizer["IntegrationStatusOk"] : item.Status.Error)"></span>
+                    <div class="integrations-item-text">
+                        <strong>@item.Name</strong>
+                        @if (!string.IsNullOrWhiteSpace(item.Detail))
+                        {
+                            <span>@item.Detail</span>
+                        }
+                        @if (item.Badges.Count > 0)
+                        {
+                            <span class="integrations-badges">
+                                @foreach (var badge in item.Badges)
+                                {
+                                    <span class="integrations-badge">@badge</span>
+                                }
+                            </span>
+                        }
+                        @if (!item.Status.Ok && !string.IsNullOrWhiteSpace(item.Status.Error))
+                        {
+                            <span class="integrations-error">@item.Status.Error</span>
+                        }
+                    </div>
+                    <div class="integrations-item-actions">
+                        <button type="button" class="integrations-icon-btn" data-int-test="@item.Id" title="@Localizer["IntegrationTest"]" aria-label="@Localizer["IntegrationTest"]">
+                            <i class="bx bx-pulse" aria-hidden="true"></i>
+                        </button>
+                        @if (item.Kind == "telegram")
+                        {
+                            <button type="button" class="integrations-icon-btn" data-int-chats-open="@item.Id" title="@Localizer["IntegrationRecentChats"]" aria-label="@Localizer["IntegrationRecentChats"]">
+                                <i class="bx bx-conversation" aria-hidden="true"></i>
+                            </button>
+                        }
+                        <button type="button" class="integrations-icon-btn is-danger" data-int-delete="@item.Id" title="@Localizer["Delete"]" aria-label="@Localizer["Delete"]">
+                            <i class="bx bx-trash" aria-hidden="true"></i>
+                        </button>
+                    </div>
+                </div>
+                @if (item.Kind == "telegram")
+                {
+                    <form class="integrations-inline" method="post" asp-controller="Integrations" asp-action="UpdateTelegramChat" data-int-form>
+                        <input type="hidden" name="id" value="@item.Id" />
+                        <label class="integrations-inline-label" for="chat-@item.Id">@Localizer["IntegrationDefaultChat"]</label>
+                        <input class="form-control form-control-sm" id="chat-@item.Id" name="defaultChatId" value="@item.DefaultChatId" />
+                        <button type="submit" class="btn btn-sm btn-outline-primary">@Localizer["Save"]</button>
+                    </form>
+                }
+                @if (item.Kind == "whatsapp")
+                {
+                    <div class="integrations-webhook">
+                        <div><span>Webhook URL</span><code data-int-copy>@item.WebhookUrl</code></div>
+                        <div><span>Verify token</span><code data-int-copy>@item.VerifyToken</code></div>
+                        <p>@Localizer["IntegrationWhatsAppTunnel"]</p>
+                    </div>
+                }
+            </li>
+        }
+    </ul>
+}

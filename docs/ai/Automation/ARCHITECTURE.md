@@ -547,6 +547,8 @@ Webhook incoming не использует cookie; лимит и HMAC доста
 
 Меню: секция **Agents** (сверка 2026-11-03) — ссылка на Index, плюс (создание), live-список автоматизаций пользователя с индикатором `IsActive` и давностью последнего запуска, контекстное меню rename / toggle / delete. History / Templates / Connections из меню убраны.
 
+Хаб (2026-11-04): шапка со статистикой (агенты / активные / шаблоны) и кнопками Integrations / Create; таблица с аватаром и статусом-точкой, на ширине < 768px строки — компактные карточки (grid: имя / статус + дата / кнопки). Шаблоны — карточки с цветной полосой по категории (`AutomationPreset.Category`: partnerly / telegram / google / whatsapp), иконкой, числом шагов и чипами сервисов (`Services` из типов узлов), фильтр-чипы по категории (`hub.js`). В меню рядом с «+» Agents — иконка открытия хаба, видна при hover / focus (на touch всегда). Окно Connections показывает интеграции пользователя списком и ссылку на `/Integrations` (сами подключения — только там: Google OAuth требует полную страницу). Билдер сам подставляет `connectionId`, если у пользователя ровно одно подключение нужного типа.
+
 Тексты только resx. Строки хаба: History / Settings / Delete — иконки, открывают popup. Edit ведёт на `/Automation/Builder/{id}`. Connections — overlay с билдера. Создание — стеклянный popup, затем страница билдера. Токены как у сайта, без site-wide glass на app-shell.
 
 Dry-run: кнопка Test в builder → `IsDryRun=true`.
@@ -604,7 +606,9 @@ UI и будущий AI Assistant вызывают **только** это. AI �
 | 7 | IDOR/SSRF/два пользователя, retry/cancel/recover. |
 | 8 | Отчёт. |
 
-**Статус 2026-11-02:** PHASE 3–7 плюс закрытие v1-дыр и UX (glass create, labeled delay, no sticky, хаб-таблица + попапы). Ядро, EF store, worker, коннекторы, UI (меню — только панель; Index без DataTable; Drawflow/history/settings/connections в overlay), входящий HMAC webhook, `execute_workflow` child enqueue, wait_until, 94 теста (зелёные на 2026-11-03). Миграция `20261102134353_AddAutomationTables` применена на локальной БД. Браузерная проверка UI не выполнялась. PHASE 8 — отчёт по запросу владельца.
+**Статус 2026-11-02:** PHASE 3–7 плюс закрытие v1-дыр и UX (glass create, labeled delay, no sticky, хаб-таблица + попапы). Ядро, EF store, worker, коннекторы, UI (меню — только панель; Index без DataTable; Drawflow/history/settings/connections в overlay), входящий HMAC webhook, `execute_workflow` child enqueue, wait_until, 94 теста (зелёные на 2026-11-03).
+
+**Расширение 2026-11-03:** точка `IAutomationModule` (модули добавляют свои триггеры/действия в registry), `GraphValidator(TriggerRegistry, ActionRegistry)`, `HandlerDescriptor.Group` / `ConnectionKind`, `AutomationTriggerDispatcher.EnqueueIntegrationAsync`. Первый модуль — `Partnerly/Integrations` (см. `docs/ai/Integrations/INTEGRATIONS-PLAN.md`). Всего тестов 133. Миграция `20261102134353_AddAutomationTables` применена на локальной БД. Браузерная проверка UI не выполнялась. PHASE 8 — отчёт по запросу владельца.
 
 ---
 

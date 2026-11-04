@@ -273,10 +273,15 @@
         tr.setAttribute("data-automation-row", item.id);
         var desc = item.description ? '<div class="automation-hub-desc"></div>' : "";
         tr.innerHTML =
-            '<td><div class="automation-hub-name"></div>' + desc + "</td>" +
+            '<td class="automation-hub-cell-main"><div class="automation-hub-row-main">' +
+            '<span class="automation-hub-avatar ' + (item.isActive ? "is-on" : "is-off") + '" aria-hidden="true"><i class="bx bx-bot"></i></span>' +
+            '<div class="automation-hub-row-text"><div class="automation-hub-name"></div>' + desc + "</div></div></td>" +
             '<td><span class="automation-hub-status"></span></td>' +
             '<td class="automation-hub-date"></td>' +
             '<td class="automation-hub-actions"></td>';
+        // Labels for the stacked (phone) layout.
+        tr.children[1].setAttribute("data-label", attr("data-col-status"));
+        tr.children[2].setAttribute("data-label", attr("data-col-updated"));
         tr.querySelector(".automation-hub-name").textContent = item.name || "";
         var descEl = tr.querySelector(".automation-hub-desc");
         if (descEl) {
@@ -292,7 +297,9 @@
         }
         if (can("data-can-edit")) {
             actions.appendChild(iconButton("settings", item.id, attr("data-settings"), "bx bx-cog"));
-            actions.appendChild(iconLink("/Automation/Builder/" + item.id, attr("data-edit"), "bx bx-edit"));
+            var edit = iconLink("/Automation/Builder/" + item.id, attr("data-edit"), "bx bx-edit");
+            edit.classList.add("is-primary");
+            actions.appendChild(edit);
         }
         if (can("data-can-delete")) {
             actions.appendChild(iconButton("delete", item.id, attr("data-delete"), "bx bx-trash", "is-danger", item.name));
@@ -489,6 +496,30 @@
         status.classList.toggle("is-on", !!isActive);
         status.classList.toggle("is-off", !isActive);
         status.textContent = isActive ? attr("data-active") : attr("data-inactive");
+        var avatar = row.querySelector(".automation-hub-avatar");
+        if (avatar) {
+            avatar.classList.toggle("is-on", !!isActive);
+            avatar.classList.toggle("is-off", !isActive);
+        }
+    }
+
+    // Template filter chips (All / Partnerly / Telegram / Google / WhatsApp).
+    if (root) {
+        root.addEventListener("click", function (event) {
+            var chip = event.target.closest("[data-template-filter]");
+            if (!chip) {
+                return;
+            }
+            var value = chip.getAttribute("data-template-filter");
+            root.querySelectorAll("[data-template-filter]").forEach(function (item) {
+                var on = item === chip;
+                item.classList.toggle("is-active", on);
+                item.setAttribute("aria-selected", on ? "true" : "false");
+            });
+            root.querySelectorAll("[data-template-category]").forEach(function (card) {
+                card.hidden = value !== "all" && card.getAttribute("data-template-category") !== value;
+            });
+        });
     }
 
     window.PartnerlyAutomationHub = {

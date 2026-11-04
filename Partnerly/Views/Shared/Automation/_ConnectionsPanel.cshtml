@@ -8,6 +8,33 @@
     <h2>@Localizer["AutomationConnections"]</h2>
 
     <div class="automation-hub-block">
+        <div class="automation-int-head">
+            <h3>@Localizer["Integrations"]</h3>
+            <a class="automation-int-manage" asp-controller="Integrations" asp-action="Index" target="_blank" rel="noopener">
+                <i class="bx bx-plug" aria-hidden="true"></i> @Localizer["IntegrationManage"]
+            </a>
+        </div>
+        @if (Model.IntegrationConnections.Count == 0)
+        {
+            <p class="automation-create-lead mb-0">@Localizer["IntegrationNoConnectionsHint"]</p>
+        }
+        else
+        {
+            <ul class="automation-int-list">
+                @foreach (var item in Model.IntegrationConnections)
+                {
+                    var icon = item.Kind switch { "telegram" => "bxl-telegram", "google" => "bxl-google", "whatsapp" => "bxl-whatsapp", _ => "bx-plug" };
+                    <li>
+                        <span class="automation-int-icon is-@item.Kind"><i class="bx @icon" aria-hidden="true"></i></span>
+                        <span class="automation-int-name">@item.Name</span>
+                        <span class="automation-int-kind">@item.Kind</span>
+                    </li>
+                }
+            </ul>
+        }
+    </div>
+
+    <div class="automation-hub-block">
         <h3>Webhook</h3>
         @if (Model.Webhooks.Count == 0)
         {

@@ -56,8 +56,9 @@ Partnerly.sln
 | `Migrations/` | миграции EF |
 | `Helpers/`, `Descriptors/` | tag helper, атрибуты-справочники, сообщения |
 | `Automation/` | Universal Automation Engine: ядро, EF store, worker, коннекторы, триггеры, `Web/` (контроллеры, ViewModels) |
+| `Integrations/` | Интеграции Telegram / Google / WhatsApp для Automation (Common, Telegram, Google, WhatsApp, Web) |
 
-Тестовый проект: `Partnerly.Automation.Tests` (94 теста, зелёные на 2026-11-03). Каталог `docs/ai/` — канонические документы агента. `.cursor/rules/` — краткие правила для Cursor. `tools/partnerly-web-inspector-extension` — unpacked Chrome-расширение для веб-инспектора. `.github/copilot-instructions.md` содержит только Azure-правила Copilot и к архитектуре Partnerly не относится.
+Тестовый проект: `Partnerly.Automation.Tests` (133 теста, зелёные на 2026-11-03, из них 39 — `Integrations/`). Каталог `docs/ai/` — канонические документы агента. `.cursor/rules/` — краткие правила для Cursor. `tools/partnerly-web-inspector-extension` — unpacked Chrome-расширение для веб-инспектора. `.github/copilot-instructions.md` содержит только Azure-правила Copilot и к архитектуре Partnerly не относится.
 
 ## Основные модули
 
@@ -84,6 +85,7 @@ Partnerly.sln
 | DataTable-действия | `DataTablesController` | удаление строки и журнал массового удаления (`datatable.bulk_delete`) |
 | Автоматизации (Agents) | `AutomationController` (`Automation/Web`) | хаб, шаблоны, билдер `/Automation/Builder/{id}`, запуски, история, подключения |
 | Входящие webhook | `AutomationHooksController` | `POST /Automation/hooks/{webhookPublicId}`, анонимно, проверка HMAC |
+| Интеграции | `IntegrationsController`, `IntegrationWebhooksController` (`Partnerly/Integrations/Web`) | `/Integrations`: Telegram, Google (Sheets / Gmail / Drive), WhatsApp — подключения для агентов |
 
 ## Важные зависимости и интеграции
 

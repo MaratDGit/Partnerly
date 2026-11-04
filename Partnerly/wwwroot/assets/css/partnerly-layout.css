@@ -397,6 +397,31 @@ body {
     background: linear-gradient(180deg, rgba(255, 255, 255, 0.78), rgba(105, 108, 255, 0.10));
 }
 
+/* "Open Agents page" next to +: shown while the Agents header is hovered or focused. */
+.partnerly-menu-agents-open {
+    margin-right: 0;
+    opacity: 0;
+    pointer-events: none;
+    transform: translateX(4px);
+    transition: color .2s ease, background-color .2s ease, opacity .18s ease, transform .18s ease;
+}
+
+.partnerly-menu-agents-header:hover .partnerly-menu-agents-open,
+.partnerly-menu-agents-header:focus-within .partnerly-menu-agents-open {
+    opacity: 1;
+    pointer-events: auto;
+    transform: none;
+}
+
+/* Touch screens have no hover: keep it visible. */
+@media (hover: none) {
+    .partnerly-menu-agents-open {
+        opacity: 1;
+        pointer-events: auto;
+        transform: none;
+    }
+}
+
 .partnerly-menu-agents-sub-item .partnerly-menu-link {
     min-height: 28px;
     gap: 8px;

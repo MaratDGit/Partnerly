@@ -185,10 +185,12 @@ namespace Partnerly.Automation.Web
         [HttpPost]
         [ValidateAntiForgeryToken]
         [Authorize(Policy = "Permission:automation.publish")]
-        public async Task<IActionResult> Publish(Guid id)
+        public async Task<IActionResult> Publish(Guid id, string? name, string? description, string? graphJson)
         {
             try
             {
+                // From the builder the form carries the canvas; publish what the user sees, not the last Save.
+                await SaveBuilderDraftAsync(id, name, description, graphJson);
                 await _authoring.PublishAsync(id);
                 await _logService.CreateLogAsync("AH", LogTypeAttribute.Information, "Automation published");
                 return OkPayload(new { success = true, id, message = _localizer["AutomationPublished"].Value }, nameof(Builder), new { id });
@@ -290,10 +292,17 @@ namespace Partnerly.Automation.Web
         [HttpPost]
         [ValidateAntiForgeryToken]
         [Authorize(Policy = "Permission:automation.run")]
-        public async Task<IActionResult> Run(Guid id, bool dryRun = false)
+        public async Task<IActionResult> Run(Guid id, string? name, string? description, string? graphJson, bool dryRun = false)
         {
             try
             {
+                await SaveBuilderDraftAsync(id, name, description, graphJson);
+                if (!dryRun && graphJson != null && await HasUnpublishedChangesAsync(id))
+                {
+                    // A live run executes the published version; running it silently with an old graph confuses users.
+                    return Fail(_localizer["AutomationPublishBeforeRun"].Value, nameof(Builder), new { id });
+                }
+
                 var run = await _authoring.EnqueueRunAsync(id, dryRun ? "test" : "manual", dryRun);
                 await _logService.CreateLogAsync("AN", LogTypeAttribute.Information, dryRun ? "Automation dry-run" : "Automation run");
                 return OkPayload(
@@ -545,11 +554,61 @@ namespace Partnerly.Automation.Web
         [Authorize(Policy = "Permission:automation.view")]
         public IActionResult Catalog()
         {
+            // Connections feed the "connection" select in node properties
+            // (integration nodes); only the owner's own, no secrets.
+            var connections = _store.QueryConnections()
+                .Where(item => !item.IsDeleted && item.OwnerUserId == _access.CurrentUserId && item.Kind != "http")
+                .OrderBy(item => item.Name)
+                .Select(item => new { id = item.Id, name = item.Name, kind = item.Kind })
+                .ToList();
             return Json(new
             {
                 triggers = _triggers.DescribeAll(HttpContext.RequestServices),
-                actions = _actions.DescribeAll(HttpContext.RequestServices)
+                actions = _actions.DescribeAll(HttpContext.RequestServices),
+                connections,
+                integrationsUrl = Url.Action("Index", "Integrations")
             });
+        }
+
+        private async Task SaveBuilderDraftAsync(Guid id, string? name, string? description, string? graphJson)
+        {
+            if (string.IsNullOrWhiteSpace(graphJson))
+            {
+                return;
+            }
+
+            if (!string.IsNullOrWhiteSpace(name))
+            {
+                await _authoring.UpdateMetaAsync(id, name, description);
+            }
+
+            await _authoring.UpdateGraphAsync(id, WorkflowGraph.Parse(graphJson));
+        }
+
+        private async Task<bool> HasUnpublishedChangesAsync(Guid id)
+        {
+            var definition = await _authoring.GetAsync(id);
+            if (definition.PublishedVersionId == null)
+            {
+                return false;
+            }
+
+            var published = await _store.GetVersionAsync(definition.PublishedVersionId.Value);
+            var draft = await _authoring.GetDraftVersionAsync(id);
+            return published != null && Logic(published.GraphJson) != Logic(draft.GraphJson);
+        }
+
+        // Moving cards on the canvas is not a change that needs a new publish.
+        private static string Logic(string graphJson)
+        {
+            var graph = WorkflowGraph.Parse(graphJson);
+            foreach (var node in graph.Nodes)
+            {
+                node.X = 0;
+                node.Y = 0;
+            }
+
+            return graph.ToJson();
         }
 
         private async Task<AutomationBuilderViewModel> BuildBuilderAsync(Guid id)
@@ -625,7 +684,12 @@ namespace Partnerly.Automation.Web
             return new AutomationConnectionsViewModel
             {
                 Webhooks = webhooks,
-                HttpConnections = connections.ToList()
+                HttpConnections = connections.Where(item => item.Kind == "http").ToList(),
+                IntegrationConnections = connections
+                    .Where(item => item.Kind != "http" && item.OwnerUserId == _access.CurrentUserId)
+                    .OrderBy(item => item.Kind)
+                    .ThenBy(item => item.Name)
+                    .ToList()
             };
         }
 

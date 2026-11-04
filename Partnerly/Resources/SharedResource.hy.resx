@@ -3346,4 +3346,412 @@ User, խումբ և նամակի կաղապար այստեղ չեն ստեղծվ
     <value>Դադարեցնել</value>
   </data>
 
+  <data name="Integrations" xml:space="preserve">
+    <value>Ինտեգրացիաներ</value>
+  </data>
+  <data name="IntegrationsIntro" xml:space="preserve">
+    <value>Միացրեք Telegram-ը, Google-ը և WhatsApp-ը մեկ անգամ և օգտագործեք դրանք որպես տրիգերներ ու գործողություններ ձեր գործակալներում։</value>
+  </data>
+  <data name="IntegrationConnect" xml:space="preserve">
+    <value>Միացնել</value>
+  </data>
+  <data name="IntegrationConnected" xml:space="preserve">
+    <value>Միացումն ավելացվեց։</value>
+  </data>
+  <data name="IntegrationGoogleFailed" xml:space="preserve">
+    <value>Google-ի միացումը ձախողվեց՝</value>
+  </data>
+  <data name="IntegrationTokenRequired" xml:space="preserve">
+    <value>Բոտի տոկենը պարտադիր է։</value>
+  </data>
+  <data name="IntegrationCheckFailed" xml:space="preserve">
+    <value>Ստուգումը ձախողվեց՝</value>
+  </data>
+  <data name="IntegrationCheckOk" xml:space="preserve">
+    <value>Միացումն աշխատում է՝</value>
+  </data>
+  <data name="IntegrationGoogleNotConfigured" xml:space="preserve">
+    <value>Google-ի հաճախորդը կարգավորված չէ։ Ավելացրեք Authentication:Google:ClientId և ClientSecret secrets.json-ում։</value>
+  </data>
+  <data name="IntegrationGoogleChooseService" xml:space="preserve">
+    <value>Ընտրեք Google-ի առնվազն մեկ ծառայություն։</value>
+  </data>
+  <data name="IntegrationWhatsAppFieldsRequired" xml:space="preserve">
+    <value>Պարտադիր են Phone number ID, access token և app secret։</value>
+  </data>
+  <data name="IntegrationDeleteConfirm" xml:space="preserve">
+    <value>Ջնջե՞լ միացումը։ Այն օգտագործող գործակալները կդադարեն աշխատել։</value>
+  </data>
+  <data name="IntegrationNoChats" xml:space="preserve">
+    <value>Հաղորդագրություններ դեռ չկան։ Գրեք բոտին ցանկացած հաղորդագրություն և կրկին փորձեք։</value>
+  </data>
+  <data name="IntegrationUseChat" xml:space="preserve">
+    <value>Ընտրել</value>
+  </data>
+  <data name="Copied" xml:space="preserve">
+    <value>Պատճենված է</value>
+  </data>
+  <data name="IntegrationTelegramIntro" xml:space="preserve">
+    <value>Բոտի հաղորդագրություններ և ֆայլեր, գործակալների մեկնարկ մուտքային հաղորդագրություններով։</value>
+  </data>
+  <data name="IntegrationTelegramFeature1" xml:space="preserve">
+    <value>Հաղորդագրությունների և ֆայլերի ուղարկում</value>
+  </data>
+  <data name="IntegrationTelegramFeature2" xml:space="preserve">
+    <value>Տրիգեր՝ նոր հաղորդագրություն բոտին</value>
+  </data>
+  <data name="IntegrationGoogleIntro" xml:space="preserve">
+    <value>Մեկ Google հաշիվ Sheets-ի, Gmail-ի և Drive-ի համար։</value>
+  </data>
+  <data name="IntegrationWhatsAppIntro" xml:space="preserve">
+    <value>WhatsApp Business Cloud API՝ Meta-ից։</value>
+  </data>
+  <data name="IntegrationWhatsAppFeature1" xml:space="preserve">
+    <value>Տեքստի և ձևանմուշների ուղարկում</value>
+  </data>
+  <data name="IntegrationWhatsAppFeature2" xml:space="preserve">
+    <value>Տրիգեր՝ մուտքային հաղորդագրություն (պետք է հանրային URL)</value>
+  </data>
+  <data name="IntegrationConnectTelegram" xml:space="preserve">
+    <value>Միացնել Telegram բոտը</value>
+  </data>
+  <data name="IntegrationTelegramStep1" xml:space="preserve">
+    <value>Բացեք @BotFather-ը Telegram-ում և ուղարկեք /newbot։</value>
+  </data>
+  <data name="IntegrationTelegramStep2" xml:space="preserve">
+    <value>Պատճենեք բոտի տոկենը և տեղադրեք ներքևում։</value>
+  </data>
+  <data name="IntegrationTelegramStep3" xml:space="preserve">
+    <value>Գրեք բոտին ցանկացած հաղորդագրություն, ապա ընտրեք զրույցը «Զրույցներ» կոճակով։</value>
+  </data>
+  <data name="IntegrationNameOptional" xml:space="preserve">
+    <value>Անվանում (ոչ պարտադիր)</value>
+  </data>
+  <data name="IntegrationBotToken" xml:space="preserve">
+    <value>Բոտի տոկեն</value>
+  </data>
+  <data name="IntegrationDefaultChat" xml:space="preserve">
+    <value>Լռելյայն զրույցի id</value>
+  </data>
+  <data name="IntegrationDefaultChatHelp" xml:space="preserve">
+    <value>Օգտագործվում է, երբ քայլում զրույց նշված չէ</value>
+  </data>
+  <data name="IntegrationConnectGoogle" xml:space="preserve">
+    <value>Միացնել Google հաշիվը</value>
+  </data>
+  <data name="IntegrationGoogleChoose" xml:space="preserve">
+    <value>Ընտրեք, ինչին Partnerly-ն մուտք կունենա։ Հետո կարող եք կրկին միանալ և ավելացնել։</value>
+  </data>
+  <data name="IntegrationDriveFull" xml:space="preserve">
+    <value>Drive-ի լիարժեք մուտք (բոլոր ֆայլերը, ոչ միայն Partnerly-ի ստեղծածները)</value>
+  </data>
+  <data name="IntegrationGoogleRedirect" xml:space="preserve">
+    <value>Google Cloud Console-ում ավելացրեք այս թույլատրված redirect URI-ն՝</value>
+  </data>
+  <data name="IntegrationContinueGoogle" xml:space="preserve">
+    <value>Շարունակել Google-ով</value>
+  </data>
+  <data name="IntegrationConnectWhatsApp" xml:space="preserve">
+    <value>Միացնել WhatsApp-ը</value>
+  </data>
+  <data name="IntegrationWhatsAppStep1" xml:space="preserve">
+    <value>Meta for Developers → ձեր հավելվածը → WhatsApp → API Setup։</value>
+  </data>
+  <data name="IntegrationWhatsAppStep2" xml:space="preserve">
+    <value>Պատճենեք Phone number ID-ն և access token-ը, App secret-ը՝ App settings → Basic-ում։</value>
+  </data>
+  <data name="IntegrationWhatsAppStep3" xml:space="preserve">
+    <value>Միանալուց հետո տեղադրեք webhook URL-ը և verify token-ը WhatsApp → Configuration-ում։</value>
+  </data>
+  <data name="IntegrationRecentChats" xml:space="preserve">
+    <value>Վերջին զրույցները</value>
+  </data>
+  <data name="IntegrationRecentChatsHelp" xml:space="preserve">
+    <value>Զրույցներ, որոնք վերջերս գրել են բոտին։ Ընտրեք լռելյայն զրույցը։</value>
+  </data>
+  <data name="IntegrationNoConnections" xml:space="preserve">
+    <value>Միացումներ դեռ չկան։</value>
+  </data>
+  <data name="IntegrationStatusOk" xml:space="preserve">
+    <value>Աշխատում է</value>
+  </data>
+  <data name="IntegrationTest" xml:space="preserve">
+    <value>Ստուգել միացումը</value>
+  </data>
+  <data name="IntegrationWhatsAppTunnel" xml:space="preserve">
+    <value>Meta-ն պետք է ինտերնետից հասնի այս URL-ին։ Localhost-ում օգտագործեք Cloudflare Tunnel կամ ngrok։</value>
+  </data>
+  <data name="Deleted" xml:space="preserve">
+    <value>Ջնջված է</value>
+  </data>
+  <data name="BuilderIntConnection" xml:space="preserve">
+    <value>Միացում</value>
+  </data>
+  <data name="BuilderIntConnectionHelp" xml:space="preserve">
+    <value>Ձեր միացումը «Ինտեգրացիաներ» էջից։</value>
+  </data>
+  <data name="BuilderChooseConnection" xml:space="preserve">
+    <value>Ընտրեք միացումը</value>
+  </data>
+  <data name="BuilderNoConnections" xml:space="preserve">
+    <value>Միացումներ չկան — ավելացրեք «Ինտեգրացիաներ» էջում</value>
+  </data>
+  <data name="BuilderManageConnections" xml:space="preserve">
+    <value>Կառավարել միացումները</value>
+  </data>
+  <data name="BuilderIntChatId" xml:space="preserve">
+    <value>Զրույցի id</value>
+  </data>
+  <data name="BuilderIntChatIdHelp" xml:space="preserve">
+    <value>Դատարկ = միացման լռելյայն զրույցը։ Թույլատրվում են փոփոխականներ, օր. {{trigger.chatId}}։</value>
+  </data>
+  <data name="BuilderIntMessageText" xml:space="preserve">
+    <value>Հաղորդագրություն</value>
+  </data>
+  <data name="BuilderIntVariablesHelp" xml:space="preserve">
+    <value>Փոփոխականներ՝ {{trigger.field}}, {{steps.nodeName.result.field}}, {{vars.name}}։</value>
+  </data>
+  <data name="BuilderIntParseMode" xml:space="preserve">
+    <value>Ձևաչափում</value>
+  </data>
+  <data name="BuilderIntPlainText" xml:space="preserve">
+    <value>Պարզ տեքստ</value>
+  </data>
+  <data name="BuilderIntAttachment" xml:space="preserve">
+    <value>Կցորդի id</value>
+  </data>
+  <data name="BuilderIntAttachmentHelp" xml:space="preserve">
+    <value>Partnerly կցորդի id, օր. որոնման քայլից։</value>
+  </data>
+  <data name="BuilderIntCaption" xml:space="preserve">
+    <value>Մակագրություն</value>
+  </data>
+  <data name="BuilderIntChatFilter" xml:space="preserve">
+    <value>Միայն այս զրույցը (id)</value>
+  </data>
+  <data name="BuilderIntTextContains" xml:space="preserve">
+    <value>Տեքստը պարունակում է</value>
+  </data>
+  <data name="BuilderIntTelegramTriggerHelp" xml:space="preserve">
+    <value>Մեկնարկում է բոտին ուղղված յուրաքանչյուր նոր հաղորդագրությամբ։ Օգտագործեք {{trigger.text}}, {{trigger.chatId}}, {{trigger.fromName}}։</value>
+  </data>
+  <data name="BuilderIntSpreadsheet" xml:space="preserve">
+    <value>Աղյուսակ</value>
+  </data>
+  <data name="BuilderIntSpreadsheetHelp" xml:space="preserve">
+    <value>Տեղադրեք աղյուսակի հղումը կամ id-ն։</value>
+  </data>
+  <data name="BuilderIntSheet" xml:space="preserve">
+    <value>Թերթ (ներդիր)</value>
+  </data>
+  <data name="BuilderIntSheetHelp" xml:space="preserve">
+    <value>Ներդիրի անունը, լռելյայն Sheet1։</value>
+  </data>
+  <data name="BuilderIntRowValues" xml:space="preserve">
+    <value>Արժեքներ</value>
+  </data>
+  <data name="BuilderIntRowValuesHelp" xml:space="preserve">
+    <value>Մեկ արժեք յուրաքանչյուր տողում՝ սյունակների հերթականությամբ։ Թույլատրվում են փոփոխականներ։</value>
+  </data>
+  <data name="BuilderIntRowNumber" xml:space="preserve">
+    <value>Տողի համար</value>
+  </data>
+  <data name="BuilderIntColumn" xml:space="preserve">
+    <value>Սյունակ</value>
+  </data>
+  <data name="BuilderIntColumnHelp" xml:space="preserve">
+    <value>Տառ (A, B…) կամ համար (1, 2…)։</value>
+  </data>
+  <data name="BuilderIntSearchValue" xml:space="preserve">
+    <value>Որոնվող արժեք</value>
+  </data>
+  <data name="BuilderIntFindRowsHelp" xml:space="preserve">
+    <value>Արդյունք՝ {{steps.nodeName.result.count}}, {{steps.nodeName.result.first.fields.Email}}։</value>
+  </data>
+  <data name="BuilderIntSheetsTriggerHelp" xml:space="preserve">
+    <value>Մեկնարկում է յուրաքանչյուր նոր տողի համար (ստուգում րոպեն մեկ)։ Օգտագործեք {{trigger.rowNumber}}, {{trigger.fields.ColumnName}}։</value>
+  </data>
+  <data name="BuilderIntFormat" xml:space="preserve">
+    <value>Ձևաչափ</value>
+  </data>
+  <data name="BuilderIntGmailQuery" xml:space="preserve">
+    <value>Որոնում</value>
+  </data>
+  <data name="BuilderIntGmailQueryHelp" xml:space="preserve">
+    <value>Gmail որոնում, օր. from:client@example.com is:unread։</value>
+  </data>
+  <data name="BuilderIntMaxResults" xml:space="preserve">
+    <value>Առավելագույն արդյունքներ</value>
+  </data>
+  <data name="BuilderIntFromContains" xml:space="preserve">
+    <value>Ուղարկողը պարունակում է</value>
+  </data>
+  <data name="BuilderIntSubjectContains" xml:space="preserve">
+    <value>Թեման պարունակում է</value>
+  </data>
+  <data name="BuilderIntGmailTriggerHelp" xml:space="preserve">
+    <value>Մեկնարկում է մուտքային յուրաքանչյուր նոր նամակով (ստուգում րոպեն մեկ)։ Օգտագործեք {{trigger.from}}, {{trigger.subject}}, {{trigger.snippet}}։</value>
+  </data>
+  <data name="BuilderIntFileName" xml:space="preserve">
+    <value>Ֆայլի անուն</value>
+  </data>
+  <data name="BuilderIntFolderId" xml:space="preserve">
+    <value>Թղթապանակի id</value>
+  </data>
+  <data name="BuilderIntFolderIdHelp" xml:space="preserve">
+    <value>Թղթապանակի հղումից՝ drive.google.com/drive/folders/&lt;id&gt;։ Դատարկ = Իմ Drive-ը։</value>
+  </data>
+  <data name="BuilderIntFolderName" xml:space="preserve">
+    <value>Թղթապանակի անուն</value>
+  </data>
+  <data name="BuilderIntNameContains" xml:space="preserve">
+    <value>Անունը պարունակում է</value>
+  </data>
+  <data name="BuilderIntDriveTriggerHelp" xml:space="preserve">
+    <value>Մեկնարկում է յուրաքանչյուր նոր ֆայլի համար (ստուգում րոպեն մեկ)։ Օգտագործեք {{trigger.name}}, {{trigger.webViewLink}}։</value>
+  </data>
+  <data name="BuilderIntPhone" xml:space="preserve">
+    <value>Հեռախոս</value>
+  </data>
+  <data name="BuilderIntPhoneHelp" xml:space="preserve">
+    <value>Միջազգային ձևաչափ, օր. 37491234567։</value>
+  </data>
+  <data name="BuilderIntWhatsAppWindowHelp" xml:space="preserve">
+    <value>Ազատ տեքստն աշխատում է միայն հաճախորդի գրելուց հետո 24 ժամվա ընթացքում։ Այլապես օգտագործեք ձևանմուշ։</value>
+  </data>
+  <data name="BuilderIntTemplateName" xml:space="preserve">
+    <value>Ձևանմուշի անուն</value>
+  </data>
+  <data name="BuilderIntLanguage" xml:space="preserve">
+    <value>Լեզվի կոդ</value>
+  </data>
+  <data name="BuilderIntTemplateParams" xml:space="preserve">
+    <value>Պարամետրեր</value>
+  </data>
+  <data name="BuilderIntWhatsAppTriggerHelp" xml:space="preserve">
+    <value>Մեկնարկում է յուրաքանչյուր մուտքային հաղորդագրությամբ։ Օգտագործեք {{trigger.from}}, {{trigger.name}}, {{trigger.text}}։</value>
+  </data>
+  <data name="NodeTypeTelegramSendMessage" xml:space="preserve">
+    <value>Telegram՝ ուղարկել հաղորդագրություն</value>
+  </data>
+  <data name="NodeTypeTelegramSendDocument" xml:space="preserve">
+    <value>Telegram՝ ուղարկել ֆայլ</value>
+  </data>
+  <data name="NodeTypeTelegramMessageReceived" xml:space="preserve">
+    <value>Telegram՝ նոր հաղորդագրություն</value>
+  </data>
+  <data name="NodeTypeSheetsAppendRow" xml:space="preserve">
+    <value>Sheets՝ ավելացնել տող</value>
+  </data>
+  <data name="NodeTypeSheetsUpdateRow" xml:space="preserve">
+    <value>Sheets՝ թարմացնել տողը</value>
+  </data>
+  <data name="NodeTypeSheetsFindRows" xml:space="preserve">
+    <value>Sheets՝ գտնել տողեր</value>
+  </data>
+  <data name="NodeTypeSheetsRowAdded" xml:space="preserve">
+    <value>Sheets՝ նոր տող</value>
+  </data>
+  <data name="NodeTypeGmailSend" xml:space="preserve">
+    <value>Gmail՝ ուղարկել նամակ</value>
+  </data>
+  <data name="NodeTypeGmailFindMessages" xml:space="preserve">
+    <value>Gmail՝ գտնել նամակներ</value>
+  </data>
+  <data name="NodeTypeGmailMessageReceived" xml:space="preserve">
+    <value>Gmail՝ նոր նամակ</value>
+  </data>
+  <data name="NodeTypeDriveUploadFile" xml:space="preserve">
+    <value>Drive՝ վերբեռնել ֆայլ</value>
+  </data>
+  <data name="NodeTypeDriveCreateFolder" xml:space="preserve">
+    <value>Drive՝ ստեղծել թղթապանակ</value>
+  </data>
+  <data name="NodeTypeDriveFindFiles" xml:space="preserve">
+    <value>Drive՝ գտնել ֆայլեր</value>
+  </data>
+  <data name="NodeTypeDriveFileAdded" xml:space="preserve">
+    <value>Drive՝ նոր ֆայլ</value>
+  </data>
+  <data name="NodeTypeWhatsAppSendText" xml:space="preserve">
+    <value>WhatsApp՝ ուղարկել հաղորդագրություն</value>
+  </data>
+  <data name="NodeTypeWhatsAppSendTemplate" xml:space="preserve">
+    <value>WhatsApp՝ ուղարկել ձևանմուշ</value>
+  </data>
+  <data name="NodeTypeWhatsAppMessageReceived" xml:space="preserve">
+    <value>WhatsApp՝ նոր հաղորդագրություն</value>
+  </data>
+  <data name="AutomationHubIntro" xml:space="preserve">
+    <value>Գործակալներն աշխատում են ինքնուրույն՝ տրիգերը մեկնարկում է, գործողությունները կատարում են աշխատանքը։ Սկսեք ձևանմուշից կամ ստեղծեք ձերը։</value>
+  </data>
+  <data name="AutomationHubAgents" xml:space="preserve">
+    <value>գործակալ</value>
+  </data>
+  <data name="AutomationHubSteps" xml:space="preserve">
+    <value>Քայլեր</value>
+  </data>
+  <data name="All" xml:space="preserve">
+    <value>Բոլորը</value>
+  </data>
+  <data name="AutomationOpenPage" xml:space="preserve">
+    <value>Բացել գործակալների էջը</value>
+  </data>
+  <data name="IntegrationManage" xml:space="preserve">
+    <value>Կառավարել</value>
+  </data>
+  <data name="IntegrationNoConnectionsHint" xml:space="preserve">
+    <value>Telegram-ի, Google-ի կամ WhatsApp-ի միացումներ դեռ չկան։ Ավելացրեք դրանք «Ինտեգրացիաներ» էջում և ընտրեք հանգույցի հատկություններում։</value>
+  </data>
+  <data name="TplTelegramTicketAlert" xml:space="preserve">
+    <value>Տոմսը Telegram-ում</value>
+  </data>
+  <data name="TplTelegramTicketAlertBody" xml:space="preserve">
+    <value>Երբ բացվում է աջակցման տոմս, այն հրապարակվում է ձեր Telegram զրույցում։</value>
+  </data>
+  <data name="TplTelegramBotInbox" xml:space="preserve">
+    <value>Telegram բոտի մուտքայիններ</value>
+  </data>
+  <data name="TplTelegramBotInboxBody" xml:space="preserve">
+    <value>Հաղորդագրություն բոտին՝ ծանուցում ձեզ և ավտոմատ պատասխան։</value>
+  </data>
+  <data name="TplSheetsSignupLog" xml:space="preserve">
+    <value>Գրանցումները Google Sheets-ում</value>
+  </data>
+  <data name="TplSheetsSignupLogBody" xml:space="preserve">
+    <value>Յուրաքանչյուր նոր օգտատեր՝ տող՝ անուն, email և ժամ։</value>
+  </data>
+  <data name="TplSheetsLeadWelcome" xml:space="preserve">
+    <value>Աղյուսակի լիդ → Gmail նամակ</value>
+  </data>
+  <data name="TplSheetsLeadWelcomeBody" xml:space="preserve">
+    <value>Լիդերի աղյուսակի նոր տողն ուղարկում է ողջույնի նամակ ձեր Gmail-ից։</value>
+  </data>
+  <data name="TplGmailToTelegram" xml:space="preserve">
+    <value>Gmail → Telegram</value>
+  </data>
+  <data name="TplGmailToTelegramBody" xml:space="preserve">
+    <value>Մուտքային յուրաքանչյուր նոր նամակ փոխանցվում է կարճ Telegram հաղորդագրությամբ։</value>
+  </data>
+  <data name="TplDriveFileAlert" xml:space="preserve">
+    <value>Նոր ֆայլ Drive-ում</value>
+  </data>
+  <data name="TplDriveFileAlertBody" xml:space="preserve">
+    <value>Drive թղթապանակի նոր ֆայլը ձեզ ուղարկում է ծանուցում՝ հղումով։</value>
+  </data>
+  <data name="TplWhatsAppAutoReply" xml:space="preserve">
+    <value>WhatsApp ավտոպատասխան և գրանցում</value>
+  </data>
+  <data name="TplWhatsAppAutoReplyBody" xml:space="preserve">
+    <value>Պատասխանում է մուտքային WhatsApp հաղորդագրություններին և գրանցում Google Sheets-ում։</value>
+  </data>
+  <data name="TplOmnichannelTicket" xml:space="preserve">
+    <value>Տոմսը բոլոր ալիքներում</value>
+  </data>
+  <data name="TplOmnichannelTicketBody" xml:space="preserve">
+    <value>Նոր տոմս՝ թիմի Telegram զրույց, գրանցում Sheets-ում և նամակ ղեկավարին, շտապները՝ նաև WhatsApp-ով։</value>
+  </data>
+  <data name="AutomationPublishBeforeRun" xml:space="preserve">
+    <value>Կան չհրապարակված փոփոխություններ։ Հրապարակեք գործակալը, ապա գործարկեք։</value>
+  </data>
 </root>

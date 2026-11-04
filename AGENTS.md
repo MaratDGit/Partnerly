@@ -86,6 +86,7 @@ Partnerly — монолитное веб-приложение ASP.NET Core MVC 
 - Права: политики `Permission:{code}` → `PermissionPolicyProvider` + `PermissionAuthorizationHandler` + `IPermissionService`. Политики стоят на CRUD/Data/Export основных модулей и на `AutomationController` (`automation.*`). Видимость записей — `IUserVisibilityService`. Старый `HasPermision` удалён (2026-10-25).
 - События: внутрипроцессный `IEventBus` / `EventBus`; `AutomationEventBridge` подписан на те же события и запускает автоматизации.
 - Модуль Automation (меню «Agents»): код в `Partnerly/Automation` (свой `AutomationController` в `Automation/Web`), hosted `AutomationWorker`, хаб `/automationHub`, редактор Drawflow на `/Automation/Builder/{id}`. Подробности: `docs/ai/Automation/ARCHITECTURE.md`.
+- Интеграции (Telegram, Google Sheets / Gmail / Drive, WhatsApp): `Partnerly/Integrations`, подключаются к Automation через `IAutomationModule`, страница `/Integrations`. Новые внешние сервисы добавлять туда же по тому же образцу. Подробности: `docs/ai/Integrations/INTEGRATIONS-PLAN.md`.
 - UI: Razor, layout по умолчанию `_ContentNavbarLayout`, локализация `en` / `ru` / `hy`.
 - Платежи (`Payment`) и транзакции (`Transaction`) есть в модели, контроллеров под них нет.
 
@@ -180,5 +181,6 @@ dotnet build "Partnerly.sln"
 | `docs/ai/Automation/MASTER-SPECIFICATION.md` | Спецификация Universal Automation Platform |
 | `docs/ai/Automation/PHASE-1-ANALYSIS.md` | Анализ PHASE 1 и предложение архитектуры |
 | `docs/ai/Automation/ARCHITECTURE.md` | Архитектура модуля Automation (PHASE 2) |
+| `docs/ai/Integrations/INTEGRATIONS-PLAN.md` | План интеграций Telegram / Google Sheets / Gmail / Drive / WhatsApp (`Partnerly/Integrations`) — пошаговые задачи и статусы |
 | `docs/reports/` | Готовые отчёты |
 | `.cursor/rules/*.mdc` | Краткие правила для Cursor; дублируют этот файл, при изменении правил держать в согласии |

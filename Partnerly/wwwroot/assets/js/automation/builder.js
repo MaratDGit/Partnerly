@@ -218,9 +218,50 @@
         return fields;
     }
 
+    // Nodes from a template have no connectionId. When the user has exactly one
+    // connection of the needed kind, pick it so the agent is ready to publish.
+    function fillTemplateConnections(descriptors) {
+        var kindByType = {};
+        descriptors.forEach(function (item) {
+            if (item.connectionKind) {
+                kindByType[item.type] = item.connectionKind;
+            }
+        });
+        var home = (editor.export().drawflow || {}).Home || {};
+        var changed = false;
+        Object.keys(home.data || {}).forEach(function (key) {
+            var data = home.data[key].data || {};
+            var kind = kindByType[data.type];
+            if (!kind || (data.config && data.config.connectionId)) {
+                return;
+            }
+            var matching = catalogConnections.filter(function (c) { return c.kind === kind; });
+            if (matching.length !== 1) {
+                return;
+            }
+            data.config = data.config || {};
+            data.config.connectionId = matching[0].id;
+            editor.updateNodeDataFromId(home.data[key].id, data);
+            changed = true;
+        });
+        if (changed) {
+            syncHidden();
+        }
+    }
+
+    // Integration node forms live in /assets/js/integrations/builder-forms.js.
+    var EXTRA_SCHEMAS = typeof window.partnerlyIntegrationNodeForms === "function"
+        ? (window.partnerlyIntegrationNodeForms(t) || {})
+        : {};
+    var catalogConnections = [];
+    var integrationsUrl = "";
+
     function schemaFor(data) {
         if (!data) {
             return [];
+        }
+        if (EXTRA_SCHEMAS[data.type]) {
+            return EXTRA_SCHEMAS[data.type];
         }
         if (data.type === "delay" && data.kind === "trigger") {
             return delayFields("delayTriggerHelp", true);
@@ -529,7 +570,33 @@
             wrap.appendChild(label);
             var control;
             var value = getByPath(data.config, field.key);
-            if (field.type === "select") {
+            if (field.type === "connection") {
+                control = document.createElement("select");
+                control.className = "form-select";
+                var matching = catalogConnections.filter(function (item) { return item.kind === field.kind; });
+                var placeholder = document.createElement("option");
+                placeholder.value = "";
+                placeholder.textContent = matching.length ? t("chooseConnection", "Choose…") : t("noConnections", "No connections yet");
+                control.appendChild(placeholder);
+                matching.forEach(function (item) {
+                    var option = document.createElement("option");
+                    option.value = item.id;
+                    option.textContent = item.name;
+                    if (String(value || "") === String(item.id)) {
+                        option.selected = true;
+                    }
+                    control.appendChild(option);
+                });
+                if (integrationsUrl) {
+                    var manage = document.createElement("a");
+                    manage.className = "automation-docs-link d-inline-block mt-1";
+                    manage.href = integrationsUrl;
+                    manage.target = "_blank";
+                    manage.rel = "noopener";
+                    manage.textContent = t("manageConnections", "Manage connections");
+                    window.setTimeout(function () { wrap.appendChild(manage); }, 0);
+                }
+            } else if (field.type === "select") {
                 control = document.createElement("select");
                 control.className = "form-select";
                 (field.options || []).forEach(function (option) {
@@ -1036,12 +1103,25 @@
             if (myBoot !== bootId) {
                 return;
             }
+            catalogConnections = catalog.connections || [];
+            integrationsUrl = catalog.integrationsUrl || "";
             function bind(list, container) {
                 if (!container) {
                     return;
                 }
                 var canEdit = !builderForm || builderForm.getAttribute("data-can-edit") !== "false";
-                (list || []).forEach(function (item) {
+                var lastGroup = null;
+                // Built-in blocks first, then one titled group per integration.
+                (list || []).slice().sort(function (a, b) {
+                    return (a.group ? 1 : 0) - (b.group ? 1 : 0);
+                }).forEach(function (item) {
+                    if (item.group && item.group !== lastGroup) {
+                        var heading = document.createElement("div");
+                        heading.className = "automation-add-group";
+                        heading.textContent = item.group;
+                        container.appendChild(heading);
+                    }
+                    lastGroup = item.group || null;
                     var button = document.createElement("button");
                     button.type = "button";
                     button.className = "automation-add-item";
@@ -1051,12 +1131,19 @@
                         if (!canEdit) {
                             return;
                         }
+                        var config = defaultConfig(item.type, item.kind);
+                        if (item.connectionKind) {
+                            var first = catalogConnections.filter(function (c) { return c.kind === item.connectionKind; })[0];
+                            if (first) {
+                                config.connectionId = first.id;
+                            }
+                        }
                         addNode({
                             id: "n" + Date.now(),
                             kind: item.kind,
                             type: item.type,
                             name: slug(item.type) + editor.getNodesFromName(slug(item.type)).length,
-                            config: defaultConfig(item.type, item.kind)
+                            config: config
                         });
                         syncHidden();
                         closeAddMenus();
@@ -1066,6 +1153,7 @@
             }
             bind(catalog.triggers, triggersHost);
             bind(catalog.actions, actionsHost);
+            fillTemplateConnections((catalog.triggers || []).concat(catalog.actions || []));
         });
 
     function zoomLabel() {

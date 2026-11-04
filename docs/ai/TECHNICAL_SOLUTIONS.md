@@ -4,6 +4,16 @@
 
 ---
 
+## TR-2026-11-03-11 — Интеграции как модуль Automation, учётные данные в AutomationConnections
+
+- **Дата:** 2026-11-03
+- **Суть:** `Partnerly/Integrations` подключается к Automation через новый `IAutomationModule`; `GraphValidator` знает типы из registry. Токены Telegram / Google / WhatsApp — в `AutomationConnections` (`Kind`, `EncryptedPayload` через `ISecretProtector`), курсоры опроса и статус — там же. REST через `HttpClient` без SDK. Входящие: polling (Telegram, Gmail, Sheets, Drive) работает на localhost; WhatsApp — только webhook (нужен туннель). Право — `automation.connections`.
+- **Причина:** владелец: интеграции в отдельной папке и в существующей автоматизации; решения D1–D7 плана приняты по рекомендации.
+- **Затрагивает:** `Automation/Abstractions` (`IAutomationModule`, `HandlerDescriptor`), `GraphValidator`, `AutomationServiceCollectionExtensions`, `AutomationTriggerDispatcher`, `AutomationController.Catalog`, `builder.js`, `Program.cs`, меню.
+- **Последствия:** без миграции. Потеря ключей Data Protection = нечитаемые токены (подключение показывает «Reconnect»). Polling и шаги агента пишут payload одного подключения — теоретическая гонка курсора (KI-014).
+
+---
+
 ## TR-2026-11-03-10 — Пароли SMTP и seed-пользователя только в secrets
 
 - **Дата:** 2026-11-03

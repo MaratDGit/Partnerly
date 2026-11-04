@@ -36,7 +36,9 @@ namespace Partnerly.Automation.Hosting
             services.AddSingleton<IVariableBinder, VariableBinder>();
             services.AddSingleton<IConditionEvaluator, ConditionEvaluator>();
             services.AddSingleton<IPublicHttpGuard, AutomationHttpGuard>();
-            services.AddSingleton<GraphValidator>();
+            services.AddSingleton(sp => new GraphValidator(
+                sp.GetRequiredService<TriggerRegistry>(),
+                sp.GetRequiredService<ActionRegistry>()));
             services.AddSingleton<CronScheduleCalculator>();
             services.AddSingleton<IAutomationRunNotifier, NullAutomationRunNotifier>();
             services.AddScoped<ISecretProtector, SecretProtector>();
@@ -51,8 +53,26 @@ namespace Partnerly.Automation.Hosting
 
             RegisterTriggers(services);
             RegisterActions(services);
-            services.AddSingleton(_ => CreateTriggerRegistry());
-            services.AddSingleton(_ => CreateActionRegistry());
+            services.AddSingleton(sp =>
+            {
+                var registry = CreateTriggerRegistry();
+                foreach (var module in sp.GetServices<IAutomationModule>())
+                {
+                    module.RegisterTriggers(registry);
+                }
+
+                return registry;
+            });
+            services.AddSingleton(sp =>
+            {
+                var registry = CreateActionRegistry();
+                foreach (var module in sp.GetServices<IAutomationModule>())
+                {
+                    module.RegisterActions(registry);
+                }
+
+                return registry;
+            });
 
             if (useDatabase)
             {

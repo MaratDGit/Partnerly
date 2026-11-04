@@ -16,6 +16,7 @@ using Partnerly.Infrastructure.Services.MiddlewareServices;
 using Partnerly.Helpers;
 using Partnerly.Automation.Hosting;
 using Partnerly.Automation.Integration;
+using Partnerly.Integrations.Common;
 using Partnerly.Models;
 using Partnerly.Models.DataTable;
 using System.Globalization;
@@ -70,6 +71,7 @@ builder.Services.AddScoped<IFileStorageService, FileStorageService>();
 builder.Services.AddScoped<IInlineUpdateService, InlineUpdateService>();
 builder.Services.AddSingleton<IDataTableRegistry, DataTableRegistry>();
 builder.Services.AddPartnerlyAutomation(useDatabase: true);
+builder.Services.AddPartnerlyIntegrations();
 
 // Transient services
 builder.Services.AddTransient<IEmailSender, EmailSender>();

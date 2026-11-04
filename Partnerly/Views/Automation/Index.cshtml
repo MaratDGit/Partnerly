@@ -6,6 +6,22 @@
     var canHistory = Can("automation.history") ? "true" : "false";
     var canEdit = Can("automation.edit") ? "true" : "false";
     var canDelete = Can("automation.delete") ? "true" : "false";
+    var activeCount = Model.Definitions.Count(item => item.IsActive);
+    var categories = new[] { "partnerly", "telegram", "google", "whatsapp" };
+    string CategoryIcon(string category) => category switch
+    {
+        "telegram" => "bxl-telegram",
+        "google" => "bxl-google",
+        "whatsapp" => "bxl-whatsapp",
+        _ => "bx-bot"
+    };
+    string CategoryLabel(string category) => category switch
+    {
+        "telegram" => "Telegram",
+        "google" => "Google",
+        "whatsapp" => "WhatsApp",
+        _ => "Partnerly"
+    };
 }
 
 @section PageStyles {
@@ -13,7 +29,7 @@
 }
 
 <div id="automationHubRoot"
-     class="container-xxl flex-grow-1 container-p-y automation-page"
+     class="container-xxl flex-grow-1 container-p-y automation-page automation-hub-page"
      data-active="@Localizer["Active"]"
      data-inactive="@Localizer["Inactive"]"
      data-empty="@Localizer["AutomationEmptyDefinitions"]"
@@ -21,20 +37,36 @@
      data-settings="@Localizer["Settings"]"
      data-edit="@Localizer["Edit"]"
      data-delete="@Localizer["Delete"]"
+     data-col-status="@Localizer["Status"]"
+     data-col-updated="@Localizer["UpdatedDate"]"
      data-can-history="@canHistory"
      data-can-edit="@canEdit"
      data-can-delete="@canDelete">
     @await Html.PartialAsync("_Toast")
 
-    <div class="automation-hub-toolbar">
-        <h1>@Localizer["Automation"]</h1>
-        @if (Can("automation.create"))
-        {
-            <button type="button" class="btn btn-primary" data-open-create-automation>
-                <i class="bx bx-plus"></i> @Localizer["Create"]
-            </button>
-        }
-    </div>
+    <header class="automation-hub-hero">
+        <div class="automation-hub-hero-text">
+            <div class="automation-hub-stats">
+                <span class="automation-hub-stat"><i class="bx bx-bot"></i> <strong data-hub-count>@Model.Definitions.Count</strong> @Localizer["AutomationHubAgents"]</span>
+                <span class="automation-hub-stat is-on"><i class="bx bx-play-circle"></i> <strong>@activeCount</strong> @Localizer["Active"]</span>
+                <span class="automation-hub-stat"><i class="bx bx-layer"></i> <strong>@Model.Presets.Count</strong> @Localizer["ReadyTemplates"]</span>
+            </div>
+        </div>
+        <div class="automation-hub-hero-actions">
+            @if (Can("automation.connections"))
+            {
+                <a class="automation-hub-secondary" asp-controller="Integrations" asp-action="Index">
+                    <i class="bx bx-plug"></i> @Localizer["Integrations"]
+                </a>
+            }
+            @if (Can("automation.create"))
+            {
+                <button type="button" class="automation-hub-primary" data-open-create-automation>
+                    <i class="bx bx-plus"></i> @Localizer["Create"]
+                </button>
+            }
+        </div>
+    </header>
 
     <div class="automation-glass automation-hub-table-wrap">
         <table class="automation-hub-table">
@@ -58,19 +90,24 @@
                 foreach (var item in Model.Definitions)
                 {
                     <tr data-automation-row="@item.Id">
-                        <td>
-                            <div class="automation-hub-name">@item.Name</div>
-                            @if (!string.IsNullOrWhiteSpace(item.Description))
-                            {
-                                <div class="automation-hub-desc">@item.Description</div>
-                            }
+                        <td class="automation-hub-cell-main">
+                            <div class="automation-hub-row-main">
+                                <span class="automation-hub-avatar @(item.IsActive ? "is-on" : "is-off")" aria-hidden="true"><i class="bx bx-bot"></i></span>
+                                <div class="automation-hub-row-text">
+                                    <div class="automation-hub-name">@item.Name</div>
+                                    @if (!string.IsNullOrWhiteSpace(item.Description))
+                                    {
+                                        <div class="automation-hub-desc">@item.Description</div>
+                                    }
+                                </div>
+                            </div>
                         </td>
-                        <td>
+                        <td data-label="@Localizer["Status"]">
                             <span class="automation-hub-status @(item.IsActive ? "is-on" : "is-off")">
                                 @(item.IsActive ? Localizer["Active"] : Localizer["Inactive"])
                             </span>
                         </td>
-                        <td class="automation-hub-date">@item.UpdatedDate.ToString("dd.MM.yyyy HH:mm")</td>
+                        <td class="automation-hub-date" data-label="@Localizer["UpdatedDate"]">@item.UpdatedDate.ToString("dd.MM.yyyy HH:mm")</td>
                         <td class="automation-hub-actions">
                             @if (Can("automation.history"))
                             {
@@ -83,7 +120,7 @@
                                 <button type="button" class="automation-hub-icon" data-hub="settings" data-id="@item.Id" title="@Localizer["Settings"]" aria-label="@Localizer["Settings"]">
                                     <i class="bx bx-cog"></i>
                                 </button>
-                                <a class="automation-hub-icon" asp-action="Builder" asp-route-id="@item.Id" title="@Localizer["Edit"]" aria-label="@Localizer["Edit"]">
+                                <a class="automation-hub-icon is-primary" asp-action="Builder" asp-route-id="@item.Id" title="@Localizer["Edit"]" aria-label="@Localizer["Edit"]">
                                     <i class="bx bx-edit"></i>
                                 </a>
                             }
@@ -101,8 +138,19 @@
         </table>
     </div>
 
-    <div class="automation-hub-templates">
-        <h2>@Localizer["ReadyTemplates"]</h2>
+    <section class="automation-hub-templates" data-template-section>
+        <div class="automation-hub-templates-head">
+            <h2>@Localizer["ReadyTemplates"]</h2>
+            <div class="automation-hub-filters" role="tablist" aria-label="@Localizer["ReadyTemplates"]">
+                <button type="button" class="automation-hub-filter is-active" data-template-filter="all" role="tab" aria-selected="true">@Localizer["All"]</button>
+                @foreach (var category in categories.Where(c => Model.Presets.Any(p => p.Category == c)))
+                {
+                    <button type="button" class="automation-hub-filter is-@category" data-template-filter="@category" role="tab" aria-selected="false">
+                        <i class="bx @CategoryIcon(category)" aria-hidden="true"></i> @CategoryLabel(category)
+                    </button>
+                }
+            </div>
+        </div>
         <div class="automation-hub-template-grid">
             @foreach (var preset in Model.Presets)
             {
@@ -111,25 +159,35 @@
                 var sizeKey = preset.Size == "large"
                     ? "TplSizeLarge"
                     : preset.Size == "medium" ? "TplSizeMedium" : "TplSizeSmall";
-                <article class="automation-glass automation-hub-template">
-                    <span class="automation-hub-template-size is-@preset.Size">@Localizer[sizeKey]</span>
+                <article class="automation-glass automation-hub-template is-@preset.Category" data-template-category="@preset.Category">
+                    <div class="automation-hub-template-top">
+                        <span class="automation-hub-template-icon is-@preset.Category" aria-hidden="true"><i class="bx @CategoryIcon(preset.Category)"></i></span>
+                        <span class="automation-hub-template-size is-@preset.Size">@Localizer[sizeKey]</span>
+                    </div>
                     <h3>@title</h3>
                     <p>@lead</p>
+                    <div class="automation-hub-template-meta">
+                        <span><i class="bx bx-git-commit" aria-hidden="true"></i> @Localizer["AutomationHubSteps"]: @preset.StepCount</span>
+                        @foreach (var service in preset.Services)
+                        {
+                            <span class="automation-hub-chip">@service</span>
+                        }
+                    </div>
                     @if (Can("automation.create"))
                     {
                         <button type="button"
-                                class="btn btn-outline-secondary"
+                                class="automation-hub-template-use"
                                 data-open-create-automation
                                 data-template-id="@preset.Id"
                                 data-template-name="@title"
                                 data-template-description="@lead">
-                            @Localizer["UseTemplate"]
+                            @Localizer["UseTemplate"] <i class="bx bx-right-arrow-alt" aria-hidden="true"></i>
                         </button>
                     }
                 </article>
             }
         </div>
-    </div>
+    </section>
 </div>
 
 <template id="automationDeleteTemplate">

@@ -556,6 +556,14 @@
 
                     </button>
 
+                    <a asp-controller="Automation"
+                       asp-action="Index"
+                       class="partnerly-menu-agents-add partnerly-menu-agents-open"
+                       title="@Localizer["AutomationOpenPage"]"
+                       aria-label="@Localizer["AutomationOpenPage"]">
+                        <i class="bx bx-grid-alt" aria-hidden="true"></i>
+                    </a>
+
                     @if (Can("automation.create"))
                     {
                     <a asp-controller="Automation"
@@ -620,6 +628,27 @@
                     }
 
                 </ul>
+
+            </li>
+            }
+
+            @if (Can("automation.connections"))
+            {
+            <li class="partnerly-menu-item partnerly-menu-integrations @(currentPage.StartsWith("/Integrations") ? "active" : "")">
+
+                <a asp-controller="Integrations"
+                   asp-action="Index"
+                   class="partnerly-menu-link">
+
+                    <span class="partnerly-menu-icon">
+                        <i class="bx bx-plug"></i>
+                    </span>
+
+                    <span class="partnerly-menu-text">
+                        @Localizer["Integrations"]
+                    </span>
+
+                </a>
 
             </li>
             }

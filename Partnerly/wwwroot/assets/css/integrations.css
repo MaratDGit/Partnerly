@@ -1,0 +1,557 @@
+/* Integrations page: glass cards on the shared --partnerly-glass-* tokens. */
+.integrations-page {
+    --int-text: #1e1b4b;
+    --int-muted: #697a8d;
+    --int-ok: #22c55e;
+    --int-error: #ef4444;
+    --int-warn-bg: rgba(250, 204, 21, 0.14);
+    --int-chip: rgba(99, 102, 241, 0.1);
+    --int-telegram: #229ed9;
+    --int-google: #4285f4;
+    --int-whatsapp: #25d366;
+}
+
+html[data-theme="dark"] .integrations-page,
+html.dark-style .integrations-page {
+    --int-text: #e0e7ff;
+    --int-muted: #a5b4fc;
+    --int-warn-bg: rgba(250, 204, 21, 0.1);
+    --int-chip: rgba(167, 139, 250, 0.16);
+}
+
+.integrations-head {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 12px 18px;
+    margin-bottom: 20px;
+}
+
+.integrations-head h1 {
+    margin: 0 0 6px;
+    font-size: 1.55rem;
+    font-weight: 650;
+    letter-spacing: -0.02em;
+    color: var(--int-text);
+}
+
+.integrations-head p {
+    margin: 0;
+    max-width: 640px;
+    color: var(--int-muted);
+}
+
+.integrations-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+    gap: 20px;
+}
+
+.integrations-card {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    padding: 22px;
+    border: 1px solid var(--partnerly-glass-border);
+    border-radius: var(--partnerly-glass-radius-sm);
+    background: var(--partnerly-glass-bg);
+    box-shadow: var(--partnerly-glass-shadow), var(--partnerly-glass-inset);
+    backdrop-filter: blur(var(--partnerly-glass-blur));
+    -webkit-backdrop-filter: blur(var(--partnerly-glass-blur));
+    transition: transform 0.18s ease, box-shadow 0.18s ease;
+}
+
+.integrations-card:hover {
+    transform: translateY(-2px);
+}
+
+.integrations-card-head {
+    display: flex;
+    gap: 14px;
+    align-items: flex-start;
+}
+
+.integrations-card-head h2 {
+    margin: 0 0 4px;
+    font-size: 1.15rem;
+    font-weight: 650;
+    color: var(--int-text);
+}
+
+.integrations-card-head p,
+.integrations-muted {
+    margin: 0;
+    font-size: 0.875rem;
+    color: var(--int-muted);
+}
+
+.integrations-logo {
+    display: inline-flex;
+    flex: 0 0 auto;
+    align-items: center;
+    justify-content: center;
+    width: 46px;
+    height: 46px;
+    border-radius: 14px;
+    color: #fff;
+    font-size: 1.6rem;
+    box-shadow: 0 8px 20px rgba(15, 23, 42, 0.15);
+}
+
+.integrations-logo.is-telegram { background: linear-gradient(135deg, #37aee2, var(--int-telegram)); }
+.integrations-logo.is-google { background: linear-gradient(135deg, #4285f4 0%, #34a853 45%, #fbbc05 75%, #ea4335 100%); }
+.integrations-logo.is-whatsapp { background: linear-gradient(135deg, #5be584, var(--int-whatsapp)); }
+
+.integrations-features {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+
+.integrations-features li,
+.integrations-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    padding: 3px 10px;
+    border-radius: 999px;
+    background: var(--int-chip);
+    color: var(--int-text);
+    font-size: 0.78rem;
+}
+
+.integrations-badge {
+    padding: 1px 8px;
+    font-size: 0.72rem;
+}
+
+.integrations-connect {
+    align-self: flex-start;
+    margin-top: auto;
+}
+
+/* The site theme keeps .btn-primary flat; this page needs visible calls to action. */
+.integrations-page .btn-primary {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 8px 18px;
+    border: 0;
+    border-radius: 12px;
+    background: linear-gradient(135deg, #6366f1, #8b5cf6);
+    color: #fff;
+    font-weight: 600;
+    box-shadow: 0 8px 20px rgba(99, 102, 241, 0.28);
+    transition: transform 0.15s ease, box-shadow 0.15s ease, opacity 0.15s ease;
+}
+
+.integrations-page .btn-primary:hover,
+.integrations-page .btn-primary:focus-visible {
+    color: #fff;
+    transform: translateY(-1px);
+    box-shadow: 0 10px 24px rgba(99, 102, 241, 0.36);
+}
+
+.integrations-page .btn-primary:disabled {
+    opacity: 0.5;
+    transform: none;
+    box-shadow: none;
+}
+
+.integrations-page .btn-outline-primary,
+.integrations-page .btn-outline-secondary {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    border: 1px solid var(--partnerly-glass-border);
+    border-radius: 12px;
+    background: var(--int-chip);
+    color: var(--int-text);
+    font-weight: 500;
+}
+
+.integrations-page .btn-outline-primary:hover,
+.integrations-page .btn-outline-secondary:hover {
+    border-color: #6366f1;
+    background: rgba(99, 102, 241, 0.16);
+    color: var(--int-text);
+}
+
+.integrations-empty {
+    margin: 0;
+    padding: 14px;
+    border: 1px dashed var(--partnerly-glass-border);
+    border-radius: 12px;
+    color: var(--int-muted);
+    font-size: 0.875rem;
+    text-align: center;
+}
+
+.integrations-list {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+
+.integrations-item {
+    padding: 12px;
+    border: 1px solid var(--partnerly-glass-line);
+    border-radius: 12px;
+    background: var(--partnerly-glass-bg-strong);
+}
+
+.integrations-item-main {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+}
+
+.integrations-item-text {
+    display: flex;
+    flex: 1 1 auto;
+    flex-direction: column;
+    gap: 2px;
+    min-width: 0;
+}
+
+.integrations-item-text strong {
+    color: var(--int-text);
+    font-weight: 600;
+    overflow-wrap: anywhere;
+}
+
+.integrations-item-text > span {
+    color: var(--int-muted);
+    font-size: 0.82rem;
+    overflow-wrap: anywhere;
+}
+
+.integrations-badges {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 4px;
+    margin-top: 2px;
+}
+
+.integrations-error {
+    color: var(--int-error) !important;
+}
+
+.integrations-dot {
+    flex: 0 0 auto;
+    width: 10px;
+    height: 10px;
+    margin-top: 6px;
+    border-radius: 50%;
+}
+
+.integrations-dot.is-ok {
+    background: var(--int-ok);
+    box-shadow: 0 0 0 4px rgba(34, 197, 94, 0.16);
+}
+
+.integrations-dot.is-error {
+    background: var(--int-error);
+    box-shadow: 0 0 0 4px rgba(239, 68, 68, 0.16);
+}
+
+.integrations-item-actions {
+    display: flex;
+    gap: 4px;
+}
+
+.integrations-icon-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 32px;
+    height: 32px;
+    border: 1px solid var(--partnerly-glass-line);
+    border-radius: 10px;
+    background: transparent;
+    color: var(--int-muted);
+    font-size: 1.1rem;
+    cursor: pointer;
+    transition: background 0.15s ease, color 0.15s ease;
+}
+
+.integrations-icon-btn:hover,
+.integrations-icon-btn:focus-visible {
+    background: var(--int-chip);
+    color: var(--int-text);
+}
+
+.integrations-icon-btn.is-danger:hover {
+    background: rgba(239, 68, 68, 0.12);
+    color: var(--int-error);
+}
+
+.integrations-icon-btn.is-busy {
+    opacity: 0.6;
+    pointer-events: none;
+}
+
+.integrations-inline {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 6px;
+    margin-top: 10px;
+}
+
+.integrations-inline-label {
+    width: 100%;
+    margin: 0;
+    color: var(--int-muted);
+    font-size: 0.75rem;
+}
+
+.integrations-inline .form-control {
+    flex: 1 1 140px;
+}
+
+.integrations-webhook {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    margin-top: 10px;
+    font-size: 0.78rem;
+}
+
+.integrations-webhook > div {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+}
+
+.integrations-webhook span,
+.integrations-webhook p {
+    margin: 0;
+    color: var(--int-muted);
+}
+
+.integrations-page code[data-int-copy] {
+    display: block;
+    padding: 6px 8px;
+    border-radius: 8px;
+    background: var(--int-chip);
+    color: var(--int-text);
+    font-size: 0.75rem;
+    word-break: break-all;
+    cursor: copy;
+}
+
+.integrations-note {
+    padding: 10px 12px;
+    border-radius: 10px;
+    background: var(--int-chip);
+    color: var(--int-text);
+    font-size: 0.8rem;
+}
+
+.integrations-note.is-warn {
+    background: var(--int-warn-bg);
+}
+
+.integrations-flash,
+.integrations-toast {
+    margin-bottom: 16px;
+    padding: 10px 14px;
+    border-radius: 12px;
+    font-size: 0.9rem;
+}
+
+.integrations-flash.is-ok,
+.integrations-toast.is-ok {
+    background: rgba(34, 197, 94, 0.14);
+    color: #15803d;
+}
+
+.integrations-flash.is-error,
+.integrations-toast.is-error {
+    background: rgba(239, 68, 68, 0.12);
+    color: #b91c1c;
+}
+
+html[data-theme="dark"] .integrations-flash.is-ok,
+html[data-theme="dark"] .integrations-toast.is-ok { color: #86efac; }
+html[data-theme="dark"] .integrations-flash.is-error,
+html[data-theme="dark"] .integrations-toast.is-error { color: #fca5a5; }
+
+.integrations-toast {
+    position: fixed;
+    z-index: 1200;
+    right: 20px;
+    bottom: 20px;
+    max-width: min(420px, calc(100vw - 40px));
+    margin: 0;
+    box-shadow: var(--partnerly-glass-shadow);
+    backdrop-filter: blur(var(--partnerly-glass-blur));
+}
+
+/* Dialogs */
+.integrations-overlay {
+    position: fixed;
+    z-index: 1100;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 16px;
+    background: var(--partnerly-glass-overlay);
+    backdrop-filter: blur(var(--partnerly-glass-overlay-blur));
+    -webkit-backdrop-filter: blur(var(--partnerly-glass-overlay-blur));
+}
+
+.integrations-overlay[hidden] {
+    display: none;
+}
+
+.integrations-dialog {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    width: min(520px, 100%);
+    max-height: calc(100vh - 32px);
+    overflow-y: auto;
+    padding: 22px;
+    border: 1px solid var(--partnerly-glass-border);
+    border-radius: var(--partnerly-glass-radius);
+    background: var(--partnerly-glass-bg-strong);
+    box-shadow: var(--partnerly-glass-shadow), var(--partnerly-glass-inset);
+    animation: integrations-pop 0.18s ease-out;
+}
+
+@keyframes integrations-pop {
+    from { opacity: 0; transform: translateY(8px) scale(0.98); }
+    to { opacity: 1; transform: none; }
+}
+
+.integrations-dialog header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 4px;
+}
+
+.integrations-dialog header .integrations-logo {
+    width: 38px;
+    height: 38px;
+    font-size: 1.3rem;
+}
+
+.integrations-dialog h3 {
+    flex: 1 1 auto;
+    margin: 0;
+    font-size: 1.1rem;
+    font-weight: 650;
+    color: var(--int-text);
+}
+
+.integrations-dialog .form-label {
+    margin: 4px 0 0;
+}
+
+.integrations-dialog footer {
+    display: flex;
+    justify-content: flex-end;
+    gap: 8px;
+    margin-top: 8px;
+}
+
+.integrations-close {
+    border: 0;
+    background: transparent;
+    color: var(--int-muted);
+    font-size: 1.5rem;
+    line-height: 1;
+    cursor: pointer;
+}
+
+.integrations-steps {
+    margin: 0;
+    padding: 10px 12px 10px 30px;
+    border-radius: 12px;
+    background: var(--int-chip);
+    color: var(--int-text);
+    font-size: 0.84rem;
+}
+
+.integrations-steps li + li {
+    margin-top: 4px;
+}
+
+.integrations-checks {
+    display: grid;
+    gap: 8px;
+}
+
+.integrations-check {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 12px;
+    border: 1px solid var(--partnerly-glass-line);
+    border-radius: 12px;
+    color: var(--int-text);
+    cursor: pointer;
+}
+
+.integrations-check.is-sub {
+    margin-left: 24px;
+    padding: 6px 10px;
+    font-size: 0.8rem;
+    color: var(--int-muted);
+}
+
+.integrations-chats {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+
+.integrations-chats li {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+    padding: 10px 12px;
+    border: 1px solid var(--partnerly-glass-line);
+    border-radius: 12px;
+    font-size: 0.85rem;
+    color: var(--int-text);
+}
+
+.integrations-chats small {
+    display: block;
+    color: var(--int-muted);
+}
+
+body.is-integrations-dialog-open {
+    overflow: hidden;
+}
+
+@media (max-width: 575.98px) {
+    .integrations-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .integrations-card,
+    .integrations-dialog {
+        padding: 16px;
+    }
+
+    .integrations-dialog {
+        border-radius: var(--partnerly-glass-radius-sm);
+    }
+}

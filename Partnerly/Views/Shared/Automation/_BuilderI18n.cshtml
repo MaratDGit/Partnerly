@@ -23,7 +23,37 @@
         ["switch"] = Localizer["NodeTypeSwitch"].Value,
         ["set_variable"] = Localizer["NodeTypeSetVariable"].Value,
         ["http_request"] = Localizer["NodeTypeHttpRequest"].Value,
-        ["execute_workflow"] = Localizer["NodeTypeExecuteWorkflow"].Value
+        ["execute_workflow"] = Localizer["NodeTypeExecuteWorkflow"].Value,
+        ["telegram.send_message"] = Localizer["NodeTypeTelegramSendMessage"].Value,
+        ["telegram.send_document"] = Localizer["NodeTypeTelegramSendDocument"].Value,
+        ["telegram.message_received"] = Localizer["NodeTypeTelegramMessageReceived"].Value,
+        ["sheets.append_row"] = Localizer["NodeTypeSheetsAppendRow"].Value,
+        ["sheets.update_row"] = Localizer["NodeTypeSheetsUpdateRow"].Value,
+        ["sheets.find_rows"] = Localizer["NodeTypeSheetsFindRows"].Value,
+        ["sheets.row_added"] = Localizer["NodeTypeSheetsRowAdded"].Value,
+        ["gmail.send"] = Localizer["NodeTypeGmailSend"].Value,
+        ["gmail.find_messages"] = Localizer["NodeTypeGmailFindMessages"].Value,
+        ["gmail.message_received"] = Localizer["NodeTypeGmailMessageReceived"].Value,
+        ["drive.upload_file"] = Localizer["NodeTypeDriveUploadFile"].Value,
+        ["drive.create_folder"] = Localizer["NodeTypeDriveCreateFolder"].Value,
+        ["drive.find_files"] = Localizer["NodeTypeDriveFindFiles"].Value,
+        ["drive.file_added"] = Localizer["NodeTypeDriveFileAdded"].Value,
+        ["whatsapp.send_text"] = Localizer["NodeTypeWhatsAppSendText"].Value,
+        ["whatsapp.send_template"] = Localizer["NodeTypeWhatsAppSendTemplate"].Value,
+        ["whatsapp.message_received"] = Localizer["NodeTypeWhatsAppMessageReceived"].Value
+    };
+    // Integration field labels: builder-forms.js key -> resx "Builder" + PascalCase key.
+    var integrationKeys = new[]
+    {
+        "intConnection", "intConnectionHelp", "chooseConnection", "noConnections", "manageConnections",
+        "intChatId", "intChatIdHelp", "intMessageText", "intVariablesHelp", "intParseMode", "intPlainText",
+        "intAttachment", "intAttachmentHelp", "intCaption", "intChatFilter", "intTextContains", "intTelegramTriggerHelp",
+        "intSpreadsheet", "intSpreadsheetHelp", "intSheet", "intSheetHelp", "intRowValues", "intRowValuesHelp",
+        "intRowNumber", "intColumn", "intColumnHelp", "intSearchValue", "intFindRowsHelp", "intSheetsTriggerHelp",
+        "intFormat", "intGmailQuery", "intGmailQueryHelp", "intMaxResults", "intFromContains", "intSubjectContains",
+        "intGmailTriggerHelp", "intFileName", "intFolderId", "intFolderIdHelp", "intFolderName", "intNameContains",
+        "intDriveTriggerHelp", "intPhone", "intPhoneHelp", "intWhatsAppWindowHelp", "intTemplateName", "intLanguage",
+        "intTemplateParams", "intWhatsAppTriggerHelp"
     };
     var i18n = new Dictionary<string, object?>
     {
@@ -139,5 +169,9 @@
         ["kindCron"] = Localizer["ScheduleCron"].Value,
         ["types"] = types
     };
+    foreach (var key in integrationKeys)
+    {
+        i18n[key] = Localizer["Builder" + char.ToUpperInvariant(key[0]) + key.Substring(1)].Value;
+    }
 }
 @Html.Raw(Json.Serialize(i18n))

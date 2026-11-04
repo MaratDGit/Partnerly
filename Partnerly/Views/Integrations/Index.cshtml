@@ -1,0 +1,193 @@
+@model Partnerly.Integrations.Web.IntegrationsViewModel
+@{
+    ViewData["Title"] = Localizer["Integrations"].Value;
+}
+
+@section PageStyles {
+    <link rel="stylesheet" href="~/assets/css/integrations.css" asp-append-version="true" />
+}
+
+<div class="container-xxl flex-grow-1 container-p-y integrations-page"
+     id="integrationsRoot"
+     data-confirm-delete="@Localizer["IntegrationDeleteConfirm"]"
+     data-no-chats="@Localizer["IntegrationNoChats"]"
+     data-use-chat="@Localizer["IntegrationUseChat"]"
+     data-copied="@Localizer["Copied"]">
+    @Html.AntiForgeryToken()
+
+    <header class="integrations-head">
+        <div>
+            <h1>@Localizer["Integrations"]</h1>
+            <p>@Localizer["IntegrationsIntro"]</p>
+        </div>
+        <a class="btn btn-outline-primary integrations-head-link" asp-controller="Automation" asp-action="Index">
+            <i class="bx bx-bot" aria-hidden="true"></i> @Localizer["Agents"]
+        </a>
+    </header>
+
+    @if (!string.IsNullOrEmpty(Model.Flash))
+    {
+        <div class="integrations-flash @(Model.FlashIsError ? "is-error" : "is-ok")" role="status">@Model.Flash</div>
+    }
+    <div class="integrations-toast" data-int-toast role="status" aria-live="polite" hidden></div>
+
+    <div class="integrations-grid">
+        @* ---------- Telegram ---------- *@
+        <section class="integrations-card" data-service="telegram">
+            <div class="integrations-card-head">
+                <span class="integrations-logo is-telegram"><i class="bx bxl-telegram" aria-hidden="true"></i></span>
+                <div>
+                    <h2>Telegram</h2>
+                    <p>@Localizer["IntegrationTelegramIntro"]</p>
+                </div>
+            </div>
+            <ul class="integrations-features">
+                <li>@Localizer["IntegrationTelegramFeature1"]</li>
+                <li>@Localizer["IntegrationTelegramFeature2"]</li>
+            </ul>
+            @await Html.PartialAsync("~/Views/Integrations/_ConnectionList.cshtml", Model.Telegram)
+            <button type="button" class="btn btn-primary integrations-connect" data-int-open="telegram">
+                <i class="bx bx-plus" aria-hidden="true"></i> @Localizer["IntegrationConnect"]
+            </button>
+        </section>
+
+        @* ---------- Google ---------- *@
+        <section class="integrations-card" data-service="google">
+            <div class="integrations-card-head">
+                <span class="integrations-logo is-google"><i class="bx bxl-google" aria-hidden="true"></i></span>
+                <div>
+                    <h2>Google</h2>
+                    <p>@Localizer["IntegrationGoogleIntro"]</p>
+                </div>
+            </div>
+            <ul class="integrations-features">
+                <li><i class="bx bx-spreadsheet" aria-hidden="true"></i> Google Sheets</li>
+                <li><i class="bx bx-envelope" aria-hidden="true"></i> Gmail</li>
+                <li><i class="bx bxl-google-cloud" aria-hidden="true"></i> Google Drive</li>
+            </ul>
+            @if (!Model.GoogleConfigured)
+            {
+                <div class="integrations-note is-warn">@Localizer["IntegrationGoogleNotConfigured"]</div>
+            }
+            @await Html.PartialAsync("~/Views/Integrations/_ConnectionList.cshtml", Model.Google)
+            <button type="button" class="btn btn-primary integrations-connect" data-int-open="google" disabled="@(Model.GoogleConfigured ? null : "disabled")">
+                <i class="bx bx-plus" aria-hidden="true"></i> @Localizer["IntegrationConnect"]
+            </button>
+        </section>
+
+        @* ---------- WhatsApp ---------- *@
+        <section class="integrations-card" data-service="whatsapp">
+            <div class="integrations-card-head">
+                <span class="integrations-logo is-whatsapp"><i class="bx bxl-whatsapp" aria-hidden="true"></i></span>
+                <div>
+                    <h2>WhatsApp</h2>
+                    <p>@Localizer["IntegrationWhatsAppIntro"]</p>
+                </div>
+            </div>
+            <ul class="integrations-features">
+                <li>@Localizer["IntegrationWhatsAppFeature1"]</li>
+                <li>@Localizer["IntegrationWhatsAppFeature2"]</li>
+            </ul>
+            @await Html.PartialAsync("~/Views/Integrations/_ConnectionList.cshtml", Model.WhatsApp)
+            <button type="button" class="btn btn-primary integrations-connect" data-int-open="whatsapp">
+                <i class="bx bx-plus" aria-hidden="true"></i> @Localizer["IntegrationConnect"]
+            </button>
+        </section>
+    </div>
+
+    @* ---------- Dialogs ---------- *@
+    <div class="integrations-overlay" data-int-dialog="telegram" hidden aria-hidden="true">
+        <form class="integrations-dialog" method="post" asp-action="ConnectTelegram" data-int-form>
+            <header>
+                <span class="integrations-logo is-telegram"><i class="bx bxl-telegram" aria-hidden="true"></i></span>
+                <h3>@Localizer["IntegrationConnectTelegram"]</h3>
+                <button type="button" class="integrations-close" data-int-close aria-label="@Localizer["Close"]"><i class="bx bx-x"></i></button>
+            </header>
+            <ol class="integrations-steps">
+                <li>@Localizer["IntegrationTelegramStep1"]</li>
+                <li>@Localizer["IntegrationTelegramStep2"]</li>
+                <li>@Localizer["IntegrationTelegramStep3"]</li>
+            </ol>
+            <label class="form-label" for="tgName">@Localizer["Name"]</label>
+            <input class="form-control" id="tgName" name="name" placeholder="@Localizer["IntegrationNameOptional"]" />
+            <label class="form-label" for="tgToken">@Localizer["IntegrationBotToken"]</label>
+            <input class="form-control" id="tgToken" name="botToken" required autocomplete="off" spellcheck="false" placeholder="123456:ABC-DEF..." />
+            <label class="form-label" for="tgChat">@Localizer["IntegrationDefaultChat"]</label>
+            <input class="form-control" id="tgChat" name="defaultChatId" placeholder="@Localizer["IntegrationDefaultChatHelp"]" />
+            <footer>
+                <button type="button" class="btn btn-outline-secondary" data-int-close>@Localizer["Cancel"]</button>
+                <button type="submit" class="btn btn-primary">@Localizer["IntegrationConnect"]</button>
+            </footer>
+        </form>
+    </div>
+
+    <div class="integrations-overlay" data-int-dialog="google" hidden aria-hidden="true">
+        <form class="integrations-dialog" method="post" asp-action="ConnectGoogle" data-int-form>
+            <header>
+                <span class="integrations-logo is-google"><i class="bx bxl-google" aria-hidden="true"></i></span>
+                <h3>@Localizer["IntegrationConnectGoogle"]</h3>
+                <button type="button" class="integrations-close" data-int-close aria-label="@Localizer["Close"]"><i class="bx bx-x"></i></button>
+            </header>
+            <p class="integrations-muted">@Localizer["IntegrationGoogleChoose"]</p>
+            <div class="integrations-checks">
+                <label class="integrations-check"><input type="checkbox" name="sheets" value="true" checked /> <i class="bx bx-spreadsheet"></i> Google Sheets</label>
+                <label class="integrations-check"><input type="checkbox" name="gmail" value="true" /> <i class="bx bx-envelope"></i> Gmail</label>
+                <label class="integrations-check"><input type="checkbox" name="drive" value="true" /> <i class="bx bxl-google-cloud"></i> Google Drive</label>
+                <label class="integrations-check is-sub"><input type="checkbox" name="driveFull" value="true" /> @Localizer["IntegrationDriveFull"]</label>
+            </div>
+            <label class="form-label" for="gName">@Localizer["Name"]</label>
+            <input class="form-control" id="gName" name="name" placeholder="@Localizer["IntegrationNameOptional"]" />
+            <div class="integrations-note">
+                @Localizer["IntegrationGoogleRedirect"]
+                <code data-int-copy>@Model.GoogleRedirectUri</code>
+            </div>
+            <footer>
+                <button type="button" class="btn btn-outline-secondary" data-int-close>@Localizer["Cancel"]</button>
+                <button type="submit" class="btn btn-primary"><i class="bx bxl-google"></i> @Localizer["IntegrationContinueGoogle"]</button>
+            </footer>
+        </form>
+    </div>
+
+    <div class="integrations-overlay" data-int-dialog="whatsapp" hidden aria-hidden="true">
+        <form class="integrations-dialog" method="post" asp-action="ConnectWhatsApp" data-int-form>
+            <header>
+                <span class="integrations-logo is-whatsapp"><i class="bx bxl-whatsapp" aria-hidden="true"></i></span>
+                <h3>@Localizer["IntegrationConnectWhatsApp"]</h3>
+                <button type="button" class="integrations-close" data-int-close aria-label="@Localizer["Close"]"><i class="bx bx-x"></i></button>
+            </header>
+            <ol class="integrations-steps">
+                <li>@Localizer["IntegrationWhatsAppStep1"]</li>
+                <li>@Localizer["IntegrationWhatsAppStep2"]</li>
+                <li>@Localizer["IntegrationWhatsAppStep3"]</li>
+            </ol>
+            <label class="form-label" for="waName">@Localizer["Name"]</label>
+            <input class="form-control" id="waName" name="name" placeholder="@Localizer["IntegrationNameOptional"]" />
+            <label class="form-label" for="waPhone">Phone number ID</label>
+            <input class="form-control" id="waPhone" name="phoneNumberId" required autocomplete="off" />
+            <label class="form-label" for="waToken">Access token</label>
+            <input class="form-control" id="waToken" name="accessToken" required autocomplete="off" spellcheck="false" />
+            <label class="form-label" for="waSecret">App secret</label>
+            <input class="form-control" id="waSecret" name="appSecret" type="password" required autocomplete="new-password" />
+            <footer>
+                <button type="button" class="btn btn-outline-secondary" data-int-close>@Localizer["Cancel"]</button>
+                <button type="submit" class="btn btn-primary">@Localizer["IntegrationConnect"]</button>
+            </footer>
+        </form>
+    </div>
+
+    <div class="integrations-overlay" data-int-dialog="chats" hidden aria-hidden="true">
+        <div class="integrations-dialog">
+            <header>
+                <span class="integrations-logo is-telegram"><i class="bx bxl-telegram" aria-hidden="true"></i></span>
+                <h3>@Localizer["IntegrationRecentChats"]</h3>
+                <button type="button" class="integrations-close" data-int-close aria-label="@Localizer["Close"]"><i class="bx bx-x"></i></button>
+            </header>
+            <p class="integrations-muted">@Localizer["IntegrationRecentChatsHelp"]</p>
+            <ul class="integrations-chats" data-int-chats></ul>
+        </div>
+    </div>
+</div>
+
+@section PageScripts {
+    <script src="~/assets/js/integrations/integrations.js" asp-append-version="true"></script>
+}

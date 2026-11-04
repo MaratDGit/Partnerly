@@ -40,6 +40,40 @@ namespace Partnerly.Automation.Integration
             return EnqueueAsync(AutomationTypeCodes.Event, payload, config => MatchesEvent(config, eventName), cancellationToken);
         }
 
+        // Integration triggers carry a connectionId in their config. Only the
+        // owner's automations bound to that connection may start, so one
+        // user's Telegram bot never wakes another user's agents.
+        public async Task EnqueueIntegrationAsync(
+            string triggerType,
+            Guid ownerUserId,
+            Guid connectionId,
+            JsonObject payload,
+            Func<JsonElement, bool>? matches = null,
+            CancellationToken cancellationToken = default)
+        {
+            var armed = await _store.GetEnabledTriggersAsync(triggerType, cancellationToken);
+            foreach (var item in armed)
+            {
+                if (item.Definition.OwnerUserId != ownerUserId)
+                {
+                    continue;
+                }
+
+                var config = ParseConfig(item.Trigger.ConfigJson);
+                if (!Guid.TryParse(ReadString(config, "connectionId"), out var boundId) || boundId != connectionId)
+                {
+                    continue;
+                }
+
+                if (matches != null && !matches(config))
+                {
+                    continue;
+                }
+
+                await TryEnqueueAsync(item, triggerType, payload, cancellationToken);
+            }
+        }
+
         public Task EnqueueArmedAsync(
             ArmedAutomationTrigger armed,
             JsonObject payload,

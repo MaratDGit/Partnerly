@@ -3346,4 +3346,412 @@ User, группу и шаблон письма здесь создать нел
     <value>Приостановить</value>
   </data>
 
+  <data name="Integrations" xml:space="preserve">
+    <value>Интеграции</value>
+  </data>
+  <data name="IntegrationsIntro" xml:space="preserve">
+    <value>Подключите Telegram, Google и WhatsApp один раз и используйте их как триггеры и действия в агентах.</value>
+  </data>
+  <data name="IntegrationConnect" xml:space="preserve">
+    <value>Подключить</value>
+  </data>
+  <data name="IntegrationConnected" xml:space="preserve">
+    <value>Подключение добавлено.</value>
+  </data>
+  <data name="IntegrationGoogleFailed" xml:space="preserve">
+    <value>Не удалось подключить Google:</value>
+  </data>
+  <data name="IntegrationTokenRequired" xml:space="preserve">
+    <value>Нужен токен бота.</value>
+  </data>
+  <data name="IntegrationCheckFailed" xml:space="preserve">
+    <value>Проверка не прошла:</value>
+  </data>
+  <data name="IntegrationCheckOk" xml:space="preserve">
+    <value>Подключение работает:</value>
+  </data>
+  <data name="IntegrationGoogleNotConfigured" xml:space="preserve">
+    <value>Google-клиент не настроен. Добавьте Authentication:Google:ClientId и ClientSecret в secrets.json.</value>
+  </data>
+  <data name="IntegrationGoogleChooseService" xml:space="preserve">
+    <value>Выберите хотя бы один сервис Google.</value>
+  </data>
+  <data name="IntegrationWhatsAppFieldsRequired" xml:space="preserve">
+    <value>Нужны Phone number ID, access token и app secret.</value>
+  </data>
+  <data name="IntegrationDeleteConfirm" xml:space="preserve">
+    <value>Удалить подключение? Агенты, которые его используют, перестанут работать.</value>
+  </data>
+  <data name="IntegrationNoChats" xml:space="preserve">
+    <value>Сообщений пока нет. Напишите боту любое сообщение и попробуйте снова.</value>
+  </data>
+  <data name="IntegrationUseChat" xml:space="preserve">
+    <value>Выбрать</value>
+  </data>
+  <data name="Copied" xml:space="preserve">
+    <value>Скопировано</value>
+  </data>
+  <data name="IntegrationTelegramIntro" xml:space="preserve">
+    <value>Сообщения и файлы от бота; запуск агентов по входящим сообщениям.</value>
+  </data>
+  <data name="IntegrationTelegramFeature1" xml:space="preserve">
+    <value>Отправка сообщений и файлов</value>
+  </data>
+  <data name="IntegrationTelegramFeature2" xml:space="preserve">
+    <value>Триггер: новое сообщение боту</value>
+  </data>
+  <data name="IntegrationGoogleIntro" xml:space="preserve">
+    <value>Один аккаунт Google для Sheets, Gmail и Drive.</value>
+  </data>
+  <data name="IntegrationWhatsAppIntro" xml:space="preserve">
+    <value>WhatsApp Business Cloud API от Meta.</value>
+  </data>
+  <data name="IntegrationWhatsAppFeature1" xml:space="preserve">
+    <value>Отправка текста и шаблонов</value>
+  </data>
+  <data name="IntegrationWhatsAppFeature2" xml:space="preserve">
+    <value>Триггер: входящее сообщение (нужен публичный URL)</value>
+  </data>
+  <data name="IntegrationConnectTelegram" xml:space="preserve">
+    <value>Подключить Telegram-бота</value>
+  </data>
+  <data name="IntegrationTelegramStep1" xml:space="preserve">
+    <value>Откройте @BotFather в Telegram и отправьте /newbot.</value>
+  </data>
+  <data name="IntegrationTelegramStep2" xml:space="preserve">
+    <value>Скопируйте токен бота и вставьте ниже.</value>
+  </data>
+  <data name="IntegrationTelegramStep3" xml:space="preserve">
+    <value>Напишите боту любое сообщение, затем выберите чат кнопкой «Чаты».</value>
+  </data>
+  <data name="IntegrationNameOptional" xml:space="preserve">
+    <value>Название (необязательно)</value>
+  </data>
+  <data name="IntegrationBotToken" xml:space="preserve">
+    <value>Токен бота</value>
+  </data>
+  <data name="IntegrationDefaultChat" xml:space="preserve">
+    <value>Чат по умолчанию (id)</value>
+  </data>
+  <data name="IntegrationDefaultChatHelp" xml:space="preserve">
+    <value>Используется, если в шаге не указан чат</value>
+  </data>
+  <data name="IntegrationConnectGoogle" xml:space="preserve">
+    <value>Подключить аккаунт Google</value>
+  </data>
+  <data name="IntegrationGoogleChoose" xml:space="preserve">
+    <value>Выберите, к чему Partnerly получит доступ. Позже можно подключиться снова и добавить.</value>
+  </data>
+  <data name="IntegrationDriveFull" xml:space="preserve">
+    <value>Полный доступ к Drive (все файлы, не только созданные Partnerly)</value>
+  </data>
+  <data name="IntegrationGoogleRedirect" xml:space="preserve">
+    <value>В Google Cloud Console добавьте этот разрешённый redirect URI:</value>
+  </data>
+  <data name="IntegrationContinueGoogle" xml:space="preserve">
+    <value>Продолжить с Google</value>
+  </data>
+  <data name="IntegrationConnectWhatsApp" xml:space="preserve">
+    <value>Подключить WhatsApp</value>
+  </data>
+  <data name="IntegrationWhatsAppStep1" xml:space="preserve">
+    <value>Meta for Developers → ваше приложение → WhatsApp → API Setup.</value>
+  </data>
+  <data name="IntegrationWhatsAppStep2" xml:space="preserve">
+    <value>Скопируйте Phone number ID и access token; App secret — в App settings → Basic.</value>
+  </data>
+  <data name="IntegrationWhatsAppStep3" xml:space="preserve">
+    <value>После подключения вставьте webhook URL и verify token в WhatsApp → Configuration.</value>
+  </data>
+  <data name="IntegrationRecentChats" xml:space="preserve">
+    <value>Недавние чаты</value>
+  </data>
+  <data name="IntegrationRecentChatsHelp" xml:space="preserve">
+    <value>Чаты, которые недавно писали боту. Выберите чат по умолчанию.</value>
+  </data>
+  <data name="IntegrationNoConnections" xml:space="preserve">
+    <value>Подключений пока нет.</value>
+  </data>
+  <data name="IntegrationStatusOk" xml:space="preserve">
+    <value>Работает</value>
+  </data>
+  <data name="IntegrationTest" xml:space="preserve">
+    <value>Проверить подключение</value>
+  </data>
+  <data name="IntegrationWhatsAppTunnel" xml:space="preserve">
+    <value>Meta должна достучаться до этого URL из интернета. На localhost используйте Cloudflare Tunnel или ngrok.</value>
+  </data>
+  <data name="Deleted" xml:space="preserve">
+    <value>Удалено</value>
+  </data>
+  <data name="BuilderIntConnection" xml:space="preserve">
+    <value>Подключение</value>
+  </data>
+  <data name="BuilderIntConnectionHelp" xml:space="preserve">
+    <value>Ваше подключение со страницы «Интеграции».</value>
+  </data>
+  <data name="BuilderChooseConnection" xml:space="preserve">
+    <value>Выберите подключение</value>
+  </data>
+  <data name="BuilderNoConnections" xml:space="preserve">
+    <value>Подключений нет — добавьте на странице «Интеграции»</value>
+  </data>
+  <data name="BuilderManageConnections" xml:space="preserve">
+    <value>Управлять подключениями</value>
+  </data>
+  <data name="BuilderIntChatId" xml:space="preserve">
+    <value>Id чата</value>
+  </data>
+  <data name="BuilderIntChatIdHelp" xml:space="preserve">
+    <value>Пусто = чат по умолчанию из подключения. Можно переменные, например {{trigger.chatId}}.</value>
+  </data>
+  <data name="BuilderIntMessageText" xml:space="preserve">
+    <value>Сообщение</value>
+  </data>
+  <data name="BuilderIntVariablesHelp" xml:space="preserve">
+    <value>Переменные: {{trigger.field}}, {{steps.nodeName.result.field}}, {{vars.name}}.</value>
+  </data>
+  <data name="BuilderIntParseMode" xml:space="preserve">
+    <value>Форматирование</value>
+  </data>
+  <data name="BuilderIntPlainText" xml:space="preserve">
+    <value>Обычный текст</value>
+  </data>
+  <data name="BuilderIntAttachment" xml:space="preserve">
+    <value>Id вложения</value>
+  </data>
+  <data name="BuilderIntAttachmentHelp" xml:space="preserve">
+    <value>Id вложения Partnerly, например из шага поиска.</value>
+  </data>
+  <data name="BuilderIntCaption" xml:space="preserve">
+    <value>Подпись</value>
+  </data>
+  <data name="BuilderIntChatFilter" xml:space="preserve">
+    <value>Только этот чат (id)</value>
+  </data>
+  <data name="BuilderIntTextContains" xml:space="preserve">
+    <value>Текст содержит</value>
+  </data>
+  <data name="BuilderIntTelegramTriggerHelp" xml:space="preserve">
+    <value>Запускается на каждое новое сообщение боту. Используйте {{trigger.text}}, {{trigger.chatId}}, {{trigger.fromName}}.</value>
+  </data>
+  <data name="BuilderIntSpreadsheet" xml:space="preserve">
+    <value>Таблица</value>
+  </data>
+  <data name="BuilderIntSpreadsheetHelp" xml:space="preserve">
+    <value>Вставьте ссылку на таблицу или её id.</value>
+  </data>
+  <data name="BuilderIntSheet" xml:space="preserve">
+    <value>Лист (вкладка)</value>
+  </data>
+  <data name="BuilderIntSheetHelp" xml:space="preserve">
+    <value>Название вкладки, по умолчанию Sheet1.</value>
+  </data>
+  <data name="BuilderIntRowValues" xml:space="preserve">
+    <value>Значения</value>
+  </data>
+  <data name="BuilderIntRowValuesHelp" xml:space="preserve">
+    <value>Одно значение в строке, по порядку колонок. Можно переменные.</value>
+  </data>
+  <data name="BuilderIntRowNumber" xml:space="preserve">
+    <value>Номер строки</value>
+  </data>
+  <data name="BuilderIntColumn" xml:space="preserve">
+    <value>Колонка</value>
+  </data>
+  <data name="BuilderIntColumnHelp" xml:space="preserve">
+    <value>Буква (A, B…) или номер (1, 2…).</value>
+  </data>
+  <data name="BuilderIntSearchValue" xml:space="preserve">
+    <value>Искомое значение</value>
+  </data>
+  <data name="BuilderIntFindRowsHelp" xml:space="preserve">
+    <value>Результат: {{steps.nodeName.result.count}}, {{steps.nodeName.result.first.fields.Email}}.</value>
+  </data>
+  <data name="BuilderIntSheetsTriggerHelp" xml:space="preserve">
+    <value>Запускается на каждую новую строку (проверка раз в минуту). Используйте {{trigger.rowNumber}}, {{trigger.fields.ColumnName}}.</value>
+  </data>
+  <data name="BuilderIntFormat" xml:space="preserve">
+    <value>Формат</value>
+  </data>
+  <data name="BuilderIntGmailQuery" xml:space="preserve">
+    <value>Поиск</value>
+  </data>
+  <data name="BuilderIntGmailQueryHelp" xml:space="preserve">
+    <value>Поиск Gmail, например from:client@example.com is:unread.</value>
+  </data>
+  <data name="BuilderIntMaxResults" xml:space="preserve">
+    <value>Максимум результатов</value>
+  </data>
+  <data name="BuilderIntFromContains" xml:space="preserve">
+    <value>Отправитель содержит</value>
+  </data>
+  <data name="BuilderIntSubjectContains" xml:space="preserve">
+    <value>Тема содержит</value>
+  </data>
+  <data name="BuilderIntGmailTriggerHelp" xml:space="preserve">
+    <value>Запускается на каждое новое письмо во входящих (проверка раз в минуту). Используйте {{trigger.from}}, {{trigger.subject}}, {{trigger.snippet}}.</value>
+  </data>
+  <data name="BuilderIntFileName" xml:space="preserve">
+    <value>Имя файла</value>
+  </data>
+  <data name="BuilderIntFolderId" xml:space="preserve">
+    <value>Id папки</value>
+  </data>
+  <data name="BuilderIntFolderIdHelp" xml:space="preserve">
+    <value>Из ссылки на папку: drive.google.com/drive/folders/&lt;id&gt;. Пусто = Мой диск.</value>
+  </data>
+  <data name="BuilderIntFolderName" xml:space="preserve">
+    <value>Название папки</value>
+  </data>
+  <data name="BuilderIntNameContains" xml:space="preserve">
+    <value>Имя содержит</value>
+  </data>
+  <data name="BuilderIntDriveTriggerHelp" xml:space="preserve">
+    <value>Запускается на каждый новый файл (проверка раз в минуту). Используйте {{trigger.name}}, {{trigger.webViewLink}}.</value>
+  </data>
+  <data name="BuilderIntPhone" xml:space="preserve">
+    <value>Телефон</value>
+  </data>
+  <data name="BuilderIntPhoneHelp" xml:space="preserve">
+    <value>Международный формат, например 37491234567.</value>
+  </data>
+  <data name="BuilderIntWhatsAppWindowHelp" xml:space="preserve">
+    <value>Свободный текст работает только 24 часа после сообщения клиента. Иначе используйте шаблон.</value>
+  </data>
+  <data name="BuilderIntTemplateName" xml:space="preserve">
+    <value>Название шаблона</value>
+  </data>
+  <data name="BuilderIntLanguage" xml:space="preserve">
+    <value>Код языка</value>
+  </data>
+  <data name="BuilderIntTemplateParams" xml:space="preserve">
+    <value>Параметры</value>
+  </data>
+  <data name="BuilderIntWhatsAppTriggerHelp" xml:space="preserve">
+    <value>Запускается на каждое входящее сообщение. Используйте {{trigger.from}}, {{trigger.name}}, {{trigger.text}}.</value>
+  </data>
+  <data name="NodeTypeTelegramSendMessage" xml:space="preserve">
+    <value>Telegram: отправить сообщение</value>
+  </data>
+  <data name="NodeTypeTelegramSendDocument" xml:space="preserve">
+    <value>Telegram: отправить файл</value>
+  </data>
+  <data name="NodeTypeTelegramMessageReceived" xml:space="preserve">
+    <value>Telegram: новое сообщение</value>
+  </data>
+  <data name="NodeTypeSheetsAppendRow" xml:space="preserve">
+    <value>Sheets: добавить строку</value>
+  </data>
+  <data name="NodeTypeSheetsUpdateRow" xml:space="preserve">
+    <value>Sheets: обновить строку</value>
+  </data>
+  <data name="NodeTypeSheetsFindRows" xml:space="preserve">
+    <value>Sheets: найти строки</value>
+  </data>
+  <data name="NodeTypeSheetsRowAdded" xml:space="preserve">
+    <value>Sheets: новая строка</value>
+  </data>
+  <data name="NodeTypeGmailSend" xml:space="preserve">
+    <value>Gmail: отправить письмо</value>
+  </data>
+  <data name="NodeTypeGmailFindMessages" xml:space="preserve">
+    <value>Gmail: найти письма</value>
+  </data>
+  <data name="NodeTypeGmailMessageReceived" xml:space="preserve">
+    <value>Gmail: новое письмо</value>
+  </data>
+  <data name="NodeTypeDriveUploadFile" xml:space="preserve">
+    <value>Drive: загрузить файл</value>
+  </data>
+  <data name="NodeTypeDriveCreateFolder" xml:space="preserve">
+    <value>Drive: создать папку</value>
+  </data>
+  <data name="NodeTypeDriveFindFiles" xml:space="preserve">
+    <value>Drive: найти файлы</value>
+  </data>
+  <data name="NodeTypeDriveFileAdded" xml:space="preserve">
+    <value>Drive: новый файл</value>
+  </data>
+  <data name="NodeTypeWhatsAppSendText" xml:space="preserve">
+    <value>WhatsApp: отправить сообщение</value>
+  </data>
+  <data name="NodeTypeWhatsAppSendTemplate" xml:space="preserve">
+    <value>WhatsApp: отправить шаблон</value>
+  </data>
+  <data name="NodeTypeWhatsAppMessageReceived" xml:space="preserve">
+    <value>WhatsApp: новое сообщение</value>
+  </data>
+  <data name="AutomationHubIntro" xml:space="preserve">
+    <value>Агенты работают сами: триггер запускает, действия выполняют работу. Начните с шаблона или соберите свой.</value>
+  </data>
+  <data name="AutomationHubAgents" xml:space="preserve">
+    <value>агентов</value>
+  </data>
+  <data name="AutomationHubSteps" xml:space="preserve">
+    <value>Шагов</value>
+  </data>
+  <data name="All" xml:space="preserve">
+    <value>Все</value>
+  </data>
+  <data name="AutomationOpenPage" xml:space="preserve">
+    <value>Открыть страницу агентов</value>
+  </data>
+  <data name="IntegrationManage" xml:space="preserve">
+    <value>Управлять</value>
+  </data>
+  <data name="IntegrationNoConnectionsHint" xml:space="preserve">
+    <value>Подключений Telegram, Google или WhatsApp пока нет. Добавьте их на странице «Интеграции» и выберите в свойствах узла.</value>
+  </data>
+  <data name="TplTelegramTicketAlert" xml:space="preserve">
+    <value>Тикет в Telegram</value>
+  </data>
+  <data name="TplTelegramTicketAlertBody" xml:space="preserve">
+    <value>Когда открывается обращение, публикует его в ваш Telegram-чат.</value>
+  </data>
+  <data name="TplTelegramBotInbox" xml:space="preserve">
+    <value>Входящие Telegram-бота</value>
+  </data>
+  <data name="TplTelegramBotInboxBody" xml:space="preserve">
+    <value>Сообщение боту: уведомление вам и автоматический ответ.</value>
+  </data>
+  <data name="TplSheetsSignupLog" xml:space="preserve">
+    <value>Регистрации в Google Sheets</value>
+  </data>
+  <data name="TplSheetsSignupLogBody" xml:space="preserve">
+    <value>Каждый новый пользователь — строка: имя, email и время.</value>
+  </data>
+  <data name="TplSheetsLeadWelcome" xml:space="preserve">
+    <value>Лид из таблицы → письмо Gmail</value>
+  </data>
+  <data name="TplSheetsLeadWelcomeBody" xml:space="preserve">
+    <value>Новая строка в таблице лидов отправляет приветственное письмо с вашего Gmail.</value>
+  </data>
+  <data name="TplGmailToTelegram" xml:space="preserve">
+    <value>Gmail → Telegram</value>
+  </data>
+  <data name="TplGmailToTelegramBody" xml:space="preserve">
+    <value>Каждое новое письмо во входящих пересылается коротким сообщением в Telegram.</value>
+  </data>
+  <data name="TplDriveFileAlert" xml:space="preserve">
+    <value>Новый файл в Drive</value>
+  </data>
+  <data name="TplDriveFileAlertBody" xml:space="preserve">
+    <value>Новый файл в папке Drive присылает вам уведомление со ссылкой.</value>
+  </data>
+  <data name="TplWhatsAppAutoReply" xml:space="preserve">
+    <value>Автоответ WhatsApp и журнал</value>
+  </data>
+  <data name="TplWhatsAppAutoReplyBody" xml:space="preserve">
+    <value>Отвечает на входящие WhatsApp и записывает их в Google Sheets.</value>
+  </data>
+  <data name="TplOmnichannelTicket" xml:space="preserve">
+    <value>Тикет во все каналы</value>
+  </data>
+  <data name="TplOmnichannelTicketBody" xml:space="preserve">
+    <value>Новый тикет: чат команды в Telegram, запись в Sheets и письмо руководителю; срочные — ещё и в WhatsApp.</value>
+  </data>
+  <data name="AutomationPublishBeforeRun" xml:space="preserve">
+    <value>Есть неопубликованные изменения. Опубликуйте агента, затем запустите.</value>
+  </data>
 </root>

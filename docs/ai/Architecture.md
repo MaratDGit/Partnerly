@@ -118,6 +118,17 @@ Controller  →  I*Service  →  I*Repository : Repository<T>  →  AppDbContext
 - `NotificationService` использует `IHubContext<NotificationHub>`.
 - `AutomationWorker` (hosted, из `AddPartnerlyAutomation`) — wakeup-очередь с lease, Cronos-расписания.
 - `AutomationHub` (`/automationHub`) — события запусков только владельцу автоматизации.
+- `IntegrationPollingWorker` (hosted, `AddPartnerlyIntegrations`) — раз в 10 с вызывает pollers Telegram (5 с) / Sheets / Gmail / Drive (60 с) для подключений, на которые подписаны опубликованные агенты.
+
+## Интеграции (`Partnerly/Integrations`, с 2026-11-03)
+
+- Подключаются через `IAutomationModule` (`IntegrationsAutomationModule`) — регистрирует 12 действий и 5 триггеров в registry Automation; `GraphValidator` принимает типы из registry.
+- Учётные данные — `AutomationConnections` с `Kind` = `telegram` / `google` / `whatsapp`, payload шифруется `ISecretProtector`. Сервис `IIntegrationConnectionService`. Курсоры опроса и статус (`_status`) — в том же payload, без миграции.
+- Действия наследуют `IntegrationActionHandlerBase`: проверка `connectionId` (владелец + Kind), dry-run пропускает записи, `find_*` выполняются и в тесте.
+- Входящие события: `AutomationTriggerDispatcher.EnqueueIntegrationAsync` — только агенты владельца подключения с тем же `connectionId`.
+- UI: `IntegrationsController` (`/Integrations`, право `automation.connections`), OAuth Google `GET /Integrations/Google/Callback` (state защищён Data Protection + nonce-cookie), `IntegrationWebhooksController` — анонимный webhook WhatsApp `/Integrations/WhatsApp/Webhook/{id}` (verify token + `X-Hub-Signature-256`).
+- Билдер: `Catalog` отдаёт `connections` владельца; формы узлов — `wwwroot/assets/js/integrations/builder-forms.js`, поле `type: "connection"`, палитра сгруппирована по `HandlerDescriptor.Group`.
+- Внешний HTTP — named client `Partnerly.Integrations`, REST без SDK (D1). Подробно: `docs/ai/Integrations/INTEGRATIONS-PLAN.md`.
 
 ## Интерфейс
 

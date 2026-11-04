@@ -4,6 +4,71 @@
 
 ---
 
+## 2026-11-04 — Telegram 400 и токен бота в логах
+
+- **Суть:** после исправления публикации запуск снова с ошибкой. По логам превью шаг дошёл до `sendMessage`, Telegram ответил 400 (точный текст ошибки не виден — во встроенном браузере не было входа).
+- **Найдено:** стандартный лог `HttpClient` (Information) писал полный URL запроса — с токеном бота — в консоль сервера.
+- **Сделано:** `AddPartnerlyIntegrations` ставит фильтр логов `System.Net.Http.HttpClient.Partnerly.Integrations` на Warning. `TelegramClient.Explain` добавляет к ошибкам Telegram подсказку (chat not found, chat_id is empty, bot was blocked, can't parse entities, empty text).
+- **Проверка:** `dotnet test` — 136/136 (новый тест: подсказка при «chat not found»). Сборка — 0 Error(s). Превью владелец остановил сам; повторный запуск агента не проверен.
+- **Владельцу:** токен бота уже попал в консольный лог превью — перевыпустить токен в @BotFather (`/revoke`) и обновить подключение.
+
+---
+
+## 2026-11-04 — Исправлено: шаг Telegram «Choose a connection» после подключения бота
+
+- **Суть:** владелец подключил бота, проверка подключения OK, но запуск агента падал «Choose a connection for this step».
+- **Причина (по коду):** `Publish` публиковал последний **сохранённый** черновик и игнорировал граф на холсте; живой запуск идёт по опубликованной версии. Подключение, выбранное (или подставленное билдером) без «Save», в опубликованную версию не попадало. Валидатор не проверял пустой `connectionId`. Данные агента владельца не смотрел (во встроенном браузере не было входа) — причина выведена из кода.
+- **Сделано:** `AutomationController.Publish` и `Run` принимают `graphJson` / `name` / `description` формы билдера и сначала сохраняют черновик; живой `Run` из билдера при неопубликованных изменениях логики (позиции карточек не считаются) отвечает «Опубликуйте агента, затем запустите» (`AutomationPublishBeforeRun`, en/ru/hy). `TriggerRegistry` / `ActionRegistry.Register(type, connectionKind)` + `ConnectionKindOf`; модуль интеграций регистрирует виды; `GraphValidator` не публикует интеграционный узел без `connectionId` (Guid или `{{переменная}}`).
+- **Проверка:** `dotnet test` — 135/135 (новые: отказ публикации без подключения, понятная ошибка тестового запуска черновика). Сборка превью — 0 Error(s). Повторный запуск с ботом владельца — не проверен.
+- **Файлы:** `AutomationController.cs`, `ActionRegistry.cs`, `TriggerRegistry.cs`, `GraphValidator.cs`, `IntegrationsAutomationModule.cs`, resx ×3, `IntegrationCoreTests.cs`, `TemplateCatalogTests.cs`.
+
+---
+
+## 2026-11-04 — Хаб Agents: стеклянные кнопки, без заголовка
+
+- **Суть:** владелец: все кнопки страницы automation — в стеклянном стиле; убрать заголовок «Автоматизация» и вводный текст.
+- **Сделано:** из `Index.cshtml` убраны `h1` и абзац `AutomationHubIntro` (ключ resx остался, не используется). В `automation-builder.css` общий glass-стиль (`--hub-glass-*`: полупрозрачный фон, blur 14px, inset-блик) для Create / Integrations, иконок строк, фильтр-чипов и «Use template»; Create / Edit / активный фильтр — индиго-тонированное стекло, Delete — красноватое, «Use template» на hover — стекло цвета сервиса карточки.
+- **Проверка:** `dotnet build Partnerly.csproj` (OutDir во временную папку) — 0 Error(s). Браузер — см. ниже.
+- **Файлы:** `Views/Automation/Index.cshtml`, `wwwroot/assets/css/automation-builder.css`, этот журнал.
+
+---
+
+## 2026-11-04 — Хаб Agents: таблица, шаблоны, интеграции в Connections, кнопка в меню
+
+- **Суть:** владелец: красивая адаптивная таблица на странице automation, красивее карточки шаблонов, новые шаблоны с Telegram / Google / WhatsApp, оценить окна Connections / Settings, кнопка открытия страницы рядом с «+» Agents при наведении.
+- **Сделано:** `Views/Automation/Index.cshtml` — шапка со статистикой и кнопками, таблица с аватаром/статусом, на телефоне строки-карточки; карточки шаблонов (цвет категории, иконка, шаги, чипы сервисов, кнопка) + фильтр по категории. `AutomationPreset.Category/Services/StepCount`. 8 новых шаблонов (telegram-ticket-alert, telegram-bot-inbox, sheets-signup-log, sheets-lead-welcome, gmail-to-telegram, drive-file-alert, whatsapp-auto-reply, omnichannel-ticket). Окно Connections: блок интеграций (список + «Manage» на `/Integrations`); Settings не трогали — там лимиты агента, а подключения принадлежат пользователю. Меню: иконка `bx-grid-alt` у «+» Agents, видна на hover/focus. Билдер подставляет единственное подключение нужного типа в узлы шаблона. Переводы en/ru/hy (23 ключа).
+- **Проверка:** `dotnet test` — 134/134 (тест шаблонов теперь валидирует через registry). Браузер (превью 7299): desktop и 375px без горизонтального скролла, фильтр Telegram, окно Connections, hover-иконка меню. Ошибок сервера нет.
+- **Файлы:** `Index.cshtml`, `automation-builder.css`, `hub.js`, `builder.js`, `AutomationTemplateCatalog.cs`, `AutomationConnectionsViewModel.cs`, `AutomationController.cs`, `_ConnectionsPanel.cshtml`, `_VerticalMenu.cshtml`, `partnerly-layout.css`, resx ×3, `TemplateCatalogTests.cs`, docs.
+
+---
+
+## 2026-11-03 — Проверка интеграций в браузере
+
+- **Суть:** владелец вошёл во встроенный браузер — проверить UI интеграций.
+- **Сделано:** превью новой сборки `localhost:7299`. `/Integrations`: карточки, диалоги Telegram / Google, мобильная ширина 375px (без горизонтального скролла), светлая и тёмная тема. Подключение Telegram с фальшивым токеном — реальный ответ API 401 показан тостом. Билдер: палитра с группами Telegram / Google Sheets / Gmail / Google Drive / WhatsApp, узел «Telegram: send message», панель свойств с полем подключения и подсказками. Узел не сохранялся (агент «Daily marker» не изменён).
+- **Исправлено:** кнопки `btn-primary` / outline на странице интеграций были прозрачными в теме сайта — свой стиль в `integrations.css`; у длинной палитры билдера появлялся горизонтальный скролл — `overflow-x: hidden` в `automation-builder.css`.
+- **Не проверено:** реальное подключение бота / Google / WhatsApp и запуск агента с ними. Консоль: только ожидаемый 400 от теста с фальшивым токеном; ошибок сервера нет. Превью-сервер остановлен.
+
+---
+
+## 2026-11-03 — Интеграции Telegram, Google Sheets / Gmail / Drive, WhatsApp
+
+- **Суть:** владелец: сделать все интеграции из плана, тесты, встроить в Automation, красивый UI.
+- **Сделано:** фазы 0–6 плана. Automation: `IAutomationModule`, `GraphValidator` по registry, `HandlerDescriptor.Group/ConnectionKind`, `EnqueueIntegrationAsync`, `Catalog` с подключениями. `Partnerly/Integrations`: Common (сервис подключений поверх `AutomationConnections`, база действий, polling service + worker, HTTP), Telegram (2 действия, триггер, poller), Google OAuth + Sheets (3 + триггер) / Gmail (2 + триггер) / Drive (3 + триггер), WhatsApp (2 действия, webhook с подписью). UI: страница `/Integrations` (glass-карточки, диалоги подключения, проверка, недавние чаты Telegram, webhook-данные WhatsApp), пункт меню, группы и поле `connection` в билдере, формы `builder-forms.js`. Переводы en/ru/hy (112 ключей).
+- **Проверка:** `dotnet build Partnerly.sln` (OutDir во временную папку) — 0 Error(s). `dotnet test` — 133/133 Passed (39 новых). Новая сборка запущена на `localhost:7299`: webhook-эндпоинты и статика отвечают; страницы за логином в браузере **не** проверены (вход не выполнялся). Реальные API сервисов не вызывались.
+- **Файлы:** `Partnerly/Integrations/**`, `Views/Integrations/*`, `wwwroot/assets/css/integrations.css`, `wwwroot/assets/js/integrations/*`, `Automation/Abstractions/IAutomationModule.cs`, `HandlerDescriptor.cs`, `GraphValidator.cs`, `AutomationServiceCollectionExtensions.cs`, `AutomationTriggerDispatcher.cs`, `AutomationController.cs`, `builder.js`, `automation-builder.css`, `Builder.cshtml`, `_BuilderI18n.cshtml`, `_VerticalMenu.cshtml`, `Program.cs`, resx ×3, `Partnerly.Automation.Tests/Integrations/*`, `.claude/launch.json`, docs.
+
+---
+
+## 2026-11-03 — План интеграций (Telegram, Google Sheets / Gmail / Drive, WhatsApp)
+
+- **Суть:** владелец: файл с пошаговыми задачами интеграций, код — в новой папке `Partnerly/Integrations`, всё должно работать с Automation.
+- **Сделано:** `docs/ai/Integrations/INTEGRATIONS-PLAN.md` — фазы 0–7, коды действий и триггеров, структура папки, решения D1–D7 для владельца, правила безопасности. Опирается на код: `IActionHandler`, `SideEffectActionHandlerBase`, `AutomationTriggerDispatcher`, `AutomationConnection` + `ISecretProtector`. Найдено: `GraphValidator` проверяет типы по статическим массивам `AutomationTypeCodes`, registry закрыты, формы узлов зашиты в `builder.js`, ключи Data Protection явно не сохраняются — вынесено в фазу 0 и D5.
+- **Проверка:** документ; код не менялся, сборка не нужна.
+- **Файлы:** `docs/ai/Integrations/INTEGRATIONS-PLAN.md`, `AGENTS.md`, `CONTINUATION_OF_WORK.md`.
+
+---
+
 ## 2026-11-03 — Коммит и push: пароли в secrets, сверка документации
 
 - **Суть:** владелец: сделать commit и push.

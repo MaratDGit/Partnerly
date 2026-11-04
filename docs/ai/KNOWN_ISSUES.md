@@ -89,7 +89,7 @@
 
 ## KI-011 — Нет автотестов
 
-- **Статус:** частично закрыто (2026-11-03) — есть `Partnerly.Automation.Tests` (xUnit, net6.0, 94 теста, все зелёные на 2026-11-03). Остальной монолит без тестов.
+- **Статус:** частично закрыто (2026-11-03) — есть `Partnerly.Automation.Tests` (xUnit, net6.0, 134 теста вместе с интеграциями, все зелёные на 2026-11-04). Остальной монолит без тестов.
 - **Суть:** раньше в решении был только `Partnerly.csproj`.
 - **Компоненты:** решение; Automation покрыт PHASE 3–7 + child workflow / wait_until / settings / templates / HTTP + labeled delay / glass create.
 - **Журнал:** 2026-11-02 — Automation PHASE 3–7, закрытие v1, UX create/delay
@@ -102,6 +102,20 @@
 - **Суть:** `using DocumentFormat.OpenXml.Spreadsheet;` в `SupportTicket.cs` не используется сущностью.
 - **Компоненты:** `Models/SupportTicket.cs`
 - **Журнал:** —
+
+---
+
+## KI-014 — Интеграции: ограничения v1
+
+- **Статус:** открыто (2026-11-03)
+- **Суть:**
+  - Ключи Data Protection не сохраняются явно (`AddDataProtection()` без `PersistKeysTo…`). На сервере их потеря сделает токены всех подключений нечитаемыми (D5 плана).
+  - Курсор опроса и результат шага агента сохраняют payload одного подключения целиком — при одновременной записи один из них может перезаписать другой (редко, курсор откатится на один проход).
+  - Реальные вызовы Telegram / Google / Meta не проверялись — только fake HTTP в тестах.
+  - До 2026-11-04 лог `HttpClient` писал URL с токеном Telegram в консоль (исправлено фильтром логов). Клиент Automation `AutomationOutbound` (HTTP request / webhook) по-прежнему логирует URL на Information — секреты в query строке туда попадут.
+  - WhatsApp-входящие требуют публичный URL; Gmail `history` ≈ неделя — при долгой остановке курсор сбрасывается на «сейчас».
+- **Компоненты:** `Partnerly/Integrations`, `AutomationServiceCollectionExtensions`
+- **Журнал:** WORK_LOG 2026-11-03 — интеграции
 
 ---
 

@@ -7,12 +7,22 @@ namespace Partnerly.Automation.Registry
     {
         private readonly Dictionary<string, Type> _handlers = new(StringComparer.Ordinal);
 
-        public void Register<THandler>(string type) where THandler : class, IActionHandler
+        private readonly Dictionary<string, string> _connectionKinds = new(StringComparer.Ordinal);
+
+        // connectionKind: the node must carry config.connectionId of that kind (integration steps).
+        public void Register<THandler>(string type, string? connectionKind = null) where THandler : class, IActionHandler
         {
             _handlers[type] = typeof(THandler);
+            if (connectionKind != null)
+            {
+                _connectionKinds[type] = connectionKind;
+            }
         }
 
         public bool IsKnown(string type) => _handlers.ContainsKey(type);
+
+        public string? ConnectionKindOf(string type) =>
+            _connectionKinds.TryGetValue(type, out var kind) ? kind : null;
 
         public IActionHandler Resolve(IServiceProvider services, string type)
         {

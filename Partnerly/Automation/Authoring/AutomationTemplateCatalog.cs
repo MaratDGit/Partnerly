@@ -12,6 +12,14 @@ namespace Partnerly.Automation.Authoring
         public string NameKey { get; init; } = string.Empty;
         public string DescriptionKey { get; init; } = string.Empty;
         public string GraphJson { get; init; } = "{}";
+
+        // partnerly / telegram / google / whatsapp — filter chip and card color on the hub.
+        public string Category { get; init; } = "partnerly";
+
+        // Service names used by the graph (Telegram, Google Sheets…), shown as chips.
+        public IReadOnlyList<string> Services { get; init; } = Array.Empty<string>();
+
+        public int StepCount { get; init; }
     }
 
     public static class AutomationTemplateCatalog
@@ -196,7 +204,120 @@ namespace Partnerly.Automation.Authoring
                     Edge("e8", "b1", "f1", "false"),
                     Edge("e9", "f1", "h1"),
                     Edge("e10", "h1", "w1"),
-                    Edge("e11", "w1", "u1")))
+                    Edge("e11", "w1", "u1"))),
+
+            // ---------- Integrations (Partnerly/Integrations). connectionId is chosen in the builder. ----------
+            Make(
+                "telegram-ticket-alert",
+                "Ticket to Telegram",
+                "When a support ticket opens, post it to your Telegram chat.",
+                "small",
+                "TplTelegramTicketAlert",
+                Graph(
+                    Trigger("t1", "event", "ticketOpened", 40, 80, @"{ ""event"": ""SupportTicketCreated"" }"),
+                    Action("a1", "telegram.send_message", "tellTeam", 300, 80,
+                        @"{ ""text"": ""🆕 Ticket {{trigger.ticketId}}\n{{trigger.subject}}"", ""parseMode"": ""none"" }"),
+                    Edge("e1", "t1", "a1"))),
+            Make(
+                "telegram-bot-inbox",
+                "Telegram bot inbox",
+                "Message to the bot: notify you and reply automatically.",
+                "medium",
+                "TplTelegramBotInbox",
+                Graph(
+                    Trigger("t1", "telegram.message_received", "botMessage", 40, 80, "{}"),
+                    Action("a1", "send_notification", "notifyMe", 300, 80,
+                        @"{ ""message"": ""Telegram {{trigger.fromName}}: {{trigger.text}}"", ""notificationType"": ""System"" }"),
+                    Action("a2", "telegram.send_message", "autoReply", 560, 80,
+                        @"{ ""chatId"": ""{{trigger.chatId}}"", ""text"": ""Thanks, {{trigger.fromName}}! We got your message and will answer soon."", ""parseMode"": ""none"" }"),
+                    Edge("e1", "t1", "a1"),
+                    Edge("e2", "a1", "a2"))),
+            Make(
+                "sheets-signup-log",
+                "Sign-ups to Google Sheets",
+                "Every new user becomes a row: name, email and time.",
+                "small",
+                "TplSheetsSignupLog",
+                Graph(
+                    Trigger("t1", "event", "signup", 40, 80, @"{ ""event"": ""UserRegistered"" }"),
+                    Action("a1", "sheets.append_row", "logRow", 300, 80,
+                        @"{ ""sheet"": ""Sheet1"", ""values"": ""{{trigger.firstName}}\n{{trigger.lastName}}\n{{trigger.email}}\n{{execution.startedAt}}"" }"),
+                    Edge("e1", "t1", "a1"))),
+            Make(
+                "sheets-lead-welcome",
+                "Sheet lead to Gmail welcome",
+                "A new row in a leads sheet sends a welcome email from your Gmail.",
+                "medium",
+                "TplSheetsLeadWelcome",
+                Graph(
+                    Trigger("t1", "sheets.row_added", "newLead", 40, 80, @"{ ""sheet"": ""Leads"" }"),
+                    Action("a1", "gmail.send", "welcomeMail", 300, 80,
+                        @"{ ""to"": ""{{trigger.fields.Email}}"", ""subject"": ""Welcome, {{trigger.fields.Name}}"", ""body"": ""<p>Hi {{trigger.fields.Name}},</p><p>Thanks for your interest. We will contact you soon.</p>"", ""format"": ""html"" }"),
+                    Action("a2", "send_notification", "notifyMe", 560, 80,
+                        @"{ ""message"": ""Welcome email sent to {{trigger.fields.Email}}"", ""notificationType"": ""System"" }"),
+                    Edge("e1", "t1", "a1"),
+                    Edge("e2", "a1", "a2"))),
+            Make(
+                "gmail-to-telegram",
+                "Gmail to Telegram",
+                "Each new inbox email is forwarded as a short Telegram message.",
+                "small",
+                "TplGmailToTelegram",
+                Graph(
+                    Trigger("t1", "gmail.message_received", "newMail", 40, 80, "{}"),
+                    Action("a1", "telegram.send_message", "forward", 300, 80,
+                        @"{ ""text"": ""📧 {{trigger.from}}\n{{trigger.subject}}\n{{trigger.snippet}}"", ""parseMode"": ""none"" }"),
+                    Edge("e1", "t1", "a1"))),
+            Make(
+                "drive-file-alert",
+                "New Drive file alert",
+                "A new file in a Drive folder sends you a notification with its link.",
+                "small",
+                "TplDriveFileAlert",
+                Graph(
+                    Trigger("t1", "drive.file_added", "newFile", 40, 80, "{}"),
+                    Action("a1", "send_notification", "notifyMe", 300, 80,
+                        @"{ ""message"": ""New file in Drive: {{trigger.name}}"", ""notificationType"": ""System"", ""link"": ""{{trigger.webViewLink}}"" }"),
+                    Edge("e1", "t1", "a1"))),
+            Make(
+                "whatsapp-auto-reply",
+                "WhatsApp auto-reply and log",
+                "Answer incoming WhatsApp messages and log them to Google Sheets.",
+                "medium",
+                "TplWhatsAppAutoReply",
+                Graph(
+                    Trigger("t1", "whatsapp.message_received", "incoming", 40, 80, "{}"),
+                    Action("a1", "whatsapp.send_text", "reply", 300, 80,
+                        @"{ ""to"": ""{{trigger.from}}"", ""text"": ""Hi {{trigger.name}}! We received your message and will reply soon."" }"),
+                    Action("a2", "sheets.append_row", "logChat", 560, 80,
+                        @"{ ""sheet"": ""WhatsApp"", ""values"": ""{{trigger.from}}\n{{trigger.name}}\n{{trigger.text}}\n{{execution.startedAt}}"" }"),
+                    Edge("e1", "t1", "a1"),
+                    Edge("e2", "a1", "a2"))),
+            Make(
+                "omnichannel-ticket",
+                "Ticket to every channel",
+                "New ticket: Telegram team chat, Sheets log and Gmail to the lead; urgent ones also go to WhatsApp.",
+                "large",
+                "TplOmnichannelTicket",
+                Graph(
+                    Trigger("t1", "event", "ticketOpened", 40, 160, @"{ ""event"": ""SupportTicketCreated"" }"),
+                    Action("a1", "telegram.send_message", "teamChat", 280, 160,
+                        @"{ ""text"": ""🆕 {{trigger.ticketId}}: {{trigger.subject}}"", ""parseMode"": ""none"" }"),
+                    Action("a2", "sheets.append_row", "logTicket", 520, 160,
+                        @"{ ""sheet"": ""Tickets"", ""values"": ""{{trigger.ticketId}}\n{{trigger.subject}}\n{{trigger.status}}\n{{execution.startedAt}}"" }"),
+                    Action("a3", "gmail.send", "mailLead", 760, 160,
+                        @"{ ""to"": ""lead@example.com"", ""subject"": ""New ticket {{trigger.ticketId}}"", ""body"": ""<p>{{trigger.subject}}</p><p>Status: {{trigger.status}}</p>"", ""format"": ""html"" }"),
+                    Action("b1", "branch", "isUrgent", 1000, 160,
+                        @"{ ""condition"": { ""op"": ""contains"", ""left"": ""{{trigger.subject}}"", ""right"": ""urgent"" } }"),
+                    Action("w1", "whatsapp.send_template", "callManager", 1240, 60,
+                        @"{ ""to"": ""37400000000"", ""template"": ""urgent_ticket"", ""language"": ""en_US"", ""parameters"": ""{{trigger.ticketId}}\n{{trigger.subject}}"" }"),
+                    Action("s1", "set_variable", "normal", 1240, 260, @"{ ""name"": ""priority"", ""value"": ""normal"" }"),
+                    Edge("e1", "t1", "a1"),
+                    Edge("e2", "a1", "a2"),
+                    Edge("e3", "a2", "a3"),
+                    Edge("e4", "a3", "b1"),
+                    Edge("e5", "b1", "w1", "true"),
+                    Edge("e6", "b1", "s1", "false")))
         };
 
         public static AutomationPreset? Get(string? id) =>
@@ -210,6 +331,12 @@ namespace Partnerly.Automation.Authoring
             string nameKey,
             WorkflowGraph graph)
         {
+            var services = graph.Nodes
+                .Select(node => ServiceOf(node.Type))
+                .Where(service => service != null)
+                .Select(service => service!)
+                .Distinct()
+                .ToList();
             return new AutomationPreset
             {
                 Id = id,
@@ -218,9 +345,34 @@ namespace Partnerly.Automation.Authoring
                 Size = size,
                 NameKey = nameKey,
                 DescriptionKey = nameKey + "Body",
-                GraphJson = graph.ToJson()
+                GraphJson = graph.ToJson(),
+                Services = services,
+                Category = services.Count == 0 ? "partnerly" : CategoryOf(services[0]),
+                StepCount = graph.Nodes.Count(node => node.Kind == "action")
             };
         }
+
+        // Integration node types are "<service>.<action>" (see Partnerly/Integrations).
+        private static string? ServiceOf(string type)
+        {
+            var dot = type.IndexOf('.');
+            return dot <= 0 ? null : type[..dot] switch
+            {
+                "telegram" => "Telegram",
+                "sheets" => "Google Sheets",
+                "gmail" => "Gmail",
+                "drive" => "Google Drive",
+                "whatsapp" => "WhatsApp",
+                _ => null
+            };
+        }
+
+        private static string CategoryOf(string service) => service switch
+        {
+            "Telegram" => "telegram",
+            "WhatsApp" => "whatsapp",
+            _ => "google"
+        };
 
         private static WorkflowGraph Graph(params object[] parts)
         {

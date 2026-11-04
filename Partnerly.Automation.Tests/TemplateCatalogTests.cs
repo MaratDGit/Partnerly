@@ -6,8 +6,6 @@ namespace Partnerly.Automation.Tests
 {
     public class TemplateCatalogTests
     {
-        private readonly GraphValidator _validator = new();
-
         [Fact]
         public void Catalog_includes_small_medium_and_large()
         {
@@ -21,15 +19,33 @@ namespace Partnerly.Automation.Tests
         }
 
         [Fact]
-        public void Every_template_graph_is_valid()
+        public async Task Every_template_graph_is_valid()
         {
+            // Integration templates need the registry-backed validator.
+            await using var provider = Integrations.IntegrationTestHost.Create(Guid.NewGuid(), new Integrations.FakeHttpHandler());
+            var validator = Microsoft.Extensions.DependencyInjection.ServiceProviderServiceExtensions.GetRequiredService<GraphValidator>(provider);
             foreach (var preset in AutomationTemplateCatalog.All)
             {
                 Assert.False(string.IsNullOrWhiteSpace(preset.NameKey), preset.Id);
                 Assert.False(string.IsNullOrWhiteSpace(preset.GraphJson), preset.Id);
-                var errors = _validator.Validate(WorkflowGraph.Parse(preset.GraphJson));
+                // Integration templates leave connectionId for the user to pick in the builder.
+                var errors = validator.Validate(WorkflowGraph.Parse(preset.GraphJson))
+                    .Where(error => !error.Contains("connection.", StringComparison.Ordinal))
+                    .ToList();
                 Assert.True(errors.Count == 0, preset.Id + ": " + string.Join(" ", errors));
             }
+        }
+
+        [Fact]
+        public void Integration_templates_carry_services_and_category()
+        {
+            var omni = AutomationTemplateCatalog.Get("omnichannel-ticket")!;
+            Assert.Equal("telegram", omni.Category);
+            Assert.Equal(new[] { "Telegram", "Google Sheets", "Gmail", "WhatsApp" }, omni.Services);
+            Assert.Equal("google", AutomationTemplateCatalog.Get("sheets-signup-log")!.Category);
+            Assert.Equal("whatsapp", AutomationTemplateCatalog.Get("whatsapp-auto-reply")!.Category);
+            Assert.Equal("partnerly", AutomationTemplateCatalog.Get("manual-flag")!.Category);
+            Assert.Empty(AutomationTemplateCatalog.Get("new-ticket-alert")!.Services);
         }
 
         [Fact]

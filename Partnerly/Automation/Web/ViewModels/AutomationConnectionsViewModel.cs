@@ -14,6 +14,9 @@ namespace Partnerly.Automation.Web.ViewModels
     {
         public IReadOnlyList<AutomationConnectionItem> Webhooks { get; set; } = Array.Empty<AutomationConnectionItem>();
         public IReadOnlyList<AutomationConnection> HttpConnections { get; set; } = Array.Empty<AutomationConnection>();
+
+        // Telegram / Google / WhatsApp connections; managed on /Integrations, listed here read-only.
+        public IReadOnlyList<AutomationConnection> IntegrationConnections { get; set; } = Array.Empty<AutomationConnection>();
         public string Name { get; set; } = string.Empty;
         public string BaseUrl { get; set; } = string.Empty;
     }

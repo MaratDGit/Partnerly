@@ -1,11 +1,31 @@
 using System.Text.RegularExpressions;
 using Partnerly.Automation.Abstractions;
+using Partnerly.Automation.Registry;
 
 namespace Partnerly.Automation.Engine
 {
     public class GraphValidator
     {
         private static readonly Regex NodeName = new(@"^[A-Za-z][A-Za-z0-9_]*$", RegexOptions.Compiled);
+
+        private readonly TriggerRegistry? _triggers;
+        private readonly ActionRegistry? _actions;
+
+        public GraphValidator()
+        {
+        }
+
+        public GraphValidator(TriggerRegistry triggers, ActionRegistry actions)
+        {
+            _triggers = triggers;
+            _actions = actions;
+        }
+
+        private bool IsKnownTrigger(string type) =>
+            AutomationTypeCodes.Triggers.Contains(type) || _triggers?.IsKnown(type) == true;
+
+        private bool IsKnownAction(string type) =>
+            AutomationTypeCodes.Actions.Contains(type) || _actions?.IsKnown(type) == true;
 
         public IReadOnlyList<string> Validate(WorkflowGraph graph)
         {
@@ -37,14 +57,14 @@ namespace Partnerly.Automation.Engine
 
                 if (node.Kind == "trigger")
                 {
-                    if (!AutomationTypeCodes.Triggers.Contains(node.Type))
+                    if (!IsKnownTrigger(node.Type))
                     {
                         errors.Add($"Unknown trigger type '{node.Type}'.");
                     }
                 }
                 else if (node.Kind == "action")
                 {
-                    if (!AutomationTypeCodes.Actions.Contains(node.Type))
+                    if (!IsKnownAction(node.Type))
                     {
                         errors.Add($"Unknown action type '{node.Type}'.");
                     }
@@ -52,6 +72,15 @@ namespace Partnerly.Automation.Engine
                 else
                 {
                     errors.Add($"Unknown node kind '{node.Kind}'.");
+                }
+
+                var connectionKind = node.Kind == "trigger"
+                    ? _triggers?.ConnectionKindOf(node.Type)
+                    : _actions?.ConnectionKindOf(node.Type);
+                var connectionId = NodeConfig.GetString(node, "connectionId") ?? string.Empty;
+                if (connectionKind != null && !Guid.TryParse(connectionId, out _) && !connectionId.Contains("{{", StringComparison.Ordinal))
+                {
+                    errors.Add($"Step '{node.Name}' needs a {connectionKind} connection.");
                 }
             }
 
