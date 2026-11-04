@@ -58,6 +58,25 @@ namespace Partnerly.Automation.Persistence
             await _db.SaveChangesAsync(cancellationToken);
         }
 
+        public async Task ClearWebhookIdsAsync(Guid versionId, CancellationToken cancellationToken = default)
+        {
+            var rows = await _db.AutomationTriggers
+                .Where(item => item.VersionId == versionId && item.WebhookPublicId != null)
+                .ToListAsync(cancellationToken);
+            if (rows.Count == 0)
+            {
+                return;
+            }
+
+            foreach (var row in rows)
+            {
+                row.WebhookPublicId = null;
+                row.WebhookSecretHash = null;
+            }
+
+            await _db.SaveChangesAsync(cancellationToken);
+        }
+
         public async Task<AutomationRun> AddRunAsync(AutomationRun run, CancellationToken cancellationToken = default)
         {
             _db.AutomationRuns.Add(run);
@@ -102,6 +121,16 @@ namespace Partnerly.Automation.Persistence
         public async Task UpdateWakeupAsync(AutomationWakeup wakeup, CancellationToken cancellationToken = default)
         {
             await SaveDisconnectedAsync(_db.AutomationWakeups, wakeup, cancellationToken);
+        }
+
+        public async Task<IReadOnlyList<AutomationWakeup>> GetOpenWakeupsAsync(Guid automationId, CancellationToken cancellationToken = default)
+        {
+            return await _db.AutomationWakeups
+                .AsNoTracking()
+                .Where(item => item.AutomationId == automationId
+                               && (item.Status == AutomationStatuses.WakeupPending || item.Status == AutomationStatuses.WakeupLeased))
+                .OrderBy(item => item.DueAtUtc)
+                .ToListAsync(cancellationToken);
         }
 
         public async Task<IReadOnlyList<AutomationWakeup>> GetPendingDueAsync(DateTime utcNow, int take, CancellationToken cancellationToken = default)

@@ -305,7 +305,7 @@
             '<span class="auto-node-kind">' + (data.kind === "trigger" ? t("triggerBlocks", "When") : t("actionBlocks", "Then")) + "</span>" +
             '<strong class="auto-node-type">' + typeLabel(data.type, data.type) + "</strong>" +
             '<span class="auto-node-name">' + (data.name || "") + "</span>" +
-            '<span class="auto-node-check" title="' + t("nodeConfigured", "Configured") + '" aria-hidden="true"><i class="bx bx-check"></i></span></div>';
+            '<span class="auto-node-check" title="' + t("nodeNeedsSetup", "Needs setup") + '"><i class="bx bx-check auto-node-check-ok" aria-hidden="true"></i><i class="bx bx-cog auto-node-check-todo" aria-hidden="true"></i></span></div>';
     }
 
     // ---- "configured" check on cards -------------------------------------
@@ -382,7 +382,12 @@
             var wired = data.kind === "trigger" ? connectionCount(node.outputs) > 0 : connectionCount(node.inputs) > 0;
             var inner = root.querySelector("#node-" + node.id + " .auto-node");
             if (inner) {
-                inner.classList.toggle("is-configured", wired && settingsReady(data));
+                var ready = wired && settingsReady(data);
+                inner.classList.toggle("is-configured", ready);
+                var badge = inner.querySelector(".auto-node-check");
+                if (badge) {
+                    badge.title = ready ? t("nodeConfigured", "Configured") : t("nodeNeedsSetup", "Needs setup");
+                }
             }
         });
     }

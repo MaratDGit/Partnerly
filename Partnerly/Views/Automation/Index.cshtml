@@ -116,7 +116,7 @@
                                 @(item.IsActive ? Localizer["Active"] : Localizer["Inactive"])
                             </span>
                         </td>
-                        <td class="automation-hub-date" data-label="@Localizer["UpdatedDate"]">@item.UpdatedDate.ToString("dd.MM.yyyy HH:mm")</td>
+                        <td class="automation-hub-date" data-label="@Localizer["UpdatedDate"]">@Partnerly.Helpers.TimeZoneHelper.FormatIn(item.UpdatedDate, item.TimeZoneId)</td>
                         <td class="automation-hub-actions">
                             @if (Can("automation.history"))
                             {

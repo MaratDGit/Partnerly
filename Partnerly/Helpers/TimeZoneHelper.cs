@@ -72,6 +72,19 @@ namespace Partnerly.Helpers
         public static string Format(DateTime value, TimeZoneInfo timeZone, string format) =>
             ToLocal(value, timeZone).ToString(format);
 
+        // Dates are stored in UTC. Views call this with the system time zone
+        // (ViewBag.TimeZoneId) or, for automation screens, the automation's own zone.
+        public static string FormatIn(
+            DateTime? value,
+            string? timeZoneId,
+            string format = "dd.MM.yyyy HH:mm",
+            string empty = "-")
+        {
+            return value.HasValue
+                ? Format(value.Value, Resolve(timeZoneId), format)
+                : empty;
+        }
+
         private static bool TryFind(string id, out TimeZoneInfo zone)
         {
             try

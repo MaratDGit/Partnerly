@@ -636,8 +636,14 @@ SIGNALR
                      * Notification date
                      */
 
+                    // Stored in UTC; JSON without an offset must not be read as browser-local time.
+                    let rawCreated = notification.createdDate;
+                    if (typeof rawCreated === 'string' && /T\d{2}:\d{2}/.test(rawCreated) && !/(Z|[+-]\d{2}:?\d{2})$/i.test(rawCreated)) {
+                        rawCreated += 'Z';
+                    }
+
                     let date =
-                        new Date(notification.createdDate);
+                        new Date(rawCreated);
 
 
                     const created =

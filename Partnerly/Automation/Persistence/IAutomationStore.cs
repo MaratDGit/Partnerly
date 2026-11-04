@@ -13,6 +13,9 @@ namespace Partnerly.Automation.Persistence
         Task<AutomationVersion?> GetVersionAsync(Guid id, CancellationToken cancellationToken = default);
         Task ReplaceTriggersAsync(Guid versionId, IReadOnlyList<AutomationTrigger> triggers, CancellationToken cancellationToken = default);
 
+        // WebhookPublicId is unique across all versions: a version that stops being the published one releases its ids.
+        Task ClearWebhookIdsAsync(Guid versionId, CancellationToken cancellationToken = default);
+
         Task<AutomationRun> AddRunAsync(AutomationRun run, CancellationToken cancellationToken = default);
         Task UpdateRunAsync(AutomationRun run, CancellationToken cancellationToken = default);
         Task<AutomationRun?> GetRunAsync(Guid id, CancellationToken cancellationToken = default);
@@ -21,6 +24,8 @@ namespace Partnerly.Automation.Persistence
 
         Task AddWakeupAsync(AutomationWakeup wakeup, CancellationToken cancellationToken = default);
         Task UpdateWakeupAsync(AutomationWakeup wakeup, CancellationToken cancellationToken = default);
+        // Pending / leased wakeups of one agent (next scheduled start, resume of waiting runs).
+        Task<IReadOnlyList<AutomationWakeup>> GetOpenWakeupsAsync(Guid automationId, CancellationToken cancellationToken = default);
         Task<IReadOnlyList<AutomationWakeup>> GetPendingDueAsync(DateTime utcNow, int take, CancellationToken cancellationToken = default);
         Task RecoverExpiredLeasesAsync(DateTime utcNow, CancellationToken cancellationToken = default);
         Task<IReadOnlyList<AutomationWakeup>> LeaseDueAsync(

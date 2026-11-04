@@ -2208,6 +2208,72 @@
     <value>Язык по умолчанию</value>
   </data>
 
+  <data name="RunMonitorNextRun" xml:space="preserve">
+    <value>Следующий запуск</value>
+  </data>
+  <data name="RunMonitorIn" xml:space="preserve">
+    <value>через</value>
+  </data>
+  <data name="RunMonitorStartingNow" xml:space="preserve">
+    <value>Запускается сейчас</value>
+  </data>
+  <data name="RunMonitorOnTrigger" xml:space="preserve">
+    <value>Запуск по событию триггера</value>
+  </data>
+  <data name="RunMonitorOff" xml:space="preserve">
+    <value>Агент выключен</value>
+  </data>
+  <data name="RunMonitorUnpublished" xml:space="preserve">
+    <value>Ещё не опубликован</value>
+  </data>
+  <data name="RunMonitorRunningNow" xml:space="preserve">
+    <value>Выполняется сейчас</value>
+  </data>
+  <data name="RunMonitorLastHour" xml:space="preserve">
+    <value>За последний час</value>
+  </data>
+  <data name="RunMonitorResumes" xml:space="preserve">
+    <value>продолжится через</value>
+  </data>
+  <data name="RunMonitorLive" xml:space="preserve">
+    <value>Онлайн</value>
+  </data>
+  <data name="RunMonitorOffline" xml:space="preserve">
+    <value>Нет связи</value>
+  </data>
+  <data name="RunMonitorStarted" xml:space="preserve">
+    <value>Начало</value>
+  </data>
+  <data name="RunMonitorDuration" xml:space="preserve">
+    <value>Длительность</value>
+  </data>
+  <data name="RunMonitorSteps" xml:space="preserve">
+    <value>Шаги</value>
+  </data>
+  <data name="WebhookSignHint" xml:space="preserve">
+    <value>Отправьте POST с JSON-телом и заголовком X-Partnerly-Signature = HMAC-SHA256 (hex) от тела с этим секретом.</value>
+  </data>
+  <data name="ConnWebhooksTitle" xml:space="preserve">
+    <value>Входящие webhook</value>
+  </data>
+  <data name="ConnWebhooksHint" xml:space="preserve">
+    <value>Webhook позволяет другому сервису запустить вашего агента. Добавьте агенту триггер Webhook и опубликуйте его - адрес появится здесь. Отправьте запрос на этот адрес, и агент запустится.</value>
+  </data>
+  <data name="ConnCopy" xml:space="preserve">
+    <value>Копировать</value>
+  </data>
+  <data name="ConnCopied" xml:space="preserve">
+    <value>Скопировано</value>
+  </data>
+  <data name="ConnAdd" xml:space="preserve">
+    <value>Добавить</value>
+  </data>
+  <data name="ConnHttpTitle" xml:space="preserve">
+    <value>Сохранённые веб-адреса</value>
+  </data>
+  <data name="ConnHttpHint" xml:space="preserve">
+    <value>Адреса внешних сервисов, к которым обращаются ваши агенты, чтобы не вводить их заново в каждом шаге.</value>
+  </data>
   <data name="TimeZone" xml:space="preserve">
     <value>Часовой пояс</value>
   </data>
@@ -2858,6 +2924,27 @@ User, группу и шаблон письма здесь создать нел
   </data>
   <data name="NodePalette" xml:space="preserve">
     <value>Блоки</value>
+  </data>
+  <data name="NodeConfigured" xml:space="preserve">
+    <value>Настроено</value>
+  </data>
+  <data name="NodeNeedsSetup" xml:space="preserve">
+    <value>Требует настройки</value>
+  </data>
+  <data name="LeaveTitle" xml:space="preserve">
+    <value>Несохранённые изменения</value>
+  </data>
+  <data name="LeaveText" xml:space="preserve">
+    <value>Сохранить изменения в этом процессе перед уходом?</value>
+  </data>
+  <data name="LeaveSave" xml:space="preserve">
+    <value>Сохранить и уйти</value>
+  </data>
+  <data name="LeaveDiscard" xml:space="preserve">
+    <value>Не сохранять</value>
+  </data>
+  <data name="LeaveStay" xml:space="preserve">
+    <value>Остаться</value>
   </data>
   <data name="NodeProperties" xml:space="preserve">
     <value>Свойства</value>
@@ -3738,6 +3825,42 @@ User, группу и шаблон письма здесь создать нел
   </data>
   <data name="TplDriveFileAlertBody" xml:space="preserve">
     <value>Новый файл в папке Drive присылает вам уведомление со ссылкой.</value>
+  </data>
+  <data name="TplSheetsConnectionTest" xml:space="preserve">
+    <value>Проверка подключения Sheets</value>
+  </data>
+  <data name="TplSheetsConnectionTestBody" xml:space="preserve">
+    <value>Запуск вручную: добавляет в таблицу тестовую строку со временем запуска.</value>
+  </data>
+  <data name="TplSheetsRowToTelegram" xml:space="preserve">
+    <value>Новая строка таблицы в Telegram</value>
+  </data>
+  <data name="TplSheetsRowToTelegramBody" xml:space="preserve">
+    <value>Каждая новая строка таблицы объявляется в Telegram.</value>
+  </data>
+  <data name="TplSheetsFindAndReport" xml:space="preserve">
+    <value>Поиск строк и отчёт</value>
+  </data>
+  <data name="TplSheetsFindAndReportBody" xml:space="preserve">
+    <value>Ищет значение в столбце и уведомляет, найдено ли что-нибудь.</value>
+  </data>
+  <data name="TplDriveFolderAndLog" xml:space="preserve">
+    <value>Папка в Drive и запись в журнал</value>
+  </data>
+  <data name="TplDriveFolderAndLogBody" xml:space="preserve">
+    <value>Запуск вручную: создаёт папку в Drive, записывает ссылку в Sheets и уведомляет вас.</value>
+  </data>
+  <data name="TplDriveFileToSheet" xml:space="preserve">
+    <value>Файл Drive в Sheets и Telegram</value>
+  </data>
+  <data name="TplDriveFileToSheetBody" xml:space="preserve">
+    <value>Новый файл в Drive записывается в таблицу и объявляется в Telegram.</value>
+  </data>
+  <data name="TplDriveFindReport" xml:space="preserve">
+    <value>Поиск файлов в Drive</value>
+  </data>
+  <data name="TplDriveFindReportBody" xml:space="preserve">
+    <value>Запуск вручную: ищет файлы по имени и уведомляет, сколько найдено.</value>
   </data>
   <data name="TplWhatsAppAutoReply" xml:space="preserve">
     <value>Автоответ WhatsApp и журнал</value>

@@ -1,8 +1,41 @@
 @model Partnerly.Automation.Web.ViewModels.AutomationHistoryPanelViewModel
 
-<div class="automation-hub-panel">
+<div class="automation-hub-panel run-monitor"
+     data-run-monitor
+     data-url="@Url.Action("RunsData", "Automation", new { id = Model.Definition.Id })"
+     data-l-next="@Localizer["RunMonitorNextRun"]"
+     data-l-in="@Localizer["RunMonitorIn"]"
+     data-l-now="@Localizer["RunMonitorStartingNow"]"
+     data-l-event="@Localizer["RunMonitorOnTrigger"]"
+     data-l-off="@Localizer["RunMonitorOff"]"
+     data-l-unpublished="@Localizer["RunMonitorUnpublished"]"
+     data-l-running="@Localizer["RunMonitorRunningNow"]"
+     data-l-lasthour="@Localizer["RunMonitorLastHour"]"
+     data-l-resumes="@Localizer["RunMonitorResumes"]"
+     data-l-empty="@Localizer["AutomationEmptyRuns"]"
+     data-l-live="@Localizer["RunMonitorLive"]"
+     data-l-offline="@Localizer["RunMonitorOffline"]"
+     data-l-zone="@Localizer["TimeZone"]">
     <p class="automation-create-kicker">@Localizer["History"]</p>
     <h2>@Model.Definition.Name</h2>
+
+    <div class="run-monitor-summary" data-monitor-summary>
+        <div class="run-monitor-card">
+            <span class="run-monitor-label">@Localizer["RunMonitorNextRun"]</span>
+            <strong class="run-monitor-value" data-monitor-next>…</strong>
+            <span class="run-monitor-sub" data-monitor-next-at></span>
+        </div>
+        <div class="run-monitor-card">
+            <span class="run-monitor-label">@Localizer["RunMonitorRunningNow"]</span>
+            <strong class="run-monitor-value" data-monitor-active>…</strong>
+            <span class="run-monitor-sub" data-monitor-limit></span>
+        </div>
+        <div class="run-monitor-card">
+            <span class="run-monitor-label">@Localizer["TimeZone"]</span>
+            <strong class="run-monitor-value run-monitor-value--small" data-monitor-zone>@Model.Definition.TimeZoneId</strong>
+            <span class="run-monitor-sub"><span class="run-monitor-dot" data-monitor-dot></span> <span data-monitor-live>@Localizer["RunMonitorLive"]</span></span>
+        </div>
+    </div>
 
     <div class="table-responsive">
         <table class="automation-hub-table automation-hub-table--compact">
@@ -10,34 +43,15 @@
                 <tr>
                     <th>@Localizer["Status"]</th>
                     <th>@Localizer["Type"]</th>
-                    <th>@Localizer["CreatedDate"]</th>
+                    <th>@Localizer["RunMonitorStarted"]</th>
+                    <th>@Localizer["RunMonitorDuration"]</th>
+                    <th>@Localizer["RunMonitorSteps"]</th>
                 </tr>
             </thead>
-            <tbody>
-            @if (Model.Runs.Count == 0)
-            {
+            <tbody data-monitor-rows>
                 <tr>
-                    <td colspan="3" class="automation-hub-empty">@Localizer["AutomationEmptyRuns"]</td>
+                    <td colspan="5" class="automation-hub-empty">…</td>
                 </tr>
-            }
-            else
-            {
-                foreach (var run in Model.Runs)
-                {
-                    <tr>
-                        <td>
-                            <button type="button"
-                                    class="automation-hub-link"
-                                    data-hub="run"
-                                    data-id="@run.Id">
-                                @run.Status
-                            </button>
-                        </td>
-                        <td>@run.TriggerType@(run.IsDryRun ? " · test" : "")</td>
-                        <td>@run.CreatedDate.ToString("dd.MM.yyyy HH:mm")</td>
-                    </tr>
-                }
-            }
             </tbody>
         </table>
     </div>

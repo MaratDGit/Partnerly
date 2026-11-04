@@ -69,8 +69,8 @@ namespace Partnerly.Automation.Integration
                 payload = new JsonObject { ["raw"] = body };
             }
 
-            await _dispatcher.EnqueueArmedAsync(armed, payload, cancellationToken);
-            return WebhookIngestResult.Accepted;
+            var queued = await _dispatcher.EnqueueArmedAsync(armed, payload, cancellationToken);
+            return queued ? WebhookIngestResult.Accepted : WebhookIngestResult.Busy;
         }
     }
 
@@ -79,6 +79,7 @@ namespace Partnerly.Automation.Integration
         Accepted,
         NotFound,
         Unauthorized,
-        TooLarge
+        TooLarge,
+        Busy
     }
 }

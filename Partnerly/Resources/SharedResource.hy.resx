@@ -2208,6 +2208,72 @@
     <value>Լռելյայն լեզու</value>
   </data>
 
+  <data name="RunMonitorNextRun" xml:space="preserve">
+    <value>Հաջորդ գործարկումը</value>
+  </data>
+  <data name="RunMonitorIn" xml:space="preserve">
+    <value>՝</value>
+  </data>
+  <data name="RunMonitorStartingNow" xml:space="preserve">
+    <value>Գործարկվում է հիմա</value>
+  </data>
+  <data name="RunMonitorOnTrigger" xml:space="preserve">
+    <value>Գործարկվում է տրիգերի ազդանշանով</value>
+  </data>
+  <data name="RunMonitorOff" xml:space="preserve">
+    <value>Գործակալն անջատված է</value>
+  </data>
+  <data name="RunMonitorUnpublished" xml:space="preserve">
+    <value>Դեռ չի հրապարակվել</value>
+  </data>
+  <data name="RunMonitorRunningNow" xml:space="preserve">
+    <value>Կատարվում է հիմա</value>
+  </data>
+  <data name="RunMonitorLastHour" xml:space="preserve">
+    <value>Վերջին ժամում</value>
+  </data>
+  <data name="RunMonitorResumes" xml:space="preserve">
+    <value>կշարունակվի</value>
+  </data>
+  <data name="RunMonitorLive" xml:space="preserve">
+    <value>Կենդանի</value>
+  </data>
+  <data name="RunMonitorOffline" xml:space="preserve">
+    <value>Կապ չկա</value>
+  </data>
+  <data name="RunMonitorStarted" xml:space="preserve">
+    <value>Սկիզբ</value>
+  </data>
+  <data name="RunMonitorDuration" xml:space="preserve">
+    <value>Տևողություն</value>
+  </data>
+  <data name="RunMonitorSteps" xml:space="preserve">
+    <value>Քայլեր</value>
+  </data>
+  <data name="WebhookSignHint" xml:space="preserve">
+    <value>Ուղարկեք POST՝ JSON մարմնով և X-Partnerly-Signature = HMAC-SHA256 (hex) վերնագրով՝ ստորագրված գաղտնաբառով։</value>
+  </data>
+  <data name="ConnWebhooksTitle" xml:space="preserve">
+    <value>Մուտքային webhook-ներ</value>
+  </data>
+  <data name="ConnWebhooksHint" xml:space="preserve">
+    <value>Webhook-ը թույլ է տալիս մեկ այլ ծառայությանը գործարկել ձեր գործակալին։ Ավելացրեք գործակալին Webhook տրիգեր և հրապարակեք՝ հասցեն կհայտնվի այստեղ։ Ուղարկեք հարցում այդ հասցեին՝ գործակալը կգործարկվի։</value>
+  </data>
+  <data name="ConnCopy" xml:space="preserve">
+    <value>Պատճենել</value>
+  </data>
+  <data name="ConnCopied" xml:space="preserve">
+    <value>Պատճենվեց</value>
+  </data>
+  <data name="ConnAdd" xml:space="preserve">
+    <value>Ավելացնել</value>
+  </data>
+  <data name="ConnHttpTitle" xml:space="preserve">
+    <value>Պահված վեբ հասցեներ</value>
+  </data>
+  <data name="ConnHttpHint" xml:space="preserve">
+    <value>Արտաքին ծառայությունների հասցեներ, որոնց դիմում են ձեր գործակալները՝ որպեսզի դրանք չմուտքագրեք ամեն քայլում։</value>
+  </data>
   <data name="TimeZone" xml:space="preserve">
     <value>Ժամային գոտի</value>
   </data>
@@ -2858,6 +2924,27 @@ User, խումբ և նամակի կաղապար այստեղ չեն ստեղծվ
   </data>
   <data name="NodePalette" xml:space="preserve">
     <value>Բլոկներ</value>
+  </data>
+  <data name="NodeConfigured" xml:space="preserve">
+    <value>Կարգավորված է</value>
+  </data>
+  <data name="NodeNeedsSetup" xml:space="preserve">
+    <value>Պահանջում է կարգավորում</value>
+  </data>
+  <data name="LeaveTitle" xml:space="preserve">
+    <value>Չպահված փոփոխություններ</value>
+  </data>
+  <data name="LeaveText" xml:space="preserve">
+    <value>Պահպանե՞լ այս գործընթացի փոփոխությունները մինչև հեռանալը։</value>
+  </data>
+  <data name="LeaveSave" xml:space="preserve">
+    <value>Պահպանել և հեռանալ</value>
+  </data>
+  <data name="LeaveDiscard" xml:space="preserve">
+    <value>Չպահպանել</value>
+  </data>
+  <data name="LeaveStay" xml:space="preserve">
+    <value>Մնալ</value>
   </data>
   <data name="NodeProperties" xml:space="preserve">
     <value>Հատկություններ</value>
@@ -3738,6 +3825,42 @@ User, խումբ և նամակի կաղապար այստեղ չեն ստեղծվ
   </data>
   <data name="TplDriveFileAlertBody" xml:space="preserve">
     <value>Drive թղթապանակի նոր ֆայլը ձեզ ուղարկում է ծանուցում՝ հղումով։</value>
+  </data>
+  <data name="TplSheetsConnectionTest" xml:space="preserve">
+    <value>Sheets-ի միացման ստուգում</value>
+  </data>
+  <data name="TplSheetsConnectionTestBody" xml:space="preserve">
+    <value>Ձեռքով գործարկում․ աղյուսակում ավելացնում է թեստային տող՝ գործարկման ժամանակով։</value>
+  </data>
+  <data name="TplSheetsRowToTelegram" xml:space="preserve">
+    <value>Աղյուսակի նոր տողը Telegram-ում</value>
+  </data>
+  <data name="TplSheetsRowToTelegramBody" xml:space="preserve">
+    <value>Աղյուսակի յուրաքանչյուր նոր տող հայտարարվում է Telegram-ում։</value>
+  </data>
+  <data name="TplSheetsFindAndReport" xml:space="preserve">
+    <value>Տողերի որոնում և հաշվետվություն</value>
+  </data>
+  <data name="TplSheetsFindAndReportBody" xml:space="preserve">
+    <value>Սյունակում փնտրում է արժեք և ծանուցում, թե արդյոք ինչ-որ բան գտնվել է։</value>
+  </data>
+  <data name="TplDriveFolderAndLog" xml:space="preserve">
+    <value>Drive թղթապանակ և գրանցում</value>
+  </data>
+  <data name="TplDriveFolderAndLogBody" xml:space="preserve">
+    <value>Ձեռքով գործարկում․ ստեղծում է Drive թղթապանակ, հղումը գրանցում Sheets-ում և ծանուցում ձեզ։</value>
+  </data>
+  <data name="TplDriveFileToSheet" xml:space="preserve">
+    <value>Drive ֆայլը Sheets-ում և Telegram-ում</value>
+  </data>
+  <data name="TplDriveFileToSheetBody" xml:space="preserve">
+    <value>Drive-ի նոր ֆայլը գրանցվում է աղյուսակում և հայտարարվում Telegram-ում։</value>
+  </data>
+  <data name="TplDriveFindReport" xml:space="preserve">
+    <value>Ֆայլերի որոնում Drive-ում</value>
+  </data>
+  <data name="TplDriveFindReportBody" xml:space="preserve">
+    <value>Ձեռքով գործարկում․ փնտրում է ֆայլեր անունով և ծանուցում, թե քանիսն են գտնվել։</value>
   </data>
   <data name="TplWhatsAppAutoReply" xml:space="preserve">
     <value>WhatsApp ավտոպատասխան և գրանցում</value>

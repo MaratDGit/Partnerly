@@ -157,10 +157,21 @@ namespace Partnerly.Automation.Authoring
                 ? Array.Empty<AutomationTrigger>()
                 : await _store.GetTriggersAsync(definition.PublishedVersionId.Value, cancellationToken);
             var graph = WorkflowGraph.Parse(draft.GraphJson);
+
+            // The Nth webhook node keeps the Nth previous URL and secret (stable across publishes).
+            var reusable = new Queue<AutomationTrigger>(previous.Where(item =>
+                item.Type == AutomationTypeCodes.Webhook && !string.IsNullOrEmpty(item.WebhookPublicId)));
             var triggers = graph.Nodes
                 .Where(node => node.Kind == "trigger")
-                .Select(node => CreateTrigger(draft.Id, node, previous))
+                .Select(node => CreateTrigger(draft.Id, node, node.Type == AutomationTypeCodes.Webhook && reusable.Count > 0 ? reusable.Dequeue() : null))
                 .ToList();
+
+            // The unique index on WebhookPublicId forbids the same id in two versions at once.
+            if (definition.PublishedVersionId != null)
+            {
+                await _store.ClearWebhookIdsAsync(definition.PublishedVersionId.Value, cancellationToken);
+            }
+
             await _store.ReplaceTriggersAsync(draft.Id, triggers, cancellationToken);
 
             var next = new AutomationVersion
@@ -282,7 +293,7 @@ namespace Partnerly.Automation.Authoring
         private AutomationTrigger CreateTrigger(
             Guid versionId,
             WorkflowNode node,
-            IReadOnlyList<AutomationTrigger> previous)
+            AutomationTrigger? previousWebhook)
         {
             var trigger = new AutomationTrigger
             {
@@ -298,8 +309,6 @@ namespace Partnerly.Automation.Authoring
                 return trigger;
             }
 
-            var previousWebhook = previous.FirstOrDefault(item => item.Type == AutomationTypeCodes.Webhook
-                                                                  && !string.IsNullOrEmpty(item.WebhookPublicId));
             trigger.WebhookPublicId = previousWebhook?.WebhookPublicId ?? Guid.NewGuid().ToString("N");
             trigger.WebhookSecretHash = previousWebhook?.WebhookSecretHash
                                         ?? _secrets.Protect(Convert.ToBase64String(RandomNumberGenerator.GetBytes(32)));

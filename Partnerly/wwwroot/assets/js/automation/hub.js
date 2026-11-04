@@ -133,11 +133,188 @@
         }
         target.body.innerHTML = html;
         setOpen(target.overlay, true);
+        bootMonitor(target.body);
         if (options.size === "wide") {
             window.requestAnimationFrame(function () {
                 bootBuilder(target.body);
             });
         }
+    }
+
+    // Live run monitor in the History popup: polls /Automation/RunsData/{id} every 3 s and
+    // counts down locally each second. Stops by itself once the popup is gone.
+    function bootMonitor(scope) {
+        var root = scope.querySelector("[data-run-monitor]");
+        if (!root) {
+            return;
+        }
+        var url = root.getAttribute("data-url");
+        var rows = root.querySelector("[data-monitor-rows]");
+        var els = {
+            next: root.querySelector("[data-monitor-next]"),
+            nextAt: root.querySelector("[data-monitor-next-at]"),
+            active: root.querySelector("[data-monitor-active]"),
+            limit: root.querySelector("[data-monitor-limit]"),
+            zone: root.querySelector("[data-monitor-zone]"),
+            dot: root.querySelector("[data-monitor-dot]"),
+            live: root.querySelector("[data-monitor-live]")
+        };
+        var data = null;
+        var offset = 0;
+        var failed = false;
+        var tick = 0;
+        var timer = null;
+
+        function label(name) {
+            return root.getAttribute("data-l-" + name) || "";
+        }
+
+        function pad(value) {
+            return value < 10 ? "0" + value : String(value);
+        }
+
+        function span(ms) {
+            var total = Math.max(0, Math.floor(ms / 1000));
+            var days = Math.floor(total / 86400);
+            total -= days * 86400;
+            var hours = Math.floor(total / 3600);
+            total -= hours * 3600;
+            var text = pad(hours) + ":" + pad(Math.floor(total / 60)) + ":" + pad(total % 60);
+            return days > 0 ? days + "d " + text : text;
+        }
+
+        function nowMs() {
+            return Date.now() + offset;
+        }
+
+        function cell(text, className) {
+            var td = document.createElement("td");
+            if (className) {
+                td.className = className;
+            }
+            td.textContent = text;
+            return td;
+        }
+
+        function buildRows() {
+            rows.innerHTML = "";
+            if (!data.runs.length) {
+                var empty = document.createElement("tr");
+                var td = cell(label("empty"), "automation-hub-empty");
+                td.colSpan = 5;
+                empty.appendChild(td);
+                rows.appendChild(empty);
+                return;
+            }
+            data.runs.forEach(function (run) {
+                var tr = document.createElement("tr");
+
+                var status = document.createElement("td");
+                var button = document.createElement("button");
+                button.type = "button";
+                button.className = "automation-hub-link run-status is-" + run.status;
+                button.setAttribute("data-hub", "run");
+                button.setAttribute("data-id", run.id);
+                button.textContent = run.status;
+                if (run.error) {
+                    button.title = run.error;
+                }
+                status.appendChild(button);
+                if (run.resumeAtUtc) {
+                    var resume = document.createElement("div");
+                    resume.className = "run-monitor-sub";
+                    resume.setAttribute("data-resume", run.resumeAtUtc);
+                    status.appendChild(resume);
+                }
+                tr.appendChild(status);
+
+                tr.appendChild(cell(run.triggerType + (run.isDryRun ? " · test" : "")));
+                tr.appendChild(cell(run.startedText));
+
+                var duration = cell("", "run-monitor-duration");
+                duration.setAttribute("data-start", run.startedAtUtc);
+                if (run.endedAtUtc) {
+                    duration.setAttribute("data-end", run.endedAtUtc);
+                }
+                tr.appendChild(duration);
+
+                var steps = cell(run.totalSteps > 0 ? run.completedSteps + " / " + run.totalSteps : String(run.completedSteps));
+                tr.appendChild(steps);
+                rows.appendChild(tr);
+            });
+        }
+
+        function render() {
+            if (!document.body.contains(root)) {
+                window.clearInterval(timer);
+                return;
+            }
+            els.dot.classList.toggle("is-off", failed);
+            els.live.textContent = failed ? label("offline") : label("live");
+            if (!data) {
+                return;
+            }
+            var now = nowMs();
+            els.zone.textContent = data.timeZoneId;
+
+            if (!data.isPublished) {
+                els.next.textContent = label("unpublished");
+                els.nextAt.textContent = "";
+            } else if (!data.isActive) {
+                els.next.textContent = label("off");
+                els.nextAt.textContent = "";
+            } else if (data.next) {
+                var left = Date.parse(data.next.atUtc) - now;
+                els.next.textContent = left <= 0 ? label("now") : label("in") + " " + span(left);
+                els.nextAt.textContent = data.next.atText;
+            } else {
+                els.next.textContent = label("event");
+                els.nextAt.textContent = data.triggerTypes.join(", ");
+            }
+
+            els.active.textContent = data.activeRuns + " / " + data.maxConcurrentRuns;
+            els.limit.textContent = label("lasthour") + ": " + data.runsLastHour + " / " + data.maxRunsPerHour;
+
+            rows.querySelectorAll(".run-monitor-duration").forEach(function (td) {
+                var end = td.getAttribute("data-end");
+                var to = end ? Date.parse(end) : now;
+                td.textContent = span(to - Date.parse(td.getAttribute("data-start")));
+            });
+            rows.querySelectorAll("[data-resume]").forEach(function (node) {
+                var left = Date.parse(node.getAttribute("data-resume")) - now;
+                node.textContent = label("resumes") + " " + (left <= 0 ? "00:00:00" : span(left));
+            });
+        }
+
+        function poll() {
+            fetch(url, {
+                credentials: "same-origin",
+                headers: { "X-Requested-With": "XMLHttpRequest", "Accept": "application/json" }
+            }).then(function (response) {
+                if (!response.ok) {
+                    throw new Error(response.statusText || "Error");
+                }
+                return response.json();
+            }).then(function (payload) {
+                data = payload;
+                offset = Date.parse(payload.nowUtc) - Date.now();
+                failed = false;
+                buildRows();
+                render();
+            }).catch(function () {
+                failed = true;
+                render();
+            });
+        }
+
+        timer = window.setInterval(function () {
+            tick += 1;
+            if (tick % 3 === 0) {
+                poll();
+            }
+            render();
+        }, 1000);
+        poll();
     }
 
     function bootBuilder(scope) {
@@ -458,6 +635,51 @@
         }
         return true;
     }
+
+    // Connections popup: "+" opens the add form, copy icon copies the neighbouring value.
+    document.addEventListener("click", function (event) {
+        var toggle = event.target.closest("[data-connection-toggle]");
+        if (toggle) {
+            var form = document.querySelector(toggle.getAttribute("data-connection-toggle"));
+            if (form) {
+                form.hidden = !form.hidden;
+                toggle.setAttribute("aria-expanded", form.hidden ? "false" : "true");
+                toggle.classList.toggle("is-open", !form.hidden);
+                if (!form.hidden) {
+                    var first = form.querySelector("input");
+                    if (first) {
+                        first.focus();
+                    }
+                }
+            }
+            return;
+        }
+        var copy = event.target.closest("[data-copy]");
+        if (copy) {
+            var holder = copy.closest(".automation-copy-row");
+            var source = holder ? holder.querySelector("[data-copy-text]") : null;
+            if (!source) {
+                return;
+            }
+            var text = source.textContent.trim();
+            var done = function () {
+                var icon = copy.querySelector("i");
+                copy.classList.add("is-done");
+                if (icon) {
+                    icon.className = "bx bx-check";
+                }
+                window.setTimeout(function () {
+                    copy.classList.remove("is-done");
+                    if (icon) {
+                        icon.className = "bx bx-copy";
+                    }
+                }, 1500);
+            };
+            if (navigator.clipboard && navigator.clipboard.writeText) {
+                navigator.clipboard.writeText(text).then(done, function () { /* clipboard blocked */ });
+            }
+        }
+    });
 
     document.addEventListener("click", handleHubClick);
 

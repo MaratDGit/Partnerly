@@ -80,6 +80,23 @@ namespace Partnerly.Automation.Persistence
             return Task.CompletedTask;
         }
 
+        public Task ClearWebhookIdsAsync(Guid versionId, CancellationToken cancellationToken = default)
+        {
+            lock (_gate)
+            {
+                if (_triggers.TryGetValue(versionId, out var list))
+                {
+                    foreach (var item in list)
+                    {
+                        item.WebhookPublicId = null;
+                        item.WebhookSecretHash = null;
+                    }
+                }
+            }
+
+            return Task.CompletedTask;
+        }
+
         public Task<AutomationRun> AddRunAsync(AutomationRun run, CancellationToken cancellationToken = default)
         {
             lock (_gate)
@@ -148,6 +165,20 @@ namespace Partnerly.Automation.Persistence
             }
 
             return Task.CompletedTask;
+        }
+
+        public Task<IReadOnlyList<AutomationWakeup>> GetOpenWakeupsAsync(Guid automationId, CancellationToken cancellationToken = default)
+        {
+            lock (_gate)
+            {
+                IReadOnlyList<AutomationWakeup> items = _wakeups.Values
+                    .Where(item => item.AutomationId == automationId
+                                   && (item.Status == AutomationStatuses.WakeupPending || item.Status == AutomationStatuses.WakeupLeased))
+                    .OrderBy(item => item.DueAtUtc)
+                    .Select(Clone)
+                    .ToList();
+                return Task.FromResult(items);
+            }
         }
 
         public Task<IReadOnlyList<AutomationWakeup>> GetPendingDueAsync(DateTime utcNow, int take, CancellationToken cancellationToken = default)

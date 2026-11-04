@@ -24,7 +24,7 @@
                         @FieldsDisplayNames.CreatedDate
                     </span>
                     <span class='audit-popup-value'>
-                        @(Model.CreatedDate?.ToString("dd.MM.yyyy HH:mm") ?? "-")
+                        @Partnerly.Helpers.TimeZoneHelper.FormatIn(Model.CreatedDate, ViewBag.TimeZoneId as string)
                     </span>
                 </div>
 
@@ -40,7 +40,7 @@
                         @FieldsDisplayNames.UpdatedDate
                     </span>
                     <span class='audit-popup-value'>
-                        @(Model.UpdatedDate?.ToString("dd.MM.yyyy HH:mm") ?? "-")
+                        @Partnerly.Helpers.TimeZoneHelper.FormatIn(Model.UpdatedDate, ViewBag.TimeZoneId as string)
                     </span>
                 </div>
             </div>">

@@ -74,7 +74,8 @@ namespace Partnerly.Automation.Integration
             }
         }
 
-        public Task EnqueueArmedAsync(
+        // False when the agent is busy or over its hourly limit (the run was not created).
+        public Task<bool> EnqueueArmedAsync(
             ArmedAutomationTrigger armed,
             JsonObject payload,
             CancellationToken cancellationToken = default)
@@ -101,7 +102,7 @@ namespace Partnerly.Automation.Integration
             }
         }
 
-        private async Task TryEnqueueAsync(
+        private async Task<bool> TryEnqueueAsync(
             ArmedAutomationTrigger item,
             string triggerType,
             JsonObject payload,
@@ -110,13 +111,13 @@ namespace Partnerly.Automation.Integration
             var active = await _store.CountActiveRunsAsync(item.Definition.Id, cancellationToken);
             if (active >= item.Definition.MaxConcurrentRuns)
             {
-                return;
+                return false;
             }
 
             var recent = await _store.CountRunsSinceAsync(item.Definition.Id, _clock.UtcNow.AddHours(-1), cancellationToken);
             if (recent >= item.Definition.MaxRunsPerHour)
             {
-                return;
+                return false;
             }
 
             var run = await _runs.EnqueueAsync(
@@ -151,6 +152,7 @@ namespace Partnerly.Automation.Integration
                 RunId = run.Id,
                 Status = AutomationStatuses.WakeupPending
             }, cancellationToken);
+            return true;
         }
 
         private static bool MatchesEntity(JsonElement config, string entityKey)

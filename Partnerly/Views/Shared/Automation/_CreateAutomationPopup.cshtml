@@ -18,9 +18,7 @@
             <i class="bx bx-x"></i>
         </button>
 
-        <p class="automation-create-kicker">@Localizer["Automation"]</p>
         <h2 id="automationCreateTitle" data-create-title="@Localizer["CreateAutomation"]" data-edit-title="@Localizer["Edit"]">@Localizer["CreateAutomation"]</h2>
-        <p class="automation-create-lead" data-create-only>@Localizer["CreateAutomationLead"]</p>
 
         <form asp-controller="Automation" asp-action="Create" method="post" class="automation-create-form"
               data-create-url="@Url.Action("Create", "Automation")"

@@ -39,6 +39,7 @@ namespace Partnerly.Automation.Web
                 WebhookIngestResult.Accepted => Ok(new { success = true }),
                 WebhookIngestResult.Unauthorized => Unauthorized(),
                 WebhookIngestResult.TooLarge => StatusCode(StatusCodes.Status413PayloadTooLarge),
+                WebhookIngestResult.Busy => StatusCode(StatusCodes.Status429TooManyRequests),
                 _ => NotFound()
             };
         }

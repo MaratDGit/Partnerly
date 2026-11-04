@@ -373,6 +373,22 @@ namespace Partnerly.Automation.Web
             return OkPayload(new { success = true, runId = id }, nameof(Index), new { run = id });
         }
 
+        // Polled by the History popup: running / finished runs and the next start of one agent.
+        [HttpGet]
+        [Authorize(Policy = "Permission:automation.history")]
+        public async Task<IActionResult> RunsData(Guid id)
+        {
+            try
+            {
+                var definition = await _authoring.GetAsync(id);
+                return Json(await BuildRunMonitorAsync(definition));
+            }
+            catch (KeyNotFoundException)
+            {
+                return NotFound();
+            }
+        }
+
         [Authorize(Policy = "Permission:automation.history")]
         public IActionResult History(Guid? id)
         {
@@ -700,6 +716,107 @@ namespace Partnerly.Automation.Web
             };
         }
 
+        private async Task<AutomationRunMonitorViewModel> BuildRunMonitorAsync(AutomationDefinition definition)
+        {
+            var now = DateTime.UtcNow;
+            var runs = VisibleRuns()
+                .Where(item => item.AutomationId == definition.Id)
+                .OrderByDescending(item => item.CreatedDate)
+                .Take(50)
+                .ToList();
+            var wakeups = await _store.GetOpenWakeupsAsync(definition.Id);
+            var published = definition.PublishedVersionId != null;
+            var model = new AutomationRunMonitorViewModel
+            {
+                NowUtc = DateTime.SpecifyKind(now, DateTimeKind.Utc),
+                TimeZoneId = definition.TimeZoneId,
+                IsActive = definition.IsActive,
+                IsPublished = published,
+                MaxConcurrentRuns = definition.MaxConcurrentRuns,
+                MaxRunsPerHour = definition.MaxRunsPerHour,
+                ActiveRuns = await _store.CountActiveRunsAsync(definition.Id),
+                RunsLastHour = await _store.CountRunsSinceAsync(definition.Id, now.AddHours(-1))
+            };
+
+            if (published)
+            {
+                var triggers = await _store.GetTriggersAsync(definition.PublishedVersionId!.Value);
+                model.TriggerTypes = triggers.Select(item => item.Type).Distinct().ToList();
+            }
+
+            // The next scheduled / interval start (waking runs are shown on their own row).
+            var next = definition.IsActive && published
+                ? wakeups.Where(item => item.RunId == null
+                                        && (item.Kind == AutomationStatuses.WakeupSchedule || item.Kind == AutomationStatuses.WakeupInterval))
+                    .OrderBy(item => item.DueAtUtc)
+                    .FirstOrDefault()
+                : null;
+            if (next != null)
+            {
+                model.Next = new RunMonitorNext
+                {
+                    AtUtc = DateTime.SpecifyKind(next.DueAtUtc, DateTimeKind.Utc),
+                    AtText = TimeZoneHelper.FormatIn(next.DueAtUtc, definition.TimeZoneId, "dd.MM.yyyy HH:mm:ss"),
+                    Kind = next.Kind
+                };
+            }
+
+            var resumeKinds = new[]
+            {
+                AutomationStatuses.WakeupStart, AutomationStatuses.WakeupDelay,
+                AutomationStatuses.WakeupWait, AutomationStatuses.WakeupRetry
+            };
+            var resume = wakeups
+                .Where(item => item.RunId != null && resumeKinds.Contains(item.Kind))
+                .GroupBy(item => item.RunId!.Value)
+                .ToDictionary(group => group.Key, group => group.Min(item => item.DueAtUtc));
+
+            var totals = new Dictionary<Guid, int>();
+            foreach (var run in runs)
+            {
+                if (!totals.TryGetValue(run.VersionId, out var total))
+                {
+                    var version = await _store.GetVersionAsync(run.VersionId);
+                    total = version == null
+                        ? 0
+                        : WorkflowGraph.Parse(version.GraphJson).Nodes.Count(node => node.Kind == "action");
+                    totals[run.VersionId] = total;
+                }
+
+                var started = run.StartedAt ?? run.CreatedDate;
+                model.Runs.Add(new RunMonitorRow
+                {
+                    Id = run.Id,
+                    Status = run.Status,
+                    TriggerType = run.TriggerType,
+                    IsDryRun = run.IsDryRun,
+                    StartedText = TimeZoneHelper.FormatIn(started, definition.TimeZoneId, "dd.MM.yyyy HH:mm:ss"),
+                    StartedAtUtc = DateTime.SpecifyKind(started, DateTimeKind.Utc),
+                    EndedAtUtc = run.EndedAt == null ? null : DateTime.SpecifyKind(run.EndedAt.Value, DateTimeKind.Utc),
+                    CompletedSteps = CountCompleted(run.CompletedNodeIdsJson),
+                    TotalSteps = total,
+                    ResumeAtUtc = resume.TryGetValue(run.Id, out var due) ? DateTime.SpecifyKind(due, DateTimeKind.Utc) : null,
+                    Error = run.Error
+                });
+            }
+
+            return model;
+        }
+
+        private static int CountCompleted(string? json)
+        {
+            try
+            {
+                return System.Text.Json.Nodes.JsonNode.Parse(string.IsNullOrWhiteSpace(json) ? "[]" : json) is System.Text.Json.Nodes.JsonArray array
+                    ? array.Count
+                    : 0;
+            }
+            catch
+            {
+                return 0;
+            }
+        }
+
         private async Task<AutomationRunDetailsViewModel?> BuildRunDetailsAsync(Guid id)
         {
             var run = await _store.GetRunAsync(id);
@@ -833,7 +950,7 @@ namespace Partnerly.Automation.Web
                 description = item.Description ?? string.Empty,
                 isActive = item.IsActive,
                 isLive = item.IsActive && item.PublishedVersionId != null,
-                updatedDate = item.UpdatedDate.ToString("dd.MM.yyyy HH:mm")
+                updatedDate = Partnerly.Helpers.TimeZoneHelper.FormatIn(item.UpdatedDate, item.TimeZoneId)
             };
         }
     }

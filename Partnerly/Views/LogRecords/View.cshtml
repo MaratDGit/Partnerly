@@ -94,6 +94,7 @@
 
                         <div class="form-floating log-field">
                             <input asp-for="CreatedDate"
+                                   value="@Partnerly.Helpers.TimeZoneHelper.FormatIn(Model.CreatedDate, ViewBag.TimeZoneId as string, "dd.MM.yyyy HH:mm:ss")"
                                    class="form-control"
                                    id="createdDate"
                                    name="createdDate"

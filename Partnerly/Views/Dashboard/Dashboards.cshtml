@@ -2,7 +2,8 @@
 @using Partnerly.Models.ViewModels
 @{
     ViewData["Title"] = Localizer["Dashboards"].Value;
-    string Fmt(DateTime? d) => d.HasValue ? d.Value.ToString("g") : "";
+    var dashboardZone = Partnerly.Helpers.TimeZoneHelper.Resolve(ViewBag.TimeZoneId as string);
+    string Fmt(DateTime? d) => d.HasValue ? Partnerly.Helpers.TimeZoneHelper.Format(d.Value, dashboardZone, "g") : "";
     string ItemTitle(DashboardListItem item) =>
         string.IsNullOrWhiteSpace(item.Title) ? item.Meta : item.Title;
     string NamedLabel(string? name) => name switch

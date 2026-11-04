@@ -2208,6 +2208,72 @@
     <value>Default language</value>
   </data>
 
+  <data name="RunMonitorNextRun" xml:space="preserve">
+    <value>Next run</value>
+  </data>
+  <data name="RunMonitorIn" xml:space="preserve">
+    <value>in</value>
+  </data>
+  <data name="RunMonitorStartingNow" xml:space="preserve">
+    <value>Starting now</value>
+  </data>
+  <data name="RunMonitorOnTrigger" xml:space="preserve">
+    <value>Starts when a trigger fires</value>
+  </data>
+  <data name="RunMonitorOff" xml:space="preserve">
+    <value>Agent is switched off</value>
+  </data>
+  <data name="RunMonitorUnpublished" xml:space="preserve">
+    <value>Not published yet</value>
+  </data>
+  <data name="RunMonitorRunningNow" xml:space="preserve">
+    <value>Running now</value>
+  </data>
+  <data name="RunMonitorLastHour" xml:space="preserve">
+    <value>Last hour</value>
+  </data>
+  <data name="RunMonitorResumes" xml:space="preserve">
+    <value>resumes in</value>
+  </data>
+  <data name="RunMonitorLive" xml:space="preserve">
+    <value>Live</value>
+  </data>
+  <data name="RunMonitorOffline" xml:space="preserve">
+    <value>No connection</value>
+  </data>
+  <data name="RunMonitorStarted" xml:space="preserve">
+    <value>Started</value>
+  </data>
+  <data name="RunMonitorDuration" xml:space="preserve">
+    <value>Duration</value>
+  </data>
+  <data name="RunMonitorSteps" xml:space="preserve">
+    <value>Steps</value>
+  </data>
+  <data name="WebhookSignHint" xml:space="preserve">
+    <value>Send POST with a JSON body and header X-Partnerly-Signature = HMAC-SHA256 (hex) of the body, signed with the secret.</value>
+  </data>
+  <data name="ConnWebhooksTitle" xml:space="preserve">
+    <value>Incoming webhooks</value>
+  </data>
+  <data name="ConnWebhooksHint" xml:space="preserve">
+    <value>A webhook lets another service start your agent. Add a Webhook trigger to an agent and publish it - its address appears here. Send a request to this address to run the agent.</value>
+  </data>
+  <data name="ConnCopy" xml:space="preserve">
+    <value>Copy</value>
+  </data>
+  <data name="ConnCopied" xml:space="preserve">
+    <value>Copied</value>
+  </data>
+  <data name="ConnAdd" xml:space="preserve">
+    <value>Add</value>
+  </data>
+  <data name="ConnHttpTitle" xml:space="preserve">
+    <value>Saved web addresses</value>
+  </data>
+  <data name="ConnHttpHint" xml:space="preserve">
+    <value>Addresses of outside services your agents call, so you do not retype them in every step.</value>
+  </data>
   <data name="TimeZone" xml:space="preserve">
     <value>Time zone</value>
   </data>
@@ -2858,6 +2924,27 @@ Delete is allowed for Support ticket.</value>
   </data>
   <data name="NodePalette" xml:space="preserve">
     <value>Blocks</value>
+  </data>
+  <data name="NodeConfigured" xml:space="preserve">
+    <value>Configured</value>
+  </data>
+  <data name="NodeNeedsSetup" xml:space="preserve">
+    <value>Needs setup</value>
+  </data>
+  <data name="LeaveTitle" xml:space="preserve">
+    <value>Unsaved changes</value>
+  </data>
+  <data name="LeaveText" xml:space="preserve">
+    <value>Save the changes to this workflow before leaving?</value>
+  </data>
+  <data name="LeaveSave" xml:space="preserve">
+    <value>Save and leave</value>
+  </data>
+  <data name="LeaveDiscard" xml:space="preserve">
+    <value>Don't save</value>
+  </data>
+  <data name="LeaveStay" xml:space="preserve">
+    <value>Stay</value>
   </data>
   <data name="NodeProperties" xml:space="preserve">
     <value>Properties</value>
@@ -3738,6 +3825,42 @@ Delete is allowed for Support ticket.</value>
   </data>
   <data name="TplDriveFileAlertBody" xml:space="preserve">
     <value>A new file in a Drive folder sends you a notification with its link.</value>
+  </data>
+  <data name="TplSheetsConnectionTest" xml:space="preserve">
+    <value>Sheets connection test</value>
+  </data>
+  <data name="TplSheetsConnectionTestBody" xml:space="preserve">
+    <value>Run by hand: adds a test row with the run time to your sheet.</value>
+  </data>
+  <data name="TplSheetsRowToTelegram" xml:space="preserve">
+    <value>New sheet row to Telegram</value>
+  </data>
+  <data name="TplSheetsRowToTelegramBody" xml:space="preserve">
+    <value>Each new row in a sheet is announced in Telegram.</value>
+  </data>
+  <data name="TplSheetsFindAndReport" xml:space="preserve">
+    <value>Find rows and report</value>
+  </data>
+  <data name="TplSheetsFindAndReportBody" xml:space="preserve">
+    <value>Search a column for a value, then notify whether anything was found.</value>
+  </data>
+  <data name="TplDriveFolderAndLog" xml:space="preserve">
+    <value>Create Drive folder and log it</value>
+  </data>
+  <data name="TplDriveFolderAndLogBody" xml:space="preserve">
+    <value>Run by hand: creates a Drive folder, logs its link to Sheets and notifies you.</value>
+  </data>
+  <data name="TplDriveFileToSheet" xml:space="preserve">
+    <value>Drive file to Sheets and Telegram</value>
+  </data>
+  <data name="TplDriveFileToSheetBody" xml:space="preserve">
+    <value>A new Drive file is logged to a sheet and announced in Telegram.</value>
+  </data>
+  <data name="TplDriveFindReport" xml:space="preserve">
+    <value>Find Drive files</value>
+  </data>
+  <data name="TplDriveFindReportBody" xml:space="preserve">
+    <value>Run by hand: looks for files by name and notifies how many were found.</value>
   </data>
   <data name="TplWhatsAppAutoReply" xml:space="preserve">
     <value>WhatsApp auto-reply and log</value>

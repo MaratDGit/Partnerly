@@ -3,8 +3,7 @@
     var canManage = (ViewData["Permissions"] as HashSet<string>)?.Contains("automation.connections") == true;
 }
 
-<div class="automation-hub-panel">
-    <p class="automation-create-kicker">@Localizer["AutomationConnections"]</p>
+<div class="automation-hub-panel automation-conn-sections">
     <h2>@Localizer["AutomationConnections"]</h2>
 
     <div class="automation-hub-block">
@@ -35,7 +34,10 @@
     </div>
 
     <div class="automation-hub-block">
-        <h3>Webhook</h3>
+        <div class="automation-int-head">
+            <h3>@Localizer["ConnWebhooksTitle"]</h3>
+        </div>
+        <p class="automation-conn-hint">@Localizer["ConnWebhooksHint"]</p>
         @if (Model.Webhooks.Count == 0)
         {
             <p class="automation-create-lead mb-0">@Localizer["AutomationEmptyWebhooks"]</p>
@@ -45,13 +47,26 @@
             foreach (var hook in Model.Webhooks)
             {
                 <div class="automation-connection">
-                    <div class="fw-semibold mb-1">@hook.AutomationName</div>
+                    <div class="fw-semibold mb-2"><i class="bx bx-bot me-1" aria-hidden="true"></i>@hook.AutomationName</div>
+
                     <div class="form-text">@Localizer["WebhookUrl"]</div>
-                    <code class="automation-code">@hook.Url</code>
+                    <div class="automation-copy-row">
+                        <code class="automation-code" data-copy-text>@hook.Url</code>
+                        <button type="button" class="btn automation-icon-btn" data-copy title="@Localizer["ConnCopy"]" aria-label="@Localizer["ConnCopy"]">
+                            <i class="bx bx-copy" aria-hidden="true"></i>
+                        </button>
+                    </div>
+
                     @if (!string.IsNullOrEmpty(hook.Secret))
                     {
                         <div class="form-text mt-2">@Localizer["WebhookSecret"]</div>
-                        <code class="automation-code">@hook.Secret</code>
+                        <div class="automation-copy-row">
+                            <code class="automation-code" data-copy-text>@hook.Secret</code>
+                            <button type="button" class="btn automation-icon-btn" data-copy title="@Localizer["ConnCopy"]" aria-label="@Localizer["ConnCopy"]">
+                                <i class="bx bx-copy" aria-hidden="true"></i>
+                            </button>
+                        </div>
+                        <div class="form-text mt-2">@Localizer["WebhookSignHint"]</div>
                     }
                 </div>
             }
@@ -59,28 +74,47 @@
     </div>
 
     <div class="automation-hub-block">
-        <h3>HTTP</h3>
+        <div class="automation-int-head">
+            <h3>@Localizer["ConnHttpTitle"]</h3>
+            @if (canManage)
+            {
+                <button type="button"
+                        class="btn automation-icon-btn automation-add-btn"
+                        data-connection-toggle="#automationHttpForm"
+                        title="@Localizer["ConnAdd"]"
+                        aria-label="@Localizer["ConnAdd"]"
+                        aria-expanded="false">
+                    <i class="bx bx-plus" aria-hidden="true"></i>
+                </button>
+            }
+        </div>
+        <p class="automation-conn-hint">@Localizer["ConnHttpHint"]</p>
+
         @if (canManage)
         {
             <form asp-action="CreateHttpConnection"
                   asp-controller="Automation"
                   method="post"
-                  class="row g-3 align-items-end mb-4"
+                  id="automationHttpForm"
+                  class="automation-conn-form"
+                  hidden
                   data-hub-ajax
                   data-hub-stay
                   data-hub-reload="connections">
                 @Html.AntiForgeryToken()
-                <div class="col-md-4">
-                    <label class="form-label">@Localizer["Name"]</label>
-                    <input class="form-control" name="name" maxlength="200" required />
+                <div class="automation-conn-form-fields">
+                    <div>
+                        <label class="form-label">@Localizer["Name"]</label>
+                        <input class="form-control" name="name" maxlength="200" required />
+                    </div>
+                    <div>
+                        <label class="form-label">@Localizer["BaseUrl"]</label>
+                        <input class="form-control" name="baseUrl" maxlength="500" placeholder="https://example.com" required />
+                    </div>
                 </div>
-                <div class="col-md-6">
-                    <label class="form-label">@Localizer["BaseUrl"]</label>
-                    <input class="form-control" name="baseUrl" maxlength="500" placeholder="https://example.com" required />
-                </div>
-                <div class="col-md-2">
-                    <button type="submit" class="btn btn-primary w-100">@Localizer["Create"]</button>
-                </div>
+                <button type="submit" class="btn automation-icon-btn automation-add-btn" title="@Localizer["Save"]" aria-label="@Localizer["Save"]">
+                    <i class="bx bx-check" aria-hidden="true"></i>
+                </button>
             </form>
         }
 
@@ -90,11 +124,12 @@
         }
         else
         {
-            <ul class="list-unstyled mb-0">
+            <ul class="automation-http-list">
                 @foreach (var item in Model.HttpConnections)
                 {
-                    <li class="d-flex justify-content-between align-items-center py-2 automation-connection">
-                        <span>@item.Name (@item.Kind)</span>
+                    <li>
+                        <span class="automation-int-icon is-http"><i class="bx bx-link-alt" aria-hidden="true"></i></span>
+                        <span class="automation-int-name">@item.Name</span>
                         @if (canManage)
                         {
                             <form asp-action="DeleteHttpConnection"
@@ -106,7 +141,9 @@
                                   data-hub-reload="connections">
                                 @Html.AntiForgeryToken()
                                 <input type="hidden" name="id" value="@item.Id" />
-                                <button type="submit" class="btn btn-sm btn-outline-danger">@Localizer["Delete"]</button>
+                                <button type="submit" class="btn automation-icon-btn automation-del-btn" title="@Localizer["Delete"]" aria-label="@Localizer["Delete"]">
+                                    <i class="bx bx-trash" aria-hidden="true"></i>
+                                </button>
                             </form>
                         }
                     </li>

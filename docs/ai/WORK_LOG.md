@@ -4,6 +4,62 @@
 
 ---
 
+## 2026-11-04 — Редактор: значок «требует настройки», перевод подсказки, защита от потери изменений
+
+- **Значок на карточке:** всегда виден; не настроено — оранжевый с шестерёнкой («Требует настройки»), настроено — зелёный с галочкой. Ключ `nodeConfigured` добавлен в `_BuilderI18n.cshtml` (раньше подсказка была всегда на английском), добавлены `NodeConfigured` / `NodeNeedsSetup` в resx.
+- **Несохранённые изменения:** новый `builder-leave-guard.js` (подключён на `Builder.cshtml`). Обновление/закрытие вкладки/смена адреса — стандартный диалог браузера; клик по ссылке сайта (меню, «Назад») — свой диалог «Сохранить и уйти / Не сохранять / Остаться» (сохранение через `BuilderSave`). Условие: есть право редактирования и `PartnerlyBuilder.isDirty()`. Текст: resx `Leave*` ×3.
+- **Проверка:** сборка — 0 ошибок, синтаксис JS проверен; в браузере не проверялось.
+
+---
+
+## 2026-11-04 — Попап «Подключения»: понятные секции, «+» и иконки
+
+- **Суть:** две секции с пояснениями для обычного пользователя. «Входящие webhook» — адрес и секрет агента с иконкой копирования и подсказкой, как это работает (создаются триггером Webhook у агента и публикацией — из попапа их создать нельзя). «Сохранённые веб-адреса» (HTTP-подключения) — вместо кнопки «Создать» круглая кнопка «+» (раскрывает форму, галочка сохраняет), вместо «Удалить» — иконка корзины.
+- **Файлы:** `_ConnectionsPanel.cshtml`, `hub.js` (переключатель формы и копирование), `automation-builder.css`, resx ×3 (`ConnWebhooksTitle`, `ConnWebhooksHint`, `ConnHttpTitle`, `ConnHttpHint`, `ConnCopy`, `ConnAdd`).
+- **Проверка:** сборка — 0 ошибок, синтаксис JS проверен. В браузере не смотрел.
+
+---
+
+## 2026-11-04 — Подключения: без дубля заголовка, аудит webhook, монитор запусков агента
+
+- **Подключения:** из попапа убран дублирующий kicker (заголовок «Подключения» был дважды).
+- **Webhook — как устроено:** попап «Подключения» показывает webhook-триггеры опубликованных агентов пользователя (для менеджеров — всех), HTTP-подключения и интеграции — это уровень пользователя, не агента. Вход: `POST /Automation/hooks/{publicId}`, анонимно, тело ≤64 КБ, подпись `X-Partnerly-Signature` = HMAC-SHA256(hex) тела секретом триггера; секрет хранится через `ISecretProtector`.
+- **Найдено и исправлено:** (1) повторная публикация агента с webhook переиспользовала `WebhookPublicId`, а на столбце уникальный индекс — на реальной SQL Server вторая публикация упала бы (InMemory-тесты это не ловили). Теперь предыдущая опубликованная версия освобождает id (`IAutomationStore.ClearWebhookIdsAsync`). (2) Два webhook-узла в одном агенте получали один и тот же URL — теперь N-й узел сохраняет N-й прежний URL/секрет. (3) При лимите параллельных запусков / запусков в час webhook отвечал 200 и молча терял событие — теперь 429 (`WebhookIngestResult.Busy`). В попап добавлена подсказка, как подписывать запрос.
+- **Монитор запусков:** попап History агента стал живым. `GET /Automation/RunsData/{id}` отдаёт запуски (статус, начало в поясе агента, длительность, шаги, время возобновления у ждущих), счётчики активных/за час и время следующего срабатывания (ближайший `schedule`/`interval` wakeup; для событийных триггеров — «по событию»). Клиент опрашивает раз в 3 с и ведёт обратный отсчёт каждую секунду (`hub.js: bootMonitor`). Новый `IAutomationStore.GetOpenWakeupsAsync`. Доступ — как у истории (`automation.history`, видимость по владельцу/менеджеру).
+- **Проверка:** сборка — 0 ошибок; `dotnet test` 142/142 (3 новых: `WebhookLifecycleTests`). В браузере и с реальной БД не проверялось.
+- **Файлы:** `AutomationAuthoringService.cs`, `AutomationStore.cs`, `InMemoryAutomationStore.cs`, `IAutomationStore.cs`, `AutomationTriggerDispatcher.cs`, `AutomationWebhookIngestService.cs`, `AutomationHooksController.cs`, `AutomationController.cs`, `AutomationRunMonitorViewModel.cs`, `_HistoryPanel.cshtml`, `_ConnectionsPanel.cshtml`, `hub.js`, `automation-builder.css`, resx ×3, `WebhookLifecycleTests.cs`.
+
+---
+
+## 2026-11-04 — Даты: из БД (UTC) в часовой пояс настроек / автоматизации
+
+- **Суть:** в БД всё хранится в UTC, но часть экранов выводила значение как есть (расхождение = смещению пояса, у владельца +4 ч).
+- **Сделано:** `TimeZoneHelper.FormatIn(value, timeZoneId, format)`. Системный пояс (`ViewBag.TimeZoneId` из SystemSettings): `_AuditInfo`, `SupportTickets/ViewCase`, `Dashboard/Dashboards`, `LogRecords/View`. Пояс конкретной автоматизации (`AutomationDefinition.TimeZoneId`): дата в хабе Agents, история запусков, `updatedDate` в ответах контроллера. Уведомления в навбаре: строка даты без смещения читается как UTC (раньше как локальное время браузера). DataTable уже конвертировал в пояс настроек — не менялся.
+- **Не менялось:** переменные агента (`execution.startedAt` и др.) остаются UTC ISO — строго как есть; пояс автоматизации по-прежнему используется расписанием.
+- **Проверка:** сборка — 0 ошибок; `dotnet test` 139/139 (3 новых теста форматирования). В браузере не проверялось.
+- **Файлы:** `TimeZoneHelper.cs`, `_AuditInfo.cshtml`, `ViewCase.cshtml`, `Dashboards.cshtml`, `LogRecords/View.cshtml`, `Automation/Index.cshtml`, `_HistoryPanel.cshtml`, `AutomationController.cs`, `_NavbarPartial.cshtml`, `TimeZoneFormatTests.cs`.
+
+---
+
+## 2026-11-04 — Попапы автоматизации: без подсказок, стеклянные кнопки
+
+- **Суть:** из попапа «Новая автоматизация» убраны надпись-«kicker» «Автоматизация» над заголовком и фраза «Дайте процессу имя. После сохранения откроется редактор.». Все кнопки попапов (создание, Settings, Delete, Connections, History, Run details, закрытие) — в стеклянном стиле.
+- **Сделано:** `_CreateAutomationPopup.cshtml` — удалены два `<p>`; в конец `automation-builder.css` добавлен блок «Glass buttons in every automation popup» на `.automation-create-card` (общий класс всех попапов): полупрозрачный фон, blur, блик; Save — индиго-стекло, Delete — красноватое; light/dark через `--pop-glass-*`. Ключи resx `CreateAutomationLead` остались, не используются.
+- **Проверка:** сборка/браузер не запускались (правки Razor и CSS).
+- **Файлы:** `_CreateAutomationPopup.cshtml`, `automation-builder.css`.
+
+---
+
+## 2026-11-04 — Шаблоны агентов для Sheets и Drive (для теста)
+
+- **Суть:** владелец просил несколько тестовых шаблонов для Google Sheets и Drive.
+- **Сделано:** 6 шаблонов в `AutomationTemplateCatalog` (+ ключи resx en/ru/hy): `sheets-connection-test` (вручную → строка в таблицу), `sheets-row-to-telegram` (новая строка → Telegram), `sheets-find-and-report` (find_rows → branch по `steps.lookup.result.count` → уведомление), `drive-folder-and-log` (папка → строка в Sheets → уведомление со ссылкой), `drive-file-to-sheet` (новый файл → Sheets + Telegram), `drive-find-report` (find_files → уведомление). Подключение и `spreadsheetId` пользователь выбирает в билдере.
+- **Проверка:** `dotnet test` (OutDir во временную папку) — 136/136, в т.ч. валидность графов всех шаблонов. В браузере и с живым Google не проверялось.
+- **Заметка:** Gmail API / Sheets API / Drive API должны быть включены в Google Cloud проекте (у владельца Gmail API был выключен — 403).
+- **Файлы:** `AutomationTemplateCatalog.cs`, `SharedResource.{en,ru,hy}.resx`.
+
+---
+
 ## 2026-11-04 — Группы пользователей: письмо по шаблону
 
 - **Суть:** в попапе «Отправить письмо» (UserGroups/Form) добавлен выбор шаблона из всех `EmailTemplate` (включая системные EC/FP/CE).

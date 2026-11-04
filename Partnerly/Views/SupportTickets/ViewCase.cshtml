@@ -19,8 +19,13 @@
     int currentStep = isClosed ? 2 : (isInProgress ? 1 : 0);
 
     var culture = System.Globalization.CultureInfo.CurrentUICulture;
-    string? createdText = Model.CreatedDate?.ToString("dd.MM.yyyy HH:mm", culture);
-    string? updatedText = Model.UpdatedDate?.ToString("dd.MM.yyyy HH:mm", culture);
+    var caseZone = Partnerly.Helpers.TimeZoneHelper.Resolve(ViewBag.TimeZoneId as string);
+    string? createdText = Model.CreatedDate.HasValue
+        ? Partnerly.Helpers.TimeZoneHelper.ToLocal(Model.CreatedDate.Value, caseZone).ToString("dd.MM.yyyy HH:mm", culture)
+        : null;
+    string? updatedText = Model.UpdatedDate.HasValue
+        ? Partnerly.Helpers.TimeZoneHelper.ToLocal(Model.UpdatedDate.Value, caseZone).ToString("dd.MM.yyyy HH:mm", culture)
+        : null;
     bool isUnassigned = Model.AssignedTo == null;
 
     string DefaultPhoto(string? url) =>
