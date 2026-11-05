@@ -185,7 +185,7 @@ namespace Partnerly.Integrations.Web
                         text = g.Last()["text"]?.ToString()
                     })
                     .ToList();
-                return Ok(new { success = true, chats });
+                return Ok(new { success = true, chats, defaultChatId = connection.GetString("defaultChatId") });
             }
             catch (Exception ex) when (ex is IntegrationException or HttpRequestException or TaskCanceledException)
             {

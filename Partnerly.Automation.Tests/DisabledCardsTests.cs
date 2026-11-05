@@ -131,5 +131,40 @@ namespace Partnerly.Automation.Tests
             Assert.True(triggers.Single(item => item.Type == AutomationTypeCodes.Manual).IsEnabled);
             Assert.False(triggers.Single(item => item.Type == AutomationTypeCodes.Webhook).IsEnabled);
         }
+
+        [Fact]
+        public async Task A_failed_chain_does_not_stop_the_other_chains()
+        {
+            var owner = Guid.NewGuid();
+            await using var provider = AutomationTestHost.Create(owner);
+            var authoring = provider.GetRequiredService<IAutomationAuthoringService>();
+            var runs = provider.GetRequiredService<IAutomationRunService>();
+            var store = provider.GetRequiredService<IAutomationStore>();
+            var automation = await authoring.CreateDraftAsync(owner, "parallel");
+            // "a" fails (private address, not retryable) and sorts first; "b" and "c" are other chains.
+            await authoring.UpdateGraphAsync(automation.Id, WorkflowGraph.Parse(@"{ ""schemaVersion"": 1, ""nodes"": [
+                { ""id"": ""t1"", ""kind"": ""trigger"", ""type"": ""manual"", ""name"": ""start"", ""config"": {} },
+                { ""id"": ""a"", ""kind"": ""action"", ""type"": ""http_request"", ""name"": ""bad"", ""config"": { ""method"": ""GET"", ""url"": ""http://127.0.0.1/x"" } },
+                { ""id"": ""a2"", ""kind"": ""action"", ""type"": ""set_variable"", ""name"": ""afterBad"", ""config"": { ""name"": ""never"", ""value"": ""1"" } },
+                { ""id"": ""b"", ""kind"": ""action"", ""type"": ""set_variable"", ""name"": ""good1"", ""config"": { ""name"": ""one"", ""value"": ""1"" } },
+                { ""id"": ""c"", ""kind"": ""action"", ""type"": ""set_variable"", ""name"": ""good2"", ""config"": { ""name"": ""two"", ""value"": ""2"" } } ],
+                ""edges"": [ { ""id"": ""e1"", ""from"": ""t1"", ""to"": ""a"" }, { ""id"": ""e2"", ""from"": ""a"", ""to"": ""a2"" },
+                             { ""id"": ""e3"", ""from"": ""t1"", ""to"": ""b"" }, { ""id"": ""e4"", ""from"": ""t1"", ""to"": ""c"" } ] }"));
+            await authoring.PublishAsync(automation.Id);
+            var queued = await authoring.EnqueueRunAsync(automation.Id, "test", false);
+            await runs.AdvanceAsync(queued.Id);
+            var run = (await store.GetRunAsync(queued.Id))!;
+            var steps = await store.GetStepsAsync(run.Id);
+
+            Assert.Equal(AutomationStatuses.Failed, run.Status);
+            Assert.Contains("bad:", run.Error);
+            var vars = JsonNode.Parse(run.ContextJson)!["vars"]!;
+            Assert.Equal("1", vars["one"]!.ToString());
+            Assert.Equal("2", vars["two"]!.ToString());
+            Assert.Null(vars["never"]);
+            Assert.Equal(AutomationStatuses.StepFailed, steps.Single(step => step.NodeId == "a").Status);
+            Assert.DoesNotContain(steps, step => step.NodeId == "a2");
+            Assert.Equal(AutomationStatuses.StepSucceeded, steps.Single(step => step.NodeId == "b").Status);
+        }
     }
 }

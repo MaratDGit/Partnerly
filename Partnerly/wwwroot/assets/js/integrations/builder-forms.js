@@ -12,6 +12,11 @@
             return { key: key, type: "text", plain: !!plain, label: t(labelKey, fallback), help: helpKey ? t(helpKey, "") : "" };
         }
 
+        // A dropdown of the connection's chats (and variables) that still accepts a typed value.
+        function chat(key, labelKey, fallback, helpKey) {
+            return { key: key, type: "text", source: "telegramChats", label: t(labelKey, fallback), help: helpKey ? t(helpKey, "") : "" };
+        }
+
         function area(key, labelKey, fallback, helpKey) {
             return { key: key, type: "textarea", label: t(labelKey, fallback), help: helpKey ? t(helpKey, "") : "" };
         }
@@ -33,7 +38,7 @@
             // ---------- Telegram ----------
             "telegram.send_message": [
                 connection("telegram"),
-                text("chatId", "intChatId", "Chat id", "intChatIdHelp"),
+                chat("chatId", "intChatId", "Chat id", "intChatIdHelp"),
                 area("text", "intMessageText", "Message", "intVariablesHelp"),
                 {
                     key: "parseMode",
@@ -48,7 +53,7 @@
             ],
             "telegram.send_document": [
                 connection("telegram"),
-                text("chatId", "intChatId", "Chat id", "intChatIdHelp"),
+                chat("chatId", "intChatId", "Chat id", "intChatIdHelp"),
                 text("attachmentId", "intAttachment", "Attachment id", "intAttachmentHelp"),
                 text("caption", "intCaption", "Caption")
             ],

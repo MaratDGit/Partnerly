@@ -5,6 +5,7 @@
     var canRun = perms?.Contains("automation.run") == true;
     var canEdit = perms?.Contains("automation.edit") == true;
     var canConnections = perms?.Contains("automation.connections") == true;
+    var canHistory = perms?.Contains("automation.history") == true;
     var canLiveRun = canRun && Model.IsPublished;
 }
 
@@ -23,6 +24,7 @@
       data-can-connections="@(canConnections ? "true" : "false")"
       data-toggle-url="@Url.Action("ToggleActive", "Automation", new { id = Model.Id })"
       data-catalog-url="@Url.Action("Catalog", "Automation")"
+      data-telegram-chats-url="@Url.Action("TelegramChats", "Integrations")"
       data-favorite-url="@Url.Action("FavoriteSet", "Automation")"
       data-favorite-import-url="@Url.Action("FavoriteImport", "Automation")"
       data-save-url="@Url.Action("BuilderSave", "Automation", new { id = Model.Id })"
@@ -95,7 +97,11 @@
             </div>
             <aside class="automation-props" data-props-panel hidden>
                 <div class="automation-props-head">
-                    <h6>@Localizer["NodeProperties"]</h6>
+                    <div class="form-check form-switch automation-prop-enabled" title="@Localizer["BuilderCardEnabledHelp"]">
+                        <input class="form-check-input" type="checkbox" id="automationPropEnabled" data-prop-enabled checked
+                               aria-label="@Localizer["BuilderCardEnabled"]" title="@Localizer["BuilderCardEnabledHelp"]" />
+                    </div>
+                    <h6 class="automation-props-title">@Localizer["NodeProperties"]</h6>
                     <button type="button" class="automation-props-close" data-props-close title="@Localizer["Close"]" aria-label="@Localizer["Close"]">
                         <i class="bx bx-x" aria-hidden="true"></i>
                     </button>
@@ -103,11 +109,6 @@
                 <p class="automation-hint" data-prop-empty>@Localizer["SelectNodeHint"]</p>
                 <div class="automation-props-body">
                     <div data-prop-form hidden>
-                        <div class="form-check form-switch automation-prop-enabled mb-3">
-                            <input class="form-check-input" type="checkbox" id="automationPropEnabled" data-prop-enabled checked />
-                            <label class="form-check-label" for="automationPropEnabled">@Localizer["BuilderCardEnabled"]</label>
-                            <div class="form-text">@Localizer["BuilderCardEnabledHelp"]</div>
-                        </div>
                         <label class="form-label">@Localizer["Name"]</label>
                         <input class="form-control mb-1" data-prop-name />
                         <div class="form-text mb-3">@Localizer["NodeNameHelp"]</div>
@@ -166,6 +167,14 @@
                         data-l-pause="@Localizer["Pause"]"
                         disabled="@(canEdit && Model.IsPublished ? null : "disabled")">
                     <i class="bx @(Model.IsActive ? "bx-pause-circle" : "bx-play-circle")" aria-hidden="true"></i><span data-label>@(Model.IsActive ? Localizer["Pause"] : Localizer["Start"])</span>
+                </button>
+                <button type="button"
+                        class="automation-add-item"
+                        data-act="history"
+                        data-hub="history"
+                        data-id="@Model.Id"
+                        disabled="@(canHistory ? null : "disabled")">
+                    <i class="bx bx-history" aria-hidden="true"></i><span data-label>@Localizer["History"]</span>
                 </button>
                 <button type="button" class="automation-add-item" data-act="settings" data-hub="settings" data-id="@Model.Id" data-hub-nested
                         disabled="@(canEdit ? null : "disabled")">

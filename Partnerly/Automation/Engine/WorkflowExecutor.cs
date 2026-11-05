@@ -39,6 +39,12 @@ namespace Partnerly.Automation.Engine
             var variables = ParseObject(run.ContextJson);
             var completed = ParseIds(run.CompletedNodeIdsJson);
             var ports = ParsePorts(run.ChosenPortsJson);
+            // Steps that failed for good. The rest of the flow goes on; only the cards behind a
+            // failed one wait forever (a join needs all its inputs). Kept in the ports map
+            // under "failed:<nodeId>" so no new column is needed.
+            var failed = new HashSet<string>(
+                ports.Keys.Where(key => key.StartsWith(FailedPrefix, StringComparison.Ordinal)).Select(key => key.Substring(FailedPrefix.Length)),
+                StringComparer.Ordinal);
             var steps = (await _store.GetStepsAsync(run.Id, cancellationToken)).ToList();
 
             foreach (var trigger in graph.Nodes.Where(node => node.Kind == "trigger"))
@@ -77,13 +83,22 @@ namespace Partnerly.Automation.Engine
                 }
 
                 var ready = graph.Nodes
-                    .Where(node => node.Kind == "action" && IsReady(graph, node, completed, ports))
+                    .Where(node => node.Kind == "action" && !failed.Contains(node.Id) && IsReady(graph, node, completed, ports))
                     .OrderBy(node => node.Id, StringComparer.Ordinal)
                     .ToList();
 
                 if (ready.Count == 0)
                 {
-                    run.Status = AutomationStatuses.Succeeded;
+                    if (failed.Count == 0)
+                    {
+                        run.Status = AutomationStatuses.Succeeded;
+                    }
+                    else
+                    {
+                        run.Status = AutomationStatuses.Failed;
+                        run.Error = FailureSummary(graph, steps, failed);
+                    }
+
                     run.EndedAt = _clock.UtcNow;
                     break;
                 }
@@ -127,9 +142,11 @@ namespace Partnerly.Automation.Engine
                     }
                     else
                     {
-                        run.Status = AutomationStatuses.Failed;
-                        run.Error = result.Error;
-                        run.EndedAt = _clock.UtcNow;
+                        // Final failure of this card: its chain stops, the other chains go on.
+                        failed.Add(node.Id);
+                        ports[FailedPrefix + node.Id] = "1";
+                        WriteStepOutput(variables, node, result);
+                        continue;
                     }
 
                     break;
@@ -194,6 +211,21 @@ namespace Partnerly.Automation.Engine
             {
                 ports[node.Id] = port;
             }
+        }
+
+        private const string FailedPrefix = "failed:";
+
+        private static string FailureSummary(WorkflowGraph graph, IReadOnlyList<AutomationRunStep> steps, HashSet<string> failed)
+        {
+            var lines = failed
+                .OrderBy(id => id, StringComparer.Ordinal)
+                .Select(id =>
+                {
+                    var last = steps.Where(step => step.NodeId == id).OrderBy(step => step.Attempt).LastOrDefault();
+                    return $"{graph.FindNode(id)?.Name ?? id}: {last?.Error ?? "failed"}";
+                });
+            var text = string.Join(" | ", lines);
+            return text.Length > 1000 ? text.Substring(0, 1000) : text;
         }
 
         private async Task EnqueueWakeupAsync(AutomationRun run, string nodeId, StepResult result, CancellationToken cancellationToken)

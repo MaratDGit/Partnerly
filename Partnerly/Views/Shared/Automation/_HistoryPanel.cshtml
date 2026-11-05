@@ -15,9 +15,24 @@
      data-l-empty="@Localizer["AutomationEmptyRuns"]"
      data-l-live="@Localizer["RunMonitorLive"]"
      data-l-offline="@Localizer["RunMonitorOffline"]"
-     data-l-zone="@Localizer["TimeZone"]">
-    <p class="automation-create-kicker">@Localizer["History"]</p>
-    <h2>@Model.Definition.Name</h2>
+     data-l-zone="@Localizer["TimeZone"]"
+     data-l-done="@Localizer["RunMonitorDone"]"
+     data-l-problems="@Localizer["RunMonitorProblems"]"
+     data-l-skipped="@Localizer["RunMonitorSkippedSteps"]"
+     data-l-pending="@Localizer["RunMonitorPending"]"
+     data-l-partial="@Localizer["RunMonitorPartial"]"
+     data-l-details="@Localizer["RunMonitorDetails"]"
+     data-l-nosteps="@Localizer["RunMonitorNoSteps"]"
+     data-l-s-queued="@Localizer["AgentRunQueued"]"
+     data-l-s-running="@Localizer["AgentRunRunning"]"
+     data-l-s-waiting="@Localizer["AgentRunWaiting"]"
+     data-l-s-succeeded="@Localizer["AgentRunSucceeded"]"
+     data-l-s-failed="@Localizer["AgentRunFailed"]"
+     data-l-s-cancelled="@Localizer["AgentRunCancelled"]"
+     data-l-s-skipped="@Localizer["RunMonitorSkippedSteps"]"
+     data-l-s-pending="@Localizer["RunMonitorPending"]">
+    <div class="run-monitor-head">
+    <p class="automation-create-kicker">@Localizer["History"]</p>    <h2>@Model.Definition.Name</h2>
 
     <div class="run-monitor-summary" data-monitor-summary>
         <div class="run-monitor-card">
@@ -35,6 +50,7 @@
             <strong class="run-monitor-value run-monitor-value--small" data-monitor-zone>@Model.Definition.TimeZoneId</strong>
             <span class="run-monitor-sub"><span class="run-monitor-dot" data-monitor-dot></span> <span data-monitor-live>@Localizer["RunMonitorLive"]</span></span>
         </div>
+    </div>
     </div>
 
     <div class="table-responsive">

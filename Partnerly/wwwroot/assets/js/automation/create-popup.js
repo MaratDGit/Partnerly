@@ -11,6 +11,17 @@
     var templateSelect = document.getElementById("automationCreateTemplate");
     var form = overlay.querySelector("form");
 
+    function setIcon(value) {
+        var wanted = value || "bx-bot";
+        var radios = form ? form.querySelectorAll('input[name="icon"]') : [];
+        var matched = false;
+        Array.prototype.forEach.call(radios, function (radio) {
+            radio.checked = radio.value === wanted;
+            matched = matched || radio.checked;
+        });
+        if (!matched && radios.length) { radios[0].checked = true; }
+    }
+
     function isOpen() {
         return overlay.classList.contains("is-open");
     }
@@ -18,6 +29,7 @@
     function open(options) {
         options = options || {};
         setMode(false);
+        setIcon(options.icon);
         overlay.hidden = false;
         overlay.classList.add("is-open");
         overlay.setAttribute("aria-hidden", "false");
@@ -65,8 +77,9 @@
     }
 
     // Edit only the name and description of an existing automation.
-    function edit(id, name, description) {
+    function edit(id, name, description, icon) {
         setMode(true, id);
+        setIcon(icon);
         overlay.hidden = false;
         overlay.classList.add("is-open");
         overlay.setAttribute("aria-hidden", "false");
@@ -217,12 +230,12 @@
     if (hubRoot && hubRoot.getAttribute("data-can-edit") === "true") {
         hubRoot.addEventListener("click", function (event) {
             var row = event.target.closest("tr[data-automation-row]");
-            if (!row || event.target.closest("a, button, .automation-hub-actions")) {
+            if (!row || event.target.closest("a, button, input, label, .automation-hub-actions, .automation-hub-switch-cell")) {
                 return;
             }
             var nameEl = row.querySelector(".automation-hub-name");
             var descEl = row.querySelector(".automation-hub-desc");
-            edit(row.getAttribute("data-automation-row"), nameEl ? nameEl.textContent : "", descEl ? descEl.textContent : "");
+            edit(row.getAttribute("data-automation-row"), nameEl ? nameEl.textContent : "", descEl ? descEl.textContent : "", row.getAttribute("data-icon"));
         });
     }
 

@@ -8,7 +8,7 @@ namespace Partnerly.Automation.Abstractions
         Task<AutomationDefinition> GetAsync(Guid automationId, CancellationToken cancellationToken = default);
         Task<AutomationVersion> GetDraftVersionAsync(Guid automationId, CancellationToken cancellationToken = default);
         Task UpdateGraphAsync(Guid automationId, WorkflowGraph graph, CancellationToken cancellationToken = default);
-        Task UpdateMetaAsync(Guid automationId, string name, string? description, CancellationToken cancellationToken = default);
+        Task UpdateMetaAsync(Guid automationId, string name, string? description, string? icon = null, CancellationToken cancellationToken = default);
         Task UpdateSettingsAsync(
             Guid automationId,
             string timeZoneId,

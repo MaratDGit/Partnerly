@@ -42,7 +42,7 @@
     head.style.touchAction = "none";
 
     head.addEventListener("pointerdown", function (event) {
-        if (event.button !== 0 || event.target.closest("button")) {
+        if (event.button !== 0 || event.target.closest("button, input, label, .automation-prop-enabled")) {
             return;
         }
         var rect = panel.getBoundingClientRect();

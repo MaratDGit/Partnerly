@@ -43,6 +43,18 @@
                           rows="3"></textarea>
                 <div class="form-text">@Localizer["AutomationDescriptionHelp"]</div>
             </div>
+            <div class="mb-3">
+                <label class="form-label">@Localizer["AutomationIcon"]</label>
+                <div class="automation-icon-picker" role="radiogroup" aria-label="@Localizer["AutomationIcon"]">
+                    @foreach (var icon in Partnerly.Automation.Abstractions.AutomationIcons.All)
+                    {
+                        <label class="automation-icon-option" title="@icon.Replace("bxl-", "").Replace("bx-", "")">
+                            <input type="radio" name="icon" value="@icon" checked="@(icon == Partnerly.Automation.Abstractions.AutomationIcons.Default)" />
+                            <span><i class="bx @icon" aria-hidden="true"></i></span>
+                        </label>
+                    }
+                </div>
+            </div>
             <div class="mb-4" data-create-only>
                 <label class="form-label" for="automationCreateTemplate">@Localizer["StartFromTemplate"]</label>
                 <select id="automationCreateTemplate" class="form-select" name="templateId">

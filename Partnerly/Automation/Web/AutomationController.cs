@@ -108,7 +108,7 @@ namespace Partnerly.Automation.Web
         [HttpPost]
         [ValidateAntiForgeryToken]
         [Authorize(Policy = "Permission:automation.create")]
-        public async Task<IActionResult> Create(string name, string? description, string? templateId)
+        public async Task<IActionResult> Create(string name, string? description, string? templateId, string? icon)
         {
             if (string.IsNullOrWhiteSpace(name))
             {
@@ -127,7 +127,7 @@ namespace Partnerly.Automation.Web
                     created = await _authoring.CreateDraftAsync(_access.CurrentUserId, name.Trim());
                 }
 
-                await _authoring.UpdateMetaAsync(created.Id, name.Trim(), description);
+                await _authoring.UpdateMetaAsync(created.Id, name.Trim(), description, icon);
                 created = await _authoring.GetAsync(created.Id);
 
                 await _logService.CreateLogAsync("AC", LogTypeAttribute.Information, "Automation created");
@@ -215,7 +215,7 @@ namespace Partnerly.Automation.Web
         [HttpPost]
         [ValidateAntiForgeryToken]
         [Authorize(Policy = "Permission:automation.edit")]
-        public async Task<IActionResult> UpdateMeta(Guid id, string name, string? description)
+        public async Task<IActionResult> UpdateMeta(Guid id, string name, string? description, string? icon)
         {
             if (string.IsNullOrWhiteSpace(name))
             {
@@ -236,7 +236,7 @@ namespace Partnerly.Automation.Web
                     text = text.Substring(0, 500);
                 }
 
-                await _authoring.UpdateMetaAsync(id, trimmed, text);
+                await _authoring.UpdateMetaAsync(id, trimmed, text, icon);
                 await _logService.CreateLogAsync("AM", LogTypeAttribute.Information, "Automation details updated");
                 return OkPayload(DefinitionPayload(await _authoring.GetAsync(id)), nameof(Index));
             }
@@ -285,7 +285,7 @@ namespace Partnerly.Automation.Web
                 var active = await _authoring.ToggleActiveAsync(id, isActive);
                 var definition = await _store.GetDefinitionAsync(id);
                 var live = active && definition?.PublishedVersionId != null;
-                return OkPayload(new { success = true, id, isActive = active, isLive = live }, nameof(Index));
+                return OkPayload(new { success = true, id, isActive = active, isLive = live, hasChanges = live && await HasUnpublishedChangesAsync(id) }, nameof(Index));
             }
             catch (KeyNotFoundException)
             {
@@ -418,6 +418,48 @@ namespace Partnerly.Automation.Web
                     Definition = definition,
                     Runs = runs
                 });
+            }
+            catch (KeyNotFoundException)
+            {
+                return NotFound();
+            }
+        }
+
+        [HttpGet]
+        [Authorize(Policy = "Permission:automation.history")]
+        public async Task<IActionResult> NodeHistoryPanel(Guid id, string nodeId, string? name)
+        {
+            try
+            {
+                var definition = await _authoring.GetAsync(id);
+                var runs = VisibleRuns()
+                    .Where(item => item.AutomationId == id)
+                    .OrderByDescending(item => item.CreatedDate)
+                    .Take(40)
+                    .ToList();
+                var model = new AutomationNodeHistoryViewModel
+                {
+                    Definition = definition,
+                    NodeName = string.IsNullOrWhiteSpace(name) ? nodeId : name
+                };
+                foreach (var run in runs)
+                {
+                    var started = run.StartedAt ?? run.CreatedDate;
+                    foreach (var step in (await _store.GetStepsAsync(run.Id)).Where(item => item.NodeId == nodeId).OrderByDescending(item => item.Attempt))
+                    {
+                        model.Rows.Add(new NodeHistoryRow
+                        {
+                            RunId = run.Id,
+                            IsDryRun = run.IsDryRun,
+                            StartedText = TimeZoneHelper.FormatIn(started, definition.TimeZoneId, "dd.MM.yyyy HH:mm:ss"),
+                            StepStatus = step.Status,
+                            Attempt = step.Attempt,
+                            Error = step.Error
+                        });
+                    }
+                }
+
+                return PartialView("~/Views/Shared/Automation/_NodeHistoryPanel.cshtml", model);
             }
             catch (KeyNotFoundException)
             {
@@ -639,6 +681,7 @@ namespace Partnerly.Automation.Web
                 actions = _actions.DescribeAll(HttpContext.RequestServices),
                 connections,
                 integrationsUrl = Url.Action("Index", "Integrations"),
+                telegramChatsUrl = Url.Action("TelegramChats", "Integrations"),
                 lookups = await _lookups.BuildAsync(HttpContext.RequestAborted)
             });
         }
@@ -709,7 +752,7 @@ namespace Partnerly.Automation.Web
 
             var published = await _store.GetVersionAsync(definition.PublishedVersionId.Value);
             var draft = await _authoring.GetDraftVersionAsync(id);
-            return published != null && Logic(published.GraphJson) != Logic(draft.GraphJson);
+            return published != null && WorkflowGraphDiff.HasLogicChanges(published.GraphJson, draft.GraphJson);
         }
 
         // Moving cards on the canvas is not a change that needs a new publish.
@@ -832,17 +875,23 @@ namespace Partnerly.Automation.Web
                 .GroupBy(item => item.RunId!.Value)
                 .ToDictionary(group => group.Key, group => group.Min(item => item.DueAtUtc));
 
-            var totals = new Dictionary<Guid, int>();
+            var graphs = new Dictionary<Guid, WorkflowGraph>();
             foreach (var run in runs)
             {
-                if (!totals.TryGetValue(run.VersionId, out var total))
+                if (!graphs.TryGetValue(run.VersionId, out var graph))
                 {
                     var version = await _store.GetVersionAsync(run.VersionId);
-                    total = version == null
-                        ? 0
-                        : WorkflowGraph.Parse(version.GraphJson).Nodes.Count(node => node.Kind == "action");
-                    totals[run.VersionId] = total;
+                    graph = version == null ? new WorkflowGraph() : WorkflowGraph.Parse(version.GraphJson);
+                    graphs[run.VersionId] = graph;
                 }
+
+                var total = graph.Nodes.Count(node => node.Kind == "action");
+                // Last attempt of every card, in the order the flow was drawn.
+                var latest = (await _store.GetStepsAsync(run.Id))
+                    .GroupBy(step => step.NodeId)
+                    .Select(group => group.OrderBy(step => step.Attempt).Last())
+                    .OrderBy(step => step.StartedAt)
+                    .ToList();
 
                 var started = run.StartedAt ?? run.CreatedDate;
                 model.Runs.Add(new RunMonitorRow
@@ -856,6 +905,17 @@ namespace Partnerly.Automation.Web
                     EndedAtUtc = run.EndedAt == null ? null : DateTime.SpecifyKind(run.EndedAt.Value, DateTimeKind.Utc),
                     CompletedSteps = CountCompleted(run.CompletedNodeIdsJson),
                     TotalSteps = total,
+                    Succeeded = latest.Count(step => step.Status == AutomationStatuses.StepSucceeded),
+                    Failed = latest.Count(step => step.Status == AutomationStatuses.StepFailed),
+                    Skipped = latest.Count(step => step.Status == AutomationStatuses.StepSkipped),
+                    Pending = latest.Count(step => step.Status is not (AutomationStatuses.StepSucceeded or AutomationStatuses.StepFailed or AutomationStatuses.StepSkipped)),
+                    Steps = latest.Select(step => new RunMonitorStep
+                    {
+                        Name = graph.FindNode(step.NodeId)?.Name ?? step.NodeId,
+                        Type = step.ActionType,
+                        Status = step.Status,
+                        Error = step.Error
+                    }).ToList(),
                     ResumeAtUtc = resume.TryGetValue(run.Id, out var due) ? DateTime.SpecifyKind(due, DateTimeKind.Utc) : null,
                     Error = run.Error
                 });
@@ -892,11 +952,18 @@ namespace Partnerly.Automation.Web
                 return null;
             }
 
+            var version = await _store.GetVersionAsync(run.VersionId);
+            var names = version == null
+                ? new Dictionary<string, string>()
+                : WorkflowGraph.Parse(version.GraphJson).Nodes
+                    .GroupBy(node => node.Id)
+                    .ToDictionary(group => group.Key, group => group.First().Name);
             return new AutomationRunDetailsViewModel
             {
                 Run = run,
                 Definition = definition,
-                Steps = await _store.GetStepsAsync(run.Id)
+                Steps = await _store.GetStepsAsync(run.Id),
+                NodeNames = names
             };
         }
 
@@ -1009,8 +1076,10 @@ namespace Partnerly.Automation.Web
                 id = item.Id,
                 name = item.Name,
                 description = item.Description ?? string.Empty,
+                icon = item.Icon,
                 isActive = item.IsActive,
                 isLive = item.IsActive && item.PublishedVersionId != null,
+                hasChanges = false,
                 updatedDate = Partnerly.Helpers.TimeZoneHelper.FormatIn(item.UpdatedDate, item.TimeZoneId)
             };
         }

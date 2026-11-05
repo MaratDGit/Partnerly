@@ -134,11 +134,39 @@
         target.body.innerHTML = html;
         setOpen(target.overlay, true);
         bootMonitor(target.body);
+        bootRunLive(target.body);
         if (options.size === "wide") {
             window.requestAnimationFrame(function () {
                 bootBuilder(target.body);
             });
         }
+    }
+
+    // Details of a run that is still going: re-read the panel every 2 s until it ends,
+    // so a freshly started run does not stay on "no steps".
+    function bootRunLive(scope) {
+        var panel = scope.querySelector("[data-run-live]");
+        if (!panel) {
+            return;
+        }
+        var id = panel.getAttribute("data-run-id");
+        window.setTimeout(function () {
+            if (!document.body.contains(panel)) {
+                return;
+            }
+            fetch("/Automation/RunDetailsPanel/" + id, {
+                credentials: "same-origin",
+                headers: { "X-Requested-With": "XMLHttpRequest" }
+            }).then(function (response) {
+                return response.ok ? response.text() : null;
+            }).then(function (html) {
+                if (!html || !document.body.contains(panel)) {
+                    return;
+                }
+                scope.innerHTML = html;
+                bootRunLive(scope);
+            }).catch(function () { /* the popup may be closed */ });
+        }, 2000);
     }
 
     // Live run monitor in the History popup: polls /Automation/RunsData/{id} every 3 s and
@@ -196,6 +224,74 @@
             return td;
         }
 
+        var expanded = {};
+
+        // Statuses are stored as English codes; show them in the language of the site.
+        function statusText(code) {
+            return label("s-" + code) || code;
+        }
+
+        function chip(kind, icon, count, title) {
+            var node = document.createElement("span");
+            node.className = "run-chip is-" + kind + (count === 0 ? " is-zero" : "");
+            node.title = title;
+            var i = document.createElement("i");
+            i.className = "bx " + icon;
+            i.setAttribute("aria-hidden", "true");
+            node.appendChild(i);
+            node.appendChild(document.createTextNode(" " + count));
+            return node;
+        }
+
+        // Counts per process: how many cards finished well, failed, were skipped or are still going.
+        function chips(run) {
+            var box = document.createElement("div");
+            box.className = "run-chips";
+            box.appendChild(chip("ok", "bx-check-circle", run.succeeded, label("done")));
+            box.appendChild(chip("bad", "bx-error-circle", run.failed, label("problems")));
+            if (run.skipped > 0) { box.appendChild(chip("skip", "bx-skip-next-circle", run.skipped, label("skipped"))); }
+            if (run.pending > 0) { box.appendChild(chip("wait", "bx-time-five", run.pending, label("pending"))); }
+            if (run.totalSteps > 0) {
+                var total = document.createElement("span");
+                total.className = "run-monitor-sub run-chips-total";
+                total.textContent = " / " + run.totalSteps;
+                box.appendChild(total);
+            }
+            return box;
+        }
+
+        // Every card of the process with its own status and error, opened by clicking the row.
+        function detailsRow(run) {
+            var tr = document.createElement("tr");
+            tr.className = "run-details";
+            var td = document.createElement("td");
+            td.colSpan = 5;
+            if (!run.steps || !run.steps.length) {
+                td.textContent = label("nosteps");
+            } else {
+                run.steps.forEach(function (step) {
+                    var line = document.createElement("div");
+                    line.className = "run-step is-" + step.status;
+                    var name = document.createElement("strong");
+                    name.textContent = step.name;
+                    var meta = document.createElement("span");
+                    meta.className = "run-monitor-sub";
+                    meta.textContent = " " + step.type + " · " + statusText(step.status);
+                    line.appendChild(name);
+                    line.appendChild(meta);
+                    if (step.error) {
+                        var error = document.createElement("div");
+                        error.className = "run-step-error";
+                        error.textContent = step.error;
+                        line.appendChild(error);
+                    }
+                    td.appendChild(line);
+                });
+            }
+            tr.appendChild(td);
+            return tr;
+        }
+
         function buildRows() {
             rows.innerHTML = "";
             if (!data.runs.length) {
@@ -215,11 +311,17 @@
                 button.className = "automation-hub-link run-status is-" + run.status;
                 button.setAttribute("data-hub", "run");
                 button.setAttribute("data-id", run.id);
-                button.textContent = run.status;
+                button.textContent = statusText(run.status);
                 if (run.error) {
                     button.title = run.error;
                 }
                 status.appendChild(button);
+                if (run.failed > 0 && run.succeeded > 0) {
+                    var partial = document.createElement("div");
+                    partial.className = "run-monitor-sub";
+                    partial.textContent = label("partial");
+                    status.appendChild(partial);
+                }
                 if (run.resumeAtUtc) {
                     var resume = document.createElement("div");
                     resume.className = "run-monitor-sub";
@@ -238,9 +340,24 @@
                 }
                 tr.appendChild(duration);
 
-                var steps = cell(run.totalSteps > 0 ? run.completedSteps + " / " + run.totalSteps : String(run.completedSteps));
+                var steps = document.createElement("td");
+                steps.appendChild(chips(run));
                 tr.appendChild(steps);
                 rows.appendChild(tr);
+                var more = detailsRow(run);
+                tr.classList.add("run-row");
+                if (run.steps && run.steps.length) {
+                    tr.classList.add("has-details");
+                    tr.addEventListener("click", function (event) {
+                        if (event.target.closest("button, a")) { return; }
+                        if (expanded[run.id]) { delete expanded[run.id]; } else { expanded[run.id] = true; }
+                        more.hidden = !expanded[run.id];
+                        tr.classList.toggle("is-open", !!expanded[run.id]);
+                    });
+                    more.hidden = !expanded[run.id];
+                    tr.classList.toggle("is-open", !!expanded[run.id]);
+                }
+                rows.appendChild(more);
             });
         }
 
@@ -340,6 +457,7 @@
             id: form.getAttribute("data-builder-id"),
             graph: graph,
             catalogUrl: form.getAttribute("data-catalog-url"),
+            telegramChatsUrl: form.getAttribute("data-telegram-chats-url"),
             saveUrl: form.getAttribute("data-save-url"),
             i18n: i18n
         });
@@ -448,17 +566,23 @@
     function renderRow(item) {
         var tr = document.createElement("tr");
         tr.setAttribute("data-automation-row", item.id);
+        tr.setAttribute("data-icon", item.icon || "bx-bot");
         var desc = item.description ? '<div class="automation-hub-desc"></div>' : "";
         tr.innerHTML =
+            '<td class="automation-hub-switch-cell"><div class="form-check form-switch automation-hub-switch"><input class="form-check-input" type="checkbox" data-hub-toggle aria-label="' + attr("data-col-status") + '"></div></td>' +
             '<td class="automation-hub-cell-main"><div class="automation-hub-row-main">' +
-            '<span class="automation-hub-avatar ' + (item.isActive ? "is-on" : "is-off") + '" aria-hidden="true"><i class="bx bx-bot"></i></span>' +
+            '<span class="automation-hub-avatar ' + (item.isActive ? "is-on" : "is-off") + '" aria-hidden="true"><i class="bx ' + (item.icon || "bx-bot") + '"></i></span>' +
             '<div class="automation-hub-row-text"><div class="automation-hub-name"></div>' + desc + "</div></div></td>" +
             '<td><span class="automation-hub-status"></span></td>' +
             '<td class="automation-hub-date"></td>' +
             '<td class="automation-hub-actions"></td>';
         // Labels for the stacked (phone) layout.
-        tr.children[1].setAttribute("data-label", attr("data-col-status"));
-        tr.children[2].setAttribute("data-label", attr("data-col-updated"));
+        tr.children[2].setAttribute("data-label", attr("data-col-status"));
+        tr.children[3].setAttribute("data-label", attr("data-col-updated"));
+        var toggle = tr.querySelector("[data-hub-toggle]");
+        toggle.setAttribute("data-id", item.id);
+        toggle.checked = !!item.isActive;
+        toggle.disabled = !can("data-can-edit");
         tr.querySelector(".automation-hub-name").textContent = item.name || "";
         var descEl = tr.querySelector(".automation-hub-desc");
         if (descEl) {
@@ -628,6 +752,10 @@
             openSettings(id, nestedFlag);
         } else if (action === "connections") {
             openConnections(true);
+        } else if (action === "node-history") {
+            loadPanel("/Automation/NodeHistoryPanel/" + id
+                + "?nodeId=" + encodeURIComponent(opener.getAttribute("data-node") || "")
+                + "&name=" + encodeURIComponent(opener.getAttribute("data-name") || ""), { size: "default" });
         } else if (action === "run") {
             openRun(id);
         } else if (action === "delete") {
@@ -724,6 +852,50 @@
             avatar.classList.toggle("is-on", !!isActive);
             avatar.classList.toggle("is-off", !isActive);
         }
+        var sw = row.querySelector("[data-hub-toggle]");
+        if (sw) {
+            sw.checked = !!isActive;
+        }
+    }
+
+    // Switch at the start of a grid row: turn the agent on / off right away.
+    if (rowsHost) {
+        rowsHost.addEventListener("change", function (event) {
+            var sw = event.target.closest("[data-hub-toggle]");
+            if (!sw) {
+                return;
+            }
+            var id = sw.getAttribute("data-id");
+            var want = sw.checked;
+            var token = document.querySelector('input[name="__RequestVerificationToken"]');
+            sw.disabled = true;
+            fetch("/Automation/ToggleActive/" + encodeURIComponent(id) + "?isActive=" + (want ? "true" : "false"), {
+                method: "POST",
+                credentials: "same-origin",
+                headers: {
+                    "X-Requested-With": "XMLHttpRequest",
+                    "Accept": "application/json",
+                    "RequestVerificationToken": token ? token.value : ""
+                }
+            }).then(function (response) {
+                return response.json().catch(function () { return {}; }).then(function (payload) {
+                    if (!response.ok || payload.success === false) {
+                        throw new Error(payload.message || response.statusText || "Error");
+                    }
+                    return payload;
+                });
+            }).then(function (payload) {
+                setActive(id, payload.isActive);
+                if (window.PartnerlyAgentsMenu && typeof window.PartnerlyAgentsMenu.setActive === "function") {
+                    window.PartnerlyAgentsMenu.setActive(id, !!payload.isLive, !!payload.hasChanges);
+                }
+            }).catch(function (err) {
+                sw.checked = !want;
+                toast(err.message || "Error", "error");
+            }).then(function () {
+                sw.disabled = !can("data-can-edit");
+            });
+        });
     }
 
     // Template filter chips (All / Partnerly / Telegram / Google / WhatsApp).

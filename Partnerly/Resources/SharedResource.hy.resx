@@ -4153,6 +4153,45 @@ User, խումբ և նամակի կաղապար այստեղ չեն ստեղծվ
   <data name="BuilderCardEnabledHelp" xml:space="preserve">
     <value>Անջատելու դեպքում գործակալը բաց կթողնի այս քարտը և կշարունակի դրանից հետո միացվածներով։ Անջատված տրիգերը գործակալին չի գործարկում։</value>
   </data>
+  <data name="RunMonitorDone" xml:space="preserve">
+    <value>Կատարված</value>
+  </data>
+  <data name="RunMonitorProblems" xml:space="preserve">
+    <value>Խնդիրներ</value>
+  </data>
+  <data name="RunMonitorSkippedSteps" xml:space="preserve">
+    <value>Բաց թողնված</value>
+  </data>
+  <data name="RunMonitorPending" xml:space="preserve">
+    <value>Ընթացքի մեջ</value>
+  </data>
+  <data name="RunMonitorPartial" xml:space="preserve">
+    <value>Մասնակի կատարված</value>
+  </data>
+  <data name="RunMonitorDetails" xml:space="preserve">
+    <value>Մանրամասներ</value>
+  </data>
+  <data name="RunMonitorNoSteps" xml:space="preserve">
+    <value>Քայլեր դեռ չկան։</value>
+  </data>
+  <data name="BuilderTelegramChats" xml:space="preserve">
+    <value>Այս բոտի զրույցները</value>
+  </data>
+  <data name="BuilderDefaultChat" xml:space="preserve">
+    <value>Միացման լռելյայն զրույցը</value>
+  </data>
+  <data name="RunStepsComing" xml:space="preserve">
+    <value>Գործարկումը հերթում է. քայլերը շուտով կերևան…</value>
+  </data>
+  <data name="RunNoSteps" xml:space="preserve">
+    <value>Այս գործարկումը քայլեր չունի։</value>
+  </data>
+  <data name="NodeHistoryEmpty" xml:space="preserve">
+    <value>Այս քարտը դեռ չի կատարվել։</value>
+  </data>
+  <data name="AutomationIcon" xml:space="preserve">
+    <value>Պատկերակ</value>
+  </data>
   <data name="BuilderChoose" xml:space="preserve">
     <value>Ընտրել…</value>
   </data>

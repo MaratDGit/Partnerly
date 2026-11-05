@@ -84,11 +84,16 @@ namespace Partnerly.Automation.Authoring
             await TouchAsync(definition, cancellationToken);
         }
 
-        public async Task UpdateMetaAsync(Guid automationId, string name, string? description, CancellationToken cancellationToken = default)
+        public async Task UpdateMetaAsync(Guid automationId, string name, string? description, string? icon = null, CancellationToken cancellationToken = default)
         {
             var definition = await RequireAsync(automationId, cancellationToken);
             definition.Name = string.IsNullOrWhiteSpace(name) ? definition.Name : name.Trim();
             definition.Description = description;
+            if (!string.IsNullOrWhiteSpace(icon))
+            {
+                definition.Icon = icon;
+            }
+
             await TouchAsync(definition, cancellationToken);
         }
 
@@ -127,7 +132,7 @@ namespace Partnerly.Automation.Authoring
                          ?? throw new KeyNotFoundException("Template was not found.");
             var created = await CreateDraftAsync(ownerUserId, preset.Name, cancellationToken);
             await UpdateGraphAsync(created.Id, WorkflowGraph.Parse(preset.GraphJson), cancellationToken);
-            await UpdateMetaAsync(created.Id, preset.Name, preset.Description, cancellationToken);
+            await UpdateMetaAsync(created.Id, preset.Name, preset.Description, null, cancellationToken);
             return await GetAsync(created.Id, cancellationToken);
         }
 

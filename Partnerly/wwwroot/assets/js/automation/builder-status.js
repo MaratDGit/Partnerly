@@ -99,7 +99,7 @@
         var menu = window.PartnerlyAgentsMenu;
         var id = card.dataset.automationId;
         if (!menu || !id) { return; }
-        menu.setActive(id, state.isPublished && state.isActive);
+        menu.setActive(id, state.isPublished && state.isActive, !!state.hasChanges);
         if (state.name && menu.rename) { menu.rename(id, state.name); }
     }
 

@@ -302,6 +302,7 @@ namespace Partnerly.Models.ViewModels
                         Paging = new DataTablePagingOptions
                         {
                             Enabled = true,
+                            ShowPageSize = true,
                         },
 
                         Actions = new DataTableActionOptions

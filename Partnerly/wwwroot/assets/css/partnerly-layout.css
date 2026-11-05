@@ -447,10 +447,19 @@ body {
     animation: partnerly-agents-dot-glow 1.8s ease-in-out infinite;
 }
 
+/* red: the agent does not run (paused or never published) */
 .partnerly-menu-agents-dot.is-off {
-    background: #c5cad3;
-    box-shadow: none;
+    background: #ef4444;
+    box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.18);
     animation: none;
+}
+
+/* yellow: it runs, but the draft has changes that are not published */
+.partnerly-menu-agents-dot.is-warn {
+    --agents-dot-glow: 245, 158, 11;
+    background: rgb(var(--agents-dot-glow));
+    box-shadow: 0 0 0 3px rgba(var(--agents-dot-glow), 0.22), 0 0 8px rgba(var(--agents-dot-glow), 0.75);
+    animation: partnerly-agents-dot-glow 1.8s ease-in-out infinite;
 }
 
 @keyframes partnerly-agents-dot-glow {
@@ -464,7 +473,8 @@ body {
 }
 
 @media (prefers-reduced-motion: reduce) {
-    .partnerly-menu-agents-dot.is-on {
+    .partnerly-menu-agents-dot.is-on,
+    .partnerly-menu-agents-dot.is-warn {
         animation: none;
     }
 }
@@ -2113,8 +2123,12 @@ html[data-theme="dark"] {
         }
 
         html[data-theme="dark"] .partnerly-menu-agents-dot.is-off {
-            background: #5b6478;
-            box-shadow: none;
+            background: #f87171;
+            box-shadow: 0 0 0 3px rgba(248, 113, 113, 0.2);
+        }
+
+        html[data-theme="dark"] .partnerly-menu-agents-dot.is-warn {
+            --agents-dot-glow: 251, 191, 36;
         }
 
         html[data-theme="dark"] .partnerly-menu-agents-ago {

@@ -31,7 +31,7 @@
             Guid.TryParse(pathParts[2], out editAgentId);
         }
     }
-    var agentMenu = new List<(Guid Id, string Name, bool Active, string Ago)>();
+    var agentMenu = new List<(Guid Id, string Name, bool Active, bool Changes, string Ago)>();
     if (Can("automation.view") && AutomationAccess.CurrentUserId != Guid.Empty)
     {
         var agentsQuery = AutomationStore.QueryDefinitions().Where(item => !item.IsDeleted);
@@ -44,7 +44,7 @@
         var definitions = agentsQuery
             .OrderBy(item => item.Name)
             .Take(40)
-            .Select(item => new { item.Id, item.Name, Live = item.IsActive && item.PublishedVersionId != null, item.UpdatedDate, item.CreatedDate })
+            .Select(item => new { item.Id, item.Name, Live = item.IsActive && item.PublishedVersionId != null, item.PublishedVersionId, item.DraftVersionId, item.UpdatedDate, item.CreatedDate })
             .ToList();
 
         var agentIds = definitions.Select(item => item.Id).ToList();
@@ -110,7 +110,17 @@
             var at = lastAction.TryGetValue(item.Id, out var runAt)
                 ? runAt
                 : (item.UpdatedDate != default ? item.UpdatedDate : item.CreatedDate);
-            agentMenu.Add((item.Id, item.Name, item.Live, AgentAgo(at)));
+            // Yellow dot: it runs, but the draft differs from what is published.
+            var changes = false;
+            if (item.Live && item.DraftVersionId != null && item.DraftVersionId != item.PublishedVersionId)
+            {
+                var published = await AutomationStore.GetVersionAsync(item.PublishedVersionId!.Value);
+                var draft = await AutomationStore.GetVersionAsync(item.DraftVersionId.Value);
+                changes = published != null && draft != null
+                    && Partnerly.Automation.Abstractions.WorkflowGraphDiff.HasLogicChanges(published.GraphJson, draft.GraphJson);
+            }
+
+            agentMenu.Add((item.Id, item.Name, item.Live, changes, AgentAgo(at)));
         }
     }
 }
@@ -626,7 +636,8 @@
                     {
                     <li class="partnerly-menu-item partnerly-menu-agents-sub-item @(editAgentId == agent.Id ? "active" : "")"
                         data-agent-id="@agent.Id"
-                        data-agent-active="@(agent.Active ? "true" : "false")">
+                        data-agent-active="@(agent.Active ? "true" : "false")"
+                        data-agent-changes="@(agent.Changes ? "true" : "false")">
 
                         <a asp-controller="Automation"
                            asp-action="Builder"
@@ -634,7 +645,7 @@
                            class="partnerly-menu-link"
                            title="@agent.Name">
 
-                            <span class="partnerly-menu-agents-dot @(agent.Active ? "is-on" : "is-off")"
+                            <span class="partnerly-menu-agents-dot @(!agent.Active ? "is-off" : agent.Changes ? "is-warn" : "is-on")"
                                   aria-hidden="true"></span>
 
                             <span class="partnerly-menu-text">
@@ -1064,9 +1075,9 @@
                     }
 
                     if (item.isLive === true) {
-                        this.setActive(id, true);
+                        this.setActive(id, true, item.hasChanges === true);
                     } else if (item.isLive === false) {
-                        this.setActive(id, false);
+                        this.setActive(id, false, false);
                     }
 
                     sortAgentRows(list);
@@ -1100,7 +1111,8 @@
 
                 },
 
-                setActive: function (id, isActive) {
+                // green = runs, yellow = runs but has unpublished changes, red = does not run.
+                setActive: function (id, isActive, hasChanges) {
 
                     if (!id) {
                         return;
@@ -1123,8 +1135,15 @@
                         '.partnerly-menu-agents-dot'
                     );
 
+                    if (hasChanges === undefined) {
+                        hasChanges = row.getAttribute('data-agent-changes') === 'true';
+                    }
+                    hasChanges = !!isActive && !!hasChanges;
+                    row.setAttribute('data-agent-changes', hasChanges ? 'true' : 'false');
+
                     if (dot) {
-                        dot.classList.toggle('is-on', !!isActive);
+                        dot.classList.toggle('is-on', !!isActive && !hasChanges);
+                        dot.classList.toggle('is-warn', hasChanges);
                         dot.classList.toggle('is-off', !isActive);
                     }
 
@@ -1385,7 +1404,7 @@
                             // Menu dot lights only for an active AND published agent.
                             const live = payload.isLive === true ||
                                 payload.isLive === 'true';
-                            window.PartnerlyAgentsMenu.setActive(id, live);
+                            window.PartnerlyAgentsMenu.setActive(id, live, payload.hasChanges === true || payload.hasChanges === 'true');
                             window.dispatchEvent(new CustomEvent('partnerly:automation-changed'));
                             if (
                                 window.PartnerlyAutomationHub &&

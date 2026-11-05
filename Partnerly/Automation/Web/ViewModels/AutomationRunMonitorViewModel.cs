@@ -25,6 +25,14 @@ namespace Partnerly.Automation.Web.ViewModels
         public string Kind { get; set; } = string.Empty;
     }
 
+    public class RunMonitorStep
+    {
+        public string Name { get; set; } = string.Empty;
+        public string Type { get; set; } = string.Empty;
+        public string Status { get; set; } = string.Empty;
+        public string? Error { get; set; }
+    }
+
     public class RunMonitorRow
     {
         public Guid Id { get; set; }
@@ -36,6 +44,12 @@ namespace Partnerly.Automation.Web.ViewModels
         public DateTime? EndedAtUtc { get; set; }
         public int CompletedSteps { get; set; }
         public int TotalSteps { get; set; }
+        // One process can hold good and bad steps at once: counts of the last attempt of each card.
+        public int Succeeded { get; set; }
+        public int Failed { get; set; }
+        public int Skipped { get; set; }
+        public int Pending { get; set; }
+        public List<RunMonitorStep> Steps { get; set; } = new();
         public DateTime? ResumeAtUtc { get; set; }
         public string? Error { get; set; }
     }

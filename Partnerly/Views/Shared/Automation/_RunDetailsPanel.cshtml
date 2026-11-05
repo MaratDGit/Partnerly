@@ -1,12 +1,41 @@
 @model Partnerly.Automation.Web.ViewModels.AutomationRunDetailsViewModel
+@functions {
+    string StatusText(string status) => status switch
+    {
+        "queued" => Localizer["AgentRunQueued"].Value,
+        "running" => Localizer["AgentRunRunning"].Value,
+        "waiting" => Localizer["AgentRunWaiting"].Value,
+        "succeeded" => Localizer["AgentRunSucceeded"].Value,
+        "failed" => Localizer["AgentRunFailed"].Value,
+        "cancelled" => Localizer["AgentRunCancelled"].Value,
+        "skipped" => Localizer["RunMonitorSkippedSteps"].Value,
+        "pending" => Localizer["RunMonitorPending"].Value,
+        _ => status
+    };
+}
 @{
     var canRun = (ViewData["Permissions"] as HashSet<string>)?.Contains("automation.run") == true;
 }
 
-<div class="automation-hub-panel">
+@{
+    var live = Model.Run.Status is "queued" or "running" or "waiting";
+}
+<div class="automation-hub-panel"@(live ? " data-run-live" : "") data-run-id="@Model.Run.Id">
     <p class="automation-create-kicker">@Localizer["History"]</p>
     <h2>@Model.Definition.Name</h2>
-    <p class="automation-create-lead">@Model.Run.Status · @Model.Run.TriggerType</p>
+    <p class="automation-create-lead">@StatusText(Model.Run.Status) · @Model.Run.TriggerType</p>
+
+    @{
+        var latest = Model.Steps.GroupBy(step => step.NodeId).Select(group => group.OrderBy(step => step.Attempt).Last()).ToList();
+        var okCount = latest.Count(step => step.Status == "succeeded");
+        var badCount = latest.Count(step => step.Status == "failed");
+        var skipCount = latest.Count(step => step.Status == "skipped");
+    }
+    <div class="run-chips mb-3">
+        <span class="run-chip is-ok" title="@Localizer["RunMonitorDone"]"><i class="bx bx-check-circle" aria-hidden="true"></i> @okCount</span>
+        <span class="run-chip is-bad" title="@Localizer["RunMonitorProblems"]"><i class="bx bx-error-circle" aria-hidden="true"></i> @badCount</span>
+        <span class="run-chip is-skip" title="@Localizer["RunMonitorSkippedSteps"]"><i class="bx bx-skip-next-circle" aria-hidden="true"></i> @skipCount</span>
+    </div>
 
     <div class="d-flex flex-wrap gap-2 mb-3">
         <button type="button"
@@ -50,7 +79,7 @@
             @if (Model.Steps.Count == 0)
             {
                 <tr>
-                    <td colspan="4" class="automation-hub-empty">@Localizer["AutomationEmptyRuns"]</td>
+                    <td colspan="4" class="automation-hub-empty">@Localizer[live ? "RunStepsComing" : "RunNoSteps"]</td>
                 </tr>
             }
             else
@@ -58,9 +87,9 @@
                 foreach (var step in Model.Steps)
                 {
                     <tr>
-                        <td>@step.NodeId</td>
+                        <td>@(Model.NodeNames.TryGetValue(step.NodeId, out var stepName) ? stepName : step.NodeId)</td>
                         <td>@step.ActionType</td>
-                        <td>@step.Status</td>
+                        <td>@StatusText(step.Status)</td>
                         <td>@step.Error</td>
                     </tr>
                 }

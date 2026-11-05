@@ -429,8 +429,7 @@
             '<span class="auto-node-kind">' + (data.kind === "trigger" ? t("triggerBlocks", "When") : t("actionBlocks", "Then")) + "</span>" +
             '<strong class="auto-node-type">' + typeLabel(data.type, data.type) + "</strong>" +
             '<span class="auto-node-name">' + (data.name || "") + "</span>" +
-            '<span class="auto-node-off" title="' + t("builderDisabledHint", "This card is turned off: the flow skips it") + '"><i class="bx bx-power-off" aria-hidden="true"></i> ' + t("builderDisabledBadge", "Off") + "</span>" +
-            '<span class="auto-node-check" title="' + t("nodeNeedsSetup", "Needs setup") + '"><i class="bx bx-check auto-node-check-ok" aria-hidden="true"></i><i class="bx bx-cog auto-node-check-todo" aria-hidden="true"></i></span></div>';
+            '<span class="auto-node-off" title="' + t("builderDisabledHint", "This card is turned off: the flow skips it") + '"><i class="bx bx-power-off" aria-hidden="true"></i> ' + t("builderDisabledBadge", "Off") + "</span></div>";
     }
 
     // ---- "configured" check on cards -------------------------------------
@@ -554,10 +553,10 @@
             if (inner) {
                 var ready = wired && settingsReady(data);
                 inner.classList.toggle("is-configured", ready);
-                var badge = inner.querySelector(".auto-node-check");
-                if (badge) {
-                    badge.title = ready ? t("nodeConfigured", "Configured") : t("nodeNeedsSetup", "Needs setup");
-                }
+                // The colour line on the left edge tells the state; the tooltip spells it out.
+                inner.title = data.disabled
+                    ? t("builderDisabledHint", "This card is turned off: the flow skips it")
+                    : (ready ? t("nodeConfigured", "Configured") : t("nodeNeedsSetup", "Needs setup"));
             }
         });
     }
@@ -1136,8 +1135,52 @@
         });
     }
 
-    function sourceOptions(source, vars) {
+    // Chats of the chosen Telegram connection (people who wrote to the bot + its default
+    // chat). Loaded once per connection, then the open card is drawn again.
+    var telegramChats = {};
+
+    function telegramChatOptions(data) {
+        var id = data && data.config ? data.config.connectionId : "";
+        if (!id) { return []; }
+        var group = t("builderTelegramChats", "Chats of this bot");
+        var entry = telegramChats[id];
+        if (entry === undefined && config.telegramChatsUrl) {
+            telegramChats[id] = { loading: true, chats: [] };
+            fetch(config.telegramChatsUrl + "?id=" + encodeURIComponent(id), {
+                credentials: "same-origin",
+                headers: { "X-Requested-With": "XMLHttpRequest", "Accept": "application/json" }
+            }).then(function (response) { return response.json(); }).then(function (json) {
+                telegramChats[id] = { chats: json && json.success ? (json.chats || []) : [], defaultChatId: json ? json.defaultChatId : "" };
+            }).catch(function () {
+                telegramChats[id] = { chats: [] };
+            }).then(function () {
+                var current = selectedId ? nodeOrNull(selectedId) : null;
+                if (current && current.data.config && current.data.config.connectionId === id) {
+                    renderFields(current.data);
+                }
+            });
+            return [];
+        }
+        if (!entry) { return []; }
+        var options = [];
+        if (entry.defaultChatId) {
+            options.push({
+                value: String(entry.defaultChatId),
+                label: t("builderDefaultChat", "Default chat of the connection") + " · " + entry.defaultChatId,
+                group: group
+            });
+        }
+        (entry.chats || []).forEach(function (chat) {
+            if (!chat.chatId || String(chat.chatId) === String(entry.defaultChatId)) { return; }
+            var who = [chat.name, chat.username ? "@" + chat.username : ""].filter(Boolean).join(" ") || chat.type || "";
+            options.push({ value: String(chat.chatId), label: (who ? who + " · " : "") + chat.chatId, group: group });
+        });
+        return options;
+    }
+
+    function sourceOptions(source, vars, data) {
         switch (source) {
+            case "telegramChats": return telegramChatOptions(data).concat(vars);
             case "events": return EVENT_OPTIONS;
             case "userEmails": return vars.concat(userOptions("email"));
             case "userIds": return vars.concat(userOptions("id"));
@@ -1254,7 +1297,7 @@
                     key: field.key,
                     value: value,
                     strict: !!field.strict,
-                    options: sourceOptions(field.source, actionVars)
+                    options: sourceOptions(field.source, actionVars, data)
                 });
                 control = built.control;
             } else if (field.type === "text" && ui && data.kind === "action" && !field.plain && actionVars.length) {
@@ -1413,7 +1456,7 @@
     }
 
     // Changing these fields changes which other fields (or choices) apply.
-    var RERENDER_KEYS = ["scheduleKind", "entity", "event"];
+    var RERENDER_KEYS = ["scheduleKind", "entity", "event", "connectionId"];
 
     function fieldKeyOf(target) {
         var own = target.getAttribute && target.getAttribute("data-config-key");
@@ -1486,23 +1529,33 @@
     var nodeMenu = document.createElement("div");
     nodeMenu.className = "automation-node-menu";
     nodeMenu.hidden = true;
-    var propsItem = document.createElement("button");
-    propsItem.type = "button";
-    propsItem.textContent = t("nodeProperties", "Properties");
-    var deleteItem = document.createElement("button");
-    deleteItem.type = "button";
-    deleteItem.className = "is-danger";
-    deleteItem.textContent = t("delete", "Delete");
-    var copyItem = document.createElement("button");
-    copyItem.type = "button";
-    copyItem.textContent = t("builderCopy", "Copy");
-    var pasteItem = document.createElement("button");
-    pasteItem.type = "button";
-    pasteItem.textContent = t("builderPaste", "Paste");
-    var toggleItem = document.createElement("button");
-    toggleItem.type = "button";
+    // Menu entry: icon + text (the text span can be changed later).
+    function menuItem(icon, text, danger) {
+        var button = document.createElement("button");
+        button.type = "button";
+        if (danger) { button.className = "is-danger"; }
+        var i = document.createElement("i");
+        i.className = "bx " + icon;
+        i.setAttribute("aria-hidden", "true");
+        var span = document.createElement("span");
+        span.textContent = text;
+        button.appendChild(i);
+        button.appendChild(span);
+        return button;
+    }
+    function setMenuText(button, text) {
+        var span = button.querySelector("span");
+        if (span) { span.textContent = text; }
+    }
+    var propsItem = menuItem("bx-slider-alt", t("nodeProperties", "Properties"));
+    var deleteItem = menuItem("bx-trash", t("delete", "Delete"), true);
+    var copyItem = menuItem("bx-copy", t("builderCopy", "Copy"));
+    var pasteItem = menuItem("bx-paste", t("builderPaste", "Paste"));
+    var toggleItem = menuItem("bx-power-off", t("builderDisable", "Turn off"));
+    var historyItem = menuItem("bx-history", t("builderCardHistory", "History"));
     nodeMenu.appendChild(propsItem);
     nodeMenu.appendChild(toggleItem);
+    nodeMenu.appendChild(historyItem);
     nodeMenu.appendChild(copyItem);
     nodeMenu.appendChild(pasteItem);
     nodeMenu.appendChild(deleteItem);
@@ -1528,9 +1581,12 @@
         propsItem.hidden = !onCard;
         copyItem.hidden = !onCard;
         deleteItem.hidden = !onCard || !canEdit;
+        var hoverNode = onCard ? nodeOrNull(id) : null;
+        // Triggers do not run as steps, so only action cards have a history.
+        historyItem.hidden = !onCard || !config.id || !hoverNode || hoverNode.data.kind === "trigger";
         toggleItem.hidden = !onCard || !canEdit;
         var current = onCard ? nodeOrNull(id) : null;
-        toggleItem.textContent = current && current.data.disabled ? t("builderEnable", "Turn on") : t("builderDisable", "Turn off");
+        setMenuText(toggleItem, current && current.data.disabled ? t("builderEnable", "Turn on") : t("builderDisable", "Turn off"));
         pasteItem.hidden = onCard || !canEdit;
         pasteItem.disabled = !clipboard;
         menuPoint = { x: clientX, y: clientY };
@@ -1678,6 +1734,25 @@
         var node = id ? nodeOrNull(id) : null;
         if (node) { setCardDisabled(id, !node.data.disabled); }
     });
+    // Runs of this one card (its steps in the agent's past runs) in the shared popup;
+    // hub.js opens it for a [data-hub="node-history"] element.
+    historyItem.addEventListener("click", function (event) {
+        event.preventDefault();
+        var id = menuNodeId;
+        hideNodeMenu();
+        var node = id ? nodeOrNull(id) : null;
+        if (!node || !config.id) { return; }
+        var opener = document.createElement("button");
+        opener.type = "button";
+        opener.hidden = true;
+        opener.setAttribute("data-hub", "node-history");
+        opener.setAttribute("data-id", config.id);
+        opener.setAttribute("data-node", node.data.id || ("n" + id));
+        opener.setAttribute("data-name", node.data.name || "");
+        document.body.appendChild(opener);
+        opener.click();
+        document.body.removeChild(opener);
+    });
     var enabledSwitch = q("[data-prop-enabled]");
     if (enabledSwitch) {
         var onSwitch = function () { setCardDisabled(selectedId, !enabledSwitch.checked); };
@@ -1725,7 +1800,10 @@
     }
     function typingInField() {
         var active = document.activeElement;
-        return !!active && (/^(INPUT|TEXTAREA|SELECT)$/.test(active.tagName) || active.isContentEditable);
+        if (!active) { return false; }
+        // A switch / checkbox / button does not type text, so Ctrl+Z / Ctrl+Y still reach the canvas.
+        if (active.tagName === "INPUT") { return !/^(checkbox|radio|button|submit|range)$/i.test(active.type); }
+        return /^(TEXTAREA|SELECT)$/.test(active.tagName) || active.isContentEditable;
     }
 
     function onKeyHideMenu(event) {
@@ -1734,7 +1812,14 @@
             hidePortPicker();
             return;
         }
-        // Ctrl/Cmd+C copies the selected card, Ctrl/Cmd+V pastes it.
+        // Ctrl/Cmd+S saves (also while typing in a field; the browser's own "save page" is blocked).
+        if ((event.ctrlKey || event.metaKey) && !event.shiftKey && !event.altKey && String(event.key).toLowerCase() === "s" && document.body.contains(root)) {
+            event.preventDefault();
+            var saveButton = document.querySelector('#automationBuilderForm [data-act="save"]');
+            if (saveButton && !saveButton.disabled) { saveButton.click(); }
+            return;
+        }
+        // Ctrl/Cmd+Z undo, Ctrl/Cmd+Y (or Shift+Z) redo, Ctrl/Cmd+C copies the selected card, Ctrl/Cmd+V pastes it.
         if (!(event.ctrlKey || event.metaKey) || typingInField() || !document.body.contains(root)) {
             return;
         }
@@ -2450,6 +2535,7 @@
             id: form.getAttribute("data-builder-id"),
             graph: graph,
             catalogUrl: form.getAttribute("data-catalog-url"),
+            telegramChatsUrl: form.getAttribute("data-telegram-chats-url"),
             saveUrl: form.getAttribute("data-save-url"),
             favoriteUrl: form.getAttribute("data-favorite-url"),
             favoriteImportUrl: form.getAttribute("data-favorite-import-url"),

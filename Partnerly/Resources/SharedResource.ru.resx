@@ -4153,6 +4153,45 @@ User, группу и шаблон письма здесь создать нел
   <data name="BuilderCardEnabledHelp" xml:space="preserve">
     <value>Если выключить, агент пропустит эту карточку и продолжит с подключёнными после неё. Выключенный триггер не запускает агента.</value>
   </data>
+  <data name="RunMonitorDone" xml:space="preserve">
+    <value>Выполнено</value>
+  </data>
+  <data name="RunMonitorProblems" xml:space="preserve">
+    <value>Проблемы</value>
+  </data>
+  <data name="RunMonitorSkippedSteps" xml:space="preserve">
+    <value>Пропущено</value>
+  </data>
+  <data name="RunMonitorPending" xml:space="preserve">
+    <value>В работе</value>
+  </data>
+  <data name="RunMonitorPartial" xml:space="preserve">
+    <value>Выполнено частично</value>
+  </data>
+  <data name="RunMonitorDetails" xml:space="preserve">
+    <value>Подробности</value>
+  </data>
+  <data name="RunMonitorNoSteps" xml:space="preserve">
+    <value>Шагов пока нет.</value>
+  </data>
+  <data name="BuilderTelegramChats" xml:space="preserve">
+    <value>Чаты этого бота</value>
+  </data>
+  <data name="BuilderDefaultChat" xml:space="preserve">
+    <value>Чат по умолчанию у подключения</value>
+  </data>
+  <data name="RunStepsComing" xml:space="preserve">
+    <value>Запуск поставлен в очередь — шаги появятся через мгновение…</value>
+  </data>
+  <data name="RunNoSteps" xml:space="preserve">
+    <value>В этом запуске нет шагов.</value>
+  </data>
+  <data name="NodeHistoryEmpty" xml:space="preserve">
+    <value>Эта карточка ещё не выполнялась.</value>
+  </data>
+  <data name="AutomationIcon" xml:space="preserve">
+    <value>Иконка</value>
+  </data>
   <data name="BuilderChoose" xml:space="preserve">
     <value>Выбрать…</value>
   </data>

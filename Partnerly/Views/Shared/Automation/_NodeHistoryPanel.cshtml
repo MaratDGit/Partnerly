@@ -1,0 +1,59 @@
+@model Partnerly.Automation.Web.ViewModels.AutomationNodeHistoryViewModel
+@functions {
+    string StatusText(string status) => status switch
+    {
+        "queued" => Localizer["AgentRunQueued"].Value,
+        "running" => Localizer["AgentRunRunning"].Value,
+        "waiting" => Localizer["AgentRunWaiting"].Value,
+        "succeeded" => Localizer["AgentRunSucceeded"].Value,
+        "failed" => Localizer["AgentRunFailed"].Value,
+        "cancelled" => Localizer["AgentRunCancelled"].Value,
+        "skipped" => Localizer["RunMonitorSkippedSteps"].Value,
+        "pending" => Localizer["RunMonitorPending"].Value,
+        _ => status
+    };
+}
+
+<div class="automation-hub-panel node-history">
+    <div class="run-monitor-head">
+        <p class="automation-create-kicker">@Localizer["History"] · @Model.Definition.Name</p>
+        <h2>@Model.NodeName</h2>
+    </div>
+
+    <div class="table-responsive">
+        <table class="automation-hub-table automation-hub-table--compact">
+            <thead>
+                <tr>
+                    <th>@Localizer["RunMonitorStarted"]</th>
+                    <th>@Localizer["Status"]</th>
+                    <th>@Localizer["Error"]</th>
+                </tr>
+            </thead>
+            <tbody>
+            @if (Model.Rows.Count == 0)
+            {
+                <tr>
+                    <td colspan="3" class="automation-hub-empty">@Localizer["NodeHistoryEmpty"]</td>
+                </tr>
+            }
+            else
+            {
+                foreach (var row in Model.Rows)
+                {
+                    <tr>
+                        <td>
+                            <span>@row.StartedText</span>
+                            @if (row.IsDryRun)
+                            {
+                                <span class="run-monitor-sub"> test</span>
+                            }
+                        </td>
+                        <td><span class="run-chip is-@(row.StepStatus == "succeeded" ? "ok" : row.StepStatus == "failed" ? "bad" : row.StepStatus == "skipped" ? "skip" : "wait")">@StatusText(row.StepStatus)</span></td>
+                        <td class="run-step-error">@row.Error</td>
+                    </tr>
+                }
+            }
+            </tbody>
+        </table>
+    </div>
+</div>

@@ -81,9 +81,11 @@
     </header>
 
     <div class="automation-glass automation-hub-table-wrap">
+        @Html.AntiForgeryToken()
         <table class="automation-hub-table">
             <thead>
                 <tr>
+                    <th class="automation-hub-switch-col"><span class="visually-hidden">@Localizer["Status"]</span></th>
                     <th>@Localizer["Name"]</th>
                     <th>@Localizer["Status"]</th>
                     <th>@Localizer["UpdatedDate"]</th>
@@ -94,17 +96,23 @@
             @if (Model.Definitions.Count == 0)
             {
                 <tr data-hub-empty>
-                    <td colspan="4" class="automation-hub-empty">@Localizer["AutomationEmptyDefinitions"]</td>
+                    <td colspan="5" class="automation-hub-empty">@Localizer["AutomationEmptyDefinitions"]</td>
                 </tr>
             }
             else
             {
                 foreach (var item in Model.Definitions)
                 {
-                    <tr data-automation-row="@item.Id">
+                    <tr data-automation-row="@item.Id" data-icon="@item.Icon">
+                        <td class="automation-hub-switch-cell">
+                            <div class="form-check form-switch automation-hub-switch" title="@(item.IsActive ? Localizer["Active"] : Localizer["Inactive"])">
+                                <input class="form-check-input" type="checkbox" data-hub-toggle data-id="@item.Id"
+                                       aria-label="@Localizer["Status"]" checked="@item.IsActive" disabled="@(Can("automation.edit") ? null : "disabled")" />
+                            </div>
+                        </td>
                         <td class="automation-hub-cell-main">
                             <div class="automation-hub-row-main">
-                                <span class="automation-hub-avatar @(item.IsActive ? "is-on" : "is-off")" aria-hidden="true"><i class="bx bx-bot"></i></span>
+                                <span class="automation-hub-avatar @(item.IsActive ? "is-on" : "is-off")" aria-hidden="true"><i class="bx @item.Icon"></i></span>
                                 <div class="automation-hub-row-text">
                                     <div class="automation-hub-name">@item.Name</div>
                                     @if (!string.IsNullOrWhiteSpace(item.Description))
