@@ -121,12 +121,38 @@
                 </div>
             </aside>
             @await Html.PartialAsync("~/Views/Shared/Automation/_BuilderChat.cshtml", Model)
+            <div class="automation-arrange" data-arrange-panel hidden role="dialog" aria-label="@Localizer["BuilderArrangeTitle"]"
+                 data-l-rows="@Localizer["ArrangeRows"]" data-l-rows-d="@Localizer["ArrangeRowsDesc"]"
+                 data-l-line="@Localizer["ArrangeLine"]" data-l-line-d="@Localizer["ArrangeLineDesc"]"
+                 data-l-tight="@Localizer["ArrangeTight"]" data-l-tight-d="@Localizer["ArrangeTightDesc"]"
+                 data-l-down="@Localizer["ArrangeDown"]" data-l-down-d="@Localizer["ArrangeDownDesc"]"
+                 data-l-column="@Localizer["ArrangeColumn"]" data-l-column-d="@Localizer["ArrangeColumnDesc"]"
+                 data-l-spacious="@Localizer["ArrangeSpacious"]" data-l-spacious-d="@Localizer["ArrangeSpaciousDesc"]"
+                 data-l-tree="@Localizer["ArrangeTree"]" data-l-tree-d="@Localizer["ArrangeTreeDesc"]"
+                 data-l-stairs="@Localizer["ArrangeStairs"]" data-l-stairs-d="@Localizer["ArrangeStairsDesc"]"
+                 data-l-snake="@Localizer["ArrangeSnake"]" data-l-snake-d="@Localizer["ArrangeSnakeDesc"]"
+                 data-l-grid="@Localizer["ArrangeGrid"]" data-l-grid-d="@Localizer["ArrangeGridDesc"]">
+                <div class="automation-arrange-head">
+                    <div>
+                        <strong>@Localizer["BuilderArrangeTitle"]</strong>
+                        <span>@Localizer["BuilderArrangeHint"]</span>
+                    </div>
+                    <button type="button" class="automation-props-close" data-arrange-close title="@Localizer["Close"]" aria-label="@Localizer["Close"]">
+                        <i class="bx bx-x" aria-hidden="true"></i>
+                    </button>
+                </div>
+                <div class="automation-arrange-list" data-arrange-list></div>
+            </div>
             <div class="automation-zoom" role="group" aria-label="@Localizer["FitView"]">
                 <button type="button" class="automation-zoom-btn" data-zoom-out title="@Localizer["ZoomOut"]" aria-label="@Localizer["ZoomOut"]">−</button>
                 <span class="automation-zoom-label" data-zoom-label>100%</span>
                 <button type="button" class="automation-zoom-btn" data-zoom-in title="@Localizer["ZoomIn"]" aria-label="@Localizer["ZoomIn"]">+</button>
                 <button type="button" class="automation-zoom-btn" data-zoom-fit title="@Localizer["FitView"]" aria-label="@Localizer["FitView"]">
                     <i class="bx bx-target-lock" aria-hidden="true"></i>
+                </button>
+                <button type="button" class="automation-zoom-btn" data-zoom-arrange aria-expanded="false" title="@Localizer["BuilderArrange"]" aria-label="@Localizer["BuilderArrange"]"
+                        disabled="@(canEdit ? null : "disabled")">
+                    <i class="bx bx-sitemap" aria-hidden="true"></i>
                 </button>
             </div>
         </div>

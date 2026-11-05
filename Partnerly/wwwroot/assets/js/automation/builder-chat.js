@@ -959,6 +959,140 @@
         }
     }
 
+    // =====================================================================
+    //  A light dot runs around the outline of the agent's icon (chat button)
+    //  The outline is read from the real glyph: it is drawn on a hidden canvas
+    //  and its outer edge is traced pixel by pixel.
+    // =====================================================================
+    function traceOutline(mask, w, h) {
+        function on(x, y) { return x >= 0 && y >= 0 && x < w && y < h && mask[y * w + x] === 1; }
+        var sx = -1, sy = -1;
+        for (var y = 0; y < h && sx < 0; y++) {
+            for (var x = 0; x < w; x++) {
+                if (on(x, y)) { sx = x; sy = y; break; }
+            }
+        }
+        if (sx < 0) { return []; }
+        // clockwise on screen, starting east
+        var dirs = [[1, 0], [1, 1], [0, 1], [-1, 1], [-1, 0], [-1, -1], [0, -1], [1, -1]];
+        var cx = sx, cy = sy, bi = 4; // came from the west (a background pixel)
+        var pts = [[cx, cy]];
+        for (var guard = 0; guard < w * h * 2; guard++) {
+            var moved = false;
+            for (var k = 1; k <= 8; k++) {
+                var d = (bi + k) % 8;
+                var nx = cx + dirs[d][0], ny = cy + dirs[d][1];
+                if (on(nx, ny)) {
+                    var pd = (bi + k - 1) % 8;
+                    var bx = cx + dirs[pd][0], by = cy + dirs[pd][1];
+                    cx = nx; cy = ny;
+                    for (var q = 0; q < 8; q++) {
+                        if (cx + dirs[q][0] === bx && cy + dirs[q][1] === by) { bi = q; break; }
+                    }
+                    moved = true;
+                    break;
+                }
+            }
+            if (!moved) { break; }
+            if (cx === sx && cy === sy) { break; }
+            pts.push([cx, cy]);
+        }
+        return pts;
+    }
+
+    function resample(pts, count) {
+        if (pts.length < 3) { return pts; }
+        var lengths = [0];
+        for (var i = 1; i <= pts.length; i++) {
+            var a = pts[i - 1], b = pts[i % pts.length];
+            lengths.push(lengths[i - 1] + Math.hypot(b[0] - a[0], b[1] - a[1]));
+        }
+        var total = lengths[lengths.length - 1];
+        var out = [];
+        var seg = 1;
+        for (var n = 0; n < count; n++) {
+            var at = (n / count) * total;
+            while (seg < lengths.length - 1 && lengths[seg] < at) { seg++; }
+            var from = pts[(seg - 1) % pts.length], to = pts[seg % pts.length];
+            var span = lengths[seg] - lengths[seg - 1] || 1;
+            var f = (at - lengths[seg - 1]) / span;
+            out.push([from[0] + (to[0] - from[0]) * f, from[1] + (to[1] - from[1]) * f]);
+        }
+        return out;
+    }
+
+    function startOrbit() {
+        if (reduced() || !launcher) { return; }
+        var iconEl = launcher.querySelector(".agent-chat-launcher-icon");
+        if (!iconEl) { return; }
+        var glyph = window.getComputedStyle(iconEl, "::before").content || "";
+        glyph = glyph.replace(/^["']|["']$/g, "");
+        if (!glyph || glyph === "none" || glyph === "normal") { return; }
+        var family = window.getComputedStyle(iconEl).fontFamily;
+
+        var SIZE = 160, FONT = 128;
+        var probe = document.createElement("canvas");
+        probe.width = SIZE; probe.height = SIZE;
+        var pctx = probe.getContext("2d");
+        pctx.font = FONT + "px " + family;
+        pctx.textAlign = "center";
+        pctx.textBaseline = "middle";
+        pctx.fillStyle = "#000";
+        pctx.fillText(glyph, SIZE / 2, SIZE / 2);
+        var image = pctx.getImageData(0, 0, SIZE, SIZE).data;
+        var mask = new Uint8Array(SIZE * SIZE);
+        for (var i = 0; i < mask.length; i++) { mask[i] = image[i * 4 + 3] > 110 ? 1 : 0; }
+        var outline = resample(traceOutline(mask, SIZE, SIZE), 260);
+        if (outline.length < 20) { return; }
+
+        var canvas = document.createElement("canvas");
+        canvas.className = "agent-chat-orbit";
+        canvas.setAttribute("aria-hidden", "true");
+        launcher.appendChild(canvas);
+        var dpr = Math.min(window.devicePixelRatio || 1, 2);
+        var box = launcher.clientWidth || 50;
+        canvas.width = box * dpr;
+        canvas.height = box * dpr;
+        var ctx = canvas.getContext("2d");
+
+        // glyph pixels -> launcher pixels (the icon is FONT_PX tall, centred in the button)
+        var fontPx = parseFloat(window.getComputedStyle(iconEl).fontSize) || 30;
+        var k = fontPx / FONT;
+        var path = outline.map(function (p) {
+            return [(box / 2 + (p[0] - SIZE / 2) * k) * dpr, (box / 2 + (p[1] - SIZE / 2) * k) * dpr];
+        });
+
+        var LOOP_MS = 3600, TAIL = 46;
+        function frame(now) {
+            window.requestAnimationFrame(frame);
+            var hidden = document.hidden || root.classList.contains("is-open") || root.classList.contains("is-scanning");
+            canvas.style.opacity = hidden ? "0" : "1";
+            if (hidden) { return; }
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            var dark = document.documentElement.getAttribute("data-theme") === "dark" || document.documentElement.classList.contains("dark-style");
+            var rgb = dark ? "216,204,255" : "99,102,241";
+            var head = Math.floor(((now % LOOP_MS) / LOOP_MS) * path.length);
+            for (var t = TAIL; t >= 0; t--) {
+                var p = path[(head - t + path.length * 2) % path.length];
+                var fade = 1 - t / TAIL;
+                ctx.beginPath();
+                ctx.arc(p[0], p[1], (0.9 + fade * 1.5) * dpr, 0, Math.PI * 2);
+                ctx.fillStyle = "rgba(" + rgb + "," + (fade * fade * 0.95).toFixed(3) + ")";
+                ctx.shadowColor = "rgba(" + rgb + ",0.9)";
+                ctx.shadowBlur = (2 + fade * 8) * dpr;
+                ctx.fill();
+            }
+            ctx.shadowBlur = 0;
+        }
+        window.requestAnimationFrame(frame);
+    }
+
+    if (document.fonts && document.fonts.ready) {
+        document.fonts.ready.then(startOrbit);
+    } else {
+        startOrbit();
+    }
+
     // ---- start -------------------------------------------------------------
     // The (only) suggestion runs the process check instead of asking the (absent) AI.
     var analyzeChip = chips.querySelectorAll("[data-chat-suggest]")[0];

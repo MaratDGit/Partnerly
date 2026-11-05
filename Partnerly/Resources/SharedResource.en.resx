@@ -4606,4 +4606,73 @@ Delete is allowed for Support ticket.</value>
   <data name="AgentChatCardNoNext" xml:space="preserve">
     <value>Last card of the chain</value>
   </data>
+  <data name="BuilderArrange" xml:space="preserve">
+    <value>Tidy up the cards: arrange chains by the shortest path</value>
+  </data>
+  <data name="BuilderArrangeTitle" xml:space="preserve">
+    <value>Tidy up the cards</value>
+  </data>
+  <data name="BuilderArrangeHint" xml:space="preserve">
+    <value>Pick the layout that suits you. Chains follow the shortest path.</value>
+  </data>
+  <data name="ArrangeRows" xml:space="preserve">
+    <value>Rows</value>
+  </data>
+  <data name="ArrangeRowsDesc" xml:space="preserve">
+    <value>Left to right; a long chain continues on the next row.</value>
+  </data>
+  <data name="ArrangeLine" xml:space="preserve">
+    <value>One line</value>
+  </data>
+  <data name="ArrangeLineDesc" xml:space="preserve">
+    <value>Every chain in a single line; the view zooms out to fit.</value>
+  </data>
+  <data name="ArrangeTight" xml:space="preserve">
+    <value>Compact</value>
+  </data>
+  <data name="ArrangeTightDesc" xml:space="preserve">
+    <value>Cards closer together, bigger on screen.</value>
+  </data>
+  <data name="ArrangeDown" xml:space="preserve">
+    <value>Top to bottom</value>
+  </data>
+  <data name="ArrangeDownDesc" xml:space="preserve">
+    <value>Chains run downward and continue in the next column.</value>
+  </data>
+  <data name="ArrangeColumn" xml:space="preserve">
+    <value>One column</value>
+  </data>
+  <data name="ArrangeColumnDesc" xml:space="preserve">
+    <value>Every chain in a single column.</value>
+  </data>
+  <data name="ArrangeSpacious" xml:space="preserve">
+    <value>Spacious</value>
+  </data>
+  <data name="ArrangeSpaciousDesc" xml:space="preserve">
+    <value>Wide gaps between cards, easy to see every link.</value>
+  </data>
+  <data name="ArrangeTree" xml:space="preserve">
+    <value>Centered tree</value>
+  </data>
+  <data name="ArrangeTreeDesc" xml:space="preserve">
+    <value>Each step is centered, branches spread up and down.</value>
+  </data>
+  <data name="ArrangeStairs" xml:space="preserve">
+    <value>Staircase</value>
+  </data>
+  <data name="ArrangeStairsDesc" xml:space="preserve">
+    <value>Every next card sits a step lower: the chain reads like stairs.</value>
+  </data>
+  <data name="ArrangeSnake" xml:space="preserve">
+    <value>Snake</value>
+  </data>
+  <data name="ArrangeSnakeDesc" xml:space="preserve">
+    <value>Rows go left to right, then right to left; a long chain stays compact.</value>
+  </data>
+  <data name="ArrangeGrid" xml:space="preserve">
+    <value>Grid</value>
+  </data>
+  <data name="ArrangeGridDesc" xml:space="preserve">
+    <value>All cards in an even grid shaped like the screen.</value>
+  </data>
 </root>

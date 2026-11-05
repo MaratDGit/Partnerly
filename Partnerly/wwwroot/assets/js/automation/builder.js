@@ -426,6 +426,7 @@
 
     function nodeHtml(data) {
         return '<div class="auto-node auto-node--' + (data.kind || "action") + '">' +
+            '<span class="auto-node-badge" aria-hidden="true"><i class="bx ' + (data.kind === "trigger" ? "bxs-bolt" : "bx-cube-alt") + '"></i></span>' +
             '<span class="auto-node-kind">' + (data.kind === "trigger" ? t("triggerBlocks", "When") : t("actionBlocks", "Then")) + "</span>" +
             '<strong class="auto-node-type">' + typeLabel(data.type, data.type) + "</strong>" +
             '<span class="auto-node-name">' + (data.name || "") + "</span>" +
@@ -681,7 +682,10 @@
         }
         var dfIds = {};
         graph.nodes.forEach(function (node, index) {
-            dfIds[node.id] = addNode(node, node.x || 80 + index * 40, node.y || 80 + index * 30);
+            // 0 is a real saved coordinate: only a missing one gets a default place.
+            var px = typeof node.x === "number" && isFinite(node.x) ? node.x : 80 + index * 40;
+            var py = typeof node.y === "number" && isFinite(node.y) ? node.y : 80 + index * 30;
+            dfIds[node.id] = addNode(node, px, py);
         });
         (graph.edges || []).forEach(function (edge) {
             var from = dfIds[edge.from];
@@ -2582,6 +2586,11 @@
     }
 
     function applyZoom(next) {
+        var current = editor.zoom || 1;
+        // Steps never jump over 100%: crossing it lands exactly on it.
+        if ((current < 0.9995 && next > 1.0005) || (current > 1.0005 && next < 0.9995)) {
+            next = 1;
+        }
         var min = editor.zoom_min || 0.2;
         var max = editor.zoom_max || 1.8;
         editor.zoom = Math.max(min, Math.min(max, next));
@@ -2593,7 +2602,8 @@
         zoomLabel();
     }
 
-    function fitView() {
+    // bounds (optional): where the cards are going to be; otherwise the cards are measured as they are.
+    function fitView(bounds) {
         var nodes = root.querySelectorAll(".drawflow-node");
         if (!nodes.length) {
             applyZoom(1);
@@ -2606,22 +2616,311 @@
         var minY = Infinity;
         var maxX = -Infinity;
         var maxY = -Infinity;
-        Array.prototype.forEach.call(nodes, function (el) {
-            minX = Math.min(minX, el.offsetLeft);
-            minY = Math.min(minY, el.offsetTop);
-            maxX = Math.max(maxX, el.offsetLeft + el.offsetWidth);
-            maxY = Math.max(maxY, el.offsetTop + el.offsetHeight);
-        });
+        if (bounds) {
+            minX = bounds.minX; minY = bounds.minY; maxX = bounds.maxX; maxY = bounds.maxY;
+        } else {
+            Array.prototype.forEach.call(nodes, function (el) {
+                minX = Math.min(minX, el.offsetLeft);
+                minY = Math.min(minY, el.offsetTop);
+                maxX = Math.max(maxX, el.offsetLeft + el.offsetWidth);
+                maxY = Math.max(maxY, el.offsetTop + el.offsetHeight);
+            });
+        }
         var pad = 56;
         var width = Math.max(maxX - minX + pad * 2, 1);
         var height = Math.max(maxY - minY + pad * 2, 1);
         var area = root.getBoundingClientRect();
         var zoom = Math.min(area.width / width, area.height / height, 1);
         applyZoom(zoom);
-        editor.canvas_x = (area.width - width * editor.zoom) / 2 - (minX - pad) * editor.zoom;
-        editor.canvas_y = (area.height - height * editor.zoom) / 2 - (minY - pad) * editor.zoom;
+        // The canvas scales around its own middle (transform-origin), not its corner.
+        var origin = (getComputedStyle(editor.precanvas).transformOrigin || "0px 0px").split(" ").map(parseFloat);
+        var ox = origin[0] || 0, oy = origin[1] || 0;
+        editor.canvas_x = (area.width - width * editor.zoom) / 2 - (minX - pad) * editor.zoom - ox * (1 - editor.zoom);
+        editor.canvas_y = (area.height - height * editor.zoom) / 2 - (minY - pad) * editor.zoom - oy * (1 - editor.zoom);
         applyCanvasTransform();
     }
+
+    // ---- "Tidy up": the user picks one of several layouts (chains by the shortest path) ----
+    var ARRANGE_VARIANTS = [
+        { key: "rows", dir: "h", wrap: true, gap: 110, lane: 44, minZoom: 0.6 },
+        { key: "line", dir: "h", wrap: false, gap: 110, lane: 44, minZoom: 0 },
+        { key: "tight", dir: "h", wrap: true, gap: 56, lane: 22, minZoom: 0.75 },
+        { key: "down", dir: "v", wrap: true, gap: 56, lane: 50, minZoom: 0.6 },
+        { key: "column", dir: "v", wrap: false, gap: 56, lane: 50, minZoom: 0 },
+        { key: "spacious", dir: "h", wrap: true, gap: 200, lane: 90, minZoom: 0.5 },
+        { key: "tree", dir: "h", wrap: true, gap: 110, lane: 44, minZoom: 0.6, center: true },
+        { key: "stairs", dir: "h", wrap: true, gap: 70, lane: 30, minZoom: 0.6, stairs: 0.9 },
+        { key: "snake", dir: "h", wrap: true, gap: 110, lane: 60, minZoom: 0.6, snake: true },
+        { key: "grid", dir: "h", wrap: false, gap: 80, lane: 40, minZoom: 0, grid: true }
+    ];
+
+    function readArrangeModel() {
+        var exported = editor.export();
+        var home = exported.drawflow && exported.drawflow.Home && exported.drawflow.Home.data ? exported.drawflow.Home.data : {};
+        var ids = Object.keys(home);
+        var size = {};
+        var maxW = 0, maxH = 0;
+        ids.forEach(function (id) {
+            var el = document.getElementById("node-" + id);
+            size[id] = { w: el ? el.offsetWidth : 176, h: el ? el.offsetHeight : 76 };
+            maxW = Math.max(maxW, size[id].w);
+            maxH = Math.max(maxH, size[id].h);
+        });
+        var next = {}, prev = {};
+        ids.forEach(function (id) { next[id] = []; prev[id] = []; });
+        ids.forEach(function (id) {
+            Object.keys(home[id].outputs || {}).forEach(function (outKey) {
+                (home[id].outputs[outKey].connections || []).forEach(function (link) {
+                    var to = String(link.node);
+                    if (next[to] && next[id].indexOf(to) === -1) { next[id].push(to); prev[to].push(id); }
+                });
+            });
+        });
+        // chains = groups of cards joined to each other
+        var seen = {}, chains = [];
+        var byPos = ids.slice().sort(function (a, b) { return home[a].pos_x - home[b].pos_x || home[a].pos_y - home[b].pos_y; });
+        byPos.forEach(function (start) {
+            if (seen[start]) { return; }
+            var members = [], queue = [start];
+            seen[start] = true;
+            while (queue.length) {
+                var cur = queue.shift();
+                members.push(cur);
+                next[cur].concat(prev[cur]).forEach(function (n) { if (!seen[n]) { seen[n] = true; queue.push(n); } });
+            }
+            chains.push(members);
+        });
+        return { home: home, ids: ids, size: size, maxW: maxW, maxH: maxH, next: next, prev: prev, chains: chains };
+    }
+
+    function computeArrange(model, v) {
+        var home = model.home, next = model.next, prev = model.prev;
+        var horizontal = v.dir === "h";
+        var depthStep = (horizontal ? model.maxW : model.maxH) + v.gap;
+        var laneStep = (horizontal ? model.maxH : model.maxW) + v.lane;
+        var areaBox = root.getBoundingClientRect();
+        var along = horizontal ? areaBox.width : areaBox.height;
+        var maxCols = v.wrap ? Math.max(2, Math.floor((along / v.minZoom - 112) / depthStep)) : Infinity;
+        var target = {};
+        var top = 0;
+
+        // grid: every card in a tidy grid shaped like the screen, chain after chain
+        if (v.grid) {
+            var order = [];
+            model.chains.forEach(function (members) {
+                var rootsG = members.filter(function (id) { return !prev[id].length; });
+                var dep = {}, qG = rootsG.slice();
+                rootsG.forEach(function (id) { dep[id] = 0; });
+                while (qG.length) {
+                    var c = qG.shift();
+                    next[c].forEach(function (n) { if (dep[n] == null) { dep[n] = dep[c] + 1; qG.push(n); } });
+                }
+                members.slice().sort(function (a, b) { return (dep[a] || 0) - (dep[b] || 0); }).forEach(function (id) { order.push(id); });
+            });
+            var ratio = areaBox.width / Math.max(areaBox.height, 1);
+            var cols = Math.max(1, Math.round(Math.sqrt(order.length * ratio * (laneStep / depthStep))));
+            order.forEach(function (id, i) {
+                target[id] = { x: (i % cols) * depthStep, y: Math.floor(i / cols) * laneStep };
+            });
+            return target;
+        }
+
+        model.chains.forEach(function (members) {
+            // shortest distance from the start cards (cards nobody leads to; triggers first)
+            var roots = members.filter(function (id) { return !prev[id].length; });
+            roots.sort(function (a, b) {
+                var ta = home[a].data && home[a].data.kind === "trigger" ? 0 : 1;
+                var tb = home[b].data && home[b].data.kind === "trigger" ? 0 : 1;
+                return ta - tb || home[a].pos_y - home[b].pos_y;
+            });
+            if (!roots.length) { roots = [members[0]]; }
+            var depth = {};
+            var queue = roots.slice();
+            roots.forEach(function (id) { depth[id] = 0; });
+            while (queue.length) {
+                var cur = queue.shift();
+                next[cur].forEach(function (n) {
+                    if (depth[n] == null) { depth[n] = depth[cur] + 1; queue.push(n); }
+                });
+            }
+            members.forEach(function (id) { if (depth[id] == null) { depth[id] = 0; } });
+
+            var layers = [];
+            members.forEach(function (id) { (layers[depth[id]] = layers[depth[id]] || []).push(id); });
+            var rowOf = {};
+            var bottom = 0;
+            var maxLayer = 1;
+            layers.forEach(function (layer) { if (layer) { maxLayer = Math.max(maxLayer, layer.length); } });
+            layers.forEach(function (layer, d) {
+                if (!layer) { return; }
+                var wanted = {};
+                layer.forEach(function (id) {
+                    var parents = prev[id].filter(function (p) { return rowOf[p] != null && depth[p] < d; });
+                    var own = (horizontal ? home[id].pos_y : home[id].pos_x) / laneStep;
+                    wanted[id] = parents.length
+                        ? parents.reduce(function (sum, p) { return sum + rowOf[p]; }, 0) / parents.length
+                        : own;
+                });
+                layer.sort(function (a, b) { return wanted[a] - wanted[b]; });
+                if (v.center) {
+                    // centred tree: every column is centred on the middle line of the chain
+                    layer.forEach(function (id, i) {
+                        rowOf[id] = (maxLayer - 1) / 2 + i - (layer.length - 1) / 2;
+                        bottom = Math.max(bottom, rowOf[id]);
+                    });
+                    return;
+                }
+                var last = -Infinity;
+                layer.forEach(function (id) {
+                    var row = Math.max(wanted[id], last + 1);
+                    rowOf[id] = row;
+                    last = row;
+                    bottom = Math.max(bottom, row);
+                });
+            });
+            var minRow = Infinity;
+            members.forEach(function (id) { minRow = Math.min(minRow, rowOf[id]); });
+
+            // a long chain wraps to the next band so the cards stay big enough to read
+            var stairs = v.stairs || 0;
+            var colsUsed = Math.min(layers.length, maxCols);
+            var span = bottom - minRow + 1 + (colsUsed - 1) * stairs;
+            var bands = Math.ceil(layers.length / maxCols);
+            members.forEach(function (id) {
+                var band = Math.floor(depth[id] / maxCols);
+                var col = depth[id] % maxCols;
+                if (v.snake && band % 2 === 1) { col = colsUsed - 1 - col; }
+                var depthPos = col * depthStep;
+                var lanePos = top + (rowOf[id] - minRow + col * stairs + band * (span + 0.6)) * laneStep;
+                target[id] = horizontal ? { x: depthPos, y: lanePos } : { x: lanePos, y: depthPos };
+            });
+            top += bands * (span + 0.6) * laneStep + 30;
+        });
+        return target;
+    }
+
+    function applyArrange(model, target) {
+        var ids = model.ids;
+        root.classList.add("is-arranging");
+        var live = editor.drawflow.drawflow.Home.data;
+        ids.forEach(function (id) {
+            var el = document.getElementById("node-" + id);
+            live[id].pos_x = target[id].x;
+            live[id].pos_y = target[id].y;
+            if (el) { el.style.left = target[id].x + "px"; el.style.top = target[id].y + "px"; }
+        });
+        var bounds = { minX: Infinity, minY: Infinity, maxX: -Infinity, maxY: -Infinity };
+        ids.forEach(function (id) {
+            bounds.minX = Math.min(bounds.minX, target[id].x);
+            bounds.minY = Math.min(bounds.minY, target[id].y);
+            bounds.maxX = Math.max(bounds.maxX, target[id].x + model.size[id].w);
+            bounds.maxY = Math.max(bounds.maxY, target[id].y + model.size[id].h);
+        });
+        var begin = performance.now();
+        (function follow() {
+            ids.forEach(function (id) { editor.updateConnectionNodes("node-" + id); });
+            if (performance.now() - begin < 900) { window.setTimeout(follow, 16); }
+        })();
+        window.setTimeout(function () {
+            root.classList.remove("is-arranging");
+            ids.forEach(function (id) { editor.updateConnectionNodes("node-" + id); });
+            fitView(bounds);
+            syncHidden();
+        }, 950);
+    }
+
+    // small picture of a layout (cards as rectangles, links as lines)
+    function arrangePreview(model, target) {
+        var NS = "http://www.w3.org/2000/svg";
+        var minX = Infinity, minY = Infinity, maxX = -Infinity, maxY = -Infinity;
+        model.ids.forEach(function (id) {
+            minX = Math.min(minX, target[id].x);
+            minY = Math.min(minY, target[id].y);
+            maxX = Math.max(maxX, target[id].x + model.size[id].w);
+            maxY = Math.max(maxY, target[id].y + model.size[id].h);
+        });
+        var W = 168, H = 92, pad = 5;
+        var scale = Math.min((W - pad * 2) / Math.max(maxX - minX, 1), (H - pad * 2) / Math.max(maxY - minY, 1));
+        var offX = (W - (maxX - minX) * scale) / 2 - minX * scale;
+        var offY = (H - (maxY - minY) * scale) / 2 - minY * scale;
+        var svg = document.createElementNS(NS, "svg");
+        svg.setAttribute("viewBox", "0 0 " + W + " " + H);
+        svg.setAttribute("class", "automation-arrange-svg");
+        svg.setAttribute("aria-hidden", "true");
+        model.ids.forEach(function (id) {
+            model.next[id].forEach(function (to) {
+                var line = document.createElementNS(NS, "line");
+                line.setAttribute("x1", offX + (target[id].x + model.size[id].w) * scale);
+                line.setAttribute("y1", offY + (target[id].y + model.size[id].h / 2) * scale);
+                line.setAttribute("x2", offX + target[to].x * scale);
+                line.setAttribute("y2", offY + (target[to].y + model.size[to].h / 2) * scale);
+                line.setAttribute("class", "automation-arrange-link");
+                svg.appendChild(line);
+            });
+        });
+        model.ids.forEach(function (id) {
+            var rect = document.createElementNS(NS, "rect");
+            rect.setAttribute("x", offX + target[id].x * scale);
+            rect.setAttribute("y", offY + target[id].y * scale);
+            rect.setAttribute("width", Math.max(model.size[id].w * scale, 3));
+            rect.setAttribute("height", Math.max(model.size[id].h * scale, 2));
+            rect.setAttribute("rx", 1.5);
+            var data = model.home[id].data || {};
+            rect.setAttribute("class", "automation-arrange-card" + (data.kind === "trigger" ? " is-trigger" : "") + (data.disabled ? " is-off" : ""));
+            svg.appendChild(rect);
+        });
+        return svg;
+    }
+
+    var arrangePanel = q("[data-arrange-panel]");
+
+    function closeArrange() {
+        if (arrangePanel) { arrangePanel.hidden = true; }
+        if (zoomArrangeBtn) { zoomArrangeBtn.setAttribute("aria-expanded", "false"); }
+    }
+
+    function arrangeText(name) {
+        return (arrangePanel && arrangePanel.getAttribute("data-l-" + name)) || name;
+    }
+
+    function openArrange() {
+        if (!arrangePanel || !canEditNow() || importing) { return; }
+        var model = readArrangeModel();
+        if (!model.ids.length) { return; }
+        var host = arrangePanel.querySelector("[data-arrange-list]");
+        host.innerHTML = "";
+        ARRANGE_VARIANTS.forEach(function (variant) {
+            var target = computeArrange(model, variant);
+            var option = document.createElement("button");
+            option.type = "button";
+            option.className = "automation-arrange-option";
+            option.appendChild(arrangePreview(model, target));
+            var title = document.createElement("strong");
+            title.textContent = arrangeText(variant.key);
+            var desc = document.createElement("span");
+            desc.textContent = arrangeText(variant.key + "-d");
+            option.appendChild(title);
+            option.appendChild(desc);
+            option.addEventListener("click", function () {
+                closeArrange();
+                applyArrange(model, target);
+            });
+            host.appendChild(option);
+        });
+        arrangePanel.hidden = false;
+        if (zoomArrangeBtn) { zoomArrangeBtn.setAttribute("aria-expanded", "true"); }
+    }
+
+    var arrangeClose = arrangePanel ? arrangePanel.querySelector("[data-arrange-close]") : null;
+    if (arrangeClose) { arrangeClose.addEventListener("click", closeArrange); }
+    // a click on the empty canvas or anywhere else closes the window
+    function onArrangeOutside(event) {
+        if (!arrangePanel || arrangePanel.hidden) { return; }
+        if (arrangePanel.contains(event.target) || (event.target.closest && event.target.closest("[data-zoom-arrange]"))) { return; }
+        closeArrange();
+    }
+    document.addEventListener("pointerdown", onArrangeOutside, true);
+    cleanupFns.push(function () { document.removeEventListener("pointerdown", onArrangeOutside, true); });
 
     editor.on("zoom", zoomLabel);
 
@@ -2630,21 +2929,11 @@
     var zoomFitBtn = q("[data-zoom-fit]");
     function onZoomIn(event) {
         event.preventDefault();
-        if (typeof editor.zoom_in === "function") {
-            editor.zoom_in();
-        } else {
-            applyZoom((editor.zoom || 1) + (editor.zoom_value || 0.08));
-        }
-        zoomLabel();
+        applyZoom((editor.zoom || 1) + (editor.zoom_value || 0.08));
     }
     function onZoomOut(event) {
         event.preventDefault();
-        if (typeof editor.zoom_out === "function") {
-            editor.zoom_out();
-        } else {
-            applyZoom((editor.zoom || 1) - (editor.zoom_value || 0.08));
-        }
-        zoomLabel();
+        applyZoom((editor.zoom || 1) - (editor.zoom_value || 0.08));
     }
     function onZoomFit(event) {
         event.preventDefault();
@@ -2658,6 +2947,15 @@
         zoomOutBtn.addEventListener("click", onZoomOut);
         cleanupFns.push(function () { zoomOutBtn.removeEventListener("click", onZoomOut); });
     }
+    var zoomArrangeBtn = q("[data-zoom-arrange]");
+    function onZoomArrange(event) {
+        event.preventDefault();
+        if (arrangePanel && !arrangePanel.hidden) { closeArrange(); } else { openArrange(); }
+    }
+    if (zoomArrangeBtn) {
+        zoomArrangeBtn.addEventListener("click", onZoomArrange);
+        cleanupFns.push(function () { zoomArrangeBtn.removeEventListener("click", onZoomArrange); });
+    }
     if (zoomFitBtn) {
         zoomFitBtn.addEventListener("click", onZoomFit);
         cleanupFns.push(function () { zoomFitBtn.removeEventListener("click", onZoomFit); });
@@ -2665,7 +2963,7 @@
 
     var wrap = root.closest(".automation-canvas-wrap") || root;
     function onWheel(event) {
-        if (event.target && event.target.closest && event.target.closest(".automation-props, .automation-zoom, .automation-add-panel, .automation-status, .agent-chat")) {
+        if (event.target && event.target.closest && event.target.closest(".automation-props, .automation-zoom, .automation-add-panel, .automation-status, .agent-chat, .automation-arrange")) {
             return;
         }
         event.preventDefault();

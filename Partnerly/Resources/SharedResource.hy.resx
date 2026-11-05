@@ -4606,4 +4606,73 @@ User, խումբ և նամակի կաղապար այստեղ չեն ստեղծվ
   <data name="AgentChatCardNoNext" xml:space="preserve">
     <value>Շղթայի վերջին քարտը</value>
   </data>
+  <data name="BuilderArrange" xml:space="preserve">
+    <value>Դասավորել քարտերը՝ շղթաներն ըստ ամենակարճ ուղու</value>
+  </data>
+  <data name="BuilderArrangeTitle" xml:space="preserve">
+    <value>Դասավորել քարտերը</value>
+  </data>
+  <data name="BuilderArrangeHint" xml:space="preserve">
+    <value>Ընտրեք հարմար դասավորությունը։ Շղթաները գնում են ամենակարճ ճանապարհով։</value>
+  </data>
+  <data name="ArrangeRows" xml:space="preserve">
+    <value>Տողերով</value>
+  </data>
+  <data name="ArrangeRowsDesc" xml:space="preserve">
+    <value>Ձախից աջ․ երկար շղթան շարունակվում է հաջորդ տողում։</value>
+  </data>
+  <data name="ArrangeLine" xml:space="preserve">
+    <value>Մեկ գծով</value>
+  </data>
+  <data name="ArrangeLineDesc" xml:space="preserve">
+    <value>Յուրաքանչյուր շղթա մեկ գծով․ տեսքը փոքրանում է, որ ամեն ինչ տեղավորվի։</value>
+  </data>
+  <data name="ArrangeTight" xml:space="preserve">
+    <value>Կոմպակտ</value>
+  </data>
+  <data name="ArrangeTightDesc" xml:space="preserve">
+    <value>Քարտերը մոտ իրար, էկրանին ավելի մեծ։</value>
+  </data>
+  <data name="ArrangeDown" xml:space="preserve">
+    <value>Վերևից վար</value>
+  </data>
+  <data name="ArrangeDownDesc" xml:space="preserve">
+    <value>Շղթաները գնում են ներքև և շարունակվում հաջորդ սյունակում։</value>
+  </data>
+  <data name="ArrangeColumn" xml:space="preserve">
+    <value>Մեկ սյունակով</value>
+  </data>
+  <data name="ArrangeColumnDesc" xml:space="preserve">
+    <value>Յուրաքանչյուր շղթա մեկ սյունակով։</value>
+  </data>
+  <data name="ArrangeSpacious" xml:space="preserve">
+    <value>Ազատ</value>
+  </data>
+  <data name="ArrangeSpaciousDesc" xml:space="preserve">
+    <value>Մեծ տարածություն քարտերի միջև, բոլոր կապերը լավ երևում են։</value>
+  </data>
+  <data name="ArrangeTree" xml:space="preserve">
+    <value>Կենտրոնացված ծառ</value>
+  </data>
+  <data name="ArrangeTreeDesc" xml:space="preserve">
+    <value>Յուրաքանչյուր քայլ կենտրոնում է, ճյուղերը բաժանվում են վերև և ներքև։</value>
+  </data>
+  <data name="ArrangeStairs" xml:space="preserve">
+    <value>Աստիճաններով</value>
+  </data>
+  <data name="ArrangeStairsDesc" xml:space="preserve">
+    <value>Յուրաքանչյուր հաջորդ քարտ մեկ աստիճան ցածր է՝ շղթան կարդացվում է աստիճանների պես։</value>
+  </data>
+  <data name="ArrangeSnake" xml:space="preserve">
+    <value>Օձանման</value>
+  </data>
+  <data name="ArrangeSnakeDesc" xml:space="preserve">
+    <value>Տողերը գնում են ձախից աջ, ապա աջից ձախ․ երկար շղթան մնում է կոմպակտ։</value>
+  </data>
+  <data name="ArrangeGrid" xml:space="preserve">
+    <value>Ցանց</value>
+  </data>
+  <data name="ArrangeGridDesc" xml:space="preserve">
+    <value>Բոլոր քարտերը հավասար ցանցով՝ էկրանի ձևով։</value>
+  </data>
 </root>

@@ -4606,4 +4606,73 @@ User, группу и шаблон письма здесь создать нел
   <data name="AgentChatCardNoNext" xml:space="preserve">
     <value>Последняя карточка цепочки</value>
   </data>
+  <data name="BuilderArrange" xml:space="preserve">
+    <value>Упорядочить карточки: цепочки по кратчайшему пути</value>
+  </data>
+  <data name="BuilderArrangeTitle" xml:space="preserve">
+    <value>Упорядочить карточки</value>
+  </data>
+  <data name="BuilderArrangeHint" xml:space="preserve">
+    <value>Выберите удобную раскладку. Цепочки идут по кратчайшему пути.</value>
+  </data>
+  <data name="ArrangeRows" xml:space="preserve">
+    <value>Строками</value>
+  </data>
+  <data name="ArrangeRowsDesc" xml:space="preserve">
+    <value>Слева направо; длинная цепочка продолжается на следующей строке.</value>
+  </data>
+  <data name="ArrangeLine" xml:space="preserve">
+    <value>Одной линией</value>
+  </data>
+  <data name="ArrangeLineDesc" xml:space="preserve">
+    <value>Каждая цепочка в одну линию; вид уменьшается, чтобы всё поместилось.</value>
+  </data>
+  <data name="ArrangeTight" xml:space="preserve">
+    <value>Компактно</value>
+  </data>
+  <data name="ArrangeTightDesc" xml:space="preserve">
+    <value>Карточки ближе друг к другу, крупнее на экране.</value>
+  </data>
+  <data name="ArrangeDown" xml:space="preserve">
+    <value>Сверху вниз</value>
+  </data>
+  <data name="ArrangeDownDesc" xml:space="preserve">
+    <value>Цепочки идут вниз и продолжаются в следующей колонке.</value>
+  </data>
+  <data name="ArrangeColumn" xml:space="preserve">
+    <value>Одной колонкой</value>
+  </data>
+  <data name="ArrangeColumnDesc" xml:space="preserve">
+    <value>Каждая цепочка в одну колонку.</value>
+  </data>
+  <data name="ArrangeSpacious" xml:space="preserve">
+    <value>Просторно</value>
+  </data>
+  <data name="ArrangeSpaciousDesc" xml:space="preserve">
+    <value>Большие промежутки между карточками, хорошо видны все связи.</value>
+  </data>
+  <data name="ArrangeTree" xml:space="preserve">
+    <value>Деревом по центру</value>
+  </data>
+  <data name="ArrangeTreeDesc" xml:space="preserve">
+    <value>Каждый шаг по центру, ветки расходятся вверх и вниз.</value>
+  </data>
+  <data name="ArrangeStairs" xml:space="preserve">
+    <value>Лесенкой</value>
+  </data>
+  <data name="ArrangeStairsDesc" xml:space="preserve">
+    <value>Каждая следующая карточка на ступеньку ниже: цепочка читается лесенкой.</value>
+  </data>
+  <data name="ArrangeSnake" xml:space="preserve">
+    <value>Змейкой</value>
+  </data>
+  <data name="ArrangeSnakeDesc" xml:space="preserve">
+    <value>Строки идут слева направо, затем справа налево; длинная цепочка остаётся компактной.</value>
+  </data>
+  <data name="ArrangeGrid" xml:space="preserve">
+    <value>Сеткой</value>
+  </data>
+  <data name="ArrangeGridDesc" xml:space="preserve">
+    <value>Все карточки ровной сеткой по форме экрана.</value>
+  </data>
 </root>
