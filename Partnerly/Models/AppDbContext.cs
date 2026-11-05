@@ -53,6 +53,7 @@ namespace Partnerly.Models
         public DbSet<AutomationRunStep> AutomationRunSteps => Set<AutomationRunStep>();
         public DbSet<AutomationConnection> AutomationConnections => Set<AutomationConnection>();
         public DbSet<AutomationTemplate> AutomationTemplates => Set<AutomationTemplate>();
+        public DbSet<AutomationFavorite> AutomationFavorites => Set<AutomationFavorite>();
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

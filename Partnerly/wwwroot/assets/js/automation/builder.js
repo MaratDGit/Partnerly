@@ -4,6 +4,8 @@
     var editor = null;
     var bootId = 0;
     var cleanupFns = [];
+    // Copied card (survives switching between agents in the same page session).
+    var clipboard = null;
 
     function q(selector) {
         var form = document.getElementById("automationBuilderForm");
@@ -44,13 +46,133 @@
         editor.start();
 
     var selectedId = null;
-    var ENTITIES = [
+    var FALLBACK_ENTITIES = [
         { value: "user", label: "User" },
         { value: "support_ticket", label: "Support ticket" },
         { value: "notification", label: "Notification" },
         { value: "user_group", label: "User group" },
         { value: "email_template", label: "Email template" }
     ];
+    var lookups = {};
+    var FAVORITES_KEY = "partnerly.builder.favorites";
+    var favorites = [];
+    try {
+        var storedFavorites = JSON.parse(localStorage.getItem(FAVORITES_KEY) || "[]");
+        favorites = Array.isArray(storedFavorites) ? storedFavorites : [];
+    } catch (e) { favorites = []; }
+    // Favorites are stored per user on the server (shared by every editor and
+    // browser). Browser storage is only the fallback while the server list is
+    // unavailable and the source of a one-time import.
+    var favoritesRemote = false;
+    function saveFavorites() {
+        try { localStorage.setItem(FAVORITES_KEY, JSON.stringify(favorites)); } catch (e) { /* storage unavailable */ }
+    }
+    function postForm(url, fields) {
+        var form = document.getElementById("automationBuilderForm");
+        var tokenInput = form ? form.querySelector('input[name="__RequestVerificationToken"]') : null;
+        var body = Object.keys(fields).map(function (name) {
+            return encodeURIComponent(name) + "=" + encodeURIComponent(fields[name]);
+        }).join("&");
+        return fetch(url, {
+            method: "POST",
+            credentials: "same-origin",
+            headers: {
+                "Content-Type": "application/x-www-form-urlencoded",
+                "X-Requested-With": "XMLHttpRequest",
+                "RequestVerificationToken": tokenInput ? tokenInput.value : ""
+            },
+            body: body
+        }).then(function (response) {
+            if (!response.ok) { throw new Error(response.statusText || "Error"); }
+            return response.json();
+        });
+    }
+    function setFavorite(key, on) {
+        var at = favorites.indexOf(key);
+        if (on && at === -1) { favorites.push(key); }
+        if (!on && at !== -1) { favorites.splice(at, 1); }
+        if (!favoritesRemote || !config.favoriteUrl) {
+            saveFavorites();
+            return;
+        }
+        postForm(config.favoriteUrl, { key: key, on: on ? "true" : "false" }).catch(function () {
+            // Not saved on the server: undo the change and repaint.
+            var back = favorites.indexOf(key);
+            if (on && back !== -1) { favorites.splice(back, 1); }
+            if (!on && back === -1) { favorites.push(key); }
+            refreshFavorites();
+        });
+    }
+    var favRepaint = [];
+    function refreshFavorites() {
+        favRepaint.forEach(function (repaint) { repaint(); });
+    }
+    // Called once the catalog is loaded: take the server list and move any
+    // old browser-only favorites into the account.
+    function adoptServerFavorites(serverList) {
+        if (!Array.isArray(serverList)) {
+            return;
+        }
+        favoritesRemote = true;
+        var legacy = [];
+        try {
+            var stored = JSON.parse(localStorage.getItem(FAVORITES_KEY) || "[]");
+            legacy = Array.isArray(stored) ? stored : [];
+        } catch (e) { legacy = []; }
+        favorites = serverList.slice();
+        var missing = legacy.filter(function (key) { return typeof key === "string" && favorites.indexOf(key) === -1; });
+        if (missing.length && config.favoriteImportUrl) {
+            postForm(config.favoriteImportUrl, { keys: missing.join(",") }).then(function (payload) {
+                if (payload && Array.isArray(payload.favorites)) {
+                    favorites = payload.favorites;
+                    try { localStorage.removeItem(FAVORITES_KEY); } catch (e) { /* ignore */ }
+                    refreshFavorites();
+                }
+            }).catch(function () { /* keep browser copy, try again next time */ });
+        } else if (legacy.length) {
+            try { localStorage.removeItem(FAVORITES_KEY); } catch (e) { /* ignore */ }
+        }
+    }
+    var GROUP_ICONS = {
+        "Telegram": "bxl-telegram",
+        "Gmail": "bxl-gmail",
+        "Google Sheets": "bx-spreadsheet",
+        "Google Drive": "bxl-google-cloud",
+        "WhatsApp": "bxl-whatsapp"
+    };
+    var TYPE_ICONS = {
+        manual: "bx-pointer",
+        schedule: "bx-calendar",
+        interval: "bx-timer",
+        "entity.created": "bx-plus-circle",
+        "entity.updated": "bx-edit",
+        "entity.deleted": "bx-trash",
+        webhook: "bx-link-alt",
+        webhook_action: "bx-send",
+        event: "bx-bell",
+        delay: "bx-time",
+        set_variable: "bx-code-alt",
+        send_email: "bx-envelope",
+        send_notification: "bx-bell",
+        http_request: "bx-globe",
+        execute_workflow: "bx-play-circle",
+        branch: "bx-git-branch",
+        wait_until: "bx-hourglass",
+        "switch": "bx-shuffle",
+        create_record: "bx-plus-circle",
+        update_record: "bx-edit",
+        find_record: "bx-search",
+        delete_record: "bx-trash"
+    };
+    var ui = typeof window.partnerlyBuilderFields === "function" ? window.partnerlyBuilderFields(t) : null;
+
+    // Entities come from the server (connectors); the static list is a fallback.
+    function ENTITIES() {
+        var list = lookups.entities || [];
+        return list.length
+            ? list.map(function (item) { return { value: item.key, label: item.name || item.key }; })
+            : FALLBACK_ENTITIES;
+    }
 
     function t(key, fallback) {
         var value = i18n[key];
@@ -97,7 +219,7 @@
             },
             { key: "time", type: "time", label: t("scheduleTime"), help: t("scheduleTimeHelp"), showIf: { scheduleKind: ["hourly", "daily", "weekly", "monthly"] } },
             { key: "at", type: "datetime", label: t("scheduleDate"), showIf: { scheduleKind: ["once"] } },
-            { key: "expression", type: "text", label: t("cronExpression"), help: t("cronExpressionHelp"), showIf: { scheduleKind: ["cron"] } }
+            { key: "expression", type: "text", plain: true, label: t("cronExpression"), help: t("cronExpressionHelp"), showIf: { scheduleKind: ["cron"] } }
         ],
         interval: [
             { key: "minutes", type: "number", min: 1, label: t("intervalMinutes"), help: t("intervalMinutesHelp") }
@@ -106,27 +228,27 @@
         "entity.updated": entityFields(),
         "entity.deleted": entityFields(),
         event: [
-            { key: "event", type: "text", label: t("eventName"), help: t("eventNameHelp") }
+            { key: "event", type: "text", source: "events", label: t("eventName"), help: t("eventNameHelp") }
         ].concat(waitBeforeFields()),
         webhook: [
             { type: "note", help: t("webhookTriggerHelp") }
         ].concat(waitBeforeFields()),
         delay: delayFields("delayHelp", true),
         set_variable: [
-            { key: "name", type: "text", label: t("variableName"), help: t("variableNameHelp") },
+            { key: "name", type: "text", plain: true, label: t("variableName"), help: t("variableNameHelp") },
             { key: "value", type: "text", label: t("variableValue"), help: t("variableValueHelp") }
         ],
         send_email: [
-            { key: "to", type: "text", label: t("emailTo"), help: t("emailToHelp") },
-            { key: "template", type: "text", label: t("emailTemplate"), help: t("emailTemplateHelp") },
+            { key: "to", type: "text", source: "userEmails", label: t("emailTo"), help: t("emailToHelp") },
+            { key: "template", type: "text", source: "templates", strict: true, label: t("emailTemplate"), help: t("emailTemplateHelp") },
             { key: "subject", type: "text", label: t("emailSubject") },
             { key: "body", type: "textarea", label: t("emailBody") }
         ],
         send_notification: [
             { key: "message", type: "textarea", label: t("notificationMessage") },
-            { key: "userId", type: "text", label: t("notificationUser"), help: t("notificationUserHelp") },
-            { key: "notificationType", type: "text", label: t("notificationType") },
-            { key: "link", type: "text", label: t("notificationLink") }
+            { key: "userId", type: "text", source: "userIds", label: t("notificationUser"), help: t("notificationUserHelp") },
+            { key: "notificationType", type: "text", source: "notifTypes", label: t("notificationType") },
+            { key: "link", type: "text", source: "links", label: t("notificationLink") }
         ],
         http_request: [
             {
@@ -138,16 +260,16 @@
                 })
             },
             { key: "url", type: "text", label: t("httpUrl"), help: t("httpUrlHelp") },
-            { key: "connectionId", type: "text", label: t("httpConnection"), help: t("httpConnectionHelp") },
+            { key: "connectionId", type: "text", source: "httpConnections", strict: true, label: t("httpConnection"), help: t("httpConnectionHelp") },
             { key: "body", type: "textarea", label: t("httpBody"), help: t("httpBodyHelp") }
         ],
         webhook_action: [
             { key: "url", type: "text", label: t("webhookUrl"), help: t("webhookUrlHelp") },
             { key: "body", type: "textarea", label: t("webhookBody"), help: t("webhookBodyHelp") },
-            { key: "secret", type: "text", label: t("webhookSecret"), help: t("webhookSecretHelp") }
+            { key: "secret", type: "text", plain: true, label: t("webhookSecret"), help: t("webhookSecretHelp") }
         ],
         execute_workflow: [
-            { key: "automationId", type: "text", label: t("childAutomation"), help: t("childAutomationHelp") }
+            { key: "automationId", type: "text", source: "automations", strict: true, label: t("childAutomation"), help: t("childAutomationHelp") }
         ],
         branch: conditionFields(false),
         wait_until: conditionFields(true),
@@ -156,20 +278,20 @@
         ],
         create_record: [
             { key: "entity", type: "select", label: t("entity"), help: t("entityHelp"), options: ENTITIES },
-            { key: "fields", type: "pairs", label: t("recordFields"), help: t("recordFieldsHelp") }
+            { key: "fields", type: "pairs", mode: "create", label: t("recordFields"), help: t("recordFieldsHelp") }
         ],
         update_record: [
             { key: "entity", type: "select", label: t("entity"), help: t("entityHelp"), options: ENTITIES },
-            { key: "key", type: "pairs", label: t("recordKey"), help: t("recordKeyHelp") },
-            { key: "fields", type: "pairs", label: t("recordFields"), help: t("recordFieldsHelp") }
+            { key: "key", type: "pairs", mode: "key", label: t("recordKey"), help: t("recordKeyHelp") },
+            { key: "fields", type: "pairs", mode: "update", label: t("recordFields"), help: t("recordFieldsHelp") }
         ],
         find_record: [
             { key: "entity", type: "select", label: t("entity"), help: t("entityHelp"), options: ENTITIES },
-            { key: "filters", type: "pairs", label: t("recordFilters"), help: t("recordFieldsHelp") }
+            { key: "filters", type: "pairs", mode: "filter", label: t("recordFilters"), help: t("recordFieldsHelp") }
         ],
         delete_record: [
             { key: "entity", type: "select", label: t("entity"), help: t("entityHelp"), options: ENTITIES },
-            { key: "key", type: "pairs", label: t("recordKey"), help: t("recordKeyHelp") }
+            { key: "key", type: "pairs", mode: "key", label: t("recordKey"), help: t("recordKeyHelp") }
         ]
     };
 
@@ -348,16 +470,27 @@
     };
 
     var INTEGRATION_PREFIX = /^(telegram|sheets|gmail|drive|whatsapp)\./;
+    // Settings (besides the connection) a card needs before it can work.
+    var INTEGRATION_REQUIRED = {
+        "telegram.send_message": ["chatId", "text"],
+        "telegram.send_document": ["chatId", "attachmentId"],
+        "sheets.append_row": ["spreadsheetId", "values"],
+        "sheets.update_row": ["spreadsheetId", "rowNumber", "values"],
+        "sheets.find_rows": ["spreadsheetId", "value"],
+        "sheets.row_added": ["spreadsheetId"],
+        "gmail.send": ["to", "subject", "body"],
+        "drive.upload_file": ["attachmentId"],
+        "drive.create_folder": ["name"],
+        "whatsapp.send_text": ["to", "text"],
+        "whatsapp.send_template": ["to", "template", "language"]
+    };
 
     function settingsReady(data) {
         var config = normalizeDelay(JSON.parse(JSON.stringify(data.config || {})));
         var type = data.type;
         if (INTEGRATION_PREFIX.test(type)) {
             if (!filled(config.connectionId)) { return false; }
-            if (/\.message_received$/.test(type)) { return true; }
-            return Object.keys(config).some(function (key) {
-                return key !== "connectionId" && key !== "parseMode" && key !== "format" && filled(config[key]);
-            });
+            return (INTEGRATION_REQUIRED[type] || []).every(function (key) { return filled(config[key]); });
         }
         var rule = CONFIG_RULES[type];
         return rule ? !!rule(config) : true;
@@ -431,6 +564,26 @@
             slug(data.kind + "-" + data.type),
             data,
             nodeHtml(data));
+    }
+
+    // New card from a catalog item (toolbar palette or the "+" port picker).
+    function createFromItem(item, x, y) {
+        var config = defaultConfig(item.type, item.kind);
+        if (item.connectionKind) {
+            var first = catalogConnections.filter(function (c) { return c.kind === item.connectionKind; })[0];
+            if (first) {
+                config.connectionId = first.id;
+            }
+        }
+        var id = addNode({
+            id: "n" + Date.now() + Math.floor(Math.random() * 1000),
+            kind: item.kind,
+            type: item.type,
+            name: slug(item.type) + editor.getNodesFromName(slug(item.type)).length,
+            config: config
+        }, x, y);
+        syncHidden();
+        return id;
     }
 
     function exportGraph() {
@@ -520,11 +673,138 @@
         });
     }
 
+    // ---- session history (undo / redo / jump) ----------------------------
+    var HISTORY_LIMIT = 100;
+    var hist = { stack: [], index: -1 };
+    var restoring = false;
+
+    function nodeTitle(node) {
+        return node.name || typeLabel(node.type, node.type);
+    }
+
+    // What changed between two graphs -> { label, key } or null when identical.
+    function describeChange(prev, next) {
+        var before = {};
+        var after = {};
+        prev.nodes.forEach(function (n) { before[n.id] = n; });
+        next.nodes.forEach(function (n) { after[n.id] = n; });
+        var added = next.nodes.filter(function (n) { return !before[n.id]; });
+        var removed = prev.nodes.filter(function (n) { return !after[n.id]; });
+        if (added.length || removed.length) {
+            if (added.length) {
+                return { label: t("historyAdded", "Added") + " " + nodeTitle(added[0]) + (added.length > 1 ? " +" + (added.length - 1) : "") };
+            }
+            return { label: t("historyRemoved", "Removed") + " " + nodeTitle(removed[0]) + (removed.length > 1 ? " +" + (removed.length - 1) : "") };
+        }
+        var edgeKey = function (e) { return e.from + ">" + e.to + ":" + (e.port || ""); };
+        var prevEdges = prev.edges.map(edgeKey).sort().join("|");
+        var nextEdges = next.edges.map(edgeKey).sort().join("|");
+        if (prevEdges !== nextEdges) {
+            return { label: next.edges.length >= prev.edges.length ? t("historyConnected", "Connected cards") : t("historyDisconnected", "Disconnected cards") };
+        }
+        for (var i = 0; i < next.nodes.length; i++) {
+            var n = next.nodes[i];
+            var o = before[n.id];
+            if (JSON.stringify([o.name, o.config]) !== JSON.stringify([n.name, n.config])) {
+                return { label: t("historyEdited", "Edited") + " " + nodeTitle(n), key: "edit:" + n.id };
+            }
+        }
+        for (var j = 0; j < next.nodes.length; j++) {
+            var m = next.nodes[j];
+            var p = before[m.id];
+            if (p.x !== m.x || p.y !== m.y) {
+                return { label: t("historyMoved", "Moved") + " " + nodeTitle(m), key: "move:" + m.id };
+            }
+        }
+        return null;
+    }
+
+    function recordHistory(graph) {
+        if (importing || restoring) { return; }
+        var json = JSON.stringify(graph);
+        var top = hist.stack[hist.index];
+        if (!top) {
+            hist.stack = [{ json: json, label: t("historyOpened", "Opened"), time: Date.now() }];
+            hist.index = 0;
+            renderHistory();
+            return;
+        }
+        if (top.json === json) { return; }
+        var change = describeChange(JSON.parse(top.json), graph);
+        if (!change) { return; }
+        var now = Date.now();
+        // Typing or dragging produces many tiny changes: merge them into one step.
+        if (change.key && top.key === change.key && now - top.time < 1500 && hist.index === hist.stack.length - 1) {
+            top.json = json;
+            top.time = now;
+        } else {
+            hist.stack = hist.stack.slice(0, hist.index + 1);
+            hist.stack.push({ json: json, label: change.label, key: change.key, time: now });
+            if (hist.stack.length > HISTORY_LIMIT) { hist.stack.shift(); }
+            hist.index = hist.stack.length - 1;
+        }
+        renderHistory();
+    }
+
+    function pad2(n) { return n < 10 ? "0" + n : String(n); }
+
+    function renderHistory() {
+        var list = q("[data-history-list]");
+        var undo = q("[data-undo]");
+        var redo = q("[data-redo]");
+        var editable = canEditNow();
+        if (undo) { undo.disabled = !editable || hist.index <= 0; }
+        if (redo) { redo.disabled = !editable || hist.index >= hist.stack.length - 1; }
+        if (!list) { return; }
+        list.innerHTML = "";
+        for (var i = hist.stack.length - 1; i >= 0; i--) {
+            var entry = hist.stack[i];
+            var d = new Date(entry.time);
+            var row = document.createElement("button");
+            row.type = "button";
+            row.className = "automation-history-item" + (i === hist.index ? " is-current" : "") + (i > hist.index ? " is-future" : "");
+            row.setAttribute("data-history-index", String(i));
+            row.disabled = !editable;
+            var time = document.createElement("span");
+            time.className = "automation-history-time";
+            time.textContent = pad2(d.getHours()) + ":" + pad2(d.getMinutes()) + ":" + pad2(d.getSeconds());
+            var text = document.createElement("span");
+            text.textContent = entry.label;
+            row.appendChild(time);
+            row.appendChild(text);
+            list.appendChild(row);
+        }
+    }
+
+    function restoreSnapshot(index) {
+        var snap = hist.stack[index];
+        if (!snap || !canEditNow()) { return; }
+        hist.index = index;
+        restoring = true;
+        try {
+            selectedId = null;
+            markSelected(null);
+            renderFields(null);
+            hideProps();
+            hideNodeMenu();
+            importGraph(JSON.parse(snap.json));
+            syncHidden();
+        } finally {
+            restoring = false;
+        }
+        renderHistory();
+    }
+
+    function undoStep() { if (hist.index > 0) { restoreSnapshot(hist.index - 1); } }
+    function redoStep() { if (hist.index < hist.stack.length - 1) { restoreSnapshot(hist.index + 1); } }
+
     function syncHidden() {
         var input = q("#graphJson") || document.getElementById("graphJson");
+        var graph = exportGraph();
         if (input) {
-            input.value = JSON.stringify(exportGraph());
+            input.value = JSON.stringify(graph);
         }
+        recordHistory(graph);
         refreshChecks();
         window.dispatchEvent(new CustomEvent("partnerly:builder-changed"));
     }
@@ -645,6 +925,166 @@
         return config;
     }
 
+    // ---- values offered in dropdowns --------------------------------------
+    var EVENT_VARS = {
+        UserRegistered: ["id", "email", "firstName", "lastName"],
+        SupportTicketCreated: ["id", "ticketId", "subject", "status", "type"],
+        SupportTicketStatusChanged: ["id", "ticketId", "status"]
+    };
+
+    var TRIGGER_VARS = {
+        "telegram.message_received": ["messageId", "chatId", "chatType", "text", "fromId", "fromUsername", "fromName", "date"],
+        "gmail.message_received": ["id", "threadId", "from", "to", "subject", "date", "snippet"],
+        "sheets.row_added": ["rowNumber", "sheet", "spreadsheetId"],
+        "drive.file_added": ["id", "name", "mimeType", "webViewLink", "createdTime", "modifiedTime", "size"],
+        "whatsapp.message_received": ["messageId", "from", "name", "text"]
+    };
+
+    var STEP_VARS = {
+        find_record: function (cfg) { return entityFieldNames(cfg.entity).map(function (n) { return "result.result." + n; }); },
+        create_record: function (cfg) { return entityFieldNames(cfg.entity).map(function (n) { return "result." + n; }); },
+        "telegram.send_message": ["result.messageId", "result.chatId"],
+        "telegram.send_document": ["result.messageId", "result.chatId", "result.fileName"],
+        "sheets.append_row": ["result.spreadsheetId", "result.range"],
+        "sheets.update_row": ["result.spreadsheetId", "result.rowNumber", "result.range"],
+        "sheets.find_rows": ["result.count", "result.first.rowNumber"],
+        "gmail.send": ["result.messageId", "result.threadId", "result.to"],
+        "gmail.find_messages": ["result.count", "result.first.id", "result.first.from", "result.first.subject", "result.first.snippet"],
+        "drive.upload_file": ["result.id", "result.name", "result.webViewLink"],
+        "drive.create_folder": ["result.id", "result.name", "result.webViewLink"],
+        "drive.find_files": ["result.count", "result.first.id", "result.first.name", "result.first.webViewLink"],
+        "whatsapp.send_text": ["result.messageId"],
+        "whatsapp.send_template": ["result.messageId"]
+    };
+
+    function variable(path, group) {
+        return { value: "{{" + path + "}}", label: path, group: group };
+    }
+
+    function entityFieldNames(key, only) {
+        var entity = (lookups.entities || []).filter(function (item) { return item.key === key; })[0];
+        if (!entity) { return []; }
+        return entity.fields.filter(function (field) {
+            return only ? field[only] : true;
+        }).map(function (field) { return field.name; });
+    }
+
+    function nodeOrNull(id) {
+        try { return editor.getNodeFromId(id); } catch (e) { return null; }
+    }
+
+    function upstreamIds(id) {
+        var seen = {};
+        var order = [];
+        var queue = [String(id)];
+        while (queue.length) {
+            var node = nodeOrNull(queue.shift());
+            if (!node) { continue; }
+            Object.keys(node.inputs || {}).forEach(function (key) {
+                (node.inputs[key].connections || []).forEach(function (link) {
+                    var from = String(link.node);
+                    if (!seen[from]) {
+                        seen[from] = true;
+                        order.push(from);
+                        queue.push(from);
+                    }
+                });
+            });
+        }
+        return order;
+    }
+
+    function nodeVariables(node) {
+        var data = node.data || {};
+        var cfg = data.config || {};
+        var list = [];
+        var groupTrigger = t("builderVarsTrigger", "Trigger data");
+        var groupSteps = t("builderVarsSteps", "Previous steps");
+        if (data.kind === "trigger") {
+            var add = function (paths) {
+                paths.forEach(function (p) { list.push(variable("trigger." + p, groupTrigger)); });
+            };
+            if (/^entity\./.test(data.type)) {
+                add(["id", "entity"]);
+                add(entityFieldNames(cfg.entity).map(function (n) { return "after." + n; }));
+                if (data.type !== "entity.created") {
+                    add(entityFieldNames(cfg.entity).map(function (n) { return "before." + n; }));
+                }
+            } else if (data.type === "event") {
+                add(EVENT_VARS[cfg.event] || ["id"]);
+            } else if (TRIGGER_VARS[data.type]) {
+                add(TRIGGER_VARS[data.type]);
+            }
+            return list;
+        }
+        var name = data.name || "";
+        if (data.type === "set_variable" && cfg.name) {
+            list.push(variable("vars." + cfg.name, groupSteps));
+        }
+        var spec = STEP_VARS[data.type];
+        if (spec && name) {
+            (typeof spec === "function" ? spec(cfg) : spec).forEach(function (p) {
+                list.push(variable("steps." + name + "." + p, groupSteps));
+            });
+        }
+        return list;
+    }
+
+    // Everything the selected card can reference: its triggers, the steps
+    // before it and run info. An unwired card sees the whole flow.
+    function variablesFor(id) {
+        var ids = upstreamIds(id);
+        if (!ids.length) {
+            var home = (editor.export().drawflow || {}).Home || {};
+            ids = Object.keys(home.data || {}).filter(function (key) { return String(key) !== String(id); });
+        }
+        var triggers = [];
+        var steps = [];
+        ids.forEach(function (key) {
+            var node = nodeOrNull(key);
+            if (!node) { return; }
+            var target = node.data && node.data.kind === "trigger" ? triggers : steps;
+            nodeVariables(node).forEach(function (item) { target.push(item); });
+        });
+        var run = t("builderVarsRun", "Run info");
+        return triggers.concat(steps, [variable("execution.runId", run), variable("execution.startedAt", run)]);
+    }
+
+    var EVENT_OPTIONS = Object.keys(EVENT_VARS).map(function (key) { return { value: key, label: key }; });
+    var LINK_OPTIONS = [
+        { value: "/Dashboard", label: "/Dashboard" },
+        { value: "/SupportTickets", label: "/SupportTickets" },
+        { value: "/Automation", label: "/Automation" }
+    ];
+
+    function userOptions(valueKey) {
+        var group = t("builderUsers", "Users");
+        return (lookups.users || []).map(function (user) {
+            var label = user.name ? user.name + " (" + user.email + ")" : user.email;
+            return { value: valueKey === "id" ? user.id : user.email, label: label, group: group };
+        });
+    }
+
+    function sourceOptions(source, vars) {
+        switch (source) {
+            case "events": return EVENT_OPTIONS;
+            case "userEmails": return vars.concat(userOptions("email"));
+            case "userIds": return vars.concat(userOptions("id"));
+            case "templates":
+                return (lookups.emailTemplates || []).map(function (name) { return { value: name, label: name }; });
+            case "automations":
+                return (lookups.automations || [])
+                    .filter(function (item) { return String(item.id) !== String(config.id); })
+                    .map(function (item) { return { value: item.id, label: item.name }; });
+            case "httpConnections":
+                return (lookups.httpConnections || []).map(function (item) { return { value: item.id, label: item.name }; });
+            case "notifTypes":
+                return [{ value: "System", label: "System" }, { value: "Support", label: "Support" }];
+            case "links": return vars.concat(LINK_OPTIONS);
+            default: return vars;
+        }
+    }
+
     function fieldVisible(field, config) {
         if (!field.showIf) {
             return true;
@@ -668,12 +1108,14 @@
             if (empty) empty.hidden = false;
             if (form) form.hidden = true;
             if (nameInput) nameInput.value = "";
+            updateDone();
             return;
         }
         if (empty) empty.hidden = true;
         if (form) form.hidden = false;
         if (nameInput) nameInput.value = data.name || "";
         data.config = normalizeDelay(data.config || {});
+        var actionVars = data.kind === "action" ? variablesFor(selectedId) : [];
         var schema = schemaFor(data);
         schema.forEach(function (field) {
             if (!fieldVisible(field, data.config)) {
@@ -693,6 +1135,8 @@
             label.textContent = field.label || field.key;
             wrap.appendChild(label);
             var control;
+            var built = null;
+            var insertHelper = null;
             var value = getByPath(data.config, field.key);
             if (field.type === "connection") {
                 control = document.createElement("select");
@@ -720,10 +1164,33 @@
                     manage.textContent = t("manageConnections", "Manage connections");
                     window.setTimeout(function () { wrap.appendChild(manage); }, 0);
                 }
+            } else if (field.type === "pairs") {
+                var entityKey = getByPath(data.config, "entity");
+                var mode = field.mode || "fields";
+                var names = entityFieldNames(entityKey, mode === "update" ? "updatable" : (mode === "filter" || mode === "key" ? "filterable" : null));
+                if (mode === "key") { names = names.filter(function (n) { return n === "id" || n === "email"; }).concat(names.filter(function (n) { return n !== "id" && n !== "email"; })); }
+                built = ui.pairs({
+                    key: field.key,
+                    value: value,
+                    fieldOptions: names.map(function (n) { return { value: n, label: n }; }),
+                    valueOptions: actionVars
+                });
+                control = built.control;
+            } else if (field.source && ui) {
+                built = ui.combo({
+                    key: field.key,
+                    value: value,
+                    strict: !!field.strict,
+                    options: sourceOptions(field.source, actionVars)
+                });
+                control = built.control;
+            } else if (field.type === "text" && ui && data.kind === "action" && !field.plain && actionVars.length) {
+                built = ui.combo({ key: field.key, value: value, options: actionVars });
+                control = built.control;
             } else if (field.type === "select") {
                 control = document.createElement("select");
                 control.className = "form-select";
-                (field.options || []).forEach(function (option) {
+                (typeof field.options === "function" ? field.options() : (field.options || [])).forEach(function (option) {
                     var item = document.createElement("option");
                     item.value = option.value;
                     item.textContent = option.label;
@@ -732,11 +1199,14 @@
                     }
                     control.appendChild(item);
                 });
-            } else if (field.type === "textarea" || field.type === "pairs") {
+            } else if (field.type === "textarea") {
                 control = document.createElement("textarea");
                 control.className = "form-control";
                 control.rows = 4;
-                control.value = field.type === "pairs" ? pairsToText(value) : (value || "");
+                control.value = value || "";
+                if (ui && data.kind === "action" && actionVars.length) {
+                    insertHelper = ui.insertVariable(control, actionVars);
+                }
             } else {
                 control = document.createElement("input");
                 control.className = "form-control";
@@ -750,8 +1220,13 @@
                     control.value = value == null ? "" : value;
                 }
             }
-            control.setAttribute("data-config-key", field.key);
-            wrap.appendChild(control);
+            if (built) {
+                wrap.appendChild(built.el);
+            } else {
+                control.setAttribute("data-config-key", field.key);
+                wrap.appendChild(control);
+                if (insertHelper) { wrap.appendChild(insertHelper); }
+            }
             if (field.help) {
                 var hint = document.createElement("div");
                 hint.className = "form-text";
@@ -761,6 +1236,7 @@
             host.appendChild(wrap);
         });
         appendDocs(host, data);
+        updateDone();
     }
 
     function docsKey(data) {
@@ -840,7 +1316,13 @@
         if (nameInput) {
             node.data.name = nameInput.value;
         }
+        var previousEntity = node.data.config && node.data.config.entity;
         readFieldsInto(node.data);
+        var key = event && event.target ? fieldKeyOf(event.target) : "";
+        if (key === "entity" && previousEntity !== node.data.config.entity) {
+            // Fields of another record type no longer apply.
+            ["fields", "key", "filters"].forEach(function (name) { delete node.data.config[name]; });
+        }
         editor.updateNodeDataFromId(selectedId, node.data);
         var htmlNode = root.querySelector("#node-" + selectedId + " .auto-node-name");
         if (htmlNode) {
@@ -851,10 +1333,31 @@
             typeNode.textContent = typeLabel(node.data.type, node.data.type);
         }
         syncHidden();
-        var key = event && event.target ? event.target.getAttribute("data-config-key") : "";
-        if (key === "scheduleKind") {
+        if (event && event.type === "change" && RERENDER_KEYS.indexOf(key) !== -1) {
             renderFields(node.data);
         }
+        updateDone();
+    }
+
+    // Changing these fields changes which other fields (or choices) apply.
+    var RERENDER_KEYS = ["scheduleKind", "entity", "event"];
+
+    function fieldKeyOf(target) {
+        var own = target.getAttribute && target.getAttribute("data-config-key");
+        if (own) { return own; }
+        var holder = target.closest ? target.closest("[data-combo-key]") : null;
+        return holder ? holder.getAttribute("data-combo-key") : "";
+    }
+
+    // "Done" is available once the card's settings are complete.
+    function updateDone() {
+        var button = q("[data-props-done]");
+        if (!button) { return; }
+        var node = selectedId ? nodeOrNull(selectedId) : null;
+        var ready = !!node && settingsReady(node.data);
+        button.disabled = !ready;
+        var hint = q("[data-props-done-hint]");
+        if (hint) { hint.hidden = ready; }
     }
 
     function markSelected(id) {
@@ -917,8 +1420,17 @@
     deleteItem.type = "button";
     deleteItem.className = "is-danger";
     deleteItem.textContent = t("delete", "Delete");
+    var copyItem = document.createElement("button");
+    copyItem.type = "button";
+    copyItem.textContent = t("builderCopy", "Copy");
+    var pasteItem = document.createElement("button");
+    pasteItem.type = "button";
+    pasteItem.textContent = t("builderPaste", "Paste");
     nodeMenu.appendChild(propsItem);
+    nodeMenu.appendChild(copyItem);
+    nodeMenu.appendChild(pasteItem);
     nodeMenu.appendChild(deleteItem);
+    var menuPoint = null;
     var menuHost = root.closest(".automation-canvas-wrap") || root;
     menuHost.appendChild(nodeMenu);
     var menuNodeId = null;
@@ -928,10 +1440,21 @@
         menuNodeId = null;
     }
 
-    function showNodeMenu(clientX, clientY, id) {
+    function canEditNow() {
         var form = document.getElementById("automationBuilderForm");
-        var canEdit = !form || form.getAttribute("data-can-edit") !== "false";
-        deleteItem.hidden = !canEdit;
+        return !form || form.getAttribute("data-can-edit") !== "false";
+    }
+
+    // id = card under the cursor, or null for the empty canvas (Paste only).
+    function showNodeMenu(clientX, clientY, id) {
+        var canEdit = canEditNow();
+        var onCard = !!id;
+        propsItem.hidden = !onCard;
+        copyItem.hidden = !onCard;
+        deleteItem.hidden = !onCard || !canEdit;
+        pasteItem.hidden = onCard || !canEdit;
+        pasteItem.disabled = !clipboard;
+        menuPoint = { x: clientX, y: clientY };
         menuNodeId = id;
         nodeMenu.hidden = false;
         var hostRect = menuHost.getBoundingClientRect();
@@ -987,6 +1510,14 @@
     function onNodeContext(event) {
         var nodeEl = event.target.closest(".drawflow-node");
         if (!nodeEl || !root.contains(nodeEl)) {
+            // Empty canvas: offer Paste (connections keep their own menu).
+            if (!canEditNow() || !root.contains(event.target) || event.target.closest(".connection, .drawflow-delete, .point")) {
+                return;
+            }
+            event.preventDefault();
+            event.stopPropagation();
+            clearPress();
+            showNodeMenu(event.clientX, event.clientY, null);
             return;
         }
         event.preventDefault();
@@ -1008,6 +1539,55 @@
         event.preventDefault();
         hideNodeMenu();
         showProps();
+    });
+    function uniqueName(base) {
+        var home = (editor.export().drawflow || {}).Home || {};
+        var used = {};
+        Object.keys(home.data || {}).forEach(function (key) {
+            used[(home.data[key].data || {}).name] = true;
+        });
+        var n = editor.getNodesFromName(base).length;
+        while (used[base + n]) { n += 1; }
+        return base + n;
+    }
+
+    function copySelected(id) {
+        var node = nodeOrNull(id);
+        if (!node) { return; }
+        persistSelected();
+        node = nodeOrNull(id);
+        clipboard = JSON.parse(JSON.stringify(node.data));
+    }
+
+    // point = {x, y} in client pixels, or null for the middle of the view.
+    function pasteClipboard(point) {
+        if (!clipboard || !canEditNow()) { return; }
+        var data = JSON.parse(JSON.stringify(clipboard));
+        data.id = "n" + Date.now() + Math.floor(Math.random() * 1000);
+        data.name = uniqueName(slug(data.type));
+        var x = null;
+        var y = null;
+        if (point) {
+            var rect = root.getBoundingClientRect();
+            var zoom = editor.zoom || 1;
+            x = (point.x - rect.left - (editor.canvas_x || 0)) / zoom;
+            y = (point.y - rect.top - (editor.canvas_y || 0)) / zoom;
+        }
+        addNode(data, x, y);
+        syncHidden();
+    }
+
+    copyItem.addEventListener("click", function (event) {
+        event.preventDefault();
+        var id = menuNodeId;
+        hideNodeMenu();
+        if (id) { copySelected(id); }
+    });
+    pasteItem.addEventListener("click", function (event) {
+        event.preventDefault();
+        var point = menuPoint;
+        hideNodeMenu();
+        pasteClipboard(point);
     });
     deleteItem.addEventListener("click", function (event) {
         event.preventDefault();
@@ -1035,9 +1615,35 @@
         }
         hideNodeMenu();
     }
+    function typingInField() {
+        var active = document.activeElement;
+        return !!active && (/^(INPUT|TEXTAREA|SELECT)$/.test(active.tagName) || active.isContentEditable);
+    }
+
     function onKeyHideMenu(event) {
         if (event.key === "Escape") {
             hideNodeMenu();
+            hidePortPicker();
+            return;
+        }
+        // Ctrl/Cmd+C copies the selected card, Ctrl/Cmd+V pastes it.
+        if (!(event.ctrlKey || event.metaKey) || typingInField() || !document.body.contains(root)) {
+            return;
+        }
+        var window_selection = window.getSelection && window.getSelection().toString();
+        if (window_selection) { return; }
+        var k = String(event.key).toLowerCase();
+        if (k === "z") {
+            event.preventDefault();
+            if (event.shiftKey) { redoStep(); } else { undoStep(); }
+        } else if (k === "y") {
+            event.preventDefault();
+            redoStep();
+        } else if (k === "c" && selectedId) {
+            copySelected(selectedId);
+        } else if (k === "v" && clipboard) {
+            event.preventDefault();
+            pasteClipboard(null);
         }
     }
     document.addEventListener("click", onDocHideMenu);
@@ -1111,6 +1717,32 @@
         onPanEnd();
     });
 
+    var statusCard = q("[data-status-card]");
+    if (statusCard) {
+        var onStatusClick = function (event) {
+            var target = event.target;
+            if (!target || !target.closest) { return; }
+            if (target.closest("[data-undo]")) { undoStep(); return; }
+            if (target.closest("[data-redo]")) { redoStep(); return; }
+            var toggle = target.closest("[data-history-toggle]");
+            if (toggle) {
+                var panel = q("[data-history-list]");
+                if (panel) {
+                    panel.hidden = !panel.hidden;
+                    toggle.setAttribute("aria-expanded", panel.hidden ? "false" : "true");
+                    var current = panel.querySelector(".is-current");
+                    if (current && !panel.hidden) { current.scrollIntoView({ block: "nearest" }); }
+                }
+                return;
+            }
+            var item = target.closest("[data-history-index]");
+            if (item) { restoreSnapshot(parseInt(item.getAttribute("data-history-index"), 10)); }
+        };
+        statusCard.addEventListener("click", onStatusClick);
+        cleanupFns.push(function () { statusCard.removeEventListener("click", onStatusClick); });
+    }
+    renderHistory();
+
     var props = q(".automation-props");
     if (props) {
         function stopCanvasPointer(event) {
@@ -1128,11 +1760,18 @@
         props.addEventListener("click", function (event) {
             if (event.target && event.target.closest && event.target.closest("[data-props-close]")) {
                 onPropsClose(event);
+                return;
+            }
+            var done = event.target && event.target.closest && event.target.closest("[data-props-done]");
+            if (done && !done.disabled) {
+                onPropsClose(event);
             }
         });
+        props.addEventListener("input", persistSelected);
         props.addEventListener("change", persistSelected);
         props.addEventListener("blur", persistSelected, true);
         cleanupFns.push(function () {
+            props.removeEventListener("input", persistSelected);
             props.removeEventListener("change", persistSelected);
             props.removeEventListener("blur", persistSelected, true);
         });
@@ -1216,6 +1855,128 @@
         closeAddMenus();
     });
 
+    // ---- "+" on a card's output: pick the next card and wire it ------------
+    var portPicker = null;
+    var bindPalette = null; // set once the catalog is loaded
+    var portSource = null;
+
+    function hidePortPicker() {
+        if (portPicker) { portPicker.hidden = true; }
+        portSource = null;
+    }
+
+    function pickForPort(item) {
+        var src = portSource;
+        hidePortPicker();
+        if (!src || !nodeOrNull(src.id)) { return; }
+        var from = nodeOrNull(src.id);
+        var el = root.querySelector("#node-" + src.id);
+        var siblings = ((from.outputs[src.output] || {}).connections || []).length;
+        var side = src.output === "output_2" ? 1 : 0;
+        var x = from.pos_x + (el ? el.offsetWidth : 200) + 90;
+        var y = from.pos_y + (side * 120) + (siblings * 110);
+        var newId = createFromItem(item, x, y);
+        if (item.kind !== "trigger") {
+            try { editor.addConnection(src.id, newId, src.output, "input_1"); } catch (e) { /* not connectable */ }
+            syncHidden();
+        }
+        var newEl = root.querySelector("#node-" + newId);
+        if (newEl && !isCompactProps()) {
+            selectNodeElement(String(newId), newEl);
+            showProps();
+        }
+    }
+
+    function buildPortPicker(catalog) {
+        if (portPicker && portPicker.parentNode) { portPicker.parentNode.removeChild(portPicker); }
+        portPicker = document.createElement("div");
+        portPicker.className = "automation-add-panel automation-port-picker";
+        portPicker.hidden = true;
+        var switcher = document.createElement("div");
+        switcher.className = "automation-port-switch";
+        var panes = {};
+        [["action", t("addAction", "Add action")], ["trigger", t("addTrigger", "Add trigger")]].forEach(function (pair) {
+            var button = document.createElement("button");
+            button.type = "button";
+            button.className = "automation-port-switch-btn";
+            button.setAttribute("data-pane", pair[0]);
+            button.textContent = pair[1];
+            button.addEventListener("click", function (event) {
+                event.preventDefault();
+                event.stopPropagation();
+                showPane(pair[0]);
+            });
+            switcher.appendChild(button);
+            var pane = document.createElement("div");
+            pane.setAttribute("data-pane-body", pair[0]);
+            panes[pair[0]] = pane;
+        });
+        function showPane(name) {
+            Array.prototype.forEach.call(switcher.children, function (button) {
+                button.classList.toggle("is-active", button.getAttribute("data-pane") === name);
+            });
+            Object.keys(panes).forEach(function (key) { panes[key].hidden = key !== name; });
+        }
+        portPicker.appendChild(switcher);
+        portPicker.appendChild(panes.action);
+        portPicker.appendChild(panes.trigger);
+        bindPalette(catalog.actions, panes.action, pickForPort);
+        bindPalette(catalog.triggers, panes.trigger, pickForPort);
+        showPane("action");
+        menuHost.appendChild(portPicker);
+    }
+
+    function openPortPicker(outEl) {
+        if (!portPicker || !canEditNow()) { return; }
+        var nodeEl = outEl.closest(".drawflow-node");
+        if (!nodeEl) { return; }
+        var outputClass = Array.prototype.filter.call(outEl.classList, function (c) { return /^output_\d+$/.test(c); })[0] || "output_1";
+        hideNodeMenu();
+        portSource = { id: nodeEl.id.replace("node-", ""), output: outputClass };
+        portPicker.hidden = false;
+        var hostRect = menuHost.getBoundingClientRect();
+        var portRect = outEl.getBoundingClientRect();
+        portPicker.style.left = "0px";
+        portPicker.style.top = "0px";
+        var box = portPicker.getBoundingClientRect();
+        var left = portRect.right - hostRect.left + 10;
+        var top = portRect.top - hostRect.top - 20;
+        left = Math.max(8, Math.min(left, hostRect.width - box.width - 8));
+        top = Math.max(8, Math.min(top, hostRect.height - box.height - 8));
+        portPicker.style.left = left + "px";
+        portPicker.style.top = top + "px";
+    }
+
+    var portDown = null;
+    function onPortDown(event) {
+        var out = event.target.closest && event.target.closest(".output");
+        portDown = out ? { el: out, x: event.clientX, y: event.clientY } : null;
+    }
+    function onPortClick(event) {
+        var out = event.target.closest && event.target.closest(".output");
+        var down = portDown;
+        portDown = null;
+        if (!out || !down || down.el !== out) { return; }
+        if (Math.abs(event.clientX - down.x) > 5 || Math.abs(event.clientY - down.y) > 5) { return; }
+        event.stopPropagation();
+        openPortPicker(out);
+    }
+    function onDocHidePicker(event) {
+        if (!portPicker || portPicker.hidden) { return; }
+        if (portPicker.contains(event.target) || (event.target.closest && event.target.closest(".output"))) { return; }
+        hidePortPicker();
+    }
+    root.addEventListener("mousedown", onPortDown, true);
+    root.addEventListener("click", onPortClick, true);
+    document.addEventListener("click", onDocHidePicker);
+    cleanupFns.push(function () {
+        root.removeEventListener("mousedown", onPortDown, true);
+        root.removeEventListener("click", onPortClick, true);
+        document.removeEventListener("click", onDocHidePicker);
+        if (portPicker && portPicker.parentNode) { portPicker.parentNode.removeChild(portPicker); }
+        portPicker = null;
+    });
+
     var triggersHost = q("[data-palette-triggers]");
     var actionsHost = q("[data-palette-actions]");
     if (triggersHost) {
@@ -1233,54 +1994,151 @@
             }
             catalogConnections = catalog.connections || [];
             integrationsUrl = catalog.integrationsUrl || "";
-            function bind(list, container) {
+            lookups = catalog.lookups || {};
+            adoptServerFavorites(catalog.favorites);
+            if (selectedId && nodeOrNull(selectedId)) {
+                renderFields(nodeOrNull(selectedId).data);
+            }
+            function bind(list, container, onPick) {
                 if (!container) {
                     return;
                 }
                 var canEdit = !builderForm || builderForm.getAttribute("data-can-edit") !== "false";
-                var lastGroup = null;
-                // Built-in blocks first, then one titled group per integration.
-                (list || []).slice().sort(function (a, b) {
+                var general = t("builderGeneral", "General");
+                // Built-in blocks first, then one section per integration.
+                var items = (list || []).slice().sort(function (a, b) {
                     return (a.group ? 1 : 0) - (b.group ? 1 : 0);
-                }).forEach(function (item) {
-                    if (item.group && item.group !== lastGroup) {
-                        var heading = document.createElement("div");
-                        heading.className = "automation-add-group";
-                        heading.textContent = item.group;
-                        container.appendChild(heading);
-                    }
-                    lastGroup = item.group || null;
-                    var button = document.createElement("button");
+                });
+                var groups = [];
+                items.forEach(function (item) {
+                    var name = item.group || general;
+                    if (groups.indexOf(name) === -1) { groups.push(name); }
+                });
+
+                function mk(tag, className, text) {
+                    var node = document.createElement(tag);
+                    if (className) { node.className = className; }
+                    if (text != null) { node.textContent = text; }
+                    return node;
+                }
+                function icon(name) {
+                    var i = mk("i", "bx " + name);
+                    i.setAttribute("aria-hidden", "true");
+                    return i;
+                }
+
+                var pal = mk("div", "automation-pal");
+                var nav = mk("div", "automation-pal-nav");
+                var listEl = mk("div", "automation-pal-list");
+                var empty = mk("p", "automation-pal-empty", t("builderNoFavorites", "No favorites yet. Click the star next to any item to pin it here."));
+                empty.hidden = true;
+                pal.appendChild(nav);
+                pal.appendChild(listEl);
+                container.appendChild(pal);
+
+                var tabs = [{ id: "__fav", label: t("builderFavorites", "Favorites"), icon: "bxs-star" }, { id: "", label: t("builderAll", "All"), icon: "bx-grid-alt" }]
+                    .concat(groups.map(function (name) {
+                        return { id: name, label: name, icon: name === general ? "bx-cube-alt" : (GROUP_ICONS[name] || "bx-plug") };
+                    }));
+                var active = "";
+
+                function isFav(key) { return favorites.indexOf(key) !== -1; }
+
+                function applyFilter() {
+                    var favCount = 0;
+                    Array.prototype.forEach.call(listEl.children, function (node) {
+                        if (node === empty) { return; }
+                        var group = node.getAttribute("data-group");
+                        if (node.classList.contains("automation-add-group")) {
+                            node.hidden = active !== "";
+                            return;
+                        }
+                        var visible = active === "__fav" ? isFav(node.getAttribute("data-key")) : (active === "" || group === active);
+                        node.hidden = !visible;
+                        if (visible) { favCount += 1; }
+                    });
+                    empty.hidden = !(active === "__fav" && favCount === 0);
+                    Array.prototype.forEach.call(nav.children, function (tab) {
+                        tab.classList.toggle("is-active", tab.getAttribute("data-tab") === active);
+                    });
+                }
+
+                tabs.forEach(function (tab) {
+                    var button = mk("button", "automation-pal-tab");
                     button.type = "button";
-                    button.className = "automation-add-item";
-                    button.textContent = typeLabel(item.type, item.displayName || item.type);
+                    button.setAttribute("data-tab", tab.id);
+                    button.appendChild(icon(tab.icon));
+                    button.appendChild(mk("span", null, tab.label));
+                    button.addEventListener("click", function (event) {
+                        event.preventDefault();
+                        event.stopPropagation();
+                        active = tab.id;
+                        applyFilter();
+                    });
+                    nav.appendChild(button);
+                });
+
+                listEl.appendChild(empty);
+                var lastGroup = null;
+                items.forEach(function (item) {
+                    var name = item.group || general;
+                    var key = item.kind + ":" + item.type;
+                    if (name !== lastGroup) {
+                        var heading = mk("div", "automation-add-group", name);
+                        heading.setAttribute("data-group", name);
+                        listEl.appendChild(heading);
+                    }
+                    lastGroup = name;
+                    var row = mk("div", "automation-pal-row");
+                    row.setAttribute("data-group", name);
+                    row.setAttribute("data-key", key);
+                    var button = mk("button", "automation-add-item");
+                    button.type = "button";
+                    button.appendChild(icon(TYPE_ICONS[item.type] || GROUP_ICONS[item.group] || "bx-cube-alt"));
+                    button.appendChild(mk("span", null, typeLabel(item.type, item.displayName || item.type)));
                     button.disabled = !canEdit;
                     button.addEventListener("click", function () {
                         if (!canEdit) {
                             return;
                         }
-                        var config = defaultConfig(item.type, item.kind);
-                        if (item.connectionKind) {
-                            var first = catalogConnections.filter(function (c) { return c.kind === item.connectionKind; })[0];
-                            if (first) {
-                                config.connectionId = first.id;
-                            }
+                        if (onPick) {
+                            onPick(item);
+                            return;
                         }
-                        addNode({
-                            id: "n" + Date.now(),
-                            kind: item.kind,
-                            type: item.type,
-                            name: slug(item.type) + editor.getNodesFromName(slug(item.type)).length,
-                            config: config
-                        });
-                        syncHidden();
+                        createFromItem(item);
                         closeAddMenus();
                     });
-                    container.appendChild(button);
+                    var star = mk("button", "automation-fav");
+                    star.type = "button";
+                    function paintStar() {
+                        var on = isFav(key);
+                        star.classList.toggle("is-on", on);
+                        star.setAttribute("aria-pressed", on ? "true" : "false");
+                        star.title = on ? t("builderRemoveFavorite", "Remove from favorites") : t("builderAddFavorite", "Add to favorites");
+                        star.innerHTML = "";
+                        star.appendChild(icon(on ? "bxs-star" : "bx-star"));
+                    }
+                    paintStar();
+                    favRepaint.push(function () { paintStar(); applyFilter(); });
+                    star.addEventListener("click", function (event) {
+                        event.preventDefault();
+                        event.stopPropagation();
+                        setFavorite(key, !isFav(key));
+                        paintStar();
+                        applyFilter();
+                    });
+                    row.appendChild(button);
+                    row.appendChild(star);
+                    listEl.appendChild(row);
                 });
+
+                active = items.some(function (item) { return isFav(item.kind + ":" + item.type); }) ? "__fav" : "";
+                applyFilter();
             }
+            bindPalette = bind;
             bind(catalog.triggers, triggersHost);
             bind(catalog.actions, actionsHost);
+            buildPortPicker(catalog);
             fillTemplateConnections((catalog.triggers || []).concat(catalog.actions || []));
         });
 
@@ -1382,7 +2240,7 @@
 
     var wrap = root.closest(".automation-canvas-wrap") || root;
     function onWheel(event) {
-        if (event.target && event.target.closest && event.target.closest(".automation-props, .automation-zoom, .automation-add-panel")) {
+        if (event.target && event.target.closest && event.target.closest(".automation-props, .automation-zoom, .automation-add-panel, .automation-status")) {
             return;
         }
         event.preventDefault();
@@ -1435,6 +2293,8 @@
             graph: graph,
             catalogUrl: form.getAttribute("data-catalog-url"),
             saveUrl: form.getAttribute("data-save-url"),
+            favoriteUrl: form.getAttribute("data-favorite-url"),
+            favoriteImportUrl: form.getAttribute("data-favorite-import-url"),
             i18n: i18n
         };
     }

@@ -12,6 +12,8 @@ namespace Partnerly.Automation.Registry
             _connectors = connectors.ToDictionary(item => item.Key, StringComparer.OrdinalIgnoreCase);
         }
 
+        public IReadOnlyCollection<IEntityConnector> All => _connectors.Values;
+
         public IEntityConnector? Get(string key) =>
             _connectors.TryGetValue(key, out var connector) ? connector : null;
 

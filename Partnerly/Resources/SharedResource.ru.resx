@@ -3943,4 +3943,100 @@ User, группу и шаблон письма здесь создать нел
   <data name="AgentPublishFirst" xml:space="preserve">
     <value>Сначала опубликуйте изменения</value>
   </data>
+  <data name="BuilderDone" xml:space="preserve">
+    <value>Готово</value>
+  </data>
+  <data name="BuilderFillRequired" xml:space="preserve">
+    <value>Заполните обязательные настройки</value>
+  </data>
+  <data name="BuilderCopy" xml:space="preserve">
+    <value>Копировать</value>
+  </data>
+  <data name="BuilderPaste" xml:space="preserve">
+    <value>Вставить</value>
+  </data>
+  <data name="BuilderAll" xml:space="preserve">
+    <value>Все</value>
+  </data>
+  <data name="BuilderGeneral" xml:space="preserve">
+    <value>Основные</value>
+  </data>
+  <data name="BuilderChoose" xml:space="preserve">
+    <value>Выбрать…</value>
+  </data>
+  <data name="BuilderCustomValue" xml:space="preserve">
+    <value>Своё значение…</value>
+  </data>
+  <data name="BuilderInsertVariable" xml:space="preserve">
+    <value>Вставить переменную…</value>
+  </data>
+  <data name="BuilderVarsTrigger" xml:space="preserve">
+    <value>Данные триггера</value>
+  </data>
+  <data name="BuilderVarsSteps" xml:space="preserve">
+    <value>Предыдущие шаги</value>
+  </data>
+  <data name="BuilderVarsRun" xml:space="preserve">
+    <value>Данные запуска</value>
+  </data>
+  <data name="BuilderUsers" xml:space="preserve">
+    <value>Пользователи</value>
+  </data>
+  <data name="BuilderAddField" xml:space="preserve">
+    <value>Добавить поле</value>
+  </data>
+  <data name="BuilderFieldPlaceholder" xml:space="preserve">
+    <value>Поле…</value>
+  </data>
+  <data name="BuilderRemove" xml:space="preserve">
+    <value>Убрать</value>
+  </data>
+  <data name="BuilderFavorites" xml:space="preserve">
+    <value>Избранное</value>
+  </data>
+  <data name="BuilderNoFavorites" xml:space="preserve">
+    <value>Пока пусто. Нажмите звёздочку у любого пункта, чтобы закрепить его здесь.</value>
+  </data>
+  <data name="BuilderAddFavorite" xml:space="preserve">
+    <value>В избранное</value>
+  </data>
+  <data name="BuilderRemoveFavorite" xml:space="preserve">
+    <value>Убрать из избранного</value>
+  </data>
+  <data name="BuilderHistory" xml:space="preserve">
+    <value>История</value>
+  </data>
+  <data name="BuilderUndo" xml:space="preserve">
+    <value>Шаг назад</value>
+  </data>
+  <data name="BuilderRedo" xml:space="preserve">
+    <value>Шаг вперёд</value>
+  </data>
+  <data name="BuilderHistoryOpened" xml:space="preserve">
+    <value>Открыто</value>
+  </data>
+  <data name="BuilderHistoryAdded" xml:space="preserve">
+    <value>Добавлено:</value>
+  </data>
+  <data name="BuilderHistoryRemoved" xml:space="preserve">
+    <value>Удалено:</value>
+  </data>
+  <data name="BuilderHistoryEdited" xml:space="preserve">
+    <value>Изменено:</value>
+  </data>
+  <data name="BuilderHistoryMoved" xml:space="preserve">
+    <value>Перемещено:</value>
+  </data>
+  <data name="BuilderHistoryConnected" xml:space="preserve">
+    <value>Карточки соединены</value>
+  </data>
+  <data name="BuilderHistoryDisconnected" xml:space="preserve">
+    <value>Связь удалена</value>
+  </data>
+  <data name="BuilderExit" xml:space="preserve">
+    <value>Выйти из редактора</value>
+  </data>
+  <data name="BuilderExitHelp" xml:space="preserve">
+    <value>Закрыть редактор и вернуться к списку агентов</value>
+  </data>
 </root>

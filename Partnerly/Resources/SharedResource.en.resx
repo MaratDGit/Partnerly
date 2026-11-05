@@ -3943,4 +3943,100 @@ Delete is allowed for Support ticket.</value>
   <data name="AgentPublishFirst" xml:space="preserve">
     <value>Publish the changes first</value>
   </data>
+  <data name="BuilderDone" xml:space="preserve">
+    <value>Done</value>
+  </data>
+  <data name="BuilderFillRequired" xml:space="preserve">
+    <value>Fill in the required settings</value>
+  </data>
+  <data name="BuilderCopy" xml:space="preserve">
+    <value>Copy</value>
+  </data>
+  <data name="BuilderPaste" xml:space="preserve">
+    <value>Paste</value>
+  </data>
+  <data name="BuilderAll" xml:space="preserve">
+    <value>All</value>
+  </data>
+  <data name="BuilderGeneral" xml:space="preserve">
+    <value>General</value>
+  </data>
+  <data name="BuilderChoose" xml:space="preserve">
+    <value>Choose…</value>
+  </data>
+  <data name="BuilderCustomValue" xml:space="preserve">
+    <value>Custom value…</value>
+  </data>
+  <data name="BuilderInsertVariable" xml:space="preserve">
+    <value>Insert variable…</value>
+  </data>
+  <data name="BuilderVarsTrigger" xml:space="preserve">
+    <value>Trigger data</value>
+  </data>
+  <data name="BuilderVarsSteps" xml:space="preserve">
+    <value>Previous steps</value>
+  </data>
+  <data name="BuilderVarsRun" xml:space="preserve">
+    <value>Run info</value>
+  </data>
+  <data name="BuilderUsers" xml:space="preserve">
+    <value>Users</value>
+  </data>
+  <data name="BuilderAddField" xml:space="preserve">
+    <value>Add field</value>
+  </data>
+  <data name="BuilderFieldPlaceholder" xml:space="preserve">
+    <value>Field…</value>
+  </data>
+  <data name="BuilderRemove" xml:space="preserve">
+    <value>Remove</value>
+  </data>
+  <data name="BuilderFavorites" xml:space="preserve">
+    <value>Favorites</value>
+  </data>
+  <data name="BuilderNoFavorites" xml:space="preserve">
+    <value>No favorites yet. Click the star next to any item to pin it here.</value>
+  </data>
+  <data name="BuilderAddFavorite" xml:space="preserve">
+    <value>Add to favorites</value>
+  </data>
+  <data name="BuilderRemoveFavorite" xml:space="preserve">
+    <value>Remove from favorites</value>
+  </data>
+  <data name="BuilderHistory" xml:space="preserve">
+    <value>History</value>
+  </data>
+  <data name="BuilderUndo" xml:space="preserve">
+    <value>Undo</value>
+  </data>
+  <data name="BuilderRedo" xml:space="preserve">
+    <value>Redo</value>
+  </data>
+  <data name="BuilderHistoryOpened" xml:space="preserve">
+    <value>Opened</value>
+  </data>
+  <data name="BuilderHistoryAdded" xml:space="preserve">
+    <value>Added</value>
+  </data>
+  <data name="BuilderHistoryRemoved" xml:space="preserve">
+    <value>Removed</value>
+  </data>
+  <data name="BuilderHistoryEdited" xml:space="preserve">
+    <value>Edited</value>
+  </data>
+  <data name="BuilderHistoryMoved" xml:space="preserve">
+    <value>Moved</value>
+  </data>
+  <data name="BuilderHistoryConnected" xml:space="preserve">
+    <value>Connected cards</value>
+  </data>
+  <data name="BuilderHistoryDisconnected" xml:space="preserve">
+    <value>Disconnected cards</value>
+  </data>
+  <data name="BuilderExit" xml:space="preserve">
+    <value>Exit editor</value>
+  </data>
+  <data name="BuilderExitHelp" xml:space="preserve">
+    <value>Leave the editor and go back to the agents list</value>
+  </data>
 </root>

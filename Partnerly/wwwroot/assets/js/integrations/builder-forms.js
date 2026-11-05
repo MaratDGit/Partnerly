@@ -8,8 +8,8 @@
             return { key: "connectionId", type: "connection", kind: kind, label: t("intConnection", "Connection"), help: t("intConnectionHelp", "") };
         }
 
-        function text(key, labelKey, fallback, helpKey) {
-            return { key: key, type: "text", label: t(labelKey, fallback), help: helpKey ? t(helpKey, "") : "" };
+        function text(key, labelKey, fallback, helpKey, plain) {
+            return { key: key, type: "text", plain: !!plain, label: t(labelKey, fallback), help: helpKey ? t(helpKey, "") : "" };
         }
 
         function area(key, labelKey, fallback, helpKey) {
@@ -26,7 +26,7 @@
 
         var sheetFields = [
             text("spreadsheetId", "intSpreadsheet", "Spreadsheet", "intSpreadsheetHelp"),
-            text("sheet", "intSheet", "Sheet (tab)", "intSheetHelp")
+            text("sheet", "intSheet", "Sheet (tab)", "intSheetHelp", true)
         ];
 
         return {
@@ -68,7 +68,7 @@
                 area("values", "intRowValues", "Row values", "intRowValuesHelp")
             ]),
             "sheets.find_rows": [connection("google")].concat(sheetFields, [
-                text("column", "intColumn", "Column", "intColumnHelp"),
+                text("column", "intColumn", "Column", "intColumnHelp", true),
                 text("value", "intSearchValue", "Value"),
                 note("intFindRowsHelp")
             ]),
@@ -138,8 +138,8 @@
             "whatsapp.send_template": [
                 connection("whatsapp"),
                 text("to", "intPhone", "Phone", "intPhoneHelp"),
-                text("template", "intTemplateName", "Template name"),
-                text("language", "intLanguage", "Language code"),
+                text("template", "intTemplateName", "Template name", "", true),
+                text("language", "intLanguage", "Language code", "", true),
                 area("parameters", "intTemplateParams", "Parameters", "intRowValuesHelp")
             ],
             "whatsapp.message_received": [

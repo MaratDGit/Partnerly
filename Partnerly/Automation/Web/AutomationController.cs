@@ -28,6 +28,8 @@ namespace Partnerly.Automation.Web
         private readonly ISecretProtector _secrets;
         private readonly TriggerRegistry _triggers;
         private readonly ActionRegistry _actions;
+        private readonly AutomationLookupService _lookups;
+        private readonly AutomationFavoritesService _favorites;
 
         public AutomationController(
             IEventBus eventBus,
@@ -44,7 +46,9 @@ namespace Partnerly.Automation.Web
             IAutomationAccessService access,
             ISecretProtector secrets,
             TriggerRegistry triggers,
-            ActionRegistry actions)
+            ActionRegistry actions,
+            AutomationLookupService lookups,
+            AutomationFavoritesService favorites)
             : base(eventBus, userService, currentUser, logService, localizer, systemSettingsService, tableService, dataTableRegistry)
         {
             _authoring = authoring;
@@ -54,6 +58,8 @@ namespace Partnerly.Automation.Web
             _secrets = secrets;
             _triggers = triggers;
             _actions = actions;
+            _lookups = lookups;
+            _favorites = favorites;
         }
 
         [Authorize(Policy = "Permission:automation.view")]
@@ -605,7 +611,7 @@ namespace Partnerly.Automation.Web
 
         [HttpGet]
         [Authorize(Policy = "Permission:automation.view")]
-        public IActionResult Catalog()
+        public async Task<IActionResult> Catalog()
         {
             // Connections feed the "connection" select in node properties
             // (integration nodes); only the owner's own, no secrets.
@@ -614,13 +620,68 @@ namespace Partnerly.Automation.Web
                 .OrderBy(item => item.Name)
                 .Select(item => new { id = item.Id, name = item.Name, kind = item.Kind })
                 .ToList();
+            // Favorites live in the database per user. If the table is not there yet
+            // (migration not applied) the editor falls back to browser storage.
+            List<string>? favorites = null;
+            try
+            {
+                favorites = await _favorites.ListAsync(_access.CurrentUserId, HttpContext.RequestAborted);
+            }
+            catch (Exception ex)
+            {
+                await _logService.CreateLogAsync("AM", LogTypeAttribute.Warning, "Automation favorites unavailable: " + ex.GetType().Name);
+            }
+
             return Json(new
             {
+                favorites,
                 triggers = _triggers.DescribeAll(HttpContext.RequestServices),
                 actions = _actions.DescribeAll(HttpContext.RequestServices),
                 connections,
-                integrationsUrl = Url.Action("Index", "Integrations")
+                integrationsUrl = Url.Action("Index", "Integrations"),
+                lookups = await _lookups.BuildAsync(HttpContext.RequestAborted)
             });
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        [Authorize(Policy = "Permission:automation.view")]
+        public async Task<IActionResult> FavoriteSet(string key, bool on)
+        {
+            if (!AutomationFavoritesService.IsValidKey(key))
+            {
+                return BadRequest(new { success = false });
+            }
+
+            try
+            {
+                await _favorites.SetAsync(_access.CurrentUserId, key, on, HttpContext.RequestAborted);
+                return Json(new { success = true });
+            }
+            catch (Exception ex)
+            {
+                await _logService.CreateLogAsync("AM", LogTypeAttribute.Warning, "Automation favorite not saved: " + ex.GetType().Name);
+                return StatusCode(500, new { success = false });
+            }
+        }
+
+        // One-time import of the browser's old favorites list (localStorage).
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        [Authorize(Policy = "Permission:automation.view")]
+        public async Task<IActionResult> FavoriteImport(string keys)
+        {
+            var list = (keys ?? string.Empty).Split(',', StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries);
+            try
+            {
+                await _favorites.MergeAsync(_access.CurrentUserId, list, HttpContext.RequestAborted);
+                return Json(new { success = true, favorites = await _favorites.ListAsync(_access.CurrentUserId, HttpContext.RequestAborted) });
+            }
+            catch (Exception ex)
+            {
+                await _logService.CreateLogAsync("AM", LogTypeAttribute.Warning, "Automation favorites import failed: " + ex.GetType().Name);
+                return StatusCode(500, new { success = false });
+            }
         }
 
         private async Task SaveBuilderDraftAsync(Guid id, string? name, string? description, string? graphJson)

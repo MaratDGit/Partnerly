@@ -82,7 +82,12 @@
 
         var toggle = btn("toggle");
         if (toggle) {
-            toggle.textContent = state.isActive ? toggle.dataset.lPause : toggle.dataset.lStart;
+            var toggleLabel = toggle.querySelector("[data-label]");
+            var toggleIcon = toggle.querySelector("i");
+            (toggleLabel || toggle).textContent = state.isActive ? toggle.dataset.lPause : toggle.dataset.lStart;
+            if (toggleIcon) {
+                toggleIcon.className = "bx " + (state.isActive ? "bx-pause-circle" : "bx-play-circle");
+            }
         }
         var run = btn("run");
         if (run) {

@@ -3943,4 +3943,100 @@ User, խումբ և նամակի կաղապար այստեղ չեն ստեղծվ
   <data name="AgentPublishFirst" xml:space="preserve">
     <value>Սկզբում հրապարակեք փոփոխությունները</value>
   </data>
+  <data name="BuilderDone" xml:space="preserve">
+    <value>Պատրաստ է</value>
+  </data>
+  <data name="BuilderFillRequired" xml:space="preserve">
+    <value>Լրացրեք պարտադիր կարգավորումները</value>
+  </data>
+  <data name="BuilderCopy" xml:space="preserve">
+    <value>Պատճենել</value>
+  </data>
+  <data name="BuilderPaste" xml:space="preserve">
+    <value>Տեղադրել</value>
+  </data>
+  <data name="BuilderAll" xml:space="preserve">
+    <value>Բոլորը</value>
+  </data>
+  <data name="BuilderGeneral" xml:space="preserve">
+    <value>Հիմնական</value>
+  </data>
+  <data name="BuilderChoose" xml:space="preserve">
+    <value>Ընտրել…</value>
+  </data>
+  <data name="BuilderCustomValue" xml:space="preserve">
+    <value>Իմ արժեքը…</value>
+  </data>
+  <data name="BuilderInsertVariable" xml:space="preserve">
+    <value>Տեղադրել փոփոխական…</value>
+  </data>
+  <data name="BuilderVarsTrigger" xml:space="preserve">
+    <value>Տրիգերի տվյալներ</value>
+  </data>
+  <data name="BuilderVarsSteps" xml:space="preserve">
+    <value>Նախորդ քայլեր</value>
+  </data>
+  <data name="BuilderVarsRun" xml:space="preserve">
+    <value>Գործարկման տվյալներ</value>
+  </data>
+  <data name="BuilderUsers" xml:space="preserve">
+    <value>Օգտատերեր</value>
+  </data>
+  <data name="BuilderAddField" xml:space="preserve">
+    <value>Ավելացնել դաշտ</value>
+  </data>
+  <data name="BuilderFieldPlaceholder" xml:space="preserve">
+    <value>Դաշտ…</value>
+  </data>
+  <data name="BuilderRemove" xml:space="preserve">
+    <value>Հեռացնել</value>
+  </data>
+  <data name="BuilderFavorites" xml:space="preserve">
+    <value>Ընտրյալներ</value>
+  </data>
+  <data name="BuilderNoFavorites" xml:space="preserve">
+    <value>Դեռ դատարկ է։ Սեղմեք աստղանիշը ցանկացած կետի կողքին՝ այստեղ ամրացնելու համար։</value>
+  </data>
+  <data name="BuilderAddFavorite" xml:space="preserve">
+    <value>Ավելացնել ընտրյալներին</value>
+  </data>
+  <data name="BuilderRemoveFavorite" xml:space="preserve">
+    <value>Հեռացնել ընտրյալներից</value>
+  </data>
+  <data name="BuilderHistory" xml:space="preserve">
+    <value>Պատմություն</value>
+  </data>
+  <data name="BuilderUndo" xml:space="preserve">
+    <value>Հետ</value>
+  </data>
+  <data name="BuilderRedo" xml:space="preserve">
+    <value>Առաջ</value>
+  </data>
+  <data name="BuilderHistoryOpened" xml:space="preserve">
+    <value>Բացվել է</value>
+  </data>
+  <data name="BuilderHistoryAdded" xml:space="preserve">
+    <value>Ավելացվել է՝</value>
+  </data>
+  <data name="BuilderHistoryRemoved" xml:space="preserve">
+    <value>Հեռացվել է՝</value>
+  </data>
+  <data name="BuilderHistoryEdited" xml:space="preserve">
+    <value>Փոփոխվել է՝</value>
+  </data>
+  <data name="BuilderHistoryMoved" xml:space="preserve">
+    <value>Տեղափոխվել է՝</value>
+  </data>
+  <data name="BuilderHistoryConnected" xml:space="preserve">
+    <value>Քարտերը միացվել են</value>
+  </data>
+  <data name="BuilderHistoryDisconnected" xml:space="preserve">
+    <value>Կապը հեռացվել է</value>
+  </data>
+  <data name="BuilderExit" xml:space="preserve">
+    <value>Դուրս գալ խմբագրիչից</value>
+  </data>
+  <data name="BuilderExitHelp" xml:space="preserve">
+    <value>Փակել խմբագրիչը և վերադառնալ գործակալների ցանկին</value>
+  </data>
 </root>

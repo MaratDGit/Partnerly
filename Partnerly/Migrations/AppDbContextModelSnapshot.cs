@@ -150,6 +150,31 @@ namespace Partnerly.Migrations
                     b.ToTable("Automations", (string)null);
                 });
 
+            modelBuilder.Entity("Partnerly.Automation.Persistence.Entities.AutomationFavorite", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime>("CreatedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("ItemKey")
+                        .IsRequired()
+                        .HasMaxLength(200)
+                        .HasColumnType("nvarchar(200)");
+
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("UserId", "ItemKey")
+                        .IsUnique();
+
+                    b.ToTable("AutomationFavorites", (string)null);
+                });
+
             modelBuilder.Entity("Partnerly.Automation.Persistence.Entities.AutomationRun", b =>
                 {
                     b.Property<Guid>("Id")
@@ -1431,6 +1456,15 @@ namespace Partnerly.Migrations
                         .WithMany()
                         .HasForeignKey("PublishedVersionId")
                         .OnDelete(DeleteBehavior.NoAction);
+                });
+
+            modelBuilder.Entity("Partnerly.Automation.Persistence.Entities.AutomationFavorite", b =>
+                {
+                    b.HasOne("Partnerly.Models.User", null)
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("Partnerly.Automation.Persistence.Entities.AutomationRun", b =>

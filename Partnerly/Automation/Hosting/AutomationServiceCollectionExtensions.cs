@@ -82,6 +82,8 @@ namespace Partnerly.Automation.Hosting
                 services.AddScoped<IEntityConnector, UserGroupConnector>();
                 services.AddScoped<IEntityConnector, EmailTemplateConnector>();
                 services.AddScoped(sp => new EntityRegistry(sp.GetServices<IEntityConnector>()));
+                services.AddScoped<Partnerly.Automation.Web.AutomationLookupService>();
+                services.AddScoped<Partnerly.Automation.Web.AutomationFavoritesService>();
                 services.AddScoped<IAutomationAccessService, CurrentUserAutomationAccessService>();
                 services.AddScoped<IAutomationRunNotifier, AutomationRunNotifier>();
                 services.AddTransient<AutomationEventBridge>();
