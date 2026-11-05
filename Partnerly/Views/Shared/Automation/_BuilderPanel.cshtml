@@ -120,6 +120,7 @@
                     <button type="button" class="btn btn-primary btn-sm" data-props-done disabled>@Localizer["BuilderDone"]</button>
                 </div>
             </aside>
+            @await Html.PartialAsync("~/Views/Shared/Automation/_BuilderChat.cshtml", Model)
             <div class="automation-zoom" role="group" aria-label="@Localizer["FitView"]">
                 <button type="button" class="automation-zoom-btn" data-zoom-out title="@Localizer["ZoomOut"]" aria-label="@Localizer["ZoomOut"]">−</button>
                 <span class="automation-zoom-label" data-zoom-label>100%</span>

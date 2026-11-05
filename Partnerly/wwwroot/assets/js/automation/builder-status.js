@@ -235,4 +235,8 @@
 
     render();
     setInterval(render, 30000);
+    // Read-only view for the chat's process check.
+    window.PartnerlyBuilderStatus = {
+        get: function () { return { isPublished: state.isPublished, isActive: state.isActive, hasChanges: state.hasChanges, running: state.running }; }
+    };
 })();

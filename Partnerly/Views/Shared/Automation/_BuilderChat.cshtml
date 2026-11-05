@@ -1,0 +1,131 @@
+@model Partnerly.Automation.Web.ViewModels.AutomationBuilderViewModel
+@{
+    var agentIcon = Partnerly.Automation.Abstractions.AutomationIcons.Normalize(Model.Icon);
+    // Texts for the process check (written by the chat as it goes).
+    var chatText = new Dictionary<string, string>
+    {
+        ["pin"] = Localizer["AgentChatPin"].Value,
+        ["unpin"] = Localizer["AgentChatUnpin"].Value,
+        ["enlarge"] = Localizer["AgentChatEnlarge"].Value,
+        ["shrink"] = Localizer["AgentChatShrink"].Value,
+        ["scanTitle"] = Localizer["AgentChatScanTitle"].Value,
+        ["step1"] = Localizer["AgentChatStep1"].Value,
+        ["step2"] = Localizer["AgentChatStep2"].Value,
+        ["step3"] = Localizer["AgentChatStep3"].Value,
+        ["step4"] = Localizer["AgentChatStep4"].Value,
+        ["step5"] = Localizer["AgentChatStep5"].Value,
+        ["intro"] = Localizer["AgentChatIntro"].Value,
+        ["statCards"] = Localizer["AgentChatStatCards"].Value,
+        ["statOn"] = Localizer["AgentChatStatOn"].Value,
+        ["statOff"] = Localizer["AgentChatStatOff"].Value,
+        ["statSetup"] = Localizer["AgentChatStatSetup"].Value,
+        ["statUnlinked"] = Localizer["AgentChatStatUnlinked"].Value,
+        ["secCards"] = Localizer["AgentChatSecCards"].Value,
+        ["secAgent"] = Localizer["AgentChatSecAgent"].Value,
+        ["secButtons"] = Localizer["AgentChatSecButtons"].Value,
+        ["kindTrigger"] = Localizer["AgentChatKindTrigger"].Value,
+        ["kindAction"] = Localizer["AgentChatKindAction"].Value,
+        ["stReady"] = Localizer["AgentChatStReady"].Value,
+        ["stSetup"] = Localizer["AgentChatStSetup"].Value,
+        ["stOff"] = Localizer["AgentChatStOff"].Value,
+        ["stUnlinked"] = Localizer["AgentChatStUnlinked"].Value,
+        ["notSet"] = Localizer["AgentChatNotSet"].Value,
+        ["notLinked"] = Localizer["AgentChatNotLinked"].Value,
+        ["published"] = Localizer["AgentChatPublished"].Value,
+        ["notPublished"] = Localizer["AgentChatNotPublished"].Value,
+        ["active"] = Localizer["AgentChatActive"].Value,
+        ["paused"] = Localizer["AgentChatPaused"].Value,
+        ["changes"] = Localizer["AgentChatChanges"].Value,
+        ["noChanges"] = Localizer["AgentChatNoChanges"].Value,
+        ["running"] = Localizer["AgentChatRunning"].Value,
+        ["btnOn"] = Localizer["AgentChatBtnOn"].Value,
+        ["btnOff"] = Localizer["AgentChatBtnOff"].Value,
+        ["reasonPublish"] = Localizer["AgentChatReasonPublish"].Value,
+        ["reasonPermission"] = Localizer["AgentChatReasonPermission"].Value,
+        ["reasonChanges"] = Localizer["AgentChatReasonChanges"].Value,
+        ["conclEmpty"] = Localizer["AgentChatConclEmpty"].Value,
+        ["conclNoTrigger"] = Localizer["AgentChatConclNoTrigger"].Value,
+        ["conclSetup"] = Localizer["AgentChatConclSetup"].Value,
+        ["conclUnlinked"] = Localizer["AgentChatConclUnlinked"].Value,
+        ["conclReady"] = Localizer["AgentChatConclReady"].Value,
+        ["conclPublish"] = Localizer["AgentChatConclPublish"].Value,
+        ["conclChanges"] = Localizer["AgentChatConclChanges"].Value,
+        ["conclLive"] = Localizer["AgentChatConclLive"].Value,
+        ["conclPaused"] = Localizer["AgentChatConclPaused"].Value,
+        ["scanSummary"] = Localizer["AgentChatScanSummary"].Value,
+    };
+}
+
+@* Mini chat with the agent. The AI is not connected to the project yet: the window, history and
+   animations are ready and window.PartnerlyAgentChat.setResponder(fn) is the single place to plug it in.
+   NB: this sits inside the editor's <form>, so it must not contain a <form> of its own. *@
+<div class="agent-chat"
+     id="agentChat"
+     data-agent-id="@Model.Id"
+     data-agent-name="@Model.Name"
+     data-l-welcome="@Localizer["AgentChatWelcome"]"
+     data-l-offline-reply="@Localizer["AgentChatNotConnected"]"
+     data-l-placeholder="@Localizer["AgentChatPlaceholder"]"
+     data-l-you="@Localizer["AgentChatYou"]">
+    <button type="button"
+            class="agent-chat-launcher"
+            data-chat-launcher
+            aria-expanded="false"
+            aria-controls="agentChatWindow"
+            title="@Localizer["AgentChatOpen"]"
+            aria-label="@Localizer["AgentChatOpen"]">
+        <i class="bx @agentIcon agent-chat-launcher-icon" aria-hidden="true"></i>
+        <i class="bx bx-x agent-chat-launcher-close" aria-hidden="true"></i>
+    </button>
+
+    <script type="application/json" data-chat-i18n>@Html.Raw(Json.Serialize(chatText))</script>
+
+    <section class="agent-chat-window"
+             id="agentChatWindow"
+             data-chat-window
+             role="dialog"
+             aria-label="@Localizer["AgentChatOpen"]"
+             hidden>
+        <header class="agent-chat-head">
+            <span class="agent-chat-avatar" aria-hidden="true"><i class="bx @agentIcon"></i></span>
+            <div class="agent-chat-title">
+                <strong>@Model.Name</strong>
+                <span class="agent-chat-sub"><span class="agent-chat-dot" aria-hidden="true"></span>@Localizer["AgentChatOffline"]</span>
+            </div>
+            <button type="button" class="agent-chat-icon-btn" data-chat-pin aria-pressed="false" title="@Localizer["AgentChatPin"]" aria-label="@Localizer["AgentChatPin"]">
+                <i class="bx bx-pin" aria-hidden="true"></i>
+            </button>
+            <button type="button" class="agent-chat-icon-btn" data-chat-size title="@Localizer["AgentChatEnlarge"]" aria-label="@Localizer["AgentChatEnlarge"]">
+                <i class="bx bx-expand-alt" aria-hidden="true"></i>
+            </button>
+            <button type="button" class="agent-chat-icon-btn" data-chat-clear title="@Localizer["AgentChatClear"]" aria-label="@Localizer["AgentChatClear"]">
+                <i class="bx bx-eraser" aria-hidden="true"></i>
+            </button>
+            <button type="button" class="agent-chat-icon-btn" data-chat-close title="@Localizer["Close"]" aria-label="@Localizer["Close"]">
+                <i class="bx bx-chevron-down" aria-hidden="true"></i>
+            </button>
+        </header>
+
+        <div class="agent-chat-body" data-chat-list role="log" aria-live="polite"></div>
+
+        <div class="agent-chat-chips" data-chat-chips>
+            <button type="button" class="agent-chat-chip" data-chat-suggest="@Localizer["AgentChatSuggest1"]">
+                <i class="bx bx-help-circle" aria-hidden="true"></i>@Localizer["AgentChatSuggest1"]
+            </button>
+            <button type="button" class="agent-chat-chip" data-chat-suggest="@Localizer["AgentChatSuggest2"]">
+                <i class="bx bx-search-alt" aria-hidden="true"></i>@Localizer["AgentChatSuggest2"]
+            </button>
+        </div>
+
+        <div class="agent-chat-footer">
+        <div class="agent-chat-composer" data-chat-form>
+            <textarea class="agent-chat-input" data-chat-input rows="1" maxlength="2000"
+                      placeholder="@Localizer["AgentChatPlaceholder"]"
+                      aria-label="@Localizer["AgentChatPlaceholder"]"></textarea>
+            <button type="button" class="agent-chat-send" data-chat-send disabled title="@Localizer["AgentChatSend"]" aria-label="@Localizer["AgentChatSend"]">
+                <i class="bx bxs-send" aria-hidden="true"></i>
+            </button>
+        </div>
+        </div>
+    </section>
+</div>

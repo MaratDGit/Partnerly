@@ -814,6 +814,7 @@ namespace Partnerly.Automation.Web
                 Id = definition.Id,
                 Name = definition.Name,
                 Description = definition.Description,
+                Icon = definition.Icon,
                 GraphJson = draft.GraphJson,
                 IsPublished = definition.PublishedVersionId != null,
                 IsActive = definition.IsActive

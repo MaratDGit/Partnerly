@@ -852,7 +852,89 @@
         window.dispatchEvent(new CustomEvent("partnerly:builder-changed"));
     }
 
+    // ---- process check (used by the chat): which values a card still lacks ----
+    var BUILTIN_REQUIRED = {
+        schedule: function (c) {
+            var kind = c.scheduleKind || "daily";
+            return kind === "once" ? ["at"] : (kind === "cron" ? ["expression"] : ["time"]);
+        },
+        interval: function () { return ["minutes"]; },
+        event: function () { return ["event"]; },
+        "entity.created": function () { return ["entity"]; },
+        "entity.updated": function () { return ["entity"]; },
+        "entity.deleted": function () { return ["entity"]; },
+        delay: function () { return ["amount"]; },
+        set_variable: function () { return ["name"]; },
+        send_email: function (c) { return ["to"].concat(filled(c.template) ? [] : ["subject", "body"]); },
+        send_notification: function () { return ["message"]; },
+        http_request: function () { return ["url"]; },
+        webhook_action: function () { return ["url"]; },
+        execute_workflow: function () { return ["automationId"]; },
+        branch: function () { return ["condition.left"]; },
+        wait_until: function () { return ["condition.left"]; },
+        "switch": function () { return ["value"]; },
+        create_record: function () { return ["entity", "fields"]; },
+        update_record: function () { return ["entity", "key", "fields"]; },
+        find_record: function () { return ["entity"]; },
+        delete_record: function () { return ["entity", "key"]; }
+    };
+
+    function fieldLabelFor(data, key) {
+        if (key === "condition.left") { return t("conditionLeft", "Condition"); }
+        if (key === "connectionId") { return t("intConnection", "Connection"); }
+        var schema = [];
+        try { schema = schemaFor(data) || []; } catch (e) { schema = []; }
+        for (var i = 0; i < schema.length; i++) {
+            if (schema[i].key === key) { return schema[i].label || key; }
+        }
+        return key;
+    }
+
+    function missingFor(data) {
+        var config = normalizeDelay(JSON.parse(JSON.stringify(data.config || {})));
+        var keys;
+        if (INTEGRATION_PREFIX.test(data.type)) {
+            keys = ["connectionId"].concat(INTEGRATION_REQUIRED[data.type] || []);
+        } else {
+            var rule = BUILTIN_REQUIRED[data.type];
+            keys = rule ? rule(config) : [];
+        }
+        return keys.filter(function (key) {
+            var value = getByPath(config, key);
+            if (key === "amount" || key === "minutes") { return !(Number(value) > 0); }
+            return !filled(value);
+        }).map(function (key) { return fieldLabelFor(data, key); });
+    }
+
     window.PartnerlyBuilder = {
+        analyze: function () {
+            persistSelected();
+            var exported = editor.export();
+            var home = exported.drawflow && exported.drawflow.Home && exported.drawflow.Home.data ? exported.drawflow.Home.data : {};
+            var cards = Object.keys(home).map(function (key) {
+                var node = home[key];
+                var data = node.data || {};
+                var wired = data.kind === "trigger" ? connectionCount(node.outputs) > 0 : connectionCount(node.inputs) > 0;
+                var missing = data.disabled ? [] : missingFor(data);
+                return {
+                    domId: node.id,
+                    kind: data.kind,
+                    type: data.type,
+                    typeLabel: typeLabel(data.type, data.type),
+                    name: data.name || "",
+                    disabled: !!data.disabled,
+                    wired: wired,
+                    missing: missing,
+                    x: node.pos_x,
+                    y: node.pos_y
+                };
+            });
+            cards.sort(function (a, b) {
+                if (a.kind !== b.kind) { return a.kind === "trigger" ? -1 : 1; }
+                return a.x - b.x || a.y - b.y;
+            });
+            return { cards: cards };
+        },
         markSaved: function () {
             var graph = exportGraph();
             savedFull = JSON.stringify(graph);
@@ -2483,7 +2565,7 @@
 
     var wrap = root.closest(".automation-canvas-wrap") || root;
     function onWheel(event) {
-        if (event.target && event.target.closest && event.target.closest(".automation-props, .automation-zoom, .automation-add-panel, .automation-status")) {
+        if (event.target && event.target.closest && event.target.closest(".automation-props, .automation-zoom, .automation-add-panel, .automation-status, .agent-chat")) {
             return;
         }
         event.preventDefault();

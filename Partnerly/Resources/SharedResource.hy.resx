@@ -4192,6 +4192,183 @@ User, խումբ և նամակի կաղապար այստեղ չեն ստեղծվ
   <data name="AutomationIcon" xml:space="preserve">
     <value>Պատկերակ</value>
   </data>
+  <data name="AgentChatOpen" xml:space="preserve">
+    <value>Զրույց գործակալի հետ</value>
+  </data>
+  <data name="AgentChatOffline" xml:space="preserve">
+    <value>Արհեստական բանականությունը դեռ միացված չէ</value>
+  </data>
+  <data name="AgentChatWelcome" xml:space="preserve">
+    <value>Բարև։ Ես «{0}» գործակալի օգնականն եմ։ Հարցրեք գործակալի մասին կամ տվեք առաջադրանք։</value>
+  </data>
+  <data name="AgentChatNotConnected" xml:space="preserve">
+    <value>Արհեստական բանականության օգնականը դեռ միացված չէ նախագծին, ուստի առայժմ չեմ կարող պատասխանել կամ կատարել առաջադրանքներ։ Ձեր հաղորդագրությունը պահպանված է զրույցում. ԱԲ-ն միացնելուց հետո կկարողանամ բացատրել գործակալը, գտնել խնդիրներ և կատարել փոփոխություններ ըստ խնդրանքի։</value>
+  </data>
+  <data name="AgentChatPlaceholder" xml:space="preserve">
+    <value>Հարցրեք կամ տվեք առաջադրանք…</value>
+  </data>
+  <data name="AgentChatYou" xml:space="preserve">
+    <value>Դուք</value>
+  </data>
+  <data name="AgentChatSend" xml:space="preserve">
+    <value>Ուղարկել</value>
+  </data>
+  <data name="AgentChatClear" xml:space="preserve">
+    <value>Մաքրել զրույցը</value>
+  </data>
+  <data name="AgentChatSuggest1" xml:space="preserve">
+    <value>Ի՞նչ է անում այս գործակալը</value>
+  </data>
+  <data name="AgentChatSuggest2" xml:space="preserve">
+    <value>Վերլուծիր այս գործընթացը</value>
+  </data>
+  <data name="AgentChatPin" xml:space="preserve">
+    <value>Չփակել զրույցը</value>
+  </data>
+  <data name="AgentChatUnpin" xml:space="preserve">
+    <value>Փակել դրսում սեղմելիս</value>
+  </data>
+  <data name="AgentChatEnlarge" xml:space="preserve">
+    <value>Մեծացնել</value>
+  </data>
+  <data name="AgentChatShrink" xml:space="preserve">
+    <value>Փոքրացնել</value>
+  </data>
+  <data name="AgentChatScanTitle" xml:space="preserve">
+    <value>Գործընթացի ստուգում</value>
+  </data>
+  <data name="AgentChatStep1" xml:space="preserve">
+    <value>Կարդում եմ կտավի քարտերը…</value>
+  </data>
+  <data name="AgentChatStep2" xml:space="preserve">
+    <value>Ստուգում եմ քարտերի կապերը…</value>
+  </data>
+  <data name="AgentChatStep3" xml:space="preserve">
+    <value>Ստուգում եմ յուրաքանչյուր քարտի կարգավորումները…</value>
+  </data>
+  <data name="AgentChatStep4" xml:space="preserve">
+    <value>Ստուգում եմ խմբագրիչի կոճակները…</value>
+  </data>
+  <data name="AgentChatStep5" xml:space="preserve">
+    <value>Կազմում եմ ամփոփագիրը…</value>
+  </data>
+  <data name="AgentChatIntro" xml:space="preserve">
+    <value>Ահա ինչ գտա «{0}»-ում՝</value>
+  </data>
+  <data name="AgentChatStatCards" xml:space="preserve">
+    <value>Քարտեր</value>
+  </data>
+  <data name="AgentChatStatOn" xml:space="preserve">
+    <value>Միացված</value>
+  </data>
+  <data name="AgentChatStatOff" xml:space="preserve">
+    <value>Անջատված</value>
+  </data>
+  <data name="AgentChatStatSetup" xml:space="preserve">
+    <value>Պահանջում են կարգավորում</value>
+  </data>
+  <data name="AgentChatStatUnlinked" xml:space="preserve">
+    <value>Առանց կապերի</value>
+  </data>
+  <data name="AgentChatSecCards" xml:space="preserve">
+    <value>Քարտեր</value>
+  </data>
+  <data name="AgentChatSecAgent" xml:space="preserve">
+    <value>Գործակալ</value>
+  </data>
+  <data name="AgentChatSecButtons" xml:space="preserve">
+    <value>Խմբագրիչի կոճակներ</value>
+  </data>
+  <data name="AgentChatKindTrigger" xml:space="preserve">
+    <value>Տրիգեր</value>
+  </data>
+  <data name="AgentChatKindAction" xml:space="preserve">
+    <value>Գործողություն</value>
+  </data>
+  <data name="AgentChatStReady" xml:space="preserve">
+    <value>Պատրաստ է</value>
+  </data>
+  <data name="AgentChatStSetup" xml:space="preserve">
+    <value>Պետք է կարգավորել</value>
+  </data>
+  <data name="AgentChatStOff" xml:space="preserve">
+    <value>Անջատված է</value>
+  </data>
+  <data name="AgentChatStUnlinked" xml:space="preserve">
+    <value>Կապեր չկան</value>
+  </data>
+  <data name="AgentChatNotSet" xml:space="preserve">
+    <value>Չի լրացված</value>
+  </data>
+  <data name="AgentChatNotLinked" xml:space="preserve">
+    <value>Չի կապված այլ քարտերի հետ</value>
+  </data>
+  <data name="AgentChatPublished" xml:space="preserve">
+    <value>Հրապարակված է</value>
+  </data>
+  <data name="AgentChatNotPublished" xml:space="preserve">
+    <value>Հրապարակված չէ</value>
+  </data>
+  <data name="AgentChatActive" xml:space="preserve">
+    <value>Ակտիվ է</value>
+  </data>
+  <data name="AgentChatPaused" xml:space="preserve">
+    <value>Դադարի մեջ է</value>
+  </data>
+  <data name="AgentChatChanges" xml:space="preserve">
+    <value>Կան չհրապարակված փոփոխություններ</value>
+  </data>
+  <data name="AgentChatNoChanges" xml:space="preserve">
+    <value>Չհրապարակված փոփոխություններ չկան</value>
+  </data>
+  <data name="AgentChatRunning" xml:space="preserve">
+    <value>Հիմա կատարվում է՝ {0}</value>
+  </data>
+  <data name="AgentChatBtnOn" xml:space="preserve">
+    <value>հասանելի է</value>
+  </data>
+  <data name="AgentChatBtnOff" xml:space="preserve">
+    <value>հասանելի չէ</value>
+  </data>
+  <data name="AgentChatReasonPublish" xml:space="preserve">
+    <value>նախ հրապարակեք գործակալին</value>
+  </data>
+  <data name="AgentChatReasonPermission" xml:space="preserve">
+    <value>իրավունք չկա</value>
+  </data>
+  <data name="AgentChatReasonChanges" xml:space="preserve">
+    <value>գործարկում է հրապարակված տարբերակը՝ առանց վերջին փոփոխությունների</value>
+  </data>
+  <data name="AgentChatConclEmpty" xml:space="preserve">
+    <value>Կտավը դատարկ է. ավելացրեք տրիգեր և գործողություններ։</value>
+  </data>
+  <data name="AgentChatConclNoTrigger" xml:space="preserve">
+    <value>Միացված տրիգեր չկա, ուստի գործակալը չի կարող սկսվել։</value>
+  </data>
+  <data name="AgentChatConclSetup" xml:space="preserve">
+    <value>Կարգավորում են պահանջում {0} քարտ. բացեք դրանք և լրացրեք վերևում նշված արժեքները։</value>
+  </data>
+  <data name="AgentChatConclUnlinked" xml:space="preserve">
+    <value>Առանց կապի քարտեր՝ {0}. կապեք դրանք նախորդ քարտի «+»-ով։</value>
+  </data>
+  <data name="AgentChatConclReady" xml:space="preserve">
+    <value>Բոլոր քարտերը կարգավորված են և կապված։</value>
+  </data>
+  <data name="AgentChatConclPublish" xml:space="preserve">
+    <value>Ստուգեք Test կոճակով, ապա հրապարակեք գործակալին։</value>
+  </data>
+  <data name="AgentChatConclChanges" xml:space="preserve">
+    <value>Կան չհրապարակված փոփոխություններ. հրապարակեք՝ ուժի մեջ մտնելու համար։</value>
+  </data>
+  <data name="AgentChatConclLive" xml:space="preserve">
+    <value>Գործակալը աշխատում է և գործարկվում է իր տրիգերներով։</value>
+  </data>
+  <data name="AgentChatConclPaused" xml:space="preserve">
+    <value>Գործակալը դադարի մեջ է. սեղմեք Start։</value>
+  </data>
+  <data name="AgentChatScanSummary" xml:space="preserve">
+    <value>Գործընթացի ստուգում՝ քարտեր {0}, կարգավորում են պահանջում {1}։</value>
+  </data>
   <data name="BuilderChoose" xml:space="preserve">
     <value>Ընտրել…</value>
   </data>

@@ -4192,6 +4192,183 @@ User, группу и шаблон письма здесь создать нел
   <data name="AutomationIcon" xml:space="preserve">
     <value>Иконка</value>
   </data>
+  <data name="AgentChatOpen" xml:space="preserve">
+    <value>Чат с агентом</value>
+  </data>
+  <data name="AgentChatOffline" xml:space="preserve">
+    <value>ИИ пока не подключён</value>
+  </data>
+  <data name="AgentChatWelcome" xml:space="preserve">
+    <value>Привет! Я помощник агента «{0}». Задайте вопрос об агенте или дайте мне задание.</value>
+  </data>
+  <data name="AgentChatNotConnected" xml:space="preserve">
+    <value>ИИ-помощник пока не подключён к проекту, поэтому я пока не могу отвечать и выполнять задания. Ваше сообщение сохранено в чате; после подключения ИИ я смогу объяснять работу агента, искать в нём проблемы и вносить изменения по просьбе.</value>
+  </data>
+  <data name="AgentChatPlaceholder" xml:space="preserve">
+    <value>Задайте вопрос или дайте задание…</value>
+  </data>
+  <data name="AgentChatYou" xml:space="preserve">
+    <value>Вы</value>
+  </data>
+  <data name="AgentChatSend" xml:space="preserve">
+    <value>Отправить</value>
+  </data>
+  <data name="AgentChatClear" xml:space="preserve">
+    <value>Очистить чат</value>
+  </data>
+  <data name="AgentChatSuggest1" xml:space="preserve">
+    <value>Что делает этот агент?</value>
+  </data>
+  <data name="AgentChatSuggest2" xml:space="preserve">
+    <value>Проанализируй этот процесс</value>
+  </data>
+  <data name="AgentChatPin" xml:space="preserve">
+    <value>Не закрывать чат</value>
+  </data>
+  <data name="AgentChatUnpin" xml:space="preserve">
+    <value>Закрывать при клике снаружи</value>
+  </data>
+  <data name="AgentChatEnlarge" xml:space="preserve">
+    <value>Увеличить</value>
+  </data>
+  <data name="AgentChatShrink" xml:space="preserve">
+    <value>Уменьшить</value>
+  </data>
+  <data name="AgentChatScanTitle" xml:space="preserve">
+    <value>Проверка процесса</value>
+  </data>
+  <data name="AgentChatStep1" xml:space="preserve">
+    <value>Читаю карточки на холсте…</value>
+  </data>
+  <data name="AgentChatStep2" xml:space="preserve">
+    <value>Проверяю связи между карточками…</value>
+  </data>
+  <data name="AgentChatStep3" xml:space="preserve">
+    <value>Проверяю настройки каждой карточки…</value>
+  </data>
+  <data name="AgentChatStep4" xml:space="preserve">
+    <value>Проверяю кнопки редактора…</value>
+  </data>
+  <data name="AgentChatStep5" xml:space="preserve">
+    <value>Составляю сводку…</value>
+  </data>
+  <data name="AgentChatIntro" xml:space="preserve">
+    <value>Вот что я нашёл в «{0}»:</value>
+  </data>
+  <data name="AgentChatStatCards" xml:space="preserve">
+    <value>Карточек</value>
+  </data>
+  <data name="AgentChatStatOn" xml:space="preserve">
+    <value>Включено</value>
+  </data>
+  <data name="AgentChatStatOff" xml:space="preserve">
+    <value>Выключено</value>
+  </data>
+  <data name="AgentChatStatSetup" xml:space="preserve">
+    <value>Требуют настройки</value>
+  </data>
+  <data name="AgentChatStatUnlinked" xml:space="preserve">
+    <value>Без связей</value>
+  </data>
+  <data name="AgentChatSecCards" xml:space="preserve">
+    <value>Карточки</value>
+  </data>
+  <data name="AgentChatSecAgent" xml:space="preserve">
+    <value>Агент</value>
+  </data>
+  <data name="AgentChatSecButtons" xml:space="preserve">
+    <value>Кнопки редактора</value>
+  </data>
+  <data name="AgentChatKindTrigger" xml:space="preserve">
+    <value>Триггер</value>
+  </data>
+  <data name="AgentChatKindAction" xml:space="preserve">
+    <value>Действие</value>
+  </data>
+  <data name="AgentChatStReady" xml:space="preserve">
+    <value>Готова</value>
+  </data>
+  <data name="AgentChatStSetup" xml:space="preserve">
+    <value>Нужна настройка</value>
+  </data>
+  <data name="AgentChatStOff" xml:space="preserve">
+    <value>Выключена</value>
+  </data>
+  <data name="AgentChatStUnlinked" xml:space="preserve">
+    <value>Нет связей</value>
+  </data>
+  <data name="AgentChatNotSet" xml:space="preserve">
+    <value>Не заполнено</value>
+  </data>
+  <data name="AgentChatNotLinked" xml:space="preserve">
+    <value>Не соединена с другими карточками</value>
+  </data>
+  <data name="AgentChatPublished" xml:space="preserve">
+    <value>Опубликован</value>
+  </data>
+  <data name="AgentChatNotPublished" xml:space="preserve">
+    <value>Не опубликован</value>
+  </data>
+  <data name="AgentChatActive" xml:space="preserve">
+    <value>Включён</value>
+  </data>
+  <data name="AgentChatPaused" xml:space="preserve">
+    <value>На паузе</value>
+  </data>
+  <data name="AgentChatChanges" xml:space="preserve">
+    <value>Есть неопубликованные изменения</value>
+  </data>
+  <data name="AgentChatNoChanges" xml:space="preserve">
+    <value>Неопубликованных изменений нет</value>
+  </data>
+  <data name="AgentChatRunning" xml:space="preserve">
+    <value>Сейчас выполняется: {0}</value>
+  </data>
+  <data name="AgentChatBtnOn" xml:space="preserve">
+    <value>доступна</value>
+  </data>
+  <data name="AgentChatBtnOff" xml:space="preserve">
+    <value>недоступна</value>
+  </data>
+  <data name="AgentChatReasonPublish" xml:space="preserve">
+    <value>сначала опубликуйте агента</value>
+  </data>
+  <data name="AgentChatReasonPermission" xml:space="preserve">
+    <value>нет прав</value>
+  </data>
+  <data name="AgentChatReasonChanges" xml:space="preserve">
+    <value>запускает опубликованную версию, без последних изменений</value>
+  </data>
+  <data name="AgentChatConclEmpty" xml:space="preserve">
+    <value>Холст пуст: добавьте триггер и действия, чтобы собрать процесс.</value>
+  </data>
+  <data name="AgentChatConclNoTrigger" xml:space="preserve">
+    <value>Нет включённого триггера, поэтому агенту нечем запускаться.</value>
+  </data>
+  <data name="AgentChatConclSetup" xml:space="preserve">
+    <value>Карточек, требующих настройки: {0}. Откройте их и заполните значения из списка выше.</value>
+  </data>
+  <data name="AgentChatConclUnlinked" xml:space="preserve">
+    <value>Карточек без связей: {0}. Соедините их через «+» на предыдущей карточке.</value>
+  </data>
+  <data name="AgentChatConclReady" xml:space="preserve">
+    <value>Все карточки настроены и соединены.</value>
+  </data>
+  <data name="AgentChatConclPublish" xml:space="preserve">
+    <value>Проверьте кнопкой Test, затем опубликуйте агента, чтобы он работал.</value>
+  </data>
+  <data name="AgentChatConclChanges" xml:space="preserve">
+    <value>Есть неопубликованные изменения: опубликуйте, чтобы они вступили в силу.</value>
+  </data>
+  <data name="AgentChatConclLive" xml:space="preserve">
+    <value>Агент работает и запускается по своим триггерам.</value>
+  </data>
+  <data name="AgentChatConclPaused" xml:space="preserve">
+    <value>Агент на паузе: нажмите Start, чтобы он заработал.</value>
+  </data>
+  <data name="AgentChatScanSummary" xml:space="preserve">
+    <value>Проверка процесса: карточек {0}, требуют настройки {1}.</value>
+  </data>
   <data name="BuilderChoose" xml:space="preserve">
     <value>Выбрать…</value>
   </data>

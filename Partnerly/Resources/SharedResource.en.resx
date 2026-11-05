@@ -4192,6 +4192,183 @@ Delete is allowed for Support ticket.</value>
   <data name="AutomationIcon" xml:space="preserve">
     <value>Icon</value>
   </data>
+  <data name="AgentChatOpen" xml:space="preserve">
+    <value>Chat with the agent</value>
+  </data>
+  <data name="AgentChatOffline" xml:space="preserve">
+    <value>AI is not connected yet</value>
+  </data>
+  <data name="AgentChatWelcome" xml:space="preserve">
+    <value>Hi! I'm the assistant for "{0}". Ask me about this agent or give me a task.</value>
+  </data>
+  <data name="AgentChatNotConnected" xml:space="preserve">
+    <value>The AI assistant is not connected to the project yet, so I can't answer or run tasks for now. Your message is kept in this chat; once the AI is connected I'll be able to explain this agent, find problems in it and make changes on request.</value>
+  </data>
+  <data name="AgentChatPlaceholder" xml:space="preserve">
+    <value>Ask a question or give a task…</value>
+  </data>
+  <data name="AgentChatYou" xml:space="preserve">
+    <value>You</value>
+  </data>
+  <data name="AgentChatSend" xml:space="preserve">
+    <value>Send</value>
+  </data>
+  <data name="AgentChatClear" xml:space="preserve">
+    <value>Clear chat</value>
+  </data>
+  <data name="AgentChatSuggest1" xml:space="preserve">
+    <value>What does this agent do?</value>
+  </data>
+  <data name="AgentChatSuggest2" xml:space="preserve">
+    <value>Analyze this process</value>
+  </data>
+  <data name="AgentChatPin" xml:space="preserve">
+    <value>Keep the chat open</value>
+  </data>
+  <data name="AgentChatUnpin" xml:space="preserve">
+    <value>Close when clicking outside</value>
+  </data>
+  <data name="AgentChatEnlarge" xml:space="preserve">
+    <value>Enlarge</value>
+  </data>
+  <data name="AgentChatShrink" xml:space="preserve">
+    <value>Make smaller</value>
+  </data>
+  <data name="AgentChatScanTitle" xml:space="preserve">
+    <value>Process check</value>
+  </data>
+  <data name="AgentChatStep1" xml:space="preserve">
+    <value>Reading the cards on the canvas…</value>
+  </data>
+  <data name="AgentChatStep2" xml:space="preserve">
+    <value>Checking the connections between cards…</value>
+  </data>
+  <data name="AgentChatStep3" xml:space="preserve">
+    <value>Checking the settings of every card…</value>
+  </data>
+  <data name="AgentChatStep4" xml:space="preserve">
+    <value>Checking the editor buttons…</value>
+  </data>
+  <data name="AgentChatStep5" xml:space="preserve">
+    <value>Writing the summary…</value>
+  </data>
+  <data name="AgentChatIntro" xml:space="preserve">
+    <value>Here is what I found in "{0}":</value>
+  </data>
+  <data name="AgentChatStatCards" xml:space="preserve">
+    <value>Cards</value>
+  </data>
+  <data name="AgentChatStatOn" xml:space="preserve">
+    <value>On</value>
+  </data>
+  <data name="AgentChatStatOff" xml:space="preserve">
+    <value>Off</value>
+  </data>
+  <data name="AgentChatStatSetup" xml:space="preserve">
+    <value>Need setup</value>
+  </data>
+  <data name="AgentChatStatUnlinked" xml:space="preserve">
+    <value>Not connected</value>
+  </data>
+  <data name="AgentChatSecCards" xml:space="preserve">
+    <value>Cards</value>
+  </data>
+  <data name="AgentChatSecAgent" xml:space="preserve">
+    <value>Agent</value>
+  </data>
+  <data name="AgentChatSecButtons" xml:space="preserve">
+    <value>Editor buttons</value>
+  </data>
+  <data name="AgentChatKindTrigger" xml:space="preserve">
+    <value>Trigger</value>
+  </data>
+  <data name="AgentChatKindAction" xml:space="preserve">
+    <value>Action</value>
+  </data>
+  <data name="AgentChatStReady" xml:space="preserve">
+    <value>Ready</value>
+  </data>
+  <data name="AgentChatStSetup" xml:space="preserve">
+    <value>Needs setup</value>
+  </data>
+  <data name="AgentChatStOff" xml:space="preserve">
+    <value>Turned off</value>
+  </data>
+  <data name="AgentChatStUnlinked" xml:space="preserve">
+    <value>Not connected</value>
+  </data>
+  <data name="AgentChatNotSet" xml:space="preserve">
+    <value>Not set</value>
+  </data>
+  <data name="AgentChatNotLinked" xml:space="preserve">
+    <value>Not connected to the other cards</value>
+  </data>
+  <data name="AgentChatPublished" xml:space="preserve">
+    <value>Published</value>
+  </data>
+  <data name="AgentChatNotPublished" xml:space="preserve">
+    <value>Not published</value>
+  </data>
+  <data name="AgentChatActive" xml:space="preserve">
+    <value>Active</value>
+  </data>
+  <data name="AgentChatPaused" xml:space="preserve">
+    <value>Paused</value>
+  </data>
+  <data name="AgentChatChanges" xml:space="preserve">
+    <value>Has unpublished changes</value>
+  </data>
+  <data name="AgentChatNoChanges" xml:space="preserve">
+    <value>No unpublished changes</value>
+  </data>
+  <data name="AgentChatRunning" xml:space="preserve">
+    <value>Running now: {0}</value>
+  </data>
+  <data name="AgentChatBtnOn" xml:space="preserve">
+    <value>available</value>
+  </data>
+  <data name="AgentChatBtnOff" xml:space="preserve">
+    <value>unavailable</value>
+  </data>
+  <data name="AgentChatReasonPublish" xml:space="preserve">
+    <value>publish the agent first</value>
+  </data>
+  <data name="AgentChatReasonPermission" xml:space="preserve">
+    <value>no permission</value>
+  </data>
+  <data name="AgentChatReasonChanges" xml:space="preserve">
+    <value>runs the published version, not the latest changes</value>
+  </data>
+  <data name="AgentChatConclEmpty" xml:space="preserve">
+    <value>The canvas is empty: add a trigger and some actions to build the process.</value>
+  </data>
+  <data name="AgentChatConclNoTrigger" xml:space="preserve">
+    <value>No trigger is turned on, so the agent has nothing to start it.</value>
+  </data>
+  <data name="AgentChatConclSetup" xml:space="preserve">
+    <value>{0} card(s) still need settings: open them and fill in the values listed above.</value>
+  </data>
+  <data name="AgentChatConclUnlinked" xml:space="preserve">
+    <value>{0} card(s) are not connected to the flow: link them with the "+" on the previous card.</value>
+  </data>
+  <data name="AgentChatConclReady" xml:space="preserve">
+    <value>All cards are set up and connected.</value>
+  </data>
+  <data name="AgentChatConclPublish" xml:space="preserve">
+    <value>Test it with the Test button, then publish the agent so it can run.</value>
+  </data>
+  <data name="AgentChatConclChanges" xml:space="preserve">
+    <value>There are unpublished changes: publish to apply them.</value>
+  </data>
+  <data name="AgentChatConclLive" xml:space="preserve">
+    <value>The agent is live and runs by its triggers.</value>
+  </data>
+  <data name="AgentChatConclPaused" xml:space="preserve">
+    <value>The agent is paused: press Start to run it.</value>
+  </data>
+  <data name="AgentChatScanSummary" xml:space="preserve">
+    <value>Process check: {0} card(s), {1} need setup.</value>
+  </data>
   <data name="BuilderChoose" xml:space="preserve">
     <value>Choose…</value>
   </data>
