@@ -104,6 +104,55 @@
                 note("intGmailTriggerHelp")
             ],
 
+            // ---------- Outlook (mail + calendar) ----------
+            "outlook.send": [
+                connection("microsoft"),
+                text("to", "emailTo", "To", "intOutlookToHelp"),
+                text("subject", "emailSubject", "Subject"),
+                area("body", "emailBody", "Body", "intVariablesHelp"),
+                {
+                    key: "format",
+                    type: "select",
+                    label: t("intFormat", "Format"),
+                    options: [
+                        { value: "html", label: "HTML" },
+                        { value: "text", label: t("intPlainText", "Plain text") }
+                    ]
+                }
+            ],
+            "outlook.find_messages": [
+                connection("microsoft"),
+                text("query", "intGmailQuery", "Search", "intOutlookQueryHelp"),
+                number("max", "intMaxResults", "Max results")
+            ],
+            "outlook.message_received": [
+                connection("microsoft"),
+                text("fromContains", "intFromContains", "From contains"),
+                text("subjectContains", "intSubjectContains", "Subject contains"),
+                note("intOutlookTriggerHelp")
+            ],
+            "outlook.create_event": [
+                connection("microsoft"),
+                text("subject", "intEventTitle", "Title"),
+                text("start", "intEventStart", "Start", "intEventStartHelp"),
+                text("end", "intEventEnd", "End (optional)"),
+                number("durationMinutes", "intEventDuration", "Duration, minutes"),
+                text("timeZone", "intTimeZone", "Time zone", "intTimeZoneHelp", true),
+                text("attendees", "intAttendees", "Attendees", "intAttendeesHelp"),
+                text("location", "intLocation", "Location"),
+                area("body", "emailBody", "Description", "intVariablesHelp")
+            ],
+            "outlook.event_added": [
+                connection("microsoft"),
+                text("subjectContains", "intSubjectContains", "Subject contains"),
+                note("intOutlookEventTriggerHelp")
+            ],
+            "outlook.find_events": [
+                connection("microsoft"),
+                number("days", "intEventDays", "Days ahead"),
+                number("max", "intMaxResults", "Max results")
+            ],
+
             // ---------- Google Drive ----------
             "drive.upload_file": [
                 connection("google"),

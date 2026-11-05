@@ -120,7 +120,9 @@ namespace Partnerly.Automation.Tests.Integrations
                     .AddInMemoryCollection(new Dictionary<string, string?>
                     {
                         ["Authentication:Google:ClientId"] = "test-client",
-                        ["Authentication:Google:ClientSecret"] = "test-secret"
+                        ["Authentication:Google:ClientSecret"] = "test-secret",
+                        ["Authentication:Microsoft:ClientId"] = "ms-client",
+                        ["Authentication:Microsoft:ClientSecret"] = "ms-secret"
                     })
                     .Build());
                 services.AddPartnerlyIntegrations(hostPolling: false);

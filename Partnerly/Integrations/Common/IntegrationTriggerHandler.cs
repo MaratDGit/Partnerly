@@ -57,6 +57,18 @@ namespace Partnerly.Integrations.Common
             : base(IntegrationTypeCodes.DriveFileAdded, "New file in Google Drive", "Google Drive", IntegrationKinds.Google) { }
     }
 
+    public sealed class OutlookMessageTrigger : IntegrationTriggerHandler
+    {
+        public OutlookMessageTrigger()
+            : base(IntegrationTypeCodes.OutlookMessageReceived, "New Outlook message", "Outlook", IntegrationKinds.Microsoft) { }
+    }
+
+    public sealed class OutlookEventTrigger : IntegrationTriggerHandler
+    {
+        public OutlookEventTrigger()
+            : base(IntegrationTypeCodes.OutlookEventAdded, "New Outlook event", "Outlook Calendar", IntegrationKinds.Microsoft) { }
+    }
+
     public sealed class WhatsAppMessageTrigger : IntegrationTriggerHandler
     {
         public WhatsAppMessageTrigger()

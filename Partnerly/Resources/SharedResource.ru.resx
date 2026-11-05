@@ -3961,6 +3961,12 @@ User, группу и шаблон письма здесь создать нел
   <data name="BuilderGeneral" xml:space="preserve">
     <value>Основные</value>
   </data>
+  <data name="BuilderServiceOff" xml:space="preserve">
+    <value>{0} ещё не включён. Включите его в разделе «Интеграции», чтобы использовать эти блоки.</value>
+  </data>
+  <data name="BuilderServiceEnable" xml:space="preserve">
+    <value>Включить</value>
+  </data>
   <data name="BuilderChoose" xml:space="preserve">
     <value>Выбрать…</value>
   </data>
@@ -4038,5 +4044,104 @@ User, группу и шаблон письма здесь создать нел
   </data>
   <data name="BuilderExitHelp" xml:space="preserve">
     <value>Закрыть редактор и вернуться к списку агентов</value>
+  </data>
+  <data name="IntegrationConnectFailed" xml:space="preserve">
+    <value>Не удалось подключить:</value>
+  </data>
+  <data name="IntegrationMicrosoftIntro" xml:space="preserve">
+    <value>Один аккаунт Microsoft для почты и календаря Outlook.</value>
+  </data>
+  <data name="IntegrationConnectMicrosoft" xml:space="preserve">
+    <value>Подключить аккаунт Outlook</value>
+  </data>
+  <data name="IntegrationMicrosoftChoose" xml:space="preserve">
+    <value>Выберите, к чему Partnerly получит доступ. Позже можно подключиться снова и добавить.</value>
+  </data>
+  <data name="IntegrationMicrosoftRedirect" xml:space="preserve">
+    <value>В Microsoft Entra (портал Azure) добавьте этот Web redirect URI:</value>
+  </data>
+  <data name="IntegrationMicrosoftNotConfigured" xml:space="preserve">
+    <value>Microsoft-клиент не настроен. Добавьте Authentication:Microsoft:ClientId и ClientSecret в secrets.json.</value>
+  </data>
+  <data name="IntegrationMicrosoftChooseService" xml:space="preserve">
+    <value>Выберите хотя бы один сервис Outlook.</value>
+  </data>
+  <data name="IntegrationContinueMicrosoft" xml:space="preserve">
+    <value>Продолжить с Microsoft</value>
+  </data>
+  <data name="NodeTypeOutlookSend" xml:space="preserve">
+    <value>Outlook: отправить письмо</value>
+  </data>
+  <data name="NodeTypeOutlookFindMessages" xml:space="preserve">
+    <value>Outlook: найти письма</value>
+  </data>
+  <data name="NodeTypeOutlookMessageReceived" xml:space="preserve">
+    <value>Outlook: новое письмо</value>
+  </data>
+  <data name="NodeTypeOutlookCreateEvent" xml:space="preserve">
+    <value>Outlook: создать событие</value>
+  </data>
+  <data name="NodeTypeOutlookFindEvents" xml:space="preserve">
+    <value>Outlook: найти события</value>
+  </data>
+  <data name="TplOutlookToTelegram" xml:space="preserve">
+    <value>Outlook → Telegram</value>
+  </data>
+  <data name="TplOutlookToTelegramBody" xml:space="preserve">
+    <value>Каждое новое письмо во входящих Outlook пересылается коротким сообщением в Telegram.</value>
+  </data>
+  <data name="TplSignupOutlookWelcome" xml:space="preserve">
+    <value>Приветственное письмо из Outlook</value>
+  </data>
+  <data name="TplSignupOutlookWelcomeBody" xml:space="preserve">
+    <value>Новый пользователь получает приветственное письмо с вашего аккаунта Outlook.</value>
+  </data>
+  <data name="BuilderIntOutlookToHelp" xml:space="preserve">
+    <value>Один или несколько адресов через запятую.</value>
+  </data>
+  <data name="BuilderIntOutlookQueryHelp" xml:space="preserve">
+    <value>Слова для поиска в почте Outlook, например invoice. Пусто = последние письма.</value>
+  </data>
+  <data name="BuilderIntOutlookTriggerHelp" xml:space="preserve">
+    <value>Запускается на каждое новое письмо во входящих (проверка раз в минуту). Используйте {{trigger.from}}, {{trigger.subject}}, {{trigger.snippet}}.</value>
+  </data>
+  <data name="BuilderIntEventTitle" xml:space="preserve">
+    <value>Название</value>
+  </data>
+  <data name="BuilderIntEventStart" xml:space="preserve">
+    <value>Начало</value>
+  </data>
+  <data name="BuilderIntEventStartHelp" xml:space="preserve">
+    <value>Дата и время, например 2026-11-06T10:00. Переменные работают.</value>
+  </data>
+  <data name="BuilderIntEventEnd" xml:space="preserve">
+    <value>Конец (необязательно)</value>
+  </data>
+  <data name="BuilderIntEventDuration" xml:space="preserve">
+    <value>Длительность, минуты</value>
+  </data>
+  <data name="BuilderIntTimeZone" xml:space="preserve">
+    <value>Часовой пояс</value>
+  </data>
+  <data name="BuilderIntTimeZoneHelp" xml:space="preserve">
+    <value>Например UTC, Europe/Moscow или Armenian Standard Time. Пусто = UTC.</value>
+  </data>
+  <data name="BuilderIntAttendees" xml:space="preserve">
+    <value>Участники</value>
+  </data>
+  <data name="BuilderIntAttendeesHelp" xml:space="preserve">
+    <value>Адреса почты через запятую.</value>
+  </data>
+  <data name="BuilderIntLocation" xml:space="preserve">
+    <value>Место</value>
+  </data>
+  <data name="BuilderIntEventDays" xml:space="preserve">
+    <value>Дней вперёд</value>
+  </data>
+  <data name="NodeTypeOutlookEventAdded" xml:space="preserve">
+    <value>Outlook: новое событие в календаре</value>
+  </data>
+  <data name="BuilderIntOutlookEventTriggerHelp" xml:space="preserve">
+    <value>Запускается на каждое новое событие календаря (проверка раз в минуту). Используйте {{trigger.subject}}, {{trigger.start}}, {{trigger.location}}.</value>
   </data>
 </root>

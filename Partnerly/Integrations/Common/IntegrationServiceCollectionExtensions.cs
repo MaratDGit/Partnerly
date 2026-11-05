@@ -3,6 +3,8 @@ using Partnerly.Integrations.Google;
 using Partnerly.Integrations.Google.Drive;
 using Partnerly.Integrations.Google.Gmail;
 using Partnerly.Integrations.Google.Sheets;
+using Partnerly.Integrations.Microsoft;
+using Partnerly.Integrations.Microsoft.Outlook;
 using Partnerly.Integrations.Telegram;
 using Partnerly.Integrations.WhatsApp;
 
@@ -36,6 +38,9 @@ namespace Partnerly.Integrations.Common
             services.AddScoped<GoogleSheetsApi>();
             services.AddScoped<GmailApi>();
             services.AddScoped<GoogleDriveApi>();
+            services.AddScoped<MicrosoftOAuthService>();
+            services.AddScoped<MicrosoftApiClient>();
+            services.AddScoped<OutlookApi>();
             services.AddScoped<WhatsAppClient>();
             services.AddScoped<WhatsAppWebhookService>();
 
@@ -44,6 +49,8 @@ namespace Partnerly.Integrations.Common
             services.AddTransient<GmailMessageTrigger>();
             services.AddTransient<DriveFileAddedTrigger>();
             services.AddTransient<WhatsAppMessageTrigger>();
+            services.AddTransient<OutlookMessageTrigger>();
+            services.AddTransient<OutlookEventTrigger>();
 
             services.AddTransient<TelegramSendMessageAction>();
             services.AddTransient<TelegramSendDocumentAction>();
@@ -57,11 +64,17 @@ namespace Partnerly.Integrations.Common
             services.AddTransient<DriveFindFilesAction>();
             services.AddTransient<WhatsAppSendTextAction>();
             services.AddTransient<WhatsAppSendTemplateAction>();
+            services.AddTransient<OutlookSendAction>();
+            services.AddTransient<OutlookFindMessagesAction>();
+            services.AddTransient<OutlookCreateEventAction>();
+            services.AddTransient<OutlookFindEventsAction>();
 
             services.AddScoped<IIntegrationPoller, TelegramPoller>();
             services.AddScoped<IIntegrationPoller, SheetsPoller>();
             services.AddScoped<IIntegrationPoller, GmailPoller>();
             services.AddScoped<IIntegrationPoller, DrivePoller>();
+            services.AddScoped<IIntegrationPoller, OutlookPoller>();
+            services.AddScoped<IIntegrationPoller, OutlookEventPoller>();
 
             if (hostPolling)
             {

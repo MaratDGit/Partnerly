@@ -11,6 +11,7 @@ using Partnerly.Events.BaseEvents;
 using Partnerly.Infrastructure.Interfaces;
 using Partnerly.Integrations.Common;
 using Partnerly.Integrations.Google;
+using Partnerly.Integrations.Microsoft;
 using Partnerly.Integrations.Telegram;
 using Partnerly.Integrations.WhatsApp;
 using Partnerly.Models.DataTable;
@@ -21,6 +22,7 @@ namespace Partnerly.Integrations.Web
     public class IntegrationsController : _BaseController
     {
         private const string GoogleStateCookie = "Partnerly.GoogleState";
+        private const string MicrosoftStateCookie = "Partnerly.MicrosoftState";
 
         private readonly IIntegrationConnectionService _connections;
         private readonly IAutomationAccessService _access;
@@ -29,7 +31,10 @@ namespace Partnerly.Integrations.Web
         private readonly GoogleOAuthService _googleOAuth;
         private readonly GoogleApiClient _google;
         private readonly WhatsAppClient _whatsApp;
+        private readonly MicrosoftOAuthService _microsoftOAuth;
+        private readonly MicrosoftApiClient _microsoft;
         private readonly IDataProtector _stateProtector;
+        private readonly IDataProtector _microsoftStateProtector;
 
         public IntegrationsController(
             IEventBus eventBus,
@@ -47,6 +52,8 @@ namespace Partnerly.Integrations.Web
             GoogleOAuthService googleOAuth,
             GoogleApiClient google,
             WhatsAppClient whatsApp,
+            MicrosoftOAuthService microsoftOAuth,
+            MicrosoftApiClient microsoft,
             IDataProtectionProvider dataProtection)
             : base(eventBus, userService, currentUser, logService, localizer, systemSettingsService, tableService, dataTableRegistry)
         {
@@ -57,7 +64,10 @@ namespace Partnerly.Integrations.Web
             _googleOAuth = googleOAuth;
             _google = google;
             _whatsApp = whatsApp;
+            _microsoftOAuth = microsoftOAuth;
+            _microsoft = microsoft;
             _stateProtector = dataProtection.CreateProtector("Integrations.GoogleState");
+            _microsoftStateProtector = dataProtection.CreateProtector("Integrations.MicrosoftState");
         }
 
         [HttpGet]
@@ -70,6 +80,9 @@ namespace Partnerly.Integrations.Web
             {
                 GoogleConfigured = _googleOAuth.IsConfigured,
                 GoogleRedirectUri = GoogleRedirectUri(),
+                MicrosoftConfigured = _microsoftOAuth.IsConfigured,
+                MicrosoftRedirectUri = MicrosoftRedirectUri(),
+                Microsoft = list.Where(c => c.Kind == IntegrationKinds.Microsoft).Select(ToCard).ToList(),
                 Telegram = list.Where(c => c.Kind == IntegrationKinds.Telegram).Select(ToCard).ToList(),
                 Google = list.Where(c => c.Kind == IntegrationKinds.Google).Select(ToCard).ToList(),
                 WhatsApp = list.Where(c => c.Kind == IntegrationKinds.WhatsApp).Select(ToCard).ToList()
@@ -80,7 +93,7 @@ namespace Partnerly.Integrations.Web
             }
             else if (!string.IsNullOrEmpty(error))
             {
-                model.Flash = _localizer["IntegrationGoogleFailed"].Value + " " + error;
+                model.Flash = _localizer["IntegrationConnectFailed"].Value + " " + error;
                 model.FlashIsError = true;
             }
 
@@ -282,6 +295,101 @@ namespace Partnerly.Integrations.Web
         [HttpPost]
         [ValidateAntiForgeryToken]
         [Authorize(Policy = "Permission:automation.connections")]
+        public IActionResult ConnectMicrosoft(string? name, bool mail, bool calendar)
+        {
+            if (!_microsoftOAuth.IsConfigured)
+            {
+                return Fail(_localizer["IntegrationMicrosoftNotConfigured"].Value);
+            }
+
+            if (!mail && !calendar)
+            {
+                return Fail(_localizer["IntegrationMicrosoftChooseService"].Value);
+            }
+
+            // Same state scheme as Google: protected {user, nonce, options}
+            // plus the nonce in a short-lived cookie of this browser.
+            var nonce = Convert.ToHexString(RandomNumberGenerator.GetBytes(16));
+            var state = _microsoftStateProtector.Protect(new JsonObject
+            {
+                ["user"] = _access.CurrentUserId.ToString(),
+                ["nonce"] = nonce,
+                ["name"] = name?.Trim(),
+                ["exp"] = _clock.UtcNow.AddMinutes(10).ToString("O")
+            }.ToJsonString());
+            Response.Cookies.Append(MicrosoftStateCookie, nonce, new CookieOptions
+            {
+                HttpOnly = true,
+                Secure = Request.IsHttps,
+                SameSite = SameSiteMode.Lax,
+                MaxAge = TimeSpan.FromMinutes(10)
+            });
+
+            var scopes = MicrosoftOAuthService.ScopesFor(mail, calendar);
+            return Ok(new { success = true, redirect = _microsoftOAuth.BuildConsentUrl(MicrosoftRedirectUri(), state, scopes) });
+        }
+
+        [HttpGet("/Integrations/Microsoft/Callback")]
+        [Authorize(Policy = "Permission:automation.connections")]
+        public async Task<IActionResult> MicrosoftCallback(string? code, string? state, string? error)
+        {
+            var nonce = Request.Cookies[MicrosoftStateCookie];
+            Response.Cookies.Delete(MicrosoftStateCookie);
+            if (!string.IsNullOrEmpty(error) || string.IsNullOrEmpty(code) || string.IsNullOrEmpty(state))
+            {
+                return RedirectToAction(nameof(Index), new { error = error ?? "cancelled" });
+            }
+
+            JsonObject? data;
+            try
+            {
+                data = JsonNode.Parse(_microsoftStateProtector.Unprotect(state)) as JsonObject;
+            }
+            catch
+            {
+                data = null;
+            }
+
+            if (data == null
+                || data["user"]?.ToString() != _access.CurrentUserId.ToString()
+                || string.IsNullOrEmpty(nonce)
+                || data["nonce"]?.ToString() != nonce
+                || !DateTime.TryParse(data["exp"]?.ToString(), null, System.Globalization.DateTimeStyles.RoundtripKind, out var exp)
+                || exp < _clock.UtcNow)
+            {
+                return RedirectToAction(nameof(Index), new { error = "state" });
+            }
+
+            try
+            {
+                var tokens = await _microsoftOAuth.ExchangeCodeAsync(code, MicrosoftRedirectUri());
+                if (string.IsNullOrWhiteSpace(tokens.RefreshToken))
+                {
+                    return RedirectToAction(nameof(Index), new { error = "no_refresh_token" });
+                }
+
+                var email = await _microsoftOAuth.GetEmailAsync(tokens.AccessToken);
+                var name = data["name"]?.ToString();
+                var connection = await _connections.CreateAsync(
+                    _access.CurrentUserId,
+                    IntegrationKinds.Microsoft,
+                    string.IsNullOrWhiteSpace(name) ? email ?? "Outlook" : name,
+                    new JsonObject { ["email"] = email });
+                MicrosoftApiClient.StoreTokens(connection, tokens, _clock.UtcNow);
+                connection.MarkOk(_clock.UtcNow);
+                await _connections.SaveAsync(connection);
+                await _logService.CreateLogAsync("AC", LogTypeAttribute.Information, "Outlook connection created");
+                return RedirectToAction(nameof(Index), new { connected = "microsoft" });
+            }
+            catch (Exception ex) when (ex is IntegrationException or HttpRequestException or TaskCanceledException)
+            {
+                return RedirectToAction(nameof(Index), new { error = ex.Message });
+            }
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        [Authorize(Policy = "Permission:automation.connections")]
         public async Task<IActionResult> ConnectWhatsApp(string? name, string accessToken, string phoneNumberId, string appSecret)
         {
             if (string.IsNullOrWhiteSpace(accessToken) || string.IsNullOrWhiteSpace(phoneNumberId) || string.IsNullOrWhiteSpace(appSecret))
@@ -342,6 +450,12 @@ namespace Partnerly.Integrations.Web
                             () => new HttpRequestMessage(HttpMethod.Get, GoogleOAuthService.UserInfoUrl), "Google", HttpContext.RequestAborted);
                         detail = info["email"]?.ToString() ?? "Google";
                         break;
+                    case IntegrationKinds.Microsoft:
+                        var profile = await _microsoft.SendAsync(connection,
+                            () => new HttpRequestMessage(HttpMethod.Get, MicrosoftOAuthService.GraphBase + "/me?$select=mail,userPrincipalName"),
+                            HttpContext.RequestAborted);
+                        detail = profile["mail"]?.ToString() ?? profile["userPrincipalName"]?.ToString() ?? "Outlook";
+                        break;
                     default:
                         var phone = await _whatsApp.GetPhoneNumberAsync(connection);
                         detail = phone["display_phone_number"]?.ToString() ?? "WhatsApp";
@@ -398,6 +512,11 @@ namespace Partnerly.Integrations.Web
                     if (GoogleApiClient.HasScope(connection, GoogleOAuthService.ScopeDriveFull)) card.Badges.Add("Drive (full)");
                     else if (GoogleApiClient.HasScope(connection, GoogleOAuthService.ScopeDriveFile)) card.Badges.Add("Drive");
                     break;
+                case IntegrationKinds.Microsoft:
+                    card.Detail = connection.GetString("email");
+                    if (MicrosoftApiClient.HasScope(connection, MicrosoftOAuthService.ScopeMailSend)) card.Badges.Add("Mail");
+                    if (MicrosoftApiClient.HasScope(connection, MicrosoftOAuthService.ScopeCalendar)) card.Badges.Add("Calendar");
+                    break;
                 case IntegrationKinds.WhatsApp:
                     card.Detail = connection.GetString("displayPhone");
                     card.WebhookUrl = $"{Request.Scheme}://{Request.Host}/Integrations/WhatsApp/Webhook/{connection.Id}";
@@ -407,6 +526,8 @@ namespace Partnerly.Integrations.Web
 
             return card;
         }
+
+        private string MicrosoftRedirectUri() => $"{Request.Scheme}://{Request.Host}/Integrations/Microsoft/Callback";
 
         private string GoogleRedirectUri() => $"{Request.Scheme}://{Request.Host}/Integrations/Google/Callback";
 

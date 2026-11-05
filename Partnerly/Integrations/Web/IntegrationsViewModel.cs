@@ -7,8 +7,11 @@ namespace Partnerly.Integrations.Web
         public List<IntegrationCardItem> Telegram { get; set; } = new();
         public List<IntegrationCardItem> Google { get; set; } = new();
         public List<IntegrationCardItem> WhatsApp { get; set; } = new();
+        public List<IntegrationCardItem> Microsoft { get; set; } = new();
         public bool GoogleConfigured { get; set; }
         public string GoogleRedirectUri { get; set; } = string.Empty;
+        public bool MicrosoftConfigured { get; set; }
+        public string MicrosoftRedirectUri { get; set; } = string.Empty;
         public string? Flash { get; set; }
         public bool FlashIsError { get; set; }
     }

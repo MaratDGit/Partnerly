@@ -3,6 +3,7 @@ using Partnerly.Automation.Registry;
 using Partnerly.Integrations.Google.Drive;
 using Partnerly.Integrations.Google.Gmail;
 using Partnerly.Integrations.Google.Sheets;
+using Partnerly.Integrations.Microsoft.Outlook;
 using Partnerly.Integrations.Telegram;
 using Partnerly.Integrations.WhatsApp;
 
@@ -19,6 +20,8 @@ namespace Partnerly.Integrations.Common
             registry.Register<GmailMessageTrigger>(IntegrationTypeCodes.GmailMessageReceived, IntegrationKinds.Google);
             registry.Register<DriveFileAddedTrigger>(IntegrationTypeCodes.DriveFileAdded, IntegrationKinds.Google);
             registry.Register<WhatsAppMessageTrigger>(IntegrationTypeCodes.WhatsAppMessageReceived, IntegrationKinds.WhatsApp);
+            registry.Register<OutlookMessageTrigger>(IntegrationTypeCodes.OutlookMessageReceived, IntegrationKinds.Microsoft);
+            registry.Register<OutlookEventTrigger>(IntegrationTypeCodes.OutlookEventAdded, IntegrationKinds.Microsoft);
         }
 
         public void RegisterActions(ActionRegistry registry)
@@ -35,6 +38,10 @@ namespace Partnerly.Integrations.Common
             registry.Register<DriveFindFilesAction>(IntegrationTypeCodes.DriveFindFiles, IntegrationKinds.Google);
             registry.Register<WhatsAppSendTextAction>(IntegrationTypeCodes.WhatsAppSendText, IntegrationKinds.WhatsApp);
             registry.Register<WhatsAppSendTemplateAction>(IntegrationTypeCodes.WhatsAppSendTemplate, IntegrationKinds.WhatsApp);
+            registry.Register<OutlookSendAction>(IntegrationTypeCodes.OutlookSend, IntegrationKinds.Microsoft);
+            registry.Register<OutlookFindMessagesAction>(IntegrationTypeCodes.OutlookFindMessages, IntegrationKinds.Microsoft);
+            registry.Register<OutlookCreateEventAction>(IntegrationTypeCodes.OutlookCreateEvent, IntegrationKinds.Microsoft);
+            registry.Register<OutlookFindEventsAction>(IntegrationTypeCodes.OutlookFindEvents, IntegrationKinds.Microsoft);
         }
     }
 }

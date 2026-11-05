@@ -230,4 +230,17 @@
         item.textContent = text;
         return item;
     }
+
+    // The agent editor links here with ?service=<kind> to turn a service on.
+    try {
+        var wanted = new URLSearchParams(window.location.search).get("service");
+        var card = wanted ? root.querySelector('[data-service="' + wanted.replace(/[^a-z]/g, "") + '"]') : null;
+        if (card) {
+            card.scrollIntoView({ block: "center" });
+            var open = card.querySelector("[data-int-open]");
+            if (open && !open.disabled) {
+                open.click();
+            }
+        }
+    } catch (e) { /* optional shortcut */ }
 })();

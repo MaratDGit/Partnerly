@@ -23,5 +23,12 @@ namespace Partnerly.Integrations.Common
         public const string WhatsAppSendText = "whatsapp.send_text";
         public const string WhatsAppSendTemplate = "whatsapp.send_template";
         public const string WhatsAppMessageReceived = "whatsapp.message_received";
+
+        public const string OutlookSend = "outlook.send";
+        public const string OutlookFindMessages = "outlook.find_messages";
+        public const string OutlookMessageReceived = "outlook.message_received";
+        public const string OutlookCreateEvent = "outlook.create_event";
+        public const string OutlookFindEvents = "outlook.find_events";
+        public const string OutlookEventAdded = "outlook.event_added";
     }
 }

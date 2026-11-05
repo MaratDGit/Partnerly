@@ -269,6 +269,28 @@ namespace Partnerly.Automation.Authoring
                         @"{ ""text"": ""📧 {{trigger.from}}\n{{trigger.subject}}\n{{trigger.snippet}}"", ""parseMode"": ""none"" }"),
                     Edge("e1", "t1", "a1"))),
             Make(
+                "outlook-to-telegram",
+                "Outlook to Telegram",
+                "Each new inbox email in Outlook is forwarded as a short Telegram message.",
+                "small",
+                "TplOutlookToTelegram",
+                Graph(
+                    Trigger("t1", "outlook.message_received", "newMail", 40, 80, "{}"),
+                    Action("a1", "telegram.send_message", "forward", 300, 80,
+                        @"{ ""text"": ""📧 {{trigger.from}}\n{{trigger.subject}}\n{{trigger.snippet}}"", ""parseMode"": ""none"" }"),
+                    Edge("e1", "t1", "a1"))),
+            Make(
+                "signup-outlook-welcome",
+                "Welcome email from Outlook",
+                "A new user receives a welcome email sent from your Outlook account.",
+                "small",
+                "TplSignupOutlookWelcome",
+                Graph(
+                    Trigger("t1", "event", "signup", 40, 80, @"{ ""event"": ""UserRegistered"" }"),
+                    Action("a1", "outlook.send", "welcomeMail", 300, 80,
+                        @"{ ""to"": ""{{trigger.email}}"", ""subject"": ""Welcome, {{trigger.firstName}}"", ""body"": ""<p>Hi {{trigger.firstName}},</p><p>Welcome aboard!</p>"", ""format"": ""html"" }"),
+                    Edge("e1", "t1", "a1"))),
+            Make(
                 "drive-file-alert",
                 "New Drive file alert",
                 "A new file in a Drive folder sends you a notification with its link.",
@@ -449,6 +471,7 @@ namespace Partnerly.Automation.Authoring
                 "sheets" => "Google Sheets",
                 "gmail" => "Gmail",
                 "drive" => "Google Drive",
+                "outlook" => "Outlook",
                 "whatsapp" => "WhatsApp",
                 _ => null
             };
@@ -458,6 +481,7 @@ namespace Partnerly.Automation.Authoring
         {
             "Telegram" => "telegram",
             "WhatsApp" => "whatsapp",
+            "Outlook" => "microsoft",
             _ => "google"
         };
 

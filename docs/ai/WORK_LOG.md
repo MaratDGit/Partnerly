@@ -4,6 +4,37 @@
 
 ---
 
+## 2026-11-05 — Палитра: переводы, выключенные сервисы, окно «+»
+
+- Подписи вкладок «Add action / Add trigger» в окне «+» теперь переведены (ключи `addAction`, `addTrigger` в `_BuilderI18n.cshtml`).
+- Блоки сервиса без подключения заменены карточкой «сервис не включён» с кнопкой «Включить» (стеклянная, как «Готово»): ссылка `/Integrations?service=<вид>`, `integrations.js` сам открывает окно подключения. Ресурсы `BuilderServiceOff` / `BuilderServiceEnable` en/ru/hy.
+- Окно «+»: вкладки Action/Trigger только над правым списком; окно `position: fixed`, открывается справа/слева и снизу/сверху по месту на экране (`openPortPicker`).
+- Проверка: `dotnet build` ок, тесты Automation 153/153, `node --check` для JS. В браузере не проверялось.
+
+---
+
+## 2026-11-05 — Outlook: триггер «новое событие календаря»
+
+- Добавлен `outlook.event_added` (группа «Outlook Calendar»): `OutlookEventPoller` раз в минуту читает `/me/events` по `createdDateTime` (курсор `outlookEventCursor`, первый проход ничего не запускает), фильтр «тема содержит». Переменные: id, subject, start, end, location, organizer, webLink, created. Файлы: `OutlookEventPoller.cs`, `OutlookApi.cs`, типы/модуль/DI, `builder-forms.js`, `builder.js`, `_BuilderI18n.cshtml`, resx ×3. Тесты 153/153 (новый на fake HTTP); с реальным аккаунтом не проверялось.
+
+---
+
+## 2026-11-05 — Палитра: высота окна = высота левого меню
+
+- Окна триггеров / действий и «+» по высоте равны левому меню (видны все сервисы, включая Outlook Calendar); список справа лежит поверх оставшегося места и прокручивается внутри без полосы. На очень низком экране окно ограничивается (`max-height`), и тогда слева появляется тонкая прокрутка; в «+» ограничение берётся из высоты холста (`openPortPicker`). Убраны прежние конфликтующие правила высоты. Файлы: `automation-builder.css`, `builder.js`. Проверено на тестовой разметке в превью (10 сервисов, 30 пунктов), не в реальном редакторе.
+
+---
+
+## 2026-11-05 — Интеграция Outlook (Microsoft Graph)
+
+- **Что:** новый вид подключения `microsoft` (экран `/Integrations`, карточка «Outlook», OAuth 2.0 через `login.microsoftonline.com`, callback `/Integrations/Microsoft/Callback`). Узлы: `outlook.send`, `outlook.find_messages`, триггер `outlook.message_received` (опрос раз в минуту по `receivedDateTime`, курсор `outlookCursor` в зашифрованном payload), `outlook.create_event`, `outlook.find_events` (группа «Outlook Calendar»). Построено по образцу Google: `MicrosoftOAuthService` / `MicrosoftApiClient` (авто-refresh, ротация refresh-токена, проверка scope), `OutlookApi`, `OutlookActions`, `OutlookPoller` (фильтры «от / тема» переиспользуют `GmailPoller.Matches`).
+- **Клиент и интерфейс:** формы узлов (`builder-forms.js`), иконки и переменные (`builder.js`), подписи en/ru/hy, две шаблона агента («Outlook → Telegram», «Приветственное письмо из Outlook»), фильтр «Outlook» на хабе Agents, карточка и диалог на `/Integrations`. Текст ошибки подключения теперь общий (`IntegrationConnectFailed`).
+- **Конфигурация:** `Authentication:Microsoft:ClientId / ClientSecret / TenantId` (пустые плейсхолдеры в `appsettings.json`, значения — в `secrets.json` / user-secrets; без них кнопка «Подключить» отключена). Новых таблиц и пакетов нет.
+- **Проверка:** `dotnet build` — успешно; `Partnerly.Automation.Tests` — 152/152 (10 новых в `Integrations/OutlookIntegrationTests.cs` на fake HTTP: отправка, ротация токена, dry-run, чужое подключение, scope, отзыв доступа, поиск, события, опрос, consent URL). **Реальных вызовов Microsoft не было**, страница `/Integrations` и билдер в браузере не открывались (нужен вход).
+- **Что сделать владельцу:** зарегистрировать приложение в Microsoft Entra (Azure), redirect URI `…/Integrations/Microsoft/Callback` (тип Web), делегированные права Mail.Send, Mail.Read, Calendars.ReadWrite, User.Read, offline_access; секрет клиента положить в `secrets.json`.
+
+---
+
 ## 2026-11-05 — Редактор: «стеклянные» кнопки
 
 - Стекло (полупрозрачность + `backdrop-filter`, светлая/тёмная темы) только у «+» на выходе карточки и «Готово». Верхние выпадающие меню оставлены как были; «Add trigger / Add action» в окне «+» — вкладки с подчёркиванием, не кнопки. Только CSS (`automation-builder.css`, блок в конце). Проверено на тестовой странице, не в реальном редакторе.

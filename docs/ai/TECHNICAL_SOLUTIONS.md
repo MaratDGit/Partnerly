@@ -4,6 +4,15 @@
 
 ---
 
+## TR-2026-11-05-03 — Outlook через Microsoft Graph, REST без пакетов
+
+- **Решение:** `IntegrationKinds.Microsoft = "microsoft"`, чистый REST (как Google, D1), делегированные права и refresh-токен в `EncryptedPayload`. Один вид подключения на почту и календарь; выбранные сервисы определяют scope (`Mail.Send`+`Mail.Read` / `Calendars.ReadWrite`), узлы проверяют scope до вызова.
+- **Опрос почты:** `GET /me/mailFolders/inbox/messages?$filter=receivedDateTime gt {курсор}&$orderby=receivedDateTime asc`; первый проход ставит курсор на последнее письмо и ничего не запускает. Webhook-подписки Graph (нужен публичный URL) не используются.
+- **Безопасность:** получатели проходят проверку формата (без `:`/пробелов — чтобы переменная не добавила «Bcc: …»), тема и место очищаются от CR/LF, tenant из конфигурации ограничен символами `[A-Za-z0-9.-]`, OAuth `state` защищён Data Protection с отдельным назначением и привязан к cookie браузера.
+- **Ограничения:** у `outlook.send` нет id письма (Graph отвечает 202); `outlook.create_event` принимает время без пояса плюс имя часового пояса (пусто = UTC); триггер событий (`outlook.event_added`) ловит только новые по `createdDateTime`, изменения и отмены не отслеживаются.
+
+---
+
 ## TR-2026-11-05-02 — Избранное палитры в БД, а не в браузере
 
 - **Решение:** таблица `AutomationFavorites (UserId, ItemKey, CreatedDate)`, уникальный индекс `(UserId, ItemKey)`, FK на `Users` (cascade). Отдельный `AutomationFavoritesService` на `AppDbContext` (не расширяет `IAutomationStore`). Ключ — `kind:type`, валидируется (буквы/цифры `:._-`, ≤200), до 500 на пользователя.

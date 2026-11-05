@@ -136,6 +136,8 @@
     var GROUP_ICONS = {
         "Telegram": "bxl-telegram",
         "Gmail": "bxl-gmail",
+        "Outlook": "bxl-microsoft",
+        "Outlook Calendar": "bx-calendar",
         "Google Sheets": "bx-spreadsheet",
         "Google Drive": "bxl-google-cloud",
         "WhatsApp": "bxl-whatsapp"
@@ -469,7 +471,7 @@
         delete_record: function (c) { return filled(c.entity) && filled(c.key); }
     };
 
-    var INTEGRATION_PREFIX = /^(telegram|sheets|gmail|drive|whatsapp)\./;
+    var INTEGRATION_PREFIX = /^(telegram|sheets|gmail|outlook|drive|whatsapp)\./;
     // Settings (besides the connection) a card needs before it can work.
     var INTEGRATION_REQUIRED = {
         "telegram.send_message": ["chatId", "text"],
@@ -479,6 +481,8 @@
         "sheets.find_rows": ["spreadsheetId", "value"],
         "sheets.row_added": ["spreadsheetId"],
         "gmail.send": ["to", "subject", "body"],
+        "outlook.send": ["to", "subject", "body"],
+        "outlook.create_event": ["subject", "start"],
         "drive.upload_file": ["attachmentId"],
         "drive.create_folder": ["name"],
         "whatsapp.send_text": ["to", "text"],
@@ -935,6 +939,8 @@
     var TRIGGER_VARS = {
         "telegram.message_received": ["messageId", "chatId", "chatType", "text", "fromId", "fromUsername", "fromName", "date"],
         "gmail.message_received": ["id", "threadId", "from", "to", "subject", "date", "snippet"],
+        "outlook.message_received": ["id", "conversationId", "from", "fromName", "to", "subject", "date", "snippet", "webLink"],
+        "outlook.event_added": ["id", "subject", "start", "end", "location", "organizer", "webLink", "created"],
         "sheets.row_added": ["rowNumber", "sheet", "spreadsheetId"],
         "drive.file_added": ["id", "name", "mimeType", "webViewLink", "createdTime", "modifiedTime", "size"],
         "whatsapp.message_received": ["messageId", "from", "name", "text"]
@@ -950,6 +956,10 @@
         "sheets.find_rows": ["result.count", "result.first.rowNumber"],
         "gmail.send": ["result.messageId", "result.threadId", "result.to"],
         "gmail.find_messages": ["result.count", "result.first.id", "result.first.from", "result.first.subject", "result.first.snippet"],
+        "outlook.send": ["result.sent", "result.to"],
+        "outlook.find_messages": ["result.count", "result.first.id", "result.first.from", "result.first.subject", "result.first.snippet"],
+        "outlook.create_event": ["result.id", "result.subject", "result.webLink"],
+        "outlook.find_events": ["result.count", "result.first.id", "result.first.subject", "result.first.start", "result.first.end"],
         "drive.upload_file": ["result.id", "result.name", "result.webViewLink"],
         "drive.create_folder": ["result.id", "result.name", "result.webViewLink"],
         "drive.find_files": ["result.count", "result.first.id", "result.first.name", "result.first.webViewLink"],
@@ -1934,17 +1944,36 @@
         hideNodeMenu();
         portSource = { id: nodeEl.id.replace("node-", ""), output: outputClass };
         portPicker.hidden = false;
-        var hostRect = menuHost.getBoundingClientRect();
+        // The window is fixed to the screen (nothing can clip it) and opens on the side
+        // of the "+" where it fits: right or left, below or above.
         var portRect = outEl.getBoundingClientRect();
+        var gap = 10;
+        var edge = 8;
+        var vw = window.innerWidth;
+        var vh = window.innerHeight;
         portPicker.style.left = "0px";
         portPicker.style.top = "0px";
         var box = portPicker.getBoundingClientRect();
-        var left = portRect.right - hostRect.left + 10;
-        var top = portRect.top - hostRect.top - 20;
-        left = Math.max(8, Math.min(left, hostRect.width - box.width - 8));
-        top = Math.max(8, Math.min(top, hostRect.height - box.height - 8));
+        var left = portRect.right + gap;
+        if (left + box.width > vw - edge) {
+            var leftSide = portRect.left - gap - box.width;
+            left = leftSide >= edge ? leftSide : vw - box.width - edge;
+        }
+        var top = portRect.top - 20;
+        if (top + box.height > vh - edge) {
+            var above = portRect.bottom + 20 - box.height;
+            top = above >= edge ? above : vh - box.height - edge;
+        }
+        left = Math.max(edge, left);
+        top = Math.max(edge, top);
         portPicker.style.left = left + "px";
         portPicker.style.top = top + "px";
+        // A transformed ancestor would shift a fixed box: correct by what we measure.
+        var placed = portPicker.getBoundingClientRect();
+        if (Math.abs(placed.left - left) > 1 || Math.abs(placed.top - top) > 1) {
+            portPicker.style.left = (left - (placed.left - left)) + "px";
+            portPicker.style.top = (top - (placed.top - top)) + "px";
+        }
     }
 
     var portDown = null;
@@ -2006,13 +2035,28 @@
                 var canEdit = !builderForm || builderForm.getAttribute("data-can-edit") !== "false";
                 var general = t("builderGeneral", "General");
                 // Built-in blocks first, then one section per integration.
-                var items = (list || []).slice().sort(function (a, b) {
+                var allItems = (list || []).slice().sort(function (a, b) {
                     return (a.group ? 1 : 0) - (b.group ? 1 : 0);
+                });
+                // A service nobody has turned on (no connection of its kind): its blocks
+                // are replaced by one notice with a button that opens Integrations.
+                function serviceOff(item) {
+                    return !!item.connectionKind && !catalogConnections.some(function (c) { return c.kind === item.connectionKind; });
+                }
+                var items = allItems.filter(function (item) { return !serviceOff(item); });
+                var offGroups = [];
+                allItems.forEach(function (item) {
+                    if (serviceOff(item) && item.group && !offGroups.some(function (g) { return g.name === item.group; })) {
+                        offGroups.push({ name: item.group, kind: item.connectionKind });
+                    }
                 });
                 var groups = [];
                 items.forEach(function (item) {
                     var name = item.group || general;
                     if (groups.indexOf(name) === -1) { groups.push(name); }
+                });
+                offGroups.forEach(function (g) {
+                    if (groups.indexOf(g.name) === -1) { groups.push(g.name); }
                 });
 
                 function mk(tag, className, text) {
@@ -2130,6 +2174,22 @@
                     row.appendChild(button);
                     row.appendChild(star);
                     listEl.appendChild(row);
+                });
+
+                offGroups.forEach(function (g) {
+                    var heading = mk("div", "automation-add-group", g.name);
+                    heading.setAttribute("data-group", g.name);
+                    listEl.appendChild(heading);
+                    var notice = mk("div", "automation-pal-notice");
+                    notice.setAttribute("data-group", g.name);
+                    notice.appendChild(icon(GROUP_ICONS[g.name] || "bx-plug"));
+                    notice.appendChild(mk("p", null, t("builderServiceOff", "{0} is not turned on yet. Turn it on in Integrations to use these blocks.").replace("{0}", g.name)));
+                    var enable = mk("a", "btn btn-primary btn-sm", t("builderServiceEnable", "Turn on"));
+                    enable.href = (integrationsUrl || "/Integrations") + "?service=" + encodeURIComponent(g.kind);
+                    enable.target = "_blank";
+                    enable.rel = "noopener";
+                    notice.appendChild(enable);
+                    listEl.appendChild(notice);
                 });
 
                 active = items.some(function (item) { return isFav(item.kind + ":" + item.type); }) ? "__fav" : "";

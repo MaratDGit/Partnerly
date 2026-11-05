@@ -71,6 +71,29 @@
             @await Html.PartialAsync("~/Views/Integrations/_ConnectionList.cshtml", Model.Google)
         </section>
 
+        @* ---------- Microsoft (Outlook) ---------- *@
+        <section class="integrations-card" data-service="microsoft">
+            <button type="button" class="btn btn-primary integrations-connect" data-int-open="microsoft" disabled="@(Model.MicrosoftConfigured ? null : "disabled")">
+                <i class="bx bx-plus" aria-hidden="true"></i> @Localizer["IntegrationConnect"]
+            </button>
+            <div class="integrations-card-head">
+                <span class="integrations-logo is-microsoft"><i class="bx bxl-microsoft" aria-hidden="true"></i></span>
+                <div>
+                    <h2>Outlook</h2>
+                    <p>@Localizer["IntegrationMicrosoftIntro"]</p>
+                </div>
+            </div>
+            <ul class="integrations-features">
+                <li><i class="bx bx-envelope" aria-hidden="true"></i> Outlook Mail</li>
+                <li><i class="bx bx-calendar" aria-hidden="true"></i> Outlook Calendar</li>
+            </ul>
+            @if (!Model.MicrosoftConfigured)
+            {
+                <div class="integrations-note is-warn">@Localizer["IntegrationMicrosoftNotConfigured"]</div>
+            }
+            @await Html.PartialAsync("~/Views/Integrations/_ConnectionList.cshtml", Model.Microsoft)
+        </section>
+
         @* ---------- WhatsApp ---------- *@
         <section class="integrations-card" data-service="whatsapp">
             <button type="button" class="btn btn-primary integrations-connect" data-int-open="whatsapp">
@@ -140,6 +163,31 @@
             <footer>
                 <button type="button" class="btn btn-outline-secondary" data-int-close>@Localizer["Cancel"]</button>
                 <button type="submit" class="btn btn-primary"><i class="bx bxl-google"></i> @Localizer["IntegrationContinueGoogle"]</button>
+            </footer>
+        </form>
+    </div>
+
+    <div class="integrations-overlay" data-int-dialog="microsoft" hidden aria-hidden="true">
+        <form class="integrations-dialog" method="post" asp-action="ConnectMicrosoft" data-int-form>
+            <header>
+                <span class="integrations-logo is-microsoft"><i class="bx bxl-microsoft" aria-hidden="true"></i></span>
+                <h3>@Localizer["IntegrationConnectMicrosoft"]</h3>
+                <button type="button" class="integrations-close" data-int-close aria-label="@Localizer["Close"]"><i class="bx bx-x"></i></button>
+            </header>
+            <p class="integrations-muted">@Localizer["IntegrationMicrosoftChoose"]</p>
+            <div class="integrations-checks">
+                <label class="integrations-check"><input type="checkbox" name="mail" value="true" checked /> <i class="bx bx-envelope"></i> Outlook Mail</label>
+                <label class="integrations-check"><input type="checkbox" name="calendar" value="true" /> <i class="bx bx-calendar"></i> Outlook Calendar</label>
+            </div>
+            <label class="form-label" for="msName">@Localizer["Name"]</label>
+            <input class="form-control" id="msName" name="name" placeholder="@Localizer["IntegrationNameOptional"]" />
+            <div class="integrations-note">
+                @Localizer["IntegrationMicrosoftRedirect"]
+                <code data-int-copy>@Model.MicrosoftRedirectUri</code>
+            </div>
+            <footer>
+                <button type="button" class="btn btn-outline-secondary" data-int-close>@Localizer["Cancel"]</button>
+                <button type="submit" class="btn btn-primary"><i class="bx bxl-microsoft"></i> @Localizer["IntegrationContinueMicrosoft"]</button>
             </footer>
         </form>
     </div>

@@ -108,6 +108,7 @@ html.dark-style .integrations-page {
 
 .integrations-logo.is-telegram { background: linear-gradient(135deg, #37aee2, var(--int-telegram)); }
 .integrations-logo.is-google { background: linear-gradient(135deg, #4285f4 0%, #34a853 45%, #fbbc05 75%, #ea4335 100%); }
+.integrations-logo.is-microsoft { background: linear-gradient(135deg, #2b88d8, #0078d4 55%, #106ebe); }
 .integrations-logo.is-whatsapp { background: linear-gradient(135deg, #5be584, var(--int-whatsapp)); }
 
 .integrations-features {

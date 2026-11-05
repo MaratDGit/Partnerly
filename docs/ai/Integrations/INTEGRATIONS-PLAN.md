@@ -1,7 +1,7 @@
 # План интеграций Partnerly
 
 Создан: 2026-11-03. Ветка: `Claude-Agent`.  
-Сервисы: **Telegram**, **Google Sheets**, **Gmail**, **Google Drive**, **WhatsApp**.  
+Сервисы: **Telegram**, **Google Sheets**, **Gmail**, **Google Drive**, **WhatsApp**, **Outlook** (фаза 8).  
 Цель: каждая интеграция — набор **действий** и **триггеров** для модуля Automation (меню Agents), плюс экран подключения.
 
 Статусы задач: `[ ]` не начато, `[~]` в работе, `[x]` сделано и проверено.  
@@ -181,6 +181,20 @@ Partnerly/Integrations/
 - [~] **7.3** Проверка в браузере (2026-11-03: страница `/Integrations` desktop/mobile/light/dark, диалоги, ошибка неверного токена Telegram с реальным API, палитра и свойства узла в билдере — ок; полный путь «подключить → агент → запуск» с реальными аккаунтами — нет): подключение, создание агента, запуск, история шагов.
 - [ ] **7.4** Обновить `Architecture.md`, `Automation/ARCHITECTURE.md`, `REVIEW_PROJECT.md`, `DATABASE.md` (если D2 → таблица), `KNOWN_ISSUES.md`, `TECHNICAL_SOLUTIONS.md`.
 - [ ] **7.5** D5 — сохранение ключей Data Protection перед выкладкой на сервер.
+
+---
+
+### Фаза 8 — Outlook (Microsoft Graph), добавлена 2026-11-05
+
+- [x] **8.1** `Kind = microsoft`, `MicrosoftOAuthService` (consent URL, обмен code, refresh с ротацией), `MicrosoftApiClient` (Bearer, авто-refresh, scope), экран подключения «Outlook» и callback `/Integrations/Microsoft/Callback`.
+- [x] **8.2** Почта: `outlook.send`, `outlook.find_messages`, триггер `outlook.message_received` (`OutlookPoller`, курсор `outlookCursor`).
+- [x] **8.3** Календарь: `outlook.create_event`, `outlook.find_events`.
+- [x] **8.4** Формы билдера, переменные, подписи en / ru / hy, 2 шаблона агента, фильтр «Outlook» на хабе.
+- [x] **8.5** Тесты (fake HTTP): `Partnerly.Automation.Tests/Integrations/OutlookIntegrationTests.cs`.
+- [ ] **8.6** Владелец: приложение в Microsoft Entra (redirect `…/Integrations/Microsoft/Callback`, права Mail.Send, Mail.Read, Calendars.ReadWrite, User.Read, offline_access), секрет в `secrets.json` (`Authentication:Microsoft:*`).
+- [ ] **8.7** Проверка с реальным аккаунтом и в браузере: подключить → агент → запуск → история шагов.
+- [x] **8.8** Триггер `outlook.event_added` (`OutlookEventPoller`, курсор `outlookEventCursor`).
+- **Позже:** вложения в письмах, ответ на письмо, Graph webhook вместо опроса (нужен публичный URL).
 
 ---
 

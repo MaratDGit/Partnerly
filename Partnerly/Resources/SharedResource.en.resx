@@ -3961,6 +3961,12 @@ Delete is allowed for Support ticket.</value>
   <data name="BuilderGeneral" xml:space="preserve">
     <value>General</value>
   </data>
+  <data name="BuilderServiceOff" xml:space="preserve">
+    <value>{0} is not turned on yet. Turn it on in Integrations to use these blocks.</value>
+  </data>
+  <data name="BuilderServiceEnable" xml:space="preserve">
+    <value>Turn on</value>
+  </data>
   <data name="BuilderChoose" xml:space="preserve">
     <value>Choose…</value>
   </data>
@@ -4038,5 +4044,104 @@ Delete is allowed for Support ticket.</value>
   </data>
   <data name="BuilderExitHelp" xml:space="preserve">
     <value>Leave the editor and go back to the agents list</value>
+  </data>
+  <data name="IntegrationConnectFailed" xml:space="preserve">
+    <value>Connection failed:</value>
+  </data>
+  <data name="IntegrationMicrosoftIntro" xml:space="preserve">
+    <value>One Microsoft account for Outlook mail and calendar.</value>
+  </data>
+  <data name="IntegrationConnectMicrosoft" xml:space="preserve">
+    <value>Connect Outlook account</value>
+  </data>
+  <data name="IntegrationMicrosoftChoose" xml:space="preserve">
+    <value>Choose what Partnerly may use. You can connect again later to add more.</value>
+  </data>
+  <data name="IntegrationMicrosoftRedirect" xml:space="preserve">
+    <value>In Microsoft Entra (Azure portal) add this Web redirect URI:</value>
+  </data>
+  <data name="IntegrationMicrosoftNotConfigured" xml:space="preserve">
+    <value>Microsoft client is not configured. Add Authentication:Microsoft:ClientId and ClientSecret to secrets.json.</value>
+  </data>
+  <data name="IntegrationMicrosoftChooseService" xml:space="preserve">
+    <value>Choose at least one Outlook service.</value>
+  </data>
+  <data name="IntegrationContinueMicrosoft" xml:space="preserve">
+    <value>Continue with Microsoft</value>
+  </data>
+  <data name="NodeTypeOutlookSend" xml:space="preserve">
+    <value>Outlook: send email</value>
+  </data>
+  <data name="NodeTypeOutlookFindMessages" xml:space="preserve">
+    <value>Outlook: find emails</value>
+  </data>
+  <data name="NodeTypeOutlookMessageReceived" xml:space="preserve">
+    <value>Outlook: new email</value>
+  </data>
+  <data name="NodeTypeOutlookCreateEvent" xml:space="preserve">
+    <value>Outlook: create event</value>
+  </data>
+  <data name="NodeTypeOutlookFindEvents" xml:space="preserve">
+    <value>Outlook: find events</value>
+  </data>
+  <data name="TplOutlookToTelegram" xml:space="preserve">
+    <value>Outlook to Telegram</value>
+  </data>
+  <data name="TplOutlookToTelegramBody" xml:space="preserve">
+    <value>Each new inbox email in Outlook is forwarded as a short Telegram message.</value>
+  </data>
+  <data name="TplSignupOutlookWelcome" xml:space="preserve">
+    <value>Welcome email from Outlook</value>
+  </data>
+  <data name="TplSignupOutlookWelcomeBody" xml:space="preserve">
+    <value>A new user receives a welcome email sent from your Outlook account.</value>
+  </data>
+  <data name="BuilderIntOutlookToHelp" xml:space="preserve">
+    <value>One or more addresses separated by commas.</value>
+  </data>
+  <data name="BuilderIntOutlookQueryHelp" xml:space="preserve">
+    <value>Words to search in Outlook mail, e.g. invoice. Empty = latest emails.</value>
+  </data>
+  <data name="BuilderIntOutlookTriggerHelp" xml:space="preserve">
+    <value>Starts for each new inbox email (checked every minute). Use {{trigger.from}}, {{trigger.subject}}, {{trigger.snippet}}.</value>
+  </data>
+  <data name="BuilderIntEventTitle" xml:space="preserve">
+    <value>Title</value>
+  </data>
+  <data name="BuilderIntEventStart" xml:space="preserve">
+    <value>Start</value>
+  </data>
+  <data name="BuilderIntEventStartHelp" xml:space="preserve">
+    <value>Date and time, e.g. 2026-11-06T10:00. Variables work.</value>
+  </data>
+  <data name="BuilderIntEventEnd" xml:space="preserve">
+    <value>End (optional)</value>
+  </data>
+  <data name="BuilderIntEventDuration" xml:space="preserve">
+    <value>Duration, minutes</value>
+  </data>
+  <data name="BuilderIntTimeZone" xml:space="preserve">
+    <value>Time zone</value>
+  </data>
+  <data name="BuilderIntTimeZoneHelp" xml:space="preserve">
+    <value>e.g. UTC, Europe/Moscow or Armenian Standard Time. Empty = UTC.</value>
+  </data>
+  <data name="BuilderIntAttendees" xml:space="preserve">
+    <value>Attendees</value>
+  </data>
+  <data name="BuilderIntAttendeesHelp" xml:space="preserve">
+    <value>Email addresses separated by commas.</value>
+  </data>
+  <data name="BuilderIntLocation" xml:space="preserve">
+    <value>Location</value>
+  </data>
+  <data name="BuilderIntEventDays" xml:space="preserve">
+    <value>Days ahead</value>
+  </data>
+  <data name="NodeTypeOutlookEventAdded" xml:space="preserve">
+    <value>Outlook: new calendar event</value>
+  </data>
+  <data name="BuilderIntOutlookEventTriggerHelp" xml:space="preserve">
+    <value>Starts for each new calendar event (checked every minute). Use {{trigger.subject}}, {{trigger.start}}, {{trigger.location}}.</value>
   </data>
 </root>

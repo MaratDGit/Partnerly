@@ -3961,6 +3961,12 @@ User, խումբ և նամակի կաղապար այստեղ չեն ստեղծվ
   <data name="BuilderGeneral" xml:space="preserve">
     <value>Հիմնական</value>
   </data>
+  <data name="BuilderServiceOff" xml:space="preserve">
+    <value>{0}-ը դեռ միացված չէ։ Միացրեք այն «Ինտեգրացիաներ» բաժնում, որպեսզի օգտագործեք այս բլոկները։</value>
+  </data>
+  <data name="BuilderServiceEnable" xml:space="preserve">
+    <value>Միացնել</value>
+  </data>
   <data name="BuilderChoose" xml:space="preserve">
     <value>Ընտրել…</value>
   </data>
@@ -4038,5 +4044,104 @@ User, խումբ և նամակի կաղապար այստեղ չեն ստեղծվ
   </data>
   <data name="BuilderExitHelp" xml:space="preserve">
     <value>Փակել խմբագրիչը և վերադառնալ գործակալների ցանկին</value>
+  </data>
+  <data name="IntegrationConnectFailed" xml:space="preserve">
+    <value>Միացումը ձախողվեց՝</value>
+  </data>
+  <data name="IntegrationMicrosoftIntro" xml:space="preserve">
+    <value>Մեկ Microsoft հաշիվ Outlook փոստի և օրացույցի համար։</value>
+  </data>
+  <data name="IntegrationConnectMicrosoft" xml:space="preserve">
+    <value>Միացնել Outlook հաշիվը</value>
+  </data>
+  <data name="IntegrationMicrosoftChoose" xml:space="preserve">
+    <value>Ընտրեք, ինչին կարող է մուտք ունենալ Partnerly-ն։ Հետագայում կարող եք կրկին միանալ՝ ավելացնելու համար։</value>
+  </data>
+  <data name="IntegrationMicrosoftRedirect" xml:space="preserve">
+    <value>Microsoft Entra-ում (Azure պորտալ) ավելացրեք այս Web redirect URI-ն՝</value>
+  </data>
+  <data name="IntegrationMicrosoftNotConfigured" xml:space="preserve">
+    <value>Microsoft-ի կլիենտը կարգավորված չէ։ Ավելացրեք Authentication:Microsoft:ClientId և ClientSecret secrets.json-ում։</value>
+  </data>
+  <data name="IntegrationMicrosoftChooseService" xml:space="preserve">
+    <value>Ընտրեք Outlook-ի առնվազն մեկ ծառայություն։</value>
+  </data>
+  <data name="IntegrationContinueMicrosoft" xml:space="preserve">
+    <value>Շարունակել Microsoft-ով</value>
+  </data>
+  <data name="NodeTypeOutlookSend" xml:space="preserve">
+    <value>Outlook՝ ուղարկել նամակ</value>
+  </data>
+  <data name="NodeTypeOutlookFindMessages" xml:space="preserve">
+    <value>Outlook՝ գտնել նամակներ</value>
+  </data>
+  <data name="NodeTypeOutlookMessageReceived" xml:space="preserve">
+    <value>Outlook՝ նոր նամակ</value>
+  </data>
+  <data name="NodeTypeOutlookCreateEvent" xml:space="preserve">
+    <value>Outlook՝ ստեղծել իրադարձություն</value>
+  </data>
+  <data name="NodeTypeOutlookFindEvents" xml:space="preserve">
+    <value>Outlook՝ գտնել իրադարձություններ</value>
+  </data>
+  <data name="TplOutlookToTelegram" xml:space="preserve">
+    <value>Outlook → Telegram</value>
+  </data>
+  <data name="TplOutlookToTelegramBody" xml:space="preserve">
+    <value>Outlook-ի ամեն նոր նամակ կարճ հաղորդագրությամբ փոխանցվում է Telegram։</value>
+  </data>
+  <data name="TplSignupOutlookWelcome" xml:space="preserve">
+    <value>Ողջույնի նամակ Outlook-ից</value>
+  </data>
+  <data name="TplSignupOutlookWelcomeBody" xml:space="preserve">
+    <value>Նոր օգտատերը ստանում է ողջույնի նամակ ձեր Outlook հաշվից։</value>
+  </data>
+  <data name="BuilderIntOutlookToHelp" xml:space="preserve">
+    <value>Մեկ կամ մի քանի հասցե՝ ստորակետերով բաժանված։</value>
+  </data>
+  <data name="BuilderIntOutlookQueryHelp" xml:space="preserve">
+    <value>Բառեր Outlook փոստում որոնելու համար, օրինակ՝ invoice։ Դատարկ = վերջին նամակները։</value>
+  </data>
+  <data name="BuilderIntOutlookTriggerHelp" xml:space="preserve">
+    <value>Գործարկվում է մուտքային ամեն նոր նամակի համար (ստուգվում է րոպեն մեկ)։ Օգտագործեք {{trigger.from}}, {{trigger.subject}}, {{trigger.snippet}}։</value>
+  </data>
+  <data name="BuilderIntEventTitle" xml:space="preserve">
+    <value>Վերնագիր</value>
+  </data>
+  <data name="BuilderIntEventStart" xml:space="preserve">
+    <value>Սկիզբ</value>
+  </data>
+  <data name="BuilderIntEventStartHelp" xml:space="preserve">
+    <value>Ամսաթիվ և ժամ, օրինակ՝ 2026-11-06T10:00։ Փոփոխականները աշխատում են։</value>
+  </data>
+  <data name="BuilderIntEventEnd" xml:space="preserve">
+    <value>Ավարտ (ըստ ցանկության)</value>
+  </data>
+  <data name="BuilderIntEventDuration" xml:space="preserve">
+    <value>Տևողություն, րոպե</value>
+  </data>
+  <data name="BuilderIntTimeZone" xml:space="preserve">
+    <value>Ժամային գոտի</value>
+  </data>
+  <data name="BuilderIntTimeZoneHelp" xml:space="preserve">
+    <value>Օրինակ՝ UTC, Europe/Moscow կամ Armenian Standard Time։ Դատարկ = UTC։</value>
+  </data>
+  <data name="BuilderIntAttendees" xml:space="preserve">
+    <value>Մասնակիցներ</value>
+  </data>
+  <data name="BuilderIntAttendeesHelp" xml:space="preserve">
+    <value>Էլ. հասցեներ՝ ստորակետերով բաժանված։</value>
+  </data>
+  <data name="BuilderIntLocation" xml:space="preserve">
+    <value>Վայր</value>
+  </data>
+  <data name="BuilderIntEventDays" xml:space="preserve">
+    <value>Օրեր առաջ</value>
+  </data>
+  <data name="NodeTypeOutlookEventAdded" xml:space="preserve">
+    <value>Outlook՝ նոր իրադարձություն օրացույցում</value>
+  </data>
+  <data name="BuilderIntOutlookEventTriggerHelp" xml:space="preserve">
+    <value>Գործարկվում է օրացույցի ամեն նոր իրադարձության համար (ստուգվում է րոպեն մեկ)։ Օգտագործեք {{trigger.subject}}, {{trigger.start}}, {{trigger.location}}։</value>
   </data>
 </root>

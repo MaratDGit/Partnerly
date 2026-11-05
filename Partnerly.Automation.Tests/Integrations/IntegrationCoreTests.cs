@@ -44,8 +44,8 @@ namespace Partnerly.Automation.Tests.Integrations
             Assert.Equal(IntegrationKinds.WhatsApp, send.ConnectionKind);
             Assert.True(send.HasSideEffects);
             Assert.False(actions.Single(item => item.Type == IntegrationTypeCodes.SheetsFindRows).HasSideEffects);
-            Assert.Equal(12, actions.Count(item => item.Group != null));
-            Assert.Equal(5, triggers.Count(item => item.Group != null));
+            Assert.Equal(16, actions.Count(item => item.Group != null));
+            Assert.Equal(7, triggers.Count(item => item.Group != null));
             Assert.Contains(actions, item => item.Type == AutomationTypeCodes.SendEmail && item.Group == null);
         }
 
