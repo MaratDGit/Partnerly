@@ -13,6 +13,7 @@ namespace Partnerly.Integrations.Google
 
         public const string ScopeSheets = "https://www.googleapis.com/auth/spreadsheets";
         public const string ScopeGmailSend = "https://www.googleapis.com/auth/gmail.send";
+        public const string ScopeGmailModify = "https://www.googleapis.com/auth/gmail.modify";
         public const string ScopeGmailRead = "https://www.googleapis.com/auth/gmail.readonly";
         public const string ScopeDriveFile = "https://www.googleapis.com/auth/drive.file";
         public const string ScopeDriveFull = "https://www.googleapis.com/auth/drive";
@@ -43,6 +44,7 @@ namespace Partnerly.Integrations.Google
             {
                 scopes.Add(ScopeGmailSend);
                 scopes.Add(ScopeGmailRead);
+                scopes.Add(ScopeGmailModify);
             }
 
             if (drive)

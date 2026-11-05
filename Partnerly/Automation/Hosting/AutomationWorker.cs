@@ -232,7 +232,7 @@ namespace Partnerly.Automation.Hosting
             var type = wakeup.Kind == AutomationStatuses.WakeupInterval
                 ? AutomationTypeCodes.Interval
                 : AutomationTypeCodes.Schedule;
-            var trigger = graph.Nodes.FirstOrDefault(node => node.Kind == "trigger" && node.Type == type);
+            var trigger = graph.Nodes.FirstOrDefault(node => node.Kind == "trigger" && !node.Disabled && node.Type == type);
             if (trigger == null)
             {
                 return;

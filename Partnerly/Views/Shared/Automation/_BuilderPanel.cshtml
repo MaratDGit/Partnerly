@@ -103,6 +103,11 @@
                 <p class="automation-hint" data-prop-empty>@Localizer["SelectNodeHint"]</p>
                 <div class="automation-props-body">
                     <div data-prop-form hidden>
+                        <div class="form-check form-switch automation-prop-enabled mb-3">
+                            <input class="form-check-input" type="checkbox" id="automationPropEnabled" data-prop-enabled checked />
+                            <label class="form-check-label" for="automationPropEnabled">@Localizer["BuilderCardEnabled"]</label>
+                            <div class="form-text">@Localizer["BuilderCardEnabledHelp"]</div>
+                        </div>
                         <label class="form-label">@Localizer["Name"]</label>
                         <input class="form-control mb-1" data-prop-name />
                         <div class="form-text mb-3">@Localizer["NodeNameHelp"]</div>

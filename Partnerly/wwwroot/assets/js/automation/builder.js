@@ -429,6 +429,7 @@
             '<span class="auto-node-kind">' + (data.kind === "trigger" ? t("triggerBlocks", "When") : t("actionBlocks", "Then")) + "</span>" +
             '<strong class="auto-node-type">' + typeLabel(data.type, data.type) + "</strong>" +
             '<span class="auto-node-name">' + (data.name || "") + "</span>" +
+            '<span class="auto-node-off" title="' + t("builderDisabledHint", "This card is turned off: the flow skips it") + '"><i class="bx bx-power-off" aria-hidden="true"></i> ' + t("builderDisabledBadge", "Off") + "</span>" +
             '<span class="auto-node-check" title="' + t("nodeNeedsSetup", "Needs setup") + '"><i class="bx bx-check auto-node-check-ok" aria-hidden="true"></i><i class="bx bx-cog auto-node-check-todo" aria-hidden="true"></i></span></div>';
     }
 
@@ -483,6 +484,27 @@
         "gmail.send": ["to", "subject", "body"],
         "outlook.send": ["to", "subject", "body"],
         "outlook.create_event": ["subject", "start"],
+        "gmail.reply": ["messageId", "body"],
+        "gmail.get_message": ["messageId"],
+        "gmail.create_draft": ["to", "subject", "body"],
+        "gmail.mark_read": ["messageId"],
+        "gmail.archive": ["messageId"],
+        "gmail.trash": ["messageId"],
+        "gmail.label": ["messageId", "label"],
+        "sheets.get_row": ["spreadsheetId", "rowNumber"],
+        "sheets.read_range": ["spreadsheetId", "range"],
+        "sheets.update_cell": ["spreadsheetId", "cell"],
+        "sheets.clear_range": ["spreadsheetId", "range"],
+        "sheets.delete_row": ["spreadsheetId", "rowNumber"],
+        "sheets.create_spreadsheet": ["title"],
+        "sheets.add_sheet": ["spreadsheetId", "sheet"],
+        "drive.get_file": ["fileId"],
+        "drive.copy_file": ["fileId"],
+        "drive.move_file": ["fileId", "folderId"],
+        "drive.rename_file": ["fileId", "name"],
+        "drive.trash_file": ["fileId"],
+        "drive.share_file": ["fileId", "email"],
+        "drive.create_text_file": ["name"],
         "drive.upload_file": ["attachmentId"],
         "drive.create_folder": ["name"],
         "whatsapp.send_text": ["to", "text"],
@@ -490,6 +512,7 @@
     };
 
     function settingsReady(data) {
+        if (data.disabled) { return true; }
         var config = normalizeDelay(JSON.parse(JSON.stringify(data.config || {})));
         var type = data.type;
         if (INTEGRATION_PREFIX.test(type)) {
@@ -513,9 +536,19 @@
         if (!editor || importing) { return; }
         var exported = editor.export();
         var home = exported.drawflow && exported.drawflow.Home && exported.drawflow.Home.data ? exported.drawflow.Home.data : {};
+        Array.prototype.forEach.call(root.querySelectorAll(".connection.is-muted"), function (line) {
+            line.classList.remove("is-muted");
+        });
         Object.keys(home).forEach(function (key) {
             var node = home[key];
             var data = node.data || {};
+            var off = root.querySelector("#node-" + node.id + " .auto-node");
+            if (off) { off.classList.toggle("is-disabled", !!data.disabled); }
+            if (data.disabled) {
+                Array.prototype.forEach.call(root.querySelectorAll(".connection.node_in_node-" + node.id + ", .connection.node_out_node-" + node.id), function (line) {
+                    line.classList.add("is-muted");
+                });
+            }
             var wired = data.kind === "trigger" ? connectionCount(node.outputs) > 0 : connectionCount(node.inputs) > 0;
             var inner = root.querySelector("#node-" + node.id + " .auto-node");
             if (inner) {
@@ -610,7 +643,8 @@
                 name: data.name,
                 x: node.pos_x,
                 y: node.pos_y,
-                config: data.config || {}
+                config: data.config || {},
+                disabled: data.disabled ? true : undefined
             });
         });
         var edges = [];
@@ -672,7 +706,7 @@
 
     function logicJson(graph) {
         return JSON.stringify({
-            nodes: graph.nodes.map(function (n) { return { id: n.id, kind: n.kind, type: n.type, name: n.name, config: n.config }; }),
+            nodes: graph.nodes.map(function (n) { return { id: n.id, kind: n.kind, type: n.type, name: n.name, config: n.config, disabled: !!n.disabled }; }),
             edges: graph.edges.map(function (e) { return { from: e.from, to: e.to, port: e.port }; })
         });
     }
@@ -705,6 +739,12 @@
         var nextEdges = next.edges.map(edgeKey).sort().join("|");
         if (prevEdges !== nextEdges) {
             return { label: next.edges.length >= prev.edges.length ? t("historyConnected", "Connected cards") : t("historyDisconnected", "Disconnected cards") };
+        }
+        for (var k = 0; k < next.nodes.length; k++) {
+            var turned = next.nodes[k];
+            if (!!before[turned.id].disabled !== !!turned.disabled) {
+                return { label: (turned.disabled ? t("historyDisabled", "Turned off") : t("historyEnabled", "Turned on")) + " " + nodeTitle(turned) };
+            }
         }
         for (var i = 0; i < next.nodes.length; i++) {
             var n = next.nodes[i];
@@ -960,6 +1000,27 @@
         "outlook.find_messages": ["result.count", "result.first.id", "result.first.from", "result.first.subject", "result.first.snippet"],
         "outlook.create_event": ["result.id", "result.subject", "result.webLink"],
         "outlook.find_events": ["result.count", "result.first.id", "result.first.subject", "result.first.start", "result.first.end"],
+        "gmail.reply": ["result.messageId", "result.threadId", "result.to"],
+        "gmail.get_message": ["result.id", "result.threadId", "result.from", "result.to", "result.subject", "result.date", "result.body", "result.snippet", "result.attachmentCount"],
+        "gmail.create_draft": ["result.draftId", "result.messageId", "result.to"],
+        "gmail.mark_read": ["result.messageId", "result.state"],
+        "gmail.archive": ["result.messageId"],
+        "gmail.trash": ["result.messageId"],
+        "gmail.label": ["result.messageId", "result.label"],
+        "sheets.get_row": ["result.found", "result.rowNumber", "result.values"],
+        "sheets.read_range": ["result.count", "result.first", "result.values"],
+        "sheets.update_cell": ["result.spreadsheetId", "result.range"],
+        "sheets.clear_range": ["result.spreadsheetId", "result.range"],
+        "sheets.delete_row": ["result.spreadsheetId", "result.rowNumber"],
+        "sheets.create_spreadsheet": ["result.spreadsheetId", "result.title", "result.url"],
+        "sheets.add_sheet": ["result.spreadsheetId", "result.sheetId", "result.title"],
+        "drive.get_file": ["result.id", "result.name", "result.mimeType", "result.webViewLink", "result.size", "result.modifiedTime"],
+        "drive.copy_file": ["result.id", "result.name", "result.webViewLink"],
+        "drive.move_file": ["result.id", "result.name", "result.webViewLink"],
+        "drive.rename_file": ["result.id", "result.name", "result.webViewLink"],
+        "drive.trash_file": ["result.id", "result.name"],
+        "drive.share_file": ["result.fileId", "result.email", "result.role", "result.webViewLink"],
+        "drive.create_text_file": ["result.id", "result.name", "result.webViewLink"],
         "drive.upload_file": ["result.id", "result.name", "result.webViewLink"],
         "drive.create_folder": ["result.id", "result.name", "result.webViewLink"],
         "drive.find_files": ["result.count", "result.first.id", "result.first.name", "result.first.webViewLink"],
@@ -1124,6 +1185,8 @@
         if (empty) empty.hidden = true;
         if (form) form.hidden = false;
         if (nameInput) nameInput.value = data.name || "";
+        var enabledBox = q("[data-prop-enabled]");
+        if (enabledBox) { enabledBox.checked = !data.disabled; enabledBox.disabled = !canEditNow(); }
         data.config = normalizeDelay(data.config || {});
         var actionVars = data.kind === "action" ? variablesFor(selectedId) : [];
         var schema = schemaFor(data);
@@ -1436,7 +1499,10 @@
     var pasteItem = document.createElement("button");
     pasteItem.type = "button";
     pasteItem.textContent = t("builderPaste", "Paste");
+    var toggleItem = document.createElement("button");
+    toggleItem.type = "button";
     nodeMenu.appendChild(propsItem);
+    nodeMenu.appendChild(toggleItem);
     nodeMenu.appendChild(copyItem);
     nodeMenu.appendChild(pasteItem);
     nodeMenu.appendChild(deleteItem);
@@ -1462,6 +1528,9 @@
         propsItem.hidden = !onCard;
         copyItem.hidden = !onCard;
         deleteItem.hidden = !onCard || !canEdit;
+        toggleItem.hidden = !onCard || !canEdit;
+        var current = onCard ? nodeOrNull(id) : null;
+        toggleItem.textContent = current && current.data.disabled ? t("builderEnable", "Turn on") : t("builderDisable", "Turn off");
         pasteItem.hidden = onCard || !canEdit;
         pasteItem.disabled = !clipboard;
         menuPoint = { x: clientX, y: clientY };
@@ -1585,6 +1654,35 @@
         }
         addNode(data, x, y);
         syncHidden();
+    }
+
+    // Turn a card off / on. Cards before and after it keep their connections;
+    // a run passes through an off card without doing anything.
+    function setCardDisabled(id, off) {
+        if (!id || !canEditNow()) { return; }
+        persistSelected();
+        var node = nodeOrNull(id);
+        if (!node) { return; }
+        if (off) { node.data.disabled = true; } else { delete node.data.disabled; }
+        editor.updateNodeDataFromId(id, node.data);
+        syncHidden();
+        var sw = q("[data-prop-enabled]");
+        if (sw && String(selectedId) === String(id)) { sw.checked = !off; }
+        updateDone();
+    }
+
+    toggleItem.addEventListener("click", function (event) {
+        event.preventDefault();
+        var id = menuNodeId;
+        hideNodeMenu();
+        var node = id ? nodeOrNull(id) : null;
+        if (node) { setCardDisabled(id, !node.data.disabled); }
+    });
+    var enabledSwitch = q("[data-prop-enabled]");
+    if (enabledSwitch) {
+        var onSwitch = function () { setCardDisabled(selectedId, !enabledSwitch.checked); };
+        enabledSwitch.addEventListener("change", onSwitch);
+        cleanupFns.push(function () { enabledSwitch.removeEventListener("change", onSwitch); });
     }
 
     copyItem.addEventListener("click", function (event) {

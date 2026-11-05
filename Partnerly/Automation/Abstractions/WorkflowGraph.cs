@@ -56,6 +56,12 @@ namespace Partnerly.Automation.Abstractions
 
         [JsonPropertyName("config")]
         public JsonElement Config { get; set; }
+
+        // Turned off in the editor. A disabled action is skipped and the flow goes on to the
+        // cards after it; a disabled trigger never starts the agent.
+        [JsonPropertyName("disabled")]
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingDefault)]
+        public bool Disabled { get; set; }
     }
 
     public class WorkflowEdge

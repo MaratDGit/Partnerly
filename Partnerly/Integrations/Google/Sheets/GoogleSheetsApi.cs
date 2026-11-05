@@ -4,7 +4,7 @@ using Partnerly.Integrations.Common;
 
 namespace Partnerly.Integrations.Google.Sheets
 {
-    public class GoogleSheetsApi
+    public partial class GoogleSheetsApi
     {
         public const string BaseUrl = "https://sheets.googleapis.com/v4/spreadsheets";
 

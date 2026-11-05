@@ -3967,6 +3967,192 @@ User, группу и шаблон письма здесь создать нел
   <data name="BuilderServiceEnable" xml:space="preserve">
     <value>Включить</value>
   </data>
+  <data name="NodeTypeGmailReply" xml:space="preserve">
+    <value>Ответить на письмо Gmail</value>
+  </data>
+  <data name="NodeTypeGmailGetMessage" xml:space="preserve">
+    <value>Прочитать письмо Gmail</value>
+  </data>
+  <data name="NodeTypeGmailCreateDraft" xml:space="preserve">
+    <value>Создать черновик Gmail</value>
+  </data>
+  <data name="NodeTypeGmailMarkRead" xml:space="preserve">
+    <value>Отметить письмо Gmail прочитанным / непрочитанным</value>
+  </data>
+  <data name="NodeTypeGmailArchive" xml:space="preserve">
+    <value>Архивировать письмо Gmail</value>
+  </data>
+  <data name="NodeTypeGmailTrash" xml:space="preserve">
+    <value>Удалить письмо Gmail в корзину</value>
+  </data>
+  <data name="NodeTypeGmailLabel" xml:space="preserve">
+    <value>Добавить или убрать метку Gmail</value>
+  </data>
+  <data name="NodeTypeSheetsGetRow" xml:space="preserve">
+    <value>Получить строку Sheets</value>
+  </data>
+  <data name="NodeTypeSheetsReadRange" xml:space="preserve">
+    <value>Прочитать диапазон Sheets</value>
+  </data>
+  <data name="NodeTypeSheetsUpdateCell" xml:space="preserve">
+    <value>Обновить ячейку Sheets</value>
+  </data>
+  <data name="NodeTypeSheetsClearRange" xml:space="preserve">
+    <value>Очистить диапазон Sheets</value>
+  </data>
+  <data name="NodeTypeSheetsDeleteRow" xml:space="preserve">
+    <value>Удалить строку Sheets</value>
+  </data>
+  <data name="NodeTypeSheetsCreateSpreadsheet" xml:space="preserve">
+    <value>Создать таблицу</value>
+  </data>
+  <data name="NodeTypeSheetsAddSheet" xml:space="preserve">
+    <value>Добавить лист в таблицу</value>
+  </data>
+  <data name="NodeTypeDriveGetFile" xml:space="preserve">
+    <value>Получить сведения о файле Drive</value>
+  </data>
+  <data name="NodeTypeDriveCopyFile" xml:space="preserve">
+    <value>Копировать файл Drive</value>
+  </data>
+  <data name="NodeTypeDriveMoveFile" xml:space="preserve">
+    <value>Переместить файл Drive</value>
+  </data>
+  <data name="NodeTypeDriveRenameFile" xml:space="preserve">
+    <value>Переименовать файл Drive</value>
+  </data>
+  <data name="NodeTypeDriveTrashFile" xml:space="preserve">
+    <value>Удалить файл Drive в корзину</value>
+  </data>
+  <data name="NodeTypeDriveShareFile" xml:space="preserve">
+    <value>Поделиться файлом Drive</value>
+  </data>
+  <data name="NodeTypeDriveCreateTextFile" xml:space="preserve">
+    <value>Создать текстовый файл Drive</value>
+  </data>
+  <data name="BuilderIntMessageId" xml:space="preserve">
+    <value>ID письма</value>
+  </data>
+  <data name="BuilderIntMessageIdHelp" xml:space="preserve">
+    <value>Выберите из триггера или предыдущего шага (например, id найденного письма).</value>
+  </data>
+  <data name="BuilderIntLabelName" xml:space="preserve">
+    <value>Название метки</value>
+  </data>
+  <data name="BuilderIntLabelMode" xml:space="preserve">
+    <value>Что сделать</value>
+  </data>
+  <data name="BuilderIntLabelAdd" xml:space="preserve">
+    <value>Добавить метку</value>
+  </data>
+  <data name="BuilderIntLabelRemove" xml:space="preserve">
+    <value>Убрать метку</value>
+  </data>
+  <data name="BuilderIntMarkState" xml:space="preserve">
+    <value>Отметить как</value>
+  </data>
+  <data name="BuilderIntStateRead" xml:space="preserve">
+    <value>Прочитанное</value>
+  </data>
+  <data name="BuilderIntStateUnread" xml:space="preserve">
+    <value>Непрочитанное</value>
+  </data>
+  <data name="BuilderIntCellRange" xml:space="preserve">
+    <value>Диапазон</value>
+  </data>
+  <data name="BuilderIntCellRangeHelp" xml:space="preserve">
+    <value>Ячейки без названия листа, например A1:C10 или A2:F2.</value>
+  </data>
+  <data name="BuilderIntCell" xml:space="preserve">
+    <value>Ячейка</value>
+  </data>
+  <data name="BuilderIntCellHelp" xml:space="preserve">
+    <value>Одна ячейка, например B7.</value>
+  </data>
+  <data name="BuilderIntSpreadsheetTitle" xml:space="preserve">
+    <value>Название таблицы</value>
+  </data>
+  <data name="BuilderIntFirstSheet" xml:space="preserve">
+    <value>Название первого листа (необязательно)</value>
+  </data>
+  <data name="BuilderIntNewSheetName" xml:space="preserve">
+    <value>Название нового листа</value>
+  </data>
+  <data name="BuilderIntFileId" xml:space="preserve">
+    <value>Файл или папка</value>
+  </data>
+  <data name="BuilderIntFileIdHelp" xml:space="preserve">
+    <value>Id или ссылка из Google Drive. Файл должен быть создан этим приложением, если при подключении не отмечен полный доступ к Drive.</value>
+  </data>
+  <data name="BuilderIntNewName" xml:space="preserve">
+    <value>Новое имя</value>
+  </data>
+  <data name="BuilderIntCopyName" xml:space="preserve">
+    <value>Имя копии (необязательно)</value>
+  </data>
+  <data name="BuilderIntDestFolder" xml:space="preserve">
+    <value>Папка назначения</value>
+  </data>
+  <data name="BuilderIntShareEmail" xml:space="preserve">
+    <value>Email человека</value>
+  </data>
+  <data name="BuilderIntShareRole" xml:space="preserve">
+    <value>Доступ</value>
+  </data>
+  <data name="BuilderIntRoleReader" xml:space="preserve">
+    <value>Просмотр</value>
+  </data>
+  <data name="BuilderIntRoleCommenter" xml:space="preserve">
+    <value>Комментирование</value>
+  </data>
+  <data name="BuilderIntRoleWriter" xml:space="preserve">
+    <value>Редактирование</value>
+  </data>
+  <data name="BuilderIntNotifyPerson" xml:space="preserve">
+    <value>Уведомить человека письмом</value>
+  </data>
+  <data name="BuilderIntYes" xml:space="preserve">
+    <value>Да</value>
+  </data>
+  <data name="BuilderIntNo" xml:space="preserve">
+    <value>Нет</value>
+  </data>
+  <data name="BuilderIntFileContent" xml:space="preserve">
+    <value>Содержимое</value>
+  </data>
+  <data name="BuilderIntCreateAs" xml:space="preserve">
+    <value>Создать как</value>
+  </data>
+  <data name="BuilderIntAsTextFile" xml:space="preserve">
+    <value>Текстовый файл</value>
+  </data>
+  <data name="BuilderIntAsGoogleDoc" xml:space="preserve">
+    <value>Документ Google</value>
+  </data>
+  <data name="BuilderDisable" xml:space="preserve">
+    <value>Выключить</value>
+  </data>
+  <data name="BuilderEnable" xml:space="preserve">
+    <value>Включить</value>
+  </data>
+  <data name="BuilderDisabledBadge" xml:space="preserve">
+    <value>Выкл</value>
+  </data>
+  <data name="BuilderDisabledHint" xml:space="preserve">
+    <value>Карточка выключена: агент её пропускает и переходит к следующим.</value>
+  </data>
+  <data name="BuilderHistoryDisabled" xml:space="preserve">
+    <value>Выключено</value>
+  </data>
+  <data name="BuilderHistoryEnabled" xml:space="preserve">
+    <value>Включено</value>
+  </data>
+  <data name="BuilderCardEnabled" xml:space="preserve">
+    <value>Карточка включена</value>
+  </data>
+  <data name="BuilderCardEnabledHelp" xml:space="preserve">
+    <value>Если выключить, агент пропустит эту карточку и продолжит с подключёнными после неё. Выключенный триггер не запускает агента.</value>
+  </data>
   <data name="BuilderChoose" xml:space="preserve">
     <value>Выбрать…</value>
   </data>

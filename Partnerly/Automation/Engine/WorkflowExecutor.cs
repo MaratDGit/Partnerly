@@ -89,6 +89,14 @@ namespace Partnerly.Automation.Engine
                 }
 
                 var node = ready[0];
+                if (node.Disabled)
+                {
+                    await SkipDisabledAsync(run, graph, node, variables, ports, steps, cancellationToken);
+                    steps = (await _store.GetStepsAsync(run.Id, cancellationToken)).ToList();
+                    completed.Add(node.Id);
+                    continue;
+                }
+
                 var context = new ActionContext
                 {
                     Run = run,
@@ -151,6 +159,40 @@ namespace Partnerly.Automation.Engine
             if (run.Status is AutomationStatuses.Succeeded or AutomationStatuses.Failed or AutomationStatuses.Cancelled)
             {
                 await _notifier.RunFinishedAsync(run, cancellationToken);
+            }
+        }
+
+        // A card that is turned off does nothing and the flow goes on past it, whatever
+        // number of cards lead into it or out of it. A branch / switch has no answer to give,
+        // so the flow follows its first connected output.
+        private async Task SkipDisabledAsync(
+            AutomationRun run,
+            WorkflowGraph graph,
+            WorkflowNode node,
+            JsonObject variables,
+            Dictionary<string, string> ports,
+            IReadOnlyList<AutomationRunStep> steps,
+            CancellationToken cancellationToken)
+        {
+            var result = StepResult.Skipped("disabled");
+            await _store.AddStepAsync(new AutomationRunStep
+            {
+                Id = Guid.NewGuid(),
+                RunId = run.Id,
+                NodeId = node.Id,
+                ActionType = node.Type,
+                Status = result.Status,
+                Attempt = steps.Count(step => step.NodeId == node.Id) + 1,
+                OutputJson = result.Output?.ToJsonString(),
+                StartedAt = _clock.UtcNow,
+                EndedAt = _clock.UtcNow
+            }, cancellationToken);
+            await _notifier.StepAsync(run, node.Id, result.Status, cancellationToken);
+            WriteStepOutput(variables, node, result);
+            var port = graph.Edges.FirstOrDefault(edge => edge.From == node.Id && !string.IsNullOrEmpty(edge.Port))?.Port;
+            if (port != null)
+            {
+                ports[node.Id] = port;
             }
         }
 

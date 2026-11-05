@@ -3967,6 +3967,192 @@ User, խումբ և նամակի կաղապար այստեղ չեն ստեղծվ
   <data name="BuilderServiceEnable" xml:space="preserve">
     <value>Միացնել</value>
   </data>
+  <data name="NodeTypeGmailReply" xml:space="preserve">
+    <value>Պատասխանել Gmail նամակին</value>
+  </data>
+  <data name="NodeTypeGmailGetMessage" xml:space="preserve">
+    <value>Կարդալ Gmail նամակը</value>
+  </data>
+  <data name="NodeTypeGmailCreateDraft" xml:space="preserve">
+    <value>Ստեղծել Gmail սևագիր</value>
+  </data>
+  <data name="NodeTypeGmailMarkRead" xml:space="preserve">
+    <value>Նշել Gmail նամակը կարդացված / չկարդացված</value>
+  </data>
+  <data name="NodeTypeGmailArchive" xml:space="preserve">
+    <value>Արխիվացնել Gmail նամակը</value>
+  </data>
+  <data name="NodeTypeGmailTrash" xml:space="preserve">
+    <value>Տեղափոխել Gmail նամակը աղբարկղ</value>
+  </data>
+  <data name="NodeTypeGmailLabel" xml:space="preserve">
+    <value>Ավելացնել կամ հեռացնել Gmail պիտակ</value>
+  </data>
+  <data name="NodeTypeSheetsGetRow" xml:space="preserve">
+    <value>Ստանալ Sheets տողը</value>
+  </data>
+  <data name="NodeTypeSheetsReadRange" xml:space="preserve">
+    <value>Կարդալ Sheets միջակայքը</value>
+  </data>
+  <data name="NodeTypeSheetsUpdateCell" xml:space="preserve">
+    <value>Թարմացնել Sheets բջիջը</value>
+  </data>
+  <data name="NodeTypeSheetsClearRange" xml:space="preserve">
+    <value>Մաքրել Sheets միջակայքը</value>
+  </data>
+  <data name="NodeTypeSheetsDeleteRow" xml:space="preserve">
+    <value>Ջնջել Sheets տողը</value>
+  </data>
+  <data name="NodeTypeSheetsCreateSpreadsheet" xml:space="preserve">
+    <value>Ստեղծել աղյուսակ</value>
+  </data>
+  <data name="NodeTypeSheetsAddSheet" xml:space="preserve">
+    <value>Ավելացնել թերթ աղյուսակում</value>
+  </data>
+  <data name="NodeTypeDriveGetFile" xml:space="preserve">
+    <value>Ստանալ Drive ֆայլի տվյալները</value>
+  </data>
+  <data name="NodeTypeDriveCopyFile" xml:space="preserve">
+    <value>Պատճենել Drive ֆայլը</value>
+  </data>
+  <data name="NodeTypeDriveMoveFile" xml:space="preserve">
+    <value>Տեղափոխել Drive ֆայլը</value>
+  </data>
+  <data name="NodeTypeDriveRenameFile" xml:space="preserve">
+    <value>Վերանվանել Drive ֆայլը</value>
+  </data>
+  <data name="NodeTypeDriveTrashFile" xml:space="preserve">
+    <value>Տեղափոխել Drive ֆայլը աղբարկղ</value>
+  </data>
+  <data name="NodeTypeDriveShareFile" xml:space="preserve">
+    <value>Կիսվել Drive ֆայլով</value>
+  </data>
+  <data name="NodeTypeDriveCreateTextFile" xml:space="preserve">
+    <value>Ստեղծել Drive տեքստային ֆայլ</value>
+  </data>
+  <data name="BuilderIntMessageId" xml:space="preserve">
+    <value>Նամակի ID</value>
+  </data>
+  <data name="BuilderIntMessageIdHelp" xml:space="preserve">
+    <value>Ընտրեք տրիգերից կամ նախորդ քայլից (օրինակ՝ գտնված նամակի id)։</value>
+  </data>
+  <data name="BuilderIntLabelName" xml:space="preserve">
+    <value>Պիտակի անվանումը</value>
+  </data>
+  <data name="BuilderIntLabelMode" xml:space="preserve">
+    <value>Ինչ անել</value>
+  </data>
+  <data name="BuilderIntLabelAdd" xml:space="preserve">
+    <value>Ավելացնել պիտակը</value>
+  </data>
+  <data name="BuilderIntLabelRemove" xml:space="preserve">
+    <value>Հեռացնել պիտակը</value>
+  </data>
+  <data name="BuilderIntMarkState" xml:space="preserve">
+    <value>Նշել որպես</value>
+  </data>
+  <data name="BuilderIntStateRead" xml:space="preserve">
+    <value>Կարդացված</value>
+  </data>
+  <data name="BuilderIntStateUnread" xml:space="preserve">
+    <value>Չկարդացված</value>
+  </data>
+  <data name="BuilderIntCellRange" xml:space="preserve">
+    <value>Միջակայք</value>
+  </data>
+  <data name="BuilderIntCellRangeHelp" xml:space="preserve">
+    <value>Բջիջներ առանց թերթի անվան, օրինակ՝ A1:C10 կամ A2:F2։</value>
+  </data>
+  <data name="BuilderIntCell" xml:space="preserve">
+    <value>Բջիջ</value>
+  </data>
+  <data name="BuilderIntCellHelp" xml:space="preserve">
+    <value>Մեկ բջիջ, օրինակ՝ B7։</value>
+  </data>
+  <data name="BuilderIntSpreadsheetTitle" xml:space="preserve">
+    <value>Աղյուսակի անվանումը</value>
+  </data>
+  <data name="BuilderIntFirstSheet" xml:space="preserve">
+    <value>Առաջին թերթի անվանումը (կամընտիր)</value>
+  </data>
+  <data name="BuilderIntNewSheetName" xml:space="preserve">
+    <value>Նոր թերթի անվանումը</value>
+  </data>
+  <data name="BuilderIntFileId" xml:space="preserve">
+    <value>Ֆայլ կամ թղթապանակ</value>
+  </data>
+  <data name="BuilderIntFileIdHelp" xml:space="preserve">
+    <value>Id կամ հղում Google Drive-ից։ Ֆայլը պետք է ստեղծված լինի այս հավելվածով, եթե միացնելիս Drive-ի լրիվ հասանելիությունը նշված չէ։</value>
+  </data>
+  <data name="BuilderIntNewName" xml:space="preserve">
+    <value>Նոր անվանում</value>
+  </data>
+  <data name="BuilderIntCopyName" xml:space="preserve">
+    <value>Պատճենի անվանումը (կամընտիր)</value>
+  </data>
+  <data name="BuilderIntDestFolder" xml:space="preserve">
+    <value>Նպատակակետ թղթապանակ</value>
+  </data>
+  <data name="BuilderIntShareEmail" xml:space="preserve">
+    <value>Անձի էլ. փոստը</value>
+  </data>
+  <data name="BuilderIntShareRole" xml:space="preserve">
+    <value>Հասանելիություն</value>
+  </data>
+  <data name="BuilderIntRoleReader" xml:space="preserve">
+    <value>Դիտում</value>
+  </data>
+  <data name="BuilderIntRoleCommenter" xml:space="preserve">
+    <value>Մեկնաբանում</value>
+  </data>
+  <data name="BuilderIntRoleWriter" xml:space="preserve">
+    <value>Խմբագրում</value>
+  </data>
+  <data name="BuilderIntNotifyPerson" xml:space="preserve">
+    <value>Տեղեկացնել անձին նամակով</value>
+  </data>
+  <data name="BuilderIntYes" xml:space="preserve">
+    <value>Այո</value>
+  </data>
+  <data name="BuilderIntNo" xml:space="preserve">
+    <value>Ոչ</value>
+  </data>
+  <data name="BuilderIntFileContent" xml:space="preserve">
+    <value>Բովանդակություն</value>
+  </data>
+  <data name="BuilderIntCreateAs" xml:space="preserve">
+    <value>Ստեղծել որպես</value>
+  </data>
+  <data name="BuilderIntAsTextFile" xml:space="preserve">
+    <value>Տեքստային ֆայլ</value>
+  </data>
+  <data name="BuilderIntAsGoogleDoc" xml:space="preserve">
+    <value>Google փաստաթուղթ</value>
+  </data>
+  <data name="BuilderDisable" xml:space="preserve">
+    <value>Անջատել</value>
+  </data>
+  <data name="BuilderEnable" xml:space="preserve">
+    <value>Միացնել</value>
+  </data>
+  <data name="BuilderDisabledBadge" xml:space="preserve">
+    <value>Անջ.</value>
+  </data>
+  <data name="BuilderDisabledHint" xml:space="preserve">
+    <value>Քարտը անջատված է. գործակալը բաց է թողնում այն և անցնում հաջորդ քարտերին։</value>
+  </data>
+  <data name="BuilderHistoryDisabled" xml:space="preserve">
+    <value>Անջատվեց</value>
+  </data>
+  <data name="BuilderHistoryEnabled" xml:space="preserve">
+    <value>Միացվեց</value>
+  </data>
+  <data name="BuilderCardEnabled" xml:space="preserve">
+    <value>Քարտը միացված է</value>
+  </data>
+  <data name="BuilderCardEnabledHelp" xml:space="preserve">
+    <value>Անջատելու դեպքում գործակալը բաց կթողնի այս քարտը և կշարունակի դրանից հետո միացվածներով։ Անջատված տրիգերը գործակալին չի գործարկում։</value>
+  </data>
   <data name="BuilderChoose" xml:space="preserve">
     <value>Ընտրել…</value>
   </data>

@@ -301,7 +301,7 @@ namespace Partnerly.Automation.Authoring
                 VersionId = versionId,
                 Type = node.Type,
                 ConfigJson = node.Config.ValueKind == JsonValueKind.Undefined ? "{}" : node.Config.GetRawText(),
-                IsEnabled = true
+                IsEnabled = !node.Disabled
             };
 
             if (node.Type != AutomationTypeCodes.Webhook)

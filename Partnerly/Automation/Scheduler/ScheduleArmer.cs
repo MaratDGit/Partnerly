@@ -92,6 +92,7 @@ namespace Partnerly.Automation.Scheduler
         private static bool IsArmedTrigger(WorkflowNode node)
         {
             return node.Kind == "trigger"
+                   && !node.Disabled
                    && (node.Type == AutomationTypeCodes.Schedule
                        || node.Type == AutomationTypeCodes.Interval
                        || node.Type == AutomationTypeCodes.DelayTrigger);

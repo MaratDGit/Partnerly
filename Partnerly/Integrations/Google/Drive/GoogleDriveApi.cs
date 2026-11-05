@@ -5,7 +5,7 @@ using Partnerly.Integrations.Common;
 
 namespace Partnerly.Integrations.Google.Drive
 {
-    public class GoogleDriveApi
+    public partial class GoogleDriveApi
     {
         public const string BaseUrl = "https://www.googleapis.com/drive/v3";
         public const string UploadUrl = "https://www.googleapis.com/upload/drive/v3/files";

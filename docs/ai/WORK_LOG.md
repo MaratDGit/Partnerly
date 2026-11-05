@@ -4,6 +4,27 @@
 
 ---
 
+## 2026-11-05 — Выключение карточек в редакторе
+
+- **Что:** у каждой карточки есть состояние «выключена» (`WorkflowNode.Disabled`, в JSON `disabled: true`, `false` не пишется). Переключатель — в правом клике по карточке («Выключить / Включить») и в панели свойств («Карточка включена»). Выключенная карточка полупрозрачная, пунктирная, с меткой «Выкл», её связи пунктиром; в истории — «Выключено / Включено».
+- **Движок (`WorkflowExecutor.SkipDisabledAsync`):** выключенное действие не выполняется, пишется шаг `skipped` («disabled»), поток идёт дальше ко всем подключённым после него карточкам; несколько входящих и исходящих связей работают как обычно. Выключенные branch / switch идут по первому подключённому выходу. Выключенный триггер публикуется с `IsEnabled = false` (не срабатывает, расписание не взводится); ручной запуск по-прежнему можно сделать.
+- **Валидация:** нужен хотя бы один включённый триггер; для выключенной карточки подключение (`connectionId`) не требуется.
+- **Файлы:** `WorkflowGraph.cs`, `WorkflowExecutor.cs`, `GraphValidator.cs`, `AutomationAuthoringService.cs`, `ScheduleArmer.cs`, `AutomationWorker.cs`, `builder.js`, `_BuilderPanel.cshtml`, `_BuilderI18n.cshtml`, `automation-builder.css`, resx ×3.
+- **Проверка:** сборка ок; тесты 176/176 (6 новых в `DisabledCardsTests.cs`). В браузере не проверялось.
+
+---
+
+## 2026-11-05 — Gmail / Sheets / Drive: 21 новое действие
+
+- **Gmail** (`GmailApi.More.cs`, `GmailMoreActions.cs`): `gmail.reply` (в той же ветке: In-Reply-To / References / threadId), `gmail.get_message` (текст письма, вложения по именам), `gmail.create_draft`, `gmail.mark_read`, `gmail.archive`, `gmail.trash`, `gmail.label` (метка создаётся при добавлении).
+- **Sheets** (`GoogleSheetsApi.More.cs`, `SheetsMoreActions.cs`): `get_row`, `read_range`, `update_cell`, `clear_range`, `delete_row` (id листа ищется по названию), `create_spreadsheet`, `add_sheet`. Диапазон/ячейка проверяются регулярным выражением (`IsCellRange`).
+- **Drive** (`GoogleDriveApi.More.cs`, `DriveMoreActions.cs`): `get_file`, `copy_file`, `move_file`, `rename_file`, `trash_file` (только корзина, не удаление навсегда), `share_file` (reader / commenter / writer, уведомление письмом), `create_text_file` (txt или Google Doc). Id принимается и ссылкой из браузера.
+- Новый scope `gmail.modify` добавлен в запрос при выборе Gmail: **существующим Google-подключениям с Gmail нужно переподключиться**, иначе действия, меняющие письма, ответят «no access … Reconnect Google». Остальное работает на старых правах.
+- Клиент: формы узлов (`builder-forms.js`), обязательные поля и переменные результата (`builder.js`), 21 название типа + ~35 подписей полей en/ru/hy. `*Api` стали `partial`, новые методы вынесены в `*.More.cs`.
+- Проверка: `dotnet build` ок; тесты Automation 170/170 (17 новых в `GoogleMoreActionsTests.cs`, fake HTTP). Реальных вызовов Google и проверки в браузере не было. Не сделано: вложения в Gmail-письмо, скачивание файла Drive, форматирование ячеек.
+
+---
+
 ## 2026-11-05 — Палитра: переводы, выключенные сервисы, окно «+»
 
 - Подписи вкладок «Add action / Add trigger» в окне «+» теперь переведены (ключи `addAction`, `addTrigger` в `_BuilderI18n.cshtml`).

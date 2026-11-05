@@ -5,7 +5,7 @@ using Partnerly.Integrations.Common;
 
 namespace Partnerly.Integrations.Google.Gmail
 {
-    public class GmailApi
+    public partial class GmailApi
     {
         public const string BaseUrl = "https://gmail.googleapis.com/gmail/v1/users/me";
 
@@ -102,10 +102,14 @@ namespace Partnerly.Integrations.Google.Gmail
             return (ids, json["historyId"]?.ToString());
         }
 
-        public static string BuildMime(string to, string subject, string body, bool html)
+        public static string BuildMime(string to, string subject, string body, bool html, IEnumerable<(string name, string value)>? extraHeaders = null)
         {
             var builder = new StringBuilder();
             builder.Append("To: ").Append(SafeHeader(to)).Append("\r\n");
+            foreach (var (name, value) in extraHeaders ?? Array.Empty<(string name, string value)>())
+            {
+                builder.Append(SafeHeader(name)).Append(": ").Append(SafeHeader(value)).Append("\r\n");
+            }
             builder.Append("Subject: =?UTF-8?B?").Append(Convert.ToBase64String(Encoding.UTF8.GetBytes(SafeHeader(subject)))).Append("?=\r\n");
             builder.Append("MIME-Version: 1.0\r\n");
             builder.Append("Content-Type: ").Append(html ? "text/html" : "text/plain").Append("; charset=UTF-8\r\n");

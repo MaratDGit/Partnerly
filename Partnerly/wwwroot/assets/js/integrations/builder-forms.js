@@ -76,6 +76,29 @@
                 note("intSheetsTriggerHelp")
             ]),
 
+            "sheets.get_row": [connection("google")].concat(sheetFields, [text("rowNumber", "intRowNumber", "Row number", "intVariablesHelp")]),
+            "sheets.read_range": [connection("google")].concat(sheetFields, [
+                text("range", "intCellRange", "Range", "intCellRangeHelp", true)
+            ]),
+            "sheets.update_cell": [connection("google")].concat(sheetFields, [
+                text("cell", "intCell", "Cell", "intCellHelp", true),
+                text("value", "intSearchValue", "Value")
+            ]),
+            "sheets.clear_range": [connection("google")].concat(sheetFields, [
+                text("range", "intCellRange", "Range", "intCellRangeHelp", true)
+            ]),
+            "sheets.delete_row": [connection("google")].concat(sheetFields, [text("rowNumber", "intRowNumber", "Row number", "intVariablesHelp")]),
+            "sheets.create_spreadsheet": [
+                connection("google"),
+                text("title", "intSpreadsheetTitle", "Spreadsheet title"),
+                text("sheet", "intFirstSheet", "First tab name (optional)", "", true)
+            ],
+            "sheets.add_sheet": [
+                connection("google"),
+                text("spreadsheetId", "intSpreadsheet", "Spreadsheet", "intSpreadsheetHelp"),
+                text("sheet", "intNewSheetName", "New tab name", "", true)
+            ],
+
             // ---------- Gmail ----------
             "gmail.send": [
                 connection("google"),
@@ -102,6 +125,69 @@
                 text("fromContains", "intFromContains", "From contains"),
                 text("subjectContains", "intSubjectContains", "Subject contains"),
                 note("intGmailTriggerHelp")
+            ],
+
+            "gmail.reply": [
+                connection("google"),
+                text("messageId", "intMessageId", "Message id", "intMessageIdHelp"),
+                area("body", "emailBody", "Body", "intVariablesHelp"),
+                {
+                    key: "format",
+                    type: "select",
+                    label: t("intFormat", "Format"),
+                    options: [
+                        { value: "html", label: "HTML" },
+                        { value: "text", label: t("intPlainText", "Plain text") }
+                    ]
+                }
+            ],
+            "gmail.get_message": [
+                connection("google"),
+                text("messageId", "intMessageId", "Message id", "intMessageIdHelp")
+            ],
+            "gmail.create_draft": [
+                connection("google"),
+                text("to", "emailTo", "To"),
+                text("subject", "emailSubject", "Subject"),
+                area("body", "emailBody", "Body", "intVariablesHelp"),
+                {
+                    key: "format",
+                    type: "select",
+                    label: t("intFormat", "Format"),
+                    options: [
+                        { value: "html", label: "HTML" },
+                        { value: "text", label: t("intPlainText", "Plain text") }
+                    ]
+                }
+            ],
+            "gmail.mark_read": [
+                connection("google"),
+                text("messageId", "intMessageId", "Message id", "intMessageIdHelp"),
+                {
+                    key: "state",
+                    type: "select",
+                    label: t("intMarkState", "Mark as"),
+                    options: [
+                        { value: "read", label: t("intStateRead", "Read") },
+                        { value: "unread", label: t("intStateUnread", "Unread") }
+                    ]
+                }
+            ],
+            "gmail.archive": [connection("google"), text("messageId", "intMessageId", "Message id", "intMessageIdHelp")],
+            "gmail.trash": [connection("google"), text("messageId", "intMessageId", "Message id", "intMessageIdHelp")],
+            "gmail.label": [
+                connection("google"),
+                text("messageId", "intMessageId", "Message id", "intMessageIdHelp"),
+                text("label", "intLabelName", "Label name", "", true),
+                {
+                    key: "mode",
+                    type: "select",
+                    label: t("intLabelMode", "What to do"),
+                    options: [
+                        { value: "add", label: t("intLabelAdd", "Add the label") },
+                        { value: "remove", label: t("intLabelRemove", "Remove the label") }
+                    ]
+                }
             ],
 
             // ---------- Outlook (mail + calendar) ----------
@@ -176,6 +262,64 @@
                 text("folderId", "intFolderId", "Folder id", "intFolderIdHelp"),
                 text("nameContains", "intNameContains", "Name contains"),
                 note("intDriveTriggerHelp")
+            ],
+
+            "drive.get_file": [connection("google"), text("fileId", "intFileId", "File or folder", "intFileIdHelp")],
+            "drive.copy_file": [
+                connection("google"),
+                text("fileId", "intFileId", "File or folder", "intFileIdHelp"),
+                text("name", "intCopyName", "Name of the copy (optional)"),
+                text("folderId", "intDestFolder", "Destination folder", "intFolderIdHelp")
+            ],
+            "drive.move_file": [
+                connection("google"),
+                text("fileId", "intFileId", "File or folder", "intFileIdHelp"),
+                text("folderId", "intDestFolder", "Destination folder", "intFolderIdHelp")
+            ],
+            "drive.rename_file": [
+                connection("google"),
+                text("fileId", "intFileId", "File or folder", "intFileIdHelp"),
+                text("name", "intNewName", "New name")
+            ],
+            "drive.trash_file": [connection("google"), text("fileId", "intFileId", "File or folder", "intFileIdHelp")],
+            "drive.share_file": [
+                connection("google"),
+                text("fileId", "intFileId", "File or folder", "intFileIdHelp"),
+                text("email", "intShareEmail", "Person's email"),
+                {
+                    key: "role",
+                    type: "select",
+                    label: t("intShareRole", "Access"),
+                    options: [
+                        { value: "reader", label: t("intRoleReader", "Can view") },
+                        { value: "commenter", label: t("intRoleCommenter", "Can comment") },
+                        { value: "writer", label: t("intRoleWriter", "Can edit") }
+                    ]
+                },
+                {
+                    key: "notify",
+                    type: "select",
+                    label: t("intNotifyPerson", "Email the person"),
+                    options: [
+                        { value: "true", label: t("intYes", "Yes") },
+                        { value: "false", label: t("intNo", "No") }
+                    ]
+                }
+            ],
+            "drive.create_text_file": [
+                connection("google"),
+                text("name", "intFileName", "File name"),
+                area("content", "intFileContent", "Content", "intVariablesHelp"),
+                text("folderId", "intFolderId", "Folder id", "intFolderIdHelp"),
+                {
+                    key: "asDocument",
+                    type: "select",
+                    label: t("intCreateAs", "Create as"),
+                    options: [
+                        { value: "false", label: t("intAsTextFile", "Text file") },
+                        { value: "true", label: t("intAsGoogleDoc", "Google Doc") }
+                    ]
+                }
             ],
 
             // ---------- WhatsApp ----------

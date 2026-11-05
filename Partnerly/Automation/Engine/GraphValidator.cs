@@ -41,6 +41,11 @@ namespace Partnerly.Automation.Engine
                 errors.Add("Graph must have at least one trigger.");
             }
 
+            if (triggers.Count > 0 && triggers.All(node => node.Disabled))
+            {
+                errors.Add("Turn on at least one trigger.");
+            }
+
             var ids = new HashSet<string>(StringComparer.Ordinal);
             var names = new HashSet<string>(StringComparer.Ordinal);
             foreach (var node in graph.Nodes)
@@ -78,7 +83,7 @@ namespace Partnerly.Automation.Engine
                     ? _triggers?.ConnectionKindOf(node.Type)
                     : _actions?.ConnectionKindOf(node.Type);
                 var connectionId = NodeConfig.GetString(node, "connectionId") ?? string.Empty;
-                if (connectionKind != null && !Guid.TryParse(connectionId, out _) && !connectionId.Contains("{{", StringComparison.Ordinal))
+                if (!node.Disabled && connectionKind != null && !Guid.TryParse(connectionId, out _) && !connectionId.Contains("{{", StringComparison.Ordinal))
                 {
                     errors.Add($"Step '{node.Name}' needs a {connectionKind} connection.");
                 }
