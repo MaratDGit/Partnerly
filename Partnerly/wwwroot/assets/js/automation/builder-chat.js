@@ -155,8 +155,8 @@
     }
 
     function syncChips() {
-        var started = messages.some(function (m) { return m.role === "user"; });
-        chips.classList.toggle("is-hidden", started);
+        // The suggestion buttons stay above the field all the time.
+        chips.classList.remove("is-hidden");
     }
 
     // ---- typing indicator -----------------------------------------------
@@ -365,7 +365,7 @@
         hits.push(el);
         window.setTimeout(function () {
             el.classList.remove("agent-scan-hit", "is-" + status);
-        }, 2600);
+        }, 3600);
     }
 
     function clearHits() {
@@ -454,19 +454,239 @@
         return "ready";
     }
 
+    // "A → B → (yes: C | no: D)" - the way a person would read the flow.
+    function portText(port) {
+        if (port === "true") { return t("flowYes"); }
+        if (port === "false") { return t("flowNo"); }
+        if (port === "default") { return t("flowOther"); }
+        if (port && port.indexOf("case:") === 0) { return t("flowCase") + " " + (Number(port.slice(5)) + 1); }
+        return "";
+    }
+
+    function storyLine(card, byId, path) {
+        var label = card.name || card.typeLabel;
+        if (card.disabled) { label += " (×)"; }
+        if (path.indexOf(card.domId) !== -1) { return label + " " + t("flowRepeat"); }
+        var next = path.concat([card.domId]);
+        var outs = card.to.filter(function (o) { return byId[o.id]; });
+        if (!outs.length) { return label; }
+        if (outs.length === 1 && !outs[0].port) {
+            return label + " → " + storyLine(byId[outs[0].id], byId, next);
+        }
+        return label + " → (" + outs.map(function (o) {
+            var prefix = portText(o.port);
+            return (prefix ? prefix + ": " : "") + storyLine(byId[o.id], byId, next);
+        }).join("  |  ") + ")";
+    }
+
+    function buildStory(cards) {
+        var byId = {};
+        cards.forEach(function (c) { byId[String(c.domId)] = c; });
+        var roots = cards.filter(function (c) { return !c.fromIds.length; });
+        return roots.map(function (root) {
+            return { chain: root.chain, text: storyLine(root, byId, []) };
+        });
+    }
+
+    function addRows(host, rows) {
+        rows.forEach(function (row) {
+            var line = make("div", "agent-rp-detail");
+            line.appendChild(make("span", "agent-rp-detail-k", row[0]));
+            line.appendChild(make("span", "agent-rp-detail-v", row[1]));
+            host.appendChild(line);
+        });
+    }
+
+    // =====================================================================
+    //  Lock + scan: while the check runs nothing in the editor can be used
+    // =====================================================================
+    var LOCK_EVENTS = ["pointerdown", "pointerup", "mousedown", "mouseup", "click", "dblclick", "auxclick",
+        "contextmenu", "touchstart", "touchend", "keydown", "keyup", "wheel", "dragstart"];
+
+    function blockOutsideChat(event) {
+        if (root.contains(event.target)) { return; }
+        event.stopPropagation();
+        event.preventDefault();
+    }
+
+    function lockEditor() {
+        LOCK_EVENTS.forEach(function (name) {
+            window.addEventListener(name, blockOutsideChat, { capture: true, passive: false });
+        });
+        document.documentElement.classList.add("agent-scan-lock");
+        document.documentElement.setAttribute("aria-busy", "true");
+        if (document.activeElement && document.activeElement !== document.body && !root.contains(document.activeElement)) {
+            document.activeElement.blur();
+        }
+    }
+
+    function unlockEditor() {
+        LOCK_EVENTS.forEach(function (name) {
+            window.removeEventListener(name, blockOutsideChat, { capture: true });
+        });
+        document.documentElement.classList.remove("agent-scan-lock");
+        document.documentElement.removeAttribute("aria-busy");
+    }
+
+    function moveTo(el, x, y, scale) {
+        return "translate(" + x + "px," + y + "px) scale(" + scale + ")";
+    }
+
+    function flyTo(el, from, to, ms) {
+        if (!el.animate) { el.style.transform = to; return Promise.resolve(); }
+        var animation = el.animate([{ transform: from }, { transform: to }], {
+            duration: ms, easing: "cubic-bezier(0.22, 1, 0.36, 1)", fill: "forwards"
+        });
+        // A hidden page does not run animations: never wait longer than the animation itself.
+        return Promise.race([
+            animation.finished.catch(function () { /* cancelled */ }),
+            new Promise(function (resolve) { window.setTimeout(resolve, ms + 400); })
+        ]);
+    }
+
+    // The agent's icon flies to the middle of the editor and grows, two light lines sweep the
+    // screen (one down, one to the right) and wake each card they touch, then the icon goes home.
+    async function playScan(cards, myEpoch) {
+        var source = launcher.querySelector(".agent-chat-launcher-icon");
+        var stageBox = (stage || root).getBoundingClientRect();
+        var srcBox = (source || launcher).getBoundingClientRect();
+        var items = cards.map(function (card) {
+            var el = document.querySelector("#node-" + card.domId + " .auto-node");
+            var box = el ? el.getBoundingClientRect() : null;
+            return { card: card, kind: classify(card), box: box, done: false };
+        });
+        var ports = Array.prototype.map.call(document.querySelectorAll("#drawflow .drawflow-node .input, #drawflow .drawflow-node .output"), function (el) {
+            return { el: el, box: el.getBoundingClientRect(), done: false };
+        });
+        function touchPort(port) {
+            if (port.done) { return; }
+            port.done = true;
+            port.el.classList.add("agent-dot-hit");
+            window.setTimeout(function () { port.el.classList.remove("agent-dot-hit"); }, 2600);
+        }
+        function touch(item) {
+            if (item.done) { return; }
+            item.done = true;
+            hitCard(item.card.domId, item.kind);
+        }
+
+        if (reduced() || !source) {
+            for (var r = 0; r < items.length; r++) { guard(myEpoch); touch(items[r]); await sleep(60); }
+            return;
+        }
+
+        var size = srcBox.width;
+        var fromX = srcBox.left - stageBox.left, fromY = srcBox.top - stageBox.top;
+        var toX = stageBox.width / 2 - size / 2;
+        var toY = stageBox.height / 2 - size / 2;
+        var big = 3.4;
+
+        var layer = make("div", "agent-scan-layer");
+        var lineH = make("div", "agent-scan-h");
+        var lineV = make("div", "agent-scan-v");
+        var fly = make("div", "agent-fly");
+        fly.style.width = size + "px";
+        fly.style.height = size + "px";
+        fly.appendChild(source.cloneNode(true));
+        layer.style.left = stageBox.left + "px";
+        layer.style.top = stageBox.top + "px";
+        layer.style.width = stageBox.width + "px";
+        layer.style.height = stageBox.height + "px";
+        layer.style.right = "auto";
+        layer.style.bottom = "auto";
+        var dfBox = (document.getElementById("drawflow") || stage || root).getBoundingClientRect();
+        var dotsPos = (dfBox.left - stageBox.left) + "px " + (dfBox.top - stageBox.top) + "px";
+        var dotsH = make("div", "agent-scan-dots agent-scan-dots-h");
+        var dotsV = make("div", "agent-scan-dots agent-scan-dots-v");
+        dotsH.style.backgroundPosition = dotsPos;
+        dotsV.style.backgroundPosition = dotsPos;
+        layer.appendChild(dotsH);
+        layer.appendChild(dotsV);
+        layer.appendChild(lineH);
+        layer.appendChild(lineV);
+        layer.appendChild(fly);
+        document.body.appendChild(layer);
+        root.classList.add("is-scanning");
+
+        var home = moveTo(fly, fromX, fromY, 1);
+        var centre = moveTo(fly, toX, toY, big);
+        fly.style.transform = home;
+        try {
+            // 3. to the middle, growing
+            await flyTo(fly, home, centre, 1700);
+            guard(myEpoch);
+            fly.classList.add("is-pulsing");
+
+            // 4. the lines sweep the whole screen; a card lights up when a line reaches it
+            var W = stageBox.width, H = stageBox.height, total = 5600;
+            lineH.style.opacity = "1";
+            lineV.style.opacity = "1";
+            dotsH.style.opacity = "1";
+            dotsV.style.opacity = "1";
+            await new Promise(function (resolve, reject) {
+                var begin = performance.now();
+                (function frame(now) {
+                    if (myEpoch !== epoch) { reject(new Error("cancelled")); return; }
+                    var p = Math.min(1, (now - begin) / total);
+                    var eased = p < 0.5 ? 2 * p * p : 1 - Math.pow(-2 * p + 2, 2) / 2;
+                    var y = eased * (H + 6) - 3;
+                    var x = eased * (W + 6) - 3;
+                    lineH.style.transform = "translateY(" + y + "px)";
+                    lineV.style.transform = "translateX(" + x + "px)";
+                    dotsH.style.setProperty("--p", y + "px");
+                    dotsV.style.setProperty("--p", x + "px");
+                    ports.forEach(function (port) {
+                        if (!port.done && (y + stageBox.top >= port.box.top || x + stageBox.left >= port.box.left)) { touchPort(port); }
+                    });
+                    items.forEach(function (item) {
+                        if (!item.done && item.box && (y + stageBox.top >= item.box.top || x + stageBox.left >= item.box.left)) { touch(item); }
+                    });
+                    if (p >= 1) { resolve(); } else { window.setTimeout(function () { frame(performance.now()); }, 16); }
+                })(begin);
+            });
+            items.forEach(touch);
+            ports.forEach(touchPort);
+            lineH.style.opacity = "0";
+            lineV.style.opacity = "0";
+            dotsH.style.opacity = "0";
+            dotsV.style.opacity = "0";
+            await sleep(800);
+            guard(myEpoch);
+
+            // 5. back to its place, small again
+            fly.classList.remove("is-pulsing");
+            await flyTo(fly, centre, home, 1500);
+        } finally {
+            root.classList.remove("is-scanning");
+            if (layer.parentNode) { layer.parentNode.removeChild(layer); }
+        }
+    }
+
     async function analyzeProcess(prompt) {
         if (busy) { return; }
         var myEpoch = epoch;
         addMessage("user", prompt, true);
         syncChips();
         setBusy(true);
-        await sleep(520);
+        // 1-2. the chat closes and the editor is locked
+        closeChat();
+        lockEditor();
         try {
+            await sleep(420);
             guard(myEpoch);
             var builder = window.PartnerlyBuilder;
             var data = builder && builder.analyze ? builder.analyze() : { cards: [] };
             var statusApi = window.PartnerlyBuilderStatus;
             var status = statusApi ? statusApi.get() : { isPublished: false, isActive: false, hasChanges: false, running: 0 };
+
+            // 3-5. icon flight and screen scan
+            await playScan(data.cards, myEpoch);
+            guard(myEpoch);
+
+            // 6. the chat opens and the agent writes the answer
+            openChat();
+            await sleep(520);
+            guard(myEpoch);
 
             // --- the bot's message: a report that is written block by block
             var row = make("div", "agent-chat-msg is-bot is-report");
@@ -534,6 +754,61 @@
             await sleep(300);
             guard(myEpoch);
 
+            // 2b. overview in plain words + the flow as a sentence
+            if (cards.length) {
+                var servicesUsed = [];
+                cards.forEach(function (c) {
+                    var m = /^(telegram|sheets|gmail|outlook|drive|whatsapp)\./.exec(c.type || "");
+                    if (m && servicesUsed.indexOf(m[1]) === -1) { servicesUsed.push(m[1]); }
+                });
+                var serviceNames = { telegram: "Telegram", sheets: "Google Sheets", gmail: "Gmail", outlook: "Outlook", drive: "Google Drive", whatsapp: "WhatsApp" };
+                var overview = [
+                    ["bx-bolt-circle", t("factTriggers", cards.filter(function (c) { return c.kind === "trigger"; }).length)],
+                    ["bx-cube-alt", t("factActions", cards.filter(function (c) { return c.kind !== "trigger"; }).length)],
+                    ["bx-git-branch", t("factChains", data.chains)],
+                    ["bx-git-compare", t("factBranches", cards.filter(function (c) { return c.type === "branch" || c.type === "switch"; }).length)]
+                ];
+                var alone = cards.filter(function (c) { return !c.from.length && !c.to.length; }).length;
+                if (alone) { overview.push(["bx-unlink", t("factAlone", alone)]); }
+                if (servicesUsed.length) {
+                    overview.push(["bx-plug", t("factServices", servicesUsed.map(function (k) { return serviceNames[k]; }).join(", "))]);
+                }
+                var ovHead = make("div", "agent-rp-section");
+                ovHead.appendChild(icon("bx-bar-chart-alt-2"));
+                ovHead.appendChild(make("span", null, t("secOverview")));
+                appear(bubble, ovHead);
+                var ovList = make("ul", "agent-rp-facts");
+                bubble.appendChild(ovList);
+                for (var o = 0; o < overview.length; o++) {
+                    guard(myEpoch);
+                    var ovItem = make("li", "agent-rp-fact is-info");
+                    ovItem.appendChild(icon(overview[o][0]));
+                    ovItem.appendChild(make("span", null, overview[o][1]));
+                    appear(ovList, ovItem);
+                    await sleep(160);
+                }
+
+                var story = buildStory(cards);
+                if (story.length) {
+                    var flowHead = make("div", "agent-rp-section");
+                    flowHead.appendChild(icon("bx-trip"));
+                    flowHead.appendChild(make("span", null, t("secFlow")));
+                    appear(bubble, flowHead);
+                    var flowList = make("div", "agent-rp-story");
+                    bubble.appendChild(flowList);
+                    for (var fl = 0; fl < story.length; fl++) {
+                        guard(myEpoch);
+                        var flowItem = make("div", "agent-rp-story-line");
+                        flowItem.appendChild(make("strong", null, t("flowChain", story[fl].chain)));
+                        flowItem.appendChild(make("span", null, story[fl].text));
+                        appear(flowList, flowItem);
+                        await sleep(260);
+                    }
+                }
+                await sleep(200);
+                guard(myEpoch);
+            }
+
             // 3. every card, and the card lights up on the canvas
             if (cards.length) {
                 var head = make("div", "agent-rp-section");
@@ -542,7 +817,7 @@
                 appear(bubble, head);
                 var listEl = make("div", "agent-rp-cards");
                 bubble.appendChild(listEl);
-                var delay = cards.length > 14 ? 180 : 420;
+                var delay = cards.length > 14 ? 160 : 320;
                 for (var c = 0; c < cards.length; c++) {
                     guard(myEpoch);
                     var card = cards[c];
@@ -556,7 +831,25 @@
                     top.appendChild(names);
                     top.appendChild(make("span", "agent-rp-badge is-" + kind, t({ ready: "stReady", setup: "stSetup", off: "stOff", unlinked: "stUnlinked" }[kind])));
                     item.appendChild(top);
+                    var details = make("div", "agent-rp-details");
+                    var rows = [];
+                    if (card.connection) { rows.push([t("cardAccount"), card.connection]); }
+                    card.settings.forEach(function (st) { rows.push([st.label, st.value]); });
+                    if (!rows.length && !card.missing.length && !card.disabled) { rows.push(["", t("cardEmpty")]); }
+                    if (card.from.length) { rows.push([t("cardFrom"), card.from.join(", ")]); }
+                    if (card.to.length) {
+                        rows.push([t("cardTo"), card.to.map(function (o) {
+                            var p = portText(o.port);
+                            return (p ? p + " → " : "") + o.name;
+                        }).join(", ")]);
+                    } else if (card.kind !== "trigger" || card.wired) {
+                        rows.push([t("cardTo"), t("cardNoNext")]);
+                    }
+                    rows.push(["", t("cardChain", card.chain)]);
+                    addRows(details, rows);
+                    item.appendChild(details);
                     if (card.missing.length) {
+
                         var miss = make("div", "agent-rp-card-note");
                         miss.appendChild(icon("bx-error-circle"));
                         miss.appendChild(make("span", null, t("notSet") + ": " + card.missing.join(", ")));
@@ -569,7 +862,6 @@
                         item.appendChild(link);
                     }
                     appear(listEl, item);
-                    hitCard(card.domId, kind);
                     await sleep(delay);
                 }
                 await sleep(260);
@@ -659,6 +951,8 @@
         } catch (e) {
             if (!e || e.message !== "cancelled") { throw e; }
         } finally {
+            // 7. everything works again (the user's permissions decide what is enabled)
+            unlockEditor();
             if (myEpoch === epoch) {
                 setBusy(false);
             }
@@ -666,8 +960,8 @@
     }
 
     // ---- start -------------------------------------------------------------
-    // The second suggestion runs the process check instead of asking the (absent) AI.
-    var analyzeChip = chips.querySelectorAll("[data-chat-suggest]")[1];
+    // The (only) suggestion runs the process check instead of asking the (absent) AI.
+    var analyzeChip = chips.querySelectorAll("[data-chat-suggest]")[0];
     if (analyzeChip) { analyzeChip.setAttribute("data-chat-analyze", ""); }
     setLarge(false);
     messages = load();

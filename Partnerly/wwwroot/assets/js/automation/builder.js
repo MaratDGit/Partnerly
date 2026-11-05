@@ -906,14 +906,103 @@
         }).map(function (key) { return fieldLabelFor(data, key); });
     }
 
+    // ---- readable settings of a card (used by the agent chat) ----------------
+    var SECRET_KEY = /secret|token|password|authorization|api[_-]?key/i;
+
+    function shortText(value, max) {
+        var text = String(value).replace(/\s+/g, " ").trim();
+        return text.length > max ? text.slice(0, max - 1) + "…" : text;
+    }
+
+    function displayValue(field, value) {
+        if (SECRET_KEY.test(field.key || "")) { return "••••••"; }
+        if (field.type === "select") {
+            var options = typeof field.options === "function" ? field.options() : (field.options || []);
+            for (var i = 0; i < options.length; i++) {
+                if (String(options[i].value) === String(value)) { return options[i].label || String(value); }
+            }
+        }
+        if (field.type === "connection") {
+            var found = catalogConnections.filter(function (c) { return String(c.id) === String(value); })[0];
+            return found ? found.name : String(value);
+        }
+        if (value && typeof value === "object") {
+            if (Array.isArray(value)) { return shortText(value.join(", "), 110); }
+            return shortText(Object.keys(value).map(function (k) {
+                return k + " = " + (SECRET_KEY.test(k) ? "••••••" : (value[k] && typeof value[k] === "object" ? JSON.stringify(value[k]) : value[k]));
+            }).join("; "), 110);
+        }
+        if (typeof value === "boolean") { return value ? "✓" : "✗"; }
+        return shortText(value, 110);
+    }
+
+    function settingsList(data) {
+        var config = normalizeDelay(JSON.parse(JSON.stringify(data.config || {})));
+        var schema = [];
+        try { schema = schemaFor(data) || []; } catch (e) { schema = []; }
+        var out = [];
+        schema.forEach(function (field) {
+            if (!field.key || field.type === "note" || field.type === "connection") { return; }
+            if (!fieldVisible(field, config)) { return; }
+            var value = getByPath(config, field.key);
+            if (!filled(value) && typeof value !== "boolean") { return; }
+            out.push({ label: field.label || field.key, value: displayValue(field, value) });
+        });
+        return out;
+    }
+
+    function connectionName(data) {
+        var id = data && data.config ? data.config.connectionId : null;
+        if (!filled(id)) { return ""; }
+        var found = catalogConnections.filter(function (c) { return String(c.id) === String(id); })[0];
+        return found ? found.name : "";
+    }
+
     window.PartnerlyBuilder = {
         analyze: function () {
             persistSelected();
             var exported = editor.export();
             var home = exported.drawflow && exported.drawflow.Home && exported.drawflow.Home.data ? exported.drawflow.Home.data : {};
-            var cards = Object.keys(home).map(function (key) {
+            var keys = Object.keys(home);
+            var byId = {};
+            keys.forEach(function (key) { byId[String(home[key].id)] = home[key]; });
+
+            function nodeLabel(node) {
+                var d = node.data || {};
+                return d.name || typeLabel(d.type, d.type);
+            }
+
+            // links: who leads to whom (and through which exit)
+            var incoming = {};
+            var outgoing = {};
+            keys.forEach(function (key) {
+                var node = home[key];
+                outgoing[String(node.id)] = [];
+                Object.keys(node.outputs || {}).forEach(function (outKey) {
+                    ((node.outputs[outKey].connections) || []).forEach(function (link) {
+                        var target = String(link.node);
+                        if (!byId[target]) { return; }
+                        outgoing[String(node.id)].push({ id: target, port: portName((node.data || {}).type, outKey) });
+                        (incoming[target] = incoming[target] || []).push(String(node.id));
+                    });
+                });
+            });
+
+            // separate chains (groups of cards joined to each other)
+            var group = {};
+            function find(a) { while (group[a] !== a) { group[a] = group[group[a]]; a = group[a]; } return a; }
+            keys.forEach(function (key) { group[String(home[key].id)] = String(home[key].id); });
+            Object.keys(outgoing).forEach(function (from) {
+                outgoing[from].forEach(function (link) {
+                    var a = find(from), b = find(link.id);
+                    if (a !== b) { group[a] = b; }
+                });
+            });
+
+            var cards = keys.map(function (key) {
                 var node = home[key];
                 var data = node.data || {};
+                var id = String(node.id);
                 var wired = data.kind === "trigger" ? connectionCount(node.outputs) > 0 : connectionCount(node.inputs) > 0;
                 var missing = data.disabled ? [] : missingFor(data);
                 return {
@@ -925,6 +1014,12 @@
                     disabled: !!data.disabled,
                     wired: wired,
                     missing: missing,
+                    settings: settingsList(data),
+                    connection: connectionName(data),
+                    from: (incoming[id] || []).map(function (fromId) { return nodeLabel(byId[fromId]); }),
+                    fromIds: incoming[id] || [],
+                    to: outgoing[id].map(function (link) { return { id: link.id, name: nodeLabel(byId[link.id]), port: link.port }; }),
+                    chainKey: find(id),
                     x: node.pos_x,
                     y: node.pos_y
                 };
@@ -933,7 +1028,12 @@
                 if (a.kind !== b.kind) { return a.kind === "trigger" ? -1 : 1; }
                 return a.x - b.x || a.y - b.y;
             });
-            return { cards: cards };
+            var chainKeys = [];
+            cards.forEach(function (card) {
+                if (chainKeys.indexOf(card.chainKey) === -1) { chainKeys.push(card.chainKey); }
+                card.chain = chainKeys.indexOf(card.chainKey) + 1;
+            });
+            return { cards: cards, chains: chainKeys.length };
         },
         markSaved: function () {
             var graph = exportGraph();

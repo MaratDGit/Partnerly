@@ -4546,4 +4546,64 @@ User, группу и шаблон письма здесь создать нел
   <data name="BuilderIntOutlookEventTriggerHelp" xml:space="preserve">
     <value>Запускается на каждое новое событие календаря (проверка раз в минуту). Используйте {{trigger.subject}}, {{trigger.start}}, {{trigger.location}}.</value>
   </data>
+  <data name="AgentChatSecFlow" xml:space="preserve">
+    <value>Как работает процесс</value>
+  </data>
+  <data name="AgentChatFlowChain" xml:space="preserve">
+    <value>Цепочка {0}</value>
+  </data>
+  <data name="AgentChatFlowYes" xml:space="preserve">
+    <value>да</value>
+  </data>
+  <data name="AgentChatFlowNo" xml:space="preserve">
+    <value>нет</value>
+  </data>
+  <data name="AgentChatFlowCase" xml:space="preserve">
+    <value>вариант</value>
+  </data>
+  <data name="AgentChatFlowOther" xml:space="preserve">
+    <value>иначе</value>
+  </data>
+  <data name="AgentChatFlowRepeat" xml:space="preserve">
+    <value>(возврат назад по кругу)</value>
+  </data>
+  <data name="AgentChatSecOverview" xml:space="preserve">
+    <value>В цифрах</value>
+  </data>
+  <data name="AgentChatFactTriggers" xml:space="preserve">
+    <value>Триггеры (что запускает процесс): {0}</value>
+  </data>
+  <data name="AgentChatFactActions" xml:space="preserve">
+    <value>Действия (что делает процесс): {0}</value>
+  </data>
+  <data name="AgentChatFactChains" xml:space="preserve">
+    <value>Отдельных цепочек: {0}</value>
+  </data>
+  <data name="AgentChatFactBranches" xml:space="preserve">
+    <value>Развилки (условие / переключатель): {0}</value>
+  </data>
+  <data name="AgentChatFactAlone" xml:space="preserve">
+    <value>Карточек без связей: {0}</value>
+  </data>
+  <data name="AgentChatFactServices" xml:space="preserve">
+    <value>Используемые сервисы: {0}</value>
+  </data>
+  <data name="AgentChatCardAccount" xml:space="preserve">
+    <value>Аккаунт</value>
+  </data>
+  <data name="AgentChatCardFrom" xml:space="preserve">
+    <value>Приходит из</value>
+  </data>
+  <data name="AgentChatCardTo" xml:space="preserve">
+    <value>Ведёт к</value>
+  </data>
+  <data name="AgentChatCardChain" xml:space="preserve">
+    <value>Цепочка {0}</value>
+  </data>
+  <data name="AgentChatCardEmpty" xml:space="preserve">
+    <value>Пока ничего не заполнено</value>
+  </data>
+  <data name="AgentChatCardNoNext" xml:space="preserve">
+    <value>Последняя карточка цепочки</value>
+  </data>
 </root>

@@ -4546,4 +4546,64 @@ Delete is allowed for Support ticket.</value>
   <data name="BuilderIntOutlookEventTriggerHelp" xml:space="preserve">
     <value>Starts for each new calendar event (checked every minute). Use {{trigger.subject}}, {{trigger.start}}, {{trigger.location}}.</value>
   </data>
+  <data name="AgentChatSecFlow" xml:space="preserve">
+    <value>How the process runs</value>
+  </data>
+  <data name="AgentChatFlowChain" xml:space="preserve">
+    <value>Chain {0}</value>
+  </data>
+  <data name="AgentChatFlowYes" xml:space="preserve">
+    <value>yes</value>
+  </data>
+  <data name="AgentChatFlowNo" xml:space="preserve">
+    <value>no</value>
+  </data>
+  <data name="AgentChatFlowCase" xml:space="preserve">
+    <value>case</value>
+  </data>
+  <data name="AgentChatFlowOther" xml:space="preserve">
+    <value>otherwise</value>
+  </data>
+  <data name="AgentChatFlowRepeat" xml:space="preserve">
+    <value>(back to the start of the loop)</value>
+  </data>
+  <data name="AgentChatSecOverview" xml:space="preserve">
+    <value>In numbers</value>
+  </data>
+  <data name="AgentChatFactTriggers" xml:space="preserve">
+    <value>Triggers (what starts the process): {0}</value>
+  </data>
+  <data name="AgentChatFactActions" xml:space="preserve">
+    <value>Actions (what the process does): {0}</value>
+  </data>
+  <data name="AgentChatFactChains" xml:space="preserve">
+    <value>Separate chains: {0}</value>
+  </data>
+  <data name="AgentChatFactBranches" xml:space="preserve">
+    <value>Decision points (condition / switch): {0}</value>
+  </data>
+  <data name="AgentChatFactAlone" xml:space="preserve">
+    <value>Cards not joined to anything: {0}</value>
+  </data>
+  <data name="AgentChatFactServices" xml:space="preserve">
+    <value>Services used: {0}</value>
+  </data>
+  <data name="AgentChatCardAccount" xml:space="preserve">
+    <value>Account</value>
+  </data>
+  <data name="AgentChatCardFrom" xml:space="preserve">
+    <value>Comes from</value>
+  </data>
+  <data name="AgentChatCardTo" xml:space="preserve">
+    <value>Leads to</value>
+  </data>
+  <data name="AgentChatCardChain" xml:space="preserve">
+    <value>Chain {0}</value>
+  </data>
+  <data name="AgentChatCardEmpty" xml:space="preserve">
+    <value>Nothing is filled in yet</value>
+  </data>
+  <data name="AgentChatCardNoNext" xml:space="preserve">
+    <value>Last card of the chain</value>
+  </data>
 </root>

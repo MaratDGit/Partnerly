@@ -791,7 +791,7 @@ html[data-theme="dark"] .agent-chat-composer:focus-within {
 /* the cards it talks about light up on the canvas */
 #drawflow .auto-node.agent-scan-hit {
     --scan: 99, 102, 241;
-    animation: agent-scan-hit 2.6s ease both;
+    animation: agent-scan-hit 3.6s ease both;
 }
 
 #drawflow .auto-node.agent-scan-hit.is-ready { --scan: 34, 197, 94; }
@@ -889,13 +889,30 @@ html[data-theme="dark"] .agent-chat {
     background: var(--chat-composer-bg);
 }
 
-/* suggestion buttons */
+/* suggestion buttons: glass (see-through, blurred), always shown above the field */
 .agent-chat-chip {
-    background: var(--chat-solid);
+    background: rgba(255, 255, 255, 0.28);
+    border-color: rgba(255, 255, 255, 0.65);
+    -webkit-backdrop-filter: blur(12px) saturate(1.4);
+    backdrop-filter: blur(12px) saturate(1.4);
+    box-shadow: 0 4px 14px rgba(79, 70, 229, 0.12), inset 0 1px 0 rgba(255, 255, 255, 0.7);
 }
 
 .agent-chat-chip:hover {
-    background: var(--chat-solid-hover);
+    background: rgba(255, 255, 255, 0.5);
+    border-color: var(--chat-accent);
+}
+
+html.dark-style .agent-chat-chip,
+html[data-theme="dark"] .agent-chat-chip {
+    background: rgba(255, 255, 255, 0.08);
+    border-color: rgba(255, 255, 255, 0.2);
+    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.12);
+}
+
+html.dark-style .agent-chat-chip:hover,
+html[data-theme="dark"] .agent-chat-chip:hover {
+    background: rgba(255, 255, 255, 0.16);
 }
 
 /* header buttons and the round launcher */
@@ -950,11 +967,11 @@ html[data-theme="dark"] .agent-chat-msg.is-report .agent-chat-bubble.is-done {
     background: linear-gradient(135deg, rgba(139, 92, 246, 0.26), rgba(99, 102, 241, 0.14)), #1b1d3d;
 }
 
-/* the whole typing strip is solid (the field and the space around it) */
+/* the strip around the typing field is see-through; the field itself stays solid */
 .agent-chat-footer {
-    padding: 10px 12px 12px;
-    border-top: 1px solid var(--chat-border);
-    background: var(--chat-solid);
+    padding: 4px 12px 12px;
+    border-top: 0;
+    background: transparent;
 }
 
 .agent-chat-footer .agent-chat-composer {
@@ -1006,4 +1023,212 @@ html[data-theme="dark"] .agent-chat-launcher:hover {
 
 .agent-chat-launcher:hover {
     transform: translateY(-2px) scale(1.08);
+}
+
+/* ---- process check: details of every card, the flow in words ---- */
+.agent-rp-details {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    margin-top: 8px;
+    padding-top: 6px;
+    border-top: 1px dashed var(--chat-border);
+    font-size: 12px;
+}
+
+.agent-rp-detail {
+    display: flex;
+    gap: 8px;
+    line-height: 1.4;
+}
+
+.agent-rp-detail-k {
+    flex: 0 0 38%;
+    max-width: 38%;
+    color: var(--chat-muted);
+    font-weight: 600;
+    overflow-wrap: anywhere;
+}
+
+.agent-rp-detail-v {
+    flex: 1 1 auto;
+    min-width: 0;
+    color: var(--chat-text);
+    overflow-wrap: anywhere;
+}
+
+.agent-rp-detail-k:empty {
+    display: none;
+}
+
+.agent-rp-fact.is-info i {
+    color: var(--chat-accent);
+}
+
+.agent-rp-story {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.agent-rp-story-line {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    padding: 7px 10px;
+    border-radius: 10px;
+    border-left: 3px solid var(--chat-accent);
+    background: rgba(255, 255, 255, 0.45);
+    font-size: 12.5px;
+    line-height: 1.5;
+}
+
+.agent-rp-story-line strong {
+    font-size: 11px;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    color: var(--chat-accent);
+}
+
+html.dark-style .agent-rp-story-line,
+html[data-theme="dark"] .agent-rp-story-line {
+    background: rgba(255, 255, 255, 0.06);
+}
+
+/* ---- keep the suggestion buttons and the typing strip from being squeezed out by long messages ---- */
+.agent-chat-head,
+.agent-chat-chips,
+.agent-chat-footer {
+    flex: 0 0 auto;
+}
+
+/* ---- process check: nothing in the editor can be used while it runs ---- */
+html.agent-scan-lock,
+html.agent-scan-lock * {
+    cursor: progress !important;
+}
+
+html.agent-scan-lock #agentChat,
+html.agent-scan-lock #agentChat * {
+    cursor: auto !important;
+}
+
+html.agent-scan-lock #agentChat button,
+html.agent-scan-lock #agentChat button * {
+    cursor: pointer !important;
+}
+
+.agent-chat.is-scanning .agent-chat-launcher-icon {
+    opacity: 0;
+}
+
+.agent-scan-layer {
+    position: fixed;
+    inset: 0;
+    z-index: 2090;
+    overflow: hidden;
+    pointer-events: none;
+}
+
+.agent-scan-h,
+.agent-scan-v {
+    position: absolute;
+    top: 0;
+    left: 0;
+    opacity: 0;
+    transition: opacity 0.4s ease;
+    will-change: transform;
+}
+
+.agent-scan-h {
+    width: 100%;
+    height: 3px;
+    background: linear-gradient(90deg, transparent, rgba(99, 102, 241, 0.95) 14%, #c4b5fd 50%, rgba(99, 102, 241, 0.95) 86%, transparent);
+    box-shadow: 0 0 14px 3px rgba(129, 140, 248, 0.75), 0 0 46px 10px rgba(139, 92, 246, 0.35);
+}
+
+.agent-scan-v {
+    width: 3px;
+    height: 100%;
+    background: linear-gradient(180deg, transparent, rgba(99, 102, 241, 0.95) 14%, #c4b5fd 50%, rgba(99, 102, 241, 0.95) 86%, transparent);
+    box-shadow: 0 0 14px 3px rgba(129, 140, 248, 0.75), 0 0 46px 10px rgba(139, 92, 246, 0.35);
+}
+
+.agent-fly {
+    position: absolute;
+    top: 0;
+    left: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #4f46e5;
+    font-size: 30px;
+    transform-origin: center;
+    filter: drop-shadow(0 0 10px rgba(129, 140, 248, 0.8));
+    will-change: transform;
+}
+
+.agent-fly i {
+    position: static !important;
+    opacity: 1 !important;
+    transform: none !important;
+    font-size: 30px;
+}
+
+.agent-fly.is-pulsing i {
+    animation: agent-rp-pulse 1.1s ease-in-out infinite;
+}
+
+html.dark-style .agent-fly,
+html[data-theme="dark"] .agent-fly {
+    color: #c4b5fd;
+}
+
+/* ---- the report bubble looks like the greeting bubble (same background, no see-through) ---- */
+.agent-chat-msg.is-report .agent-chat-bubble,
+.agent-chat-msg.is-report .agent-chat-bubble.is-done,
+html.dark-style .agent-chat-msg.is-report .agent-chat-bubble.is-done,
+html[data-theme="dark"] .agent-chat-msg.is-report .agent-chat-bubble.is-done {
+    background: var(--chat-bot-bg);
+    border-color: var(--chat-border);
+    -webkit-backdrop-filter: none;
+    backdrop-filter: none;
+}
+
+/* ---- the dots of the editor light up when a scan line reaches them ---- */
+.agent-scan-dots {
+    position: absolute;
+    inset: 0;
+    opacity: 0;
+    transition: opacity 0.5s ease;
+    --p: -400px;
+    --dot: rgba(79, 70, 229, 0.95);
+    background-image: radial-gradient(var(--dot) 1.9px, transparent 2.3px);
+    background-size: 18px 18px;
+}
+
+.agent-scan-dots-h {
+    -webkit-mask-image: linear-gradient(180deg, transparent calc(var(--p) - 190px), #000 var(--p), transparent calc(var(--p) + 55px));
+    mask-image: linear-gradient(180deg, transparent calc(var(--p) - 190px), #000 var(--p), transparent calc(var(--p) + 55px));
+}
+
+.agent-scan-dots-v {
+    -webkit-mask-image: linear-gradient(90deg, transparent calc(var(--p) - 190px), #000 var(--p), transparent calc(var(--p) + 55px));
+    mask-image: linear-gradient(90deg, transparent calc(var(--p) - 190px), #000 var(--p), transparent calc(var(--p) + 55px));
+}
+
+html.dark-style .agent-scan-dots,
+html[data-theme="dark"] .agent-scan-dots {
+    --dot: rgba(196, 181, 253, 1);
+}
+
+#drawflow .drawflow-node .input.agent-dot-hit,
+#drawflow .drawflow-node .output.agent-dot-hit {
+    animation: agent-dot-hit 2.6s ease both;
+}
+
+@keyframes agent-dot-hit {
+    0% { box-shadow: 0 0 0 0 rgba(129, 140, 248, 0); }
+    15% { box-shadow: 0 0 0 5px rgba(129, 140, 248, 0.55), 0 0 18px 6px rgba(167, 139, 250, 0.7); }
+    100% { box-shadow: 0 0 0 0 rgba(129, 140, 248, 0); }
 }

@@ -4546,4 +4546,64 @@ User, խումբ և նամակի կաղապար այստեղ չեն ստեղծվ
   <data name="BuilderIntOutlookEventTriggerHelp" xml:space="preserve">
     <value>Գործարկվում է օրացույցի ամեն նոր իրադարձության համար (ստուգվում է րոպեն մեկ)։ Օգտագործեք {{trigger.subject}}, {{trigger.start}}, {{trigger.location}}։</value>
   </data>
+  <data name="AgentChatSecFlow" xml:space="preserve">
+    <value>Ինչպես է աշխատում գործընթացը</value>
+  </data>
+  <data name="AgentChatFlowChain" xml:space="preserve">
+    <value>Շղթա {0}</value>
+  </data>
+  <data name="AgentChatFlowYes" xml:space="preserve">
+    <value>այո</value>
+  </data>
+  <data name="AgentChatFlowNo" xml:space="preserve">
+    <value>ոչ</value>
+  </data>
+  <data name="AgentChatFlowCase" xml:space="preserve">
+    <value>տարբերակ</value>
+  </data>
+  <data name="AgentChatFlowOther" xml:space="preserve">
+    <value>այլապես</value>
+  </data>
+  <data name="AgentChatFlowRepeat" xml:space="preserve">
+    <value>(վերադարձ շրջանով)</value>
+  </data>
+  <data name="AgentChatSecOverview" xml:space="preserve">
+    <value>Թվերով</value>
+  </data>
+  <data name="AgentChatFactTriggers" xml:space="preserve">
+    <value>Տրիգերներ (ինչն է գործարկում գործընթացը): {0}</value>
+  </data>
+  <data name="AgentChatFactActions" xml:space="preserve">
+    <value>Գործողություններ (ինչ է անում գործընթացը): {0}</value>
+  </data>
+  <data name="AgentChatFactChains" xml:space="preserve">
+    <value>Առանձին շղթաներ: {0}</value>
+  </data>
+  <data name="AgentChatFactBranches" xml:space="preserve">
+    <value>Ճյուղավորումներ (պայման / անջատիչ): {0}</value>
+  </data>
+  <data name="AgentChatFactAlone" xml:space="preserve">
+    <value>Առանց կապերի քարտեր: {0}</value>
+  </data>
+  <data name="AgentChatFactServices" xml:space="preserve">
+    <value>Օգտագործվող ծառայություններ: {0}</value>
+  </data>
+  <data name="AgentChatCardAccount" xml:space="preserve">
+    <value>Հաշիվ</value>
+  </data>
+  <data name="AgentChatCardFrom" xml:space="preserve">
+    <value>Գալիս է</value>
+  </data>
+  <data name="AgentChatCardTo" xml:space="preserve">
+    <value>Տանում է դեպի</value>
+  </data>
+  <data name="AgentChatCardChain" xml:space="preserve">
+    <value>Շղթա {0}</value>
+  </data>
+  <data name="AgentChatCardEmpty" xml:space="preserve">
+    <value>Դեռ ոչինչ լրացված չէ</value>
+  </data>
+  <data name="AgentChatCardNoNext" xml:space="preserve">
+    <value>Շղթայի վերջին քարտը</value>
+  </data>
 </root>
