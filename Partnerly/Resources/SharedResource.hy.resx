@@ -3001,7 +3001,7 @@ User, խումբ և նամակի կաղապար այստեղ չեն ստեղծվ
     <value>Նշեք անուն և հանրային http(s) URL</value>
   </data>
   <data name="CreateAutomation" xml:space="preserve">
-    <value>Նոր ավտոմատացում</value>
+    <value>Նոր գործակալ</value>
   </data>
   <data name="CreateAutomationLead" xml:space="preserve">
     <value>Տվեք անուն։ Պահելուց հետո կբացվի խմբագիրը։</value>
@@ -3883,6 +3883,24 @@ User, խումբ և նամակի կաղապար այստեղ չեն ստեղծվ
   <data name="TplOmnichannelTicketBody" xml:space="preserve">
     <value>Նոր տոմս՝ թիմի Telegram զրույց, գրանցում Sheets-ում և նամակ ղեկավարին, շտապները՝ նաև WhatsApp-ով։</value>
   </data>
+  <data name="TplPcNewFile" xml:space="preserve"><value>Նոր ֆայլ համակարգչից Telegram</value></data>
+  <data name="TplPcNewFileBody" xml:space="preserve"><value>Երբ հսկվող պանակում հայտնվում է PDF կամ Word ֆայլ, այն ուղարկել Telegram։</value></data>
+  <data name="TplPcScreenshot" xml:space="preserve"><value>Համակարգչի էկրանի նկար Telegram</value></data>
+  <data name="TplPcScreenshotBody" xml:space="preserve"><value>Ձեռքով գործարկում․ նկարում է համակարգչի էկրանը և ուղարկում Telegram։</value></data>
+  <data name="TplPcDiskLow" xml:space="preserve"><value>Սկավառակի տեղը քիչ է</value></data>
+  <data name="TplPcDiskLowBody" xml:space="preserve"><value>Երբ սկավառակը գրեթե լիքն է՝ հաղորդագրություն համակարգչում, ծանուցում Partnerly-ում և հաղորդագրություն Telegram։</value></data>
+  <data name="TplPcOffline" xml:space="preserve"><value>Համակարգիչը անջատվեց ցանցից</value></data>
+  <data name="TplPcOfflineBody" xml:space="preserve"><value>Երբ համակարգիչը կորցնում է կապը Partnerly-ի հետ, ծանուցել ձեզ և գրել Telegram։</value></data>
+  <data name="TplPcMorning" xml:space="preserve"><value>Բարի լույս համակարգչում</value></data>
+  <data name="TplPcMorningBody" xml:space="preserve"><value>Ամեն օր 09:00-ին համակարգիչը ցույց է տալիս ծանուցում և բարձրաձայն ողջունում։</value></data>
+  <data name="BuilderPcChooseFile" xml:space="preserve"><value>Ընտրել ֆայլ…</value></data>
+  <data name="BuilderPcChooseFolder" xml:space="preserve"><value>Ընտրել պանակ…</value></data>
+  <data name="BuilderPcChooseProgram" xml:space="preserve"><value>Ընտրել ծրագիր…</value></data>
+  <data name="BuilderPcPickNoConnection" xml:space="preserve"><value>Նախ ընտրեք համակարգիչը վերևում։</value></data>
+  <data name="BuilderPcPickWaiting" xml:space="preserve"><value>Նայեք ձեր համակարգչին՝ ընտրեք այնտեղ բացված պատուհանում…</value></data>
+  <data name="BuilderPcPickFailed" xml:space="preserve"><value>Համակարգիչը չպատասխանեց։</value></data>
+  <data name="BuilderPcPickOk" xml:space="preserve"><value>Ընտրված է համակարգչում։</value></data>
+  <data name="BuilderPcPickNotAllowed" xml:space="preserve"><value>Համակարգիչը դեռ թույլ չի տալիս այս վայրը։ Ավելացրեք այն Partnerly Agent-ի կարգավորումներում, հակառակ դեպքում քարտը կմերժվի։</value></data>
   <data name="AutomationPublishBeforeRun" xml:space="preserve">
     <value>Կան չհրապարակված փոփոխություններ։ Հրապարակեք գործակալը, ապա գործարկեք։</value>
   </data>

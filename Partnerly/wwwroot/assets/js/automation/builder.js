@@ -1767,6 +1767,101 @@
         return entry[kind].map(function (path) { return { value: String(path), label: String(path), group: group }; });
     }
 
+    // "Choose..." buttons under a path field of a Computer card: the program on the PC opens a Windows
+    // dialog, the person picks there, and the path lands in the field (typing by hand still works).
+    var PICK_LABELS = {
+        file: ["builderPcChooseFile", "Choose file…"],
+        save: ["builderPcChooseFile", "Choose file…"],
+        zip: ["builderPcChooseFile", "Choose file…"],
+        zipsave: ["builderPcChooseFile", "Choose file…"],
+        folder: ["builderPcChooseFolder", "Choose folder…"],
+        program: ["builderPcChooseProgram", "Choose program…"],
+        programname: ["builderPcChooseProgram", "Choose program…"],
+        script: ["builderPcChooseFile", "Choose file…"]
+    };
+
+    function appendPicker(built, field, data) {
+        var kinds = Array.isArray(field.pick) ? field.pick : [field.pick];
+        var row = document.createElement("div");
+        row.className = "automation-pc-pick";
+        var status = document.createElement("span");
+        status.className = "automation-pc-pick-status";
+        status.setAttribute("role", "status");
+        var buttons = [];
+
+        function setStatus(message, kind) {
+            status.textContent = message || "";
+            status.className = "automation-pc-pick-status" + (kind ? " is-" + kind : "");
+        }
+
+        function fill(path) {
+            var select = built.el.querySelector("select");
+            var input = built.control;
+            if (input && input.tagName === "INPUT") {
+                input.value = path;
+                input.hidden = false;
+                if (select) {
+                    var known = Array.prototype.some.call(select.options, function (option) { return option.value === path; });
+                    select.value = known ? path : "__custom__";
+                    if (known) { input.hidden = true; }
+                }
+                input.dispatchEvent(new Event("input", { bubbles: true }));
+                input.dispatchEvent(new Event("change", { bubbles: true }));
+            } else if (select) {
+                if (!Array.prototype.some.call(select.options, function (option) { return option.value === path; })) {
+                    var extra = document.createElement("option");
+                    extra.value = path;
+                    extra.textContent = path;
+                    select.appendChild(extra);
+                }
+                select.value = path;
+                select.dispatchEvent(new Event("change", { bubbles: true }));
+            }
+        }
+
+        function choose(kind) {
+            var id = data && data.config ? data.config.connectionId : "";
+            if (!id) {
+                setStatus(t("builderPcPickNoConnection", "Choose the computer above first."), "warn");
+                return;
+            }
+            buttons.forEach(function (button) { button.disabled = true; });
+            setStatus(t("builderPcPickWaiting", "Look at your PC: choose in the window that opened there…"), "wait");
+            postForm(config.computerPickUrl, { id: id, kind: kind, title: field.label || "" }).then(function (json) {
+                if (!json || json.success === false) {
+                    setStatus((json && json.message) || t("builderPcPickFailed", "The PC did not answer."), "error");
+                } else if (json.cancelled || !json.path) {
+                    setStatus("", "");
+                } else {
+                    fill(json.path);
+                    setStatus(json.allowed
+                        ? t("builderPcPickOk", "Chosen on the PC.")
+                        : t("builderPcPickNotAllowed", "The PC does not allow this place yet. Add it in the Partnerly Agent settings on the PC, otherwise the card will be refused."),
+                        json.allowed ? "ok" : "warn");
+                }
+            }).catch(function () {
+                setStatus(t("builderPcPickFailed", "The PC did not answer."), "error");
+            }).then(function () {
+                buttons.forEach(function (button) { button.disabled = !canEditNow(); });
+            });
+        }
+
+        kinds.forEach(function (kind) {
+            var labels = PICK_LABELS[kind] || PICK_LABELS.file;
+            var button = document.createElement("button");
+            button.type = "button";
+            button.className = "btn btn-sm btn-outline-secondary automation-pc-pick-button";
+            button.innerHTML = '<i class="bx bx-desktop" aria-hidden="true"></i> ';
+            button.appendChild(document.createTextNode(t(labels[0], labels[1])));
+            button.disabled = !canEditNow() || !config.computerPickUrl;
+            button.addEventListener("click", function () { choose(kind); });
+            buttons.push(button);
+            row.appendChild(button);
+        });
+        row.appendChild(status);
+        built.el.appendChild(row);
+    }
+
     function sourceOptions(source, vars, data) {
         switch (source) {
             case "computerFolders": return computerOptions(data, "folders").concat(vars);
@@ -1893,6 +1988,7 @@
                     options: sourceOptions(field.source, actionVars, data)
                 });
                 control = built.control;
+                if (field.pick) { appendPicker(built, field, data); }
             } else if (field.type === "text" && ui && data.kind === "action" && !field.plain && actionVars.length) {
                 built = ui.combo({ key: field.key, value: value, options: actionVars });
                 control = built.control;
@@ -3587,6 +3683,7 @@
             catalogUrl: form.getAttribute("data-catalog-url"),
             telegramChatsUrl: form.getAttribute("data-telegram-chats-url"),
             computerSettingsUrl: form.getAttribute("data-computer-settings-url"),
+            computerPickUrl: form.getAttribute("data-computer-pick-url"),
             saveUrl: form.getAttribute("data-save-url"),
             favoriteUrl: form.getAttribute("data-favorite-url"),
             favoriteImportUrl: form.getAttribute("data-favorite-import-url"),

@@ -3001,7 +3001,7 @@ User, группу и шаблон письма здесь создать нел
     <value>Укажите имя и публичный http(s) URL</value>
   </data>
   <data name="CreateAutomation" xml:space="preserve">
-    <value>Новая автоматизация</value>
+    <value>Новый агент</value>
   </data>
   <data name="CreateAutomationLead" xml:space="preserve">
     <value>Дайте процессу имя. После сохранения откроется редактор.</value>
@@ -3883,6 +3883,24 @@ User, группу и шаблон письма здесь создать нел
   <data name="TplOmnichannelTicketBody" xml:space="preserve">
     <value>Новый тикет: чат команды в Telegram, запись в Sheets и письмо руководителю; срочные — ещё и в WhatsApp.</value>
   </data>
+  <data name="TplPcNewFile" xml:space="preserve"><value>Новый файл с ПК в Telegram</value></data>
+  <data name="TplPcNewFileBody" xml:space="preserve"><value>Когда в отслеживаемой папке появляется PDF или Word, отправить его в Telegram.</value></data>
+  <data name="TplPcScreenshot" xml:space="preserve"><value>Снимок экрана ПК в Telegram</value></data>
+  <data name="TplPcScreenshotBody" xml:space="preserve"><value>Запуск вручную: делает снимок экрана ПК и отправляет в Telegram.</value></data>
+  <data name="TplPcDiskLow" xml:space="preserve"><value>Мало места на диске</value></data>
+  <data name="TplPcDiskLowBody" xml:space="preserve"><value>Когда диск почти заполнен: сообщение на ПК, уведомление в Partnerly и сообщение в Telegram.</value></data>
+  <data name="TplPcOffline" xml:space="preserve"><value>ПК пропал из сети</value></data>
+  <data name="TplPcOfflineBody" xml:space="preserve"><value>Когда ПК теряет связь с Partnerly, уведомить вас и написать в Telegram.</value></data>
+  <data name="TplPcMorning" xml:space="preserve"><value>Доброе утро на ПК</value></data>
+  <data name="TplPcMorningBody" xml:space="preserve"><value>Каждый день в 09:00 ПК показывает уведомление и произносит приветствие вслух.</value></data>
+  <data name="BuilderPcChooseFile" xml:space="preserve"><value>Выбрать файл…</value></data>
+  <data name="BuilderPcChooseFolder" xml:space="preserve"><value>Выбрать папку…</value></data>
+  <data name="BuilderPcChooseProgram" xml:space="preserve"><value>Выбрать программу…</value></data>
+  <data name="BuilderPcPickNoConnection" xml:space="preserve"><value>Сначала выберите компьютер выше.</value></data>
+  <data name="BuilderPcPickWaiting" xml:space="preserve"><value>Посмотрите на свой ПК: выберите в окне, которое там открылось…</value></data>
+  <data name="BuilderPcPickFailed" xml:space="preserve"><value>ПК не ответил.</value></data>
+  <data name="BuilderPcPickOk" xml:space="preserve"><value>Выбрано на ПК.</value></data>
+  <data name="BuilderPcPickNotAllowed" xml:space="preserve"><value>ПК пока не разрешает это место. Добавьте его в настройках Partnerly Agent на ПК, иначе карточка будет отклонена.</value></data>
   <data name="AutomationPublishBeforeRun" xml:space="preserve">
     <value>Есть неопубликованные изменения. Опубликуйте агента, затем запустите.</value>
   </data>

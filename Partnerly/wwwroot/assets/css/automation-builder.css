@@ -1539,7 +1539,7 @@ html[data-theme="dark"] .automation-hub-icon:not(.is-primary):not(.is-danger) {
 
 .automation-hub-template-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(min(100%, 250px), 1fr));
+    grid-template-columns: repeat(auto-fill, minmax(min(100%, 190px), 1fr));
     gap: 14px;
 }
 
@@ -1551,7 +1551,8 @@ html[data-theme="dark"] .automation-hub-icon:not(.is-primary):not(.is-danger) {
     gap: 8px;
     min-width: 0;
     height: 100%;
-    padding: 18px 16px 16px;
+    min-height: 250px;
+    padding: 20px 16px 16px;
     overflow: hidden;
     border-radius: 18px;
     transition: transform 0.18s ease, box-shadow 0.18s ease, border-color 0.18s ease;
@@ -3306,6 +3307,9 @@ html[data-theme="dark"] .automation-port-switch .automation-port-switch-btn.is-a
 /* ---- Outlook (Microsoft) accents ---- */
 :root { --hub-microsoft: #0078d4; }
 .automation-hub-template.is-microsoft { --tpl-accent: var(--hub-microsoft); }
+.automation-hub-template.is-computer { --tpl-accent: #0ea5e9; }
+.automation-hub-logo.is-computer,
+.automation-hub-template-icon.is-computer { background: linear-gradient(135deg, #64748b, #0ea5e9 60%, #6366f1); }
 .automation-hub-template-icon.is-microsoft,
 .automation-int-icon.is-microsoft,
 .automation-hub-logo.is-microsoft { background: linear-gradient(135deg, #2b88d8, #0078d4 55%, #106ebe); }
@@ -5844,3 +5848,184 @@ html.dark-style [data-prop-fields] .is-required-missing > .form-label,
 html[data-theme="dark"] [data-prop-fields] .is-required-missing > .form-label {
     color: #fcd34d;
 }
+
+/* ====== Dropdown fields (selects) in Agents pages, builder, popups and windows ======
+   The glass field rules above use the `background` shorthand, which erased the arrow, and the
+   site-wide 40px field rule shrinks the right padding, so text ran under the arrow. One block
+   puts the arrow back and keeps the same look in every window (light / dark). */
+.automation-page select.form-select,
+.automation-create-card select.form-select,
+.automation-hub-overlay select.form-select,
+.automation-props select.form-select,
+.automation-side-body select.form-select,
+.automation-page .automation-combo select {
+    -webkit-appearance: none;
+    appearance: none;
+    height: 40px;
+    min-height: 40px;
+    padding: 0.4rem 2.2rem 0.4rem 0.8rem;
+    border-radius: 12px;
+    line-height: 1.5;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    cursor: pointer;
+    background-color: rgba(255, 255, 255, 0.72);
+    background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%236366f1' stroke-width='2.4' stroke-linecap='round' stroke-linejoin='round'%3e%3cpath d='m6 9 6 6 6-6'/%3e%3c/svg%3e");
+    background-repeat: no-repeat !important;
+    background-position: right 0.7rem center !important;
+    background-size: 16px 16px !important;
+    color-scheme: light;
+}
+
+.automation-page select.form-select:hover,
+.automation-create-card select.form-select:hover,
+.automation-hub-overlay select.form-select:hover,
+.automation-props select.form-select:hover,
+.automation-side-body select.form-select:hover {
+    border-color: rgba(99, 102, 241, 0.38);
+}
+
+.automation-page select.form-select:focus,
+.automation-create-card select.form-select:focus,
+.automation-hub-overlay select.form-select:focus,
+.automation-props select.form-select:focus,
+.automation-side-body select.form-select:focus {
+    background-color: rgba(255, 255, 255, 0.92);
+    border-color: rgba(99, 102, 241, 0.55);
+    box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.14);
+    outline: 0;
+}
+
+.automation-page select.form-select:disabled,
+.automation-create-card select.form-select:disabled,
+.automation-hub-overlay select.form-select:disabled,
+.automation-props select.form-select:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+
+.automation-page select.form-select option,
+.automation-create-card select.form-select option,
+.automation-hub-overlay select.form-select option,
+.automation-props select.form-select option {
+    background: #ffffff;
+    color: #1e1b4b;
+}
+
+html.dark-style .automation-page select.form-select,
+html.dark-style .automation-create-card select.form-select,
+html.dark-style .automation-hub-overlay select.form-select,
+html.dark-style .automation-props select.form-select,
+html.dark-style .automation-side-body select.form-select,
+html[data-theme="dark"] .automation-page select.form-select,
+html[data-theme="dark"] .automation-create-card select.form-select,
+html[data-theme="dark"] .automation-hub-overlay select.form-select,
+html[data-theme="dark"] .automation-props select.form-select,
+html[data-theme="dark"] .automation-side-body select.form-select {
+    background-color: rgba(12, 14, 32, 0.72);
+    background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%23c4b5fd' stroke-width='2.4' stroke-linecap='round' stroke-linejoin='round'%3e%3cpath d='m6 9 6 6 6-6'/%3e%3c/svg%3e");
+    color: #edf0ff;
+    color-scheme: dark;
+}
+
+html.dark-style .automation-page select.form-select:focus,
+html.dark-style .automation-create-card select.form-select:focus,
+html.dark-style .automation-hub-overlay select.form-select:focus,
+html.dark-style .automation-props select.form-select:focus,
+html.dark-style .automation-side-body select.form-select:focus,
+html[data-theme="dark"] .automation-page select.form-select:focus,
+html[data-theme="dark"] .automation-create-card select.form-select:focus,
+html[data-theme="dark"] .automation-hub-overlay select.form-select:focus,
+html[data-theme="dark"] .automation-props select.form-select:focus,
+html[data-theme="dark"] .automation-side-body select.form-select:focus {
+    background-color: rgba(18, 20, 44, 0.92);
+    border-color: rgba(167, 139, 250, 0.6);
+    box-shadow: 0 0 0 3px rgba(167, 139, 250, 0.18);
+}
+
+html.dark-style .automation-page select.form-select option,
+html.dark-style .automation-create-card select.form-select option,
+html.dark-style .automation-hub-overlay select.form-select option,
+html.dark-style .automation-props select.form-select option,
+html[data-theme="dark"] .automation-page select.form-select option,
+html[data-theme="dark"] .automation-create-card select.form-select option,
+html[data-theme="dark"] .automation-hub-overlay select.form-select option,
+html[data-theme="dark"] .automation-props select.form-select option {
+    background: #15172e;
+    color: #edf0ff;
+}
+
+/* "Insert variable…" helper under text fields: a small quiet helper, not a list - no arrow. */
+.automation-page select.form-select.automation-insert-var,
+html.dark-style .automation-page select.form-select.automation-insert-var,
+html[data-theme="dark"] .automation-page select.form-select.automation-insert-var {
+    height: 30px;
+    min-height: 30px;
+    padding: 0.2rem 0.7rem;
+    border-style: dashed;
+    border-radius: 10px;
+    background-image: none;
+    font-size: 0.75rem;
+    color: #697a8d;
+}
+
+html.dark-style .automation-page select.form-select.automation-insert-var,
+html[data-theme="dark"] .automation-page select.form-select.automation-insert-var {
+    color: #a5b4fc;
+}
+
+/* Keep the arrow while the dropdown is focused / open (the glass :focus rule resets the background). */
+.automation-page select.form-select:focus:not(.automation-insert-var),
+.automation-create-card select.form-select:focus,
+.automation-hub-overlay select.form-select:focus,
+.automation-props select.form-select:focus:not(.automation-insert-var),
+.automation-side-body select.form-select:focus:not(.automation-insert-var) {
+    background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%236366f1' stroke-width='2.4' stroke-linecap='round' stroke-linejoin='round'%3e%3cpath d='m6 9 6 6 6-6'/%3e%3c/svg%3e");
+}
+
+html.dark-style .automation-page select.form-select:focus:not(.automation-insert-var),
+html.dark-style .automation-create-card select.form-select:focus,
+html.dark-style .automation-hub-overlay select.form-select:focus,
+html.dark-style .automation-props select.form-select:focus:not(.automation-insert-var),
+html.dark-style .automation-side-body select.form-select:focus:not(.automation-insert-var),
+html[data-theme="dark"] .automation-page select.form-select:focus:not(.automation-insert-var),
+html[data-theme="dark"] .automation-create-card select.form-select:focus,
+html[data-theme="dark"] .automation-hub-overlay select.form-select:focus,
+html[data-theme="dark"] .automation-props select.form-select:focus:not(.automation-insert-var),
+html[data-theme="dark"] .automation-side-body select.form-select:focus:not(.automation-insert-var) {
+    background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%23c4b5fd' stroke-width='2.4' stroke-linecap='round' stroke-linejoin='round'%3e%3cpath d='m6 9 6 6 6-6'/%3e%3c/svg%3e");
+}
+
+/* "Choose..." buttons of Computer cards: pick a file / folder on the PC itself. */
+.automation-pc-pick {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 6px 8px;
+    margin-top: 6px;
+}
+
+.automation-pc-pick-button {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    border-radius: 10px;
+}
+
+.automation-pc-pick-status {
+    flex: 1 1 100%;
+    font-size: 0.75rem;
+    line-height: 1.4;
+    color: #697a8d;
+}
+
+.automation-pc-pick-status:empty {
+    display: none;
+}
+
+.automation-pc-pick-status.is-ok { color: #1f9d57; }
+.automation-pc-pick-status.is-warn { color: #b45309; }
+.automation-pc-pick-status.is-error { color: #dc2626; }
+
+html.dark-style .automation-pc-pick-status.is-warn,
+html[data-theme="dark"] .automation-pc-pick-status.is-warn { color: #fcd34d; }

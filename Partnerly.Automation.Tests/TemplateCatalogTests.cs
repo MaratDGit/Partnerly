@@ -22,7 +22,12 @@ namespace Partnerly.Automation.Tests
         public async Task Every_template_graph_is_valid()
         {
             // Integration templates need the registry-backed validator.
-            await using var provider = Integrations.IntegrationTestHost.Create(Guid.NewGuid(), new Integrations.FakeHttpHandler());
+            await using var provider = AutomationTestHost.Create(Guid.NewGuid(), clock: new FakeClock(), configure: services =>
+            {
+                Microsoft.Extensions.DependencyInjection.ServiceCollectionServiceExtensions.AddSingleton<Microsoft.Extensions.Configuration.IConfiguration>(services, new Microsoft.Extensions.Configuration.ConfigurationBuilder().Build());
+                Partnerly.Integrations.Common.IntegrationServiceCollectionExtensions.AddPartnerlyIntegrations(services, hostPolling: false);
+                Partnerly.Computer.ComputerServiceCollectionExtensions.AddPartnerlyComputer(services);
+            });
             var validator = Microsoft.Extensions.DependencyInjection.ServiceProviderServiceExtensions.GetRequiredService<GraphValidator>(provider);
             foreach (var preset in AutomationTemplateCatalog.All)
             {
@@ -45,6 +50,12 @@ namespace Partnerly.Automation.Tests
             Assert.Equal("google", AutomationTemplateCatalog.Get("sheets-signup-log")!.Category);
             Assert.Equal("whatsapp", AutomationTemplateCatalog.Get("whatsapp-auto-reply")!.Category);
             Assert.Equal("partnerly", AutomationTemplateCatalog.Get("manual-flag")!.Category);
+            foreach (var id in new[] { "pc-new-file-telegram", "pc-screenshot-telegram", "pc-disk-low-alert", "pc-offline-alert", "pc-morning-greeting" })
+            {
+                var pc = AutomationTemplateCatalog.Get(id)!;
+                Assert.Equal("computer", pc.Category);
+                Assert.Contains("Computer", pc.Services);
+            }
             Assert.Empty(AutomationTemplateCatalog.Get("new-ticket-alert")!.Services);
         }
 

@@ -60,9 +60,20 @@ namespace Partnerly.Agent.Security
             throw new AgentException("This place is not allowed in the Partnerly Agent settings (allowedFolders).");
         }
 
-        public static bool IsUnder(string full, string root) =>
-            string.Equals(full, root, StringComparison.OrdinalIgnoreCase)
-            || full.StartsWith(root + Path.DirectorySeparatorChar, StringComparison.OrdinalIgnoreCase);
+        // A drive root such as "F:\" already ends with a separator: adding one more made every file on
+        // the drive "outside" it, so allowing a whole drive did not work.
+        public static bool IsUnder(string full, string root)
+        {
+            if (string.Equals(full, root, StringComparison.OrdinalIgnoreCase))
+            {
+                return true;
+            }
+
+            var prefix = root.EndsWith(Path.DirectorySeparatorChar) || root.EndsWith(Path.AltDirectorySeparatorChar)
+                ? root
+                : root + Path.DirectorySeparatorChar;
+            return full.StartsWith(prefix, StringComparison.OrdinalIgnoreCase);
+        }
 
         // A shortcut/junction inside an allowed folder could lead outside of it.
         private static void RejectLinks(string full, string root)

@@ -426,7 +426,77 @@ namespace Partnerly.Automation.Authoring
                     Edge("e3", "a2", "a3"),
                     Edge("e4", "a3", "b1"),
                     Edge("e5", "b1", "w1", "true"),
-                    Edge("e6", "b1", "s1", "false")))
+                    Edge("e6", "b1", "s1", "false"))),
+            Make(
+                "pc-new-file-telegram",
+                "New PC file to Telegram",
+                "When a PDF or Word file appears in a watched folder, send it to Telegram.",
+                "medium",
+                "TplPcNewFile",
+                Graph(
+                    Trigger("t1", "computer.file_created", "newFile", 40, 80, @"{ ""folder"": """", ""pattern"": ""*.pdf;*.docx"" }"),
+                    Action("a1", "computer.get_file", "fetch", 300, 80, @"{ ""path"": ""{{trigger.path}}"" }"),
+                    Action("a2", "telegram.send_document", "sendFile", 560, 80,
+                        @"{ ""attachmentId"": ""{{steps.fetch.result.attachmentId}}"", ""caption"": ""📄 {{trigger.fileName}} ({{trigger.machine}})"" }"),
+                    Edge("e1", "t1", "a1"),
+                    Edge("e2", "a1", "a2"))),
+            Make(
+                "pc-screenshot-telegram",
+                "PC screenshot to Telegram",
+                "Run by hand: takes a screenshot of the PC and sends it to Telegram.",
+                "small",
+                "TplPcScreenshot",
+                Graph(
+                    Trigger("t1", "manual", "start", 40, 80),
+                    Action("a1", "computer.screenshot", "shot", 280, 80, @"{ ""screen"": ""main"" }"),
+                    Action("a2", "telegram.send_document", "sendShot", 520, 80,
+                        @"{ ""attachmentId"": ""{{steps.shot.result.attachmentId}}"", ""caption"": ""🖥 Screenshot {{execution.startedAt}}"" }"),
+                    Edge("e1", "t1", "a1"),
+                    Edge("e2", "a1", "a2"))),
+            Make(
+                "pc-disk-low-alert",
+                "Low disk space alert",
+                "When a disk is almost full: message on the PC, a Partnerly notification and a Telegram message.",
+                "medium",
+                "TplPcDiskLow",
+                Graph(
+                    Trigger("t1", "computer.disk_low", "diskLow", 40, 100, "{}"),
+                    Action("a1", "computer.notify", "warnPc", 300, 100,
+                        @"{ ""title"": ""Disk space"", ""text"": ""Drive {{trigger.drive}} has only {{trigger.freeGb}} GB left."" }"),
+                    Action("a2", "send_notification", "notifyMe", 560, 100,
+                        @"{ ""message"": ""{{trigger.machine}}: drive {{trigger.drive}} has {{trigger.freeGb}} GB free ({{trigger.freePercent}}%)"", ""notificationType"": ""System"" }"),
+                    Action("a3", "telegram.send_message", "tellTelegram", 820, 100,
+                        @"{ ""text"": ""💾 {{trigger.machine}}: drive {{trigger.drive}} has {{trigger.freeGb}} GB free"", ""parseMode"": ""none"" }"),
+                    Edge("e1", "t1", "a1"),
+                    Edge("e2", "a1", "a2"),
+                    Edge("e3", "a2", "a3"))),
+            Make(
+                "pc-offline-alert",
+                "PC went offline",
+                "When the PC loses its connection to Partnerly, notify you and tell Telegram.",
+                "small",
+                "TplPcOffline",
+                Graph(
+                    Trigger("t1", "computer.status_changed", "pcStatus", 40, 80, @"{ ""state"": ""offline"" }"),
+                    Action("a1", "send_notification", "notifyMe", 300, 80,
+                        @"{ ""message"": ""{{trigger.machine}} is offline"", ""notificationType"": ""System"" }"),
+                    Action("a2", "telegram.send_message", "tellTelegram", 560, 80,
+                        @"{ ""text"": ""⚠️ {{trigger.machine}} is offline"", ""parseMode"": ""none"" }"),
+                    Edge("e1", "t1", "a1"),
+                    Edge("e2", "a1", "a2"))),
+            Make(
+                "pc-morning-greeting",
+                "Good morning on the PC",
+                "Every day at 09:00 the PC shows a notification and says a greeting aloud.",
+                "small",
+                "TplPcMorning",
+                Graph(
+                    Trigger("t1", "schedule", "morning", 40, 80, @"{ ""scheduleKind"": ""daily"", ""time"": ""09:00"" }"),
+                    Action("a1", "computer.notify", "hello", 280, 80,
+                        @"{ ""title"": ""Good morning"", ""text"": ""A new day has started."" }"),
+                    Action("a2", "computer.speak", "sayHello", 520, 80, @"{ ""text"": ""Good morning!"" }"),
+                    Edge("e1", "t1", "a1"),
+                    Edge("e2", "a1", "a2")))
         };
 
         public static AutomationPreset? Get(string? id) =>
@@ -456,7 +526,9 @@ namespace Partnerly.Automation.Authoring
                 DescriptionKey = nameKey + "Body",
                 GraphJson = graph.ToJson(),
                 Services = services,
-                Category = services.Count == 0 ? "partnerly" : CategoryOf(services[0]),
+                Category = services.Count == 0
+                    ? "partnerly"
+                    : services.Contains("Computer") ? "computer" : CategoryOf(services[0]),
                 StepCount = graph.Nodes.Count(node => node.Kind == "action")
             };
         }
@@ -473,6 +545,7 @@ namespace Partnerly.Automation.Authoring
                 "drive" => "Google Drive",
                 "outlook" => "Outlook",
                 "whatsapp" => "WhatsApp",
+                "computer" => "Computer",
                 _ => null
             };
         }

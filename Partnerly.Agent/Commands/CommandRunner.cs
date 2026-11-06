@@ -49,6 +49,7 @@ namespace Partnerly.Agent.Commands
             switch (op)
             {
                 case "ping": return new JsonObject { ["machine"] = Environment.MachineName };
+                case "pick_path": return PickPath(args);
                 case "notify": return Notify(args);
                 case "message_box": return MessageBox(args);
                 case "speak": return await SpeakAsync(args, cancellationToken);
@@ -87,6 +88,46 @@ namespace Partnerly.Agent.Commands
                 case "download_url": return await DownloadUrlAsync(args, cancellationToken);
                 default: throw new AgentException("This version of Partnerly Agent does not know the command \"" + op + "\". Update the program.");
             }
+        }
+
+        // The editor's "Choose" button: the person picks a file or folder in a Windows dialog on this PC.
+        // Only the chosen path goes back (nothing is read), plus a hint whether the settings allow it.
+        private JsonObject PickPath(JsonObject args)
+        {
+            var kind = Text(args, "kind").ToLowerInvariant();
+            var picked = _ui.PickPath(kind, Text(args, "title"));
+            if (picked == null)
+            {
+                return new JsonObject { ["cancelled"] = true };
+            }
+
+            var path = picked;
+            var allowed = false;
+            switch (kind)
+            {
+                case "programname":
+                    path = StripExe(Path.GetFileName(picked));
+                    allowed = _config.AllowedPrograms.Any(item =>
+                        string.Equals(StripExe(Path.GetFileName(Environment.ExpandEnvironmentVariables(item.Trim()))), path, StringComparison.OrdinalIgnoreCase));
+                    break;
+                case "program":
+                    allowed = IsAllowedProgram(picked);
+                    break;
+                case "script":
+                    allowed = TryAllowed(_scriptFolders, picked);
+                    break;
+                default:
+                    allowed = TryAllowed(_folders, picked);
+                    break;
+            }
+
+            return new JsonObject { ["cancelled"] = false, ["path"] = path, ["allowed"] = allowed };
+        }
+
+        private static bool TryAllowed(PathGuard guard, string path)
+        {
+            try { guard.Resolve(path); return true; }
+            catch (AgentException) { return false; }
         }
 
         // ---------- screen ----------

@@ -68,6 +68,58 @@ namespace Partnerly.Agent.UI
             return stream.ToArray();
         }
 
+        // Windows "choose a file / folder" dialog for the editor's "Choose" button. Returns null when the
+        // person closes it. kind: file, save, folder, program, programname, script, zip, zipsave.
+        public string? PickPath(string kind, string title) =>
+            RunSta(() =>
+            {
+                // A hidden window on top, so the dialog is not lost behind the browser.
+                using var owner = new Form
+                {
+                    TopMost = true,
+                    ShowInTaskbar = false,
+                    FormBorderStyle = FormBorderStyle.None,
+                    StartPosition = FormStartPosition.Manual,
+                    Location = new Point(-32000, -32000),
+                    Size = new Size(1, 1)
+                };
+                owner.Show();
+                owner.Activate();
+
+                var caption = Clip(title, 80, "Partnerly");
+                if (kind == "folder")
+                {
+                    using var folder = new FolderBrowserDialog { Description = caption, UseDescriptionForTitle = true, ShowNewFolderButton = true };
+                    return folder.ShowDialog(owner) == DialogResult.OK ? folder.SelectedPath : null;
+                }
+
+                if (kind is "save" or "zipsave")
+                {
+                    using var save = new SaveFileDialog
+                    {
+                        Title = caption,
+                        OverwritePrompt = false,
+                        Filter = kind == "zipsave" ? "Zip archive (*.zip)|*.zip" : "All files (*.*)|*.*",
+                        DefaultExt = kind == "zipsave" ? "zip" : string.Empty
+                    };
+                    return save.ShowDialog(owner) == DialogResult.OK ? save.FileName : null;
+                }
+
+                using var open = new OpenFileDialog
+                {
+                    Title = caption,
+                    CheckFileExists = true,
+                    Filter = kind switch
+                    {
+                        "program" or "programname" => "Programs (*.exe)|*.exe|All files (*.*)|*.*",
+                        "script" => "Scripts (*.ps1;*.bat;*.cmd)|*.ps1;*.bat;*.cmd",
+                        "zip" => "Zip archive (*.zip)|*.zip",
+                        _ => "All files (*.*)|*.*"
+                    }
+                };
+                return open.ShowDialog(owner) == DialogResult.OK ? open.FileName : null;
+            });
+
         // Clipboard and windows must live on an STA thread.
         private static T RunSta<T>(Func<T> work)
         {

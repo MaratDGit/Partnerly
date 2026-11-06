@@ -29,6 +29,26 @@
     <div class="integrations-toast" data-int-toast role="status" aria-live="polite" hidden></div>
 
     <div class="integrations-grid">
+        @* ---------- Computer ---------- *@
+        <section class="integrations-card" data-service="computer">
+            <button type="button" class="btn btn-primary integrations-connect" data-int-open="computer">
+                <i class="bx bx-plus" aria-hidden="true"></i> @Localizer["IntegrationConnect"]
+            </button>
+            <div class="integrations-card-head">
+                <span class="integrations-logo is-computer"><i class="bx bx-desktop" aria-hidden="true"></i></span>
+                <div>
+                    <h2>@Localizer["ComputerTitle"]</h2>
+                    <p>@Localizer["IntegrationComputerIntro"]</p>
+                </div>
+            </div>
+            <ul class="integrations-features">
+                <li><i class="bx bx-folder-open" aria-hidden="true"></i> @Localizer["IntegrationComputerFeature1"]</li>
+                <li><i class="bx bx-bell" aria-hidden="true"></i> @Localizer["IntegrationComputerFeature2"]</li>
+                <li><i class="bx bx-shield-quarter" aria-hidden="true"></i> @Localizer["IntegrationComputerFeature3"]</li>
+            </ul>
+            @await Html.PartialAsync("~/Views/Integrations/_ConnectionList.cshtml", Model.Computers)
+        </section>
+
         @* ---------- Telegram ---------- *@
         <section class="integrations-card" data-service="telegram">
             <button type="button" class="btn btn-primary integrations-connect" data-int-open="telegram">
@@ -114,25 +134,6 @@
             @await Html.PartialAsync("~/Views/Integrations/_ConnectionList.cshtml", Model.WhatsApp)
         </section>
 
-        @* ---------- Computer ---------- *@
-        <section class="integrations-card" data-service="computer">
-            <button type="button" class="btn btn-primary integrations-connect" data-int-open="computer">
-                <i class="bx bx-plus" aria-hidden="true"></i> @Localizer["IntegrationConnect"]
-            </button>
-            <div class="integrations-card-head">
-                <span class="integrations-logo is-computer"><i class="bx bx-desktop" aria-hidden="true"></i></span>
-                <div>
-                    <h2>@Localizer["ComputerTitle"]</h2>
-                    <p>@Localizer["IntegrationComputerIntro"]</p>
-                </div>
-            </div>
-            <ul class="integrations-features">
-                <li><i class="bx bx-folder-open" aria-hidden="true"></i> @Localizer["IntegrationComputerFeature1"]</li>
-                <li><i class="bx bx-bell" aria-hidden="true"></i> @Localizer["IntegrationComputerFeature2"]</li>
-                <li><i class="bx bx-shield-quarter" aria-hidden="true"></i> @Localizer["IntegrationComputerFeature3"]</li>
-            </ul>
-            @await Html.PartialAsync("~/Views/Integrations/_ConnectionList.cshtml", Model.Computers)
-        </section>
     </div>
 
     @* ---------- Dialogs ---------- *@
@@ -258,7 +259,7 @@
                 @Localizer["ComputerAgentRequirements"]
                 @if (Model.AgentAvailable)
                 {
-                    <a class="integrations-link" asp-action="DownloadAgent"><i class="bx bx-download" aria-hidden="true"></i> @Localizer["ComputerDownloadAgent"]</a>
+                    <a class="integrations-link" asp-action="DownloadAgent" download="Partnerly-Agent.zip" data-no-loader><i class="bx bx-download" aria-hidden="true"></i> @Localizer["ComputerDownloadAgent"]</a>
                 }
                 else
                 {

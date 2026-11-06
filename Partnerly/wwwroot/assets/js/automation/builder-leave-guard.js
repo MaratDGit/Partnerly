@@ -152,6 +152,11 @@
         if (!link || dialog || !isDirty()) {
             return;
         }
+        // Renaming an agent in the left menu puts an input inside the link: not a navigation.
+        var agentRow = link.closest(".partnerly-menu-agents-sub-item");
+        if (agentRow && agentRow.classList.contains("is-renaming")) {
+            return;
+        }
         var href = link.getAttribute("href") || "";
         if (!href || href.charAt(0) === "#" || /^(javascript|mailto|tel):/i.test(href)
             || link.target === "_blank" || link.hasAttribute("download")

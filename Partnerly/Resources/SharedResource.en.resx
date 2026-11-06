@@ -3001,7 +3001,7 @@ Delete is allowed for Support ticket.</value>
     <value>Enter a name and a public http(s) URL</value>
   </data>
   <data name="CreateAutomation" xml:space="preserve">
-    <value>New automation</value>
+    <value>New agent</value>
   </data>
   <data name="CreateAutomationLead" xml:space="preserve">
     <value>Give it a name. After you save, the workflow editor opens.</value>
@@ -3883,6 +3883,24 @@ Delete is allowed for Support ticket.</value>
   <data name="TplOmnichannelTicketBody" xml:space="preserve">
     <value>New ticket: Telegram team chat, Sheets log and Gmail to the lead; urgent ones also go to WhatsApp.</value>
   </data>
+  <data name="TplPcNewFile" xml:space="preserve"><value>New PC file to Telegram</value></data>
+  <data name="TplPcNewFileBody" xml:space="preserve"><value>When a PDF or Word file appears in a watched folder, send it to Telegram.</value></data>
+  <data name="TplPcScreenshot" xml:space="preserve"><value>PC screenshot to Telegram</value></data>
+  <data name="TplPcScreenshotBody" xml:space="preserve"><value>Run by hand: takes a screenshot of the PC and sends it to Telegram.</value></data>
+  <data name="TplPcDiskLow" xml:space="preserve"><value>Low disk space alert</value></data>
+  <data name="TplPcDiskLowBody" xml:space="preserve"><value>When a disk is almost full: message on the PC, a Partnerly notification and a Telegram message.</value></data>
+  <data name="TplPcOffline" xml:space="preserve"><value>PC went offline</value></data>
+  <data name="TplPcOfflineBody" xml:space="preserve"><value>When the PC loses its connection to Partnerly, notify you and tell Telegram.</value></data>
+  <data name="TplPcMorning" xml:space="preserve"><value>Good morning on the PC</value></data>
+  <data name="TplPcMorningBody" xml:space="preserve"><value>Every day at 09:00 the PC shows a notification and says a greeting aloud.</value></data>
+  <data name="BuilderPcChooseFile" xml:space="preserve"><value>Choose file…</value></data>
+  <data name="BuilderPcChooseFolder" xml:space="preserve"><value>Choose folder…</value></data>
+  <data name="BuilderPcChooseProgram" xml:space="preserve"><value>Choose program…</value></data>
+  <data name="BuilderPcPickNoConnection" xml:space="preserve"><value>Choose the computer above first.</value></data>
+  <data name="BuilderPcPickWaiting" xml:space="preserve"><value>Look at your PC: choose in the window that opened there…</value></data>
+  <data name="BuilderPcPickFailed" xml:space="preserve"><value>The PC did not answer.</value></data>
+  <data name="BuilderPcPickOk" xml:space="preserve"><value>Chosen on the PC.</value></data>
+  <data name="BuilderPcPickNotAllowed" xml:space="preserve"><value>The PC does not allow this place yet. Add it in the Partnerly Agent settings on the PC, otherwise the card will be refused.</value></data>
   <data name="AutomationPublishBeforeRun" xml:space="preserve">
     <value>You have unpublished changes. Publish the agent, then run it.</value>
   </data>

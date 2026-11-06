@@ -29,6 +29,16 @@ namespace Partnerly.Automation.Tests.Integrations
         }
 
         [Fact]
+        public void A_whole_drive_can_be_allowed_and_everything_on_it_passes()
+        {
+            var drive = Path.GetPathRoot(_root)!;
+            var guard = new PathGuard(new[] { drive.Replace(Path.DirectorySeparatorChar, '/') });
+            var file = Path.Combine(_root, "allowed", "sub", "a.txt");
+            Assert.Equal(file, guard.Resolve(file));
+            Assert.Equal(drive, guard.Resolve(drive));
+        }
+
+        [Fact]
         public void Places_outside_are_refused_even_when_the_name_starts_the_same()
         {
             Assert.Throws<AgentException>(() => _guard.Resolve(Path.Combine(_root, "allowed-evil", "a.txt")));

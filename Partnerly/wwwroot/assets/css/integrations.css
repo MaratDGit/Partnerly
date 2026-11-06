@@ -19,6 +19,20 @@ html.dark-style .integrations-page {
     --int-chip: rgba(167, 139, 250, 0.16);
 }
 
+/* Same narrow, centered width as the Agents hub. */
+.integrations-page.container-xxl {
+    width: 100%;
+    max-width: 1080px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+@media (max-width: 991.98px) {
+    .integrations-page.container-xxl {
+        max-width: 100%;
+    }
+}
+
 .integrations-head {
     display: flex;
     flex-wrap: wrap;
@@ -44,15 +58,9 @@ html.dark-style .integrations-page {
 
 .integrations-grid {
     display: grid;
-    grid-template-columns: repeat(3, minmax(0, 1fr));
+    grid-template-columns: minmax(0, 1fr);
     align-items: start;
     gap: 16px;
-}
-
-@media (max-width: 1099.98px) {
-    .integrations-grid {
-        grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-    }
 }
 
 .integrations-card {

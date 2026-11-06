@@ -537,6 +537,50 @@ namespace Partnerly.Integrations.Web
         private string AgentFolder() =>
             _configuration["Agent:DownloadFolder"] is { Length: > 0 } folder ? folder : ComputerAgentPackage.DefaultFolder(_environment.ContentRootPath);
 
+        private static readonly string[] PickKinds = { "file", "save", "folder", "program", "programname", "script", "zip", "zipsave" };
+
+        // The editor's "Choose" button: the program on the PC opens a Windows file / folder dialog, the person picks
+        // there, and only the chosen path comes back. Waits while the person decides.
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        [Authorize(Policy = "Permission:automation.connections")]
+        public async Task<IActionResult> ComputerPick(Guid id, string kind, string? title)
+        {
+            var connection = await _connections.GetForOwnerAsync(id, _access.CurrentUserId, IntegrationKinds.Computer);
+            if (connection == null || !PickKinds.Contains(kind, StringComparer.OrdinalIgnoreCase))
+            {
+                return NotFound();
+            }
+
+            try
+            {
+                var response = await _computers.SendAsync(
+                    connection.Id,
+                    "pick_path",
+                    new JsonObject { ["kind"] = kind.ToLowerInvariant(), ["title"] = title ?? string.Empty },
+                    TimeSpan.FromMinutes(3),
+                    HttpContext.RequestAborted);
+                if (!response.Ok)
+                {
+                    var failure = response.ErrorKey != null ? _localizer[response.ErrorKey] : null;
+                    return Ok(new { success = false, message = failure is { ResourceNotFound: false } ? failure.Value : response.Error });
+                }
+
+                return Ok(new
+                {
+                    success = true,
+                    cancelled = response.Data["cancelled"]?.GetValue<bool>() == true,
+                    path = response.Data["path"]?.ToString(),
+                    allowed = response.Data["allowed"]?.GetValue<bool>() == true
+                });
+            }
+            catch (ComputerException ex)
+            {
+                var text = _localizer[ex.Key];
+                return Ok(new { success = false, message = text.ResourceNotFound ? ex.Message : text.Value });
+            }
+        }
+
         // A new token cuts off the program that used the old one.
         [HttpPost]
         [ValidateAntiForgeryToken]

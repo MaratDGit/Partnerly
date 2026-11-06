@@ -9,9 +9,12 @@
 
         function intro(name) { return note("intPc" + name + "Intro"); }
 
-        function pcText(key, labelKey, fallback, helpKey, source) {
+        // pick: what the "Choose..." button opens on the PC (file, folder, save, program, programname, script, zip, zipsave;
+        // an array shows one button per kind). Typing the value by hand still works.
+        function pcText(key, labelKey, fallback, helpKey, source, pick) {
             var field = text(key, labelKey, fallback, helpKey);
             field.source = source || "computerFolders";
+            if (pick) { field.pick = pick; }
             return field;
         }
 
@@ -42,7 +45,7 @@
                 note("intPcMessageBoxNote")
             ],
             "computer.speak": [pc, intro("Speak"), area("text", "intPcText", "Text", "intVariablesHelp")],
-            "computer.open": [pc, intro("Open"), pcText("target", "intPcTarget", "Link, file or folder", "intPcTargetHelp")],
+            "computer.open": [pc, intro("Open"), pcText("target", "intPcTarget", "Link, file or folder", "intPcTargetHelp", null, ["file", "folder"])],
 
             // ---------- Clipboard, information ----------
             "computer.clipboard_set": [pc, intro("ClipboardSet"), area("text", "intPcText", "Text", "intVariablesHelp")],
@@ -56,71 +59,71 @@
             "computer.list_programs": [pc, intro("ListPrograms")],
             "computer.network_info": [pc, intro("NetworkInfo")],
             "computer.ping_host": [pc, intro("PingHost"), text("host", "intPcHost", "Site or device", "intPcHostHelp", true)],
-            "computer.process_running": [pc, intro("ProcessRunning"), pcText("name", "intPcProgramName", "Program name", "intPcProgramNameHelp", "computerPrograms")],
+            "computer.process_running": [pc, intro("ProcessRunning"), pcText("name", "intPcProgramName", "Program name", "intPcProgramNameHelp", "computerPrograms", "programname")],
 
             // ---------- Files ----------
             "computer.read_file": [
                 pc, intro("ReadFile"),
-                pcText("path", "intPcFile", "File", "intPcPathHelp"),
+                pcText("path", "intPcFile", "File", "intPcPathHelp", null, "file"),
                 number("maxKb", "intPcMaxKb", "Largest size (KB)")
             ],
             "computer.write_file": [
                 pc, intro("WriteFile"),
-                pcText("path", "intPcFile", "File", "intPcPathHelp"),
+                pcText("path", "intPcFile", "File", "intPcPathHelp", null, "save"),
                 area("text", "intPcText", "Text", "intVariablesHelp"),
                 choice("mode", "intPcMode", "If the file exists", [["overwrite", "intPcReplace", "Replace it"], ["append", "intPcAppend", "Add to the end"]])
             ],
-            "computer.file_info": [pc, intro("FileInfo"), pcText("path", "intPcFileOrFolder", "File or folder", "intPcPathHelp")],
+            "computer.file_info": [pc, intro("FileInfo"), pcText("path", "intPcFileOrFolder", "File or folder", "intPcPathHelp", null, ["file", "folder"])],
             "computer.list_folder": [
                 pc, intro("ListFolder"),
-                pcText("path", "intPcFolder", "Folder", "intPcPathHelp"),
+                pcText("path", "intPcFolder", "Folder", "intPcPathHelp", null, "folder"),
                 text("pattern", "intPcPattern", "Mask", "intPcPatternHelp", true),
                 yesNo("recursive", "intPcRecursive", "Include subfolders")
             ],
-            "computer.create_folder": [pc, intro("CreateFolder"), pcText("path", "intPcFolder", "Folder", "intPcPathHelp")],
+            "computer.create_folder": [pc, intro("CreateFolder"), pcText("path", "intPcFolder", "Folder", "intPcPathHelp", null, "folder")],
             "computer.copy_file": [
                 pc, intro("CopyFile"),
-                pcText("source", "intPcSource", "From", "intPcPathHelp"),
-                pcText("destination", "intPcDestination", "To", "intPcPathHelp"),
+                pcText("source", "intPcSource", "From", "intPcPathHelp", null, ["file", "folder"]),
+                pcText("destination", "intPcDestination", "To", "intPcPathHelp", null, ["folder", "save"]),
                 yesNo("overwrite", "intPcOverwrite", "Replace if it exists")
             ],
             "computer.move_file": [
                 pc, intro("MoveFile"),
-                pcText("source", "intPcSource", "From", "intPcPathHelp"),
-                pcText("destination", "intPcDestination", "To", "intPcPathHelp"),
+                pcText("source", "intPcSource", "From", "intPcPathHelp", null, ["file", "folder"]),
+                pcText("destination", "intPcDestination", "To", "intPcPathHelp", null, ["folder", "save"]),
                 yesNo("overwrite", "intPcOverwrite", "Replace if it exists")
             ],
             "computer.delete_file": [
                 pc, intro("DeleteFile"),
-                pcText("path", "intPcFile", "File", "intPcPathHelp"),
+                pcText("path", "intPcFile", "File", "intPcPathHelp", null, "file"),
                 note("intPcDeleteNote")
             ],
             "computer.zip_folder": [
                 pc, intro("ZipFolder"),
-                pcText("source", "intPcFolder", "Folder", "intPcPathHelp"),
-                pcText("destination", "intPcZipFile", "Archive file (.zip)", "intPcPathHelp")
+                pcText("source", "intPcFolder", "Folder", "intPcPathHelp", null, "folder"),
+                pcText("destination", "intPcZipFile", "Archive file (.zip)", "intPcPathHelp", null, "zipsave")
             ],
             "computer.unzip": [
                 pc, intro("Unzip"),
-                pcText("source", "intPcZipFile", "Archive file (.zip)", "intPcPathHelp"),
-                pcText("destination", "intPcUnzipTo", "Unpack into folder", "intPcPathHelp"),
+                pcText("source", "intPcZipFile", "Archive file (.zip)", "intPcPathHelp", null, "zip"),
+                pcText("destination", "intPcUnzipTo", "Unpack into folder", "intPcPathHelp", null, "folder"),
                 yesNo("overwrite", "intPcOverwrite", "Replace if it exists")
             ],
             "computer.save_attachment": [
                 pc, intro("SaveAttachment"),
                 text("attachmentId", "intAttachment", "Attachment id", "intAttachmentHelp"),
-                pcText("folder", "intPcFolder", "Folder", "intPcPathHelp"),
+                pcText("folder", "intPcFolder", "Folder", "intPcPathHelp", null, "folder"),
                 text("fileName", "intFileName", "File name", "intPcSaveNameHelp"),
                 yesNo("overwrite", "intPcOverwrite", "Replace if it exists")
             ],
             "computer.get_file": [
                 pc, intro("GetFile"),
-                pcText("path", "intPcFile", "File", "intPcPathHelp")
+                pcText("path", "intPcFile", "File", "intPcPathHelp", null, "file")
             ],
             "computer.download_url": [
                 pc, intro("DownloadUrl"),
                 text("url", "intPcUrl", "Link to the file", "intPcUrlHelp"),
-                pcText("folder", "intPcFolder", "Folder", "intPcPathHelp"),
+                pcText("folder", "intPcFolder", "Folder", "intPcPathHelp", null, "folder"),
                 text("fileName", "intFileName", "File name", "intPcDownloadNameHelp"),
                 yesNo("overwrite", "intPcOverwrite", "Replace if it exists")
             ],
@@ -128,7 +131,7 @@
             // ---------- Programs ----------
             "computer.run_program": [
                 pc, intro("RunProgram"),
-                pcText("path", "intPcProgram", "Program", "intPcProgramHelp", "computerPrograms"),
+                pcText("path", "intPcProgram", "Program", "intPcProgramHelp", "computerPrograms", "program"),
                 text("arguments", "intPcArguments", "Arguments", "intPcArgumentsHelp"),
                 yesNo("wait", "intPcWait", "Wait for it to finish"),
                 number("timeoutSeconds", "intPcTimeout", "Stop after (seconds)"),
@@ -136,7 +139,7 @@
             ],
             "computer.run_script": [
                 pc, intro("RunScript"),
-                pcText("path", "intPcScript", "Script (.ps1, .bat, .cmd)", "intPcScriptHelp", "computerScripts"),
+                pcText("path", "intPcScript", "Script (.ps1, .bat, .cmd)", "intPcScriptHelp", "computerScripts", "script"),
                 text("arguments", "intPcArguments", "Arguments", "intPcArgumentsHelp"),
                 yesNo("wait", "intPcWait", "Wait for it to finish"),
                 number("timeoutSeconds", "intPcTimeout", "Stop after (seconds)"),
@@ -144,7 +147,7 @@
             ],
             "computer.close_program": [
                 pc, intro("CloseProgram"),
-                pcText("name", "intPcProgramName", "Program name", "intPcCloseHelp", "computerPrograms")
+                pcText("name", "intPcProgramName", "Program name", "intPcCloseHelp", "computerPrograms", "programname")
             ],
 
             // ---------- The computer ----------
@@ -186,30 +189,30 @@
             // ---------- Triggers: what happens on the PC ----------
             "computer.file_created": [
                 pc, intro("FileCreated"),
-                pcText("folder", "intPcWatchFolder", "Only this folder", "intPcWatchFolderHelp"),
+                pcText("folder", "intPcWatchFolder", "Only this folder", "intPcWatchFolderHelp", null, "folder"),
                 text("pattern", "intPcPattern", "Mask", "intPcPatternHelp", true),
                 note("intPcFileTriggerHelp")
             ],
             "computer.file_changed": [
                 pc, intro("FileChanged"),
-                pcText("folder", "intPcWatchFolder", "Only this folder", "intPcWatchFolderHelp"),
+                pcText("folder", "intPcWatchFolder", "Only this folder", "intPcWatchFolderHelp", null, "folder"),
                 text("pattern", "intPcPattern", "Mask", "intPcPatternHelp", true),
                 note("intPcFileTriggerHelp")
             ],
             "computer.file_deleted": [
                 pc, intro("FileDeleted"),
-                pcText("folder", "intPcWatchFolder", "Only this folder", "intPcWatchFolderHelp"),
+                pcText("folder", "intPcWatchFolder", "Only this folder", "intPcWatchFolderHelp", null, "folder"),
                 text("pattern", "intPcPattern", "Mask", "intPcPatternHelp", true),
                 note("intPcFileTriggerHelp")
             ],
             "computer.program_started": [
                 pc, intro("ProgramStarted"),
-                pcText("program", "intPcProgramName", "Program name", "intPcProgramTriggerHelp", "computerPrograms"),
+                pcText("program", "intPcProgramName", "Program name", "intPcProgramTriggerHelp", "computerPrograms", "programname"),
                 note("intPcProgramWatchHelp")
             ],
             "computer.program_stopped": [
                 pc, intro("ProgramStopped"),
-                pcText("program", "intPcProgramName", "Program name", "intPcProgramTriggerHelp", "computerPrograms"),
+                pcText("program", "intPcProgramName", "Program name", "intPcProgramTriggerHelp", "computerPrograms", "programname"),
                 note("intPcProgramWatchHelp")
             ],
             "computer.status_changed": [
