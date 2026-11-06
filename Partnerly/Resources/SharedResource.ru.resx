@@ -4675,4 +4675,106 @@ User, группу и шаблон письма здесь создать нел
   <data name="ArrangeGridDesc" xml:space="preserve">
     <value>Все карточки ровной сеткой по форме экрана.</value>
   </data>
+  <data name="ToolsPubTitle" xml:space="preserve">
+    <value>Некоторые карточки не готовы</value>
+  </data>
+  <data name="ToolsPubLead" xml:space="preserve">
+    <value>Агент может работать не так, как вы ожидаете:</value>
+  </data>
+  <data name="ToolsPubNoTrigger" xml:space="preserve">
+    <value>Нет триггера: ничто не запустит этого агента</value>
+  </data>
+  <data name="ToolsPubSetup" xml:space="preserve">
+    <value>не заполнено</value>
+  </data>
+  <data name="ToolsPubUnlinked" xml:space="preserve">
+    <value>не подключена к цепочке</value>
+  </data>
+  <data name="ToolsPubShow" xml:space="preserve">
+    <value>Показать</value>
+  </data>
+  <data name="ToolsPubAnyway" xml:space="preserve">
+    <value>Опубликовать всё равно</value>
+  </data>
+  <data name="ToolsPubCancel" xml:space="preserve">
+    <value>Отмена</value>
+  </data>
+  <data name="ToolsNavTitle" xml:space="preserve">
+    <value>Карта и поиск</value>
+  </data>
+  <data name="ToolsNavSearch" xml:space="preserve">
+    <value>Найти карточку…</value>
+  </data>
+  <data name="ToolsNavNone" xml:space="preserve">
+    <value>Ничего не найдено</value>
+  </data>
+  <data name="ToolsNoteAdd" xml:space="preserve">
+    <value>Добавить заметку</value>
+  </data>
+  <data name="ToolsNotePlaceholder" xml:space="preserve">
+    <value>Напишите заметку…</value>
+  </data>
+  <data name="ToolsNoteDelete" xml:space="preserve">
+    <value>Удалить заметку</value>
+  </data>
+  <data name="ToolsNoteColor" xml:space="preserve">
+    <value>Цвет заметки</value>
+  </data>
+  <data name="ToolsMultiCount" xml:space="preserve">
+    <value>Выбрано карточек: {0}</value>
+  </data>
+  <data name="ToolsMultiHint" xml:space="preserve">
+    <value>Shift + перетаскивание выделяет, Shift + клик добавляет карточку</value>
+  </data>
+  <data name="ToolsAlignLeft" xml:space="preserve">
+    <value>По левому краю</value>
+  </data>
+  <data name="ToolsAlignCenter" xml:space="preserve">
+    <value>По центру</value>
+  </data>
+  <data name="ToolsAlignRight" xml:space="preserve">
+    <value>По правому краю</value>
+  </data>
+  <data name="ToolsAlignTop" xml:space="preserve">
+    <value>По верхнему краю</value>
+  </data>
+  <data name="ToolsAlignMiddle" xml:space="preserve">
+    <value>По середине</value>
+  </data>
+  <data name="ToolsAlignBottom" xml:space="preserve">
+    <value>По нижнему краю</value>
+  </data>
+  <data name="ToolsDistH" xml:space="preserve">
+    <value>Распределить по горизонтали</value>
+  </data>
+  <data name="ToolsDistV" xml:space="preserve">
+    <value>Распределить по вертикали</value>
+  </data>
+  <data name="ToolsMultiClear" xml:space="preserve">
+    <value>Снять выделение</value>
+  </data>
+  <data name="ToolsRunShow" xml:space="preserve">
+    <value>Показать на холсте</value>
+  </data>
+  <data name="ToolsRunClear" xml:space="preserve">
+    <value>Скрыть отметки запуска</value>
+  </data>
+  <data name="ToolsRunBanner" xml:space="preserve">
+    <value>Запуск показан на холсте</value>
+  </data>
+  <data name="ToolsRunOk" xml:space="preserve">
+    <value>выполнено</value>
+  </data>
+  <data name="ToolsRunFailed" xml:space="preserve">
+    <value>ошибка</value>
+  </data>
+  <data name="ToolsRunSkipped" xml:space="preserve">
+    <value>пропущено</value>
+  </data>
+  <data name="ToolsRunNotRun" xml:space="preserve">
+    <value>не выполнялась</value>
+  </data>
+  <data name="BuilderHistoryNotes" xml:space="preserve">
+    <value>Изменена заметка</value>
+  </data>
 </root>

@@ -1,0 +1,40 @@
+@{
+    // Texts for builder-tools.js (multi-select, map, notes, pre-publish check, run on canvas).
+    var toolsText = new Dictionary<string, string>
+    {
+        ["pubTitle"] = Localizer["ToolsPubTitle"].Value,
+        ["pubLead"] = Localizer["ToolsPubLead"].Value,
+        ["pubNoTrigger"] = Localizer["ToolsPubNoTrigger"].Value,
+        ["pubSetup"] = Localizer["ToolsPubSetup"].Value,
+        ["pubUnlinked"] = Localizer["ToolsPubUnlinked"].Value,
+        ["pubShow"] = Localizer["ToolsPubShow"].Value,
+        ["pubAnyway"] = Localizer["ToolsPubAnyway"].Value,
+        ["pubCancel"] = Localizer["ToolsPubCancel"].Value,
+        ["navTitle"] = Localizer["ToolsNavTitle"].Value,
+        ["navSearch"] = Localizer["ToolsNavSearch"].Value,
+        ["navNone"] = Localizer["ToolsNavNone"].Value,
+        ["noteAdd"] = Localizer["ToolsNoteAdd"].Value,
+        ["notePlaceholder"] = Localizer["ToolsNotePlaceholder"].Value,
+        ["noteDelete"] = Localizer["ToolsNoteDelete"].Value,
+        ["noteColor"] = Localizer["ToolsNoteColor"].Value,
+        ["multiCount"] = Localizer["ToolsMultiCount"].Value,
+        ["multiHint"] = Localizer["ToolsMultiHint"].Value,
+        ["alignLeft"] = Localizer["ToolsAlignLeft"].Value,
+        ["alignCenter"] = Localizer["ToolsAlignCenter"].Value,
+        ["alignRight"] = Localizer["ToolsAlignRight"].Value,
+        ["alignTop"] = Localizer["ToolsAlignTop"].Value,
+        ["alignMiddle"] = Localizer["ToolsAlignMiddle"].Value,
+        ["alignBottom"] = Localizer["ToolsAlignBottom"].Value,
+        ["distH"] = Localizer["ToolsDistH"].Value,
+        ["distV"] = Localizer["ToolsDistV"].Value,
+        ["multiClear"] = Localizer["ToolsMultiClear"].Value,
+        ["runShow"] = Localizer["ToolsRunShow"].Value,
+        ["runClear"] = Localizer["ToolsRunClear"].Value,
+        ["runBanner"] = Localizer["ToolsRunBanner"].Value,
+        ["runOk"] = Localizer["ToolsRunOk"].Value,
+        ["runFailed"] = Localizer["ToolsRunFailed"].Value,
+        ["runSkipped"] = Localizer["ToolsRunSkipped"].Value,
+        ["runNotRun"] = Localizer["ToolsRunNotRun"].Value,
+    };
+}
+<script type="application/json" id="automationToolsI18n">@Html.Raw(Json.Serialize(toolsText))</script>

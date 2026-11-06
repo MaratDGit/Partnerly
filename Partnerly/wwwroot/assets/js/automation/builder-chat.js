@@ -817,12 +817,20 @@
                 appear(bubble, head);
                 var listEl = make("div", "agent-rp-cards");
                 bubble.appendChild(listEl);
+                // a click on a card of the report selects it on the canvas and opens its settings
+                listEl.addEventListener("click", function (event) {
+                    var hit = event.target.closest("[data-card-focus]");
+                    if (hit && window.PartnerlyBuilder && window.PartnerlyBuilder.focusCard) {
+                        window.PartnerlyBuilder.focusCard(hit.getAttribute("data-card-focus"));
+                    }
+                });
                 var delay = cards.length > 14 ? 160 : 320;
                 for (var c = 0; c < cards.length; c++) {
                     guard(myEpoch);
                     var card = cards[c];
                     var kind = classify(card);
                     var item = make("div", "agent-rp-card is-" + kind);
+                    item.setAttribute("data-card-focus", String(card.domId));
                     var top = make("div", "agent-rp-card-top");
                     top.appendChild(icon(card.kind === "trigger" ? "bx-bolt-circle" : "bx-cube-alt"));
                     var names = make("div", "agent-rp-card-name");

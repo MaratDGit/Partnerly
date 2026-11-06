@@ -53,10 +53,13 @@
             document.body.appendChild(container);
         }
         var el = document.createElement("div");
-        el.className = "toast align-items-center border-0 " + (type === "error" ? "text-bg-danger" : "text-bg-primary");
+        var failed = type === "error";
+        // glass card in the style of the Agents pages (see .automation-toast in automation-builder.css)
+        el.className = "toast automation-toast border-0 " + (failed ? "is-error" : "is-ok");
         el.setAttribute("role", "alert");
-        el.innerHTML = '<div class="d-flex"><div class="toast-body"></div>' +
-            '<button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast"></button></div>';
+        el.innerHTML = '<div class="automation-toast-icon"><i class="bx ' + (failed ? "bx-error-circle" : "bx-check-circle") + '" aria-hidden="true"></i></div>' +
+            '<div class="toast-body"></div>' +
+            '<button type="button" class="automation-toast-close" data-bs-dismiss="toast" aria-label="Close"><i class="bx bx-x" aria-hidden="true"></i></button>';
         el.querySelector(".toast-body").textContent = message;
         container.appendChild(el);
         if (window.bootstrap && bootstrap.Toast) {

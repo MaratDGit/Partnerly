@@ -4675,4 +4675,106 @@ User, խումբ և նամակի կաղապար այստեղ չեն ստեղծվ
   <data name="ArrangeGridDesc" xml:space="preserve">
     <value>Բոլոր քարտերը հավասար ցանցով՝ էկրանի ձևով։</value>
   </data>
+  <data name="ToolsPubTitle" xml:space="preserve">
+    <value>Որոշ քարտեր պատրաստ չեն</value>
+  </data>
+  <data name="ToolsPubLead" xml:space="preserve">
+    <value>Գործակալը կարող է աշխատել ոչ այնպես, ինչպես սպասում եք՝</value>
+  </data>
+  <data name="ToolsPubNoTrigger" xml:space="preserve">
+    <value>Տրիգեր չկա՝ ոչինչ չի գործարկի այս գործակալին</value>
+  </data>
+  <data name="ToolsPubSetup" xml:space="preserve">
+    <value>լրացված չէ</value>
+  </data>
+  <data name="ToolsPubUnlinked" xml:space="preserve">
+    <value>չի միացված շղթային</value>
+  </data>
+  <data name="ToolsPubShow" xml:space="preserve">
+    <value>Ցույց տալ</value>
+  </data>
+  <data name="ToolsPubAnyway" xml:space="preserve">
+    <value>Հրապարակել ամեն դեպքում</value>
+  </data>
+  <data name="ToolsPubCancel" xml:space="preserve">
+    <value>Չեղարկել</value>
+  </data>
+  <data name="ToolsNavTitle" xml:space="preserve">
+    <value>Քարտեզ և որոնում</value>
+  </data>
+  <data name="ToolsNavSearch" xml:space="preserve">
+    <value>Գտնել քարտ…</value>
+  </data>
+  <data name="ToolsNavNone" xml:space="preserve">
+    <value>Ոչինչ չի գտնվել</value>
+  </data>
+  <data name="ToolsNoteAdd" xml:space="preserve">
+    <value>Ավելացնել նշում</value>
+  </data>
+  <data name="ToolsNotePlaceholder" xml:space="preserve">
+    <value>Գրեք նշում…</value>
+  </data>
+  <data name="ToolsNoteDelete" xml:space="preserve">
+    <value>Ջնջել նշումը</value>
+  </data>
+  <data name="ToolsNoteColor" xml:space="preserve">
+    <value>Նշման գույն</value>
+  </data>
+  <data name="ToolsMultiCount" xml:space="preserve">
+    <value>Ընտրված քարտեր՝ {0}</value>
+  </data>
+  <data name="ToolsMultiHint" xml:space="preserve">
+    <value>Shift + քաշելը ընտրում է, Shift + սեղմելը ավելացնում է քարտ</value>
+  </data>
+  <data name="ToolsAlignLeft" xml:space="preserve">
+    <value>Ըստ ձախ եզրի</value>
+  </data>
+  <data name="ToolsAlignCenter" xml:space="preserve">
+    <value>Ըստ կենտրոնի</value>
+  </data>
+  <data name="ToolsAlignRight" xml:space="preserve">
+    <value>Ըստ աջ եզրի</value>
+  </data>
+  <data name="ToolsAlignTop" xml:space="preserve">
+    <value>Ըստ վերին եզրի</value>
+  </data>
+  <data name="ToolsAlignMiddle" xml:space="preserve">
+    <value>Ըստ միջնամասի</value>
+  </data>
+  <data name="ToolsAlignBottom" xml:space="preserve">
+    <value>Ըստ ներքին եզրի</value>
+  </data>
+  <data name="ToolsDistH" xml:space="preserve">
+    <value>Հավասարաչափ հորիզոնական</value>
+  </data>
+  <data name="ToolsDistV" xml:space="preserve">
+    <value>Հավասարաչափ ուղղահայաց</value>
+  </data>
+  <data name="ToolsMultiClear" xml:space="preserve">
+    <value>Հանել ընտրությունը</value>
+  </data>
+  <data name="ToolsRunShow" xml:space="preserve">
+    <value>Ցույց տալ կտավի վրա</value>
+  </data>
+  <data name="ToolsRunClear" xml:space="preserve">
+    <value>Թաքցնել գործարկման նշումները</value>
+  </data>
+  <data name="ToolsRunBanner" xml:space="preserve">
+    <value>Գործարկումը ցուցադրված է կտավի վրա</value>
+  </data>
+  <data name="ToolsRunOk" xml:space="preserve">
+    <value>կատարված է</value>
+  </data>
+  <data name="ToolsRunFailed" xml:space="preserve">
+    <value>սխալ</value>
+  </data>
+  <data name="ToolsRunSkipped" xml:space="preserve">
+    <value>բաց թողնված է</value>
+  </data>
+  <data name="ToolsRunNotRun" xml:space="preserve">
+    <value>չի կատարվել</value>
+  </data>
+  <data name="BuilderHistoryNotes" xml:space="preserve">
+    <value>Փոփոխված է նշումը</value>
+  </data>
 </root>

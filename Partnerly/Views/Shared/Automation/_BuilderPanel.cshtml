@@ -37,6 +37,7 @@
     <input type="hidden" name="graphJson" id="graphJson" value="@Model.GraphJson" />
     <script type="application/json" id="automationBuilderGraph">@Html.Raw(string.IsNullOrWhiteSpace(Model.GraphJson) ? "{}" : Model.GraphJson)</script>
     <script type="application/json" id="automationBuilderI18n">@await Html.PartialAsync("~/Views/Shared/Automation/_BuilderI18n.cshtml")</script>
+    @await Html.PartialAsync("~/Views/Shared/Automation/_BuilderTools.cshtml")
 
     <div class="automation-builder">
         <div class="automation-canvas-wrap">

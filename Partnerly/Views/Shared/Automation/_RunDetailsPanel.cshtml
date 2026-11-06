@@ -44,6 +44,12 @@
                 data-id="@Model.Definition.Id">
             @Localizer["Back"]
         </button>
+        <button type="button"
+                class="btn btn-outline-primary run-show-canvas"
+                data-show-run
+                data-run-steps="@System.Text.Json.JsonSerializer.Serialize(latest.Select(step => new { nodeId = step.NodeId, status = step.Status, error = step.Error }))">
+            <i class="bx bx-show" aria-hidden="true"></i> @Localizer["ToolsRunShow"]
+        </button>
         @if (Model.Run.Status is "queued" or "running" or "waiting" && canRun)
         {
             <form asp-action="Cancel"

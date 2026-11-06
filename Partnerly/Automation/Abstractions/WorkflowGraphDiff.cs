@@ -10,6 +10,7 @@ namespace Partnerly.Automation.Abstractions
         private static string Logic(string graphJson)
         {
             var graph = WorkflowGraph.Parse(graphJson);
+            graph.Notes = null; // notes are only a picture, not what the agent does
             foreach (var node in graph.Nodes)
             {
                 node.X = 0;

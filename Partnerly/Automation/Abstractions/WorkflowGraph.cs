@@ -22,6 +22,10 @@ namespace Partnerly.Automation.Abstractions
         [JsonPropertyName("edges")]
         public List<WorkflowEdge> Edges { get; set; } = new();
 
+        // Sticky notes on the editor canvas. Only for people reading the picture: the engine ignores them.
+        [JsonPropertyName("notes")]
+        public List<WorkflowNote>? Notes { get; set; }
+
         public static WorkflowGraph Parse(string json)
         {
             var graph = JsonSerializer.Deserialize<WorkflowGraph>(json, JsonOptions);
@@ -62,6 +66,30 @@ namespace Partnerly.Automation.Abstractions
         [JsonPropertyName("disabled")]
         [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingDefault)]
         public bool Disabled { get; set; }
+    }
+
+    public class WorkflowNote
+    {
+        [JsonPropertyName("id")]
+        public string Id { get; set; } = string.Empty;
+
+        [JsonPropertyName("text")]
+        public string Text { get; set; } = string.Empty;
+
+        [JsonPropertyName("x")]
+        public double X { get; set; }
+
+        [JsonPropertyName("y")]
+        public double Y { get; set; }
+
+        [JsonPropertyName("w")]
+        public double W { get; set; } = 200;
+
+        [JsonPropertyName("h")]
+        public double H { get; set; } = 120;
+
+        [JsonPropertyName("color")]
+        public string? Color { get; set; }
     }
 
     public class WorkflowEdge

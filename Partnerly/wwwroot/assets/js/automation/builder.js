@@ -663,16 +663,25 @@
                 });
             });
         });
-        return { schemaVersion: 1, nodes: nodes, edges: edges };
+        var out = { schemaVersion: 1, nodes: nodes, edges: edges };
+        if (boardNotes.length) {
+            out.notes = JSON.parse(JSON.stringify(boardNotes));
+        }
+        return out;
     }
+
+    // Sticky notes on the canvas (drawn by builder-tools.js); they travel with the graph.
+    var boardNotes = [];
 
     function importGraph(graph) {
         importing = true;
         try {
             importGraphInner(graph);
+            boardNotes = graph && Array.isArray(graph.notes) ? JSON.parse(JSON.stringify(graph.notes)) : [];
         } finally {
             importing = false;
         }
+        window.dispatchEvent(new CustomEvent("partnerly:notes-changed"));
     }
 
     function importGraphInner(graph) {
@@ -762,6 +771,9 @@
             if (p.x !== m.x || p.y !== m.y) {
                 return { label: t("historyMoved", "Moved") + " " + nodeTitle(m), key: "move:" + m.id };
             }
+        }
+        if (JSON.stringify(prev.notes || []) !== JSON.stringify(next.notes || [])) {
+            return { label: t("historyNotes", "Edited a note"), key: "notes" };
         }
         return null;
     }
@@ -2963,7 +2975,7 @@
 
     var wrap = root.closest(".automation-canvas-wrap") || root;
     function onWheel(event) {
-        if (event.target && event.target.closest && event.target.closest(".automation-props, .automation-zoom, .automation-add-panel, .automation-status, .agent-chat, .automation-arrange")) {
+        if (event.target && event.target.closest && event.target.closest(".automation-props, .automation-zoom, .automation-add-panel, .automation-status, .agent-chat, .automation-arrange, .automation-mapbox, .automation-multibar, .automation-note")) {
             return;
         }
         event.preventDefault();
@@ -2990,6 +3002,45 @@
     window.dispatchEvent(new CustomEvent("partnerly:builder-changed"));
     renderFields(null);
     zoomLabel();
+
+    // ---- pieces the extra tools (builder-tools.js) build on ----------------
+    // Centre the view on a point of the canvas (card coordinates).
+    function centerOn(px, py, smooth) {
+        var area = root.getBoundingClientRect();
+        var z = editor.zoom || 1;
+        var origin = (getComputedStyle(editor.precanvas).transformOrigin || "0px 0px").split(" ").map(parseFloat);
+        var ox = origin[0] || 0, oy = origin[1] || 0;
+        editor.canvas_x = area.width / 2 - ox - (px - ox) * z;
+        editor.canvas_y = area.height / 2 - oy - (py - oy) * z;
+        if (smooth) {
+            editor.precanvas.classList.add("is-gliding");
+            window.setTimeout(function () { editor.precanvas.classList.remove("is-gliding"); }, 480);
+        }
+        applyCanvasTransform();
+    }
+
+    // Select a card, open its settings and bring it to the middle of the view.
+    function focusCard(domId) {
+        var el = document.getElementById("node-" + domId);
+        if (!el) { return false; }
+        selectNodeElement(String(domId), el);
+        if (!isCompactProps()) { showProps(); }
+        var left = parseFloat(el.style.left) || 0, top = parseFloat(el.style.top) || 0;
+        centerOn(left + el.offsetWidth / 2, top + el.offsetHeight / 2, true);
+        return true;
+    }
+
+    window.PartnerlyBuilder.focusCard = focusCard;
+    window.PartnerlyBuilder.internals = {
+        editor: editor, root: root, syncHidden: syncHidden, persistSelected: persistSelected, selectNodeElement: selectNodeElement,
+        showProps: showProps, fitView: fitView, applyZoom: applyZoom, applyCanvasTransform: applyCanvasTransform, centerOn: centerOn,
+        canEditNow: canEditNow, addNode: addNode, exportGraph: exportGraph, uniqueName: uniqueName, slug: slug,
+        typingInField: typingInField, clearEditorSelection: clearEditorSelection, t: t, cleanupFns: cleanupFns,
+        isImporting: function () { return importing; },
+        getNotes: function () { return JSON.parse(JSON.stringify(boardNotes)); },
+        setNotes: function (list) { boardNotes = JSON.parse(JSON.stringify(list || [])); syncHidden(); }
+    };
+    window.dispatchEvent(new CustomEvent("partnerly:builder-ready"));
     };
 
     function configFromDom() {

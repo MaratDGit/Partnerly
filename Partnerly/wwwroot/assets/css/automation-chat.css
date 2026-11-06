@@ -1242,3 +1242,13 @@ html[data-theme="dark"] .agent-scan-dots {
     pointer-events: none;
     transition: opacity 0.3s ease;
 }
+
+.agent-rp-card[data-card-focus] {
+    cursor: pointer;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.agent-rp-card[data-card-focus]:hover {
+    transform: translateX(2px);
+    box-shadow: 0 4px 14px rgba(99, 102, 241, 0.25);
+}
