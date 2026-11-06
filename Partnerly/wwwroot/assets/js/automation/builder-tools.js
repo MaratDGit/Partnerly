@@ -400,6 +400,7 @@
                 clearMulti();
                 clearRunMarks();
                 closeNav();
+                closeSide();
                 return;
             }
             if (I.typingInField() || !I.canEditNow()) { return; }
@@ -577,6 +578,354 @@
             notes = builder.internals.getNotes();
             renderNotes();
             clearMulti();
+        });
+
+        // =================================================================
+        //  Side section: History / Connections / Versions / Settings of this agent.
+        //  The editor shrinks to make room; the header keeps the short facts about the agent.
+        // =================================================================
+        var side = document.querySelector("[data-side-panel]");
+        var sideBody = side ? side.querySelector("[data-side-body]") : null;
+        var SIDE_KEY = "partnerly.builder.sidewidth45";
+        var SIDE_TAB_KEY = "partnerly.builder.sidetab";
+        var sideShare = 45;
+        var sideTab = "";
+        var sideToggles = Array.prototype.slice.call(document.querySelectorAll("[data-side-open]"));
+        try {
+            var storedShare = parseFloat(window.localStorage.getItem(SIDE_KEY));
+            if (storedShare >= 18 && storedShare <= 70) { sideShare = storedShare; }
+            sideTab = window.localStorage.getItem(SIDE_TAB_KEY) || "";
+        } catch (e) { sideShare = 45; }
+
+        function sideLabel(name) { return side ? (side.getAttribute("data-l-" + name) || "") : ""; }
+        function applySideWidth() {
+            if (side) { side.style.setProperty("--side-w", sideShare + "%"); }
+        }
+        function refreshLayout() {
+            // the canvas follows the width while the section slides: tell the editor a few times
+            [60, 160, 320].forEach(function (delay) {
+                window.setTimeout(function () { window.dispatchEvent(new Event("resize")); }, delay);
+            });
+        }
+        function sideIsOpen() { return !!side && side.classList.contains("is-open"); }
+        function paintToggles() {
+            sideToggles.forEach(function (button) {
+                button.classList.toggle("is-on", sideIsOpen());
+                button.setAttribute("aria-expanded", sideIsOpen() ? "true" : "false");
+            });
+        }
+        function closeSide() {
+            if (!sideIsOpen()) { return; }
+            side.classList.remove("is-open");
+            side.setAttribute("aria-hidden", "true");
+            paintToggles();
+            refreshLayout();
+        }
+
+        function chip(text, className) {
+            var el = make("span", "automation-status-chip" + (className ? " " + className : ""), text);
+            return el;
+        }
+        function renderSummary(data) {
+            var name = side.querySelector("[data-side-name]");
+            if (name && data.name) { name.textContent = data.name; }
+            var icon = side.querySelector("[data-side-icon]");
+            if (icon && data.icon) { icon.className = "bx " + data.icon; }
+
+            var chips = side.querySelector("[data-side-chips]");
+            chips.textContent = "";
+            var state = !data.isPublished ? sideLabel("draft") : (data.isActive ? sideLabel("live") : sideLabel("paused"));
+            chips.appendChild(chip(state, !data.isPublished ? "is-off" : (data.isActive ? "is-on" : "is-warn")));
+            if (data.version) { chips.appendChild(chip(sideLabel("version") + " " + data.version, "")); }
+            chips.appendChild(chip(data.timeZone, ""));
+
+            var facts = side.querySelector("[data-side-facts]");
+            facts.textContent = "";
+            function fact(label, value) {
+                var row = make("div", "automation-side-fact");
+                row.appendChild(make("span", null, label));
+                row.appendChild(make("strong", null, value));
+                facts.appendChild(row);
+            }
+            if (data.lastRunStatus) {
+                fact(sideLabel("lastrun"), data.lastRunStatus + (data.lastRunDry ? " (" + sideLabel("test") + ")" : "") + " \u00b7 " + data.lastRunAt);
+            } else {
+                fact(sideLabel("lastrun"), sideLabel("noruns"));
+            }
+            if (data.changedAt) { fact(sideLabel("changed"), (data.changedBy ? data.changedBy + " \u00b7 " : "") + data.changedAt); }
+
+            var stats = side.querySelector("[data-side-stats]");
+            stats.textContent = "";
+            function pill(label, value) {
+                var el = make("div", "automation-side-pill");
+                el.appendChild(make("small", null, label));
+                el.appendChild(make("strong", null, value));
+                stats.appendChild(el);
+            }
+            var average = data.averageSeconds < 1 ? "<1 s" : (data.averageSeconds < 90 ? Math.round(data.averageSeconds) + " s" : Math.round(data.averageSeconds / 60) + " min");
+            pill(sideLabel("runs"), String(data.total));
+            pill(sideLabel("success"), data.total ? Math.round(100 * data.succeeded / data.total) + "%" : "-");
+            pill(sideLabel("failed"), String(data.failed));
+            pill(sideLabel("average"), data.total ? average : "-");
+            var bars = make("button", "automation-side-bars");
+            bars.type = "button";
+            bars.setAttribute("aria-label", sideLabel("days"));
+            var peak = Math.max.apply(null, data.days.map(function (day) { return day.ok + day.failed + day.other; }).concat([1]));
+            data.days.forEach(function (day) {
+                var all = day.ok + day.failed + day.other;
+                var column = make("span", "automation-side-bar");
+                column.setAttribute("data-tip", day.label + "  \u00b7  " + day.ok + " \u2713   " + day.failed + " \u2717" + (day.other ? "   " + day.other + " \u2026" : ""));
+                var stack = make("span", "automation-side-bar-stack");
+                stack.style.height = (all ? Math.max(5, Math.round(26 * all / peak)) : 2) + "px";
+                [["is-failed", day.failed], ["is-other", day.other], ["is-ok", day.ok]].forEach(function (part) {
+                    if (part[1] > 0) {
+                        var piece = make("span", part[0]);
+                        piece.style.flex = String(part[1]);
+                        stack.appendChild(piece);
+                    }
+                });
+                column.appendChild(stack);
+                bars.appendChild(column);
+            });
+            stats.appendChild(bars);
+        }
+        // instant tooltip of the 7-day chart; a click opens History
+        var chartTip = make("div", "automation-side-tip");
+        chartTip.hidden = true;
+        document.body.appendChild(chartTip);
+        document.addEventListener("mouseover", function (event) {
+            var column = event.target.closest ? event.target.closest(".automation-side-bar") : null;
+            if (!column) { chartTip.hidden = true; return; }
+            chartTip.textContent = column.getAttribute("data-tip") || "";
+            var box = column.getBoundingClientRect();
+            chartTip.hidden = false;
+            chartTip.style.left = Math.max(8, Math.min(window.innerWidth - chartTip.offsetWidth - 8, box.left + box.width / 2 - chartTip.offsetWidth / 2)) + "px";
+            chartTip.style.top = Math.max(8, box.top - chartTip.offsetHeight - 8) + "px";
+        });
+        document.addEventListener("click", function (event) {
+            if (event.target.closest && event.target.closest(".automation-side-bars")) {
+                chartTip.hidden = true;
+                selectTab("history");
+            }
+        });
+        function loadSummary() {
+            fetch(side.getAttribute("data-summary-url"), { credentials: "same-origin", headers: { "X-Requested-With": "XMLHttpRequest" } })
+                .then(function (response) { return response.ok ? response.json() : null; })
+                .then(function (data) { if (data) { renderSummary(data); } })
+                .catch(function () { /* the header keeps what it had */ });
+        }
+
+        function tabButtons() { return Array.prototype.slice.call(side.querySelectorAll("[data-side-tab]")); }
+        function loadTab() {
+            var url = side.getAttribute("data-url-" + sideTab);
+            if (!url) { return; }
+            var token = (loadTab.token = (loadTab.token || 0) + 1);
+            sideBody.classList.add("is-loading");
+            fetch(url, { credentials: "same-origin", headers: { "X-Requested-With": "XMLHttpRequest", "Accept": "text/html" } })
+                .then(function (response) {
+                    if (!response.ok) { throw new Error(response.statusText || "Error"); }
+                    return response.text();
+                })
+                .then(function (html) {
+                    if (token !== loadTab.token) { return; }
+                    // Parse outside the editor form: inside it the browser would drop the <form> tags of the
+                    // tab (a form cannot sit in a form) and "Save" would submit the editor instead.
+                    var parsed = new DOMParser().parseFromString(html, "text/html");
+                    sideBody.textContent = "";
+                    while (parsed.body.firstChild) { sideBody.appendChild(document.adoptNode(parsed.body.firstChild)); }
+                    sideBody.setAttribute("data-tab", sideTab);
+                    // History keeps its header and only the rows scroll
+                    sideBody.classList.toggle("is-fixed", !!sideBody.querySelector("[data-run-monitor]"));
+                    Array.prototype.forEach.call(sideBody.querySelectorAll("[data-automation-hub-close]"), function (el) { el.remove(); });
+                    sideBody.scrollTop = 0;
+                    if (window.PartnerlyAutomationHub && window.PartnerlyAutomationHub.boot) { window.PartnerlyAutomationHub.boot(sideBody); }
+                })
+                .catch(function (err) { if (token === loadTab.token) { sideBody.textContent = err.message || "Error"; } })
+                .then(function () { if (token === loadTab.token) { sideBody.classList.remove("is-loading"); } });
+        }
+        function selectTab(name) {
+            var buttons = tabButtons();
+            if (!buttons.some(function (button) { return button.getAttribute("data-side-tab") === name; })) {
+                name = buttons.length ? buttons[0].getAttribute("data-side-tab") : "";
+            }
+            if (!name) { return; }
+            sideTab = name;
+            try { window.localStorage.setItem(SIDE_TAB_KEY, name); } catch (e) { /* storage unavailable */ }
+            buttons.forEach(function (button) {
+                var on = button.getAttribute("data-side-tab") === name;
+                button.classList.toggle("is-on", on);
+                button.setAttribute("aria-selected", on ? "true" : "false");
+            });
+            loadTab();
+        }
+        function openSide(tab) {
+            if (!side) { return; }
+            applySideWidth();
+            var wasOpen = sideIsOpen();
+            side.classList.add("is-open");
+            side.setAttribute("aria-hidden", "false");
+            paintToggles();
+            refreshLayout();
+            loadSummary();
+            if (!wasOpen || tab || !sideTab) { selectTab(tab || sideTab); }
+        }
+        window.PartnerlyBuilderSide = {
+            open: openSide,
+            close: closeSide,
+            reload: function () { if (sideIsOpen()) { loadTab(); loadSummary(); } }
+        };
+        document.addEventListener("click", function (event) {
+            var opener = event.target.closest ? event.target.closest("[data-side-open]") : null;
+            if (opener) {
+                event.preventDefault();
+                if (sideIsOpen()) { closeSide(); } else { openSide(); }
+                return;
+            }
+            if (event.target.closest && event.target.closest("[data-side-close]")) { closeSide(); return; }
+            var tabButton = event.target.closest ? event.target.closest("[data-side-tab]") : null;
+            if (tabButton) { selectTab(tabButton.getAttribute("data-side-tab")); }
+        });
+        // a change made in a tab (settings, connections, a run) can change the header too
+        window.addEventListener("partnerly:automation-changed", function () { if (sideIsOpen()) { loadSummary(); } });
+        if (side) {
+            side.addEventListener("submit", function (event) {
+                var form = event.target;
+                if (!form || !form.hasAttribute || !form.hasAttribute("data-hub-ajax")) { return; }
+                event.preventDefault();
+                event.stopPropagation();
+                if (window.PartnerlyAutomationHub && window.PartnerlyAutomationHub.submit) {
+                    window.PartnerlyAutomationHub.submit(form, event.submitter);
+                }
+            });
+        }
+        if (side) {
+            var handle = side.querySelector("[data-side-resize]");
+            var dragging = false;
+            var setShare = function (value) {
+                sideShare = Math.max(18, Math.min(70, value));
+                applySideWidth();
+                try { window.localStorage.setItem(SIDE_KEY, String(Math.round(sideShare * 10) / 10)); } catch (e) { /* storage unavailable */ }
+            };
+            handle.addEventListener("pointerdown", function (event) {
+                dragging = true;
+                handle.setPointerCapture(event.pointerId);
+                side.classList.add("is-resizing");
+                event.preventDefault();
+            });
+            handle.addEventListener("pointermove", function (event) {
+                if (!dragging) { return; }
+                var box = side.parentElement.getBoundingClientRect();
+                setShare(((box.right - event.clientX) / box.width) * 100);
+            });
+            var endDrag = function () {
+                if (!dragging) { return; }
+                dragging = false;
+                side.classList.remove("is-resizing");
+                refreshLayout();
+            };
+            handle.addEventListener("pointerup", endDrag);
+            handle.addEventListener("pointercancel", endDrag);
+            handle.addEventListener("dblclick", function () { setShare(45); refreshLayout(); });
+            handle.addEventListener("keydown", function (event) {
+                if (event.key === "ArrowLeft") { setShare(sideShare + 3); refreshLayout(); event.preventDefault(); }
+                if (event.key === "ArrowRight") { setShare(sideShare - 3); refreshLayout(); event.preventDefault(); }
+            });
+            applySideWidth();
+        }
+
+        // =================================================================
+        //  Agent variables and failure alert
+        // =================================================================
+        var varsButton = zoomButton("bx-slider-alt", tt("varsButton"), "data-zoom-vars");
+        varsButton.disabled = !I.canEditNow();
+        varsButton.addEventListener("click", function () {
+            if (!I.canEditNow()) { return; }
+            var current = I.getSettings();
+            var overlay = make("div", "automation-create is-open");
+            overlay.setAttribute("role", "dialog");
+            overlay.setAttribute("aria-modal", "true");
+            var card = make("div", "automation-create-card automation-vars-card");
+            card.appendChild(make("h2", null, tt("varsTitle")));
+            card.appendChild(make("p", "automation-create-lead", tt("varsLead")));
+            var list = make("div", "automation-vars-list");
+            card.appendChild(list);
+
+            function addRow(name, value) {
+                var row = make("div", "automation-vars-row");
+                var nameInput = make("input", "form-control");
+                nameInput.type = "text";
+                nameInput.placeholder = tt("varsName");
+                nameInput.setAttribute("aria-label", tt("varsName"));
+                nameInput.value = name || "";
+                var valueInput = make("input", "form-control");
+                valueInput.type = "text";
+                valueInput.placeholder = tt("varsValue");
+                valueInput.setAttribute("aria-label", tt("varsValue"));
+                valueInput.value = value || "";
+                var remove = make("button", "automation-vars-remove");
+                remove.type = "button";
+                remove.setAttribute("aria-label", "x");
+                remove.innerHTML = '<i class="bx bx-trash" aria-hidden="true"></i>';
+                remove.addEventListener("click", function () { row.remove(); });
+                row.appendChild(nameInput);
+                row.appendChild(valueInput);
+                row.appendChild(remove);
+                list.appendChild(row);
+                return nameInput;
+            }
+            Object.keys(current.variables || {}).forEach(function (key) { addRow(key, current.variables[key]); });
+            var add = make("button", "btn btn-sm btn-outline-primary", tt("varsAdd"));
+            add.type = "button";
+            add.addEventListener("click", function () { addRow("", "").focus(); });
+            card.appendChild(add);
+
+            var notifyRow = make("label", "automation-vars-notify");
+            var notify = make("input", "form-check-input");
+            notify.type = "checkbox";
+            notify.checked = current.notifyOnFailure !== false;
+            notifyRow.appendChild(notify);
+            var notifyText = make("span");
+            notifyText.appendChild(make("strong", null, tt("varsNotify")));
+            notifyText.appendChild(make("small", null, tt("varsNotifyHelp")));
+            notifyRow.appendChild(notifyText);
+            card.appendChild(notifyRow);
+
+            var problem = make("p", "automation-vars-problem");
+            problem.hidden = true;
+            card.appendChild(problem);
+            var actions = make("div", "automation-create-actions");
+            var done = make("button", "btn btn-primary", tt("varsDone"));
+            done.type = "button";
+            actions.appendChild(done);
+            card.appendChild(actions);
+            overlay.appendChild(card);
+            document.body.appendChild(overlay);
+            document.body.classList.add("is-automation-create-open");
+
+            function close() {
+                if (overlay.parentNode) { overlay.parentNode.removeChild(overlay); }
+                document.body.classList.remove("is-automation-create-open");
+            }
+            done.addEventListener("click", function () {
+                var variables = {};
+                var bad = false;
+                Array.prototype.forEach.call(list.children, function (row) {
+                    var inputs = row.querySelectorAll("input");
+                    var name = inputs[0].value.trim();
+                    if (!name && !inputs[1].value) { return; }
+                    if (!/^[A-Za-z0-9_]+$/.test(name) || Object.prototype.hasOwnProperty.call(variables, name)) { bad = true; return; }
+                    variables[name] = inputs[1].value;
+                });
+                if (bad) {
+                    problem.textContent = tt("varsBad");
+                    problem.hidden = false;
+                    return;
+                }
+                I.setSettings({ variables: variables, notifyOnFailure: notify.checked ? undefined : false });
+                close();
+            });
+            overlay.addEventListener("click", function (event) { if (event.target === overlay) { close(); } });
+            overlay.addEventListener("keydown", function (event) { if (event.key === "Escape") { close(); } });
         });
 
         // =================================================================

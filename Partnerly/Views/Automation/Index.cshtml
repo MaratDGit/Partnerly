@@ -54,7 +54,7 @@
      data-can-history="@canHistory"
      data-can-edit="@canEdit"
      data-can-delete="@canDelete">
-    @await Html.PartialAsync("_Toast")
+    @await Html.PartialAsync("_AutomationToast")
 
     <header class="automation-hub-hero">
         <div class="automation-hub-hero-text">
@@ -73,12 +73,31 @@
             }
             @if (Can("automation.create"))
             {
+                <label class="automation-hub-secondary" role="button" tabindex="0" data-import-agent-label
+                       data-import-url="@Url.Action("Import", "Automation")">
+                    <i class="bx bx-upload"></i> @Localizer["ToolsImport"]
+                    <input type="file" accept=".json,application/json" hidden data-import-agent />
+                </label>
                 <button type="button" class="automation-hub-primary" data-open-create-automation>
                     <i class="bx bx-plus"></i> @Localizer["Create"]
                 </button>
             }
         </div>
     </header>
+
+    @{
+        var allTags = Model.Definitions.SelectMany(item => item.TagList).Distinct(StringComparer.OrdinalIgnoreCase).OrderBy(tag => tag, StringComparer.OrdinalIgnoreCase).ToList();
+    }
+    @if (allTags.Count > 0)
+    {
+        <div class="automation-hub-tags" data-tag-filter role="group" aria-label="@Localizer["ToolsTags"]">
+            <i class="bx bx-purchase-tag-alt" aria-hidden="true"></i>
+            @foreach (var tag in allTags)
+            {
+                <button type="button" class="automation-hub-tag is-filter" data-tag="@tag.ToLowerInvariant()">@tag</button>
+            }
+        </div>
+    }
 
     <div class="automation-glass automation-hub-table-wrap">
         @Html.AntiForgeryToken()
@@ -103,7 +122,7 @@
             {
                 foreach (var item in Model.Definitions)
                 {
-                    <tr data-automation-row="@item.Id" data-icon="@item.Icon">
+                    <tr data-automation-row="@item.Id" data-icon="@item.Icon" data-tags="@(string.Join("|", item.TagList).ToLowerInvariant())">
                         <td class="automation-hub-switch-cell">
                             <div class="form-check form-switch automation-hub-switch" title="@(item.IsActive ? Localizer["Active"] : Localizer["Inactive"])">
                                 <input class="form-check-input" type="checkbox" data-hub-toggle data-id="@item.Id"
@@ -118,6 +137,15 @@
                                     @if (!string.IsNullOrWhiteSpace(item.Description))
                                     {
                                         <div class="automation-hub-desc">@item.Description</div>
+                                    }
+                                    @if (item.TagList.Count > 0)
+                                    {
+                                        <div class="automation-hub-tags-row">
+                                            @foreach (var tag in item.TagList)
+                                            {
+                                                <span class="automation-hub-tag">@tag</span>
+                                            }
+                                        </div>
                                     }
                                 </div>
                             </div>

@@ -64,6 +64,26 @@
                 <button type="submit" class="btn btn-outline-danger">@Localizer["Canceled"]</button>
             </form>
         }
+        @if (canRun && Model.Run.Status is "failed")
+        {
+            <form asp-action="Resume" asp-controller="Automation" asp-route-id="@Model.Run.Id" method="post" class="m-0"
+                  data-hub-ajax data-hub-stay data-hub-reload-run="@Model.Run.Id">
+                @Html.AntiForgeryToken()
+                <button type="submit" class="btn btn-outline-warning" title="@Localizer["ToolsResume"]">
+                    <i class="bx bx-skip-next-circle" aria-hidden="true"></i> @Localizer["ToolsResume"]
+                </button>
+            </form>
+        }
+        @if (canRun && Model.Run.Status is "succeeded" or "failed" or "cancelled")
+        {
+            <form asp-action="Rerun" asp-controller="Automation" asp-route-id="@Model.Run.Id" method="post" class="m-0"
+                  data-hub-ajax data-hub-stay>
+                @Html.AntiForgeryToken()
+                <button type="submit" class="btn btn-outline-primary">
+                    <i class="bx bx-revision" aria-hidden="true"></i> @Localizer["ToolsRerun"]
+                </button>
+            </form>
+        }
     </div>
 
     @if (!string.IsNullOrEmpty(Model.Run.Error))

@@ -26,6 +26,12 @@ namespace Partnerly.Automation.Abstractions
         public const string HttpRequest = "http_request";
         public const string WebhookAction = "webhook";
         public const string ExecuteWorkflow = "execute_workflow";
+        public const string Loop = "loop";
+        public const string Filter = "filter";
+        public const string StoreSet = "store_set";
+        public const string StoreGet = "store_get";
+        public const string StoreDelete = "store_delete";
+        public const string Once = "once";
 
         public static readonly string[] Triggers =
         {
@@ -35,7 +41,7 @@ namespace Partnerly.Automation.Abstractions
         public static readonly string[] Actions =
         {
             SendEmail, SendNotification, CreateRecord, UpdateRecord, FindRecord, DeleteRecord,
-            Delay, WaitUntil, Branch, Switch, SetVariable, HttpRequest, WebhookAction, ExecuteWorkflow
+            Delay, WaitUntil, Branch, Switch, SetVariable, HttpRequest, WebhookAction, ExecuteWorkflow, Loop, Filter, StoreSet, StoreGet, StoreDelete, Once
         };
     }
 }

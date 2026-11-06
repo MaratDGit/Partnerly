@@ -54,7 +54,15 @@ namespace Partnerly.Automation.Persistence
             CancellationToken cancellationToken = default);
 
         IQueryable<AutomationDefinition> QueryDefinitions();
+        // Data store of one agent (key / value between runs, "Only once" memory).
+        Task<AutomationDataItem?> GetDataItemAsync(Guid automationId, string key, DateTime utcNow, CancellationToken cancellationToken = default);
+        Task SetDataItemAsync(Guid automationId, string key, string value, DateTime utcNow, DateTime? expiresAt, CancellationToken cancellationToken = default);
+        // False when a live (not expired) item with this key already exists.
+        Task<bool> TryAddDataItemAsync(Guid automationId, string key, string value, DateTime utcNow, DateTime? expiresAt, CancellationToken cancellationToken = default);
+        Task<bool> DeleteDataItemAsync(Guid automationId, string key, CancellationToken cancellationToken = default);
+
         IQueryable<AutomationRun> QueryRuns();
+        IQueryable<AutomationVersion> QueryVersions();
         IQueryable<AutomationConnection> QueryConnections();
         Task<AutomationConnection> AddConnectionAsync(AutomationConnection connection, CancellationToken cancellationToken = default);
         Task UpdateConnectionAsync(AutomationConnection connection, CancellationToken cancellationToken = default);

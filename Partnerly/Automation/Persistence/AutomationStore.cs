@@ -325,6 +325,93 @@ INNER JOIN (
         public IQueryable<AutomationRun> QueryRuns() =>
             _db.AutomationRuns.AsNoTracking();
 
+        public async Task<AutomationDataItem?> GetDataItemAsync(Guid automationId, string key, DateTime utcNow, CancellationToken cancellationToken = default)
+        {
+            var item = await _db.AutomationDataItems.AsNoTracking()
+                .FirstOrDefaultAsync(x => x.AutomationId == automationId && x.Key == key, cancellationToken);
+            return item != null && item.ExpiresAt != null && item.ExpiresAt <= utcNow ? null : item;
+        }
+
+        public async Task SetDataItemAsync(Guid automationId, string key, string value, DateTime utcNow, DateTime? expiresAt, CancellationToken cancellationToken = default)
+        {
+            var item = await _db.AutomationDataItems.AsTracking()
+                .FirstOrDefaultAsync(x => x.AutomationId == automationId && x.Key == key, cancellationToken);
+            if (item == null)
+            {
+                item = new AutomationDataItem { Id = Guid.NewGuid(), AutomationId = automationId, Key = key, CreatedDate = utcNow };
+                _db.AutomationDataItems.Add(item);
+            }
+
+            item.Value = value;
+            item.ExpiresAt = expiresAt;
+            item.UpdatedDate = utcNow;
+            await _db.SaveChangesAsync(cancellationToken);
+            _db.Entry(item).State = EntityState.Detached;
+        }
+
+        public async Task<bool> TryAddDataItemAsync(Guid automationId, string key, string value, DateTime utcNow, DateTime? expiresAt, CancellationToken cancellationToken = default)
+        {
+            var existing = await _db.AutomationDataItems.AsTracking()
+                .FirstOrDefaultAsync(x => x.AutomationId == automationId && x.Key == key, cancellationToken);
+            if (existing != null)
+            {
+                if (existing.ExpiresAt == null || existing.ExpiresAt > utcNow)
+                {
+                    _db.Entry(existing).State = EntityState.Detached;
+                    return false;
+                }
+
+                existing.Value = value;
+                existing.ExpiresAt = expiresAt;
+                existing.UpdatedDate = utcNow;
+                await _db.SaveChangesAsync(cancellationToken);
+                _db.Entry(existing).State = EntityState.Detached;
+                return true;
+            }
+
+            var item = new AutomationDataItem
+            {
+                Id = Guid.NewGuid(),
+                AutomationId = automationId,
+                Key = key,
+                Value = value,
+                ExpiresAt = expiresAt,
+                CreatedDate = utcNow,
+                UpdatedDate = utcNow
+            };
+            _db.AutomationDataItems.Add(item);
+            try
+            {
+                await _db.SaveChangesAsync(cancellationToken);
+                _db.Entry(item).State = EntityState.Detached;
+                return true;
+            }
+            catch (DbUpdateException)
+            {
+                // two runs asked at the same moment: the other one got it first
+                _db.Entry(item).State = EntityState.Detached;
+                return false;
+            }
+        }
+
+        public async Task<bool> DeleteDataItemAsync(Guid automationId, string key, CancellationToken cancellationToken = default)
+        {
+            var item = await _db.AutomationDataItems.AsTracking()
+                .FirstOrDefaultAsync(x => x.AutomationId == automationId && x.Key == key, cancellationToken);
+            if (item == null)
+            {
+                return false;
+            }
+
+            _db.AutomationDataItems.Remove(item);
+            await _db.SaveChangesAsync(cancellationToken);
+            _db.Entry(item).State = EntityState.Detached;
+            return true;
+        }
+
+        public IQueryable<AutomationVersion> QueryVersions() =>
+            _db.AutomationVersions.AsNoTracking();
+
         public IQueryable<AutomationConnection> QueryConnections() =>
             _db.AutomationConnections.AsNoTracking();
 

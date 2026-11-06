@@ -30,7 +30,8 @@
       data-save-url="@Url.Action("BuilderSave", "Automation", new { id = Model.Id })"
       data-publish-url="@Url.Action("Publish", "Automation", new { id = Model.Id })"
       data-run-url="@Url.Action("Run", "Automation", new { id = Model.Id, dryRun = false })"
-      data-test-url="@Url.Action("Run", "Automation", new { id = Model.Id, dryRun = true })">
+      data-test-url="@Url.Action("Run", "Automation", new { id = Model.Id, dryRun = true })"
+      data-test-node-url="@Url.Action("TestNode", "Automation", new { id = Model.Id })">
     @Html.AntiForgeryToken()
     <input type="hidden" name="name" value="@Model.Name" />
     <input type="hidden" name="description" value="@Model.Description" />
@@ -72,6 +73,10 @@
                  data-l-failed="@Localizer["AgentRunFailed"]"
                  data-l-cancelled="@Localizer["AgentRunCancelled"]"
                  role="status" aria-live="polite">
+                <button type="button" class="automation-status-side" data-side-open data-id="@Model.Id"
+                        title="@Localizer["BuilderSideOpen"]" aria-label="@Localizer["BuilderSideOpen"]" aria-expanded="false">
+                    <i class="bx bx-dock-right" aria-hidden="true"></i>
+                </button>
                 <div class="automation-status-main">
                     <span class="automation-status-dot" data-status-dot aria-hidden="true"></span>
                     <strong data-status-label></strong>
@@ -157,6 +162,56 @@
                 </button>
             </div>
         </div>
+        <aside class="automation-side" data-side-panel aria-hidden="true"
+               data-summary-url="@Url.Action("SideSummary", "Automation", new { id = Model.Id })"
+               data-url-history="@Url.Action("HistoryPanel", "Automation", new { id = Model.Id })"
+               data-url-connections="@Url.Action("ConnectionsPanel", "Automation")"
+               data-url-versions="@Url.Action("ToolsPanel", "Automation", new { id = Model.Id })"
+               data-url-settings="@Url.Action("SettingsPanel", "Automation", new { id = Model.Id })"
+               data-l-runs="@Localizer["ToolsStatsRuns"]" data-l-success="@Localizer["ToolsStatsSuccess"]"
+               data-l-failed="@Localizer["ToolsStatsFailed"]" data-l-average="@Localizer["ToolsStatsAverage"]"
+               data-l-days="@Localizer["ToolsStatsTitle"]" data-l-lastrun="@Localizer["AgentLastRun"]"
+               data-l-noruns="@Localizer["AgentNoRuns"]" data-l-changed="@Localizer["ToolsLastChanged"]"
+               data-l-live="@Localizer["AgentStateLive"]" data-l-paused="@Localizer["AgentStatePaused"]"
+               data-l-draft="@Localizer["AgentStateDraft"]" data-l-version="@Localizer["ToolsVersion"]"
+               data-l-test="@Localizer["TestRun"]" data-l-zone="@Localizer["TimeZone"]">
+            <div class="automation-side-resize" data-side-resize role="separator" aria-orientation="vertical" tabindex="0"
+                 title="@Localizer["BuilderSideResize"]" aria-label="@Localizer["BuilderSideResize"]"></div>
+            <div class="automation-side-inner">
+                <header class="automation-side-head">
+                    <div class="automation-side-title">
+                        <span class="automation-side-avatar" aria-hidden="true"><i class="bx @Model.Icon" data-side-icon></i></span>
+                        <strong data-side-name>@Model.Name</strong>
+                        <a class="automation-side-export" data-no-loader href="@Url.Action("Export", "Automation", new { id = Model.Id })" download
+                           title="@Localizer["ToolsShareHint"]">
+                            <i class="bx bx-download" aria-hidden="true"></i><span>@Localizer["ToolsShareTitle"]</span>
+                        </a>
+                        <button type="button" class="automation-side-close" data-side-close title="@Localizer["Close"]" aria-label="@Localizer["Close"]">
+                            <i class="bx bx-x" aria-hidden="true"></i>
+                        </button>
+                    </div>
+                    <div class="automation-side-chips" data-side-chips></div>
+                    <div class="automation-side-facts" data-side-facts></div>
+                    <div class="automation-side-stats" data-side-stats></div>
+                </header>
+                <nav class="automation-side-tabs" role="tablist">
+                    @if (canHistory)
+                    {
+                        <button type="button" role="tab" class="automation-side-tab" data-side-tab="history"><i class="bx bx-history" aria-hidden="true"></i><span>@Localizer["History"]</span></button>
+                    }
+                    <button type="button" role="tab" class="automation-side-tab" data-side-tab="versions"><i class="bx bx-git-branch" aria-hidden="true"></i><span>@Localizer["ToolsVersionsTitle"]</span></button>
+                    @if (canEdit)
+                    {
+                        <button type="button" role="tab" class="automation-side-tab" data-side-tab="settings"><i class="bx bx-cog" aria-hidden="true"></i><span>@Localizer["AutomationSettings"]</span></button>
+                    }
+                    @if (canConnections)
+                    {
+                        <button type="button" role="tab" class="automation-side-tab" data-side-tab="connections"><i class="bx bx-plug" aria-hidden="true"></i><span>@Localizer["AutomationConnections"]</span></button>
+                    }
+                </nav>
+                <div class="automation-side-body" data-side-body role="tabpanel"></div>
+            </div>
+        </aside>
     </div>
 
     <div class="automation-toolbar">
@@ -195,26 +250,6 @@
                         data-l-pause="@Localizer["Pause"]"
                         disabled="@(canEdit && Model.IsPublished ? null : "disabled")">
                     <i class="bx @(Model.IsActive ? "bx-pause-circle" : "bx-play-circle")" aria-hidden="true"></i><span data-label>@(Model.IsActive ? Localizer["Pause"] : Localizer["Start"])</span>
-                </button>
-                <button type="button"
-                        class="automation-add-item"
-                        data-act="history"
-                        data-hub="history"
-                        data-id="@Model.Id"
-                        disabled="@(canHistory ? null : "disabled")">
-                    <i class="bx bx-history" aria-hidden="true"></i><span data-label>@Localizer["History"]</span>
-                </button>
-                <button type="button" class="automation-add-item" data-act="settings" data-hub="settings" data-id="@Model.Id" data-hub-nested
-                        disabled="@(canEdit ? null : "disabled")">
-                    <i class="bx bx-cog" aria-hidden="true"></i><span data-label>@Localizer["AutomationSettings"]</span>
-                </button>
-                <button type="button"
-                        class="automation-add-item"
-                        data-act="connections"
-                        data-hub="connections"
-                        data-hub-nested
-                        disabled="@(canConnections ? null : "disabled")">
-                    <i class="bx bx-plug" aria-hidden="true"></i><span data-label>@Localizer["AutomationConnections"]</span>
                 </button>
                 <a class="automation-add-item automation-add-exit" data-act="back" asp-action="Index" title="@Localizer["BuilderExitHelp"]">
                     <i class="bx bx-log-out" aria-hidden="true"></i><span data-label>@Localizer["BuilderExit"]</span>

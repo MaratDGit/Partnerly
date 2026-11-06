@@ -19,7 +19,7 @@ using Partnerly.Models.DataTable;
 
 namespace Partnerly.Automation.Web
 {
-    public class AutomationController : _BaseController
+    public partial class AutomationController : _BaseController
     {
         private readonly IAutomationAuthoringService _authoring;
         private readonly IAutomationRunService _runs;
@@ -630,10 +630,12 @@ namespace Partnerly.Automation.Web
             int maxRunsPerHour,
             int retryLimit,
             int stepTimeoutSeconds,
-            int runTimeoutSeconds)
+            int runTimeoutSeconds,
+            string? tags = null)
         {
             try
             {
+                await _authoring.UpdateTagsAsync(id, tags);
                 await _authoring.UpdateSettingsAsync(
                     id,
                     timeZoneId,
@@ -1001,10 +1003,25 @@ namespace Partnerly.Automation.Web
 
             var connections = _store.QueryConnections().Where(item =>
                 !item.IsDeleted && (_access.CanManage || item.OwnerUserId == _access.CurrentUserId));
+            var httpConnections = connections.Where(item => item.Kind == "http").ToList();
+            var httpUrls = new Dictionary<Guid, string>();
+            foreach (var item in httpConnections)
+            {
+                try
+                {
+                    httpUrls[item.Id] = JsonNode.Parse(_secrets.Unprotect(item.EncryptedPayload))?["baseUrl"]?.GetValue<string>() ?? string.Empty;
+                }
+                catch
+                {
+                    httpUrls[item.Id] = string.Empty;
+                }
+            }
+
             return new AutomationConnectionsViewModel
             {
                 Webhooks = webhooks,
-                HttpConnections = connections.Where(item => item.Kind == "http").ToList(),
+                HttpConnections = httpConnections,
+                HttpUrls = httpUrls,
                 IntegrationConnections = connections
                     .Where(item => item.Kind != "http" && item.OwnerUserId == _access.CurrentUserId)
                     .OrderBy(item => item.Kind)

@@ -4777,4 +4777,262 @@ Delete is allowed for Support ticket.</value>
   <data name="BuilderHistoryNotes" xml:space="preserve">
     <value>Edited a note</value>
   </data>
+  <data name="NodeTypeLoop" xml:space="preserve">
+    <value>For each</value>
+  </data>
+  <data name="NodeTypeFilter" xml:space="preserve">
+    <value>Only continue if</value>
+  </data>
+  <data name="DocsActionLoop" xml:space="preserve">
+    <value>Goes through a list and repeats the cards on its 'each item' output once per item. Inside, use {{loop.item}} and {{loop.number}}. When the list is over, the flow continues from the 'when finished' output.</value>
+  </data>
+  <data name="DocsActionFilter" xml:space="preserve">
+    <value>Lets the flow pass only when the condition is true. When it is false this branch quietly ends and the run still counts as successful.</value>
+  </data>
+  <data name="BuilderLoopItems" xml:space="preserve">
+    <value>List to go through</value>
+  </data>
+  <data name="BuilderLoopItemsHelp" xml:space="preserve">
+    <value>A list from an earlier card (for example {{steps.find.result.items}}), a JSON list, or one item per line.</value>
+  </data>
+  <data name="BuilderLoopMax" xml:space="preserve">
+    <value>Most items</value>
+  </data>
+  <data name="BuilderLoopMaxHelp" xml:space="preserve">
+    <value>Safety limit: 100 by default, 500 at most.</value>
+  </data>
+  <data name="BuilderFilterHelp" xml:space="preserve">
+    <value>The flow goes on only if this is true. Otherwise this branch ends here.</value>
+  </data>
+  <data name="BuilderOnError" xml:space="preserve">
+    <value>If this card fails</value>
+  </data>
+  <data name="BuilderOnErrorStop" xml:space="preserve">
+    <value>Stop this branch (default)</value>
+  </data>
+  <data name="BuilderOnErrorContinue" xml:space="preserve">
+    <value>Ignore the error and go on</value>
+  </data>
+  <data name="BuilderOnErrorRoute" xml:space="preserve">
+    <value>Go to the error path (red output)</value>
+  </data>
+  <data name="BuilderOnErrorHelp" xml:space="preserve">
+    <value>Stop: the run is marked failed. Ignore: the error is noted and the next cards run. Error path: only the cards connected to the red output run.</value>
+  </data>
+  <data name="BuilderPortEach" xml:space="preserve">
+    <value>Each item</value>
+  </data>
+  <data name="BuilderPortDone" xml:space="preserve">
+    <value>When finished</value>
+  </data>
+  <data name="BuilderPortError" xml:space="preserve">
+    <value>If it fails</value>
+  </data>
+  <data name="BuilderExecWait" xml:space="preserve">
+    <value>Wait for the result</value>
+  </data>
+  <data name="BuilderExecWaitNo" xml:space="preserve">
+    <value>No, just start it</value>
+  </data>
+  <data name="BuilderExecWaitYes" xml:space="preserve">
+    <value>Yes, wait until it finishes</value>
+  </data>
+  <data name="BuilderExecWaitHelp" xml:space="preserve">
+    <value>With waiting, the next cards get the child's variables as {{steps.NAME.result.vars}}, and a failed child fails this card.</value>
+  </data>
+  <data name="BuilderTestCard" xml:space="preserve">
+    <value>Test this card</value>
+  </data>
+  <data name="BuilderTestRunning" xml:space="preserve">
+    <value>Testing...</value>
+  </data>
+  <data name="BuilderTestNote" xml:space="preserve">
+    <value>Uses the values of the last run. Cards that send or change something do not run: you see what they would get.</value>
+  </data>
+  <data name="BuilderTestSettings" xml:space="preserve">
+    <value>Settings with values filled in</value>
+  </data>
+  <data name="BuilderTestResult" xml:space="preserve">
+    <value>Result</value>
+  </data>
+  <data name="BuilderTestFailed" xml:space="preserve">
+    <value>Could not test the card.</value>
+  </data>
+  <data name="BuilderTestSave" xml:space="preserve">
+    <value>Fill in the card first.</value>
+  </data>
+  <data name="BuilderFunctionsHint" xml:space="preserve">
+    <value>Tip: change a value with functions, for example {{ vars.name | upper }} or {{ vars.date | date:"dd.MM.yyyy" }}. Available: upper, lower, capitalize, trim, default, date, number, round, replace, substring, truncate, length, first, last, join, split, add, subtract, multiply, divide, json, urlencode.</value>
+  </data>
+  <data name="BuilderMenuTools" xml:space="preserve">
+    <value>Versions</value>
+  </data>
+  <data name="ToolsRerunQueued" xml:space="preserve">
+    <value>The run was started again.</value>
+  </data>
+  <data name="ToolsResumeQueued" xml:space="preserve">
+    <value>The run goes on from the failed cards.</value>
+  </data>
+  <data name="ToolsResumeOnlyFailed" xml:space="preserve">
+    <value>Only a failed run can be continued.</value>
+  </data>
+  <data name="ToolsTestBadCard" xml:space="preserve">
+    <value>This card cannot be tested.</value>
+  </data>
+  <data name="ToolsVersionRestored" xml:space="preserve">
+    <value>The version is in the draft. Publish to make it live.</value>
+  </data>
+  <data name="ToolsImportBad" xml:space="preserve">
+    <value>This file is not an agent exported from Partnerly.</value>
+  </data>
+  <data name="ToolsPanelTitle" xml:space="preserve">
+    <value>More tools</value>
+  </data>
+  <data name="ToolsStatsTitle" xml:space="preserve">
+    <value>Last 7 days</value>
+  </data>
+  <data name="ToolsStatsRuns" xml:space="preserve">
+    <value>Runs</value>
+  </data>
+  <data name="ToolsStatsSuccess" xml:space="preserve">
+    <value>Success</value>
+  </data>
+  <data name="ToolsStatsFailed" xml:space="preserve">
+    <value>Failed</value>
+  </data>
+  <data name="ToolsStatsAverage" xml:space="preserve">
+    <value>Average time</value>
+  </data>
+  <data name="ToolsVersionsTitle" xml:space="preserve">
+    <value>Versions</value>
+  </data>
+  <data name="ToolsVersionsHint" xml:space="preserve">
+    <value>Restore puts an older version into the draft. The live version does not change until you Publish.</value>
+  </data>
+  <data name="ToolsVersion" xml:space="preserve">
+    <value>Version</value>
+  </data>
+  <data name="ToolsVersionLive" xml:space="preserve">
+    <value>Live</value>
+  </data>
+  <data name="ToolsVersionDraft" xml:space="preserve">
+    <value>Draft</value>
+  </data>
+  <data name="ToolsCards" xml:space="preserve">
+    <value>cards</value>
+  </data>
+  <data name="ToolsRestore" xml:space="preserve">
+    <value>Restore</value>
+  </data>
+  <data name="ToolsShareTitle" xml:space="preserve">
+    <value>Export</value>
+  </data>
+  <data name="ToolsShareHint" xml:space="preserve">
+    <value>Download this agent as a file to keep it or move it elsewhere. Connections are not included.</value>
+  </data>
+  <data name="ToolsExport" xml:space="preserve">
+    <value>Export agent</value>
+  </data>
+  <data name="ToolsImport" xml:space="preserve">
+    <value>Import agent</value>
+  </data>
+  <data name="ToolsRerun" xml:space="preserve">
+    <value>Run again</value>
+  </data>
+  <data name="ToolsResume" xml:space="preserve">
+    <value>Continue from failed</value>
+  </data>
+  <data name="ToolsVarsButton" xml:space="preserve">
+    <value>Agent variables and alerts</value>
+  </data>
+  <data name="ToolsVarsTitle" xml:space="preserve">
+    <value>Agent variables and alerts</value>
+  </data>
+  <data name="ToolsVarsLead" xml:space="preserve">
+    <value>Constants every run starts with. Use them in any field as {{vars.name}}.</value>
+  </data>
+  <data name="ToolsVarsName" xml:space="preserve">
+    <value>Name</value>
+  </data>
+  <data name="ToolsVarsValue" xml:space="preserve">
+    <value>Value</value>
+  </data>
+  <data name="ToolsVarsAdd" xml:space="preserve">
+    <value>Add variable</value>
+  </data>
+  <data name="ToolsVarsNotify" xml:space="preserve">
+    <value>Notify me when a run fails</value>
+  </data>
+  <data name="ToolsVarsNotifyHelp" xml:space="preserve">
+    <value>One notification when failures start, not one per failed run.</value>
+  </data>
+  <data name="ToolsVarsDone" xml:space="preserve">
+    <value>Done</value>
+  </data>
+  <data name="ToolsVarsBad" xml:space="preserve">
+    <value>Names may use letters, digits and _ only.</value>
+  </data>
+  <data name="NodeTypeStoreSet" xml:space="preserve">
+    <value>Save a value</value>
+  </data>
+  <data name="NodeTypeStoreGet" xml:space="preserve">
+    <value>Read a value</value>
+  </data>
+  <data name="NodeTypeStoreDelete" xml:space="preserve">
+    <value>Forget a value</value>
+  </data>
+  <data name="NodeTypeOnce" xml:space="preserve">
+    <value>Only once</value>
+  </data>
+  <data name="DocsActionStoreSet" xml:space="preserve">
+    <value>Keeps a value under a name so the next runs of this agent can read it (a counter, the last id, a date). Optionally forgets it after some hours.</value>
+  </data>
+  <data name="DocsActionStoreGet" xml:space="preserve">
+    <value>Reads a saved value into {{steps.NAME.result.value}}. {{steps.NAME.result.found}} tells whether it existed; the default is used when it did not.</value>
+  </data>
+  <data name="DocsActionStoreDelete" xml:space="preserve">
+    <value>Forgets a saved value.</value>
+  </data>
+  <data name="DocsActionOnce" xml:space="preserve">
+    <value>Lets the flow pass the first time a key is seen and stops this branch every later time. Use a key like {{trigger.id}} so each mail, ticket or order is handled only once.</value>
+  </data>
+  <data name="BuilderStoreKey" xml:space="preserve">
+    <value>Name (key)</value>
+  </data>
+  <data name="BuilderStoreKeyHelp" xml:space="preserve">
+    <value>Up to 190 characters. Values are kept per agent.</value>
+  </data>
+  <data name="BuilderOnceKeyHelp" xml:space="preserve">
+    <value>For example {{trigger.id}}: the same value is let through only once.</value>
+  </data>
+  <data name="BuilderStoreValue" xml:space="preserve">
+    <value>Value</value>
+  </data>
+  <data name="BuilderStoreTtl" xml:space="preserve">
+    <value>Forget after (hours)</value>
+  </data>
+  <data name="BuilderStoreTtlHelp" xml:space="preserve">
+    <value>Leave empty to keep it forever.</value>
+  </data>
+  <data name="BuilderStoreDefault" xml:space="preserve">
+    <value>Value when nothing is saved</value>
+  </data>
+  <data name="ToolsTags" xml:space="preserve">
+    <value>Tags</value>
+  </data>
+  <data name="ToolsTagsHelp" xml:space="preserve">
+    <value>Words separated by commas, up to 8. Used to filter the agents list.</value>
+  </data>
+  <data name="ToolsLastChanged" xml:space="preserve">
+    <value>Last changed by</value>
+  </data>
+  <data name="BuilderSideResize" xml:space="preserve">
+    <value>Drag to resize (double click: 45%)</value>
+  </data>
+  <data name="BuilderSideOpen" xml:space="preserve">
+    <value>Agent panel: history, connections, versions, settings</value>
+  </data>
+  <data name="BuilderInspector" xml:space="preserve">
+    <value>Inspector</value>
+  </data>
 </root>

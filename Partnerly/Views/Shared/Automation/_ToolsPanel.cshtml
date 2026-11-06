@@ -1,0 +1,31 @@
+@model Partnerly.Automation.Web.ViewModels.AutomationToolsViewModel
+@{
+    var perms = ViewData["Permissions"] as HashSet<string>;
+    var canEdit = perms?.Contains("automation.edit") == true;
+}
+
+<div class="automation-hub-panel automation-tools">
+    <div class="automation-hub-block">
+        <p class="automation-conn-hint">@Localizer["ToolsVersionsHint"]</p>
+        <ul class="automation-int-list">
+            @foreach (var version in Model.Versions)
+            {
+                <li>
+                    <span class="automation-int-name">
+                        @Localizer["ToolsVersion"] @version.Number
+                        @if (version.IsLive) { <span class="automation-status-chip is-on">@Localizer["ToolsVersionLive"]</span> }
+                        @if (version.IsDraft) { <span class="automation-status-chip is-warn">@Localizer["ToolsVersionDraft"]</span> }
+                    </span>
+                    <span class="automation-int-kind">@version.WhenText &middot; @version.Cards @Localizer["ToolsCards"]</span>
+                    @if (canEdit && !version.IsDraft)
+                    {
+                        <form asp-action="RestoreVersion" asp-controller="Automation" asp-route-id="@Model.Definition.Id" method="post" data-hub-ajax data-hub-stay>
+                            <input type="hidden" name="versionId" value="@version.Id" />
+                            <button type="submit" class="btn btn-sm btn-outline-primary">@Localizer["ToolsRestore"]</button>
+                        </form>
+                    }
+                </li>
+            }
+        </ul>
+    </div>
+</div>

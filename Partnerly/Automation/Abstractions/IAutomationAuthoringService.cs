@@ -18,6 +18,7 @@ namespace Partnerly.Automation.Abstractions
             int stepTimeoutSeconds,
             int runTimeoutSeconds,
             CancellationToken cancellationToken = default);
+        Task UpdateTagsAsync(Guid automationId, string? tags, CancellationToken cancellationToken = default);
         Task<AutomationDefinition> CreateFromTemplateAsync(Guid ownerUserId, string templateId, CancellationToken cancellationToken = default);
         Task<IReadOnlyList<string>> ValidateAsync(Guid automationId, CancellationToken cancellationToken = default);
         Task PublishAsync(Guid automationId, CancellationToken cancellationToken = default);

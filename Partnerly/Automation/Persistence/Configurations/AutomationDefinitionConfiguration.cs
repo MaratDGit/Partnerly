@@ -15,6 +15,7 @@ namespace Partnerly.Automation.Persistence.Configurations
             builder.Property(x => x.Description).HasMaxLength(2000);
             builder.Property(x => x.TimeZoneId).IsRequired().HasMaxLength(100);
             builder.Property(x => x.Note).HasMaxLength(2000);
+            builder.Property(x => x.Tags).HasMaxLength(400);
 
             builder.HasIndex(x => new { x.OwnerUserId, x.IsDeleted });
             builder.HasIndex(x => new { x.IsActive, x.IsDeleted });

@@ -84,6 +84,13 @@ namespace Partnerly.Automation.Authoring
             await TouchAsync(definition, cancellationToken);
         }
 
+        public async Task UpdateTagsAsync(Guid automationId, string? tags, CancellationToken cancellationToken = default)
+        {
+            var definition = await RequireAsync(automationId, cancellationToken);
+            definition.Tags = AutomationDefinition.NormalizeTags(tags);
+            await TouchAsync(definition, cancellationToken);
+        }
+
         public async Task UpdateMetaAsync(Guid automationId, string name, string? description, string? icon = null, CancellationToken cancellationToken = default)
         {
             var definition = await RequireAsync(automationId, cancellationToken);

@@ -31,6 +31,12 @@ namespace Partnerly.Automation.Actions
                 return StepResult.Skipped("dryRun");
             }
 
+            var wait = string.Equals(NodeConfig.GetString(context.Node, "wait"), "true", StringComparison.OrdinalIgnoreCase);
+            if (wait && await PollChildAsync(context, cancellationToken) is { } polled)
+            {
+                return polled;
+            }
+
             var raw = context.Services.GetService(typeof(IVariableBinder)) is IVariableBinder binder
                 ? binder.Interpolate(NodeConfig.GetString(context.Node, "automationId"), context.Variables)
                 : NodeConfig.GetString(context.Node, "automationId");
@@ -102,10 +108,74 @@ namespace Partnerly.Automation.Actions
                 Status = AutomationStatuses.WakeupPending
             }, cancellationToken);
 
+            if (wait)
+            {
+                // "Wait for the result": come back every few seconds until the child run is over
+                return StepResult.Waiting(clock.UtcNow.AddSeconds(5), AutomationStatuses.WakeupWait, new JsonObject
+                {
+                    ["runId"] = childRun.Id.ToString(),
+                    ["automationId"] = child.Id.ToString(),
+                    ["waiting"] = true
+                });
+            }
+
             return StepResult.Succeeded(new JsonObject
             {
                 ["runId"] = childRun.Id.ToString(),
                 ["automationId"] = child.Id.ToString()
+            });
+        }
+
+        // null = no child started yet by this card (start one).
+        private static async Task<StepResult?> PollChildAsync(ActionContext context, CancellationToken cancellationToken)
+        {
+            var prior = (context.Variables["steps"] as JsonObject)?[context.Node.Name]?["result"] as JsonObject;
+            if (prior?["waiting"]?.GetValue<bool>() != true
+                || !Guid.TryParse(prior["runId"]?.GetValue<string>(), out var childRunId))
+            {
+                return null;
+            }
+
+            var store = context.Services.GetService(typeof(IAutomationStore)) as IAutomationStore;
+            var clock = context.Services.GetService(typeof(IAutomationClock)) as IAutomationClock;
+            if (store == null || clock == null)
+            {
+                return StepResult.Failed("Automation services are not available.", retryable: false);
+            }
+
+            var childRun = await store.GetRunAsync(childRunId, cancellationToken);
+            if (childRun == null)
+            {
+                return StepResult.Failed("The child run was not found.", retryable: false);
+            }
+
+            if (childRun.Status == AutomationStatuses.Succeeded)
+            {
+                var output = new JsonObject
+                {
+                    ["runId"] = childRun.Id.ToString(),
+                    ["automationId"] = childRun.AutomationId.ToString(),
+                    ["status"] = childRun.Status
+                };
+                if (JsonNode.Parse(string.IsNullOrWhiteSpace(childRun.ContextJson) ? "{}" : childRun.ContextJson) is JsonObject childContext
+                    && childContext["vars"] is JsonNode childVars)
+                {
+                    output["vars"] = JsonNodes.Clone(childVars);
+                }
+
+                return StepResult.Succeeded(output);
+            }
+
+            if (childRun.Status is AutomationStatuses.Failed or AutomationStatuses.Cancelled)
+            {
+                return StepResult.Failed($"Child run {childRun.Status}: {childRun.Error}".TrimEnd(' ', ':'), retryable: false);
+            }
+
+            return StepResult.Waiting(clock.UtcNow.AddSeconds(5), AutomationStatuses.WakeupWait, new JsonObject
+            {
+                ["runId"] = childRun.Id.ToString(),
+                ["automationId"] = childRun.AutomationId.ToString(),
+                ["waiting"] = true
             });
         }
     }

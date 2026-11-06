@@ -129,9 +129,16 @@
             <ul class="automation-http-list">
                 @foreach (var item in Model.HttpConnections)
                 {
+                    var address = Model.HttpUrls.TryGetValue(item.Id, out var savedUrl) ? savedUrl : string.Empty;
                     <li>
-                        <span class="automation-int-icon is-http"><i class="bx bx-link-alt" aria-hidden="true"></i></span>
-                        <span class="automation-int-name">@item.Name</span>
+                        <button type="button" class="automation-http-row" data-connection-toggle="#automationHttpEdit-@item.Id"
+                                aria-expanded="false" title="@(canManage ? Localizer["Edit"] : item.Name)">
+                            <span class="automation-int-icon is-http"><i class="bx bx-link-alt" aria-hidden="true"></i></span>
+                            <span class="automation-http-text">
+                                <span class="automation-int-name">@item.Name</span>
+                                <span class="automation-http-url">@address</span>
+                            </span>
+                        </button>
                         @if (canManage)
                         {
                             <form asp-action="DeleteHttpConnection"
@@ -145,6 +152,31 @@
                                 <input type="hidden" name="id" value="@item.Id" />
                                 <button type="submit" class="btn automation-icon-btn automation-del-btn" title="@Localizer["Delete"]" aria-label="@Localizer["Delete"]">
                                     <i class="bx bx-trash" aria-hidden="true"></i>
+                                </button>
+                            </form>
+                            <form asp-action="UpdateHttpConnection"
+                                  asp-controller="Automation"
+                                  method="post"
+                                  id="automationHttpEdit-@item.Id"
+                                  class="automation-conn-form automation-http-edit"
+                                  hidden
+                                  data-hub-ajax
+                                  data-hub-stay
+                                  data-hub-reload="connections">
+                                @Html.AntiForgeryToken()
+                                <input type="hidden" name="id" value="@item.Id" />
+                                <div class="automation-conn-form-fields">
+                                    <div>
+                                        <label class="form-label">@Localizer["Name"]</label>
+                                        <input class="form-control" name="name" maxlength="200" value="@item.Name" required />
+                                    </div>
+                                    <div>
+                                        <label class="form-label">@Localizer["BaseUrl"]</label>
+                                        <input class="form-control" name="baseUrl" maxlength="500" value="@address" required />
+                                    </div>
+                                </div>
+                                <button type="submit" class="btn automation-icon-btn automation-add-btn" title="@Localizer["Save"]" aria-label="@Localizer["Save"]">
+                                    <i class="bx bx-check" aria-hidden="true"></i>
                                 </button>
                             </form>
                         }

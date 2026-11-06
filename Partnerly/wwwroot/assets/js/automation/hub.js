@@ -3,15 +3,12 @@
 
     var root = document.getElementById("automationHubRoot");
     var overlay = document.getElementById("automationHub");
-    var nested = document.getElementById("automationHubNested");
-    if (!overlay || !nested) {
+    if (!overlay) {
         return;
     }
 
     var mainCard = overlay.querySelector("[data-hub-card]");
-    var nestedCard = nested.querySelector("[data-hub-card]");
     var mainBody = overlay.querySelector("[data-hub-body]");
-    var nestedBody = nested.querySelector("[data-hub-body]");
     var rowsHost = root ? root.querySelector("[data-hub-rows]") : null;
     var deleteTemplate = document.getElementById("automationDeleteTemplate");
     var loading = false;
@@ -86,63 +83,34 @@
 
     function isAnyOpen() {
         var createEl = document.getElementById("automationCreate");
-        return isOpen(overlay) || isOpen(nested) || (createEl && createEl.classList.contains("is-open"));
+        return isOpen(overlay) || (createEl && createEl.classList.contains("is-open"));
     }
 
-    function slot(useNested) {
-        return useNested
-            ? { overlay: nested, card: nestedCard, body: nestedBody }
-            : { overlay: overlay, card: mainCard, body: mainBody };
-    }
-
-    function closeSlot(useNested) {
-        var target = slot(useNested);
-        if (!useNested && target.body && target.body.querySelector("#automationBuilderForm")
-            && typeof window.destroyAutomationBuilder === "function") {
-            window.destroyAutomationBuilder();
+    function closeSlot() {
+        if (mainBody) {
+            mainBody.innerHTML = "";
         }
-        if (target.body) {
-            target.body.innerHTML = "";
+        if (mainCard) {
+            mainCard.classList.remove("is-confirm");
         }
-        if (target.card) {
-            target.card.classList.remove("is-wide", "is-confirm");
-        }
-        setOpen(target.overlay, false);
-        if (!useNested) {
-            closeSlot(true);
-        }
+        setOpen(overlay, false);
     }
 
     function closeTop() {
-        if (isOpen(nested)) {
-            closeSlot(true);
-            return;
-        }
         if (isOpen(overlay)) {
-            closeSlot(false);
+            closeSlot();
         }
     }
 
     function showHtml(html, options) {
         options = options || {};
-        var target = slot(!!options.nested);
-        if (!options.nested && target.body && target.body.querySelector("#automationBuilderForm")
-            && typeof window.destroyAutomationBuilder === "function") {
-            window.destroyAutomationBuilder();
+        if (mainCard) {
+            mainCard.classList.toggle("is-confirm", options.size === "confirm");
         }
-        if (target.card) {
-            target.card.classList.toggle("is-wide", options.size === "wide");
-            target.card.classList.toggle("is-confirm", options.size === "confirm");
-        }
-        target.body.innerHTML = html;
-        setOpen(target.overlay, true);
-        bootMonitor(target.body);
-        bootRunLive(target.body);
-        if (options.size === "wide") {
-            window.requestAnimationFrame(function () {
-                bootBuilder(target.body);
-            });
-        }
+        mainBody.innerHTML = html;
+        setOpen(overlay, true);
+        bootMonitor(mainBody);
+        bootRunLive(mainBody);
     }
 
     // Details of a run that is still going: re-read the panel every 2 s until it ends,
@@ -437,35 +405,6 @@
         poll();
     }
 
-    function bootBuilder(scope) {
-        var form = scope.querySelector("#automationBuilderForm");
-        if (!form || typeof window.initAutomationBuilder !== "function") {
-            return;
-        }
-        var graphEl = scope.querySelector("#automationBuilderGraph");
-        var i18nEl = scope.querySelector("#automationBuilderI18n");
-        var graph = {};
-        var i18n = {};
-        try {
-            graph = JSON.parse(graphEl ? graphEl.textContent || "{}" : "{}");
-        } catch (err) {
-            graph = {};
-        }
-        try {
-            i18n = JSON.parse(i18nEl ? i18nEl.textContent || "{}" : "{}");
-        } catch (err) {
-            i18n = {};
-        }
-        window.initAutomationBuilder({
-            id: form.getAttribute("data-builder-id"),
-            graph: graph,
-            catalogUrl: form.getAttribute("data-catalog-url"),
-            telegramChatsUrl: form.getAttribute("data-telegram-chats-url"),
-            saveUrl: form.getAttribute("data-save-url"),
-            i18n: i18n
-        });
-    }
-
     function loadPanel(url, options) {
         options = options || {};
         if (loading) {
@@ -497,16 +436,28 @@
         return Promise.resolve();
     }
 
+    function inSide(tab) {
+        if (!window.PartnerlyBuilderSide) {
+            return false;
+        }
+        closeSlot();
+        window.PartnerlyBuilderSide.open(tab);
+        return true;
+    }
+
     function openHistory(id) {
+        if (inSide("history")) { return Promise.resolve(); }
         return loadPanel("/Automation/HistoryPanel/" + id, { size: "default" });
     }
 
-    function openSettings(id, nestedFlag) {
-        return loadPanel("/Automation/SettingsPanel/" + id, { size: "default", nested: !!nestedFlag });
+    function openSettings(id) {
+        if (inSide("settings")) { return Promise.resolve(); }
+        return loadPanel("/Automation/SettingsPanel/" + id, { size: "default" });
     }
 
-    function openConnections(nestedFlag) {
-        return loadPanel("/Automation/ConnectionsPanel", { size: "default", nested: !!nestedFlag });
+    function openConnections() {
+        if (inSide("connections")) { return Promise.resolve(); }
+        return loadPanel("/Automation/ConnectionsPanel", { size: "default" });
     }
 
     function openRun(id) {
@@ -706,8 +657,16 @@
                 removeRow((form.querySelector('input[name="id"]') || {}).value);
             }
             updateRowName(form);
+            if (payload.reload === "page") {
+                window.setTimeout(function () { window.location.reload(); }, 1300);
+                return payload;
+            }
+            if (form.closest("[data-side-body]") && window.PartnerlyBuilderSide) {
+                window.PartnerlyBuilderSide.reload();
+                return payload;
+            }
             if (payload.reload === "connections") {
-                return openConnections(isOpen(nested) || form.closest("#automationHubNested"));
+                return openConnections();
             }
             if (form.getAttribute("data-hub-reload-run")) {
                 return openRun(form.getAttribute("data-hub-reload-run"));
@@ -732,11 +691,7 @@
             return true;
         }
         if (event.target === overlay) {
-            closeSlot(false);
-            return true;
-        }
-        if (event.target === nested) {
-            closeSlot(true);
+            closeSlot();
             return true;
         }
         var opener = event.target.closest("[data-hub]");
@@ -746,15 +701,14 @@
         event.preventDefault();
         var action = opener.getAttribute("data-hub");
         var id = opener.getAttribute("data-id");
-        var nestedFlag = opener.hasAttribute("data-hub-nested") || isOpen(overlay) && action !== "edit" && action !== "history" && action !== "run" && action !== "delete";
         if (action === "edit") {
             openBuilder(id);
         } else if (action === "history") {
             openHistory(id);
         } else if (action === "settings") {
-            openSettings(id, nestedFlag);
+            openSettings(id);
         } else if (action === "connections") {
-            openConnections(true);
+            openConnections();
         } else if (action === "node-history") {
             loadPanel("/Automation/NodeHistoryPanel/" + id
                 + "?nodeId=" + encodeURIComponent(opener.getAttribute("data-node") || "")
@@ -814,23 +768,73 @@
 
     document.addEventListener("click", handleHubClick);
 
+    // Tag filter above the agents list: pick one or more tags, only agents that have all of them stay.
+    document.addEventListener("click", function (event) {
+        var chip = event.target.closest ? event.target.closest("[data-tag-filter] [data-tag]") : null;
+        if (!chip) {
+            return;
+        }
+        chip.classList.toggle("is-on");
+        var picked = Array.prototype.map.call(document.querySelectorAll("[data-tag-filter] .is-on"), function (item) {
+            return item.getAttribute("data-tag");
+        });
+        Array.prototype.forEach.call(document.querySelectorAll("[data-automation-row]"), function (row) {
+            var tags = (row.getAttribute("data-tags") || "").split("|");
+            row.hidden = !picked.every(function (tag) { return tags.indexOf(tag) !== -1; });
+        });
+    });
+
+    // Import an agent that was exported from Partnerly (a .json file).
+    document.addEventListener("change", function (event) {
+        var input = event.target;
+        if (!input || !input.matches || !input.matches("[data-import-agent]") || !input.files || !input.files.length) {
+            return;
+        }
+        var label = input.closest("[data-import-agent-label]");
+        var tokenInput = document.querySelector('input[name="__RequestVerificationToken"]');
+        var body = new FormData();
+        body.append("file", input.files[0]);
+        fetch(label.getAttribute("data-import-url"), {
+            method: "POST",
+            credentials: "same-origin",
+            headers: { "X-Requested-With": "XMLHttpRequest", "RequestVerificationToken": tokenInput ? tokenInput.value : "" },
+            body: body
+        }).then(function (response) {
+            return parseJson(response).then(function (payload) {
+                if (!response.ok || !payload || payload.success === false) {
+                    throw new Error((payload && payload.message) || response.statusText || "Error");
+                }
+                return payload;
+            });
+        }).then(function (payload) {
+            window.location.href = "/Automation/Builder/" + encodeURIComponent(payload.id);
+        }).catch(function (err) {
+            toast(err.message || "Error", "error");
+        }).then(function () {
+            input.value = "";
+        });
+    });
+
+    function submitAjaxForm(form, submitter) {
+        if (submitter && submitter.getAttribute("formaction")) {
+            form.setAttribute("data-submit-action", submitter.getAttribute("formaction"));
+        } else {
+            form.removeAttribute("data-submit-action");
+        }
+        return postForm(form);
+    }
+
     document.addEventListener("submit", function (event) {
         var form = event.target;
         if (!form || !form.hasAttribute("data-hub-ajax")) {
             return;
         }
         event.preventDefault();
-        var submitter = event.submitter;
-        if (submitter && submitter.getAttribute("formaction")) {
-            form.setAttribute("data-submit-action", submitter.getAttribute("formaction"));
-        } else {
-            form.removeAttribute("data-submit-action");
-        }
-        postForm(form);
+        submitAjaxForm(form, event.submitter);
     });
 
     document.addEventListener("keydown", function (event) {
-        if (event.key === "Escape" && (isOpen(nested) || isOpen(overlay))) {
+        if (event.key === "Escape" && isOpen(overlay)) {
             closeTop();
         }
     });
@@ -929,7 +933,14 @@
         removeRow: removeRow,
         setActive: setActive,
         toast: toast,
-        close: closeTop
+        close: closeTop,
+        // send a data-hub-ajax form the same way the page does (used by the editor's side section)
+        submit: submitAjaxForm,
+        // start the live parts (run monitor, running run) of HTML that was put on the page by hand
+        boot: function (scope) {
+            bootMonitor(scope);
+            bootRunLive(scope);
+        }
     };
 
     if (root) {

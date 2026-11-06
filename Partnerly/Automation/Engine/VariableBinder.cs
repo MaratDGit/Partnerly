@@ -54,6 +54,13 @@ namespace Partnerly.Automation.Engine
                 trimmed = trimmed[2..^2].Trim();
             }
 
+            // functions after the path: {{ steps.a.result.name | upper | truncate:20 }}
+            var calls = new List<ValueFilters.Call>();
+            if (trimmed.Contains('|'))
+            {
+                trimmed = ValueFilters.Split(trimmed, calls);
+            }
+
             if (IsBlockedPath(trimmed))
             {
                 return null;
@@ -68,10 +75,11 @@ namespace Partnerly.Automation.Engine
                     continue;
                 }
 
-                return null;
+                current = null;
+                break;
             }
 
-            return current;
+            return calls.Count == 0 ? current : ValueFilters.Apply(current == null ? null : JsonNodes.Clone(current), calls);
         }
 
         public static string NodeToString(JsonNode? node)

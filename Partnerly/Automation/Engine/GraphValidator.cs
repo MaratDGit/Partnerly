@@ -116,6 +116,37 @@ namespace Partnerly.Automation.Engine
                 }
             }
 
+            foreach (var node in graph.Nodes.Where(item => item.Type == AutomationTypeCodes.Loop && item.Kind == "action"))
+            {
+                var ports = graph.Edges.Where(edge => edge.From == node.Id).Select(edge => edge.Port).ToList();
+                if (!ports.Contains("each"))
+                {
+                    errors.Add($"For each '{node.Name}' needs cards on its 'each' output.");
+                    continue;
+                }
+
+                foreach (var bodyId in WorkflowExecutor.LoopBody(graph, node.Id))
+                {
+                    var inner = graph.FindNode(bodyId);
+                    if (inner?.Type == AutomationTypeCodes.Loop)
+                    {
+                        errors.Add($"For each '{inner.Name}' cannot sit inside another For each.");
+                    }
+                    else if (inner?.Type == AutomationTypeCodes.WaitUntil)
+                    {
+                        errors.Add($"'{inner.Name}' (Wait until) cannot sit inside For each '{node.Name}'.");
+                    }
+                }
+            }
+
+            foreach (var edge in graph.Edges.Where(item => item.Port == "error"))
+            {
+                if (graph.FindNode(edge.From)?.Kind != "action")
+                {
+                    errors.Add($"Edge '{edge.Id}': only a step can have an error path.");
+                }
+            }
+
             var reachable = new HashSet<string>(StringComparer.Ordinal);
             var queue = new Queue<string>(triggers.Select(item => item.Id));
             while (queue.Count > 0)

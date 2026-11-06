@@ -4777,4 +4777,262 @@ User, группу и шаблон письма здесь создать нел
   <data name="BuilderHistoryNotes" xml:space="preserve">
     <value>Изменена заметка</value>
   </data>
+  <data name="NodeTypeLoop" xml:space="preserve">
+    <value>Для каждого</value>
+  </data>
+  <data name="NodeTypeFilter" xml:space="preserve">
+    <value>Продолжать, только если</value>
+  </data>
+  <data name="DocsActionLoop" xml:space="preserve">
+    <value>Проходит по списку и повторяет карточки на выходе «Каждый элемент» для каждого элемента. Внутри доступны {{loop.item}} и {{loop.number}}. Когда список кончился, поток идёт дальше с выхода «Когда закончено».</value>
+  </data>
+  <data name="DocsActionFilter" xml:space="preserve">
+    <value>Пропускает поток дальше, только если условие истинно. Если нет — эта ветка тихо заканчивается, а запуск считается успешным.</value>
+  </data>
+  <data name="BuilderLoopItems" xml:space="preserve">
+    <value>Список для перебора</value>
+  </data>
+  <data name="BuilderLoopItemsHelp" xml:space="preserve">
+    <value>Список из предыдущей карточки (например {{steps.find.result.items}}), JSON-список или по одному элементу в строке.</value>
+  </data>
+  <data name="BuilderLoopMax" xml:space="preserve">
+    <value>Максимум элементов</value>
+  </data>
+  <data name="BuilderLoopMaxHelp" xml:space="preserve">
+    <value>Защитный предел: по умолчанию 100, не больше 500.</value>
+  </data>
+  <data name="BuilderFilterHelp" xml:space="preserve">
+    <value>Поток продолжится, только если это верно. Иначе эта ветка закончится здесь.</value>
+  </data>
+  <data name="BuilderOnError" xml:space="preserve">
+    <value>Если эта карточка упала</value>
+  </data>
+  <data name="BuilderOnErrorStop" xml:space="preserve">
+    <value>Остановить эту ветку (по умолчанию)</value>
+  </data>
+  <data name="BuilderOnErrorContinue" xml:space="preserve">
+    <value>Игнорировать ошибку и идти дальше</value>
+  </data>
+  <data name="BuilderOnErrorRoute" xml:space="preserve">
+    <value>Перейти на путь ошибки (красный выход)</value>
+  </data>
+  <data name="BuilderOnErrorHelp" xml:space="preserve">
+    <value>Остановить: запуск помечается ошибкой. Игнорировать: ошибка записывается, дальше идут следующие карточки. Путь ошибки: работают только карточки на красном выходе.</value>
+  </data>
+  <data name="BuilderPortEach" xml:space="preserve">
+    <value>Каждый элемент</value>
+  </data>
+  <data name="BuilderPortDone" xml:space="preserve">
+    <value>Когда закончено</value>
+  </data>
+  <data name="BuilderPortError" xml:space="preserve">
+    <value>Если ошибка</value>
+  </data>
+  <data name="BuilderExecWait" xml:space="preserve">
+    <value>Ждать результата</value>
+  </data>
+  <data name="BuilderExecWaitNo" xml:space="preserve">
+    <value>Нет, только запустить</value>
+  </data>
+  <data name="BuilderExecWaitYes" xml:space="preserve">
+    <value>Да, ждать завершения</value>
+  </data>
+  <data name="BuilderExecWaitHelp" xml:space="preserve">
+    <value>При ожидании следующие карточки получают переменные дочернего агента как {{steps.NAME.result.vars}}, а ошибка дочернего агента отмечает эту карточку как упавшую.</value>
+  </data>
+  <data name="BuilderTestCard" xml:space="preserve">
+    <value>Проверить карточку</value>
+  </data>
+  <data name="BuilderTestRunning" xml:space="preserve">
+    <value>Проверяю...</value>
+  </data>
+  <data name="BuilderTestNote" xml:space="preserve">
+    <value>Использует значения последнего запуска. Карточки, которые что-то отправляют или меняют, не выполняются: вы видите, что они получили бы.</value>
+  </data>
+  <data name="BuilderTestSettings" xml:space="preserve">
+    <value>Настройки с подставленными значениями</value>
+  </data>
+  <data name="BuilderTestResult" xml:space="preserve">
+    <value>Результат</value>
+  </data>
+  <data name="BuilderTestFailed" xml:space="preserve">
+    <value>Не удалось проверить карточку.</value>
+  </data>
+  <data name="BuilderTestSave" xml:space="preserve">
+    <value>Сначала заполните карточку.</value>
+  </data>
+  <data name="BuilderFunctionsHint" xml:space="preserve">
+    <value>Подсказка: значение можно менять функциями, например {{ vars.name | upper }} или {{ vars.date | date:"dd.MM.yyyy" }}. Доступны: upper, lower, capitalize, trim, default, date, number, round, replace, substring, truncate, length, first, last, join, split, add, subtract, multiply, divide, json, urlencode.</value>
+  </data>
+  <data name="BuilderMenuTools" xml:space="preserve">
+    <value>Версии</value>
+  </data>
+  <data name="ToolsRerunQueued" xml:space="preserve">
+    <value>Запуск начат заново.</value>
+  </data>
+  <data name="ToolsResumeQueued" xml:space="preserve">
+    <value>Запуск продолжится с упавших карточек.</value>
+  </data>
+  <data name="ToolsResumeOnlyFailed" xml:space="preserve">
+    <value>Продолжить можно только упавший запуск.</value>
+  </data>
+  <data name="ToolsTestBadCard" xml:space="preserve">
+    <value>Эту карточку нельзя проверить.</value>
+  </data>
+  <data name="ToolsVersionRestored" xml:space="preserve">
+    <value>Версия загружена в черновик. Опубликуйте, чтобы она заработала.</value>
+  </data>
+  <data name="ToolsImportBad" xml:space="preserve">
+    <value>Этот файл не является агентом, экспортированным из Partnerly.</value>
+  </data>
+  <data name="ToolsPanelTitle" xml:space="preserve">
+    <value>Дополнительно</value>
+  </data>
+  <data name="ToolsStatsTitle" xml:space="preserve">
+    <value>Последние 7 дней</value>
+  </data>
+  <data name="ToolsStatsRuns" xml:space="preserve">
+    <value>Запусков</value>
+  </data>
+  <data name="ToolsStatsSuccess" xml:space="preserve">
+    <value>Успешно</value>
+  </data>
+  <data name="ToolsStatsFailed" xml:space="preserve">
+    <value>С ошибкой</value>
+  </data>
+  <data name="ToolsStatsAverage" xml:space="preserve">
+    <value>Среднее время</value>
+  </data>
+  <data name="ToolsVersionsTitle" xml:space="preserve">
+    <value>Версии</value>
+  </data>
+  <data name="ToolsVersionsHint" xml:space="preserve">
+    <value>«Вернуть» загружает старую версию в черновик. Рабочая версия не меняется, пока вы не опубликуете.</value>
+  </data>
+  <data name="ToolsVersion" xml:space="preserve">
+    <value>Версия</value>
+  </data>
+  <data name="ToolsVersionLive" xml:space="preserve">
+    <value>Работает</value>
+  </data>
+  <data name="ToolsVersionDraft" xml:space="preserve">
+    <value>Черновик</value>
+  </data>
+  <data name="ToolsCards" xml:space="preserve">
+    <value>карточек</value>
+  </data>
+  <data name="ToolsRestore" xml:space="preserve">
+    <value>Вернуть</value>
+  </data>
+  <data name="ToolsShareTitle" xml:space="preserve">
+    <value>Экспорт</value>
+  </data>
+  <data name="ToolsShareHint" xml:space="preserve">
+    <value>Скачайте агента файлом, чтобы сохранить или перенести. Подключения в файл не входят.</value>
+  </data>
+  <data name="ToolsExport" xml:space="preserve">
+    <value>Экспортировать агента</value>
+  </data>
+  <data name="ToolsImport" xml:space="preserve">
+    <value>Импортировать агента</value>
+  </data>
+  <data name="ToolsRerun" xml:space="preserve">
+    <value>Запустить снова</value>
+  </data>
+  <data name="ToolsResume" xml:space="preserve">
+    <value>Продолжить с упавших</value>
+  </data>
+  <data name="ToolsVarsButton" xml:space="preserve">
+    <value>Переменные агента и уведомления</value>
+  </data>
+  <data name="ToolsVarsTitle" xml:space="preserve">
+    <value>Переменные агента и уведомления</value>
+  </data>
+  <data name="ToolsVarsLead" xml:space="preserve">
+    <value>Константы, с которых начинается каждый запуск. Используйте в любом поле как {{vars.имя}}.</value>
+  </data>
+  <data name="ToolsVarsName" xml:space="preserve">
+    <value>Имя</value>
+  </data>
+  <data name="ToolsVarsValue" xml:space="preserve">
+    <value>Значение</value>
+  </data>
+  <data name="ToolsVarsAdd" xml:space="preserve">
+    <value>Добавить переменную</value>
+  </data>
+  <data name="ToolsVarsNotify" xml:space="preserve">
+    <value>Сообщать мне, если запуск упал</value>
+  </data>
+  <data name="ToolsVarsNotifyHelp" xml:space="preserve">
+    <value>Одно уведомление в начале серии ошибок, а не по одному на каждый упавший запуск.</value>
+  </data>
+  <data name="ToolsVarsDone" xml:space="preserve">
+    <value>Готово</value>
+  </data>
+  <data name="ToolsVarsBad" xml:space="preserve">
+    <value>В имени можно использовать только буквы, цифры и _.</value>
+  </data>
+  <data name="NodeTypeStoreSet" xml:space="preserve">
+    <value>Сохранить значение</value>
+  </data>
+  <data name="NodeTypeStoreGet" xml:space="preserve">
+    <value>Прочитать значение</value>
+  </data>
+  <data name="NodeTypeStoreDelete" xml:space="preserve">
+    <value>Забыть значение</value>
+  </data>
+  <data name="NodeTypeOnce" xml:space="preserve">
+    <value>Только один раз</value>
+  </data>
+  <data name="DocsActionStoreSet" xml:space="preserve">
+    <value>Хранит значение под именем, чтобы следующие запуски этого агента могли его прочитать (счётчик, последний id, дата). По желанию забывает его через несколько часов.</value>
+  </data>
+  <data name="DocsActionStoreGet" xml:space="preserve">
+    <value>Читает сохранённое значение в {{steps.ИМЯ.result.value}}. {{steps.ИМЯ.result.found}} показывает, было ли оно; если нет, берётся значение по умолчанию.</value>
+  </data>
+  <data name="DocsActionStoreDelete" xml:space="preserve">
+    <value>Удаляет сохранённое значение.</value>
+  </data>
+  <data name="DocsActionOnce" xml:space="preserve">
+    <value>Пропускает поток при первом появлении ключа и останавливает ветку во все следующие разы. Ключ вроде {{trigger.id}} гарантирует, что каждое письмо, обращение или заказ обработается один раз.</value>
+  </data>
+  <data name="BuilderStoreKey" xml:space="preserve">
+    <value>Имя (ключ)</value>
+  </data>
+  <data name="BuilderStoreKeyHelp" xml:space="preserve">
+    <value>До 190 символов. Значения хранятся отдельно для каждого агента.</value>
+  </data>
+  <data name="BuilderOnceKeyHelp" xml:space="preserve">
+    <value>Например {{trigger.id}}: одно и то же значение пропускается только один раз.</value>
+  </data>
+  <data name="BuilderStoreValue" xml:space="preserve">
+    <value>Значение</value>
+  </data>
+  <data name="BuilderStoreTtl" xml:space="preserve">
+    <value>Забыть через (часов)</value>
+  </data>
+  <data name="BuilderStoreTtlHelp" xml:space="preserve">
+    <value>Оставьте пустым, чтобы хранить всегда.</value>
+  </data>
+  <data name="BuilderStoreDefault" xml:space="preserve">
+    <value>Значение, если ничего не сохранено</value>
+  </data>
+  <data name="ToolsTags" xml:space="preserve">
+    <value>Теги</value>
+  </data>
+  <data name="ToolsTagsHelp" xml:space="preserve">
+    <value>Слова через запятую, не больше 8. Нужны для фильтра в списке агентов.</value>
+  </data>
+  <data name="ToolsLastChanged" xml:space="preserve">
+    <value>Последнее изменение</value>
+  </data>
+  <data name="BuilderSideResize" xml:space="preserve">
+    <value>Потяните, чтобы изменить размер (двойной клик: 45%)</value>
+  </data>
+  <data name="BuilderSideOpen" xml:space="preserve">
+    <value>Панель агента: история, подключения, версии, настройки</value>
+  </data>
+  <data name="BuilderInspector" xml:space="preserve">
+    <value>Инспектор</value>
+  </data>
 </root>

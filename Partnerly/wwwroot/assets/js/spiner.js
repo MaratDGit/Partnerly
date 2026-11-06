@@ -100,6 +100,8 @@
             href.startsWith("#") ||
             href.startsWith("javascript:") ||
             $(this).attr("target") === "_blank" ||
+            // a file download does not leave the page: the loader would never be hidden
+            this.hasAttribute("download") ||
             $(this).attr("data-bs-toggle")
         ) {
             return;

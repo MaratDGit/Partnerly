@@ -24,9 +24,12 @@ namespace Partnerly.Automation.Engine
             ActionContext context,
             IReadOnlyList<AutomationRunStep> existing,
             int retryLimit,
-            CancellationToken cancellationToken)
+            CancellationToken cancellationToken,
+            bool repeated = false)
         {
-            var succeeded = existing.Any(step =>
+            // repeated: the card runs again on purpose (next item of a "For each"), so an earlier success
+            // must not short-circuit it.
+            var succeeded = !repeated && existing.Any(step =>
                 step.NodeId == context.Node.Id && step.Status == AutomationStatuses.StepSucceeded);
             if (succeeded)
             {
@@ -63,10 +66,19 @@ namespace Partnerly.Automation.Engine
                 EndedAt = _clock.UtcNow
             }, cancellationToken);
 
-            if (result.Status == AutomationStatuses.StepFailed && result.Retryable && attempt < retryLimit)
+            var retryAttempt = attempt;
+            if (repeated)
+            {
+                // count only the failures after the last success of this card in this pass
+                var own = existing.Where(step => step.NodeId == context.Node.Id).OrderBy(step => step.Attempt).ToList();
+                var lastOk = own.FindLastIndex(step => step.Status != AutomationStatuses.StepFailed);
+                retryAttempt = own.Count - (lastOk + 1) + 1;
+            }
+
+            if (result.Status == AutomationStatuses.StepFailed && result.Retryable && retryAttempt < retryLimit)
             {
                 result.WakeupKind = AutomationStatuses.WakeupRetry;
-                var delaySeconds = Math.Min(60, 1 << Math.Min(attempt - 1, 6));
+                var delaySeconds = Math.Min(60, 1 << Math.Min(retryAttempt - 1, 6));
                 result.ResumeAtUtc = _clock.UtcNow.AddSeconds(delaySeconds);
             }
 

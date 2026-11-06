@@ -31,6 +31,11 @@
             </select>
             <div class="form-text">@Localizer["ScheduleTimeHelp"]</div>
         </div>
+        <div class="mb-3">
+            <label class="form-label">@Localizer["ToolsTags"]</label>
+            <input class="form-control" type="text" name="tags" maxlength="200" value="@definition.Tags" />
+            <div class="form-text">@Localizer["ToolsTagsHelp"]</div>
+        </div>
         <div class="row g-3">
             <div class="col-md-4">
                 <label class="form-label">@Localizer["MaxConcurrentRuns"]</label>

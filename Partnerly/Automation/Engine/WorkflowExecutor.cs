@@ -1,6 +1,7 @@
 using System.Text.Json;
 using System.Text.Json.Nodes;
 using Partnerly.Automation.Abstractions;
+using Partnerly.Automation.Actions;
 using Partnerly.Automation.Persistence;
 using Partnerly.Automation.Persistence.Entities;
 
@@ -53,6 +54,21 @@ namespace Partnerly.Automation.Engine
             }
 
             var startedNow = run.StartedAt == null;
+            if (startedNow && graph.Settings?.Variables is { Count: > 0 } constants)
+            {
+                // agent-level constants: {{vars.name}} from the first card on
+                var vars = variables["vars"] as JsonObject ?? new JsonObject();
+                foreach (var pair in constants)
+                {
+                    if (!vars.ContainsKey(pair.Key))
+                    {
+                        vars[pair.Key] = pair.Value;
+                    }
+                }
+
+                variables["vars"] = vars;
+            }
+
             run.Status = AutomationStatuses.Running;
             run.StartedAt ??= _clock.UtcNow;
             run.HeartbeatAt = _clock.UtcNow;
@@ -89,6 +105,11 @@ namespace Partnerly.Automation.Engine
 
                 if (ready.Count == 0)
                 {
+                    if (AdvanceLoops(graph, variables, ports, completed, failed))
+                    {
+                        continue;
+                    }
+
                     if (failed.Count == 0)
                     {
                         run.Status = AutomationStatuses.Succeeded;
@@ -112,6 +133,14 @@ namespace Partnerly.Automation.Engine
                     continue;
                 }
 
+                if (node.Type == AutomationTypeCodes.Loop)
+                {
+                    await StartLoopAsync(run, graph, node, variables, ports, completed, failed, cancellationToken);
+                    steps = (await _store.GetStepsAsync(run.Id, cancellationToken)).ToList();
+                    continue;
+                }
+
+                var repeated = ActiveLoopBodies(graph, variables).Contains(node.Id);
                 var context = new ActionContext
                 {
                     Run = run,
@@ -124,7 +153,7 @@ namespace Partnerly.Automation.Engine
                 };
 
                 await _notifier.StepAsync(run, node.Id, "started", cancellationToken);
-                var result = await _stepRunner.RunAsync(context, steps, definition.RetryLimit, cancellationToken);
+                var result = await _stepRunner.RunAsync(context, steps, definition.RetryLimit, cancellationToken, repeated);
                 if (result.Status != AutomationStatuses.StepWaiting)
                 {
                     await _notifier.StepAsync(run, node.Id, result.Status, cancellationToken);
@@ -142,10 +171,9 @@ namespace Partnerly.Automation.Engine
                     }
                     else
                     {
-                        // Final failure of this card: its chain stops, the other chains go on.
-                        failed.Add(node.Id);
-                        ports[FailedPrefix + node.Id] = "1";
-                        WriteStepOutput(variables, node, result);
+                        // Final failure of this card: by default its chain stops and the other chains go on;
+                        // "On error" can route it to an error path or let the flow carry on.
+                        ApplyFinalFailure(graph, node, result, variables, ports, completed, failed);
                         continue;
                     }
 
@@ -177,6 +205,226 @@ namespace Partnerly.Automation.Engine
             {
                 await _notifier.RunFinishedAsync(run, cancellationToken);
             }
+
+            if (run.Status == AutomationStatuses.Failed && !run.IsDryRun
+                && services.GetService(typeof(IRunFailureAlert)) is IRunFailureAlert alert)
+            {
+                try
+                {
+                    await alert.RunFailedAsync(run, definition, graph, cancellationToken);
+                }
+                catch (Exception)
+                {
+                    // an alert that cannot be sent must never change the result of the run
+                }
+            }
+        }
+
+        // ---- "On error" -------------------------------------------------------
+        // stop (default): the card's chain ends, the run is marked failed at the end.
+        // continue: the error is recorded, the flow goes on along the normal path.
+        // route (or a card wired to the red "error" output): the flow goes on along the error path only.
+        private static void ApplyFinalFailure(
+            WorkflowGraph graph,
+            WorkflowNode node,
+            StepResult result,
+            JsonObject variables,
+            Dictionary<string, string> ports,
+            HashSet<string> completed,
+            HashSet<string> failed)
+        {
+            WriteStepOutput(variables, node, result);
+            var mode = NodeConfig.GetString(node, "onError");
+            var errorWired = graph.Edges.Any(edge => edge.From == node.Id && edge.Port == ErrorPort);
+            if (errorWired || string.Equals(mode, "route", StringComparison.Ordinal))
+            {
+                ports[node.Id] = ErrorPort;
+                completed.Add(node.Id);
+                return;
+            }
+
+            if (string.Equals(mode, "continue", StringComparison.Ordinal))
+            {
+                completed.Add(node.Id);
+                return;
+            }
+
+            failed.Add(node.Id);
+            ports[FailedPrefix + node.Id] = "1";
+        }
+
+        private const string ErrorPort = "error";
+
+        // ---- "For each" ---------------------------------------------------------
+        private const string LoopsKey = "_loops";
+
+        private static HashSet<string> Reach(WorkflowGraph graph, IEnumerable<string> starts, string stopAt)
+        {
+            var seen = new HashSet<string>(StringComparer.Ordinal);
+            var queue = new Queue<string>(starts);
+            while (queue.Count > 0)
+            {
+                var id = queue.Dequeue();
+                if (id == stopAt || !seen.Add(id))
+                {
+                    continue;
+                }
+
+                foreach (var edge in graph.Edges.Where(item => item.From == id))
+                {
+                    queue.Enqueue(edge.To);
+                }
+            }
+
+            return seen;
+        }
+
+        // The cards one pass of a "For each" repeats: everything after its "each" output that the "done" path does not also reach.
+        public static HashSet<string> LoopBody(WorkflowGraph graph, string loopId)
+        {
+            var body = Reach(graph, graph.Edges.Where(edge => edge.From == loopId && edge.Port == "each").Select(edge => edge.To), loopId);
+            var after = Reach(graph, graph.Edges.Where(edge => edge.From == loopId && edge.Port != "each").Select(edge => edge.To), loopId);
+            body.ExceptWith(after);
+            return body;
+        }
+
+        private static HashSet<string> ActiveLoopBodies(WorkflowGraph graph, JsonObject variables)
+        {
+            var all = new HashSet<string>(StringComparer.Ordinal);
+            if (variables[LoopsKey] is JsonObject loops)
+            {
+                foreach (var pair in loops)
+                {
+                    all.UnionWith(LoopBody(graph, pair.Key));
+                }
+            }
+
+            return all;
+        }
+
+        private static void SetLoopVariable(JsonObject variables, WorkflowNode node, JsonArray items, int index)
+        {
+            variables["loop"] = new JsonObject
+            {
+                ["name"] = node.Name,
+                ["item"] = JsonNodes.Clone(items[index]),
+                ["index"] = index,
+                ["number"] = index + 1,
+                ["count"] = items.Count
+            };
+        }
+
+        private async Task StartLoopAsync(
+            AutomationRun run,
+            WorkflowGraph graph,
+            WorkflowNode node,
+            JsonObject variables,
+            Dictionary<string, string> ports,
+            HashSet<string> completed,
+            HashSet<string> failed,
+            CancellationToken cancellationToken)
+        {
+            var started = _clock.UtcNow;
+            var existing = await _store.GetStepsAsync(run.Id, cancellationToken);
+            await _notifier.StepAsync(run, node.Id, "started", cancellationToken);
+            var ok = LoopItems.TryRead(node, _binder, variables, out var items, out var error);
+            var result = ok
+                ? StepResult.Succeeded(new JsonObject { ["count"] = items.Count })
+                : StepResult.Failed(error, retryable: false);
+            await _store.AddStepAsync(new AutomationRunStep
+            {
+                Id = Guid.NewGuid(),
+                RunId = run.Id,
+                NodeId = node.Id,
+                ActionType = node.Type,
+                Status = result.Status,
+                Attempt = existing.Count(step => step.NodeId == node.Id) + 1,
+                OutputJson = result.Output?.ToJsonString(),
+                Error = result.Error,
+                StartedAt = started,
+                EndedAt = _clock.UtcNow
+            }, cancellationToken);
+            await _notifier.StepAsync(run, node.Id, result.Status, cancellationToken);
+
+            if (!ok)
+            {
+                ApplyFinalFailure(graph, node, result, variables, ports, completed, failed);
+                return;
+            }
+
+            WriteStepOutput(variables, node, result);
+            completed.Add(node.Id);
+            if (items.Count == 0)
+            {
+                ports[node.Id] = "done";
+                return;
+            }
+
+            var loops = variables[LoopsKey] as JsonObject ?? new JsonObject();
+            loops[node.Id] = new JsonObject { ["i"] = 0, ["n"] = items.Count, ["items"] = items };
+            variables[LoopsKey] = loops;
+            SetLoopVariable(variables, node, items, 0);
+            ports[node.Id] = "each";
+        }
+
+        // Called when nothing is ready: the pass over the current item is finished, so start the next
+        // item, or - after the last one - open the "done" path. True when it changed something.
+        private static bool AdvanceLoops(
+            WorkflowGraph graph,
+            JsonObject variables,
+            Dictionary<string, string> ports,
+            HashSet<string> completed,
+            HashSet<string> failed)
+        {
+            if (variables[LoopsKey] is not JsonObject loops || loops.Count == 0)
+            {
+                return false;
+            }
+
+            var open = loops.FirstOrDefault(pair => pair.Value is JsonObject item && item["failed"]?.GetValue<bool>() != true);
+            if (open.Key == null)
+            {
+                return false;
+            }
+
+            var key = open.Key;
+            var node = graph.FindNode(key);
+            var state = (JsonObject)loops[key]!;
+            var body = LoopBody(graph, key);
+            if (node == null || body.Any(failed.Contains))
+            {
+                // an item failed for good: stop going through the list, the loop counts as failed.
+                // The state stays so "Resume" can continue with this very item.
+                state["failed"] = true;
+                failed.Add(key);
+                ports[FailedPrefix + key] = "1";
+                return true;
+            }
+
+            var index = state["i"]!.GetValue<int>();
+            var count = state["n"]!.GetValue<int>();
+            if (index + 1 < count)
+            {
+                index++;
+                state["i"] = index;
+                foreach (var id in body)
+                {
+                    completed.Remove(id);
+                    ports.Remove(id);
+                }
+
+                SetLoopVariable(variables, node, (JsonArray)state["items"]!, index);
+                return true;
+            }
+
+            loops.Remove(key);
+            ports[key] = "done";
+            if (loops.Count == 0)
+            {
+                variables.Remove("loop");
+            }
+
+            return true;
         }
 
         // A card that is turned off does nothing and the flow goes on past it, whatever
@@ -292,12 +540,14 @@ namespace Partnerly.Automation.Engine
                 return false;
             }
 
+            ports.TryGetValue(edge.From, out var chosen);
             if (string.IsNullOrEmpty(edge.Port))
             {
-                return true;
+                // the normal path is closed after an error that was routed, or when a filter said stop
+                return chosen != ErrorPort && chosen != FilterActionHandler.StoppedPort;
             }
 
-            if (!ports.TryGetValue(edge.From, out var chosen))
+            if (chosen == null)
             {
                 return false;
             }

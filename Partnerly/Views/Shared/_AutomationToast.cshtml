@@ -1,0 +1,35 @@
+@* The message of the Agents and editor screens after a page reload (TempData). Same look as the messages the
+   screens show without reloading (hub.js toast): glass card, icon, own close button. *@
+@{
+    var message = TempData["ToastMessage"] as string;
+    var toastType = TempData["ToastType"] as string ?? "success";
+}
+
+@if (!string.IsNullOrEmpty(message))
+{
+    var failed = toastType == "error";
+
+    <div class="toast-container position-fixed bottom-0 end-0 p-3">
+        <div id="appToast" class="toast automation-toast border-0 @(failed ? "is-error" : "is-ok")"
+             role="alert" aria-live="assertive" aria-atomic="true">
+            <div class="automation-toast-icon"><i class="bx @(failed ? "bx-error-circle" : "bx-check-circle")" aria-hidden="true"></i></div>
+            <div class="toast-body">@message</div>
+            <button type="button" class="automation-toast-close" data-bs-dismiss="toast" aria-label="@Localizer["Close"]">
+                <i class="bx bx-x" aria-hidden="true"></i>
+            </button>
+        </div>
+    </div>
+
+    // not again after F5
+    TempData.Remove("ToastMessage");
+    TempData.Remove("ToastType");
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            var toastEl = document.getElementById("appToast");
+            if (toastEl && window.bootstrap) {
+                new bootstrap.Toast(toastEl, { delay: 3000 }).show();
+            }
+        });
+    </script>
+}

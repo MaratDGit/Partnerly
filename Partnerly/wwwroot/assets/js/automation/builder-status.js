@@ -77,8 +77,6 @@
         setEnabled("test", can.run && stats.hasTrigger);
         setEnabled("run", can.run && state.isPublished && !state.hasChanges && !logicDirty);
         setEnabled("toggle", can.edit && state.isPublished);
-        setEnabled("settings", can.edit);
-        setEnabled("connections", can.connections);
 
         var toggle = btn("toggle");
         if (toggle) {

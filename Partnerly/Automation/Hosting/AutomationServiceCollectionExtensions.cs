@@ -86,6 +86,7 @@ namespace Partnerly.Automation.Hosting
                 services.AddScoped<Partnerly.Automation.Web.AutomationFavoritesService>();
                 services.AddScoped<IAutomationAccessService, CurrentUserAutomationAccessService>();
                 services.AddScoped<IAutomationRunNotifier, AutomationRunNotifier>();
+                services.AddScoped<IRunFailureAlert, Partnerly.Automation.Integration.RunFailureAlert>();
                 services.AddTransient<AutomationEventBridge>();
                 services.AddHttpClient(OutboundHttp.ClientName, client =>
                 {
@@ -133,6 +134,12 @@ namespace Partnerly.Automation.Hosting
             services.AddTransient<HttpRequestActionHandler>();
             services.AddTransient<WebhookActionHandler>();
             services.AddTransient<ExecuteWorkflowActionHandler>();
+            services.AddTransient<LoopActionHandler>();
+            services.AddTransient<FilterActionHandler>();
+            services.AddTransient<StoreSetActionHandler>();
+            services.AddTransient<StoreGetActionHandler>();
+            services.AddTransient<StoreDeleteActionHandler>();
+            services.AddTransient<OnceActionHandler>();
         }
 
         private static TriggerRegistry CreateTriggerRegistry()
@@ -167,6 +174,12 @@ namespace Partnerly.Automation.Hosting
             registry.Register<HttpRequestActionHandler>(AutomationTypeCodes.HttpRequest);
             registry.Register<WebhookActionHandler>(AutomationTypeCodes.WebhookAction);
             registry.Register<ExecuteWorkflowActionHandler>(AutomationTypeCodes.ExecuteWorkflow);
+            registry.Register<LoopActionHandler>(AutomationTypeCodes.Loop);
+            registry.Register<FilterActionHandler>(AutomationTypeCodes.Filter);
+            registry.Register<StoreSetActionHandler>(AutomationTypeCodes.StoreSet);
+            registry.Register<StoreGetActionHandler>(AutomationTypeCodes.StoreGet);
+            registry.Register<StoreDeleteActionHandler>(AutomationTypeCodes.StoreDelete);
+            registry.Register<OnceActionHandler>(AutomationTypeCodes.Once);
             return registry;
         }
     }

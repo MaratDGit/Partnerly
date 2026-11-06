@@ -625,3 +625,11 @@ UI и будущий AI Assistant вызывают **только** это. AI �
 - Прод-миграции.
 - Правка vendor CSS.
 - Исправление KI-003/010 «заодно».
+
+---
+
+## 21. Дополнения 2026-11-06
+
+- Типы действий `loop` (выходы `each` / `done`) и `filter` (false → порт `stopped`). Порт `error` у любой карточки с `config.onError = "route"`. Подробности и ограничения — TECHNICAL_SOLUTIONS TR-2026-11-06-01.
+- `graph.settings` (константы `vars`, `notifyOnFailure`) и `graph.notes` — не часть логики (`WorkflowGraphDiff` игнорирует заметки и `notifyOnFailure`).
+- `IAutomationRunService.RerunAsync` / `ResumeFailedAsync`; `IAutomationStore.QueryVersions`; `IRunFailureAlert` (необязательный).

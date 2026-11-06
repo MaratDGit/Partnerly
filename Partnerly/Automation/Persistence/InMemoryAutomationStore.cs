@@ -440,6 +440,81 @@ namespace Partnerly.Automation.Persistence
             }
         }
 
+        private readonly Dictionary<string, AutomationDataItem> _dataItems = new();
+
+        private static string DataKey(Guid automationId, string key) => automationId.ToString("N") + "|" + key;
+
+        public Task<AutomationDataItem?> GetDataItemAsync(Guid automationId, string key, DateTime utcNow, CancellationToken cancellationToken = default)
+        {
+            lock (_gate)
+            {
+                if (_dataItems.TryGetValue(DataKey(automationId, key), out var item) && (item.ExpiresAt == null || item.ExpiresAt > utcNow))
+                {
+                    return Task.FromResult<AutomationDataItem?>(new AutomationDataItem
+                    {
+                        Id = item.Id, AutomationId = item.AutomationId, Key = item.Key, Value = item.Value,
+                        ExpiresAt = item.ExpiresAt, CreatedDate = item.CreatedDate, UpdatedDate = item.UpdatedDate
+                    });
+                }
+
+                return Task.FromResult<AutomationDataItem?>(null);
+            }
+        }
+
+        public Task SetDataItemAsync(Guid automationId, string key, string value, DateTime utcNow, DateTime? expiresAt, CancellationToken cancellationToken = default)
+        {
+            lock (_gate)
+            {
+                var id = DataKey(automationId, key);
+                if (!_dataItems.TryGetValue(id, out var item))
+                {
+                    item = new AutomationDataItem { Id = Guid.NewGuid(), AutomationId = automationId, Key = key, CreatedDate = utcNow };
+                    _dataItems[id] = item;
+                }
+
+                item.Value = value;
+                item.ExpiresAt = expiresAt;
+                item.UpdatedDate = utcNow;
+            }
+
+            return Task.CompletedTask;
+        }
+
+        public Task<bool> TryAddDataItemAsync(Guid automationId, string key, string value, DateTime utcNow, DateTime? expiresAt, CancellationToken cancellationToken = default)
+        {
+            lock (_gate)
+            {
+                var id = DataKey(automationId, key);
+                if (_dataItems.TryGetValue(id, out var item) && (item.ExpiresAt == null || item.ExpiresAt > utcNow))
+                {
+                    return Task.FromResult(false);
+                }
+
+                _dataItems[id] = new AutomationDataItem
+                {
+                    Id = Guid.NewGuid(), AutomationId = automationId, Key = key, Value = value,
+                    ExpiresAt = expiresAt, CreatedDate = utcNow, UpdatedDate = utcNow
+                };
+                return Task.FromResult(true);
+            }
+        }
+
+        public Task<bool> DeleteDataItemAsync(Guid automationId, string key, CancellationToken cancellationToken = default)
+        {
+            lock (_gate)
+            {
+                return Task.FromResult(_dataItems.Remove(DataKey(automationId, key)));
+            }
+        }
+
+        public IQueryable<AutomationVersion> QueryVersions()
+        {
+            lock (_gate)
+            {
+                return _versions.Values.Select(Clone).ToList().AsQueryable();
+            }
+        }
+
         public IQueryable<AutomationRun> QueryRuns()
         {
             lock (_gate)

@@ -11,6 +11,7 @@ namespace Partnerly.Automation.Abstractions
         {
             var graph = WorkflowGraph.Parse(graphJson);
             graph.Notes = null; // notes are only a picture, not what the agent does
+            if (graph.Settings != null) { graph.Settings.NotifyOnFailure = null; }
             foreach (var node in graph.Nodes)
             {
                 node.X = 0;

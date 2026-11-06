@@ -126,6 +126,10 @@ namespace Partnerly.Migrations
                     b.Property<int>("StepTimeoutSeconds")
                         .HasColumnType("int");
 
+                    b.Property<string>("Tags")
+                        .HasMaxLength(400)
+                        .HasColumnType("nvarchar(400)");
+
                     b.Property<string>("TimeZoneId")
                         .IsRequired()
                         .HasMaxLength(100)
@@ -148,6 +152,41 @@ namespace Partnerly.Migrations
                     b.HasIndex("OwnerUserId", "IsDeleted");
 
                     b.ToTable("Automations", (string)null);
+                });
+
+            modelBuilder.Entity("Partnerly.Automation.Persistence.Entities.AutomationDataItem", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("AutomationId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime>("CreatedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime?>("ExpiresAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Key")
+                        .IsRequired()
+                        .HasMaxLength(200)
+                        .HasColumnType("nvarchar(200)");
+
+                    b.Property<DateTime>("UpdatedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Value")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("AutomationId", "Key")
+                        .IsUnique();
+
+                    b.ToTable("AutomationDataItems", (string)null);
                 });
 
             modelBuilder.Entity("Partnerly.Automation.Persistence.Entities.AutomationFavorite", b =>
@@ -1456,6 +1495,15 @@ namespace Partnerly.Migrations
                         .WithMany()
                         .HasForeignKey("PublishedVersionId")
                         .OnDelete(DeleteBehavior.NoAction);
+                });
+
+            modelBuilder.Entity("Partnerly.Automation.Persistence.Entities.AutomationDataItem", b =>
+                {
+                    b.HasOne("Partnerly.Automation.Persistence.Entities.AutomationDefinition", null)
+                        .WithMany()
+                        .HasForeignKey("AutomationId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("Partnerly.Automation.Persistence.Entities.AutomationFavorite", b =>

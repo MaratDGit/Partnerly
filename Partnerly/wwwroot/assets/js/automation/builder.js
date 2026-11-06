@@ -158,6 +158,12 @@
         send_notification: "bx-bell",
         http_request: "bx-globe",
         execute_workflow: "bx-play-circle",
+        loop: "bx-repost",
+        store_set: "bx-save",
+        store_get: "bx-data",
+        store_delete: "bx-eraser",
+        once: "bx-check-double",
+        filter: "bx-filter-alt",
         branch: "bx-git-branch",
         wait_until: "bx-hourglass",
         "switch": "bx-shuffle",
@@ -271,8 +277,39 @@
             { key: "secret", type: "text", plain: true, label: t("webhookSecret"), help: t("webhookSecretHelp") }
         ],
         execute_workflow: [
-            { key: "automationId", type: "text", source: "automations", strict: true, label: t("childAutomation"), help: t("childAutomationHelp") }
+            { key: "automationId", type: "text", source: "automations", strict: true, label: t("childAutomation"), help: t("childAutomationHelp") },
+            {
+                key: "wait",
+                type: "select",
+                label: t("execWait", "Wait for the result"),
+                help: t("execWaitHelp", ""),
+                options: [
+                    { value: "", label: t("execWaitNo", "No, just start it") },
+                    { value: "true", label: t("execWaitYes", "Yes, wait until it finishes") }
+                ]
+            }
         ],
+        store_set: [
+            { key: "key", type: "text", label: t("storeKey", "Name (key)"), help: t("storeKeyHelp", "") },
+            { key: "value", type: "textarea", label: t("storeValue", "Value") },
+            { key: "ttlHours", type: "number", min: 1, label: t("storeTtl", "Forget after (hours)"), help: t("storeTtlHelp", "") }
+        ],
+        store_get: [
+            { key: "key", type: "text", label: t("storeKey", "Name (key)"), help: t("storeKeyHelp", "") },
+            { key: "default", type: "text", label: t("storeDefault", "Value when nothing is saved") }
+        ],
+        store_delete: [
+            { key: "key", type: "text", label: t("storeKey", "Name (key)"), help: t("storeKeyHelp", "") }
+        ],
+        once: [
+            { key: "key", type: "text", label: t("storeKey", "Name (key)"), help: t("onceKeyHelp", "") },
+            { key: "ttlHours", type: "number", min: 1, label: t("storeTtl", "Forget after (hours)"), help: t("storeTtlHelp", "") }
+        ],
+        loop: [
+            { key: "items", type: "textarea", label: t("loopItems", "List to go through"), help: t("loopItemsHelp", "") },
+            { key: "maxItems", type: "number", min: 1, label: t("loopMax", "Most items"), help: t("loopMaxHelp", "") }
+        ],
+        filter: [{ type: "note", help: t("filterHelp", "") }].concat(conditionFields(false).slice(1)),
         branch: conditionFields(false),
         wait_until: conditionFields(true),
         "switch": [
@@ -380,10 +417,21 @@
     var catalogConnections = [];
     var integrationsUrl = "";
 
-    function schemaFor(data) {
-        if (!data) {
-            return [];
-        }
+    function onErrorField() {
+        return {
+            key: "onError",
+            type: "select",
+            label: t("onError", "If this card fails"),
+            help: t("onErrorHelp", ""),
+            options: [
+                { value: "", label: t("onErrorStop", "Stop this branch (default)") },
+                { value: "continue", label: t("onErrorContinue", "Ignore the error and go on") },
+                { value: "route", label: t("onErrorRoute", "Go to the error path (red output)") }
+            ]
+        };
+    }
+
+    function baseSchemaFor(data) {
         if (EXTRA_SCHEMAS[data.type]) {
             return EXTRA_SCHEMAS[data.type];
         }
@@ -394,6 +442,14 @@
             return SCHEMAS.webhook_action;
         }
         return SCHEMAS[data.type] || [];
+    }
+
+    function schemaFor(data) {
+        if (!data) {
+            return [];
+        }
+        var base = baseSchemaFor(data);
+        return data.kind === "action" ? base.concat([onErrorField()]) : base;
     }
 
     function defaultConfig(type, kind) {
@@ -414,7 +470,10 @@
         if (type === "http_request") {
             return { method: "GET" };
         }
-        if (type === "branch" || type === "wait_until") {
+        if (type === "loop") {
+            return { items: "", maxItems: 100 };
+        }
+        if (type === "branch" || type === "wait_until" || type === "filter") {
             return { condition: { op: "equals", left: "{{vars.ready}}", right: "yes" } };
         }
         return {};
@@ -463,6 +522,12 @@
         http_request: function (c) { return filled(c.url); },
         webhook_action: function (c) { return filled(c.url); },
         execute_workflow: function (c) { return filled(c.automationId); },
+        loop: function (c) { return filled(c.items); },
+        store_set: function (c) { return filled(c.key); },
+        store_get: function (c) { return filled(c.key); },
+        store_delete: function (c) { return filled(c.key); },
+        once: function (c) { return filled(c.key); },
+        filter: function (c) { return !!c.condition && filled(c.condition.left); },
         branch: function (c) { return !!c.condition && filled(c.condition.left); },
         wait_until: function (c) { return !!c.condition && filled(c.condition.left); },
         "switch": function (c) { return filled(c.value); },
@@ -562,21 +627,80 @@
         });
     }
 
-    function outputsFor(type) {
-        if (type === "branch" || type === "switch") {
-            return 2;
-        }
-        return 1;
+    function baseOutputs(type) {
+        return type === "branch" || type === "switch" || type === "loop" ? 2 : 1;
     }
 
-    function portName(type, outputKey) {
+    // A card that sends its errors down their own path has one more (red) output.
+    function hasErrorOutput(data) {
+        return !!data && data.kind === "action" && !!data.config && data.config.onError === "route";
+    }
+
+    function outputsFor(type, data) {
+        return baseOutputs(type) + (hasErrorOutput(data) ? 1 : 0);
+    }
+
+    function portName(type, outputKey, data) {
+        var index = parseInt(String(outputKey).replace("output_", ""), 10) || 1;
+        if (hasErrorOutput(data) && index === baseOutputs(type) + 1) {
+            return "error";
+        }
         if (type === "branch") {
-            return outputKey === "output_2" ? "false" : "true";
+            return index === 2 ? "false" : "true";
         }
         if (type === "switch") {
-            return outputKey === "output_2" ? "case:0" : "default";
+            return index === 2 ? "case:0" : "default";
+        }
+        if (type === "loop") {
+            return index === 2 ? "done" : "each";
         }
         return null;
+    }
+
+    function outputForPort(type, port, data) {
+        if (port === "error") {
+            return "output_" + (baseOutputs(type) + 1);
+        }
+        if (port === "false" || port === "done" || (port && port.indexOf("case:") === 0)) {
+            return "output_2";
+        }
+        return "output_1";
+    }
+
+    // Tooltips and colour of the outputs that mean something (each / done / error).
+    function decoratePorts(id) {
+        var node = nodeOrNull(id);
+        var el = document.getElementById("node-" + id);
+        if (!node || !el) { return; }
+        var data = node.data || {};
+        var outs = el.querySelectorAll(".outputs .output");
+        Array.prototype.forEach.call(outs, function (out, i) {
+            var key = "output_" + (i + 1);
+            var port = portName(data.type, key, data);
+            out.classList.toggle("is-error-port", port === "error");
+            out.classList.toggle("is-loop-each", port === "each");
+            out.classList.toggle("is-loop-done", port === "done");
+            var label = port === "error" ? t("portError", "If it fails") : port === "each" ? t("portEach", "Each item") : port === "done" ? t("portDone", "When finished") : "";
+            if (label) { out.title = label; } else { out.removeAttribute("title"); }
+        });
+    }
+
+    // Keep the red output in step with the "If this card fails" choice.
+    function syncErrorOutput(id, data) {
+        var node = nodeOrNull(id);
+        if (!node || !data || data.kind !== "action") { return; }
+        var base = baseOutputs(data.type);
+        var count = Object.keys(node.outputs || {}).length;
+        if (hasErrorOutput(data) && count === base) {
+            editor.addNodeOutput(id);
+        } else if (!hasErrorOutput(data) && count > base) {
+            editor.removeNodeOutput(id, "output_" + count);
+        } else {
+            decoratePorts(id);
+            return;
+        }
+        decoratePorts(id);
+        if (!importing) { refreshChecks(); }
     }
 
     function dropPoint() {
@@ -590,9 +714,9 @@
 
     function addNode(data, x, y) {
         var inputs = data.kind === "trigger" ? 0 : 1;
-        var outputs = outputsFor(data.type);
+        var outputs = outputsFor(data.type, data);
         var point = (x == null || y == null) ? dropPoint() : null;
-        return editor.addNode(
+        var created = editor.addNode(
             slug(data.type),
             inputs,
             outputs,
@@ -601,6 +725,8 @@
             slug(data.kind + "-" + data.type),
             data,
             nodeHtml(data));
+        decoratePorts(created);
+        return created;
     }
 
     // New card from a catalog item (toolbar palette or the "+" port picker).
@@ -658,7 +784,7 @@
                         id: "e-" + fromId + "-" + connection.node + "-" + index,
                         from: fromId,
                         to: idMap[String(connection.node)],
-                        port: portName(type, outputKey)
+                        port: portName(type, outputKey, node.data)
                     });
                 });
             });
@@ -667,7 +793,25 @@
         if (boardNotes.length) {
             out.notes = JSON.parse(JSON.stringify(boardNotes));
         }
+        var settings = cleanSettings(boardSettings);
+        if (settings) {
+            out.settings = settings;
+        }
         return out;
+    }
+
+    // Agent variables ({{vars.name}} in every run) and the failure alert switch.
+    var boardSettings = null;
+    function cleanSettings(source) {
+        if (!source) { return null; }
+        var result = {};
+        var names = source.variables ? Object.keys(source.variables).filter(function (name) { return /^[A-Za-z0-9_]+$/.test(name); }) : [];
+        if (names.length) {
+            result.variables = {};
+            names.forEach(function (name) { result.variables[name] = String(source.variables[name]); });
+        }
+        if (source.notifyOnFailure === false) { result.notifyOnFailure = false; }
+        return Object.keys(result).length ? result : null;
     }
 
     // Sticky notes on the canvas (drawn by builder-tools.js); they travel with the graph.
@@ -678,6 +822,7 @@
         try {
             importGraphInner(graph);
             boardNotes = graph && Array.isArray(graph.notes) ? JSON.parse(JSON.stringify(graph.notes)) : [];
+            boardSettings = graph && graph.settings ? cleanSettings(graph.settings) : null;
         } finally {
             importing = false;
         }
@@ -690,6 +835,15 @@
             return;
         }
         var dfIds = {};
+        // an error path in the graph means the card sends its errors there
+        var withErrorPath = {};
+        (graph.edges || []).forEach(function (edge) { if (edge.port === "error") { withErrorPath[edge.from] = true; } });
+        graph.nodes.forEach(function (node) {
+            if (withErrorPath[node.id] && node.kind === "action") {
+                node.config = node.config || {};
+                node.config.onError = "route";
+            }
+        });
         graph.nodes.forEach(function (node, index) {
             // 0 is a real saved coordinate: only a missing one gets a default place.
             var px = typeof node.x === "number" && isFinite(node.x) ? node.x : 80 + index * 40;
@@ -702,10 +856,8 @@
             if (!from || !to) {
                 return;
             }
-            var output = "output_1";
-            if (edge.port === "false" || (edge.port && edge.port.indexOf("case:") === 0)) {
-                output = "output_2";
-            }
+            var fromNode = graph.nodes.filter(function (item) { return item.id === edge.from; })[0] || {};
+            var output = outputForPort(fromNode.type, edge.port, fromNode);
             try {
                 editor.addConnection(from, to, output, "input_1");
             } catch (e) { }
@@ -719,7 +871,8 @@
     function logicJson(graph) {
         return JSON.stringify({
             nodes: graph.nodes.map(function (n) { return { id: n.id, kind: n.kind, type: n.type, name: n.name, config: n.config, disabled: !!n.disabled }; }),
-            edges: graph.edges.map(function (e) { return { from: e.from, to: e.to, port: e.port }; })
+            edges: graph.edges.map(function (e) { return { from: e.from, to: e.to, port: e.port }; }),
+            variables: graph.settings && graph.settings.variables ? graph.settings.variables : null
         });
     }
 
@@ -774,6 +927,9 @@
         }
         if (JSON.stringify(prev.notes || []) !== JSON.stringify(next.notes || [])) {
             return { label: t("historyNotes", "Edited a note"), key: "notes" };
+        }
+        if (JSON.stringify(prev.settings || null) !== JSON.stringify(next.settings || null)) {
+            return { label: t("toolsVars", "Edited agent variables"), key: "settings" };
         }
         return null;
     }
@@ -886,6 +1042,12 @@
         http_request: function () { return ["url"]; },
         webhook_action: function () { return ["url"]; },
         execute_workflow: function () { return ["automationId"]; },
+        loop: function () { return ["items"]; },
+        store_set: function () { return ["key"]; },
+        store_get: function () { return ["key"]; },
+        store_delete: function () { return ["key"]; },
+        once: function () { return ["key"]; },
+        filter: function () { return ["condition.left"]; },
         branch: function () { return ["condition.left"]; },
         wait_until: function () { return ["condition.left"]; },
         "switch": function () { return ["value"]; },
@@ -1184,6 +1346,8 @@
     };
 
     var STEP_VARS = {
+        store_get: ["result.value", "result.found"],
+        once: ["result.firstTime"],
         find_record: function (cfg) { return entityFieldNames(cfg.entity).map(function (n) { return "result.result." + n; }); },
         create_record: function (cfg) { return entityFieldNames(cfg.entity).map(function (n) { return "result." + n; }); },
         "telegram.send_message": ["result.messageId", "result.chatId"],
@@ -1286,6 +1450,12 @@
             return list;
         }
         var name = data.name || "";
+        if (data.type === "loop" && name) {
+            list.push(variable("steps." + name + ".result.count", groupSteps));
+        }
+        if (cfg.onError === "route" || cfg.onError === "continue") {
+            list.push(variable("steps." + name + ".error", groupSteps));
+        }
         if (data.type === "set_variable" && cfg.name) {
             list.push(variable("vars." + cfg.name, groupSteps));
         }
@@ -1315,7 +1485,18 @@
             nodeVariables(node).forEach(function (item) { target.push(item); });
         });
         var run = t("builderVarsRun", "Run info");
-        return triggers.concat(steps, [variable("execution.runId", run), variable("execution.startedAt", run)]);
+        var extra = [];
+        var insideLoop = ids.some(function (key) {
+            var node = nodeOrNull(key);
+            return node && node.data && node.data.type === "loop";
+        });
+        if (insideLoop) {
+            var loopGroup = t("builderVarsLoop", "Current item");
+            ["item", "number", "index", "count"].forEach(function (part) { extra.push(variable("loop." + part, loopGroup)); });
+        }
+        var constants = boardSettings && boardSettings.variables ? Object.keys(boardSettings.variables) : [];
+        constants.forEach(function (name) { extra.push(variable("vars." + name, t("builderVarsAgent", "Agent variables"))); });
+        return triggers.concat(steps, extra, [variable("execution.runId", run), variable("execution.startedAt", run)]);
     }
 
     var EVENT_OPTIONS = Object.keys(EVENT_VARS).map(function (key) { return { value: key, label: key }; });
@@ -1550,7 +1731,70 @@
             host.appendChild(wrap);
         });
         appendDocs(host, data);
+        appendTestBox(host, data);
         updateDone();
+    }
+
+    // "Test this card": runs it in test mode with the values of the last run.
+    function appendTestBox(host, data) {
+        if (!data || data.kind !== "action") { return; }
+        var form = document.getElementById("automationBuilderForm");
+        var url = form ? form.getAttribute("data-test-node-url") : "";
+        if (!url) { return; }
+        var box = document.createElement("div");
+        box.className = "automation-testcard";
+        var button = document.createElement("button");
+        button.type = "button";
+        button.className = "btn btn-outline-primary btn-sm";
+        button.innerHTML = '<i class="bx bx-test-tube" aria-hidden="true"></i> ';
+        button.appendChild(document.createTextNode(t("testCard", "Test this card")));
+        var note = document.createElement("div");
+        note.className = "form-text";
+        note.textContent = t("testNote", "");
+        var out = document.createElement("div");
+        out.className = "automation-testcard-out";
+        out.hidden = true;
+        box.appendChild(button);
+        box.appendChild(note);
+        box.appendChild(out);
+        host.appendChild(box);
+        button.disabled = !canEditNow() && false;
+        button.addEventListener("click", function () {
+            var id = selectedId;
+            var node = id ? nodeOrNull(id) : null;
+            if (!node) { return; }
+            persistSelected();
+            var d = node.data;
+            var payload = JSON.stringify({ id: d.id, kind: d.kind, type: d.type, name: d.name, config: d.config || {} });
+            button.disabled = true;
+            out.hidden = false;
+            out.textContent = t("testRunning", "Testing...");
+            out.className = "automation-testcard-out";
+            postForm(url, { nodeJson: payload }).then(function (result) {
+                out.textContent = "";
+                out.classList.toggle("is-failed", result.status === "failed");
+                var head = document.createElement("strong");
+                head.textContent = t("testResult", "Result") + ": " + result.status + (result.port ? " (" + result.port + ")" : "");
+                out.appendChild(head);
+                [
+                    [result.error ? "Error" : null, result.error],
+                    [result.output != null ? t("testResult", "Result") : null, result.output != null ? JSON.stringify(result.output, null, 2) : null],
+                    [result.config ? t("testSettings", "Settings with values filled in") : null, result.config ? JSON.stringify(result.config, null, 2) : null]
+                ].forEach(function (part) {
+                    if (!part[0] || part[1] == null) { return; }
+                    var label = document.createElement("div");
+                    label.className = "automation-testcard-label";
+                    label.textContent = part[0];
+                    var pre = document.createElement("pre");
+                    pre.textContent = part[1];
+                    out.appendChild(label);
+                    out.appendChild(pre);
+                });
+            }).catch(function (err) {
+                out.textContent = (err && err.message) || t("testFailed", "Could not test the card.");
+                out.classList.add("is-failed");
+            }).then(function () { button.disabled = false; });
+        });
     }
 
     function docsKey(data) {
@@ -1575,6 +1819,12 @@
             box.className = "automation-docs";
             box.textContent = text;
             host.appendChild(box);
+        }
+        if (data && data.kind === "action" && i18n.functionsHint) {
+            var tip = document.createElement("p");
+            tip.className = "automation-docs";
+            tip.textContent = i18n.functionsHint;
+            host.appendChild(tip);
         }
         var url = i18n.docsUrl;
         if (url) {
@@ -1646,6 +1896,7 @@
         if (typeNode) {
             typeNode.textContent = typeLabel(node.data.type, node.data.type);
         }
+        syncErrorOutput(selectedId, node.data);
         syncHidden();
         if (event && event.type === "change" && RERENDER_KEYS.indexOf(key) !== -1) {
             renderFields(node.data);
@@ -1751,11 +2002,14 @@
     var pasteItem = menuItem("bx-paste", t("builderPaste", "Paste"));
     var toggleItem = menuItem("bx-power-off", t("builderDisable", "Turn off"));
     var historyItem = menuItem("bx-history", t("builderCardHistory", "History"));
+    // empty canvas: opens the side section of the agent (history, versions, settings, connections)
+    var inspectorItem = menuItem("bx-dock-right", t("builderInspector", "Inspector"));
     nodeMenu.appendChild(propsItem);
     nodeMenu.appendChild(toggleItem);
     nodeMenu.appendChild(historyItem);
     nodeMenu.appendChild(copyItem);
     nodeMenu.appendChild(pasteItem);
+    nodeMenu.appendChild(inspectorItem);
     nodeMenu.appendChild(deleteItem);
     var menuPoint = null;
     var menuHost = root.closest(".automation-canvas-wrap") || root;
@@ -1786,6 +2040,7 @@
         var current = onCard ? nodeOrNull(id) : null;
         setMenuText(toggleItem, current && current.data.disabled ? t("builderEnable", "Turn on") : t("builderDisable", "Turn off"));
         pasteItem.hidden = onCard || !canEdit;
+        inspectorItem.hidden = onCard;
         pasteItem.disabled = !clipboard;
         menuPoint = { x: clientX, y: clientY };
         menuNodeId = id;
@@ -1843,8 +2098,8 @@
     function onNodeContext(event) {
         var nodeEl = event.target.closest(".drawflow-node");
         if (!nodeEl || !root.contains(nodeEl)) {
-            // Empty canvas: offer Paste (connections keep their own menu).
-            if (!canEditNow() || !root.contains(event.target) || event.target.closest(".connection, .drawflow-delete, .point")) {
+            // Empty canvas: Paste and Inspector (connections keep their own menu).
+            if (!root.contains(event.target) || event.target.closest(".connection, .drawflow-delete, .point")) {
                 return;
             }
             event.preventDefault();
@@ -1868,6 +2123,11 @@
         root.removeEventListener("contextmenu", onNodeContext, true);
     });
 
+    inspectorItem.addEventListener("click", function (event) {
+        event.preventDefault();
+        hideNodeMenu();
+        if (window.PartnerlyBuilderSide) { window.PartnerlyBuilderSide.open(); }
+    });
     propsItem.addEventListener("click", function (event) {
         event.preventDefault();
         hideNodeMenu();
@@ -3037,6 +3297,8 @@
         canEditNow: canEditNow, addNode: addNode, exportGraph: exportGraph, uniqueName: uniqueName, slug: slug,
         typingInField: typingInField, clearEditorSelection: clearEditorSelection, t: t, cleanupFns: cleanupFns,
         isImporting: function () { return importing; },
+        getSettings: function () { return JSON.parse(JSON.stringify(boardSettings || {})); },
+        setSettings: function (value) { boardSettings = cleanSettings(value); syncHidden(); },
         getNotes: function () { return JSON.parse(JSON.stringify(boardNotes)); },
         setNotes: function (list) { boardNotes = JSON.parse(JSON.stringify(list || [])); syncHidden(); }
     };

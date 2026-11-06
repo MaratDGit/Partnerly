@@ -4777,4 +4777,262 @@ User, խումբ և նամակի կաղապար այստեղ չեն ստեղծվ
   <data name="BuilderHistoryNotes" xml:space="preserve">
     <value>Փոփոխված է նշումը</value>
   </data>
+  <data name="NodeTypeLoop" xml:space="preserve">
+    <value>Յուրաքանչյուրի համար</value>
+  </data>
+  <data name="NodeTypeFilter" xml:space="preserve">
+    <value>Շարունակել միայն եթե</value>
+  </data>
+  <data name="DocsActionLoop" xml:space="preserve">
+    <value>Անցնում է ցանկով և կրկնում է «Յուրաքանչյուր տարր» ելքի քարտերը ամեն տարրի համար։ Ներսում օգտագործեք {{loop.item}} և {{loop.number}}։ Ցանկն ավարտվելուց հետո հոսքը շարունակվում է «Երբ ավարտվի» ելքից։</value>
+  </data>
+  <data name="DocsActionFilter" xml:space="preserve">
+    <value>Թույլ է տալիս հոսքին շարունակվել միայն երբ պայմանը ճիշտ է։ Հակառակ դեպքում այս ճյուղը լուռ ավարտվում է, իսկ գործարկումը համարվում է հաջողված։</value>
+  </data>
+  <data name="BuilderLoopItems" xml:space="preserve">
+    <value>Անցնելու ցանկ</value>
+  </data>
+  <data name="BuilderLoopItemsHelp" xml:space="preserve">
+    <value>Ցանկ նախորդ քարտից (օրինակ {{steps.find.result.items}}), JSON ցանկ կամ մեկ տարր մեկ տողում։</value>
+  </data>
+  <data name="BuilderLoopMax" xml:space="preserve">
+    <value>Առավելագույն տարրեր</value>
+  </data>
+  <data name="BuilderLoopMaxHelp" xml:space="preserve">
+    <value>Անվտանգության սահման՝ լռելյայն 100, առավելագույնը 500։</value>
+  </data>
+  <data name="BuilderFilterHelp" xml:space="preserve">
+    <value>Հոսքը շարունակվում է միայն եթե սա ճիշտ է։ Հակառակ դեպքում ճյուղն այստեղ ավարտվում է։</value>
+  </data>
+  <data name="BuilderOnError" xml:space="preserve">
+    <value>Եթե այս քարտը ձախողվի</value>
+  </data>
+  <data name="BuilderOnErrorStop" xml:space="preserve">
+    <value>Կանգնեցնել այս ճյուղը (լռելյայն)</value>
+  </data>
+  <data name="BuilderOnErrorContinue" xml:space="preserve">
+    <value>Անտեսել սխալը և շարունակել</value>
+  </data>
+  <data name="BuilderOnErrorRoute" xml:space="preserve">
+    <value>Անցնել սխալի ճանապարհով (կարմիր ելք)</value>
+  </data>
+  <data name="BuilderOnErrorHelp" xml:space="preserve">
+    <value>Կանգնեցնել՝ գործարկումը նշվում է որպես ձախողված։ Անտեսել՝ սխալը գրանցվում է, հաջորդ քարտերը աշխատում են։ Սխալի ճանապարհ՝ աշխատում են միայն կարմիր ելքին միացված քարտերը։</value>
+  </data>
+  <data name="BuilderPortEach" xml:space="preserve">
+    <value>Յուրաքանչյուր տարր</value>
+  </data>
+  <data name="BuilderPortDone" xml:space="preserve">
+    <value>Երբ ավարտվի</value>
+  </data>
+  <data name="BuilderPortError" xml:space="preserve">
+    <value>Եթե ձախողվի</value>
+  </data>
+  <data name="BuilderExecWait" xml:space="preserve">
+    <value>Սպասել արդյունքին</value>
+  </data>
+  <data name="BuilderExecWaitNo" xml:space="preserve">
+    <value>Ոչ, միայն սկսել</value>
+  </data>
+  <data name="BuilderExecWaitYes" xml:space="preserve">
+    <value>Այո, սպասել ավարտին</value>
+  </data>
+  <data name="BuilderExecWaitHelp" xml:space="preserve">
+    <value>Սպասելու դեպքում հաջորդ քարտերը ստանում են ենթա-գործակալի փոփոխականները որպես {{steps.NAME.result.vars}}, իսկ նրա ձախողումը ձախողում է այս քարտը։</value>
+  </data>
+  <data name="BuilderTestCard" xml:space="preserve">
+    <value>Ստուգել քարտը</value>
+  </data>
+  <data name="BuilderTestRunning" xml:space="preserve">
+    <value>Ստուգվում է...</value>
+  </data>
+  <data name="BuilderTestNote" xml:space="preserve">
+    <value>Օգտագործում է վերջին գործարկման արժեքները։ Ինչ-որ բան ուղարկող կամ փոխող քարտերը չեն կատարվում․ տեսնում եք, թե ինչ կստանային։</value>
+  </data>
+  <data name="BuilderTestSettings" xml:space="preserve">
+    <value>Լրացված արժեքներով կարգավորումներ</value>
+  </data>
+  <data name="BuilderTestResult" xml:space="preserve">
+    <value>Արդյունք</value>
+  </data>
+  <data name="BuilderTestFailed" xml:space="preserve">
+    <value>Չհաջողվեց ստուգել քարտը։</value>
+  </data>
+  <data name="BuilderTestSave" xml:space="preserve">
+    <value>Նախ լրացրեք քարտը։</value>
+  </data>
+  <data name="BuilderFunctionsHint" xml:space="preserve">
+    <value>Խորհուրդ․ արժեքը կարելի է փոխել ֆունկցիաներով, օրինակ {{ vars.name | upper }} կամ {{ vars.date | date:"dd.MM.yyyy" }}։ Հասանելի են՝ upper, lower, capitalize, trim, default, date, number, round, replace, substring, truncate, length, first, last, join, split, add, subtract, multiply, divide, json, urlencode։</value>
+  </data>
+  <data name="BuilderMenuTools" xml:space="preserve">
+    <value>Տարբերակներ</value>
+  </data>
+  <data name="ToolsRerunQueued" xml:space="preserve">
+    <value>Գործարկումը նորից սկսվեց։</value>
+  </data>
+  <data name="ToolsResumeQueued" xml:space="preserve">
+    <value>Գործարկումը կշարունակվի ձախողված քարտերից։</value>
+  </data>
+  <data name="ToolsResumeOnlyFailed" xml:space="preserve">
+    <value>Շարունակել կարելի է միայն ձախողված գործարկումը։</value>
+  </data>
+  <data name="ToolsTestBadCard" xml:space="preserve">
+    <value>Այս քարտը հնարավոր չէ ստուգել։</value>
+  </data>
+  <data name="ToolsVersionRestored" xml:space="preserve">
+    <value>Տարբերակը բեռնվեց սևագրի մեջ։ Հրապարակեք, որ այն գործի։</value>
+  </data>
+  <data name="ToolsImportBad" xml:space="preserve">
+    <value>Այս ֆայլը Partnerly-ից արտահանված գործակալ չէ։</value>
+  </data>
+  <data name="ToolsPanelTitle" xml:space="preserve">
+    <value>Լրացուցիչ</value>
+  </data>
+  <data name="ToolsStatsTitle" xml:space="preserve">
+    <value>Վերջին 7 օրը</value>
+  </data>
+  <data name="ToolsStatsRuns" xml:space="preserve">
+    <value>Գործարկումներ</value>
+  </data>
+  <data name="ToolsStatsSuccess" xml:space="preserve">
+    <value>Հաջողված</value>
+  </data>
+  <data name="ToolsStatsFailed" xml:space="preserve">
+    <value>Ձախողված</value>
+  </data>
+  <data name="ToolsStatsAverage" xml:space="preserve">
+    <value>Միջին ժամանակ</value>
+  </data>
+  <data name="ToolsVersionsTitle" xml:space="preserve">
+    <value>Տարբերակներ</value>
+  </data>
+  <data name="ToolsVersionsHint" xml:space="preserve">
+    <value>«Վերականգնել»-ը հին տարբերակը դնում է սևագրի մեջ։ Աշխատող տարբերակը չի փոխվում մինչև հրապարակեք։</value>
+  </data>
+  <data name="ToolsVersion" xml:space="preserve">
+    <value>Տարբերակ</value>
+  </data>
+  <data name="ToolsVersionLive" xml:space="preserve">
+    <value>Գործում է</value>
+  </data>
+  <data name="ToolsVersionDraft" xml:space="preserve">
+    <value>Սևագիր</value>
+  </data>
+  <data name="ToolsCards" xml:space="preserve">
+    <value>քարտ</value>
+  </data>
+  <data name="ToolsRestore" xml:space="preserve">
+    <value>Վերականգնել</value>
+  </data>
+  <data name="ToolsShareTitle" xml:space="preserve">
+    <value>Արտահանում</value>
+  </data>
+  <data name="ToolsShareHint" xml:space="preserve">
+    <value>Ներբեռնեք գործակալը որպես ֆայլ՝ պահելու կամ տեղափոխելու համար։ Կապերը չեն ներառվում։</value>
+  </data>
+  <data name="ToolsExport" xml:space="preserve">
+    <value>Արտահանել գործակալը</value>
+  </data>
+  <data name="ToolsImport" xml:space="preserve">
+    <value>Ներմուծել գործակալ</value>
+  </data>
+  <data name="ToolsRerun" xml:space="preserve">
+    <value>Նորից գործարկել</value>
+  </data>
+  <data name="ToolsResume" xml:space="preserve">
+    <value>Շարունակել ձախողվածներից</value>
+  </data>
+  <data name="ToolsVarsButton" xml:space="preserve">
+    <value>Գործակալի փոփոխականներ և ծանուցումներ</value>
+  </data>
+  <data name="ToolsVarsTitle" xml:space="preserve">
+    <value>Գործակալի փոփոխականներ և ծանուցումներ</value>
+  </data>
+  <data name="ToolsVarsLead" xml:space="preserve">
+    <value>Հաստատուններ, որոնցով սկսվում է ամեն գործարկում։ Օգտագործեք ցանկացած դաշտում՝ {{vars.name}}։</value>
+  </data>
+  <data name="ToolsVarsName" xml:space="preserve">
+    <value>Անուն</value>
+  </data>
+  <data name="ToolsVarsValue" xml:space="preserve">
+    <value>Արժեք</value>
+  </data>
+  <data name="ToolsVarsAdd" xml:space="preserve">
+    <value>Ավելացնել փոփոխական</value>
+  </data>
+  <data name="ToolsVarsNotify" xml:space="preserve">
+    <value>Ծանուցել, եթե գործարկումը ձախողվի</value>
+  </data>
+  <data name="ToolsVarsNotifyHelp" xml:space="preserve">
+    <value>Մեկ ծանուցում ձախողումների սկզբում, ոչ թե յուրաքանչյուր ձախողված գործարկման համար։</value>
+  </data>
+  <data name="ToolsVarsDone" xml:space="preserve">
+    <value>Պատրաստ է</value>
+  </data>
+  <data name="ToolsVarsBad" xml:space="preserve">
+    <value>Անունում թույլատրվում են միայն տառեր, թվեր և _։</value>
+  </data>
+  <data name="NodeTypeStoreSet" xml:space="preserve">
+    <value>Պահպանել արժեք</value>
+  </data>
+  <data name="NodeTypeStoreGet" xml:space="preserve">
+    <value>Կարդալ արժեք</value>
+  </data>
+  <data name="NodeTypeStoreDelete" xml:space="preserve">
+    <value>Մոռանալ արժեք</value>
+  </data>
+  <data name="NodeTypeOnce" xml:space="preserve">
+    <value>Միայն մեկ անգամ</value>
+  </data>
+  <data name="DocsActionStoreSet" xml:space="preserve">
+    <value>Արժեքը պահում է անվան տակ, որ այս գործակալի հաջորդ գործարկումները կարողանան այն կարդալ (հաշվիչ, վերջին id, ամսաթիվ)։ Ցանկության դեպքում մոռանում է մի քանի ժամից։</value>
+  </data>
+  <data name="DocsActionStoreGet" xml:space="preserve">
+    <value>Կարդում է պահված արժեքը {{steps.NAME.result.value}}-ի մեջ։ {{steps.NAME.result.found}}-ը ցույց է տալիս՝ այն կար, թե ոչ․ եթե չկար, վերցվում է լռելյայն արժեքը։</value>
+  </data>
+  <data name="DocsActionStoreDelete" xml:space="preserve">
+    <value>Ջնջում է պահված արժեքը։</value>
+  </data>
+  <data name="DocsActionOnce" xml:space="preserve">
+    <value>Հոսքը թողնում է բանալու առաջին հանդիպման ժամանակ և կանգնեցնում է այս ճյուղը բոլոր հաջորդ անգամներին։ Օգտագործեք {{trigger.id}}-ի նման բանալի, որ յուրաքանչյուր նամակ, դիմում կամ պատվեր մշակվի մեկ անգամ։</value>
+  </data>
+  <data name="BuilderStoreKey" xml:space="preserve">
+    <value>Անուն (բանալի)</value>
+  </data>
+  <data name="BuilderStoreKeyHelp" xml:space="preserve">
+    <value>Մինչև 190 նիշ։ Արժեքները պահվում են յուրաքանչյուր գործակալի համար առանձին։</value>
+  </data>
+  <data name="BuilderOnceKeyHelp" xml:space="preserve">
+    <value>Օրինակ՝ {{trigger.id}}․ նույն արժեքը թողնվում է միայն մեկ անգամ։</value>
+  </data>
+  <data name="BuilderStoreValue" xml:space="preserve">
+    <value>Արժեք</value>
+  </data>
+  <data name="BuilderStoreTtl" xml:space="preserve">
+    <value>Մոռանալ հետո (ժամ)</value>
+  </data>
+  <data name="BuilderStoreTtlHelp" xml:space="preserve">
+    <value>Թողեք դատարկ՝ հավերժ պահելու համար։</value>
+  </data>
+  <data name="BuilderStoreDefault" xml:space="preserve">
+    <value>Արժեք, եթե ոչինչ պահված չէ</value>
+  </data>
+  <data name="ToolsTags" xml:space="preserve">
+    <value>Պիտակներ</value>
+  </data>
+  <data name="ToolsTagsHelp" xml:space="preserve">
+    <value>Բառեր ստորակետերով, առավելագույնը 8։ Օգտագործվում է գործակալների ցանկը զտելու համար։</value>
+  </data>
+  <data name="ToolsLastChanged" xml:space="preserve">
+    <value>Վերջին փոփոխությունը</value>
+  </data>
+  <data name="BuilderSideResize" xml:space="preserve">
+    <value>Քաշեք չափը փոխելու համար (կրկնակի սեղմում՝ 45%)</value>
+  </data>
+  <data name="BuilderSideOpen" xml:space="preserve">
+    <value>Գործակալի վահանակ՝ պատմություն, կապեր, տարբերակներ, կարգավորումներ</value>
+  </data>
+  <data name="BuilderInspector" xml:space="preserve">
+    <value>Ինսպեկտոր</value>
+  </data>
 </root>

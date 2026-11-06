@@ -181,3 +181,9 @@ Automation: `20261102134353_AddAutomationTables` (создана, на лока�
 | Фактическое состояние конкретной клиентской БД | **не проверялось** |
 | Применялись ли все миграции на машине разработчика | **неизвестно** (`EnsureCreated` может расходиться с миграциями) |
 | Индексы, не заданные в Fluent, но созданные конвенцией | смотреть snapshot; не выдумывать |
+
+## Дополнение 2026-11-06 (Automation)
+
+- Таблица `AutomationDataItems`: `Id`, `AutomationId` (FK → `Automations`, cascade), `Key` (200), `Value` (nvarchar max), `ExpiresAt?`, `CreatedDate`, `UpdatedDate`; уникальный индекс `(AutomationId, Key)`. Данные карточек хранилища и «Only once» (ключи с префиксом `once:`).
+- Колонка `Automations.Tags` (nvarchar(400), null): теги через запятую.
+- Миграция `20261106120000_AddAutomationDataStoreAndTags`.

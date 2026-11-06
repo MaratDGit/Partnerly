@@ -26,6 +26,10 @@ namespace Partnerly.Automation.Abstractions
         [JsonPropertyName("notes")]
         public List<WorkflowNote>? Notes { get; set; }
 
+        // Agent-level settings: constants for {{vars.*}} and alert options. Null when nothing is set.
+        [JsonPropertyName("settings")]
+        public WorkflowSettings? Settings { get; set; }
+
         public static WorkflowGraph Parse(string json)
         {
             var graph = JsonSerializer.Deserialize<WorkflowGraph>(json, JsonOptions);
@@ -66,6 +70,17 @@ namespace Partnerly.Automation.Abstractions
         [JsonPropertyName("disabled")]
         [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingDefault)]
         public bool Disabled { get; set; }
+    }
+
+    public class WorkflowSettings
+    {
+        // Constants every run starts with: {{vars.name}}.
+        [JsonPropertyName("variables")]
+        public Dictionary<string, string>? Variables { get; set; }
+
+        // null = on: the owner gets a notification when a run fails.
+        [JsonPropertyName("notifyOnFailure")]
+        public bool? NotifyOnFailure { get; set; }
     }
 
     public class WorkflowNote
