@@ -24,7 +24,7 @@ else
                             <span class="integrations-badges">
                                 @foreach (var badge in item.Badges)
                                 {
-                                    <span class="integrations-badge">@badge</span>
+                                    <span class="integrations-badge @(item.Kind == "computer" ? (item.IsOnline ? "is-online" : "is-offline") : "")">@badge</span>
                                 }
                             </span>
                         }
@@ -43,11 +43,29 @@ else
                                 <i class="bx bx-conversation" aria-hidden="true"></i>
                             </button>
                         }
+                        @if (item.Kind == "computer")
+                        {
+                            <button type="button" class="integrations-icon-btn" data-int-renew="@item.Id" title="@Localizer["ComputerRenewToken"]" aria-label="@Localizer["ComputerRenewToken"]">
+                                <i class="bx bx-key" aria-hidden="true"></i>
+                            </button>
+                        }
                         <button type="button" class="integrations-icon-btn is-danger" data-int-delete="@item.Id" title="@Localizer["Delete"]" aria-label="@Localizer["Delete"]">
                             <i class="bx bx-trash" aria-hidden="true"></i>
                         </button>
                     </div>
                 </div>
+                @if (item.Kind == "computer" && !item.IsOnline)
+                {
+                    <details class="integrations-trouble">
+                        <summary>@Localizer["ComputerTroubleTitle"]</summary>
+                        <ul>
+                            @for (var i = 1; i <= 6; i++)
+                            {
+                                <li>@Localizer["ComputerTrouble" + i]</li>
+                            }
+                        </ul>
+                    </details>
+                }
                 @if (item.Kind == "telegram")
                 {
                     <form class="integrations-inline" method="post" asp-controller="Integrations" asp-action="UpdateTelegramChat" data-int-form>

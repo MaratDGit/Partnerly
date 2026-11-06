@@ -130,6 +130,11 @@ Controller  →  I*Service  →  I*Repository : Repository<T>  →  AppDbContext
 - Билдер: `Catalog` отдаёт `connections` владельца; формы узлов — `wwwroot/assets/js/integrations/builder-forms.js`, поле `type: "connection"`, палитра сгруппирована по `HandlerDescriptor.Group`.
 - Внешний HTTP — named client `Partnerly.Integrations`, REST без SDK (D1). Подробно: `docs/ai/Integrations/INTEGRATIONS-PLAN.md`.
 
+## Компьютер пользователя (`Partnerly/Computer`, `Partnerly.Agent`, с 2026-11-06)
+
+- ПК — подключение вида `computer` (`AutomationConnection`, без новой таблицы). Программа `Partnerly.Agent` (Windows, трей) сама подключается к `ComputerHub` (`/computerHub`, вход по токену `pc.<id>.<секрет>`, хэш в payload). Сайт шлёт команды через `ComputerGateway` и ждёт ответ; события ПК запускают агентов через `EnqueueIntegrationAsync`.
+- Карточки `computer.*` (22 действия, 3 триггера) регистрирует `ComputerAutomationModule`; действия наследуют `ComputerActionBase` → `IntegrationActionHandlerBase`. Что разрешено, решает файл настроек на ПК. Подробно: `docs/ai/Computer/COMPUTER-AGENT.md`.
+
 ## Интерфейс
 
 - `_ViewStart.cshtml`: layout `_ContentNavbarLayout`.

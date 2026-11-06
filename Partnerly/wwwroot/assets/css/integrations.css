@@ -110,6 +110,11 @@ html.dark-style .integrations-page {
 .integrations-logo.is-google { background: linear-gradient(135deg, #4285f4 0%, #34a853 45%, #fbbc05 75%, #ea4335 100%); }
 .integrations-logo.is-microsoft { background: linear-gradient(135deg, #2b88d8, #0078d4 55%, #106ebe); }
 .integrations-logo.is-whatsapp { background: linear-gradient(135deg, #5be584, var(--int-whatsapp)); }
+.integrations-logo.is-computer { background: linear-gradient(135deg, #64748b, #0ea5e9 60%, #6366f1); }
+.integrations-badge.is-online { background: rgba(34, 197, 94, 0.18); color: #15803d; }
+.integrations-badge.is-offline { background: rgba(148, 163, 184, 0.2); color: var(--int-muted); }
+html[data-theme="dark"] .integrations-badge.is-online,
+html.dark-style .integrations-badge.is-online { color: #86efac; }
 
 .integrations-features {
     display: flex;
@@ -657,3 +662,32 @@ html.dark-style .integrations-page {
 .integrations-page .btn-primary:focus-visible {
     transform: none;
 }
+
+.integrations-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    margin-left: 6px;
+    font-weight: 600;
+    text-decoration: none;
+}
+
+/* Computer: live "waiting for the program" line and the "why is it offline" list */
+.integrations-wait {
+    display: flex;
+    align-items: center;
+    gap: .5rem;
+    margin: .75rem 0;
+    padding: .6rem .8rem;
+    border-radius: .5rem;
+    background: rgba(105, 108, 255, .1);
+    color: var(--bs-body-color, inherit);
+    font-weight: 500;
+}
+.integrations-wait.is-ok { background: rgba(34, 197, 94, .15); color: #15803d; }
+.integrations-wait.is-warn { background: rgba(245, 158, 11, .15); color: #b45309; }
+.integrations-wait i { font-size: 1.25rem; }
+.integrations-trouble { margin: .4rem 0 0; font-size: .85rem; }
+.integrations-trouble summary { cursor: pointer; color: var(--bs-primary, #696cff); }
+.integrations-trouble ul { margin: .4rem 0 0; padding-left: 1.2rem; }
+.integrations-trouble li { margin-bottom: .25rem; }

@@ -7,6 +7,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Partnerly", "Partnerly\Part
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Partnerly.Automation.Tests", "Partnerly.Automation.Tests\Partnerly.Automation.Tests.csproj", "{DFEFE556-63E7-4DEE-AB99-CB578DC18AEB}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Partnerly.Agent", "Partnerly.Agent\Partnerly.Agent.csproj", "{FF0CFAE7-045E-49DC-99A3-B5FBB1C2765F}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -41,6 +43,18 @@ Global
 		{DFEFE556-63E7-4DEE-AB99-CB578DC18AEB}.Release|x64.Build.0 = Release|Any CPU
 		{DFEFE556-63E7-4DEE-AB99-CB578DC18AEB}.Release|x86.ActiveCfg = Release|Any CPU
 		{DFEFE556-63E7-4DEE-AB99-CB578DC18AEB}.Release|x86.Build.0 = Release|Any CPU
+		{FF0CFAE7-045E-49DC-99A3-B5FBB1C2765F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FF0CFAE7-045E-49DC-99A3-B5FBB1C2765F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FF0CFAE7-045E-49DC-99A3-B5FBB1C2765F}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{FF0CFAE7-045E-49DC-99A3-B5FBB1C2765F}.Debug|x64.Build.0 = Debug|Any CPU
+		{FF0CFAE7-045E-49DC-99A3-B5FBB1C2765F}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{FF0CFAE7-045E-49DC-99A3-B5FBB1C2765F}.Debug|x86.Build.0 = Debug|Any CPU
+		{FF0CFAE7-045E-49DC-99A3-B5FBB1C2765F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FF0CFAE7-045E-49DC-99A3-B5FBB1C2765F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FF0CFAE7-045E-49DC-99A3-B5FBB1C2765F}.Release|x64.ActiveCfg = Release|Any CPU
+		{FF0CFAE7-045E-49DC-99A3-B5FBB1C2765F}.Release|x64.Build.0 = Release|Any CPU
+		{FF0CFAE7-045E-49DC-99A3-B5FBB1C2765F}.Release|x86.ActiveCfg = Release|Any CPU
+		{FF0CFAE7-045E-49DC-99A3-B5FBB1C2765F}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

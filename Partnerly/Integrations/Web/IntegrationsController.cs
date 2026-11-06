@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.DataProtection;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Localization;
 using Partnerly.Automation.Abstractions;
+using Partnerly.Computer;
 using Partnerly.Controllers;
 using Partnerly.Descriptors.Attributes;
 using Partnerly.Events.BaseEvents;
@@ -33,6 +34,9 @@ namespace Partnerly.Integrations.Web
         private readonly WhatsAppClient _whatsApp;
         private readonly MicrosoftOAuthService _microsoftOAuth;
         private readonly MicrosoftApiClient _microsoft;
+        private readonly IComputerGateway _computers;
+        private readonly IConfiguration _configuration;
+        private readonly IWebHostEnvironment _environment;
         private readonly IDataProtector _stateProtector;
         private readonly IDataProtector _microsoftStateProtector;
 
@@ -54,6 +58,9 @@ namespace Partnerly.Integrations.Web
             WhatsAppClient whatsApp,
             MicrosoftOAuthService microsoftOAuth,
             MicrosoftApiClient microsoft,
+            IComputerGateway computers,
+            IConfiguration configuration,
+            IWebHostEnvironment environment,
             IDataProtectionProvider dataProtection)
             : base(eventBus, userService, currentUser, logService, localizer, systemSettingsService, tableService, dataTableRegistry)
         {
@@ -66,6 +73,9 @@ namespace Partnerly.Integrations.Web
             _whatsApp = whatsApp;
             _microsoftOAuth = microsoftOAuth;
             _microsoft = microsoft;
+            _computers = computers;
+            _configuration = configuration;
+            _environment = environment;
             _stateProtector = dataProtection.CreateProtector("Integrations.GoogleState");
             _microsoftStateProtector = dataProtection.CreateProtector("Integrations.MicrosoftState");
         }
@@ -85,7 +95,9 @@ namespace Partnerly.Integrations.Web
                 Microsoft = list.Where(c => c.Kind == IntegrationKinds.Microsoft).Select(ToCard).ToList(),
                 Telegram = list.Where(c => c.Kind == IntegrationKinds.Telegram).Select(ToCard).ToList(),
                 Google = list.Where(c => c.Kind == IntegrationKinds.Google).Select(ToCard).ToList(),
-                WhatsApp = list.Where(c => c.Kind == IntegrationKinds.WhatsApp).Select(ToCard).ToList()
+                WhatsApp = list.Where(c => c.Kind == IntegrationKinds.WhatsApp).Select(ToCard).ToList(),
+                Computers = list.Where(c => c.Kind == IntegrationKinds.Computer).Select(ToCard).ToList(),
+                AgentAvailable = ComputerAgentPackage.FindExe(AgentFolder()) != null
             };
             if (!string.IsNullOrEmpty(connected))
             {
@@ -154,6 +166,55 @@ namespace Partnerly.Integrations.Web
             connection.Set("defaultChatId", string.IsNullOrWhiteSpace(defaultChatId) ? null : defaultChatId.Trim());
             await _connections.SaveAsync(connection);
             return Ok(new { success = true, message = _localizer["AutomationSaved"].Value });
+        }
+
+        // Polled by the "add computer" window: turns green as soon as the program on the PC connects.
+        [HttpGet]
+        [Authorize(Policy = "Permission:automation.connections")]
+        public async Task<IActionResult> ComputerStatus(Guid id)
+        {
+            var connection = await _connections.GetForOwnerAsync(id, _access.CurrentUserId, IntegrationKinds.Computer);
+            if (connection == null)
+            {
+                return NotFound();
+            }
+
+            return Ok(new
+            {
+                success = true,
+                online = _computers.IsOnline(connection.Id),
+                machine = connection.GetString("machine"),
+                version = connection.GetString("agentVersion")
+            });
+        }
+
+        // What the program on the PC says it allows (folders, programs, scripts): the card editor
+        // offers them in a dropdown. A hint only - the PC itself decides at run time.
+        [HttpGet]
+        [Authorize(Policy = "Permission:automation.connections")]
+        public async Task<IActionResult> ComputerSettings(Guid id)
+        {
+            var connection = await _connections.GetForOwnerAsync(id, _access.CurrentUserId, IntegrationKinds.Computer);
+            if (connection == null)
+            {
+                return NotFound();
+            }
+
+            JsonNode? settings = null;
+            try { settings = JsonNode.Parse(connection.GetString("settings") ?? "null"); }
+            catch (System.Text.Json.JsonException) { /* an old or damaged hint is just ignored */ }
+
+            return Ok(new
+            {
+                success = true,
+                online = _computers.IsOnline(connection.Id),
+                machine = connection.GetString("machine"),
+                known = settings != null,
+                folders = settings?["folders"],
+                programs = settings?["programs"],
+                scripts = settings?["scripts"],
+                confirm = settings?["confirm"]
+            });
         }
 
         // Chats that wrote to the bot recently, so the user can copy a chat id.
@@ -425,6 +486,76 @@ namespace Partnerly.Integrations.Web
             return Ok(new { success = true, message = _localizer["IntegrationConnected"].Value });
         }
 
+        // A computer is paired with a one-time token that the Partnerly Agent program on the PC
+        // uses to connect. The token is shown once; only its hash is kept.
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        [Authorize(Policy = "Permission:automation.connections")]
+        public async Task<IActionResult> ConnectComputer(string? name)
+        {
+            var connection = await _connections.CreateAsync(_access.CurrentUserId, IntegrationKinds.Computer,
+                string.IsNullOrWhiteSpace(name) ? _localizer["ComputerDefaultName"].Value : name.Trim(), new JsonObject());
+            var (token, hash) = ComputerToken.Create(connection.Id);
+            connection.Set("tokenHash", hash);
+            connection.MarkOk(_clock.UtcNow);
+            await _connections.SaveAsync(connection);
+            await _logService.CreateLogAsync("AC", LogTypeAttribute.Information, "Computer connection created");
+            return Ok(new { success = true, message = _localizer["IntegrationConnected"].Value, token, serverUrl = $"{Request.Scheme}://{Request.Host}", connectionId = connection.Id });
+        }
+
+        // The program itself, to be asked for the first time (the site address and token are typed in).
+        [HttpGet]
+        [Authorize(Policy = "Permission:automation.connections")]
+        public IActionResult DownloadAgent()
+        {
+            var exe = ComputerAgentPackage.FindExe(AgentFolder());
+            return exe == null
+                ? NotFound(new { success = false, message = _localizer["ComputerAgentMissing"].Value })
+                : File(ComputerAgentPackage.Build(exe, null, null), "application/zip", "Partnerly-Agent.zip");
+        }
+
+        // The program plus config.json with the address and token of a computer that was just added.
+        // The site never stores the token, so it is checked against the hash before it is packed.
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        [Authorize(Policy = "Permission:automation.connections")]
+        public async Task<IActionResult> DownloadAgentWithSettings(Guid id, string token)
+        {
+            var connection = await _connections.GetForOwnerAsync(id, _access.CurrentUserId, IntegrationKinds.Computer);
+            if (connection == null || !ComputerToken.TryParse(token, out var tokenId, out var secret)
+                || tokenId != connection.Id || !ComputerToken.Matches(secret, connection.GetString("tokenHash")))
+            {
+                return NotFound();
+            }
+
+            var exe = ComputerAgentPackage.FindExe(AgentFolder());
+            return exe == null
+                ? NotFound(new { success = false, message = _localizer["ComputerAgentMissing"].Value })
+                : File(ComputerAgentPackage.Build(exe, $"{Request.Scheme}://{Request.Host}", token.Trim()), "application/zip", "Partnerly-Agent.zip");
+        }
+
+        private string AgentFolder() =>
+            _configuration["Agent:DownloadFolder"] is { Length: > 0 } folder ? folder : ComputerAgentPackage.DefaultFolder(_environment.ContentRootPath);
+
+        // A new token cuts off the program that used the old one.
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        [Authorize(Policy = "Permission:automation.connections")]
+        public async Task<IActionResult> RenewComputerToken(Guid id)
+        {
+            var connection = await _connections.GetForOwnerAsync(id, _access.CurrentUserId, IntegrationKinds.Computer);
+            if (connection == null)
+            {
+                return NotFound();
+            }
+
+            var (token, hash) = ComputerToken.Create(connection.Id);
+            connection.Set("tokenHash", hash);
+            await _connections.SaveAsync(connection);
+            await _logService.CreateLogAsync("AC", LogTypeAttribute.Information, "Computer token renewed");
+            return Ok(new { success = true, message = _localizer["IntegrationConnected"].Value, token, serverUrl = $"{Request.Scheme}://{Request.Host}", connectionId = connection.Id });
+        }
+
         [HttpPost]
         [ValidateAntiForgeryToken]
         [Authorize(Policy = "Permission:automation.connections")]
@@ -455,6 +586,10 @@ namespace Partnerly.Integrations.Web
                             () => new HttpRequestMessage(HttpMethod.Get, MicrosoftOAuthService.GraphBase + "/me?$select=mail,userPrincipalName"),
                             HttpContext.RequestAborted);
                         detail = profile["mail"]?.ToString() ?? profile["userPrincipalName"]?.ToString() ?? "Outlook";
+                        break;
+                    case IntegrationKinds.Computer:
+                        var pong = await _computers.SendAsync(connection.Id, "ping", new JsonObject(), TimeSpan.FromSeconds(15), HttpContext.RequestAborted);
+                        detail = pong.Data["machine"]?.ToString() ?? connection.Name;
                         break;
                     default:
                         var phone = await _whatsApp.GetPhoneNumberAsync(connection);
@@ -516,6 +651,19 @@ namespace Partnerly.Integrations.Web
                     card.Detail = connection.GetString("email");
                     if (MicrosoftApiClient.HasScope(connection, MicrosoftOAuthService.ScopeMailSend)) card.Badges.Add("Mail");
                     if (MicrosoftApiClient.HasScope(connection, MicrosoftOAuthService.ScopeCalendar)) card.Badges.Add("Calendar");
+                    break;
+                case IntegrationKinds.Computer:
+                    card.Detail = string.Join(" · ", new[] { connection.GetString("machine"), connection.GetString("os") }.Where(x => !string.IsNullOrWhiteSpace(x)));
+                    card.IsOnline = _computers.IsOnline(connection.Id);
+                    card.OfflineReason = connection.GetString("lastState") is "paused" or "uninstalled" ? connection.GetString("lastState") : "offline";
+                    card.Badges.Add(card.IsOnline
+                        ? _localizer["ComputerOnline"].Value
+                        : card.OfflineReason switch
+                        {
+                            "paused" => _localizer["ComputerPaused"].Value,
+                            "uninstalled" => _localizer["ComputerUninstalled"].Value,
+                            _ => _localizer["ComputerOffline"].Value
+                        });
                     break;
                 case IntegrationKinds.WhatsApp:
                     card.Detail = connection.GetString("displayPhone");

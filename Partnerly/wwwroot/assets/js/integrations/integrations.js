@@ -68,12 +68,62 @@
         return overlay;
     }
 
+    // The pairing token of a computer is shown once; the list is refreshed when the user closes it.
+    var tokenShown = false;
+    var lastToken = null;
+
+    var waitTimer = null;
+
+    // Watches the new computer: the dialog turns green when the program on the PC connects.
+    function watchComputer(overlay, id) {
+        var box = overlay.querySelector("[data-int-wait]");
+        var label = overlay.querySelector("[data-int-wait-text]");
+        var dialog = overlay.querySelector(".integrations-dialog");
+        var started = Date.now();
+        window.clearInterval(waitTimer);
+        waitTimer = window.setInterval(function () {
+            fetch(actionUrl("ComputerStatus") + "?id=" + encodeURIComponent(id), {
+                credentials: "same-origin",
+                headers: { "X-Requested-With": "XMLHttpRequest", "Accept": "application/json" }
+            }).then(readJson).then(function (json) {
+                if (json.online) {
+                    window.clearInterval(waitTimer);
+                    box.className = "integrations-wait is-ok";
+                    box.querySelector("i").className = "bx bx-check-circle";
+                    label.textContent = (dialog.getAttribute("data-connected-text") || "Connected").replace("{0}", json.machine || "");
+                } else if (Date.now() - started > 90000) {
+                    box.className = "integrations-wait is-warn";
+                    label.textContent = dialog.getAttribute("data-wait-long-text") || "";
+                }
+            }).catch(function () { /* the next tick tries again */ });
+        }, 2000);
+    }
+
+    function showToken(json) {
+        closeDialogs();
+        var overlay = openDialog("computer-token");
+        if (!overlay) { return; }
+        overlay.querySelector("[data-int-server-url]").textContent = json.serverUrl || "";
+        overlay.querySelector("[data-int-token]").textContent = json.token || "";
+        var wait = overlay.querySelector("[data-int-wait]");
+        wait.className = "integrations-wait";
+        wait.querySelector("i").className = "bx bx-loader-alt bx-spin";
+        tokenShown = true;
+        lastToken = { id: json.connectionId, token: json.token };
+        if (json.connectionId) { watchComputer(overlay, json.connectionId); }
+    }
+
     function closeDialogs() {
+        window.clearInterval(waitTimer);
         root.querySelectorAll("[data-int-dialog]").forEach(function (overlay) {
             overlay.hidden = true;
             overlay.setAttribute("aria-hidden", "true");
         });
         document.body.classList.remove("is-integrations-dialog-open");
+        if (tokenShown) {
+            tokenShown = false;
+            window.location.reload();
+        }
     }
 
     root.addEventListener("click", function (event) {
@@ -104,6 +154,49 @@
                 var dot = test.closest(".integrations-item").querySelector(".integrations-dot");
                 if (dot) {
                     dot.className = "integrations-dot " + (json.ok ? "is-ok" : "is-error");
+                }
+            });
+            return;
+        }
+
+        var download = event.target.closest("[data-int-download]");
+        if (download && lastToken) {
+            busy(download, true);
+            var body = new FormData();
+            body.append("id", lastToken.id);
+            body.append("token", lastToken.token);
+            body.append("__RequestVerificationToken", antiForgery());
+            fetch(actionUrl("DownloadAgentWithSettings"), { method: "POST", body: body, credentials: "same-origin" })
+                .then(function (response) {
+                    if (!response.ok) { return response.json().catch(function () { return {}; }).then(function (json) { throw new Error(json.message || "Error"); }); }
+                    return response.blob();
+                })
+                .then(function (blob) {
+                    var link = document.createElement("a");
+                    link.href = URL.createObjectURL(blob);
+                    link.download = "Partnerly-Agent.zip";
+                    document.body.appendChild(link);
+                    link.click();
+                    link.remove();
+                    window.setTimeout(function () { URL.revokeObjectURL(link.href); }, 4000);
+                })
+                .catch(function (error) { toast(error.message, false); })
+                .then(function () { busy(download, false); });
+            return;
+        }
+
+        var renew = event.target.closest("[data-int-renew]");
+        if (renew) {
+            if (!window.confirm(root.getAttribute("data-confirm-renew") || "Renew?")) {
+                return;
+            }
+            busy(renew, true);
+            post(actionUrl("RenewComputerToken"), { id: renew.getAttribute("data-int-renew") }).then(function (json) {
+                busy(renew, false);
+                if (json.ok && json.token) {
+                    showToken(json);
+                } else {
+                    toast(json.message, false);
                 }
             });
             return;
@@ -168,6 +261,10 @@
                 }
                 if (json.redirect) {
                     window.location.href = json.redirect;
+                    return;
+                }
+                if (json.ok && json.token) {
+                    showToken(json);
                     return;
                 }
                 if (json.ok) {

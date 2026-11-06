@@ -9,7 +9,10 @@ namespace Partnerly.Integrations.Common
         // Outlook mail / calendar through Microsoft Graph.
         public const string Microsoft = "microsoft";
 
-        public static readonly string[] All = { Telegram, Google, WhatsApp, Microsoft };
+        // The user's own PC, reached through the Partnerly Agent program (Partnerly/Computer).
+        public const string Computer = "computer";
+
+        public static readonly string[] All = { Telegram, Google, WhatsApp, Microsoft, Computer };
 
         public static bool IsKnown(string? kind) => kind != null && All.Contains(kind);
     }

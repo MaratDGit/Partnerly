@@ -5092,4 +5092,734 @@ User, группу и шаблон письма здесь создать нел
   <data name="NodeNotConnected" xml:space="preserve">
     <value>Не подключена к потоку</value>
   </data>
+  <data name="NodeTypeComputerNotify" xml:space="preserve">
+    <value>Компьютер: показать уведомление</value>
+  </data>
+  <data name="NodeTypeComputerMessageBox" xml:space="preserve">
+    <value>Компьютер: показать окно с сообщением</value>
+  </data>
+  <data name="NodeTypeComputerSpeak" xml:space="preserve">
+    <value>Компьютер: озвучить текст</value>
+  </data>
+  <data name="NodeTypeComputerOpen" xml:space="preserve">
+    <value>Компьютер: открыть ссылку, файл или папку</value>
+  </data>
+  <data name="NodeTypeComputerClipboardSet" xml:space="preserve">
+    <value>Компьютер: скопировать текст в буфер обмена</value>
+  </data>
+  <data name="NodeTypeComputerClipboardGet" xml:space="preserve">
+    <value>Компьютер: прочитать буфер обмена</value>
+  </data>
+  <data name="NodeTypeComputerSystemInfo" xml:space="preserve">
+    <value>Компьютер: получить сведения о ПК</value>
+  </data>
+  <data name="NodeTypeComputerScreenshot" xml:space="preserve">
+    <value>Компьютер: сделать скриншот</value>
+  </data>
+  <data name="NodeTypeComputerProcessRunning" xml:space="preserve">
+    <value>Компьютер: запущена ли программа</value>
+  </data>
+  <data name="NodeTypeComputerReadFile" xml:space="preserve">
+    <value>Компьютер: прочитать текстовый файл</value>
+  </data>
+  <data name="NodeTypeComputerWriteFile" xml:space="preserve">
+    <value>Компьютер: записать текстовый файл</value>
+  </data>
+  <data name="NodeTypeComputerListFolder" xml:space="preserve">
+    <value>Компьютер: список файлов в папке</value>
+  </data>
+  <data name="NodeTypeComputerCopyFile" xml:space="preserve">
+    <value>Компьютер: скопировать файл</value>
+  </data>
+  <data name="NodeTypeComputerMoveFile" xml:space="preserve">
+    <value>Компьютер: переместить или переименовать файл</value>
+  </data>
+  <data name="NodeTypeComputerZipFolder" xml:space="preserve">
+    <value>Компьютер: упаковать папку в ZIP</value>
+  </data>
+  <data name="NodeTypeComputerSaveAttachment" xml:space="preserve">
+    <value>Компьютер: сохранить вложение на ПК</value>
+  </data>
+  <data name="NodeTypeComputerGetFile" xml:space="preserve">
+    <value>Компьютер: взять файл с ПК</value>
+  </data>
+  <data name="NodeTypeComputerRunProgram" xml:space="preserve">
+    <value>Компьютер: запустить программу</value>
+  </data>
+  <data name="NodeTypeComputerRunScript" xml:space="preserve">
+    <value>Компьютер: запустить скрипт</value>
+  </data>
+  <data name="NodeTypeComputerCloseProgram" xml:space="preserve">
+    <value>Компьютер: закрыть программу</value>
+  </data>
+  <data name="NodeTypeComputerLock" xml:space="preserve">
+    <value>Компьютер: заблокировать ПК</value>
+  </data>
+  <data name="NodeTypeComputerSleep" xml:space="preserve">
+    <value>Компьютер: перевести ПК в сон</value>
+  </data>
+  <data name="NodeTypeComputerFileCreated" xml:space="preserve">
+    <value>Новый файл на ПК</value>
+  </data>
+  <data name="NodeTypeComputerStatusChanged" xml:space="preserve">
+    <value>ПК вышел в сеть или отключился</value>
+  </data>
+  <data name="NodeTypeComputerProgramStarted" xml:space="preserve">
+    <value>На ПК запущена программа</value>
+  </data>
+  <data name="BuilderIntPcTitle" xml:space="preserve">
+    <value>Заголовок</value>
+  </data>
+  <data name="BuilderIntPcText" xml:space="preserve">
+    <value>Текст</value>
+  </data>
+  <data name="BuilderIntPcButtons" xml:space="preserve">
+    <value>Кнопки</value>
+  </data>
+  <data name="BuilderIntPcYesNo" xml:space="preserve">
+    <value>Да / Нет</value>
+  </data>
+  <data name="BuilderIntPcTarget" xml:space="preserve">
+    <value>Ссылка, файл или папка</value>
+  </data>
+  <data name="BuilderIntPcTargetHelp" xml:space="preserve">
+    <value>Адрес сайта (https://...) или файл либо папка из разрешённых папок. Программы здесь не открываются: для них есть карточка «Запустить программу».</value>
+  </data>
+  <data name="BuilderIntPcClipboardHelp" xml:space="preserve">
+    <value>Возвращает текст, который сейчас в буфере обмена: {{steps.&lt;имя&gt;.result.text}}.</value>
+  </data>
+  <data name="BuilderIntPcInfoHelp" xml:space="preserve">
+    <value>Возвращает имя компьютера, систему, память, диски, время работы и заряд батареи.</value>
+  </data>
+  <data name="BuilderIntPcScreen" xml:space="preserve">
+    <value>Экран</value>
+  </data>
+  <data name="BuilderIntPcScreenMain" xml:space="preserve">
+    <value>Основной экран</value>
+  </data>
+  <data name="BuilderIntPcScreenAll" xml:space="preserve">
+    <value>Все экраны</value>
+  </data>
+  <data name="BuilderIntPcScreenshotHelp" xml:space="preserve">
+    <value>Снимок сохраняется как вложение. Используйте {{steps.&lt;имя&gt;.result.attachmentId}} в карточке Telegram или Drive, чтобы отправить его дальше.</value>
+  </data>
+  <data name="BuilderIntPcProgramName" xml:space="preserve">
+    <value>Название программы</value>
+  </data>
+  <data name="BuilderIntPcProgramNameHelp" xml:space="preserve">
+    <value>Название программы без пути, например notepad или notepad.exe.</value>
+  </data>
+  <data name="BuilderIntPcPath" xml:space="preserve">
+    <value>Файл</value>
+  </data>
+  <data name="BuilderIntPcPathHelp" xml:space="preserve">
+    <value>Полный путь, например C:/Users/me/Documents/Partnerly/notes.txt. Работают только папки, разрешённые в настройках Partnerly Agent на этом ПК.</value>
+  </data>
+  <data name="BuilderIntPcMaxKb" xml:space="preserve">
+    <value>Максимальный размер (КБ)</value>
+  </data>
+  <data name="BuilderIntPcMode" xml:space="preserve">
+    <value>Если файл уже есть</value>
+  </data>
+  <data name="BuilderIntPcReplace" xml:space="preserve">
+    <value>Заменить</value>
+  </data>
+  <data name="BuilderIntPcAppend" xml:space="preserve">
+    <value>Дописать в конец</value>
+  </data>
+  <data name="BuilderIntPcFolder" xml:space="preserve">
+    <value>Папка</value>
+  </data>
+  <data name="BuilderIntPcPattern" xml:space="preserve">
+    <value>Маска</value>
+  </data>
+  <data name="BuilderIntPcPatternHelp" xml:space="preserve">
+    <value>Например *.pdf или *.pdf;*.docx. Пусто - все файлы.</value>
+  </data>
+  <data name="BuilderIntPcRecursive" xml:space="preserve">
+    <value>Включая вложенные папки</value>
+  </data>
+  <data name="BuilderIntPcSource" xml:space="preserve">
+    <value>Откуда</value>
+  </data>
+  <data name="BuilderIntPcDestination" xml:space="preserve">
+    <value>Куда</value>
+  </data>
+  <data name="BuilderIntPcOverwrite" xml:space="preserve">
+    <value>Заменить, если уже есть</value>
+  </data>
+  <data name="BuilderIntPcZipFile" xml:space="preserve">
+    <value>Файл архива (.zip)</value>
+  </data>
+  <data name="BuilderIntPcFile" xml:space="preserve">
+    <value>Файл</value>
+  </data>
+  <data name="BuilderIntPcGetFileHelp" xml:space="preserve">
+    <value>Файл (до 8 МБ) сохраняется как вложение; в следующих карточках используйте {{steps.&lt;имя&gt;.result.attachmentId}}.</value>
+  </data>
+  <data name="BuilderIntPcProgram" xml:space="preserve">
+    <value>Программа</value>
+  </data>
+  <data name="BuilderIntPcProgramHelp" xml:space="preserve">
+    <value>Точно так, как записано в allowedPrograms в настройках агента, например notepad.exe или C:/Tools/backup.exe.</value>
+  </data>
+  <data name="BuilderIntPcArguments" xml:space="preserve">
+    <value>Аргументы</value>
+  </data>
+  <data name="BuilderIntPcWait" xml:space="preserve">
+    <value>Дождаться завершения</value>
+  </data>
+  <data name="BuilderIntPcTimeout" xml:space="preserve">
+    <value>Остановить через (секунд)</value>
+  </data>
+  <data name="BuilderIntPcScript" xml:space="preserve">
+    <value>Скрипт (.ps1, .bat, .cmd)</value>
+  </data>
+  <data name="BuilderIntPcScriptHelp" xml:space="preserve">
+    <value>Скрипт должен лежать в папке из scriptFolders в настройках агента.</value>
+  </data>
+  <data name="BuilderIntPcCloseHelp" xml:space="preserve">
+    <value>Закрывает окно программы вежливо (как кнопка X). Программа должна быть в allowedPrograms.</value>
+  </data>
+  <data name="BuilderIntPcLockHelp" xml:space="preserve">
+    <value>Блокирует экран. Чтобы продолжить, нужно ввести пароль.</value>
+  </data>
+  <data name="BuilderIntPcSleepHelp" xml:space="preserve">
+    <value>Переводит ПК в сон через мгновение после ответа. Убедитесь, что за ним никто не работает.</value>
+  </data>
+  <data name="BuilderIntPcWatchFolder" xml:space="preserve">
+    <value>Только эта папка</value>
+  </data>
+  <data name="BuilderIntPcWatchFolderHelp" xml:space="preserve">
+    <value>Пусто - любая отслеживаемая папка. Вложенные папки включены.</value>
+  </data>
+  <data name="BuilderIntPcFileTriggerHelp" xml:space="preserve">
+    <value>Запускается, когда в папке из watchFolders в настройках агента появляется новый файл. Переменные: {{trigger.path}}, {{trigger.fileName}}, {{trigger.folder}}, {{trigger.extension}}, {{trigger.size}}.</value>
+  </data>
+  <data name="BuilderIntPcState" xml:space="preserve">
+    <value>Когда ПК</value>
+  </data>
+  <data name="BuilderIntPcStateAny" xml:space="preserve">
+    <value>Выходит в сеть или отключается</value>
+  </data>
+  <data name="BuilderIntPcStateOnline" xml:space="preserve">
+    <value>Выходит в сеть</value>
+  </data>
+  <data name="BuilderIntPcStateOffline" xml:space="preserve">
+    <value>Отключается</value>
+  </data>
+  <data name="BuilderIntPcProgramTriggerHelp" xml:space="preserve">
+    <value>Пусто - любая отслеживаемая программа. Например: chrome.</value>
+  </data>
+  <data name="BuilderIntPcProgramWatchHelp" xml:space="preserve">
+    <value>Сообщаются только программы из watchPrograms в настройках агента. Переменные: {{trigger.name}}, {{trigger.machine}}.</value>
+  </data>
+  <data name="ComputerTitle" xml:space="preserve">
+    <value>Компьютер</value>
+  </data>
+  <data name="ComputerDefaultName" xml:space="preserve">
+    <value>Мой компьютер</value>
+  </data>
+  <data name="ComputerOnline" xml:space="preserve">
+    <value>В сети</value>
+  </data>
+  <data name="ComputerOffline" xml:space="preserve">
+    <value>Не в сети</value>
+  </data>
+  <data name="IntegrationComputerIntro" xml:space="preserve">
+    <value>Пусть агенты действуют на вашем ПК: показывают сообщения, работают с файлами, запускают разрешённые вами программы.</value>
+  </data>
+  <data name="IntegrationComputerFeature1" xml:space="preserve">
+    <value>Файлы и программы</value>
+  </data>
+  <data name="IntegrationComputerFeature2" xml:space="preserve">
+    <value>Уведомления, скриншоты</value>
+  </data>
+  <data name="IntegrationComputerFeature3" xml:space="preserve">
+    <value>Только то, что вы разрешили</value>
+  </data>
+  <data name="IntegrationConnectComputer" xml:space="preserve">
+    <value>Добавить компьютер</value>
+  </data>
+  <data name="IntegrationComputerStep1" xml:space="preserve">
+    <value>Дайте компьютеру имя и нажмите «Создать».</value>
+  </data>
+  <data name="IntegrationComputerStep2" xml:space="preserve">
+    <value>Откроется окно с вашей личной загрузкой. Скачайте программу и распакуйте zip (правой кнопкой &gt; «Извлечь всё»).</value>
+  </data>
+  <data name="IntegrationComputerStep3" xml:space="preserve">
+    <value>Запустите Partnerly.Agent.exe и нажмите «Да». Эта страница покажет, когда компьютер подключится.</value>
+  </data>
+  <data name="IntegrationComputerCreate" xml:space="preserve">
+    <value>Создать</value>
+  </data>
+  <data name="ComputerTokenTitle" xml:space="preserve">
+    <value>Токен компьютера</value>
+  </data>
+  <data name="ComputerTokenHelp" xml:space="preserve">
+    <value>Скопируйте оба значения в Partnerly Agent сейчас. Токен показывается один раз; если потеряете, создайте новый кнопкой с ключом.</value>
+  </data>
+  <data name="ComputerServerUrl" xml:space="preserve">
+    <value>Адрес сайта</value>
+  </data>
+  <data name="ComputerToken" xml:space="preserve">
+    <value>Токен</value>
+  </data>
+  <data name="ComputerRenewToken" xml:space="preserve">
+    <value>Новый токен</value>
+  </data>
+  <data name="ComputerRenewConfirm" xml:space="preserve">
+    <value>Создать новый токен? Программа на ПК перестанет работать, пока вы не введёте новый.</value>
+  </data>
+  <data name="DocsIntegrationComputer" xml:space="preserve">
+    <value>Позволяет агентам действовать на вашем ПК с Windows через маленькую программу Partnerly Agent (значок в трее).
+Настройка: откройте «Интеграции», нажмите «Добавить» в карточке «Компьютер» и «Создать». В следующем окне скачайте программу с вашими настройками (токен показывается один раз), распакуйте, запустите Partnerly.Agent.exe и нажмите «Да», чтобы установить для вашей учётной записи Windows. Нужна Windows 10 или новее, больше ничего не требуется.
+Всё решается на ПК, в файле настроек (меню в трее, «Open settings file»): allowedFolders - папки, в которых карточки могут читать, писать, копировать, архивировать и открывать файлы; allowedPrograms - программы, которые карточки могут запускать и закрывать; scriptFolders - папки со скриптами .ps1 / .bat / .cmd; watchFolders и watchPrograms - о чём сообщать триггерам; confirmOps - команды, которые сначала спрашивают клик на ПК, например run_program, lock или sleep. Всё, чего нет в списках, отклоняется.
+Действия: уведомление, окно с сообщением, озвучить текст, открыть ссылку / файл / папку, копировать и читать буфер обмена, сведения о ПК, скриншот, запущена ли программа, прочитать и записать текстовый файл, список папки, копировать, переместить, упаковать в ZIP, сохранить вложение на ПК, взять файл с ПК (он станет вложением, и его можно отправить карточкой Telegram или Drive), запустить программу, запустить скрипт, закрыть программу, заблокировать, сон. Триггеры: новый файл на ПК, ПК вышел в сеть или отключился, на ПК запущена программа.
+Намеренно не сделано: произвольные команды, нажатия клавиш и мышь, реестр, удаление файлов. Если ПК выключен, карточка завершается понятной ошибкой, и агент может воспользоваться путём ошибки.</value>
+  </data>
+  <data name="ComputerDownloadAgent" xml:space="preserve">
+    <value>Скачать только программу</value>
+  </data>
+  <data name="ComputerDownloadWithSettings" xml:space="preserve">
+    <value>Скачать программу с этими настройками</value>
+  </data>
+  <data name="ComputerAgentMissing" xml:space="preserve">
+    <value>Файла программы на этом сервере пока нет. Попросите администратора опубликовать его (tools/publish-agent.ps1).</value>
+  </data>
+  <data name="ComputerAgentRequirements" xml:space="preserve">
+    <value>Нужна Windows 10 или новее. Больше ничего устанавливать не нужно.</value>
+  </data>
+  <data name="BuilderIntPcAny" xml:space="preserve">
+    <value>Любое из этих</value>
+  </data>
+  <data name="BuilderIntPcArgumentsHelp" xml:space="preserve">
+    <value>Дополнительный текст после имени программы, например --silent или имя файла. Можно оставить пустым.</value>
+  </data>
+  <data name="BuilderIntPcAskNote" xml:space="preserve">
+    <value>Этот компьютер может спросить владельца (нажать «Да») перед запуском. Включается в программе на ПК: значок в трее &gt; Settings &gt; Ask me first.</value>
+  </data>
+  <data name="BuilderIntPcClipboardTriggerNote" xml:space="preserve">
+    <value>Нужно включить «Report text I copy to the clipboard» в настройках программы (значок в трее &gt; Settings &gt; Watching). По умолчанию выключено: копируемый текст может быть личным.</value>
+  </data>
+  <data name="BuilderIntPcDelaySeconds" xml:space="preserve">
+    <value>Подождать перед этим (секунд)</value>
+  </data>
+  <data name="BuilderIntPcDeleteNote" xml:space="preserve">
+    <value>Файл попадает в Корзину, его можно восстановить. Папки не удаляются никогда. По умолчанию ПК сначала спрашивает владельца.</value>
+  </data>
+  <data name="BuilderIntPcDiskLowNote" xml:space="preserve">
+    <value>Программа сообщает о диске, когда свободного места меньше лимита из её настроек (значок в трее &gt; Settings &gt; Watching, по умолчанию 5 ГБ). Сообщает один раз, пока место не освободят.</value>
+  </data>
+  <data name="BuilderIntPcDownloadNameHelp" xml:space="preserve">
+    <value>Оставьте пустым, чтобы взять имя из ссылки. Программы и скрипты (.exe, .bat...) не скачиваются никогда.</value>
+  </data>
+  <data name="BuilderIntPcDrive" xml:space="preserve">
+    <value>Только этот диск (буква)</value>
+  </data>
+  <data name="BuilderIntPcDriveConnected" xml:space="preserve">
+    <value>Диск подключён</value>
+  </data>
+  <data name="BuilderIntPcDriveHelp" xml:space="preserve">
+    <value>Буква, например E. Пусто = любой диск.</value>
+  </data>
+  <data name="BuilderIntPcDriveRemoved" xml:space="preserve">
+    <value>Диск отключён</value>
+  </data>
+  <data name="BuilderIntPcFileOrFolder" xml:space="preserve">
+    <value>Файл или папка</value>
+  </data>
+  <data name="BuilderIntPcHost" xml:space="preserve">
+    <value>Сайт или устройство</value>
+  </data>
+  <data name="BuilderIntPcHostHelp" xml:space="preserve">
+    <value>Имя сайта или IP-адрес, например google.com или 192.168.1.1.</value>
+  </data>
+  <data name="BuilderIntPcIdleEnded" xml:space="preserve">
+    <value>Кто-то вернулся к ПК</value>
+  </data>
+  <data name="BuilderIntPcIdleNote" xml:space="preserve">
+    <value>«Никого нет» означает, что клавиатурой и мышью не пользуются. Время задаётся в настройках программы (значок в трее &gt; Settings &gt; Watching, по умолчанию 10 минут).</value>
+  </data>
+  <data name="BuilderIntPcIdleStarted" xml:space="preserve">
+    <value>Давно никто не трогал ПК</value>
+  </data>
+  <data name="BuilderIntPcMediaAction" xml:space="preserve">
+    <value>Кнопка</value>
+  </data>
+  <data name="BuilderIntPcMediaNext" xml:space="preserve">
+    <value>Следующий трек</value>
+  </data>
+  <data name="BuilderIntPcMediaPlayPause" xml:space="preserve">
+    <value>Играть / пауза</value>
+  </data>
+  <data name="BuilderIntPcMediaPrevious" xml:space="preserve">
+    <value>Предыдущий трек</value>
+  </data>
+  <data name="BuilderIntPcMediaStop" xml:space="preserve">
+    <value>Стоп</value>
+  </data>
+  <data name="BuilderIntPcMessageBoxNote" xml:space="preserve">
+    <value>Окно ждёт нажатия. При «Да / Нет» ответ приходит в {{...button}} и {{...confirmed}}, дальше можно идти по условию.</value>
+  </data>
+  <data name="BuilderIntPcModeLogoff" xml:space="preserve">
+    <value>Выйти из Windows (без ожидания)</value>
+  </data>
+  <data name="BuilderIntPcModeRestart" xml:space="preserve">
+    <value>Перезагрузить</value>
+  </data>
+  <data name="BuilderIntPcModeShutdown" xml:space="preserve">
+    <value>Выключить</value>
+  </data>
+  <data name="BuilderIntPcOk" xml:space="preserve">
+    <value>OK</value>
+  </data>
+  <data name="BuilderIntPcPowerLow" xml:space="preserve">
+    <value>Низкий заряд (20%, 10%, 5%)</value>
+  </data>
+  <data name="BuilderIntPcPowerPluggedIn" xml:space="preserve">
+    <value>Зарядку подключили</value>
+  </data>
+  <data name="BuilderIntPcPowerUnplugged" xml:space="preserve">
+    <value>Зарядку отключили</value>
+  </data>
+  <data name="BuilderIntPcSaveNameHelp" xml:space="preserve">
+    <value>Оставьте пустым, чтобы сохранить исходное имя вложения.</value>
+  </data>
+  <data name="BuilderIntPcSessionLocked" xml:space="preserve">
+    <value>Экран заблокирован</value>
+  </data>
+  <data name="BuilderIntPcSessionSignedIn" xml:space="preserve">
+    <value>Кто-то вошёл в Windows</value>
+  </data>
+  <data name="BuilderIntPcSessionSignedOut" xml:space="preserve">
+    <value>Кто-то вышел из Windows</value>
+  </data>
+  <data name="BuilderIntPcSessionSleeping" xml:space="preserve">
+    <value>ПК засыпает</value>
+  </data>
+  <data name="BuilderIntPcSessionUnlocked" xml:space="preserve">
+    <value>Экран разблокирован</value>
+  </data>
+  <data name="BuilderIntPcSessionWoke" xml:space="preserve">
+    <value>ПК проснулся</value>
+  </data>
+  <data name="BuilderIntPcShutdownMode" xml:space="preserve">
+    <value>Что сделать</value>
+  </data>
+  <data name="BuilderIntPcShutdownNote" xml:space="preserve">
+    <value>Во время ожидания Windows показывает предупреждение. Остановить можно карточкой «Отменить выключение» (или человеком у ПК).</value>
+  </data>
+  <data name="BuilderIntPcUnzipTo" xml:space="preserve">
+    <value>Распаковать в папку</value>
+  </data>
+  <data name="BuilderIntPcUrl" xml:space="preserve">
+    <value>Ссылка на файл</value>
+  </data>
+  <data name="BuilderIntPcUrlHelp" xml:space="preserve">
+    <value>Веб-адрес, начинающийся с http:// или https://. До 100 МБ.</value>
+  </data>
+  <data name="BuilderIntPcVolumeAction" xml:space="preserve">
+    <value>Что сделать</value>
+  </data>
+  <data name="BuilderIntPcVolumeDown" xml:space="preserve">
+    <value>Тише</value>
+  </data>
+  <data name="BuilderIntPcVolumeMute" xml:space="preserve">
+    <value>Выключить / включить звук</value>
+  </data>
+  <data name="BuilderIntPcVolumeSteps" xml:space="preserve">
+    <value>Сколько шагов</value>
+  </data>
+  <data name="BuilderIntPcVolumeStepsHelp" xml:space="preserve">
+    <value>Один шаг — около 2% громкости. От 1 до 25. Для отключения звука не нужно.</value>
+  </data>
+  <data name="BuilderIntPcVolumeUp" xml:space="preserve">
+    <value>Громче</value>
+  </data>
+  <data name="BuilderIntPcWhat" xml:space="preserve">
+    <value>Что произошло</value>
+  </data>
+  <data name="BuilderIntPcNotifyIntro" xml:space="preserve">
+    <value>Показывает небольшое сообщение у часов на ПК.</value>
+  </data>
+  <data name="BuilderIntPcMessageBoxIntro" xml:space="preserve">
+    <value>Открывает окно по центру экрана и ждёт, пока кто-нибудь нажмёт кнопку.</value>
+  </data>
+  <data name="BuilderIntPcSpeakIntro" xml:space="preserve">
+    <value>ПК зачитывает текст вслух.</value>
+  </data>
+  <data name="BuilderIntPcOpenIntro" xml:space="preserve">
+    <value>Открывает веб-страницу, файл или папку в программе, которую выбирает Windows. Программы и скрипты так не открываются.</value>
+  </data>
+  <data name="BuilderIntPcClipboardSetIntro" xml:space="preserve">
+    <value>Кладёт текст в буфер обмена ПК, его можно вставить через Ctrl+V.</value>
+  </data>
+  <data name="BuilderIntPcClipboardGetIntro" xml:space="preserve">
+    <value>Читает текст, который сейчас в буфере обмена ПК. Он приходит в {{...text}}.</value>
+  </data>
+  <data name="BuilderIntPcSystemInfoIntro" xml:space="preserve">
+    <value>Читает данные о ПК: имя, Windows, память, свободное место на дисках, батарея.</value>
+  </data>
+  <data name="BuilderIntPcScreenshotIntro" xml:space="preserve">
+    <value>Делает снимок экрана и сохраняет как вложение, которое можно отправить следующими карточками.</value>
+  </data>
+  <data name="BuilderIntPcActiveWindowIntro" xml:space="preserve">
+    <value>Говорит, какое окно сейчас на переднем плане: заголовок и программу.</value>
+  </data>
+  <data name="BuilderIntPcListProgramsIntro" xml:space="preserve">
+    <value>Перечисляет программы с открытым окном на ПК.</value>
+  </data>
+  <data name="BuilderIntPcNetworkInfoIntro" xml:space="preserve">
+    <value>Сообщает имя ПК, есть ли сеть и IP-адреса.</value>
+  </data>
+  <data name="BuilderIntPcPingHostIntro" xml:space="preserve">
+    <value>Проверяет с ПК, отвечает ли сайт или устройство и как быстро.</value>
+  </data>
+  <data name="BuilderIntPcProcessRunningIntro" xml:space="preserve">
+    <value>Проверяет, запущена ли программа. Результат удобно использовать в условии.</value>
+  </data>
+  <data name="BuilderIntPcReadFileIntro" xml:space="preserve">
+    <value>Читает текстовый файл с ПК в {{...text}}. Работают только папки, разрешённые в настройках программы.</value>
+  </data>
+  <data name="BuilderIntPcWriteFileIntro" xml:space="preserve">
+    <value>Записывает текст в файл на ПК (новый, либо заменяет / дополняет существующий).</value>
+  </data>
+  <data name="BuilderIntPcFileInfoIntro" xml:space="preserve">
+    <value>Проверяет, существует ли файл или папка, и даёт размер и даты.</value>
+  </data>
+  <data name="BuilderIntPcListFolderIntro" xml:space="preserve">
+    <value>Перечисляет файлы в папке (до 200). Удобно, чтобы найти, что обрабатывать дальше.</value>
+  </data>
+  <data name="BuilderIntPcCreateFolderIntro" xml:space="preserve">
+    <value>Создаёт папку (вместе с недостающими папками выше). Если она уже есть, ничего не происходит.</value>
+  </data>
+  <data name="BuilderIntPcCopyFileIntro" xml:space="preserve">
+    <value>Копирует файл в другое место на ПК.</value>
+  </data>
+  <data name="BuilderIntPcMoveFileIntro" xml:space="preserve">
+    <value>Переносит файл в другую папку или переименовывает его.</value>
+  </data>
+  <data name="BuilderIntPcDeleteFileIntro" xml:space="preserve">
+    <value>Переносит файл в Корзину.</value>
+  </data>
+  <data name="BuilderIntPcZipFolderIntro" xml:space="preserve">
+    <value>Упаковывает папку в один .zip-файл.</value>
+  </data>
+  <data name="BuilderIntPcUnzipIntro" xml:space="preserve">
+    <value>Распаковывает .zip-файл в папку (до 500 МБ).</value>
+  </data>
+  <data name="BuilderIntPcSaveAttachmentIntro" xml:space="preserve">
+    <value>Сохраняет на ПК файл из Partnerly (например из Telegram или Gmail). До 8 МБ.</value>
+  </data>
+  <data name="BuilderIntPcGetFileIntro" xml:space="preserve">
+    <value>Забирает файл с ПК в Partnerly как вложение (до 8 МБ), чтобы следующие карточки могли его отправить.</value>
+  </data>
+  <data name="BuilderIntPcDownloadUrlIntro" xml:space="preserve">
+    <value>ПК скачивает файл из интернета в папку.</value>
+  </data>
+  <data name="BuilderIntPcRunProgramIntro" xml:space="preserve">
+    <value>Запускает программу из списка разрешённых в настройках программы.</value>
+  </data>
+  <data name="BuilderIntPcRunScriptIntro" xml:space="preserve">
+    <value>Запускает скрипт (.ps1, .bat, .cmd) из папки скриптов, разрешённой в настройках программы.</value>
+  </data>
+  <data name="BuilderIntPcCloseProgramIntro" xml:space="preserve">
+    <value>Вежливо закрывает окно программы (как крестик). Ничего не «убивается».</value>
+  </data>
+  <data name="BuilderIntPcLockIntro" xml:space="preserve">
+    <value>Блокирует экран. Чтобы продолжить, нужен пароль.</value>
+  </data>
+  <data name="BuilderIntPcSleepIntro" xml:space="preserve">
+    <value>Отправляет ПК в сон. Он будет офлайн, пока не проснётся.</value>
+  </data>
+  <data name="BuilderIntPcDisplayOffIntro" xml:space="preserve">
+    <value>Выключает монитор. ПК продолжает работать; клавиша или мышь включают его.</value>
+  </data>
+  <data name="BuilderIntPcShutdownIntro" xml:space="preserve">
+    <value>Выключает ПК, перезагружает его или выходит из Windows.</value>
+  </data>
+  <data name="BuilderIntPcCancelShutdownIntro" xml:space="preserve">
+    <value>Отменяет выключение или перезагрузку, запланированные карточкой «Выключить».</value>
+  </data>
+  <data name="BuilderIntPcVolumeIntro" xml:space="preserve">
+    <value>Делает звук громче или тише, либо выключает его.</value>
+  </data>
+  <data name="BuilderIntPcMediaIntro" xml:space="preserve">
+    <value>Нажимает кнопку музыки / видео: играть, пауза, следующий трек...</value>
+  </data>
+  <data name="BuilderIntPcFileCreatedIntro" xml:space="preserve">
+    <value>Запускает агента, когда в наблюдаемой папке появляется новый файл.</value>
+  </data>
+  <data name="BuilderIntPcFileChangedIntro" xml:space="preserve">
+    <value>Запускает агента, когда файл в наблюдаемой папке сохранён с изменениями.</value>
+  </data>
+  <data name="BuilderIntPcFileDeletedIntro" xml:space="preserve">
+    <value>Запускает агента, когда файл исчезает из наблюдаемой папки.</value>
+  </data>
+  <data name="BuilderIntPcProgramStartedIntro" xml:space="preserve">
+    <value>Запускает агента, когда на ПК запускается программа.</value>
+  </data>
+  <data name="BuilderIntPcProgramStoppedIntro" xml:space="preserve">
+    <value>Запускает агента, когда на ПК закрывается программа.</value>
+  </data>
+  <data name="BuilderIntPcStatusChangedIntro" xml:space="preserve">
+    <value>Запускает агента, когда ПК выходит в сеть (программа подключилась) или пропадает.</value>
+  </data>
+  <data name="BuilderIntPcSessionChangedIntro" xml:space="preserve">
+    <value>Запускает агента при блокировке / разблокировке экрана, входе или выходе из Windows, сне и пробуждении ПК.</value>
+  </data>
+  <data name="BuilderIntPcClipboardChangedIntro" xml:space="preserve">
+    <value>Запускает агента, когда на ПК скопирован новый текст. Скопированный текст приходит в {{...text}}.</value>
+  </data>
+  <data name="BuilderIntPcPowerChangedIntro" xml:space="preserve">
+    <value>Запускает агента при подключении / отключении зарядки или низком заряде батареи.</value>
+  </data>
+  <data name="BuilderIntPcDriveChangedIntro" xml:space="preserve">
+    <value>Запускает агента, когда флешка или другой диск подключён или отключён.</value>
+  </data>
+  <data name="BuilderIntPcIdleChangedIntro" xml:space="preserve">
+    <value>Запускает агента, когда ПК долго никто не использует, либо когда кто-то вернулся.</value>
+  </data>
+  <data name="BuilderIntPcDiskLowIntro" xml:space="preserve">
+    <value>Запускает агента, когда на диске ПК заканчивается свободное место.</value>
+  </data>
+  <data name="NodeTypeComputerCreateFolder" xml:space="preserve">
+    <value>Компьютер: создать папку</value>
+  </data>
+  <data name="NodeTypeComputerDeleteFile" xml:space="preserve">
+    <value>Компьютер: файл в Корзину</value>
+  </data>
+  <data name="NodeTypeComputerFileInfo" xml:space="preserve">
+    <value>Компьютер: проверить файл</value>
+  </data>
+  <data name="NodeTypeComputerUnzip" xml:space="preserve">
+    <value>Компьютер: распаковать архив</value>
+  </data>
+  <data name="NodeTypeComputerListPrograms" xml:space="preserve">
+    <value>Компьютер: открытые программы</value>
+  </data>
+  <data name="NodeTypeComputerVolume" xml:space="preserve">
+    <value>Компьютер: громкость</value>
+  </data>
+  <data name="NodeTypeComputerMedia" xml:space="preserve">
+    <value>Компьютер: кнопки музыки</value>
+  </data>
+  <data name="NodeTypeComputerDisplayOff" xml:space="preserve">
+    <value>Компьютер: выключить экран</value>
+  </data>
+  <data name="NodeTypeComputerShutdown" xml:space="preserve">
+    <value>Компьютер: выключить / перезагрузить</value>
+  </data>
+  <data name="NodeTypeComputerCancelShutdown" xml:space="preserve">
+    <value>Компьютер: отменить выключение</value>
+  </data>
+  <data name="NodeTypeComputerActiveWindow" xml:space="preserve">
+    <value>Компьютер: окно на переднем плане</value>
+  </data>
+  <data name="NodeTypeComputerNetworkInfo" xml:space="preserve">
+    <value>Компьютер: данные о сети</value>
+  </data>
+  <data name="NodeTypeComputerPingHost" xml:space="preserve">
+    <value>Компьютер: ping</value>
+  </data>
+  <data name="NodeTypeComputerDownloadUrl" xml:space="preserve">
+    <value>Компьютер: скачать файл</value>
+  </data>
+  <data name="NodeTypeComputerFileChanged" xml:space="preserve">
+    <value>Компьютер: файл изменён</value>
+  </data>
+  <data name="NodeTypeComputerFileDeleted" xml:space="preserve">
+    <value>Компьютер: файл удалён</value>
+  </data>
+  <data name="NodeTypeComputerProgramStopped" xml:space="preserve">
+    <value>Компьютер: программа закрыта</value>
+  </data>
+  <data name="NodeTypeComputerSessionChanged" xml:space="preserve">
+    <value>Компьютер: блокировка / сон</value>
+  </data>
+  <data name="NodeTypeComputerClipboardChanged" xml:space="preserve">
+    <value>Компьютер: буфер обмена изменён</value>
+  </data>
+  <data name="NodeTypeComputerPowerChanged" xml:space="preserve">
+    <value>Компьютер: зарядка / батарея</value>
+  </data>
+  <data name="NodeTypeComputerDriveChanged" xml:space="preserve">
+    <value>Компьютер: USB-диск</value>
+  </data>
+  <data name="NodeTypeComputerIdleChanged" xml:space="preserve">
+    <value>Компьютер: простой / вернулись</value>
+  </data>
+  <data name="NodeTypeComputerDiskLow" xml:space="preserve">
+    <value>Компьютер: мало места на диске</value>
+  </data>
+  <data name="ComputerPaused" xml:space="preserve">
+    <value>Приостановлено на ПК</value>
+  </data>
+  <data name="ComputerUninstalled" xml:space="preserve">
+    <value>Программа удалена</value>
+  </data>
+  <data name="BuilderPcAllowedFolders" xml:space="preserve">
+    <value>Папки, разрешённые на этом ПК</value>
+  </data>
+  <data name="BuilderPcAllowedPrograms" xml:space="preserve">
+    <value>Программы, разрешённые на этом ПК</value>
+  </data>
+  <data name="ComputerWait" xml:space="preserve">
+    <value>Ждём, пока программа подключится...</value>
+  </data>
+  <data name="ComputerConnectedOk" xml:space="preserve">
+    <value>Подключено! «{0}» в сети. Это окно можно закрыть.</value>
+  </data>
+  <data name="ComputerWaitLong" xml:space="preserve">
+    <value>Пока ничего. Проверьте, что программа запущена (значок у часов), и откройте «Почему не в сети?» под компьютером в списке.</value>
+  </data>
+  <data name="ComputerTroubleTitle" xml:space="preserve">
+    <value>Почему не в сети?</value>
+  </data>
+  <data name="ComputerTrouble1" xml:space="preserve">
+    <value>Программа не запущена: найдите её значок у часов (нажмите маленькую стрелку, если он скрыт). Если его нет, запустите Partnerly.Agent.exe снова.</value>
+  </data>
+  <data name="ComputerTrouble2" xml:space="preserve">
+    <value>Она выключена: нажмите на значок правой кнопкой и отметьте «Let Partnerly use this computer». Тогда здесь написано «Приостановлено на ПК».</value>
+  </data>
+  <data name="ComputerTrouble3" xml:space="preserve">
+    <value>ПК спит, выключен или нет интернета.</value>
+  </data>
+  <data name="ComputerTrouble4" xml:space="preserve">
+    <value>Токен обновили (кнопка с ключом) либо этот компьютер удалили здесь и добавили заново: скачайте программу с новыми настройками и запустите её, либо выберите «Connection...» в меню значка.</value>
+  </data>
+  <data name="ComputerTrouble5" xml:space="preserve">
+    <value>Программу удалили с ПК (здесь написано «Программа удалена»): скачайте и установите её снова.</value>
+  </data>
+  <data name="ComputerTrouble6" xml:space="preserve">
+    <value>Не получается? Нажмите на значок правой кнопкой и выберите «Check connection»: программа простыми словами скажет, что не так.</value>
+  </data>
+  <data name="ComputerTokenStep1" xml:space="preserve">
+    <value>Нажмите кнопку ниже, чтобы скачать программу с вашими настройками (zip-файл).</value>
+  </data>
+  <data name="ComputerTokenStep2" xml:space="preserve">
+    <value>Откройте папку «Загрузки», нажмите на zip правой кнопкой и выберите «Извлечь всё». Не запускайте программу из самого zip.</value>
+  </data>
+  <data name="ComputerTokenStep3" xml:space="preserve">
+    <value>Откройте новую папку, запустите Partnerly.Agent.exe и нажмите «Да». Программа установится для вашей учётной записи Windows.</value>
+  </data>
+  <data name="ComputerTokenStep4" xml:space="preserve">
+    <value>Подождите здесь: это окно станет зелёным, когда компьютер подключится.</value>
+  </data>
+  <data name="DocsIntegrationComputerMore" xml:space="preserve">
+    <value>Программа живёт в трее (у часов): зелёная точка означает, что она подключена. Правой кнопкой можно включить или выключить доступ Partnerly, изменить папки, программы и наблюдение в «Settings», проверить соединение или удалить программу (это можно и в «Параметры Windows» &gt; «Приложения»). Триггеры: новый, изменённый или удалённый файл, запуск или закрытие программы, блокировка и разблокировка экрана, пробуждение ПК, USB-диск, зарядка и батарея, никого нет за ПК, мало места на диске, текст в буфере обмена. Действия: файлы (чтение, запись, копирование, перенос, zip, распаковка, Корзина, скачивание), программы и скрипты, уведомления и окна, громкость и кнопки музыки, снимок экрана, блокировка, сон, выключение. Если компьютер не в сети, откройте «Почему не в сети?» под ним в списке.</value>
+  </data>
+  <data name="ComputerErrOffline" xml:space="preserve">
+    <value>Компьютер не в сети. Запустите на нём Partnerly Agent и повторите.</value>
+  </data>
+  <data name="ComputerErrTimeout" xml:space="preserve">
+    <value>Компьютер не ответил вовремя.</value>
+  </data>
+  <data name="ComputerErrWentOffline" xml:space="preserve">
+    <value>Компьютер отключился, пока выполнялась команда.</value>
+  </data>
+  <data name="ComputerErrRefused" xml:space="preserve">
+    <value>Компьютер отклонил команду.</value>
+  </data>
 </root>

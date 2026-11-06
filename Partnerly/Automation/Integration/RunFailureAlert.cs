@@ -36,7 +36,7 @@ namespace Partnerly.Automation.Integration
                 return;
             }
 
-            var reason = string.IsNullOrWhiteSpace(run.Error) ? "see the run history" : run.Error;
+            var reason = string.IsNullOrWhiteSpace(run.Error) ? "see the run history" : LocalizedError.Strip(run.Error)!;
             if (reason.Length > 300)
             {
                 reason = reason.Substring(0, 300) + "...";

@@ -8,6 +8,8 @@ namespace Partnerly.Integrations.Web
         public List<IntegrationCardItem> Google { get; set; } = new();
         public List<IntegrationCardItem> WhatsApp { get; set; } = new();
         public List<IntegrationCardItem> Microsoft { get; set; } = new();
+        public List<IntegrationCardItem> Computers { get; set; } = new();
+        public bool AgentAvailable { get; set; }
         public bool GoogleConfigured { get; set; }
         public string GoogleRedirectUri { get; set; } = string.Empty;
         public bool MicrosoftConfigured { get; set; }
@@ -29,5 +31,9 @@ namespace Partnerly.Integrations.Web
         public string? WebhookUrl { get; set; }
         public string? VerifyToken { get; set; }
         public string? DefaultChatId { get; set; }
+        public bool IsOnline { get; set; }
+
+        // For a computer that is offline: "paused" (switched off on the PC), "uninstalled" or "offline".
+        public string? OfflineReason { get; set; }
     }
 }

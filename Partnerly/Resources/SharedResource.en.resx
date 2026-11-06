@@ -5092,4 +5092,734 @@ Delete is allowed for Support ticket.</value>
   <data name="NodeNotConnected" xml:space="preserve">
     <value>Not connected to the flow</value>
   </data>
+  <data name="NodeTypeComputerNotify" xml:space="preserve">
+    <value>Computer: show notification</value>
+  </data>
+  <data name="NodeTypeComputerMessageBox" xml:space="preserve">
+    <value>Computer: show message window</value>
+  </data>
+  <data name="NodeTypeComputerSpeak" xml:space="preserve">
+    <value>Computer: speak text</value>
+  </data>
+  <data name="NodeTypeComputerOpen" xml:space="preserve">
+    <value>Computer: open link, file or folder</value>
+  </data>
+  <data name="NodeTypeComputerClipboardSet" xml:space="preserve">
+    <value>Computer: copy text to clipboard</value>
+  </data>
+  <data name="NodeTypeComputerClipboardGet" xml:space="preserve">
+    <value>Computer: read clipboard</value>
+  </data>
+  <data name="NodeTypeComputerSystemInfo" xml:space="preserve">
+    <value>Computer: get PC information</value>
+  </data>
+  <data name="NodeTypeComputerScreenshot" xml:space="preserve">
+    <value>Computer: take screenshot</value>
+  </data>
+  <data name="NodeTypeComputerProcessRunning" xml:space="preserve">
+    <value>Computer: is a program running</value>
+  </data>
+  <data name="NodeTypeComputerReadFile" xml:space="preserve">
+    <value>Computer: read text file</value>
+  </data>
+  <data name="NodeTypeComputerWriteFile" xml:space="preserve">
+    <value>Computer: write text file</value>
+  </data>
+  <data name="NodeTypeComputerListFolder" xml:space="preserve">
+    <value>Computer: list files in folder</value>
+  </data>
+  <data name="NodeTypeComputerCopyFile" xml:space="preserve">
+    <value>Computer: copy file</value>
+  </data>
+  <data name="NodeTypeComputerMoveFile" xml:space="preserve">
+    <value>Computer: move or rename file</value>
+  </data>
+  <data name="NodeTypeComputerZipFolder" xml:space="preserve">
+    <value>Computer: zip folder</value>
+  </data>
+  <data name="NodeTypeComputerSaveAttachment" xml:space="preserve">
+    <value>Computer: save attachment to PC</value>
+  </data>
+  <data name="NodeTypeComputerGetFile" xml:space="preserve">
+    <value>Computer: get file from PC</value>
+  </data>
+  <data name="NodeTypeComputerRunProgram" xml:space="preserve">
+    <value>Computer: run program</value>
+  </data>
+  <data name="NodeTypeComputerRunScript" xml:space="preserve">
+    <value>Computer: run script</value>
+  </data>
+  <data name="NodeTypeComputerCloseProgram" xml:space="preserve">
+    <value>Computer: close program</value>
+  </data>
+  <data name="NodeTypeComputerLock" xml:space="preserve">
+    <value>Computer: lock PC</value>
+  </data>
+  <data name="NodeTypeComputerSleep" xml:space="preserve">
+    <value>Computer: put PC to sleep</value>
+  </data>
+  <data name="NodeTypeComputerFileCreated" xml:space="preserve">
+    <value>New file on PC</value>
+  </data>
+  <data name="NodeTypeComputerStatusChanged" xml:space="preserve">
+    <value>PC went online or offline</value>
+  </data>
+  <data name="NodeTypeComputerProgramStarted" xml:space="preserve">
+    <value>Program started on PC</value>
+  </data>
+  <data name="BuilderIntPcTitle" xml:space="preserve">
+    <value>Title</value>
+  </data>
+  <data name="BuilderIntPcText" xml:space="preserve">
+    <value>Text</value>
+  </data>
+  <data name="BuilderIntPcButtons" xml:space="preserve">
+    <value>Buttons</value>
+  </data>
+  <data name="BuilderIntPcYesNo" xml:space="preserve">
+    <value>Yes / No</value>
+  </data>
+  <data name="BuilderIntPcTarget" xml:space="preserve">
+    <value>Link, file or folder</value>
+  </data>
+  <data name="BuilderIntPcTargetHelp" xml:space="preserve">
+    <value>A web address (https://...) or a file or folder from the allowed folders. Programs are not opened here: use Run program.</value>
+  </data>
+  <data name="BuilderIntPcClipboardHelp" xml:space="preserve">
+    <value>Returns the text that is in the clipboard right now: {{steps.&lt;name&gt;.result.text}}.</value>
+  </data>
+  <data name="BuilderIntPcInfoHelp" xml:space="preserve">
+    <value>Returns the machine name, system, memory, disks, uptime and battery.</value>
+  </data>
+  <data name="BuilderIntPcScreen" xml:space="preserve">
+    <value>Screen</value>
+  </data>
+  <data name="BuilderIntPcScreenMain" xml:space="preserve">
+    <value>Main screen</value>
+  </data>
+  <data name="BuilderIntPcScreenAll" xml:space="preserve">
+    <value>All screens</value>
+  </data>
+  <data name="BuilderIntPcScreenshotHelp" xml:space="preserve">
+    <value>The picture is saved as an attachment. Use {{steps.&lt;name&gt;.result.attachmentId}} in a Telegram or Drive card to send it on.</value>
+  </data>
+  <data name="BuilderIntPcProgramName" xml:space="preserve">
+    <value>Program name</value>
+  </data>
+  <data name="BuilderIntPcProgramNameHelp" xml:space="preserve">
+    <value>The name of the program without the path, for example notepad or notepad.exe.</value>
+  </data>
+  <data name="BuilderIntPcPath" xml:space="preserve">
+    <value>File</value>
+  </data>
+  <data name="BuilderIntPcPathHelp" xml:space="preserve">
+    <value>Full path, for example C:/Users/me/Documents/Partnerly/notes.txt. Only folders allowed in the Partnerly Agent settings on that PC work.</value>
+  </data>
+  <data name="BuilderIntPcMaxKb" xml:space="preserve">
+    <value>Largest size (KB)</value>
+  </data>
+  <data name="BuilderIntPcMode" xml:space="preserve">
+    <value>If the file exists</value>
+  </data>
+  <data name="BuilderIntPcReplace" xml:space="preserve">
+    <value>Replace it</value>
+  </data>
+  <data name="BuilderIntPcAppend" xml:space="preserve">
+    <value>Add to the end</value>
+  </data>
+  <data name="BuilderIntPcFolder" xml:space="preserve">
+    <value>Folder</value>
+  </data>
+  <data name="BuilderIntPcPattern" xml:space="preserve">
+    <value>Mask</value>
+  </data>
+  <data name="BuilderIntPcPatternHelp" xml:space="preserve">
+    <value>For example *.pdf or *.pdf;*.docx. Empty means all files.</value>
+  </data>
+  <data name="BuilderIntPcRecursive" xml:space="preserve">
+    <value>Include subfolders</value>
+  </data>
+  <data name="BuilderIntPcSource" xml:space="preserve">
+    <value>From</value>
+  </data>
+  <data name="BuilderIntPcDestination" xml:space="preserve">
+    <value>To</value>
+  </data>
+  <data name="BuilderIntPcOverwrite" xml:space="preserve">
+    <value>Replace if it exists</value>
+  </data>
+  <data name="BuilderIntPcZipFile" xml:space="preserve">
+    <value>Archive file (.zip)</value>
+  </data>
+  <data name="BuilderIntPcFile" xml:space="preserve">
+    <value>File</value>
+  </data>
+  <data name="BuilderIntPcGetFileHelp" xml:space="preserve">
+    <value>The file (up to 8 MB) is saved as an attachment; use {{steps.&lt;name&gt;.result.attachmentId}} in the next cards.</value>
+  </data>
+  <data name="BuilderIntPcProgram" xml:space="preserve">
+    <value>Program</value>
+  </data>
+  <data name="BuilderIntPcProgramHelp" xml:space="preserve">
+    <value>Exactly as written in allowedPrograms in the agent settings, for example notepad.exe or C:/Tools/backup.exe.</value>
+  </data>
+  <data name="BuilderIntPcArguments" xml:space="preserve">
+    <value>Arguments</value>
+  </data>
+  <data name="BuilderIntPcWait" xml:space="preserve">
+    <value>Wait for it to finish</value>
+  </data>
+  <data name="BuilderIntPcTimeout" xml:space="preserve">
+    <value>Stop after (seconds)</value>
+  </data>
+  <data name="BuilderIntPcScript" xml:space="preserve">
+    <value>Script (.ps1, .bat, .cmd)</value>
+  </data>
+  <data name="BuilderIntPcScriptHelp" xml:space="preserve">
+    <value>The script must lie in a folder listed in scriptFolders of the agent settings.</value>
+  </data>
+  <data name="BuilderIntPcCloseHelp" xml:space="preserve">
+    <value>Closes the program window politely (like the X button). The program must be in allowedPrograms.</value>
+  </data>
+  <data name="BuilderIntPcLockHelp" xml:space="preserve">
+    <value>Locks the screen. The person has to enter the password to continue.</value>
+  </data>
+  <data name="BuilderIntPcSleepHelp" xml:space="preserve">
+    <value>Puts the PC to sleep a moment after the answer. Make sure nobody is working on it.</value>
+  </data>
+  <data name="BuilderIntPcWatchFolder" xml:space="preserve">
+    <value>Only this folder</value>
+  </data>
+  <data name="BuilderIntPcWatchFolderHelp" xml:space="preserve">
+    <value>Empty means any watched folder. Subfolders are included.</value>
+  </data>
+  <data name="BuilderIntPcFileTriggerHelp" xml:space="preserve">
+    <value>Starts when a new file appears in a folder listed in watchFolders of the agent settings. Variables: {{trigger.path}}, {{trigger.fileName}}, {{trigger.folder}}, {{trigger.extension}}, {{trigger.size}}.</value>
+  </data>
+  <data name="BuilderIntPcState" xml:space="preserve">
+    <value>When the PC</value>
+  </data>
+  <data name="BuilderIntPcStateAny" xml:space="preserve">
+    <value>Goes online or offline</value>
+  </data>
+  <data name="BuilderIntPcStateOnline" xml:space="preserve">
+    <value>Goes online</value>
+  </data>
+  <data name="BuilderIntPcStateOffline" xml:space="preserve">
+    <value>Goes offline</value>
+  </data>
+  <data name="BuilderIntPcProgramTriggerHelp" xml:space="preserve">
+    <value>Leave empty for any watched program. Example: chrome.</value>
+  </data>
+  <data name="BuilderIntPcProgramWatchHelp" xml:space="preserve">
+    <value>Only programs listed in watchPrograms of the agent settings are reported. Variables: {{trigger.name}}, {{trigger.machine}}.</value>
+  </data>
+  <data name="ComputerTitle" xml:space="preserve">
+    <value>Computer</value>
+  </data>
+  <data name="ComputerDefaultName" xml:space="preserve">
+    <value>My computer</value>
+  </data>
+  <data name="ComputerOnline" xml:space="preserve">
+    <value>Online</value>
+  </data>
+  <data name="ComputerOffline" xml:space="preserve">
+    <value>Offline</value>
+  </data>
+  <data name="IntegrationComputerIntro" xml:space="preserve">
+    <value>Let agents act on your own PC: show messages, work with files, run programs you allow.</value>
+  </data>
+  <data name="IntegrationComputerFeature1" xml:space="preserve">
+    <value>Files and programs</value>
+  </data>
+  <data name="IntegrationComputerFeature2" xml:space="preserve">
+    <value>Notifications, screenshots</value>
+  </data>
+  <data name="IntegrationComputerFeature3" xml:space="preserve">
+    <value>Only what you allow</value>
+  </data>
+  <data name="IntegrationConnectComputer" xml:space="preserve">
+    <value>Add a computer</value>
+  </data>
+  <data name="IntegrationComputerStep1" xml:space="preserve">
+    <value>Give the computer a name and press Create.</value>
+  </data>
+  <data name="IntegrationComputerStep2" xml:space="preserve">
+    <value>A window with your personal download opens. Download the program and extract the zip (right-click &gt; Extract All).</value>
+  </data>
+  <data name="IntegrationComputerStep3" xml:space="preserve">
+    <value>Start Partnerly.Agent.exe and press Yes. This page shows when the computer is connected.</value>
+  </data>
+  <data name="IntegrationComputerCreate" xml:space="preserve">
+    <value>Create</value>
+  </data>
+  <data name="ComputerTokenTitle" xml:space="preserve">
+    <value>Token of the computer</value>
+  </data>
+  <data name="ComputerTokenHelp" xml:space="preserve">
+    <value>Copy both values into Partnerly Agent now. The token is shown only once; if you lose it, make a new one with the key button.</value>
+  </data>
+  <data name="ComputerServerUrl" xml:space="preserve">
+    <value>Site address</value>
+  </data>
+  <data name="ComputerToken" xml:space="preserve">
+    <value>Token</value>
+  </data>
+  <data name="ComputerRenewToken" xml:space="preserve">
+    <value>New token</value>
+  </data>
+  <data name="ComputerRenewConfirm" xml:space="preserve">
+    <value>Make a new token? The program on the PC will stop working until you enter the new one.</value>
+  </data>
+  <data name="DocsIntegrationComputer" xml:space="preserve">
+    <value>Lets agents act on your own Windows PC through the small Partnerly Agent program (an icon in the tray).
+Setup: open Integrations, press Add in the Computer card and press Create. Download the program with your settings from the next window (the token is shown once), unzip it, start Partnerly.Agent.exe and press Yes to install it for your Windows account. It needs Windows 10 or newer and nothing else.
+Everything is decided on the PC, in the settings file (tray menu, Open settings file): allowedFolders - folders cards may read, write, copy, zip and open; allowedPrograms - programs cards may run or close; scriptFolders - folders with .ps1 / .bat / .cmd scripts; watchFolders and watchPrograms - what is reported to the triggers; confirmOps - commands that first ask for a click on the PC, for example run_program, lock or sleep. Whatever is not listed is refused.
+Actions: notification, message window, speak text, open link / file / folder, copy and read clipboard, PC information, screenshot, is a program running, read and write text file, list folder, copy, move, zip, save an attachment to the PC, get a file from the PC (it becomes an attachment, so a Telegram or Drive card can send it), run program, run script, close program, lock, sleep. Triggers: new file on PC, PC went online or offline, program started on PC.
+Left out on purpose: free commands, keystrokes and mouse, the registry, deleting files. If the PC is off, the card fails with a clear message, and the agent can use the error path.</value>
+  </data>
+  <data name="ComputerDownloadAgent" xml:space="preserve">
+    <value>Download only the program</value>
+  </data>
+  <data name="ComputerDownloadWithSettings" xml:space="preserve">
+    <value>Download the program with these settings</value>
+  </data>
+  <data name="ComputerAgentMissing" xml:space="preserve">
+    <value>The program file is not on this server yet. Ask the administrator to publish it (tools/publish-agent.ps1).</value>
+  </data>
+  <data name="ComputerAgentRequirements" xml:space="preserve">
+    <value>Needs Windows 10 or newer. Nothing else has to be installed.</value>
+  </data>
+  <data name="BuilderIntPcAny" xml:space="preserve">
+    <value>Any of these</value>
+  </data>
+  <data name="BuilderIntPcArgumentsHelp" xml:space="preserve">
+    <value>Extra text after the program name, for example --silent or a file name. Leave empty if not needed.</value>
+  </data>
+  <data name="BuilderIntPcAskNote" xml:space="preserve">
+    <value>This PC can ask its owner for a click before running this. Turn it on in the program on the PC: tray icon &gt; Settings &gt; Ask me first.</value>
+  </data>
+  <data name="BuilderIntPcClipboardTriggerNote" xml:space="preserve">
+    <value>Needs &quot;Report text I copy to the clipboard&quot; turned on in the program&apos;s Settings (tray icon &gt; Settings &gt; Watching). It is off by default because copied text can be private.</value>
+  </data>
+  <data name="BuilderIntPcDelaySeconds" xml:space="preserve">
+    <value>Wait before (seconds)</value>
+  </data>
+  <data name="BuilderIntPcDeleteNote" xml:space="preserve">
+    <value>The file goes to the Recycle Bin, so it can be restored. Folders are never deleted. By default the PC asks its owner first.</value>
+  </data>
+  <data name="BuilderIntPcDiskLowNote" xml:space="preserve">
+    <value>The program reports a drive when its free space falls below the limit set in its Settings (tray icon &gt; Settings &gt; Watching, default 5 GB). It reports once, until the space is freed.</value>
+  </data>
+  <data name="BuilderIntPcDownloadNameHelp" xml:space="preserve">
+    <value>Leave empty to take the name from the link. Programs and scripts (.exe, .bat...) are never downloaded.</value>
+  </data>
+  <data name="BuilderIntPcDrive" xml:space="preserve">
+    <value>Only this drive letter</value>
+  </data>
+  <data name="BuilderIntPcDriveConnected" xml:space="preserve">
+    <value>Drive plugged in</value>
+  </data>
+  <data name="BuilderIntPcDriveHelp" xml:space="preserve">
+    <value>A letter, for example E. Empty = any drive.</value>
+  </data>
+  <data name="BuilderIntPcDriveRemoved" xml:space="preserve">
+    <value>Drive removed</value>
+  </data>
+  <data name="BuilderIntPcFileOrFolder" xml:space="preserve">
+    <value>File or folder</value>
+  </data>
+  <data name="BuilderIntPcHost" xml:space="preserve">
+    <value>Site or device</value>
+  </data>
+  <data name="BuilderIntPcHostHelp" xml:space="preserve">
+    <value>A site name or an IP address, for example google.com or 192.168.1.1.</value>
+  </data>
+  <data name="BuilderIntPcIdleEnded" xml:space="preserve">
+    <value>Somebody is back</value>
+  </data>
+  <data name="BuilderIntPcIdleNote" xml:space="preserve">
+    <value>&quot;Nobody at the PC&quot; means no keyboard or mouse use. The time is set in the program&apos;s Settings (tray icon &gt; Settings &gt; Watching, default 10 minutes).</value>
+  </data>
+  <data name="BuilderIntPcIdleStarted" xml:space="preserve">
+    <value>Nobody has touched the PC for a while</value>
+  </data>
+  <data name="BuilderIntPcMediaAction" xml:space="preserve">
+    <value>Button</value>
+  </data>
+  <data name="BuilderIntPcMediaNext" xml:space="preserve">
+    <value>Next track</value>
+  </data>
+  <data name="BuilderIntPcMediaPlayPause" xml:space="preserve">
+    <value>Play / pause</value>
+  </data>
+  <data name="BuilderIntPcMediaPrevious" xml:space="preserve">
+    <value>Previous track</value>
+  </data>
+  <data name="BuilderIntPcMediaStop" xml:space="preserve">
+    <value>Stop</value>
+  </data>
+  <data name="BuilderIntPcMessageBoxNote" xml:space="preserve">
+    <value>The window waits for a click. With Yes / No you get the answer in {{...button}} and {{...confirmed}}, and can continue by condition.</value>
+  </data>
+  <data name="BuilderIntPcModeLogoff" xml:space="preserve">
+    <value>Sign out (no waiting)</value>
+  </data>
+  <data name="BuilderIntPcModeRestart" xml:space="preserve">
+    <value>Restart</value>
+  </data>
+  <data name="BuilderIntPcModeShutdown" xml:space="preserve">
+    <value>Shut down</value>
+  </data>
+  <data name="BuilderIntPcOk" xml:space="preserve">
+    <value>OK</value>
+  </data>
+  <data name="BuilderIntPcPowerLow" xml:space="preserve">
+    <value>Battery is low (20%, 10%, 5%)</value>
+  </data>
+  <data name="BuilderIntPcPowerPluggedIn" xml:space="preserve">
+    <value>Charger plugged in</value>
+  </data>
+  <data name="BuilderIntPcPowerUnplugged" xml:space="preserve">
+    <value>Charger unplugged</value>
+  </data>
+  <data name="BuilderIntPcSaveNameHelp" xml:space="preserve">
+    <value>Leave empty to keep the original name of the attachment.</value>
+  </data>
+  <data name="BuilderIntPcSessionLocked" xml:space="preserve">
+    <value>Screen locked</value>
+  </data>
+  <data name="BuilderIntPcSessionSignedIn" xml:space="preserve">
+    <value>Someone signed in to Windows</value>
+  </data>
+  <data name="BuilderIntPcSessionSignedOut" xml:space="preserve">
+    <value>Someone signed out of Windows</value>
+  </data>
+  <data name="BuilderIntPcSessionSleeping" xml:space="preserve">
+    <value>PC is going to sleep</value>
+  </data>
+  <data name="BuilderIntPcSessionUnlocked" xml:space="preserve">
+    <value>Screen unlocked</value>
+  </data>
+  <data name="BuilderIntPcSessionWoke" xml:space="preserve">
+    <value>PC woke up from sleep</value>
+  </data>
+  <data name="BuilderIntPcShutdownMode" xml:space="preserve">
+    <value>What to do</value>
+  </data>
+  <data name="BuilderIntPcShutdownNote" xml:space="preserve">
+    <value>Windows shows a warning during the wait. The &quot;Cancel planned shutdown&quot; card (or a person at the PC) can stop it.</value>
+  </data>
+  <data name="BuilderIntPcUnzipTo" xml:space="preserve">
+    <value>Unpack into folder</value>
+  </data>
+  <data name="BuilderIntPcUrl" xml:space="preserve">
+    <value>Link to the file</value>
+  </data>
+  <data name="BuilderIntPcUrlHelp" xml:space="preserve">
+    <value>A web address that starts with http:// or https://. Up to 100 MB.</value>
+  </data>
+  <data name="BuilderIntPcVolumeAction" xml:space="preserve">
+    <value>What to do</value>
+  </data>
+  <data name="BuilderIntPcVolumeDown" xml:space="preserve">
+    <value>Quieter</value>
+  </data>
+  <data name="BuilderIntPcVolumeMute" xml:space="preserve">
+    <value>Mute / unmute</value>
+  </data>
+  <data name="BuilderIntPcVolumeSteps" xml:space="preserve">
+    <value>How many steps</value>
+  </data>
+  <data name="BuilderIntPcVolumeStepsHelp" xml:space="preserve">
+    <value>One step is about 2% of the volume. From 1 to 25. Not used for mute.</value>
+  </data>
+  <data name="BuilderIntPcVolumeUp" xml:space="preserve">
+    <value>Louder</value>
+  </data>
+  <data name="BuilderIntPcWhat" xml:space="preserve">
+    <value>What happened</value>
+  </data>
+  <data name="BuilderIntPcNotifyIntro" xml:space="preserve">
+    <value>Shows a small message near the clock on the PC.</value>
+  </data>
+  <data name="BuilderIntPcMessageBoxIntro" xml:space="preserve">
+    <value>Opens a window in the middle of the screen and waits until someone presses a button.</value>
+  </data>
+  <data name="BuilderIntPcSpeakIntro" xml:space="preserve">
+    <value>The PC reads the text aloud.</value>
+  </data>
+  <data name="BuilderIntPcOpenIntro" xml:space="preserve">
+    <value>Opens a web page, a file or a folder in the program Windows picks for it. Programs and scripts are not opened this way.</value>
+  </data>
+  <data name="BuilderIntPcClipboardSetIntro" xml:space="preserve">
+    <value>Puts the text into the clipboard of the PC, so it can be pasted with Ctrl+V.</value>
+  </data>
+  <data name="BuilderIntPcClipboardGetIntro" xml:space="preserve">
+    <value>Reads the text that is in the clipboard of the PC right now. You get it in {{...text}}.</value>
+  </data>
+  <data name="BuilderIntPcSystemInfoIntro" xml:space="preserve">
+    <value>Reads facts about the PC: name, Windows, memory, free disk space, battery.</value>
+  </data>
+  <data name="BuilderIntPcScreenshotIntro" xml:space="preserve">
+    <value>Takes a picture of the screen and keeps it as an attachment you can send with the next cards.</value>
+  </data>
+  <data name="BuilderIntPcActiveWindowIntro" xml:space="preserve">
+    <value>Tells which window is in front right now: its title and the program.</value>
+  </data>
+  <data name="BuilderIntPcListProgramsIntro" xml:space="preserve">
+    <value>Lists the programs that have an open window on the PC.</value>
+  </data>
+  <data name="BuilderIntPcNetworkInfoIntro" xml:space="preserve">
+    <value>Tells the name of the PC, whether it has a network, and its IP addresses.</value>
+  </data>
+  <data name="BuilderIntPcPingHostIntro" xml:space="preserve">
+    <value>Checks from the PC whether a site or a device answers, and how fast.</value>
+  </data>
+  <data name="BuilderIntPcProcessRunningIntro" xml:space="preserve">
+    <value>Checks whether a program is running now. Use the result in a condition.</value>
+  </data>
+  <data name="BuilderIntPcReadFileIntro" xml:space="preserve">
+    <value>Reads a text file from the PC into {{...text}}. Only folders allowed in the program&apos;s Settings work.</value>
+  </data>
+  <data name="BuilderIntPcWriteFileIntro" xml:space="preserve">
+    <value>Writes text into a file on the PC (a new file, or replaces / extends an existing one).</value>
+  </data>
+  <data name="BuilderIntPcFileInfoIntro" xml:space="preserve">
+    <value>Checks whether a file or folder exists, and gives its size and dates.</value>
+  </data>
+  <data name="BuilderIntPcListFolderIntro" xml:space="preserve">
+    <value>Lists the files in a folder (up to 200). Use it to find what to process next.</value>
+  </data>
+  <data name="BuilderIntPcCreateFolderIntro" xml:space="preserve">
+    <value>Creates a folder (with all missing folders above it). Nothing happens if it already exists.</value>
+  </data>
+  <data name="BuilderIntPcCopyFileIntro" xml:space="preserve">
+    <value>Copies a file to another place on the PC.</value>
+  </data>
+  <data name="BuilderIntPcMoveFileIntro" xml:space="preserve">
+    <value>Moves a file to another folder, or renames it.</value>
+  </data>
+  <data name="BuilderIntPcDeleteFileIntro" xml:space="preserve">
+    <value>Moves a file to the Recycle Bin.</value>
+  </data>
+  <data name="BuilderIntPcZipFolderIntro" xml:space="preserve">
+    <value>Packs a folder into one .zip file.</value>
+  </data>
+  <data name="BuilderIntPcUnzipIntro" xml:space="preserve">
+    <value>Unpacks a .zip file into a folder (up to 500 MB).</value>
+  </data>
+  <data name="BuilderIntPcSaveAttachmentIntro" xml:space="preserve">
+    <value>Saves a file that is in Partnerly (for example from Telegram or Gmail) onto the PC. Up to 8 MB.</value>
+  </data>
+  <data name="BuilderIntPcGetFileIntro" xml:space="preserve">
+    <value>Takes a file from the PC into Partnerly as an attachment (up to 8 MB), so the next cards can send it.</value>
+  </data>
+  <data name="BuilderIntPcDownloadUrlIntro" xml:space="preserve">
+    <value>The PC downloads a file from the internet into a folder.</value>
+  </data>
+  <data name="BuilderIntPcRunProgramIntro" xml:space="preserve">
+    <value>Starts a program from the list of allowed programs in the program&apos;s Settings.</value>
+  </data>
+  <data name="BuilderIntPcRunScriptIntro" xml:space="preserve">
+    <value>Runs a script (.ps1, .bat, .cmd) that lies in a scripts folder allowed in the program&apos;s Settings.</value>
+  </data>
+  <data name="BuilderIntPcCloseProgramIntro" xml:space="preserve">
+    <value>Politely closes the window of a program (like pressing the cross). Nothing is killed.</value>
+  </data>
+  <data name="BuilderIntPcLockIntro" xml:space="preserve">
+    <value>Locks the screen. A password is needed to continue.</value>
+  </data>
+  <data name="BuilderIntPcSleepIntro" xml:space="preserve">
+    <value>Puts the PC to sleep. It goes offline until it wakes up.</value>
+  </data>
+  <data name="BuilderIntPcDisplayOffIntro" xml:space="preserve">
+    <value>Turns the monitor off. The PC keeps working; a key or mouse move turns it on.</value>
+  </data>
+  <data name="BuilderIntPcShutdownIntro" xml:space="preserve">
+    <value>Shuts the PC down, restarts it, or signs out of Windows.</value>
+  </data>
+  <data name="BuilderIntPcCancelShutdownIntro" xml:space="preserve">
+    <value>Cancels a shutdown or restart that was planned by the &quot;Shut down&quot; card.</value>
+  </data>
+  <data name="BuilderIntPcVolumeIntro" xml:space="preserve">
+    <value>Makes the sound louder or quieter, or turns it off.</value>
+  </data>
+  <data name="BuilderIntPcMediaIntro" xml:space="preserve">
+    <value>Presses a music / video button: play, pause, next track...</value>
+  </data>
+  <data name="BuilderIntPcFileCreatedIntro" xml:space="preserve">
+    <value>Starts the agent when a new file appears in a folder the program watches.</value>
+  </data>
+  <data name="BuilderIntPcFileChangedIntro" xml:space="preserve">
+    <value>Starts the agent when a file in a watched folder is saved with changes.</value>
+  </data>
+  <data name="BuilderIntPcFileDeletedIntro" xml:space="preserve">
+    <value>Starts the agent when a file disappears from a watched folder.</value>
+  </data>
+  <data name="BuilderIntPcProgramStartedIntro" xml:space="preserve">
+    <value>Starts the agent when a program starts on the PC.</value>
+  </data>
+  <data name="BuilderIntPcProgramStoppedIntro" xml:space="preserve">
+    <value>Starts the agent when a program is closed on the PC.</value>
+  </data>
+  <data name="BuilderIntPcStatusChangedIntro" xml:space="preserve">
+    <value>Starts the agent when the PC goes online (program connected) or offline.</value>
+  </data>
+  <data name="BuilderIntPcSessionChangedIntro" xml:space="preserve">
+    <value>Starts the agent when the screen is locked or unlocked, someone signs in or out, or the PC sleeps or wakes up.</value>
+  </data>
+  <data name="BuilderIntPcClipboardChangedIntro" xml:space="preserve">
+    <value>Starts the agent when new text is copied on the PC. The copied text arrives in {{...text}}.</value>
+  </data>
+  <data name="BuilderIntPcPowerChangedIntro" xml:space="preserve">
+    <value>Starts the agent when the charger is plugged or unplugged, or the battery gets low.</value>
+  </data>
+  <data name="BuilderIntPcDriveChangedIntro" xml:space="preserve">
+    <value>Starts the agent when a USB stick or another drive is plugged in or removed.</value>
+  </data>
+  <data name="BuilderIntPcIdleChangedIntro" xml:space="preserve">
+    <value>Starts the agent when nobody uses the PC for a while, or when somebody comes back.</value>
+  </data>
+  <data name="BuilderIntPcDiskLowIntro" xml:space="preserve">
+    <value>Starts the agent when free space on a disk of the PC runs out.</value>
+  </data>
+  <data name="NodeTypeComputerCreateFolder" xml:space="preserve">
+    <value>Computer: create folder</value>
+  </data>
+  <data name="NodeTypeComputerDeleteFile" xml:space="preserve">
+    <value>Computer: file to Recycle Bin</value>
+  </data>
+  <data name="NodeTypeComputerFileInfo" xml:space="preserve">
+    <value>Computer: check file</value>
+  </data>
+  <data name="NodeTypeComputerUnzip" xml:space="preserve">
+    <value>Computer: unzip archive</value>
+  </data>
+  <data name="NodeTypeComputerListPrograms" xml:space="preserve">
+    <value>Computer: open programs</value>
+  </data>
+  <data name="NodeTypeComputerVolume" xml:space="preserve">
+    <value>Computer: volume</value>
+  </data>
+  <data name="NodeTypeComputerMedia" xml:space="preserve">
+    <value>Computer: music buttons</value>
+  </data>
+  <data name="NodeTypeComputerDisplayOff" xml:space="preserve">
+    <value>Computer: screen off</value>
+  </data>
+  <data name="NodeTypeComputerShutdown" xml:space="preserve">
+    <value>Computer: shut down / restart</value>
+  </data>
+  <data name="NodeTypeComputerCancelShutdown" xml:space="preserve">
+    <value>Computer: cancel shutdown</value>
+  </data>
+  <data name="NodeTypeComputerActiveWindow" xml:space="preserve">
+    <value>Computer: window in front</value>
+  </data>
+  <data name="NodeTypeComputerNetworkInfo" xml:space="preserve">
+    <value>Computer: network info</value>
+  </data>
+  <data name="NodeTypeComputerPingHost" xml:space="preserve">
+    <value>Computer: ping</value>
+  </data>
+  <data name="NodeTypeComputerDownloadUrl" xml:space="preserve">
+    <value>Computer: download file</value>
+  </data>
+  <data name="NodeTypeComputerFileChanged" xml:space="preserve">
+    <value>Computer: file changed</value>
+  </data>
+  <data name="NodeTypeComputerFileDeleted" xml:space="preserve">
+    <value>Computer: file deleted</value>
+  </data>
+  <data name="NodeTypeComputerProgramStopped" xml:space="preserve">
+    <value>Computer: program closed</value>
+  </data>
+  <data name="NodeTypeComputerSessionChanged" xml:space="preserve">
+    <value>Computer: lock / unlock / sleep</value>
+  </data>
+  <data name="NodeTypeComputerClipboardChanged" xml:space="preserve">
+    <value>Computer: clipboard changed</value>
+  </data>
+  <data name="NodeTypeComputerPowerChanged" xml:space="preserve">
+    <value>Computer: charger / battery</value>
+  </data>
+  <data name="NodeTypeComputerDriveChanged" xml:space="preserve">
+    <value>Computer: USB drive</value>
+  </data>
+  <data name="NodeTypeComputerIdleChanged" xml:space="preserve">
+    <value>Computer: idle / back</value>
+  </data>
+  <data name="NodeTypeComputerDiskLow" xml:space="preserve">
+    <value>Computer: disk space low</value>
+  </data>
+  <data name="ComputerPaused" xml:space="preserve">
+    <value>Paused on the PC</value>
+  </data>
+  <data name="ComputerUninstalled" xml:space="preserve">
+    <value>Program removed</value>
+  </data>
+  <data name="BuilderPcAllowedFolders" xml:space="preserve">
+    <value>Folders this PC allows</value>
+  </data>
+  <data name="BuilderPcAllowedPrograms" xml:space="preserve">
+    <value>Programs this PC allows</value>
+  </data>
+  <data name="ComputerWait" xml:space="preserve">
+    <value>Waiting for the program to connect...</value>
+  </data>
+  <data name="ComputerConnectedOk" xml:space="preserve">
+    <value>Connected! &quot;{0}&quot; is online. You can close this window.</value>
+  </data>
+  <data name="ComputerWaitLong" xml:space="preserve">
+    <value>Still nothing. Check that the program is running (icon near the clock) and open &quot;Why is it offline?&quot; under the computer in the list.</value>
+  </data>
+  <data name="ComputerTroubleTitle" xml:space="preserve">
+    <value>Why is it offline?</value>
+  </data>
+  <data name="ComputerTrouble1" xml:space="preserve">
+    <value>The program is not running: look for its icon near the clock (click the small arrow if it is hidden). If it is not there, start Partnerly.Agent.exe again.</value>
+  </data>
+  <data name="ComputerTrouble2" xml:space="preserve">
+    <value>It is turned off: right-click the icon and tick &quot;Let Partnerly use this computer&quot;. The card then says &quot;Paused on the PC&quot;.</value>
+  </data>
+  <data name="ComputerTrouble3" xml:space="preserve">
+    <value>The PC is asleep, switched off, or has no internet.</value>
+  </data>
+  <data name="ComputerTrouble4" xml:space="preserve">
+    <value>The token was renewed (key button) or this computer was deleted here and added again: download the program with the new settings and start it, or use &quot;Connection...&quot; in the tray menu.</value>
+  </data>
+  <data name="ComputerTrouble5" xml:space="preserve">
+    <value>The program was removed from the PC (the card says &quot;Program removed&quot;): download it and install it again.</value>
+  </data>
+  <data name="ComputerTrouble6" xml:space="preserve">
+    <value>Still stuck? Right-click the icon and choose &quot;Check connection&quot;: it says in plain words what is wrong.</value>
+  </data>
+  <data name="ComputerTokenStep1" xml:space="preserve">
+    <value>Press the button below to download the program with your settings (a zip file).</value>
+  </data>
+  <data name="ComputerTokenStep2" xml:space="preserve">
+    <value>Open the Downloads folder, right-click the zip and choose &quot;Extract All&quot;. Do not start the program from inside the zip.</value>
+  </data>
+  <data name="ComputerTokenStep3" xml:space="preserve">
+    <value>Open the new folder, start Partnerly.Agent.exe and press Yes. It installs for your Windows account.</value>
+  </data>
+  <data name="ComputerTokenStep4" xml:space="preserve">
+    <value>Wait here: this window turns green when the computer is connected.</value>
+  </data>
+  <data name="DocsIntegrationComputerMore" xml:space="preserve">
+    <value>The program lives in the tray (near the clock): a green dot means connected. Right-click it to turn Partnerly&apos;s access on or off, change folders, programs and watching in Settings, check the connection, or remove the program (also possible in Windows Settings &gt; Apps). Triggers: new, changed or deleted file, program started or closed, screen locked or unlocked, PC woke up, USB drive plugged, charger or battery, nobody at the PC, disk space low, clipboard text. Actions: files (read, write, copy, move, zip, unzip, Recycle Bin, download), programs and scripts, notifications and windows, volume and media buttons, screenshot, lock, sleep, shut down. If the computer shows offline, open &quot;Why is it offline?&quot; under it in the list.</value>
+  </data>
+  <data name="ComputerErrOffline" xml:space="preserve">
+    <value>The computer is offline. Start Partnerly Agent on it and try again.</value>
+  </data>
+  <data name="ComputerErrTimeout" xml:space="preserve">
+    <value>The computer did not answer in time.</value>
+  </data>
+  <data name="ComputerErrWentOffline" xml:space="preserve">
+    <value>The computer went offline while the command was running.</value>
+  </data>
+  <data name="ComputerErrRefused" xml:space="preserve">
+    <value>The computer refused the command.</value>
+  </data>
 </root>

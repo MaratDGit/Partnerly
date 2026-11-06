@@ -373,3 +373,5 @@ Partnerly/wwwroot/uploads/profiles/*
 Partnerly/wwwroot/uploads/attachments/**
 !Partnerly/wwwroot/uploads/profiles/.gitkeep
 !Partnerly/wwwroot/uploads/attachments/.gitkeep
+# Published Partnerly Agent offered for download (tools/publish-agent.ps1)
+Partnerly/App_Data/agent/

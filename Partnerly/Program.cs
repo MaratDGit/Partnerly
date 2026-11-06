@@ -1,4 +1,5 @@
-﻿using AspNet.Security.OAuth.Apple;
+using Partnerly.Computer;
+using AspNet.Security.OAuth.Apple;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Localization;
@@ -36,7 +37,7 @@ builder.Services
     .AddControllersWithViews()
     .AddViewLocalization()
     .AddDataAnnotationsLocalization();
-builder.Services.AddSignalR();
+builder.Services.AddSignalR().AddHubOptions<Partnerly.Computer.ComputerHub>(o => o.MaximumReceiveMessageSize = 14 * 1024 * 1024);
 
 // Scoped services
 builder.Services.AddScoped<DataTableQueryService>();
@@ -72,6 +73,7 @@ builder.Services.AddScoped<IInlineUpdateService, InlineUpdateService>();
 builder.Services.AddSingleton<IDataTableRegistry, DataTableRegistry>();
 builder.Services.AddPartnerlyAutomation(useDatabase: true);
 builder.Services.AddPartnerlyIntegrations();
+builder.Services.AddPartnerlyComputer();
 
 // Transient services
 builder.Services.AddTransient<IEmailSender, EmailSender>();
@@ -251,6 +253,7 @@ app.UseMiddleware<RoleChangeMiddleware>();
 // -------------------- HUBS --------------------
 app.MapHub<NotificationHub>("/notificationHub");
 app.MapHub<AutomationHub>("/automationHub");
+app.MapHub<Partnerly.Computer.ComputerHub>("/computerHub");
 
 app.Run();
 

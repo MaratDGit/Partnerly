@@ -107,6 +107,10 @@ namespace Partnerly.Automation.Web
 
         [HttpPost]
         [ValidateAntiForgeryToken]
+        // Errors of background steps carry a translation key (see LocalizedError); here the language of the viewer is used.
+        private string? Resolve(string? error) =>
+            LocalizedError.Resolve(error, key => _localizer[key] is { ResourceNotFound: false } found ? found.Value : null);
+
         [Authorize(Policy = "Permission:automation.create")]
         public async Task<IActionResult> Create(string name, string? description, string? templateId, string? icon)
         {
@@ -454,7 +458,7 @@ namespace Partnerly.Automation.Web
                             StartedText = TimeZoneHelper.FormatIn(started, definition.TimeZoneId, "dd.MM.yyyy HH:mm:ss"),
                             StepStatus = step.Status,
                             Attempt = step.Attempt,
-                            Error = step.Error
+                            Error = Resolve(step.Error)
                         });
                     }
                 }
@@ -917,10 +921,10 @@ namespace Partnerly.Automation.Web
                         Name = graph.FindNode(step.NodeId)?.Name ?? step.NodeId,
                         Type = step.ActionType,
                         Status = step.Status,
-                        Error = step.Error
+                        Error = Resolve(step.Error)
                     }).ToList(),
                     ResumeAtUtc = resume.TryGetValue(run.Id, out var due) ? DateTime.SpecifyKind(due, DateTimeKind.Utc) : null,
-                    Error = run.Error
+                    Error = Resolve(run.Error)
                 });
             }
 

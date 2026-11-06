@@ -140,7 +140,8 @@
         "Outlook Calendar": "bx-calendar",
         "Google Sheets": "bx-spreadsheet",
         "Google Drive": "bxl-google-cloud",
-        "WhatsApp": "bxl-whatsapp"
+        "WhatsApp": "bxl-whatsapp",
+        "Computer": "bx-desktop"
     };
     var TYPE_ICONS = {
         manual: "bx-pointer",
@@ -170,7 +171,55 @@
         create_record: "bx-plus-circle",
         update_record: "bx-edit",
         find_record: "bx-search",
-        delete_record: "bx-trash"
+        delete_record: "bx-trash",
+        "computer.notify": "bx-bell",
+        "computer.message_box": "bx-message-square-detail",
+        "computer.speak": "bx-volume-full",
+        "computer.open": "bx-link-external",
+        "computer.clipboard_set": "bx-clipboard",
+        "computer.clipboard_get": "bx-paste",
+        "computer.system_info": "bx-chip",
+        "computer.screenshot": "bx-camera",
+        "computer.process_running": "bx-pulse",
+        "computer.read_file": "bx-file",
+        "computer.write_file": "bx-edit-alt",
+        "computer.list_folder": "bx-folder-open",
+        "computer.copy_file": "bx-copy",
+        "computer.move_file": "bx-move",
+        "computer.zip_folder": "bx-archive",
+        "computer.save_attachment": "bx-download",
+        "computer.get_file": "bx-upload",
+        "computer.run_program": "bx-play-circle",
+        "computer.run_script": "bx-terminal",
+        "computer.close_program": "bx-window-close",
+        "computer.lock": "bx-lock-alt",
+        "computer.sleep": "bx-moon",
+        "computer.file_created": "bx-file-blank",
+        "computer.status_changed": "bx-wifi",
+        "computer.program_started": "bx-rocket",
+        "computer.file_changed": "bx-file-find",
+        "computer.file_deleted": "bx-file-blank",
+        "computer.program_stopped": "bx-stop-circle",
+        "computer.session_changed": "bx-log-in-circle",
+        "computer.clipboard_changed": "bx-clipboard",
+        "computer.power_changed": "bx-battery",
+        "computer.drive_changed": "bx-usb",
+        "computer.idle_changed": "bx-time-five",
+        "computer.disk_low": "bx-hdd",
+        "computer.create_folder": "bx-folder-plus",
+        "computer.delete_file": "bx-trash",
+        "computer.file_info": "bx-search-alt",
+        "computer.unzip": "bx-package",
+        "computer.list_programs": "bx-list-ul",
+        "computer.volume": "bx-volume-low",
+        "computer.media": "bx-play",
+        "computer.display_off": "bx-desktop",
+        "computer.shutdown": "bx-power-off",
+        "computer.cancel_shutdown": "bx-undo",
+        "computer.active_window": "bx-window",
+        "computer.network_info": "bx-network-chart",
+        "computer.ping_host": "bx-broadcast",
+        "computer.download_url": "bx-cloud-download"
     };
     var ui = typeof window.partnerlyBuilderFields === "function" ? window.partnerlyBuilderFields(t) : null;
 
@@ -491,11 +540,12 @@
         drive: { cls: "drive", icon: "bxl-google-cloud", label: "Google Drive" },
         whatsapp: { cls: "whatsapp", icon: "bxl-whatsapp", label: "WhatsApp" },
         outlook: { cls: "outlook", icon: "bxl-microsoft", label: "Outlook" },
-        outlookCalendar: { cls: "outlook", icon: "bx-calendar", label: "Outlook Calendar" }
+        outlookCalendar: { cls: "outlook", icon: "bx-calendar", label: "Outlook Calendar" },
+        computer: { cls: "computer", icon: "bx-desktop", label: "Computer" }
     };
 
     function serviceOf(type) {
-        var match = /^(telegram|sheets|gmail|drive|whatsapp|outlook)\./.exec(String(type || ""));
+        var match = /^(telegram|sheets|gmail|drive|whatsapp|outlook|computer)\./.exec(String(type || ""));
         if (!match) { return null; }
         if (match[1] === "outlook" && /\.(create_event|find_events|event_added)$/.test(type)) {
             return SERVICE_CHIPS.outlookCalendar;
@@ -565,7 +615,7 @@
         delete_record: function (c) { return filled(c.entity) && filled(c.key); }
     };
 
-    var INTEGRATION_PREFIX = /^(telegram|sheets|gmail|outlook|drive|whatsapp)\./;
+    var INTEGRATION_PREFIX = /^(telegram|sheets|gmail|outlook|drive|whatsapp|computer)\./;
     // Settings (besides the connection) a card needs before it can work.
     var INTEGRATION_REQUIRED = {
         "telegram.send_message": ["chatId", "text"],
@@ -601,7 +651,30 @@
         "drive.upload_file": ["attachmentId"],
         "drive.create_folder": ["name"],
         "whatsapp.send_text": ["to", "text"],
-        "whatsapp.send_template": ["to", "template", "language"]
+        "whatsapp.send_template": ["to", "template", "language"],
+        "computer.notify": ["text"],
+        "computer.message_box": ["text"],
+        "computer.speak": ["text"],
+        "computer.open": ["target"],
+        "computer.clipboard_set": ["text"],
+        "computer.process_running": ["name"],
+        "computer.read_file": ["path"],
+        "computer.write_file": ["path", "text"],
+        "computer.list_folder": ["path"],
+        "computer.copy_file": ["source", "destination"],
+        "computer.move_file": ["source", "destination"],
+        "computer.zip_folder": ["source", "destination"],
+        "computer.save_attachment": ["attachmentId", "folder"],
+        "computer.get_file": ["path"],
+        "computer.run_program": ["path"],
+        "computer.run_script": ["path"],
+        "computer.close_program": ["name"],
+        "computer.create_folder": ["path"],
+        "computer.delete_file": ["path"],
+        "computer.file_info": ["path"],
+        "computer.unzip": ["source", "destination"],
+        "computer.ping_host": ["host"],
+        "computer.download_url": ["url", "folder"]
     };
 
     function settingsReady(data) {
@@ -1127,6 +1200,12 @@
         return keys.filter(function (key) {
             var value = getByPath(config, key);
             if (key === "amount" || key === "minutes") { return !(Number(value) > 0); }
+            if (key === "chatId" && /^telegram\./.test(data.type) && !filled(value)) {
+                // An empty chat is fine when the connection has a default chat (the server uses it).
+                telegramChatOptions({ config: config });
+                var entry = telegramChats[config.connectionId];
+                if (entry && entry.defaultChatId) { return false; }
+            }
             return !filled(value);
         });
     }
@@ -1402,7 +1481,19 @@
         "outlook.event_added": ["id", "subject", "start", "end", "location", "organizer", "webLink", "created"],
         "sheets.row_added": ["rowNumber", "sheet", "spreadsheetId"],
         "drive.file_added": ["id", "name", "mimeType", "webViewLink", "createdTime", "modifiedTime", "size"],
-        "whatsapp.message_received": ["messageId", "from", "name", "text"]
+        "whatsapp.message_received": ["messageId", "from", "name", "text"],
+        "computer.file_created": ["path", "fileName", "folder", "extension", "size", "machine"],
+        "computer.status_changed": ["state", "machine"],
+        "computer.program_started": ["name", "machine"],
+        "computer.program_stopped": ["name", "machine"],
+        "computer.file_changed": ["path", "fileName", "folder", "extension", "size", "machine"],
+        "computer.file_deleted": ["path", "fileName", "folder", "extension", "machine"],
+        "computer.session_changed": ["state", "machine"],
+        "computer.clipboard_changed": ["text", "length", "machine"],
+        "computer.power_changed": ["state", "percent", "machine"],
+        "computer.drive_changed": ["state", "drive", "label", "kind", "machine"],
+        "computer.idle_changed": ["state", "idleMinutes", "machine"],
+        "computer.disk_low": ["drive", "freeGb", "freePercent", "machine"]
     };
 
     var STEP_VARS = {
@@ -1446,7 +1537,33 @@
         "drive.create_folder": ["result.id", "result.name", "result.webViewLink"],
         "drive.find_files": ["result.count", "result.first.id", "result.first.name", "result.first.webViewLink"],
         "whatsapp.send_text": ["result.messageId"],
-        "whatsapp.send_template": ["result.messageId"]
+        "whatsapp.send_template": ["result.messageId"],
+        "computer.clipboard_get": ["result.text"],
+        "computer.system_info": ["result.machine", "result.os", "result.cpuCount", "result.memoryGb", "result.uptimeMinutes", "result.onBattery", "result.batteryPercent", "result.drives"],
+        "computer.screenshot": ["result.attachmentId", "result.fileName", "result.size"],
+        "computer.get_file": ["result.attachmentId", "result.fileName", "result.size"],
+        "computer.process_running": ["result.running", "result.count"],
+        "computer.read_file": ["result.text", "result.size", "result.fileName"],
+        "computer.write_file": ["result.path", "result.size"],
+        "computer.list_folder": ["result.count", "result.items"],
+        "computer.copy_file": ["result.path"],
+        "computer.move_file": ["result.path"],
+        "computer.zip_folder": ["result.path", "result.size"],
+        "computer.save_attachment": ["result.path", "result.size"],
+        "computer.message_box": ["result.button", "result.confirmed"],
+        "computer.run_program": ["result.exitCode", "result.output", "result.errors", "result.processId"],
+        "computer.run_script": ["result.exitCode", "result.output", "result.errors", "result.processId"],
+        "computer.close_program": ["result.closed"],
+        "computer.create_folder": ["result.path", "result.existed"],
+        "computer.delete_file": ["result.deleted", "result.path"],
+        "computer.file_info": ["result.exists", "result.isFolder", "result.size", "result.modified", "result.created", "result.extension"],
+        "computer.unzip": ["result.path", "result.files"],
+        "computer.list_programs": ["result.count", "result.items"],
+        "computer.active_window": ["result.title", "result.program"],
+        "computer.network_info": ["result.hostname", "result.online", "result.addresses"],
+        "computer.ping_host": ["result.reachable", "result.roundTripMs", "result.status"],
+        "computer.download_url": ["result.path", "result.size"],
+        "computer.shutdown": ["result.mode", "result.delaySeconds"]
     };
 
     function variable(path, group) {
@@ -1597,6 +1714,7 @@
                 if (current && current.data.config && current.data.config.connectionId === id) {
                     renderFields(current.data);
                 }
+                refreshChecks();
             });
             return [];
         }
@@ -1617,8 +1735,43 @@
         return options;
     }
 
+    // Folders, programs and script folders the chosen computer allows: the program on the PC tells
+    // the site, the editor offers them in a dropdown (a hint; the PC still decides when the card runs).
+    var computerInfo = {};
+
+    function computerOptions(data, kind) {
+        var id = data && data.config ? data.config.connectionId : "";
+        if (!id) { return []; }
+        var entry = computerInfo[id];
+        if (entry === undefined && config.computerSettingsUrl) {
+            computerInfo[id] = { loading: true };
+            fetch(config.computerSettingsUrl + "?id=" + encodeURIComponent(id), {
+                credentials: "same-origin",
+                headers: { "X-Requested-With": "XMLHttpRequest", "Accept": "application/json" }
+            }).then(function (response) { return response.json(); }).then(function (json) {
+                computerInfo[id] = json && json.success ? json : {};
+            }).catch(function () {
+                computerInfo[id] = {};
+            }).then(function () {
+                var current = selectedId ? nodeOrNull(selectedId) : null;
+                if (current && current.data.config && current.data.config.connectionId === id) {
+                    renderFields(current.data);
+                }
+            });
+            return [];
+        }
+        if (!entry || !entry[kind]) { return []; }
+        var group = kind === "programs"
+            ? t("builderPcAllowedPrograms", "Programs this PC allows")
+            : t("builderPcAllowedFolders", "Folders this PC allows");
+        return entry[kind].map(function (path) { return { value: String(path), label: String(path), group: group }; });
+    }
+
     function sourceOptions(source, vars, data) {
         switch (source) {
+            case "computerFolders": return computerOptions(data, "folders").concat(vars);
+            case "computerPrograms": return computerOptions(data, "programs").concat(vars);
+            case "computerScripts": return computerOptions(data, "scripts").concat(vars);
             case "telegramChats": return telegramChatOptions(data).concat(vars);
             case "events": return EVENT_OPTIONS;
             case "userEmails": return vars.concat(userOptions("email"));
@@ -3433,6 +3586,7 @@
             graph: graph,
             catalogUrl: form.getAttribute("data-catalog-url"),
             telegramChatsUrl: form.getAttribute("data-telegram-chats-url"),
+            computerSettingsUrl: form.getAttribute("data-computer-settings-url"),
             saveUrl: form.getAttribute("data-save-url"),
             favoriteUrl: form.getAttribute("data-favorite-url"),
             favoriteImportUrl: form.getAttribute("data-favorite-import-url"),

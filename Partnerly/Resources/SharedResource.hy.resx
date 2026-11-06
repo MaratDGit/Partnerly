@@ -5092,4 +5092,734 @@ User, խումբ և նամակի կաղապար այստեղ չեն ստեղծվ
   <data name="NodeNotConnected" xml:space="preserve">
     <value>Չի միացված հոսքին</value>
   </data>
+  <data name="NodeTypeComputerNotify" xml:space="preserve">
+    <value>Համակարգիչ՝ ցույց տալ ծանուցում</value>
+  </data>
+  <data name="NodeTypeComputerMessageBox" xml:space="preserve">
+    <value>Համակարգիչ՝ ցույց տալ հաղորդագրության պատուհան</value>
+  </data>
+  <data name="NodeTypeComputerSpeak" xml:space="preserve">
+    <value>Համակարգիչ՝ արտասանել տեքստը</value>
+  </data>
+  <data name="NodeTypeComputerOpen" xml:space="preserve">
+    <value>Համակարգիչ՝ բացել հղում, ֆայլ կամ պանակ</value>
+  </data>
+  <data name="NodeTypeComputerClipboardSet" xml:space="preserve">
+    <value>Համակարգիչ՝ պատճենել տեքստը clipboard</value>
+  </data>
+  <data name="NodeTypeComputerClipboardGet" xml:space="preserve">
+    <value>Համակարգիչ՝ կարդալ clipboard-ը</value>
+  </data>
+  <data name="NodeTypeComputerSystemInfo" xml:space="preserve">
+    <value>Համակարգիչ՝ ստանալ տվյալներ ՀՀ-ի մասին</value>
+  </data>
+  <data name="NodeTypeComputerScreenshot" xml:space="preserve">
+    <value>Համակարգիչ՝ անել սքրինշոթ</value>
+  </data>
+  <data name="NodeTypeComputerProcessRunning" xml:space="preserve">
+    <value>Համակարգիչ՝ աշխատո՞ւմ է ծրագիրը</value>
+  </data>
+  <data name="NodeTypeComputerReadFile" xml:space="preserve">
+    <value>Համակարգիչ՝ կարդալ տեքստային ֆայլ</value>
+  </data>
+  <data name="NodeTypeComputerWriteFile" xml:space="preserve">
+    <value>Համակարգիչ՝ գրել տեքստային ֆայլ</value>
+  </data>
+  <data name="NodeTypeComputerListFolder" xml:space="preserve">
+    <value>Համակարգիչ՝ պանակի ֆայլերի ցանկ</value>
+  </data>
+  <data name="NodeTypeComputerCopyFile" xml:space="preserve">
+    <value>Համակարգիչ՝ պատճենել ֆայլը</value>
+  </data>
+  <data name="NodeTypeComputerMoveFile" xml:space="preserve">
+    <value>Համակարգիչ՝ տեղափոխել կամ վերանվանել ֆայլը</value>
+  </data>
+  <data name="NodeTypeComputerZipFolder" xml:space="preserve">
+    <value>Համակարգիչ՝ արխիվացնել պանակը</value>
+  </data>
+  <data name="NodeTypeComputerSaveAttachment" xml:space="preserve">
+    <value>Համակարգիչ՝ պահել կցորդը ՀՀ-ում</value>
+  </data>
+  <data name="NodeTypeComputerGetFile" xml:space="preserve">
+    <value>Համակարգիչ՝ վերցնել ֆայլը ՀՀ-ից</value>
+  </data>
+  <data name="NodeTypeComputerRunProgram" xml:space="preserve">
+    <value>Համակարգիչ՝ գործարկել ծրագիր</value>
+  </data>
+  <data name="NodeTypeComputerRunScript" xml:space="preserve">
+    <value>Համակարգիչ՝ գործարկել սկրիպտ</value>
+  </data>
+  <data name="NodeTypeComputerCloseProgram" xml:space="preserve">
+    <value>Համակարգիչ՝ փակել ծրագիրը</value>
+  </data>
+  <data name="NodeTypeComputerLock" xml:space="preserve">
+    <value>Համակարգիչ՝ արգելափակել ՀՀ-ը</value>
+  </data>
+  <data name="NodeTypeComputerSleep" xml:space="preserve">
+    <value>Համակարգիչ՝ քնի ռեժիմ</value>
+  </data>
+  <data name="NodeTypeComputerFileCreated" xml:space="preserve">
+    <value>Նոր ֆայլ ՀՀ-ում</value>
+  </data>
+  <data name="NodeTypeComputerStatusChanged" xml:space="preserve">
+    <value>ՀՀ-ը միացավ կամ անջատվեց</value>
+  </data>
+  <data name="NodeTypeComputerProgramStarted" xml:space="preserve">
+    <value>ՀՀ-ում ծրագիր է գործարկվել</value>
+  </data>
+  <data name="BuilderIntPcTitle" xml:space="preserve">
+    <value>Վերնագիր</value>
+  </data>
+  <data name="BuilderIntPcText" xml:space="preserve">
+    <value>Տեքստ</value>
+  </data>
+  <data name="BuilderIntPcButtons" xml:space="preserve">
+    <value>Կոճակներ</value>
+  </data>
+  <data name="BuilderIntPcYesNo" xml:space="preserve">
+    <value>Այո / Ոչ</value>
+  </data>
+  <data name="BuilderIntPcTarget" xml:space="preserve">
+    <value>Հղում, ֆայլ կամ պանակ</value>
+  </data>
+  <data name="BuilderIntPcTargetHelp" xml:space="preserve">
+    <value>Կայքի հասցե (https://...) կամ թույլատրված պանակների ֆայլ կամ պանակ։ Ծրագրերն այստեղ չեն բացվում․ դրա համար կա «Գործարկել ծրագիր» քարտը։</value>
+  </data>
+  <data name="BuilderIntPcClipboardHelp" xml:space="preserve">
+    <value>Վերադարձնում է clipboard-ում այս պահին եղած տեքստը․ {{steps.&lt;անուն&gt;.result.text}}։</value>
+  </data>
+  <data name="BuilderIntPcInfoHelp" xml:space="preserve">
+    <value>Վերադարձնում է համակարգչի անունը, համակարգը, հիշողությունը, սկավառակները, աշխատաժամանակը և մարտկոցի լիցքը։</value>
+  </data>
+  <data name="BuilderIntPcScreen" xml:space="preserve">
+    <value>Էկրան</value>
+  </data>
+  <data name="BuilderIntPcScreenMain" xml:space="preserve">
+    <value>Հիմնական էկրան</value>
+  </data>
+  <data name="BuilderIntPcScreenAll" xml:space="preserve">
+    <value>Բոլոր էկրանները</value>
+  </data>
+  <data name="BuilderIntPcScreenshotHelp" xml:space="preserve">
+    <value>Նկարը պահվում է որպես կցորդ։ Այն ուղարկելու համար Telegram կամ Drive քարտում օգտագործեք {{steps.&lt;անուն&gt;.result.attachmentId}}։</value>
+  </data>
+  <data name="BuilderIntPcProgramName" xml:space="preserve">
+    <value>Ծրագրի անունը</value>
+  </data>
+  <data name="BuilderIntPcProgramNameHelp" xml:space="preserve">
+    <value>Ծրագրի անունն առանց ճանապարհի, օրինակ՝ notepad կամ notepad.exe։</value>
+  </data>
+  <data name="BuilderIntPcPath" xml:space="preserve">
+    <value>Ֆայլ</value>
+  </data>
+  <data name="BuilderIntPcPathHelp" xml:space="preserve">
+    <value>Լրիվ ճանապարհ, օրինակ՝ C:/Users/me/Documents/Partnerly/notes.txt։ Աշխատում են միայն այդ ՀՀ-ում Partnerly Agent-ի կարգավորումներում թույլատրված պանակները։</value>
+  </data>
+  <data name="BuilderIntPcMaxKb" xml:space="preserve">
+    <value>Առավելագույն չափ (ԿԲ)</value>
+  </data>
+  <data name="BuilderIntPcMode" xml:space="preserve">
+    <value>Եթե ֆայլն արդեն կա</value>
+  </data>
+  <data name="BuilderIntPcReplace" xml:space="preserve">
+    <value>Փոխարինել</value>
+  </data>
+  <data name="BuilderIntPcAppend" xml:space="preserve">
+    <value>Ավելացնել վերջում</value>
+  </data>
+  <data name="BuilderIntPcFolder" xml:space="preserve">
+    <value>Պանակ</value>
+  </data>
+  <data name="BuilderIntPcPattern" xml:space="preserve">
+    <value>Ձևանմուշ</value>
+  </data>
+  <data name="BuilderIntPcPatternHelp" xml:space="preserve">
+    <value>Օրինակ՝ *.pdf կամ *.pdf;*.docx։ Դատարկը նշանակում է բոլոր ֆայլերը։</value>
+  </data>
+  <data name="BuilderIntPcRecursive" xml:space="preserve">
+    <value>Ներառյալ ենթապանակները</value>
+  </data>
+  <data name="BuilderIntPcSource" xml:space="preserve">
+    <value>Որտեղից</value>
+  </data>
+  <data name="BuilderIntPcDestination" xml:space="preserve">
+    <value>Ուր</value>
+  </data>
+  <data name="BuilderIntPcOverwrite" xml:space="preserve">
+    <value>Փոխարինել, եթե կա</value>
+  </data>
+  <data name="BuilderIntPcZipFile" xml:space="preserve">
+    <value>Արխիվի ֆայլ (.zip)</value>
+  </data>
+  <data name="BuilderIntPcFile" xml:space="preserve">
+    <value>Ֆայլ</value>
+  </data>
+  <data name="BuilderIntPcGetFileHelp" xml:space="preserve">
+    <value>Ֆայլը (մինչև 8 ՄԲ) պահվում է որպես կցորդ․ հաջորդ քարտերում օգտագործեք {{steps.&lt;անուն&gt;.result.attachmentId}}։</value>
+  </data>
+  <data name="BuilderIntPcProgram" xml:space="preserve">
+    <value>Ծրագիր</value>
+  </data>
+  <data name="BuilderIntPcProgramHelp" xml:space="preserve">
+    <value>Ճիշտ այնպես, ինչպես գրված է գործակալի կարգավորումների allowedPrograms-ում, օրինակ՝ notepad.exe կամ C:/Tools/backup.exe։</value>
+  </data>
+  <data name="BuilderIntPcArguments" xml:space="preserve">
+    <value>Արգումենտներ</value>
+  </data>
+  <data name="BuilderIntPcWait" xml:space="preserve">
+    <value>Սպասել ավարտին</value>
+  </data>
+  <data name="BuilderIntPcTimeout" xml:space="preserve">
+    <value>Կանգնեցնել (վայրկյան)</value>
+  </data>
+  <data name="BuilderIntPcScript" xml:space="preserve">
+    <value>Սկրիպտ (.ps1, .bat, .cmd)</value>
+  </data>
+  <data name="BuilderIntPcScriptHelp" xml:space="preserve">
+    <value>Սկրիպտը պետք է լինի գործակալի կարգավորումների scriptFolders-ում նշված պանակում։</value>
+  </data>
+  <data name="BuilderIntPcCloseHelp" xml:space="preserve">
+    <value>Փակում է ծրագրի պատուհանը քաղաքավարի (ինչպես X կոճակը)։ Ծրագիրը պետք է լինի allowedPrograms-ում։</value>
+  </data>
+  <data name="BuilderIntPcLockHelp" xml:space="preserve">
+    <value>Արգելափակում է էկրանը։ Շարունակելու համար պետք է մուտքագրել գաղտնաբառը։</value>
+  </data>
+  <data name="BuilderIntPcSleepHelp" xml:space="preserve">
+    <value>Պատասխանից մի պահ անց ՀՀ-ը քնի է անցնում։ Համոզվեք, որ ոչ ոք չի աշխատում դրանով։</value>
+  </data>
+  <data name="BuilderIntPcWatchFolder" xml:space="preserve">
+    <value>Միայն այս պանակը</value>
+  </data>
+  <data name="BuilderIntPcWatchFolderHelp" xml:space="preserve">
+    <value>Դատարկը նշանակում է ցանկացած հետևվող պանակ։ Ենթապանակները ներառված են։</value>
+  </data>
+  <data name="BuilderIntPcFileTriggerHelp" xml:space="preserve">
+    <value>Գործարկվում է, երբ գործակալի կարգավորումների watchFolders-ում նշված պանակում նոր ֆայլ է հայտնվում։ Փոփոխականներ՝ {{trigger.path}}, {{trigger.fileName}}, {{trigger.folder}}, {{trigger.extension}}, {{trigger.size}}։</value>
+  </data>
+  <data name="BuilderIntPcState" xml:space="preserve">
+    <value>Երբ ՀՀ-ը</value>
+  </data>
+  <data name="BuilderIntPcStateAny" xml:space="preserve">
+    <value>Միանում է կամ անջատվում</value>
+  </data>
+  <data name="BuilderIntPcStateOnline" xml:space="preserve">
+    <value>Միանում է</value>
+  </data>
+  <data name="BuilderIntPcStateOffline" xml:space="preserve">
+    <value>Անջատվում է</value>
+  </data>
+  <data name="BuilderIntPcProgramTriggerHelp" xml:space="preserve">
+    <value>Դատարկը նշանակում է ցանկացած հետևվող ծրագիր։ Օրինակ՝ chrome։</value>
+  </data>
+  <data name="BuilderIntPcProgramWatchHelp" xml:space="preserve">
+    <value>Հայտնվում են միայն գործակալի կարգավորումների watchPrograms-ում նշված ծրագրերը։ Փոփոխականներ՝ {{trigger.name}}, {{trigger.machine}}։</value>
+  </data>
+  <data name="ComputerTitle" xml:space="preserve">
+    <value>Համակարգիչ</value>
+  </data>
+  <data name="ComputerDefaultName" xml:space="preserve">
+    <value>Իմ համակարգիչը</value>
+  </data>
+  <data name="ComputerOnline" xml:space="preserve">
+    <value>Կապի մեջ է</value>
+  </data>
+  <data name="ComputerOffline" xml:space="preserve">
+    <value>Անջատված է</value>
+  </data>
+  <data name="IntegrationComputerIntro" xml:space="preserve">
+    <value>Թող գործակալները գործեն ձեր ՀՀ-ում․ ցույց տան հաղորդագրություններ, աշխատեն ֆայլերի հետ, գործարկեն ձեր թույլատրած ծրագրերը։</value>
+  </data>
+  <data name="IntegrationComputerFeature1" xml:space="preserve">
+    <value>Ֆայլեր և ծրագրեր</value>
+  </data>
+  <data name="IntegrationComputerFeature2" xml:space="preserve">
+    <value>Ծանուցումներ, սքրինշոթներ</value>
+  </data>
+  <data name="IntegrationComputerFeature3" xml:space="preserve">
+    <value>Միայն այն, ինչ դուք թույլ եք տվել</value>
+  </data>
+  <data name="IntegrationConnectComputer" xml:space="preserve">
+    <value>Ավելացնել համակարգիչ</value>
+  </data>
+  <data name="IntegrationComputerStep1" xml:space="preserve">
+    <value>Տվեք համակարգչին անուն և սեղմեք «Ստեղծել»։</value>
+  </data>
+  <data name="IntegrationComputerStep2" xml:space="preserve">
+    <value>Կբացվի պատուհան ձեր անձնական ներբեռնմամբ։ Ներբեռնեք ծրագիրը և բացեք zip-ը (աջ սեղմում &gt; «Extract All»)։</value>
+  </data>
+  <data name="IntegrationComputerStep3" xml:space="preserve">
+    <value>Գործարկեք Partnerly.Agent.exe-ը և սեղմեք «Այո»։ Այս էջը կցուցադրի, երբ համակարգիչը միանա։</value>
+  </data>
+  <data name="IntegrationComputerCreate" xml:space="preserve">
+    <value>Ստեղծել</value>
+  </data>
+  <data name="ComputerTokenTitle" xml:space="preserve">
+    <value>Համակարգչի թոքենը</value>
+  </data>
+  <data name="ComputerTokenHelp" xml:space="preserve">
+    <value>Պատճենեք երկու արժեքները Partnerly Agent-ի մեջ հիմա։ Թոքենը ցուցադրվում է միայն մեկ անգամ․ եթե կորցնեք, ստեղծեք նորը բանալու կոճակով։</value>
+  </data>
+  <data name="ComputerServerUrl" xml:space="preserve">
+    <value>Կայքի հասցե</value>
+  </data>
+  <data name="ComputerToken" xml:space="preserve">
+    <value>Թոքեն</value>
+  </data>
+  <data name="ComputerRenewToken" xml:space="preserve">
+    <value>Նոր թոքեն</value>
+  </data>
+  <data name="ComputerRenewConfirm" xml:space="preserve">
+    <value>Ստեղծե՞լ նոր թոքեն։ ՀՀ-ի ծրագիրը կդադարի աշխատել, մինչև չմուտքագրեք նորը։</value>
+  </data>
+  <data name="DocsIntegrationComputer" xml:space="preserve">
+    <value>Թույլ է տալիս գործակալներին գործել ձեր Windows ՀՀ-ում՝ Partnerly Agent փոքր ծրագրի միջոցով (պատկերակ tray-ում)։
+Կարգավորում՝ բացեք «Ինտեգրացիաներ», սեղմեք «Ավելացնել» «Համակարգիչ» քարտում և «Ստեղծել»։ Հաջորդ պատուհանում ներբեռնեք ծրագիրը ձեր կարգավորումներով (թոքենը ցուցադրվում է մեկ անգամ), բացեք արխիվը, գործարկեք Partnerly.Agent.exe-ը և սեղմեք «Այո»՝ ձեր Windows հաշվի համար տեղադրելու համար։ Պահանջվում է Windows 10 կամ ավելի նոր, այլ բան պետք չէ։
+Ամեն ինչ որոշվում է ՀՀ-ում՝ կարգավորումների ֆայլում (tray-ի ընտրացանկ, Open settings file)․ allowedFolders - պանակներ, որտեղ քարտերը կարող են կարդալ, գրել, պատճենել, արխիվացնել և բացել․ allowedPrograms - ծրագրեր, որոնք քարտերը կարող են գործարկել կամ փակել․ scriptFolders - .ps1 / .bat / .cmd սկրիպտներով պանակներ․ watchFolders և watchPrograms - ինչի մասին է հայտնվում տրիգերներին․ confirmOps - հրամաններ, որոնք նախ սպասում են սեղմման ՀՀ-ում, օրինակ՝ run_program, lock կամ sleep։ Ինչ ցանկերում չկա, մերժվում է։
+Գործողություններ՝ ծանուցում, հաղորդագրության պատուհան, տեքստի արտասանում, հղում / ֆայլ / պանակ բացել, clipboard-ի պատճենում և ընթերցում, տվյալներ ՀՀ-ի մասին, սքրինշոթ, աշխատո՞ւմ է ծրագիրը, տեքստային ֆայլի ընթերցում և գրառում, պանակի ցանկ, պատճենել, տեղափոխել, արխիվացնել, կցորդը պահել ՀՀ-ում, ֆայլ վերցնել ՀՀ-ից (այն դառնում է կցորդ, ուստի Telegram կամ Drive քարտը կարող է ուղարկել), ծրագիր գործարկել, սկրիպտ գործարկել, ծրագիր փակել, արգելափակել, քուն։ Տրիգերներ՝ նոր ֆայլ ՀՀ-ում, ՀՀ-ը միացավ կամ անջատվեց, ՀՀ-ում ծրագիր է գործարկվել։
+Միտումնավոր չկա՝ կամայական հրամաններ, ստեղների և մկնիկի սեղմումներ, ռեգիստր, ֆայլերի ջնջում։ Եթե ՀՀ-ը անջատված է, քարտը ավարտվում է հստակ սխալով, և գործակալը կարող է օգտագործել սխալի ուղին։</value>
+  </data>
+  <data name="ComputerDownloadAgent" xml:space="preserve">
+    <value>Ներբեռնել միայն ծրագիրը</value>
+  </data>
+  <data name="ComputerDownloadWithSettings" xml:space="preserve">
+    <value>Ներբեռնել ծրագիրը այս կարգավորումներով</value>
+  </data>
+  <data name="ComputerAgentMissing" xml:space="preserve">
+    <value>Ծրագրի ֆայլը այս սերվերում դեռ չկա։ Խնդրեք ադմինիստրատորին հրապարակել այն (tools/publish-agent.ps1)։</value>
+  </data>
+  <data name="ComputerAgentRequirements" xml:space="preserve">
+    <value>Պահանջվում է Windows 10 կամ ավելի նոր։ Այլ բան տեղադրել պետք չէ։</value>
+  </data>
+  <data name="BuilderIntPcAny" xml:space="preserve">
+    <value>Ցանկացածը սրանցից</value>
+  </data>
+  <data name="BuilderIntPcArgumentsHelp" xml:space="preserve">
+    <value>Լրացուցիչ տեքստ ծրագրի անունից հետո, օրինակ՝ --silent կամ ֆայլի անուն։ Կարելի է թողնել դատարկ։</value>
+  </data>
+  <data name="BuilderIntPcAskNote" xml:space="preserve">
+    <value>Այս համակարգիչը կարող է հարցնել սեփականատիրոջը՝ գործարկելուց առաջ։ Միացվում է ծրագրում՝ սկուտեղի պատկերակ &gt; Settings &gt; Ask me first։</value>
+  </data>
+  <data name="BuilderIntPcClipboardTriggerNote" xml:space="preserve">
+    <value>Պետք է միացնել «Report text I copy to the clipboard»-ը ծրագրի կարգավորումներում (սկուտեղի պատկերակ &gt; Settings &gt; Watching)։ Լռելյայն անջատված է, քանի որ պատճենվող տեքստը կարող է անձնական լինել։</value>
+  </data>
+  <data name="BuilderIntPcDelaySeconds" xml:space="preserve">
+    <value>Սպասել նախքան (վայրկյան)</value>
+  </data>
+  <data name="BuilderIntPcDeleteNote" xml:space="preserve">
+    <value>Ֆայլը տեղափոխվում է Աղբարկղ, այն կարելի է վերականգնել։ Թղթապանակները երբեք չեն ջնջվում։ Լռելյայն համակարգիչը նախ հարցնում է սեփականատիրոջը։</value>
+  </data>
+  <data name="BuilderIntPcDiskLowNote" xml:space="preserve">
+    <value>Ծրագիրը հայտնում է սկավառակի մասին, երբ ազատ տեղը փոքր է կարգավորումներում նշված սահմանից (սկուտեղի պատկերակ &gt; Settings &gt; Watching, լռելյայն 5 ԳԲ)։ Հայտնում է մեկ անգամ՝ մինչև տեղը ազատվի։</value>
+  </data>
+  <data name="BuilderIntPcDownloadNameHelp" xml:space="preserve">
+    <value>Թողեք դատարկ՝ անունը հղումից վերցնելու համար։ Ծրագրերն ու սկրիպտերը (.exe, .bat...) երբեք չեն ներբեռնվում։</value>
+  </data>
+  <data name="BuilderIntPcDrive" xml:space="preserve">
+    <value>Միայն այս սկավառակը (տառ)</value>
+  </data>
+  <data name="BuilderIntPcDriveConnected" xml:space="preserve">
+    <value>Սկավառակը միացված է</value>
+  </data>
+  <data name="BuilderIntPcDriveHelp" xml:space="preserve">
+    <value>Տառ, օրինակ՝ E։ Դատարկ = ցանկացած սկավառակ։</value>
+  </data>
+  <data name="BuilderIntPcDriveRemoved" xml:space="preserve">
+    <value>Սկավառակը հեռացված է</value>
+  </data>
+  <data name="BuilderIntPcFileOrFolder" xml:space="preserve">
+    <value>Ֆայլ կամ թղթապանակ</value>
+  </data>
+  <data name="BuilderIntPcHost" xml:space="preserve">
+    <value>Կայք կամ սարք</value>
+  </data>
+  <data name="BuilderIntPcHostHelp" xml:space="preserve">
+    <value>Կայքի անուն կամ IP հասցե, օրինակ՝ google.com կամ 192.168.1.1։</value>
+  </data>
+  <data name="BuilderIntPcIdleEnded" xml:space="preserve">
+    <value>Ինչ-որ մեկը վերադարձել է</value>
+  </data>
+  <data name="BuilderIntPcIdleNote" xml:space="preserve">
+    <value>«Ոչ ոք չկա» նշանակում է, որ ստեղնաշարն ու մկնիկը չեն օգտագործվում։ Ժամանակը սահմանվում է ծրագրի կարգավորումներում (սկուտեղի պատկերակ &gt; Settings &gt; Watching, լռելյայն 10 րոպե)։</value>
+  </data>
+  <data name="BuilderIntPcIdleStarted" xml:space="preserve">
+    <value>Վաղուց ոչ ոք չի դիպել համակարգչին</value>
+  </data>
+  <data name="BuilderIntPcMediaAction" xml:space="preserve">
+    <value>Կոճակ</value>
+  </data>
+  <data name="BuilderIntPcMediaNext" xml:space="preserve">
+    <value>Հաջորդ երգը</value>
+  </data>
+  <data name="BuilderIntPcMediaPlayPause" xml:space="preserve">
+    <value>Նվագարկել / դադար</value>
+  </data>
+  <data name="BuilderIntPcMediaPrevious" xml:space="preserve">
+    <value>Նախորդ երգը</value>
+  </data>
+  <data name="BuilderIntPcMediaStop" xml:space="preserve">
+    <value>Կանգնեցնել</value>
+  </data>
+  <data name="BuilderIntPcMessageBoxNote" xml:space="preserve">
+    <value>Պատուհանը սպասում է սեղմման։ «Այո / Ոչ» դեպքում պատասխանը գալիս է {{...button}} և {{...confirmed}} փոփոխականներով, հետո կարելի է շարունակել պայմանով։</value>
+  </data>
+  <data name="BuilderIntPcModeLogoff" xml:space="preserve">
+    <value>Դուրս գալ Windows-ից (առանց սպասելու)</value>
+  </data>
+  <data name="BuilderIntPcModeRestart" xml:space="preserve">
+    <value>Վերագործարկել</value>
+  </data>
+  <data name="BuilderIntPcModeShutdown" xml:space="preserve">
+    <value>Անջատել</value>
+  </data>
+  <data name="BuilderIntPcOk" xml:space="preserve">
+    <value>OK</value>
+  </data>
+  <data name="BuilderIntPcPowerLow" xml:space="preserve">
+    <value>Մարտկոցը քիչ է (20%, 10%, 5%)</value>
+  </data>
+  <data name="BuilderIntPcPowerPluggedIn" xml:space="preserve">
+    <value>Լիցքավորիչը միացված է</value>
+  </data>
+  <data name="BuilderIntPcPowerUnplugged" xml:space="preserve">
+    <value>Լիցքավորիչը անջատված է</value>
+  </data>
+  <data name="BuilderIntPcSaveNameHelp" xml:space="preserve">
+    <value>Թողեք դատարկ՝ կցորդի սկզբնական անունը պահելու համար։</value>
+  </data>
+  <data name="BuilderIntPcSessionLocked" xml:space="preserve">
+    <value>Էկրանը արգելափակված է</value>
+  </data>
+  <data name="BuilderIntPcSessionSignedIn" xml:space="preserve">
+    <value>Ինչ-որ մեկը մտել է Windows</value>
+  </data>
+  <data name="BuilderIntPcSessionSignedOut" xml:space="preserve">
+    <value>Ինչ-որ մեկը դուրս է եկել Windows-ից</value>
+  </data>
+  <data name="BuilderIntPcSessionSleeping" xml:space="preserve">
+    <value>Համակարգիչը քնում է</value>
+  </data>
+  <data name="BuilderIntPcSessionUnlocked" xml:space="preserve">
+    <value>Էկրանը բացված է</value>
+  </data>
+  <data name="BuilderIntPcSessionWoke" xml:space="preserve">
+    <value>Համակարգիչը արթնացել է</value>
+  </data>
+  <data name="BuilderIntPcShutdownMode" xml:space="preserve">
+    <value>Ինչ անել</value>
+  </data>
+  <data name="BuilderIntPcShutdownNote" xml:space="preserve">
+    <value>Սպասման ընթացքում Windows-ը ցույց է տալիս նախազգուշացում։ Կանգնեցնել կարելի է «Չեղարկել անջատումը» քարտով (կամ համակարգչի մոտ գտնվող մարդը)։</value>
+  </data>
+  <data name="BuilderIntPcUnzipTo" xml:space="preserve">
+    <value>Բացել թղթապանակում</value>
+  </data>
+  <data name="BuilderIntPcUrl" xml:space="preserve">
+    <value>Հղում ֆայլին</value>
+  </data>
+  <data name="BuilderIntPcUrlHelp" xml:space="preserve">
+    <value>Վեբ հասցե, որը սկսվում է http:// կամ https://-ով։ Մինչև 100 ՄԲ։</value>
+  </data>
+  <data name="BuilderIntPcVolumeAction" xml:space="preserve">
+    <value>Ինչ անել</value>
+  </data>
+  <data name="BuilderIntPcVolumeDown" xml:space="preserve">
+    <value>Ավելի կամաց</value>
+  </data>
+  <data name="BuilderIntPcVolumeMute" xml:space="preserve">
+    <value>Անջատել / միացնել ձայնը</value>
+  </data>
+  <data name="BuilderIntPcVolumeSteps" xml:space="preserve">
+    <value>Քանի քայլ</value>
+  </data>
+  <data name="BuilderIntPcVolumeStepsHelp" xml:space="preserve">
+    <value>Մեկ քայլը ձայնի մոտ 2%-ն է։ 1-ից 25։ Անջատման դեպքում պետք չէ։</value>
+  </data>
+  <data name="BuilderIntPcVolumeUp" xml:space="preserve">
+    <value>Ավելի բարձր</value>
+  </data>
+  <data name="BuilderIntPcWhat" xml:space="preserve">
+    <value>Ինչ է տեղի ունեցել</value>
+  </data>
+  <data name="BuilderIntPcNotifyIntro" xml:space="preserve">
+    <value>Ցույց է տալիս փոքր հաղորդագրություն համակարգչի ժամացույցի մոտ։</value>
+  </data>
+  <data name="BuilderIntPcMessageBoxIntro" xml:space="preserve">
+    <value>Բացում է պատուհան էկրանի կենտրոնում և սպասում, մինչև ինչ-որ մեկը սեղմի կոճակը։</value>
+  </data>
+  <data name="BuilderIntPcSpeakIntro" xml:space="preserve">
+    <value>Համակարգիչը բարձրաձայն կարդում է տեքստը։</value>
+  </data>
+  <data name="BuilderIntPcOpenIntro" xml:space="preserve">
+    <value>Բացում է վեբ էջ, ֆայլ կամ թղթապանակ Windows-ի ընտրած ծրագրով։ Ծրագրերն ու սկրիպտերը այսպես չեն բացվում։</value>
+  </data>
+  <data name="BuilderIntPcClipboardSetIntro" xml:space="preserve">
+    <value>Տեքստը դնում է համակարգչի clipboard-ում, այն կարելի է տեղադրել Ctrl+V-ով։</value>
+  </data>
+  <data name="BuilderIntPcClipboardGetIntro" xml:space="preserve">
+    <value>Կարդում է տեքստը, որը հիմա համակարգչի clipboard-ում է։ Այն գալիս է {{...text}}-ով։</value>
+  </data>
+  <data name="BuilderIntPcSystemInfoIntro" xml:space="preserve">
+    <value>Կարդում է տվյալներ համակարգչի մասին՝ անուն, Windows, հիշողություն, սկավառակի ազատ տեղ, մարտկոց։</value>
+  </data>
+  <data name="BuilderIntPcScreenshotIntro" xml:space="preserve">
+    <value>Լուսանկարում է էկրանը և պահում որպես կցորդ, որը հաջորդ քարտերով կարելի է ուղարկել։</value>
+  </data>
+  <data name="BuilderIntPcActiveWindowIntro" xml:space="preserve">
+    <value>Ասում է, թե որ պատուհանն է հիմա առջևում՝ վերնագիրը և ծրագիրը։</value>
+  </data>
+  <data name="BuilderIntPcListProgramsIntro" xml:space="preserve">
+    <value>Թվարկում է համակարգչում բաց պատուհան ունեցող ծրագրերը։</value>
+  </data>
+  <data name="BuilderIntPcNetworkInfoIntro" xml:space="preserve">
+    <value>Հայտնում է համակարգչի անունը, կա արդյոք ցանց և IP հասցեները։</value>
+  </data>
+  <data name="BuilderIntPcPingHostIntro" xml:space="preserve">
+    <value>Ստուգում է համակարգչից՝ պատասխանո՞ւմ է արդյոք կայքը կամ սարքը և որքան արագ։</value>
+  </data>
+  <data name="BuilderIntPcProcessRunningIntro" xml:space="preserve">
+    <value>Ստուգում է՝ գործարկվա՞ծ է արդյոք ծրագիրը։ Արդյունքը հարմար է օգտագործել պայմանում։</value>
+  </data>
+  <data name="BuilderIntPcReadFileIntro" xml:space="preserve">
+    <value>Կարդում է տեքստային ֆայլը համակարգչից {{...text}}-ի մեջ։ Աշխատում են միայն ծրագրի կարգավորումներում թույլատրված թղթապանակները։</value>
+  </data>
+  <data name="BuilderIntPcWriteFileIntro" xml:space="preserve">
+    <value>Գրում է տեքստը համակարգչի ֆայլում (նոր, կամ փոխարինում / լրացնում է գոյություն ունեցողը)։</value>
+  </data>
+  <data name="BuilderIntPcFileInfoIntro" xml:space="preserve">
+    <value>Ստուգում է՝ գոյություն ունի՞ արդյոք ֆայլը կամ թղթապանակը, և տալիս է չափն ու ամսաթվերը։</value>
+  </data>
+  <data name="BuilderIntPcListFolderIntro" xml:space="preserve">
+    <value>Թվարկում է թղթապանակի ֆայլերը (մինչև 200)։ Հարմար է գտնելու՝ ինչ մշակել հետո։</value>
+  </data>
+  <data name="BuilderIntPcCreateFolderIntro" xml:space="preserve">
+    <value>Ստեղծում է թղթապանակ (բացակայող վերին թղթապանակների հետ)։ Եթե արդեն կա, ոչինչ չի լինում։</value>
+  </data>
+  <data name="BuilderIntPcCopyFileIntro" xml:space="preserve">
+    <value>Պատճենում է ֆայլը համակարգչի մեկ այլ տեղ։</value>
+  </data>
+  <data name="BuilderIntPcMoveFileIntro" xml:space="preserve">
+    <value>Տեղափոխում է ֆայլը մեկ այլ թղթապանակ կամ վերանվանում է այն։</value>
+  </data>
+  <data name="BuilderIntPcDeleteFileIntro" xml:space="preserve">
+    <value>Ֆայլը տեղափոխում է Աղբարկղ։</value>
+  </data>
+  <data name="BuilderIntPcZipFolderIntro" xml:space="preserve">
+    <value>Թղթապանակը փաթեթավորում է մեկ .zip ֆայլի մեջ։</value>
+  </data>
+  <data name="BuilderIntPcUnzipIntro" xml:space="preserve">
+    <value>.zip ֆայլը բացում է թղթապանակի մեջ (մինչև 500 ՄԲ)։</value>
+  </data>
+  <data name="BuilderIntPcSaveAttachmentIntro" xml:space="preserve">
+    <value>Պահում է համակարգչում Partnerly-ում գտնվող ֆայլը (օրինակ՝ Telegram-ից կամ Gmail-ից)։ Մինչև 8 ՄԲ։</value>
+  </data>
+  <data name="BuilderIntPcGetFileIntro" xml:space="preserve">
+    <value>Համակարգչից վերցնում է ֆայլը Partnerly՝ որպես կցորդ (մինչև 8 ՄԲ), որպեսզի հաջորդ քարտերը կարողանան ուղարկել։</value>
+  </data>
+  <data name="BuilderIntPcDownloadUrlIntro" xml:space="preserve">
+    <value>Համակարգիչը ինտերնետից ֆայլ է ներբեռնում թղթապանակ։</value>
+  </data>
+  <data name="BuilderIntPcRunProgramIntro" xml:space="preserve">
+    <value>Գործարկում է ծրագիր՝ ծրագրի կարգավորումներում թույլատրվածների ցանկից։</value>
+  </data>
+  <data name="BuilderIntPcRunScriptIntro" xml:space="preserve">
+    <value>Գործարկում է սկրիպտ (.ps1, .bat, .cmd)՝ ծրագրի կարգավորումներում թույլատրված սկրիպտների թղթապանակից։</value>
+  </data>
+  <data name="BuilderIntPcCloseProgramIntro" xml:space="preserve">
+    <value>Քաղաքավարի փակում է ծրագրի պատուհանը (ինչպես խաչը)։ Ոչինչ բռնի չի կանգնեցվում։</value>
+  </data>
+  <data name="BuilderIntPcLockIntro" xml:space="preserve">
+    <value>Արգելափակում է էկրանը։ Շարունակելու համար գաղտնաբառ է պետք։</value>
+  </data>
+  <data name="BuilderIntPcSleepIntro" xml:space="preserve">
+    <value>Համակարգիչը քնեցնում է։ Այն օֆլայն կլինի, մինչև արթնանա։</value>
+  </data>
+  <data name="BuilderIntPcDisplayOffIntro" xml:space="preserve">
+    <value>Անջատում է մոնիտորը։ Համակարգիչը շարունակում է աշխատել, ստեղնը կամ մկնիկը այն միացնում են։</value>
+  </data>
+  <data name="BuilderIntPcShutdownIntro" xml:space="preserve">
+    <value>Անջատում է համակարգիչը, վերագործարկում կամ դուրս է գալիս Windows-ից։</value>
+  </data>
+  <data name="BuilderIntPcCancelShutdownIntro" xml:space="preserve">
+    <value>Չեղարկում է «Անջատել» քարտով նախատեսված անջատումը կամ վերագործարկումը։</value>
+  </data>
+  <data name="BuilderIntPcVolumeIntro" xml:space="preserve">
+    <value>Ձայնը դարձնում է ավելի բարձր կամ ցածր, կամ անջատում է։</value>
+  </data>
+  <data name="BuilderIntPcMediaIntro" xml:space="preserve">
+    <value>Սեղմում է երաժշտության / տեսանյութի կոճակ՝ նվագարկել, դադար, հաջորդ երգ...</value>
+  </data>
+  <data name="BuilderIntPcFileCreatedIntro" xml:space="preserve">
+    <value>Գործարկում է գործակալին, երբ հսկվող թղթապանակում նոր ֆայլ է հայտնվում։</value>
+  </data>
+  <data name="BuilderIntPcFileChangedIntro" xml:space="preserve">
+    <value>Գործարկում է գործակալին, երբ հսկվող թղթապանակի ֆայլը պահվում է փոփոխություններով։</value>
+  </data>
+  <data name="BuilderIntPcFileDeletedIntro" xml:space="preserve">
+    <value>Գործարկում է գործակալին, երբ ֆայլը անհետանում է հսկվող թղթապանակից։</value>
+  </data>
+  <data name="BuilderIntPcProgramStartedIntro" xml:space="preserve">
+    <value>Գործարկում է գործակալին, երբ համակարգչում ծրագիր է գործարկվում։</value>
+  </data>
+  <data name="BuilderIntPcProgramStoppedIntro" xml:space="preserve">
+    <value>Գործարկում է գործակալին, երբ համակարգչում ծրագիր է փակվում։</value>
+  </data>
+  <data name="BuilderIntPcStatusChangedIntro" xml:space="preserve">
+    <value>Գործարկում է գործակալին, երբ համակարգիչը միանում է (ծրագիրը կապվել է) կամ անջատվում։</value>
+  </data>
+  <data name="BuilderIntPcSessionChangedIntro" xml:space="preserve">
+    <value>Գործարկում է գործակալին էկրանի արգելափակման / բացման, Windows-ում մուտքի կամ ելքի, համակարգչի քնելու և արթնանալու դեպքում։</value>
+  </data>
+  <data name="BuilderIntPcClipboardChangedIntro" xml:space="preserve">
+    <value>Գործարկում է գործակալին, երբ համակարգչում նոր տեքստ է պատճենվում։ Պատճենված տեքստը գալիս է {{...text}}-ով։</value>
+  </data>
+  <data name="BuilderIntPcPowerChangedIntro" xml:space="preserve">
+    <value>Գործարկում է գործակալին լիցքավորիչը միացնելիս / անջատելիս կամ մարտկոցը քիչ լինելիս։</value>
+  </data>
+  <data name="BuilderIntPcDriveChangedIntro" xml:space="preserve">
+    <value>Գործարկում է գործակալին, երբ USB կրիչ կամ այլ սկավառակ է միացվում կամ հեռացվում։</value>
+  </data>
+  <data name="BuilderIntPcIdleChangedIntro" xml:space="preserve">
+    <value>Գործարկում է գործակալին, երբ համակարգիչը երկար ժամանակ ոչ ոք չի օգտագործում, կամ երբ ինչ-որ մեկը վերադառնում է։</value>
+  </data>
+  <data name="BuilderIntPcDiskLowIntro" xml:space="preserve">
+    <value>Գործարկում է գործակալին, երբ համակարգչի սկավառակի ազատ տեղը սպառվում է։</value>
+  </data>
+  <data name="NodeTypeComputerCreateFolder" xml:space="preserve">
+    <value>Համակարգիչ՝ ստեղծել թղթապանակ</value>
+  </data>
+  <data name="NodeTypeComputerDeleteFile" xml:space="preserve">
+    <value>Համակարգիչ՝ ֆայլը Աղբարկղ</value>
+  </data>
+  <data name="NodeTypeComputerFileInfo" xml:space="preserve">
+    <value>Համակարգիչ՝ ստուգել ֆայլը</value>
+  </data>
+  <data name="NodeTypeComputerUnzip" xml:space="preserve">
+    <value>Համակարգիչ՝ բացել արխիվը</value>
+  </data>
+  <data name="NodeTypeComputerListPrograms" xml:space="preserve">
+    <value>Համակարգիչ՝ բաց ծրագրեր</value>
+  </data>
+  <data name="NodeTypeComputerVolume" xml:space="preserve">
+    <value>Համակարգիչ՝ ձայն</value>
+  </data>
+  <data name="NodeTypeComputerMedia" xml:space="preserve">
+    <value>Համակարգիչ՝ երաժշտության կոճակներ</value>
+  </data>
+  <data name="NodeTypeComputerDisplayOff" xml:space="preserve">
+    <value>Համակարգիչ՝ անջատել էկրանը</value>
+  </data>
+  <data name="NodeTypeComputerShutdown" xml:space="preserve">
+    <value>Համակարգիչ՝ անջատել / վերագործարկել</value>
+  </data>
+  <data name="NodeTypeComputerCancelShutdown" xml:space="preserve">
+    <value>Համակարգիչ՝ չեղարկել անջատումը</value>
+  </data>
+  <data name="NodeTypeComputerActiveWindow" xml:space="preserve">
+    <value>Համակարգիչ՝ առջևի պատուհանը</value>
+  </data>
+  <data name="NodeTypeComputerNetworkInfo" xml:space="preserve">
+    <value>Համակարգիչ՝ ցանցի տվյալներ</value>
+  </data>
+  <data name="NodeTypeComputerPingHost" xml:space="preserve">
+    <value>Համակարգիչ՝ ping</value>
+  </data>
+  <data name="NodeTypeComputerDownloadUrl" xml:space="preserve">
+    <value>Համակարգիչ՝ ներբեռնել ֆայլ</value>
+  </data>
+  <data name="NodeTypeComputerFileChanged" xml:space="preserve">
+    <value>Համակարգիչ՝ ֆայլը փոխվել է</value>
+  </data>
+  <data name="NodeTypeComputerFileDeleted" xml:space="preserve">
+    <value>Համակարգիչ՝ ֆայլը ջնջվել է</value>
+  </data>
+  <data name="NodeTypeComputerProgramStopped" xml:space="preserve">
+    <value>Համակարգիչ՝ ծրագիրը փակվել է</value>
+  </data>
+  <data name="NodeTypeComputerSessionChanged" xml:space="preserve">
+    <value>Համակարգիչ՝ արգելափակում / քուն</value>
+  </data>
+  <data name="NodeTypeComputerClipboardChanged" xml:space="preserve">
+    <value>Համակարգիչ՝ clipboard-ը փոխվել է</value>
+  </data>
+  <data name="NodeTypeComputerPowerChanged" xml:space="preserve">
+    <value>Համակարգիչ՝ լիցքավորիչ / մարտկոց</value>
+  </data>
+  <data name="NodeTypeComputerDriveChanged" xml:space="preserve">
+    <value>Համակարգիչ՝ USB սկավառակ</value>
+  </data>
+  <data name="NodeTypeComputerIdleChanged" xml:space="preserve">
+    <value>Համակարգիչ՝ անգործություն / վերադարձ</value>
+  </data>
+  <data name="NodeTypeComputerDiskLow" xml:space="preserve">
+    <value>Համակարգիչ՝ սկավառակի տեղը քիչ է</value>
+  </data>
+  <data name="ComputerPaused" xml:space="preserve">
+    <value>Դադարեցված է համակարգչում</value>
+  </data>
+  <data name="ComputerUninstalled" xml:space="preserve">
+    <value>Ծրագիրը հեռացված է</value>
+  </data>
+  <data name="BuilderPcAllowedFolders" xml:space="preserve">
+    <value>Այս համակարգչում թույլատրված թղթապանակներ</value>
+  </data>
+  <data name="BuilderPcAllowedPrograms" xml:space="preserve">
+    <value>Այս համակարգչում թույլատրված ծրագրեր</value>
+  </data>
+  <data name="ComputerWait" xml:space="preserve">
+    <value>Սպասում ենք ծրագրի միացմանը...</value>
+  </data>
+  <data name="ComputerConnectedOk" xml:space="preserve">
+    <value>Միացված է։ «{0}» առցանց է։ Այս պատուհանը կարելի է փակել։</value>
+  </data>
+  <data name="ComputerWaitLong" xml:space="preserve">
+    <value>Դեռ ոչինչ։ Ստուգեք, որ ծրագիրը գործարկված է (պատկերակը ժամացույցի մոտ) և բացեք «Ինչու չի միանում» ցանկում՝ համակարգչի տակ։</value>
+  </data>
+  <data name="ComputerTroubleTitle" xml:space="preserve">
+    <value>Ինչու չի միանում</value>
+  </data>
+  <data name="ComputerTrouble1" xml:space="preserve">
+    <value>Ծրագիրը գործարկված չէ՝ փնտրեք նրա պատկերակը ժամացույցի մոտ (սեղմեք փոքր սլաքը, եթե թաքնված է)։ Եթե չկա, նորից գործարկեք Partnerly.Agent.exe-ը։</value>
+  </data>
+  <data name="ComputerTrouble2" xml:space="preserve">
+    <value>Այն անջատված է՝ աջ սեղմեք պատկերակին և նշեք «Let Partnerly use this computer»։ Այդ դեպքում այստեղ գրված է «Դադարեցված է համակարգչում»։</value>
+  </data>
+  <data name="ComputerTrouble3" xml:space="preserve">
+    <value>Համակարգիչը քնած է, անջատված է կամ ինտերնետ չկա։</value>
+  </data>
+  <data name="ComputerTrouble4" xml:space="preserve">
+    <value>Թոքենը թարմացվել է (բանալիով կոճակ) կամ այս համակարգիչը ջնջվել և նորից ավելացվել է՝ ներբեռնեք ծրագիրը նոր կարգավորումներով և գործարկեք, կամ ընտրեք «Connection...» պատկերակի ցանկում։</value>
+  </data>
+  <data name="ComputerTrouble5" xml:space="preserve">
+    <value>Ծրագիրը հեռացվել է համակարգչից (այստեղ գրված է «Ծրագիրը հեռացված է»)՝ ներբեռնեք և նորից տեղադրեք։</value>
+  </data>
+  <data name="ComputerTrouble6" xml:space="preserve">
+    <value>Չի ստացվում՞։ Աջ սեղմեք պատկերակին և ընտրեք «Check connection»՝ ծրագիրը պարզ բառերով կասի, թե ինչն է սխալ։</value>
+  </data>
+  <data name="ComputerTokenStep1" xml:space="preserve">
+    <value>Սեղմեք ներքևի կոճակը՝ ծրագիրը ձեր կարգավորումներով ներբեռնելու համար (zip ֆայլ)։</value>
+  </data>
+  <data name="ComputerTokenStep2" xml:space="preserve">
+    <value>Բացեք «Ներբեռնումներ» թղթապանակը, աջ սեղմեք zip-ին և ընտրեք «Extract All»։ Ծրագիրը zip-ի ներսից մի գործարկեք։</value>
+  </data>
+  <data name="ComputerTokenStep3" xml:space="preserve">
+    <value>Բացեք նոր թղթապանակը, գործարկեք Partnerly.Agent.exe-ը և սեղմեք «Այո»։ Ծրագիրը կտեղադրվի ձեր Windows հաշվի համար։</value>
+  </data>
+  <data name="ComputerTokenStep4" xml:space="preserve">
+    <value>Սպասեք այստեղ․ երբ համակարգիչը միանա, այս պատուհանը կդառնա կանաչ։</value>
+  </data>
+  <data name="DocsIntegrationComputerMore" xml:space="preserve">
+    <value>Ծրագիրը գտնվում է սկուտեղում (ժամացույցի մոտ)՝ կանաչ կետը նշանակում է, որ միացված է։ Աջ սեղմումով կարելի է միացնել կամ անջատել Partnerly-ի հասանելիությունը, փոխել թղթապանակները, ծրագրերը և հսկումը «Settings»-ում, ստուգել կապը կամ հեռացնել ծրագիրը (կարելի է նաև Windows Settings &gt; Apps-ում)։ Տրիգերներ՝ նոր, փոփոխված կամ ջնջված ֆայլ, ծրագրի գործարկում կամ փակում, էկրանի արգելափակում և բացում, համակարգչի արթնացում, USB սկավառակ, լիցքավորիչ և մարտկոց, ոչ ոք չկա համակարգչի մոտ, սկավառակի տեղը քիչ է, clipboard-ի տեքստ։ Գործողություններ՝ ֆայլեր (կարդալ, գրել, պատճենել, տեղափոխել, zip, բացել, Աղբարկղ, ներբեռնել), ծրագրեր և սկրիպտեր, ծանուցումներ և պատուհաններ, ձայն և երաժշտության կոճակներ, էկրանի նկար, արգելափակում, քուն, անջատում։ Եթե համակարգիչը անցանց է, բացեք «Ինչու չի միանում» ցանկում՝ նրա տակ։</value>
+  </data>
+  <data name="ComputerErrOffline" xml:space="preserve">
+    <value>Համակարգիչը անցանց է։ Գործարկեք դրա վրա Partnerly Agent-ը և կրկին փորձեք։</value>
+  </data>
+  <data name="ComputerErrTimeout" xml:space="preserve">
+    <value>Համակարգիչը ժամանակին չպատասխանեց։</value>
+  </data>
+  <data name="ComputerErrWentOffline" xml:space="preserve">
+    <value>Համակարգիչը անջատվեց հրամանի կատարման ժամանակ։</value>
+  </data>
+  <data name="ComputerErrRefused" xml:space="preserve">
+    <value>Համակարգիչը մերժեց հրամանը։</value>
+  </data>
 </root>

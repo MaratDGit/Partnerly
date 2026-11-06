@@ -12,7 +12,8 @@
      data-confirm-delete="@Localizer["IntegrationDeleteConfirm"]"
      data-no-chats="@Localizer["IntegrationNoChats"]"
      data-use-chat="@Localizer["IntegrationUseChat"]"
-     data-copied="@Localizer["Copied"]">
+     data-copied="@Localizer["Copied"]"
+     data-confirm-renew="@Localizer["ComputerRenewConfirm"]">
     @Html.AntiForgeryToken()
 
     <header class="integrations-head">
@@ -111,6 +112,26 @@
                 <li>@Localizer["IntegrationWhatsAppFeature2"]</li>
             </ul>
             @await Html.PartialAsync("~/Views/Integrations/_ConnectionList.cshtml", Model.WhatsApp)
+        </section>
+
+        @* ---------- Computer ---------- *@
+        <section class="integrations-card" data-service="computer">
+            <button type="button" class="btn btn-primary integrations-connect" data-int-open="computer">
+                <i class="bx bx-plus" aria-hidden="true"></i> @Localizer["IntegrationConnect"]
+            </button>
+            <div class="integrations-card-head">
+                <span class="integrations-logo is-computer"><i class="bx bx-desktop" aria-hidden="true"></i></span>
+                <div>
+                    <h2>@Localizer["ComputerTitle"]</h2>
+                    <p>@Localizer["IntegrationComputerIntro"]</p>
+                </div>
+            </div>
+            <ul class="integrations-features">
+                <li><i class="bx bx-folder-open" aria-hidden="true"></i> @Localizer["IntegrationComputerFeature1"]</li>
+                <li><i class="bx bx-bell" aria-hidden="true"></i> @Localizer["IntegrationComputerFeature2"]</li>
+                <li><i class="bx bx-shield-quarter" aria-hidden="true"></i> @Localizer["IntegrationComputerFeature3"]</li>
+            </ul>
+            @await Html.PartialAsync("~/Views/Integrations/_ConnectionList.cshtml", Model.Computers)
         </section>
     </div>
 
@@ -217,6 +238,71 @@
                 <button type="submit" class="btn btn-primary">@Localizer["IntegrationConnect"]</button>
             </footer>
         </form>
+    </div>
+
+    <div class="integrations-overlay" data-int-dialog="computer" hidden aria-hidden="true">
+        <form class="integrations-dialog" method="post" asp-action="ConnectComputer" data-int-form>
+            <header>
+                <span class="integrations-logo is-computer"><i class="bx bx-desktop" aria-hidden="true"></i></span>
+                <h3>@Localizer["IntegrationConnectComputer"]</h3>
+                <button type="button" class="integrations-close" data-int-close aria-label="@Localizer["Close"]"><i class="bx bx-x"></i></button>
+            </header>
+            <ol class="integrations-steps">
+                <li>@Localizer["IntegrationComputerStep1"]</li>
+                <li>@Localizer["IntegrationComputerStep2"]</li>
+                <li>@Localizer["IntegrationComputerStep3"]</li>
+            </ol>
+            <label class="form-label" for="pcName">@Localizer["Name"]</label>
+            <input class="form-control" id="pcName" name="name" placeholder="@Localizer["ComputerDefaultName"]" />
+            <div class="integrations-note">
+                @Localizer["ComputerAgentRequirements"]
+                @if (Model.AgentAvailable)
+                {
+                    <a class="integrations-link" asp-action="DownloadAgent"><i class="bx bx-download" aria-hidden="true"></i> @Localizer["ComputerDownloadAgent"]</a>
+                }
+                else
+                {
+                    <span class="integrations-error">@Localizer["ComputerAgentMissing"]</span>
+                }
+            </div>
+            <footer>
+                <button type="button" class="btn btn-outline-secondary" data-int-close>@Localizer["Cancel"]</button>
+                <button type="submit" class="btn btn-primary">@Localizer["IntegrationComputerCreate"]</button>
+            </footer>
+        </form>
+    </div>
+
+    <div class="integrations-overlay" data-int-dialog="computer-token" hidden aria-hidden="true">
+        <div class="integrations-dialog" data-connected-text="@Localizer["ComputerConnectedOk"]" data-wait-long-text="@Localizer["ComputerWaitLong"]">
+            <header>
+                <span class="integrations-logo is-computer"><i class="bx bx-key" aria-hidden="true"></i></span>
+                <h3>@Localizer["ComputerTokenTitle"]</h3>
+                <button type="button" class="integrations-close" data-int-close aria-label="@Localizer["Close"]"><i class="bx bx-x"></i></button>
+            </header>
+            <ol class="integrations-steps">
+                <li>@Localizer["ComputerTokenStep1"]</li>
+                <li>@Localizer["ComputerTokenStep2"]</li>
+                <li>@Localizer["ComputerTokenStep3"]</li>
+                <li>@Localizer["ComputerTokenStep4"]</li>
+            </ol>
+            <div class="integrations-wait" data-int-wait role="status">
+                <i class="bx bx-loader-alt bx-spin" aria-hidden="true"></i> <span data-int-wait-text>@Localizer["ComputerWait"]</span>
+            </div>
+            <p class="integrations-muted">@Localizer["ComputerTokenHelp"]</p>
+            <div class="integrations-webhook">
+                <div><span>@Localizer["ComputerServerUrl"]</span><code data-int-copy data-int-server-url></code></div>
+                <div><span>@Localizer["ComputerToken"]</span><code data-int-copy data-int-token></code></div>
+            </div>
+            <footer>
+                @if (Model.AgentAvailable)
+                {
+                    <button type="button" class="btn btn-outline-primary" data-int-download>
+                        <i class="bx bx-download" aria-hidden="true"></i> @Localizer["ComputerDownloadWithSettings"]
+                    </button>
+                }
+                <button type="button" class="btn btn-primary" data-int-close>@Localizer["Close"]</button>
+            </footer>
+        </div>
     </div>
 
     <div class="integrations-overlay" data-int-dialog="chats" hidden aria-hidden="true">

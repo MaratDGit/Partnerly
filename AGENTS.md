@@ -87,6 +87,7 @@ Partnerly — монолитное веб-приложение ASP.NET Core MVC 
 - События: внутрипроцессный `IEventBus` / `EventBus`; `AutomationEventBridge` подписан на те же события и запускает автоматизации.
 - Модуль Automation (меню «Agents»): код в `Partnerly/Automation` (свой `AutomationController` в `Automation/Web`), hosted `AutomationWorker`, хаб `/automationHub`, редактор Drawflow на `/Automation/Builder/{id}`. Подробности: `docs/ai/Automation/ARCHITECTURE.md`.
 - Интеграции (Telegram, Google Sheets / Gmail / Drive, WhatsApp): `Partnerly/Integrations`, подключаются к Automation через `IAutomationModule`, страница `/Integrations`. Новые внешние сервисы добавлять туда же по тому же образцу. Подробности: `docs/ai/Integrations/INTEGRATIONS-PLAN.md`.
+- Компьютер пользователя (`Partnerly/Computer`, программа `Partnerly.Agent` для Windows): подключение вида `computer` (без своей таблицы), хаб `/computerHub` по токену, карточки `computer.*`. Подробности: `docs/ai/Computer/COMPUTER-AGENT.md`.
 - UI: Razor, layout по умолчанию `_ContentNavbarLayout`, локализация `en` / `ru` / `hy`.
 - Платежи (`Payment`) и транзакции (`Transaction`) есть в модели, контроллеров под них нет.
 
@@ -181,6 +182,7 @@ dotnet build "Partnerly.sln"
 | `docs/ai/Automation/MASTER-SPECIFICATION.md` | Спецификация Universal Automation Platform |
 | `docs/ai/Automation/PHASE-1-ANALYSIS.md` | Анализ PHASE 1 и предложение архитектуры |
 | `docs/ai/Automation/ARCHITECTURE.md` | Архитектура модуля Automation (PHASE 2) |
+| `docs/ai/Computer/COMPUTER-AGENT.md` | Карточки действий на ПК пользователя: программа `Partnerly.Agent`, хаб `/computerHub`, безопасность, настройки (`Partnerly/Computer`) |
 | `docs/ai/Integrations/INTEGRATIONS-PLAN.md` | План интеграций Telegram / Google Sheets / Gmail / Drive / WhatsApp (`Partnerly/Integrations`) — пошаговые задачи и статусы |
 | `docs/reports/` | Готовые отчёты |
 | `.cursor/rules/*.mdc` | Краткие правила для Cursor; дублируют этот файл, при изменении правил держать в согласии |

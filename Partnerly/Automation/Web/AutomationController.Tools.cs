@@ -149,7 +149,7 @@ namespace Partnerly.Automation.Web
             {
                 success = true,
                 status = result.Status,
-                error = result.Error,
+                error = Resolve(result.Error),
                 port = result.Port,
                 output = result.Output,
                 config = preview,

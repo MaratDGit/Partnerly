@@ -25,6 +25,19 @@
             return { key: key, type: "number", min: 1, label: t(labelKey, fallback) };
         }
 
+        // A Yes / No choice stored as "true" / "false".
+        function yesNo(key, labelKey, fallback) {
+            return {
+                key: key,
+                type: "select",
+                label: t(labelKey, fallback),
+                options: [
+                    { value: "false", label: t("intNo", "No") },
+                    { value: "true", label: t("intYes", "Yes") }
+                ]
+            };
+        }
+
         function note(helpKey) {
             return { type: "note", help: t(helpKey, "") };
         }
@@ -34,7 +47,7 @@
             text("sheet", "intSheet", "Sheet (tab)", "intSheetHelp", true)
         ];
 
-        return {
+        var forms = {
             // ---------- Telegram ----------
             "telegram.send_message": [
                 connection("telegram"),
@@ -344,7 +357,16 @@
                 connection("whatsapp"),
                 text("textContains", "intTextContains", "Text contains"),
                 note("intWhatsAppTriggerHelp")
-            ]
+            ],
+
+            // Computer cards live in builder-forms-computer.js
         };
+
+        var helpers = { connection: connection, text: text, area: area, number: number, yesNo: yesNo, note: note };
+        if (typeof window.partnerlyComputerForms === "function") {
+            Object.assign(forms, window.partnerlyComputerForms(t, helpers));
+        }
+
+        return forms;
     };
 })();

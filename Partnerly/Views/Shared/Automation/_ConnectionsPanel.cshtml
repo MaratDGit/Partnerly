@@ -24,7 +24,7 @@
             <ul class="automation-int-list">
                 @foreach (var item in Model.IntegrationConnections)
                 {
-                    var icon = item.Kind switch { "telegram" => "bxl-telegram", "google" => "bxl-google", "microsoft" => "bxl-microsoft", "whatsapp" => "bxl-whatsapp", _ => "bx-plug" };
+                    var icon = item.Kind switch { "telegram" => "bxl-telegram", "google" => "bxl-google", "microsoft" => "bxl-microsoft", "whatsapp" => "bxl-whatsapp", "computer" => "bx-desktop", _ => "bx-plug" };
                     <li>
                         <span class="automation-int-icon is-@item.Kind"><i class="bx @icon" aria-hidden="true"></i></span>
                         <span class="automation-int-name">@item.Name</span>
