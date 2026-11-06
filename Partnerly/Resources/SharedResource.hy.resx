@@ -5035,4 +5035,46 @@ User, խումբ և նամակի կաղապար այստեղ չեն ստեղծվ
   <data name="BuilderInspector" xml:space="preserve">
     <value>Ինսպեկտոր</value>
   </data>
+  <data name="DocsIntegrationsTitle" xml:space="preserve">
+    <value>Ինտեգրացիաներ</value>
+  </data>
+  <data name="DocsIntegrationsConnect" xml:space="preserve">
+    <value>Բացեք «Ինտեգրացիաներ» բաժինը մենյուից և սեղմեք «Միացնել» ցանկալի ծառայության վրա։ Telegram-ը պահանջում է բոտի թոկենը @BotFather-ից։ Google-ը և Outlook-ը կբացեն մատակարարի մուտքի էջը և կխնդրեն ձեր համաձայնությունը։ Գաղտնիքները պահվում են գաղտնագրված և այլևս չեն ցուցադրվում։ Քարտում ընտրեք միացումը «Միացում» դաշտում․ ցանկում միայն ձեր միացումներն են։ Փորձնական գործարկումը հաղորդագրություններ չի ուղարկում և ծառայության մեջ ոչինչ չի գրում։ Եթե ծառայության մոտ երևում է «Վերամիացնել», միացրեք այն նորից։ Քարտի արդյունքը հաջորդ քարտերում կարդացվում է որպես {{steps.ՔարտիԱնուն.result.…}}․ ստորև նշված է միայն result մասը։</value>
+  </data>
+  <data name="DocsIntegrationTelegram" xml:space="preserve">
+    <value>Գործողություններ․ ուղարկել հաղորդագրություն (չատի id, տեքստ, նշագրման ռեժիմ) և ուղարկել ֆայլ (Partnerly-ի կցորդ)։ Տրիգեր․ նոր հաղորդագրություն բոտին, հասանելի են {{trigger.text}}, {{trigger.chatId}}, {{trigger.fromName}}, {{trigger.fromUsername}}, {{trigger.date}}։ Ուղարկելուց հետո հասանելի է result.messageId։ Բոտը հարցվում է պարբերաբար, հանրային հասցե պետք չէ։ Լռելյայն չատը նշվում է «Ինտեգրացիաներ» էջում։</value>
+  </data>
+  <data name="DocsIntegrationSheets" xml:space="preserve">
+    <value>Գործողություններ․ ավելացնել տող, գտնել տողեր, թարմացնել տողը, ստանալ տողը, կարդալ տիրույթ, թարմացնել բջիջ, մաքրել տիրույթ, ջնջել տողը, ստեղծել աղյուսակ, ավելացնել թերթ։ Տրիգեր․ նոր տող։ Աղյուսակի id-ն հասցեի երկար մասն է /d/ և /edit միջև։ Արժեքները դրվում են սյունակներով՝ հերթականությամբ։ Արդյունքներ․ result.rowNumber, result.count, result.first.rowNumber, result.values, result.url։</value>
+  </data>
+  <data name="DocsIntegrationGmail" xml:space="preserve">
+    <value>Գործողություններ․ ուղարկել նամակ, պատասխանել, գտնել նամակներ, կարդալ նամակը, ստեղծել սևագիր, նշել կարդացված կամ չկարդացված, արխիվացնել, աղբարկղ, ավելացնել կամ հանել պիտակ։ Տրիգեր․ նոր նամակ, կարելի է զտել Gmail-ի որոնմամբ կամ պիտակով․ հասանելի են {{trigger.from}}, {{trigger.subject}}, {{trigger.snippet}}, {{trigger.id}}։ Արդյունքներ․ result.messageId, result.count, result.first.subject, result.body։ Սա առանձին է «Ուղարկել նամակ» քարտից, որը օգտագործում է Partnerly-ի փոստը։ Եթե Gmail-ը նոր թույլտվություններ է խնդրում, միացրեք այն նորից։</value>
+  </data>
+  <data name="DocsIntegrationDrive" xml:space="preserve">
+    <value>Գործողություններ․ վերբեռնել ֆայլ (Partnerly-ի կցորդ), ստեղծել պանակ, գտնել ֆայլեր, ստանալ ֆայլի տվյալները, պատճենել, տեղափոխել, վերանվանել, աղբարկղ, կիսվել email-ով, ստեղծել տեքստային ֆայլ։ Տրիգեր․ նոր ֆայլ, կարելի է միայն մեկ պանակում։ Արդյունքներ․ result.id, result.name, result.webViewLink, result.count։</value>
+  </data>
+  <data name="DocsIntegrationWhatsApp" xml:space="preserve">
+    <value>Գործողություններ․ ուղարկել տեքստ (միայն հաճախորդի հաղորդագրությունից հետո 24 ժամվա ընթացքում) և ուղարկել ձևանմուշ (հաստատված ձևանմուշներ, ցանկացած ժամանակ)։ Տրիգեր․ մուտքային հաղորդագրություն․ Meta-ի webhook-ի համար պետք է հանրային հասցե։ Արդյունք․ result.messageId։</value>
+  </data>
+  <data name="DocsIntegrationOutlook" xml:space="preserve">
+    <value>Փոստ․ ուղարկել, գտնել նամակներ, տրիգեր «նոր նամակ»։ Օրացույց․ ստեղծել իրադարձություն, գտնել իրադարձություններ, տրիգեր «նոր իրադարձություն»։ Արդյունքներ․ result.id, result.webLink, result.count, result.first.subject։ Ադմինիստրատորը նախ պետք է գրանցի Microsoft հավելվածը․ մինչ այդ «Ինտեգրացիաներ» էջում այն նշված է որպես չկարգավորված։</value>
+  </data>
+  <data name="DocsErrorPathTitle" xml:space="preserve">
+    <value>Երբ քարտը չի աշխատում</value>
+  </data>
+  <data name="DocsErrorPathBody" xml:space="preserve">
+    <value>Գործողության յուրաքանչյուր քարտ ունի «Եթե այս քարտը ձախողվի» կարգավորումը։ Լռելյայն ընտրված է «Կանգնեցնել այս ճյուղը»։ «Անտեսել սխալը և շարունակել» անցնում է հաջորդ քարտին։ «Անցնել սխալի ճանապարհով (կարմիր ելք)» ավելացնում է կարմիր ելք․ միացրեք նրան այն քարտերը, որոնք պետք է աշխատեն ձախողումից հետո, օրինակ ծանուցում։ Գործարկման ձախողման մասին գործակալը կարող է նաև ծանուցել ձեզ։</value>
+  </data>
+  <data name="DocsTabBasics" xml:space="preserve">
+    <value>Հիմունքներ</value>
+  </data>
+  <data name="DocsTabSystem" xml:space="preserve">
+    <value>Համակարգ</value>
+  </data>
+  <data name="DocsTabTriggers" xml:space="preserve">
+    <value>Տրիգերներ</value>
+  </data>
+  <data name="DocsTabActions" xml:space="preserve">
+    <value>Գործողություններ</value>
+  </data>
 </root>

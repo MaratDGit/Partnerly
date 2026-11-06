@@ -5,10 +5,13 @@
       "name": "partnerly-preview",
       "runtimeExecutable": "dotnet",
       "runtimeArgs": [
-        "C:\\Users\\IIG\\AppData\\Local\\Temp\\claude\\C--Users-IIG--claude-spares-spare-9HUmtG\\046ff8bd-3c6f-4db0-b54d-8c03012da280\\scratchpad\\testout\\Partnerly.dll",
-        "--contentRoot", "F:\\Marat\\My Projects\\Belote Helper 2\\Partnerly\\Partnerly",
-        "--environment", "Development",
-        "--urls", "http://localhost:7299"
+        "C:\\Users\\IIG\\AppData\\Local\\Temp\\claude\\3a9dfcfa2581cf83\\b48f6948-16c5-413e-85fe-bc26e2d20cad\\scratchpad\\out\\Partnerly.dll",
+        "--contentRoot",
+        "F:\\Marat\\My Projects\\Belote Helper 2\\Partnerly\\Partnerly",
+        "--environment",
+        "Development",
+        "--urls",
+        "http://localhost:7299"
       ],
       "port": 7299
     }

@@ -5035,4 +5035,46 @@ User, группу и шаблон письма здесь создать нел
   <data name="BuilderInspector" xml:space="preserve">
     <value>Инспектор</value>
   </data>
+  <data name="DocsIntegrationsTitle" xml:space="preserve">
+    <value>Интеграции</value>
+  </data>
+  <data name="DocsIntegrationsConnect" xml:space="preserve">
+    <value>Откройте «Интеграции» в меню и нажмите «Подключить» у нужного сервиса. Telegram просит токен бота от @BotFather; Google и Outlook откроют страницу входа провайдера и попросят согласие. Секреты хранятся в зашифрованном виде и больше не показываются. В карточке выберите подключение в поле «Подключение»: в списке только ваши подключения. Тестовый запуск не отправляет сообщения и ничего не пишет в сервис. Если у сервиса появилась пометка «Переподключить», подключите его заново. Результат карточки читается в следующих карточках как {{steps.ИмяКарточки.result.…}}; ниже указана только часть result.</value>
+  </data>
+  <data name="DocsIntegrationTelegram" xml:space="preserve">
+    <value>Действия: отправить сообщение (id чата, текст, режим разметки) и отправить файл (вложение Partnerly). Триггер: новое сообщение боту, доступны {{trigger.text}}, {{trigger.chatId}}, {{trigger.fromName}}, {{trigger.fromUsername}}, {{trigger.date}}. После отправки доступен result.messageId. Бот опрашивается, публичный адрес не нужен. Чат по умолчанию задаётся на странице «Интеграции».</value>
+  </data>
+  <data name="DocsIntegrationSheets" xml:space="preserve">
+    <value>Действия: добавить строку, найти строки, обновить строку, получить строку, прочитать диапазон, обновить ячейку, очистить диапазон, удалить строку, создать таблицу, добавить лист. Триггер: новая строка. Id таблицы — длинная часть адреса между /d/ и /edit. Значения идут по колонкам по порядку. Результаты: result.rowNumber, result.count, result.first.rowNumber, result.values, result.url.</value>
+  </data>
+  <data name="DocsIntegrationGmail" xml:space="preserve">
+    <value>Действия: отправить письмо, ответить, найти письма, прочитать письмо, создать черновик, отметить прочитанным или непрочитанным, архивировать, в корзину, добавить или снять метку. Триггер: новое письмо, можно отфильтровать поиском Gmail или меткой; доступны {{trigger.from}}, {{trigger.subject}}, {{trigger.snippet}}, {{trigger.id}}. Результаты: result.messageId, result.count, result.first.subject, result.body. Это отдельно от карточки «Отправить письмо», которая использует почту Partnerly. Если Gmail просит новые разрешения, подключите его заново.</value>
+  </data>
+  <data name="DocsIntegrationDrive" xml:space="preserve">
+    <value>Действия: загрузить файл (вложение Partnerly), создать папку, найти файлы, получить сведения о файле, копировать, переместить, переименовать, в корзину, поделиться по email, создать текстовый файл. Триггер: новый файл, можно только в одной папке. Результаты: result.id, result.name, result.webViewLink, result.count.</value>
+  </data>
+  <data name="DocsIntegrationWhatsApp" xml:space="preserve">
+    <value>Действия: отправить текст (только в течение 24 часов после сообщения клиента) и отправить шаблон (одобренные шаблоны, в любое время). Триггер: входящее сообщение; для webhook Meta нужен публичный адрес. Результат: result.messageId.</value>
+  </data>
+  <data name="DocsIntegrationOutlook" xml:space="preserve">
+    <value>Почта: отправить, найти письма, триггер «новое письмо». Календарь: создать событие, найти события, триггер «новое событие». Результаты: result.id, result.webLink, result.count, result.first.subject. Администратор должен сначала зарегистрировать приложение Microsoft; пока этого нет, на странице «Интеграции» стоит «не настроено».</value>
+  </data>
+  <data name="DocsErrorPathTitle" xml:space="preserve">
+    <value>Если карточка упала</value>
+  </data>
+  <data name="DocsErrorPathBody" xml:space="preserve">
+    <value>У каждой карточки действия есть настройка «Если эта карточка упала». По умолчанию выбрано «Остановить эту ветку». «Игнорировать ошибку и идти дальше» переходит к следующей карточке. «Перейти на путь ошибки (красный выход)» добавляет красный выход: подключите к нему карточки, которые должны выполниться после сбоя, например уведомление. О сбое запуска агент может также уведомить вас.</value>
+  </data>
+  <data name="DocsTabBasics" xml:space="preserve">
+    <value>Основы</value>
+  </data>
+  <data name="DocsTabSystem" xml:space="preserve">
+    <value>Система</value>
+  </data>
+  <data name="DocsTabTriggers" xml:space="preserve">
+    <value>Триггеры</value>
+  </data>
+  <data name="DocsTabActions" xml:space="preserve">
+    <value>Действия</value>
+  </data>
 </root>

@@ -58,7 +58,7 @@ Partnerly.sln
 | `Automation/` | Universal Automation Engine: ядро, EF store, worker, коннекторы, триггеры, `Web/` (контроллеры, ViewModels) |
 | `Integrations/` | Интеграции Telegram / Google / WhatsApp для Automation (Common, Telegram, Google, WhatsApp, Web) |
 
-Тестовый проект: `Partnerly.Automation.Tests` (133 теста, зелёные на 2026-11-03, из них 39 — `Integrations/`). Каталог `docs/ai/` — канонические документы агента. `.cursor/rules/` — краткие правила для Cursor. `tools/partnerly-web-inspector-extension` — unpacked Chrome-расширение для веб-инспектора. `.github/copilot-instructions.md` содержит только Azure-правила Copilot и к архитектуре Partnerly не относится.
+Тестовый проект: `Partnerly.Automation.Tests` (222 теста, зелёные на 2026-11-06, из них 39 — `Integrations/`; тесты контроллеров и JS нет). Каталог `docs/ai/` — канонические документы агента. `.cursor/rules/` — краткие правила для Cursor. `tools/partnerly-web-inspector-extension` — unpacked Chrome-расширение для веб-инспектора. `.github/copilot-instructions.md` содержит только Azure-правила Copilot и к архитектуре Partnerly не относится.
 
 ## Основные модули
 

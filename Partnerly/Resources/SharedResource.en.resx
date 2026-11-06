@@ -5035,4 +5035,46 @@ Delete is allowed for Support ticket.</value>
   <data name="BuilderInspector" xml:space="preserve">
     <value>Inspector</value>
   </data>
+  <data name="DocsIntegrationsTitle" xml:space="preserve">
+    <value>Integrations</value>
+  </data>
+  <data name="DocsIntegrationsConnect" xml:space="preserve">
+    <value>Open Integrations from the menu and press Connect on a service. Telegram asks for the bot token from @BotFather; Google and Outlook open the provider sign-in page and ask for your consent. Secrets are stored encrypted and never shown again. In a card, pick the connection in the Connection field: only your own connections are listed. A test run does not send messages or write to the service. If a service shows Reconnect, connect it again. A card result is read in later cards as {{steps.CardName.result.…}}; below only the result part is shown.</value>
+  </data>
+  <data name="DocsIntegrationTelegram" xml:space="preserve">
+    <value>Actions: send message (chat id, text, parse mode) and send file (a Partnerly attachment). Trigger: a new message to your bot, with {{trigger.text}}, {{trigger.chatId}}, {{trigger.fromName}}, {{trigger.fromUsername}}, {{trigger.date}}. After a send, result.messageId is available. The bot is polled, so no public address is needed. Set a default chat id on the Integrations page.</value>
+  </data>
+  <data name="DocsIntegrationSheets" xml:space="preserve">
+    <value>Actions: add row, find rows, update row, get row, read range, update cell, clear range, delete row, create spreadsheet, add tab. Trigger: a new row. The spreadsheet id is the long part of the sheet address between /d/ and /edit. Values go in columns in order. Results: result.rowNumber, result.count, result.first.rowNumber, result.values, result.url.</value>
+  </data>
+  <data name="DocsIntegrationGmail" xml:space="preserve">
+    <value>Actions: send email, reply, find emails, read message, create draft, mark read or unread, archive, move to trash, add or remove label. Trigger: a new email, optionally filtered by a Gmail search or label, with {{trigger.from}}, {{trigger.subject}}, {{trigger.snippet}}, {{trigger.id}}. Results: result.messageId, result.count, result.first.subject, result.body. This is separate from the Send email card, which uses the Partnerly mailbox. If Gmail asks for new permissions, reconnect it.</value>
+  </data>
+  <data name="DocsIntegrationDrive" xml:space="preserve">
+    <value>Actions: upload file (a Partnerly attachment), create folder, find files, get file info, copy, move, rename, move to trash, share with an email, create text file. Trigger: a new file, optionally only in one folder. Results: result.id, result.name, result.webViewLink, result.count.</value>
+  </data>
+  <data name="DocsIntegrationWhatsApp" xml:space="preserve">
+    <value>Actions: send text (only inside 24 hours after the customer wrote) and send template (approved templates, any time). Trigger: an incoming message; it needs a public address for the Meta webhook. Result: result.messageId.</value>
+  </data>
+  <data name="DocsIntegrationOutlook" xml:space="preserve">
+    <value>Mail: send, find emails, trigger new email. Calendar: create event, find events, trigger new event. Results: result.id, result.webLink, result.count, result.first.subject. The administrator must first register the Microsoft app; until then the Integrations page shows it as not configured.</value>
+  </data>
+  <data name="DocsErrorPathTitle" xml:space="preserve">
+    <value>When a card fails</value>
+  </data>
+  <data name="DocsErrorPathBody" xml:space="preserve">
+    <value>Every action card has the setting If this card fails. Stop this branch is the default. Ignore the error and go on continues to the next card. Go to the error path adds a red output on the card: connect the cards that should run after a failure, for example a notification. The agent can also notify you when a run fails.</value>
+  </data>
+  <data name="DocsTabBasics" xml:space="preserve">
+    <value>Basics</value>
+  </data>
+  <data name="DocsTabSystem" xml:space="preserve">
+    <value>System</value>
+  </data>
+  <data name="DocsTabTriggers" xml:space="preserve">
+    <value>Triggers</value>
+  </data>
+  <data name="DocsTabActions" xml:space="preserve">
+    <value>Actions</value>
+  </data>
 </root>

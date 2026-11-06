@@ -2563,3 +2563,51 @@ textarea.form-control:not(.form-control-lg) {
 .form-label {
     font-size: 0.8125rem;
 }
+
+/* ---------- Scrollbars: slim, rounded, accent thumb (all themes) ---------- */
+:root {
+    --partnerly-scroll-thumb: rgba(105, 108, 255, 0.45);
+    --partnerly-scroll-thumb-hover: rgba(105, 108, 255, 0.8);
+}
+
+html[data-theme="dark"] {
+    --partnerly-scroll-thumb: rgba(167, 139, 250, 0.4);
+    --partnerly-scroll-thumb-hover: rgba(167, 139, 250, 0.75);
+}
+
+* {
+    scrollbar-width: thin;
+    scrollbar-color: var(--partnerly-scroll-thumb) transparent;
+}
+
+@supports selector(::-webkit-scrollbar) {
+    * {
+        scrollbar-width: auto;
+        scrollbar-color: auto;
+    }
+
+    *::-webkit-scrollbar {
+        width: 10px;
+        height: 10px;
+    }
+
+    *::-webkit-scrollbar-track {
+        background: transparent;
+    }
+
+    *::-webkit-scrollbar-thumb {
+        border: 2px solid transparent;
+        border-radius: 999px;
+        background: linear-gradient(180deg, #818cf8, #a78bfa) padding-box;
+        opacity: 0.6;
+        min-height: 36px;
+    }
+
+    *::-webkit-scrollbar-thumb:hover {
+        background: linear-gradient(180deg, #6366f1, #8b5cf6) padding-box;
+    }
+
+    *::-webkit-scrollbar-corner {
+        background: transparent;
+    }
+}

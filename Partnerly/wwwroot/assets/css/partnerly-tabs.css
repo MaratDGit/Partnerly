@@ -176,3 +176,130 @@ html[data-theme="dark"] .partnerly-tab-body {
         transition: none;
     }
 }
+
+/* ---------- Documentation page: header + tabs stay put, only the tab content scrolls ---------- */
+.docs-page {
+    display: flex;
+    flex-direction: column;
+    /* navbar 60 + content padding 20 + footer 39 */
+    height: calc(100dvh - 119px);
+    min-height: 320px;
+}
+
+.docs-page > .card-body {
+    display: flex;
+    flex: 1 1 auto;
+    flex-direction: column;
+    min-height: 0;
+}
+
+.docs-page .legal-copy {
+    width: 100%;
+    max-width: none;
+    display: flex;
+    flex: 1 1 auto;
+    flex-direction: column;
+    min-height: 0;
+}
+
+.docs-page .partnerly-tabs {
+    flex: 1 1 auto;
+    min-height: 0;
+}
+
+#docsTabs {
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    scrollbar-width: none;
+}
+
+#docsTabs::-webkit-scrollbar {
+    display: none;
+}
+
+#docsTabs .nav-link {
+    white-space: nowrap;
+}
+
+#docsTabsContent {
+    flex: 1 1 auto;
+    min-height: 0;
+    overflow-y: auto;
+}
+
+#docsTabsContent > .tab-pane.active {
+    display: block;
+    height: auto;
+    overflow: visible;
+}
+
+/* One accent colour per section (headings only; tab buttons stay neutral) */
+#docsBasics-tab-pane { --tab-color: #3b82f6; }
+#docsTriggers-tab-pane { --tab-color: #f59e0b; }
+#docsActions-tab-pane { --tab-color: #8b5cf6; }
+#docsIntegrations-tab-pane { --tab-color: #10b981; }
+#docsSystem-tab-pane { --tab-color: #ec4899; }
+
+#docsTabsContent .tab-pane h3 {
+    padding-left: 12px;
+    border-left: 3px solid var(--tab-color);
+}
+
+#docsTabsContent .tab-pane h4 {
+    position: relative;
+    padding-left: 18px;
+}
+
+#docsTabsContent .tab-pane h4::before {
+    content: "";
+    position: absolute;
+    left: 4px;
+    top: 50%;
+    width: 7px;
+    height: 7px;
+    margin-top: -3px;
+    border-radius: 50%;
+    background: var(--tab-color);
+    box-shadow: 0 0 8px color-mix(in srgb, var(--tab-color) 70%, transparent);
+}
+
+#docsTabsContent .tab-pane .docs-toc a {
+    border-color: color-mix(in srgb, var(--tab-color) 45%, transparent);
+}
+
+#docsTabsContent .tab-pane h3,
+#docsTabsContent .tab-pane h4 {
+    scroll-margin-top: 12px;
+}
+
+/* Service badges in the Integrations tab */
+#docsTabsContent .tab-pane h4.docs-brand-title {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding-left: 0;
+}
+
+#docsTabsContent .tab-pane h4.docs-brand-title::before {
+    display: none;
+}
+
+.docs-brand {
+    display: inline-flex;
+    flex: 0 0 auto;
+    align-items: center;
+    justify-content: center;
+    width: 32px;
+    height: 32px;
+    border-radius: 10px;
+    color: #fff;
+    font-size: 1.15rem;
+    box-shadow: 0 4px 10px -4px rgba(15, 23, 42, 0.55);
+}
+
+.docs-brand.is-telegram { background: linear-gradient(135deg, #37aee2, #1e96c8); }
+.docs-brand.is-sheets { background: linear-gradient(135deg, #34a853, #0f9d58); }
+.docs-brand.is-gmail { background: linear-gradient(135deg, #f0625a, #d93025); }
+.docs-brand.is-drive { background: linear-gradient(135deg, #4285f4 0%, #34a853 55%, #fbbc05 100%); }
+.docs-brand.is-whatsapp { background: linear-gradient(135deg, #5be584, #1fb855); }
+.docs-brand.is-outlook { background: linear-gradient(135deg, #2b88d8, #0078d4 55%, #106ebe); }

@@ -1,43 +1,51 @@
+@{
+    var appName = (ViewBag.ApplicationName as string) ?? "Partnerly";
+    string D(string key) => Localizer[key].Value.Replace("Partnerly", appName);
+}
 <div class="legal-copy">
-    <p>@Localizer["DocsLead"]</p>
+    <p>@D("DocsLead")</p>
 
-    <h3>@Localizer["DocsStartTitle"]</h3>
-    <p>@Localizer["DocsStartBody"]</p>
+    <partnerly-tabs id="docsTabs" class="mt-3">
+    <partnerly-tab id="docsBasics" icon="bx bx-book-open" title="@D("DocsTabBasics")" active="true">
+    <h3>@D("DocsStartTitle")</h3>
+    <p>@D("DocsStartBody")</p>
 
-    <h3>@Localizer["DocsAgentsTitle"]</h3>
-    <p>@Localizer["DocsAgentsBody"]</p>
+    <h3>@D("DocsAgentsTitle")</h3>
+    <p>@D("DocsAgentsBody")</p>
 
-    <h3>@Localizer["DocsAutomationHowTitle"]</h3>
-    <p class="docs-setup">@Localizer["DocsAutomationHowBody"]</p>
+    <h3>@D("DocsAutomationHowTitle")</h3>
+    <p class="docs-setup">@D("DocsAutomationHowBody")</p>
 
-    <h3>@Localizer["DocsVariablesTitle"]</h3>
-    <p class="docs-setup">@Localizer["DocsVariablesBody"]</p>
+    <h3>@D("DocsVariablesTitle")</h3>
+    <p class="docs-setup">@D("DocsVariablesBody")</p>
 
-    <h3>@Localizer["DocsRecordsTitle"]</h3>
-    <p class="docs-setup">@Localizer["DocsRecordsBody"]</p>
-
-    <h3>@Localizer["DocsTriggersTitle"]</h3>
+    <h3>@D("DocsRecordsTitle")</h3>
+    <p class="docs-setup">@D("DocsRecordsBody")</p>
+    </partnerly-tab>
+    <partnerly-tab id="docsTriggers" icon="bx bx-bolt-circle" title="@D("DocsTabTriggers")">
+    <h3>@D("DocsTriggersTitle")</h3>
     <h4 id="docs-manual">@Localizer["NodeTypeManual"]</h4>
-    <p class="docs-setup">@Localizer["DocsTriggerManual"]</p>
+    <p class="docs-setup">@D("DocsTriggerManual")</p>
     <h4 id="docs-schedule">@Localizer["NodeTypeSchedule"]</h4>
-    <p class="docs-setup">@Localizer["DocsTriggerSchedule"]</p>
+    <p class="docs-setup">@D("DocsTriggerSchedule")</p>
     <h4 id="docs-interval">@Localizer["NodeTypeInterval"]</h4>
-    <p class="docs-setup">@Localizer["DocsTriggerInterval"]</p>
+    <p class="docs-setup">@D("DocsTriggerInterval")</p>
     <h4 id="docs-entity.created">@Localizer["NodeTypeEntityCreated"]</h4>
-    <p class="docs-setup">@Localizer["DocsTriggerEntityCreated"]</p>
+    <p class="docs-setup">@D("DocsTriggerEntityCreated")</p>
     <h4 id="docs-entity.updated">@Localizer["NodeTypeEntityUpdated"]</h4>
-    <p class="docs-setup">@Localizer["DocsTriggerEntityUpdated"]</p>
+    <p class="docs-setup">@D("DocsTriggerEntityUpdated")</p>
     <h4 id="docs-entity.deleted">@Localizer["NodeTypeEntityDeleted"]</h4>
-    <p class="docs-setup">@Localizer["DocsTriggerEntityDeleted"]</p>
+    <p class="docs-setup">@D("DocsTriggerEntityDeleted")</p>
     <h4 id="docs-event">@Localizer["NodeTypeEvent"]</h4>
-    <p class="docs-setup">@Localizer["DocsTriggerEvent"]</p>
+    <p class="docs-setup">@D("DocsTriggerEvent")</p>
     <h4 id="docs-webhook">@Localizer["NodeTypeWebhook"]</h4>
-    <p class="docs-setup">@Localizer["DocsTriggerWebhook"]</p>
-    <h4 id="docs-delay_trigger">@Localizer["DocsTriggerDelayTitle"]</h4>
-    <p class="docs-setup">@Localizer["DocsTriggerDelay"]</p>
-
-    <h3>@Localizer["DocsActionsTitle"]</h3>
-    <nav class="docs-toc" aria-label="@Localizer["DocsActionsTitle"]">
+    <p class="docs-setup">@D("DocsTriggerWebhook")</p>
+    <h4 id="docs-delay_trigger">@D("DocsTriggerDelayTitle")</h4>
+    <p class="docs-setup">@D("DocsTriggerDelay")</p>
+    </partnerly-tab>
+    <partnerly-tab id="docsActions" icon="bx bx-cog" title="@D("DocsTabActions")">
+    <h3>@D("DocsActionsTitle")</h3>
+    <nav class="docs-toc" aria-label="@D("DocsActionsTitle")">
         <a href="#docs-delay">@Localizer["NodeTypeDelay"]</a>
         <a href="#docs-set_variable">@Localizer["NodeTypeSetVariable"]</a>
         <a href="#docs-send_email">@Localizer["NodeTypeSendEmail"]</a>
@@ -54,52 +62,100 @@
         <a href="#docs-delete_record">@Localizer["NodeTypeDeleteRecord"]</a>
     </nav>
     <h4 id="docs-delay">@Localizer["NodeTypeDelay"]</h4>
-    <p class="docs-setup">@Localizer["DocsActionDelay"]</p>
+    <p class="docs-setup">@D("DocsActionDelay")</p>
     <h4 id="docs-set_variable">@Localizer["NodeTypeSetVariable"]</h4>
-    <p class="docs-setup">@Localizer["DocsActionSetVariable"]</p>
+    <p class="docs-setup">@D("DocsActionSetVariable")</p>
     <h4 id="docs-send_email">@Localizer["NodeTypeSendEmail"]</h4>
-    <p class="docs-setup">@Localizer["DocsActionSendEmail"]</p>
+    <p class="docs-setup">@D("DocsActionSendEmail")</p>
     <h4 id="docs-send_notification">@Localizer["NodeTypeSendNotification"]</h4>
-    <p class="docs-setup">@Localizer["DocsActionSendNotification"]</p>
+    <p class="docs-setup">@D("DocsActionSendNotification")</p>
     <h4 id="docs-http_request">@Localizer["NodeTypeHttpRequest"]</h4>
-    <p class="docs-setup">@Localizer["DocsActionHttpRequest"]</p>
+    <p class="docs-setup">@D("DocsActionHttpRequest")</p>
     <h4 id="docs-webhook_action">@Localizer["NodeTypeWebhookAction"]</h4>
-    <p class="docs-setup">@Localizer["DocsActionWebhook"]</p>
+    <p class="docs-setup">@D("DocsActionWebhook")</p>
     <h4 id="docs-execute_workflow">@Localizer["NodeTypeExecuteWorkflow"]</h4>
-    <p class="docs-setup">@Localizer["DocsActionExecuteWorkflow"]</p>
+    <p class="docs-setup">@D("DocsActionExecuteWorkflow")</p>
     <h4 id="docs-branch">@Localizer["NodeTypeBranch"]</h4>
-    <p class="docs-setup">@Localizer["DocsActionBranch"]</p>
+    <p class="docs-setup">@D("DocsActionBranch")</p>
     <h4 id="docs-wait_until">@Localizer["NodeTypeWaitUntil"]</h4>
-    <p class="docs-setup">@Localizer["DocsActionWaitUntil"]</p>
+    <p class="docs-setup">@D("DocsActionWaitUntil")</p>
     <h4 id="docs-switch">@Localizer["NodeTypeSwitch"]</h4>
-    <p class="docs-setup">@Localizer["DocsActionSwitch"]</p>
+    <p class="docs-setup">@D("DocsActionSwitch")</p>
     <h4 id="docs-loop">@Localizer["NodeTypeLoop"]</h4>
-    <p class="docs-setup">@Localizer["DocsActionLoop"]</p>
+    <p class="docs-setup">@D("DocsActionLoop")</p>
     <h4 id="docs-filter">@Localizer["NodeTypeFilter"]</h4>
-    <p class="docs-setup">@Localizer["DocsActionFilter"]</p>
+    <p class="docs-setup">@D("DocsActionFilter")</p>
     <h4 id="docs-store_set">@Localizer["NodeTypeStoreSet"]</h4>
-    <p class="docs-setup">@Localizer["DocsActionStoreSet"]</p>
+    <p class="docs-setup">@D("DocsActionStoreSet")</p>
     <h4 id="docs-store_get">@Localizer["NodeTypeStoreGet"]</h4>
-    <p class="docs-setup">@Localizer["DocsActionStoreGet"]</p>
+    <p class="docs-setup">@D("DocsActionStoreGet")</p>
     <h4 id="docs-store_delete">@Localizer["NodeTypeStoreDelete"]</h4>
-    <p class="docs-setup">@Localizer["DocsActionStoreDelete"]</p>
+    <p class="docs-setup">@D("DocsActionStoreDelete")</p>
     <h4 id="docs-once">@Localizer["NodeTypeOnce"]</h4>
-    <p class="docs-setup">@Localizer["DocsActionOnce"]</p>
+    <p class="docs-setup">@D("DocsActionOnce")</p>
     <h4 id="docs-create_record">@Localizer["NodeTypeCreateRecord"]</h4>
-    <p class="docs-setup">@Localizer["DocsActionCreateRecord"]</p>
+    <p class="docs-setup">@D("DocsActionCreateRecord")</p>
     <h4 id="docs-update_record">@Localizer["NodeTypeUpdateRecord"]</h4>
-    <p class="docs-setup">@Localizer["DocsActionUpdateRecord"]</p>
+    <p class="docs-setup">@D("DocsActionUpdateRecord")</p>
     <h4 id="docs-find_record">@Localizer["NodeTypeFindRecord"]</h4>
-    <p class="docs-setup">@Localizer["DocsActionFindRecord"]</p>
+    <p class="docs-setup">@D("DocsActionFindRecord")</p>
     <h4 id="docs-delete_record">@Localizer["NodeTypeDeleteRecord"]</h4>
-    <p class="docs-setup">@Localizer["DocsActionDeleteRecord"]</p>
+    <p class="docs-setup">@D("DocsActionDeleteRecord")</p>
 
-    <h3>@Localizer["DocsUsersTitle"]</h3>
-    <p>@Localizer["DocsUsersBody"]</p>
+    <h3 id="docs-error-path">@D("DocsErrorPathTitle")</h3>
+    <p class="docs-setup">@D("DocsErrorPathBody")</p>
+    </partnerly-tab>
+    <partnerly-tab id="docsIntegrations" icon="bx bx-plug" title="@D("DocsIntegrationsTitle")">
+    <h3 id="docs-integrations">@D("DocsIntegrationsTitle")</h3>
+    <p class="docs-setup">@D("DocsIntegrationsConnect")</p>
+    <h4 id="docs-telegram" class="docs-brand-title"><span class="docs-brand is-telegram"><i class="bx bxl-telegram" aria-hidden="true"></i></span>Telegram</h4>
+    <p class="docs-setup">@D("DocsIntegrationTelegram")</p>
+    <h4 id="docs-sheets" class="docs-brand-title"><span class="docs-brand is-sheets"><i class="bx bx-spreadsheet" aria-hidden="true"></i></span>Google Sheets</h4>
+    <p class="docs-setup">@D("DocsIntegrationSheets")</p>
+    <h4 id="docs-gmail" class="docs-brand-title"><span class="docs-brand is-gmail"><i class="bx bxl-gmail" aria-hidden="true"></i></span>Gmail</h4>
+    <p class="docs-setup">@D("DocsIntegrationGmail")</p>
+    <h4 id="docs-drive" class="docs-brand-title"><span class="docs-brand is-drive"><i class="bx bxl-google-cloud" aria-hidden="true"></i></span>Google Drive</h4>
+    <p class="docs-setup">@D("DocsIntegrationDrive")</p>
+    <h4 id="docs-whatsapp" class="docs-brand-title"><span class="docs-brand is-whatsapp"><i class="bx bxl-whatsapp" aria-hidden="true"></i></span>WhatsApp</h4>
+    <p class="docs-setup">@D("DocsIntegrationWhatsApp")</p>
+    <h4 id="docs-outlook" class="docs-brand-title"><span class="docs-brand is-outlook"><i class="bx bxl-microsoft" aria-hidden="true"></i></span>Outlook</h4>
+    <p class="docs-setup">@D("DocsIntegrationOutlook")</p>
+    </partnerly-tab>
+    <partnerly-tab id="docsSystem" icon="bx bx-server" title="@D("DocsTabSystem")">
+    <h3>@D("DocsUsersTitle")</h3>
+    <p>@D("DocsUsersBody")</p>
 
-    <h3>@Localizer["DocsTicketsTitle"]</h3>
-    <p>@Localizer["DocsTicketsBody"]</p>
+    <h3>@D("DocsTicketsTitle")</h3>
+    <p>@D("DocsTicketsBody")</p>
 
-    <h3>@Localizer["DocsSettingsTitle"]</h3>
-    <p>@Localizer["DocsSettingsBody"]</p>
+    <h3>@D("DocsSettingsTitle")</h3>
+    <p>@D("DocsSettingsBody")</p>
+    </partnerly-tab>
+    </partnerly-tabs>
 </div>
+
+<script>
+    (function () {
+        function openFromHash() {
+            var id = decodeURIComponent((location.hash || "").slice(1));
+            if (!id) { return; }
+            var target = document.getElementById(id);
+            var pane = target && target.closest(".tab-pane");
+            if (!pane) { return; }
+            var button = document.querySelector('[data-bs-target="#' + pane.id + '"]');
+            if (button && window.bootstrap && window.bootstrap.Tab) {
+                window.bootstrap.Tab.getOrCreateInstance(button).show();
+            }
+            setTimeout(function () { target.scrollIntoView({ block: "start" }); }, 400);
+        }
+        // A shorter tab must not leave the page scrolled past its content.
+        document.addEventListener("shown.bs.tab", function (event) {
+            if (event.target && event.target.closest && event.target.closest("#docsTabs")) {
+                var box = document.getElementById("docsTabsContent");
+                if (box) { box.scrollTop = 0; }
+            }
+        });
+        window.addEventListener("load", openFromHash);
+        window.addEventListener("hashchange", openFromHash);
+    })();
+</script>

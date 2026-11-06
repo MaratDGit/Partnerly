@@ -345,6 +345,11 @@ AutomationWakeup → Automation / Run (без Cascade delete run)
 - Нет исходящих рёбер у terminal; branch имеет ports `true`/`false`; switch — `case:{value}` и `default`.
 - `name` узла — ключ `steps.{name}` в переменных; уникален, `[A-Za-z][A-Za-z0-9_]*`.
 - Неизвестные type — ошибка публикации.
+- (2026-11-06, вместо «ровно один trigger»): триггеров может быть несколько, включён должен быть хотя бы один.
+- Порты рёбер: `true` / `false` (branch), `case:N` / `default` (switch), `each` / `done` (loop), `error` (любая карточка с `config.onError = "route"`), `stopped` — не ребро, а выбранный порт `filter` / `once`: рёбра без порта после `error` / `stopped` не срабатывают.
+- `config.onError` у любого action: пусто / `continue` / `route`.
+- Корень графа может содержать `notes` (заметки холста, не логика) и `settings` (`variables` — константы `{{vars.*}}`, `notifyOnFailure`); `WorkflowGraphDiff` их не считает изменением логики (кроме `variables`).
+- `loop`: должен иметь рёбра с портом `each`; внутри тела нет другого `loop` и нет `wait_until`.
 
 Drawflow хранит x/y; сервер их не интерпретирует, только сохраняет.
 
@@ -357,6 +362,8 @@ Drawflow хранит x/y; сервер их не интерпретирует, 
 **Triggers:** `manual`, `schedule`, `interval`, `entity.created`, `entity.updated`, `entity.deleted`, `webhook`, `event`, `delay`.
 
 **Actions:** `send_email`, `send_notification`, `create_record`, `update_record`, `find_record`, `delete_record`, `delay`, `wait_until`, `branch`, `switch`, `set_variable`, `http_request`, `webhook`, `execute_workflow`.
+
+**Добавлены 2026-11-06 (actions):** `loop`, `filter`, `store_set`, `store_get`, `store_delete`, `once`. Интеграционные типы (`telegram.*`, `gmail.*`, `sheets.*`, `drive.*`, `outlook.*`, `whatsapp.*`) регистрируются модулями `IAutomationModule` и описаны в `docs/ai/Integrations/INTEGRATIONS-PLAN.md`.
 
 **ScheduleKind** в config: `once`, `interval_minutes`, `hourly`, `daily`, `weekly`, `monthly`, `cron`, `specific_date`. Все считают next fire через Cronos + `TimeZoneHelper.Resolve(definition.TimeZoneId)` → DueAtUtc.
 
@@ -542,8 +549,13 @@ Webhook incoming не использует cookie; лимит и HMAC доста
 | DeleteConfirmed | delete | confirm overlay |
 | Run / Cancel | run | JSON; шаги в overlay |
 | HistoryPanel / RunDetailsPanel | history | таблица запусков в overlay |
-| ConnectionsPanel | connections | overlay из билдера |
-| SettingsPanel / SettingsSave | view / edit | overlay |
+| ConnectionsPanel | connections | вкладка Connections боковой секции билдера; на хабе — popup |
+| SettingsPanel / SettingsSave | view / edit | вкладка Settings; на хабе — popup |
+| ToolsPanel / RestoreVersion / Export / Import | view / edit / view / create | вкладка Versions; Export — кнопка в шапке секции; Import — кнопка на хабе |
+| SideSummary | view | JSON для шапки секции (статус, версия, последний запуск, кто менял, 7 дней) |
+| TestNode | run | «Test this card» в свойствах карточки (режим теста, JSON) |
+| Rerun / Resume | run | кнопки «Run again» / «Continue from failed» в окне деталей запуска |
+| UpdateHttpConnection / CreateHttpConnection / DeleteHttpConnection | connections | сохранённые web-адреса (имя + адрес, редактирование по клику) |
 
 Меню: секция **Agents** (сверка 2026-11-03) — ссылка на Index, плюс (создание), live-список автоматизаций пользователя с индикатором `IsActive` и давностью последнего запуска, контекстное меню rename / toggle / delete. History / Templates / Connections из меню убраны.
 
@@ -552,6 +564,8 @@ Webhook incoming не использует cookie; лимит и HMAC доста
 Тексты только resx. Строки хаба: History / Settings / Delete — иконки, открывают popup. Edit ведёт на `/Automation/Builder/{id}`. Connections — overlay с билдера. Создание — стеклянный popup, затем страница билдера. Токены как у сайта, без site-wide glass на app-shell.
 
 Dry-run: кнопка Test в builder → `IsDryRun=true`.
+
+Боковая секция билдера (2026-11-06): кнопка на карточке состояния или «Inspector» в правом клике по пустому месту. Плавно открывается (по умолчанию 45%, ширина меняется, запоминается), в шапке краткие данные об агенте и график 7 дней, вкладки History / Versions / Settings / Connections (содержимое — те же partial-представления, что у попапов). Попапом остаются детали запуска, история одной карточки, удаление и создание агента. Вкладки подгружаются через `DOMParser`, а submit их форм секция ловит сама (форма внутри формы редактора: браузер не передаёт такой submit выше внешней формы) — см. TR-2026-11-06-03.
 
 ---
 
@@ -591,6 +605,8 @@ UI и будущий AI Assistant вызывают **только** это. AI �
 
 С in-memory EF (PHASE 7): run delay → wakeup, retry, cancel, recover lease, dry-run не зовёт email.
 
+Состояние на 2026-11-06: 222 теста, зелёные. Добавлены `EngineExtrasTests` (цикл, путь ошибки, фильтр, функции значений, константы, повтор / продолжение, ожидание дочернего агента, валидатор цикла), `DataStoreTests` (хранилище, «Only once», теги), `GraphNotesTests`. Не покрыто: действия контроллера (`TestNode`, `Export`, `Import`, `RestoreVersion`, `SideSummary`, `ToolsPanel`, `UpdateHttpConnection`, `Rerun` / `Resume` как HTTP), JS, реальный EF-store с БД.
+
 Не выключать тесты ради зелёной сборки.
 
 ---
@@ -618,7 +634,7 @@ UI и будущий AI Assistant вызывают **только** это. AI �
 - React SPA.
 - Произвольный SQL и C#.
 - AI-генерация workflow.
-- Google/Microsoft/Telegram/Slack OAuth connections (только каркас http/webhook).
+- Google/Microsoft/Telegram/Slack OAuth connections (только каркас http/webhook). **Устарело:** Telegram / Google / Microsoft / WhatsApp сделаны позже в `Partnerly/Integrations` (2026-11-03..05); Slack нет.
 - Payment/Balance.
 - Выполнение workflow внутри HTTP request.
 - `Task.Delay` на часы.
@@ -633,3 +649,29 @@ UI и будущий AI Assistant вызывают **только** это. AI �
 - Типы действий `loop` (выходы `each` / `done`) и `filter` (false → порт `stopped`). Порт `error` у любой карточки с `config.onError = "route"`. Подробности и ограничения — TECHNICAL_SOLUTIONS TR-2026-11-06-01.
 - `graph.settings` (константы `vars`, `notifyOnFailure`) и `graph.notes` — не часть логики (`WorkflowGraphDiff` игнорирует заметки и `notifyOnFailure`).
 - `IAutomationRunService.RerunAsync` / `ResumeFailedAsync`; `IAutomationStore.QueryVersions`; `IRunFailureAlert` (необязательный).
+
+---
+
+## 22. Аудит кода 2026-11-06: что готово, что недоработано
+
+Проверены `Partnerly/Automation`, `Partnerly/Integrations`, представления и JS редактора, переводы, тесты, документы. Факты — по коду и поиску по репозиторию; «не проверено» значит «в браузере под входом не открывалось».
+
+**Готово (код + тесты движка):** триггеры (manual, schedule, interval, delay, webhook, event, entity.*), действия ядра, `loop`, `filter`, `store_*`, `once`, путь ошибки, функции значений `{{ x | f }}`, константы агента, повтор и продолжение запуска, ожидание дочернего агента, уведомление о сбое (в приложении), версии с Restore, экспорт / импорт, теги, статистика 7 дней, интеграции Telegram / Gmail / Sheets / Drive / Outlook / WhatsApp (на fake HTTP).
+
+**Недоработано / риски (подробно с номерами — `KNOWN_ISSUES.md`, KI-017):**
+
+1. Интерфейс не проверен под входом: боковая секция и вкладки, шапка с графиком, «Test this card», Export / Import, Restore, «Run again» / «Continue from failed», Inspector, теги на хабе, редактирование web-адреса. Проверялись только тестовые страницы и юнит-тесты.
+2. Нет тестов на HTTP-действия контроллера и на EF-хранилище с реальной БД (`AutomationStore`: `TryAddDataItemAsync`, `SetDataItemAsync`).
+3. Цикл: не покрыты тестами `delay` и `execute_workflow` с ожиданием внутри цикла и продолжение после падения в середине цикла (покрыт простой случай).
+4. Хранилище данных: нет экрана просмотра и очистки значений; просроченные записи не удаляются физически; ключи `once:` накапливаются.
+5. `/Documentation`: разделы по интеграциям и пути ошибки добавлены 2026-11-06; всё ещё нет разделов по функциям значений, константам агента, боковой секции, Inspector, «Test this card», экспорту / импорту, тегам.
+6. Шаблоны агентов (14) не используют цикл, фильтр, «Only once», путь ошибки.
+7. Чат агента (`builder-chat.js`): счётчик «ветвления» считает только `branch` / `switch`, про `loop` / `filter` / `once` / путь ошибки в отчёте нет ничего.
+8. Зашитые английские тексты: сообщение `RunFailureAlert`, ошибки обработчиков (`StepResult.Failed("...")`), подпись «Error» в окне «Test this card», статусы запуска в шапке секции показываются кодом (`succeeded`).
+9. Хаб (список агентов): History / Settings / Connections остаются popup; теги в строке не обновляются без перезагрузки после правки в Settings.
+10. Остатки: `SideEffectActionHandlerBase.ExecuteCoreAsync` по умолчанию возвращает «needs Partnerly connectors in PHASE 5» (все наследники его переопределяют); неиспользуемые ключи resx (`ConnCopied`, `BuilderChooseConnection`, `BuilderNoConnections`, `BuilderManageConnections`, `AgentChatSuggest1`, `BuilderTestSave`, `BuilderMenuTools`, `ToolsPanelTitle`, `ToolsExport`); неиспользуемые CSS `.automation-tools-bar*`, `.automation-tools-stats`; popup-стили Connections (`.automation-conn-scroll`, `:has(.automation-conn-sections)`) нужны только popup на хабе.
+11. Ограничения движка: циклы не вкладываются; `wait_until` в цикле запрещён; лимиты `MaxConcurrentRuns` / `MaxRunsPerHour` проверяют только worker (schedule / interval) и dispatcher (события), ручной запуск и «Run again» их не проверяют; «Run again» запускает логику той версии, что была у старого запуска; функция `date` не переводит часовой пояс; в тесте карточки `find_record` читает от имени владельца агента (как реальный запуск).
+12. Узкий экран / телефон, светлая тема, сенсорный ввод для новых элементов не проверялись; у секции `min-width: 320px` внутри.
+13. Нет: зашифрованных секретов агента, комментариев к карточкам, удаления версий (решение: не делать, лучше подпись версии или автоочистка).
+14. Реальные Telegram / Google / Meta / Microsoft не проверялись, нужны действия владельца (plan 3.3, 6.1, 6.5, 8.6, 8.7, 7.5).
+15. Миграция `AddAutomationDataStoreAndTags` применена только на локальной БД.
