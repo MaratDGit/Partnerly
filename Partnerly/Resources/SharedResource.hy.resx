@@ -2609,11 +2609,20 @@ Publish-ից հետո Partnerly-ն արթնացնում է գործակալին 
     <value>Նույն գրառման տեսակը և ոչ պարտադիր սպասումը մեկնարկից առաջ։ Աշխատում է գրառումը ջնջելիս։</value>
   </data>
   <data name="DocsTriggerEvent" xml:space="preserve">
-    <value>Իրադարձության անունը պետք է լինի ճիշտ մեկը՝
+    <value>Իրադարձության անունը պետք է լինի հենց հետևյալներից մեկը․
 UserRegistered — {{trigger.id}}, {{trigger.email}}, {{trigger.firstName}}, {{trigger.lastName}}։
+UserLoggedIn — նույն դաշտերը․ օգտատերը մուտք է գործել։
+UserLoginFailed — նույն դաշտերը և {{trigger.attempts}}, {{trigger.lockedOut}}․ սխալ գաղտնաբառ է մուտքագրվել։
+UserLockedOut — նույն դաշտերը և {{trigger.lockedUntil}}․ հաշիվը արգելափակվել է չափազանց շատ սխալ գաղտնաբառերից հետո։
+UserEmailConfirmed — նույն դաշտերը․ օգտատերը հաստատել է էլ. փոստը։
+PasswordResetRequested — նույն դաշտերը․ ուղարկվել է «մոռացել եմ գաղտնաբառը» հղումը։
+PasswordChanged — նույն դաշտերը․ գաղտնաբառը փոխվել է։
+UserDeleted — նույն դաշտերը․ օգտատերը ջնջվել է։
 SupportTicketCreated — {{trigger.id}}, {{trigger.ticketId}}, {{trigger.subject}}, {{trigger.status}}, {{trigger.type}}։
 SupportTicketStatusChanged — {{trigger.id}}, {{trigger.ticketId}}, {{trigger.status}}։
-Մեկնարկից առաջ սպասելը պարտադիր չէ։</value>
+SupportTicketAssigned — {{trigger.id}}, {{trigger.ticketId}}, {{trigger.subject}}, {{trigger.status}}, {{trigger.assignedTo}}, {{trigger.previousAssignedTo}}։
+SupportTicketDeleted — {{trigger.id}}, {{trigger.ticketId}}, {{trigger.subject}}, {{trigger.status}}։
+Սկսելուց առաջ սպասելը ընտրովի է։</value>
   </data>
   <data name="DocsTriggerWebhook" xml:space="preserve">
     <value>Publish-ից հետո Connections-ից պատճենեք URL-ը և HMAC գաղտնիքը։
@@ -3103,7 +3112,7 @@ User, խումբ և նամակի կաղապար այստեղ չեն ստեղծվ
     <value>Իրադարձության անուն</value>
   </data>
   <data name="EventNameHelp" xml:space="preserve">
-    <value>Ճիշտ մեկը՝ UserRegistered, SupportTicketCreated կամ SupportTicketStatusChanged։</value>
+    <value>Ընտրեք անունը ցանկից, օրինակ՝ UserRegistered կամ SupportTicketAssigned։ Այն պետք է համընկնի ճշգրիտ։</value>
   </data>
   <data name="WebhookTriggerHelp" xml:space="preserve">
     <value>Հրապարակումից հետո URL-ը և գաղտնիքը կերևան Միացումներում։</value>
@@ -5076,5 +5085,11 @@ User, խումբ և նամակի կաղապար այստեղ չեն ստեղծվ
   </data>
   <data name="DocsTabActions" xml:space="preserve">
     <value>Գործողություններ</value>
+  </data>
+  <data name="NodeFillIn" xml:space="preserve">
+    <value>Լրացրեք</value>
+  </data>
+  <data name="NodeNotConnected" xml:space="preserve">
+    <value>Չի միացված հոսքին</value>
   </data>
 </root>

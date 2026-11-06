@@ -222,6 +222,7 @@ using (var scope = app.Services.CreateScope())
     eventBus.Subscribe<UserRegisteredEvent, AutomationEventBridge>();
     eventBus.Subscribe<SupportTickedCreatedEvent, AutomationEventBridge>();
     eventBus.Subscribe<SupportTickedStatusChangedEvent, AutomationEventBridge>();
+    eventBus.Subscribe<AutomationAppEvent, AutomationEventBridge>();
 }
 
 if (!app.Environment.IsDevelopment())

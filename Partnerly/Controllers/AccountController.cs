@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Partnerly.Descriptors.Attributes;
 using Partnerly.Descriptors.Messages;
+using Partnerly.Events;
 using Partnerly.Events.BaseEvents;
 using Partnerly.Helpers;
 using Partnerly.Infrastructure.Interfaces;
@@ -104,6 +105,10 @@ namespace Partnerly.Controllers
             if (!BCrypt.Net.BCrypt.Verify(model.Password, user.PasswordHash))
             {
                 await RegisterFailedLoginAsync(user);
+                var lockedNow = await IsUserLockedOutAsync(user);
+                await _eventBus.PublishAsync(AutomationAppEvent.LoginFailed(user, lockedNow));
+                if (lockedNow)
+                    await _eventBus.PublishAsync(AutomationAppEvent.LockedOut(user));
                 if (await IsUserLockedOutAsync(user))
                     ModelState.AddModelError("Password", ErrorMessages.AccountLocked);
                 else
@@ -273,6 +278,7 @@ namespace Partnerly.Controllers
                 };
 
                 await _emailSender.SendEmailWithTemplateAsync(EmailTemplateNameAttribute.ForgotPassword, user.Email, emailModel);
+                await _eventBus.PublishAsync(AutomationAppEvent.ForUser(AutomationAppEvent.PasswordResetRequested, user));
 
                 return RedirectToLandingAuth("forgot-ok", returnUrl);
             }
@@ -352,6 +358,7 @@ namespace Partnerly.Controllers
                 return View(model);
             }
 
+            await _eventBus.PublishAsync(AutomationAppEvent.ForUser(AutomationAppEvent.PasswordChanged, user));
             return RedirectToLandingAuth("login", returnUrl);
         }
 
@@ -383,6 +390,7 @@ namespace Partnerly.Controllers
 
                         if (tokenResult.Success)
                         {
+                            await _eventBus.PublishAsync(AutomationAppEvent.ForUser(AutomationAppEvent.UserEmailConfirmed, user));
                             return RedirectToLandingAuth("email-ok");
                         }
                     }
@@ -797,6 +805,8 @@ namespace Partnerly.Controllers
                 CookieAuthenticationDefaults.AuthenticationScheme,
                 new ClaimsPrincipal(claimsIdentity),
                 authProperties);
+
+            await _eventBus.PublishAsync(AutomationAppEvent.ForUser(AutomationAppEvent.UserLoggedIn, user));
         }
     
 

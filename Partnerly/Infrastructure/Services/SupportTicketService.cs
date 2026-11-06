@@ -98,6 +98,10 @@ namespace Partnerly.Infrastructure.Services
             {
                 await _eventBus.PublishAsync(new SupportTickedCreatedEvent(newTicket: result.Data, type: SupportTickedCreatedEvent.EventType.Assigned, sendEmail: true, sendNote: true));
             }
+            if (result.Success && result.Data?.AssignedTo != null && result.Data.AssignedTo != oldAssignedTo)
+            {
+                await _eventBus.PublishAsync(AutomationAppEvent.TicketAssigned(result.Data, oldAssignedTo));
+            }
             if (result.Success && !string.IsNullOrEmpty(oldStatus) && !string.IsNullOrEmpty(ticket.Status) && oldStatus != ticket.Status)
             {
                 await _eventBus.PublishAsync(new SupportTickedStatusChangedEvent(ticket: result.Data, oldStatus: oldStatus, sendEmail: true, sendNote: true));
@@ -173,6 +177,7 @@ namespace Partnerly.Infrastructure.Services
 
             _supportTicketRepository.Delete(ticket);
             await _supportTicketRepository.SaveChangesAsync();
+            await _eventBus.PublishAsync(AutomationAppEvent.TicketDeleted(ticket));
 
             return ServiceResult<SupportTicket?>.Ok(ticket);
         }

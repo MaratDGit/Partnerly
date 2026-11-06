@@ -2611,8 +2611,17 @@ Fires when that record is created. Fields of the new row are in {{trigger.…}}.
   <data name="DocsTriggerEvent" xml:space="preserve">
     <value>Event name must be exactly one of:
 UserRegistered — {{trigger.id}}, {{trigger.email}}, {{trigger.firstName}}, {{trigger.lastName}}.
+UserLoggedIn — same fields; a user signed in.
+UserLoginFailed — same fields plus {{trigger.attempts}}, {{trigger.lockedOut}}; a wrong password was entered.
+UserLockedOut — same fields plus {{trigger.lockedUntil}}; the account was locked after too many wrong passwords.
+UserEmailConfirmed — same fields; the user confirmed the email address.
+PasswordResetRequested — same fields; a “forgot password” link was sent.
+PasswordChanged — same fields; the password was changed.
+UserDeleted — same fields; the user was deleted.
 SupportTicketCreated — {{trigger.id}}, {{trigger.ticketId}}, {{trigger.subject}}, {{trigger.status}}, {{trigger.type}}.
 SupportTicketStatusChanged — {{trigger.id}}, {{trigger.ticketId}}, {{trigger.status}}.
+SupportTicketAssigned — {{trigger.id}}, {{trigger.ticketId}}, {{trigger.subject}}, {{trigger.status}}, {{trigger.assignedTo}}, {{trigger.previousAssignedTo}}.
+SupportTicketDeleted — {{trigger.id}}, {{trigger.ticketId}}, {{trigger.subject}}, {{trigger.status}}.
 Wait before starting is optional.</value>
   </data>
   <data name="DocsTriggerWebhook" xml:space="preserve">
@@ -3103,7 +3112,7 @@ Delete is allowed for Support ticket.</value>
     <value>Event name</value>
   </data>
   <data name="EventNameHelp" xml:space="preserve">
-    <value>Must be exactly UserRegistered, SupportTicketCreated, or SupportTicketStatusChanged.</value>
+    <value>Pick a name from the list, for example UserRegistered or SupportTicketAssigned. It must match exactly.</value>
   </data>
   <data name="WebhookTriggerHelp" xml:space="preserve">
     <value>After publish, the URL and secret appear on Connections.</value>
@@ -5076,5 +5085,11 @@ Delete is allowed for Support ticket.</value>
   </data>
   <data name="DocsTabActions" xml:space="preserve">
     <value>Actions</value>
+  </data>
+  <data name="NodeFillIn" xml:space="preserve">
+    <value>Fill in</value>
+  </data>
+  <data name="NodeNotConnected" xml:space="preserve">
+    <value>Not connected to the flow</value>
   </data>
 </root>

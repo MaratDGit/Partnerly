@@ -2609,11 +2609,20 @@ Email template — поиск. Поля: id, name, subject.</value>
     <value>Тот же тип записи и необязательная пауза перед стартом. Срабатывает при удалении записи.</value>
   </data>
   <data name="DocsTriggerEvent" xml:space="preserve">
-    <value>Имя события должно быть ровно одним из:
+    <value>Название события должно быть ровно одним из:
 UserRegistered — {{trigger.id}}, {{trigger.email}}, {{trigger.firstName}}, {{trigger.lastName}}.
+UserLoggedIn — те же поля; пользователь вошёл.
+UserLoginFailed — те же поля и {{trigger.attempts}}, {{trigger.lockedOut}}; введён неверный пароль.
+UserLockedOut — те же поля и {{trigger.lockedUntil}}; аккаунт заблокирован после слишком многих неверных паролей.
+UserEmailConfirmed — те же поля; пользователь подтвердил почту.
+PasswordResetRequested — те же поля; отправлена ссылка «забыли пароль».
+PasswordChanged — те же поля; пароль изменён.
+UserDeleted — те же поля; пользователь удалён.
 SupportTicketCreated — {{trigger.id}}, {{trigger.ticketId}}, {{trigger.subject}}, {{trigger.status}}, {{trigger.type}}.
 SupportTicketStatusChanged — {{trigger.id}}, {{trigger.ticketId}}, {{trigger.status}}.
-Пауза перед стартом необязательна.</value>
+SupportTicketAssigned — {{trigger.id}}, {{trigger.ticketId}}, {{trigger.subject}}, {{trigger.status}}, {{trigger.assignedTo}}, {{trigger.previousAssignedTo}}.
+SupportTicketDeleted — {{trigger.id}}, {{trigger.ticketId}}, {{trigger.subject}}, {{trigger.status}}.
+Ожидание перед стартом необязательно.</value>
   </data>
   <data name="DocsTriggerWebhook" xml:space="preserve">
     <value>После Publish скопируйте URL и HMAC-секрет в Connections.
@@ -3103,7 +3112,7 @@ User, группу и шаблон письма здесь создать нел
     <value>Имя события</value>
   </data>
   <data name="EventNameHelp" xml:space="preserve">
-    <value>Ровно одно из: UserRegistered, SupportTicketCreated или SupportTicketStatusChanged.</value>
+    <value>Выберите название из списка, например UserRegistered или SupportTicketAssigned. Оно должно совпадать точно.</value>
   </data>
   <data name="WebhookTriggerHelp" xml:space="preserve">
     <value>После публикации URL и секрет появятся в Подключениях.</value>
@@ -5076,5 +5085,11 @@ User, группу и шаблон письма здесь создать нел
   </data>
   <data name="DocsTabActions" xml:space="preserve">
     <value>Действия</value>
+  </data>
+  <data name="NodeFillIn" xml:space="preserve">
+    <value>Заполните</value>
+  </data>
+  <data name="NodeNotConnected" xml:space="preserve">
+    <value>Не подключена к потоку</value>
   </data>
 </root>

@@ -483,12 +483,40 @@
         return String(type || "node").replace(/[^A-Za-z0-9_]/g, "_");
     }
 
+    // Cards of an integration show a small icon of the service next to the card title.
+    var SERVICE_CHIPS = {
+        telegram: { cls: "telegram", icon: "bxl-telegram", label: "Telegram" },
+        sheets: { cls: "sheets", icon: "bx-spreadsheet", label: "Google Sheets" },
+        gmail: { cls: "gmail", icon: "bxl-gmail", label: "Gmail" },
+        drive: { cls: "drive", icon: "bxl-google-cloud", label: "Google Drive" },
+        whatsapp: { cls: "whatsapp", icon: "bxl-whatsapp", label: "WhatsApp" },
+        outlook: { cls: "outlook", icon: "bxl-microsoft", label: "Outlook" },
+        outlookCalendar: { cls: "outlook", icon: "bx-calendar", label: "Outlook Calendar" }
+    };
+
+    function serviceOf(type) {
+        var match = /^(telegram|sheets|gmail|drive|whatsapp|outlook)\./.exec(String(type || ""));
+        if (!match) { return null; }
+        if (match[1] === "outlook" && /\.(create_event|find_events|event_added)$/.test(type)) {
+            return SERVICE_CHIPS.outlookCalendar;
+        }
+        return SERVICE_CHIPS[match[1]];
+    }
+
+    function serviceChipHtml(type) {
+        var service = serviceOf(type);
+        return service
+            ? '<span class="auto-node-service is-' + service.cls + '" title="' + service.label + '"><i class="bx ' + service.icon + '" aria-hidden="true"></i></span>'
+            : "";
+    }
+
     function nodeHtml(data) {
         return '<div class="auto-node auto-node--' + (data.kind || "action") + '">' +
             '<span class="auto-node-badge" aria-hidden="true"><i class="bx ' + (data.kind === "trigger" ? "bxs-bolt" : "bx-cube-alt") + '"></i></span>' +
             '<span class="auto-node-kind">' + (data.kind === "trigger" ? t("triggerBlocks", "When") : t("actionBlocks", "Then")) + "</span>" +
-            '<strong class="auto-node-type">' + typeLabel(data.type, data.type) + "</strong>" +
+            '<strong class="auto-node-type">' + serviceChipHtml(data.type) + "<span>" + typeLabel(data.type, data.type) + "</span></strong>" +
             '<span class="auto-node-name">' + (data.name || "") + "</span>" +
+            '<span class="auto-node-missing" hidden></span>' +
             '<span class="auto-node-off" title="' + t("builderDisabledHint", "This card is turned off: the flow skips it") + '"><i class="bx bx-power-off" aria-hidden="true"></i> ' + t("builderDisabledBadge", "Off") + "</span></div>";
     }
 
@@ -617,12 +645,31 @@
             var wired = data.kind === "trigger" ? connectionCount(node.outputs) > 0 : connectionCount(node.inputs) > 0;
             var inner = root.querySelector("#node-" + node.id + " .auto-node");
             if (inner) {
-                var ready = wired && settingsReady(data);
+                var fieldsReady = settingsReady(data);
+                var ready = wired && fieldsReady;
                 inner.classList.toggle("is-configured", ready);
+                // Fields that still need a value are listed on the card in the colour of its state line.
+                var missing = [];
+                if (!data.disabled && !fieldsReady) {
+                    try { missing = missingFor(data); } catch (e) { missing = []; }
+                }
+                var hint = inner.querySelector(".auto-node-missing");
+                var hintText = missing.length
+                    ? t("nodeFillIn", "Fill in") + ": " + missing.slice(0, 3).join(", ") + (missing.length > 3 ? " +" + (missing.length - 3) : "")
+                    : "";
+                if (hint && (hint.textContent !== hintText || hint.hidden === !!hintText)) {
+                    hint.textContent = hintText;
+                    hint.hidden = !hintText;
+                    hint.title = missing.join(", ");
+                    // The card changed height: re-draw its lines.
+                    try { editor.updateConnectionNodes("node-" + node.id); } catch (e) { /* card is going away */ }
+                }
                 // The colour line on the left edge tells the state; the tooltip spells it out.
                 inner.title = data.disabled
                     ? t("builderDisabledHint", "This card is turned off: the flow skips it")
-                    : (ready ? t("nodeConfigured", "Configured") : t("nodeNeedsSetup", "Needs setup"));
+                    : (ready ? t("nodeConfigured", "Configured")
+                        : (missing.length ? t("nodeFillIn", "Fill in") + ": " + missing.join(", ")
+                            : (fieldsReady ? t("nodeNotConnected", "Not connected to the flow") : t("nodeNeedsSetup", "Needs setup"))));
             }
         });
     }
@@ -1068,7 +1115,7 @@
         return key;
     }
 
-    function missingFor(data) {
+    function missingKeysFor(data) {
         var config = normalizeDelay(JSON.parse(JSON.stringify(data.config || {})));
         var keys;
         if (INTEGRATION_PREFIX.test(data.type)) {
@@ -1081,7 +1128,11 @@
             var value = getByPath(config, key);
             if (key === "amount" || key === "minutes") { return !(Number(value) > 0); }
             return !filled(value);
-        }).map(function (key) { return fieldLabelFor(data, key); });
+        });
+    }
+
+    function missingFor(data) {
+        return missingKeysFor(data).map(function (key) { return fieldLabelFor(data, key); });
     }
 
     // ---- readable settings of a card (used by the agent chat) ----------------
@@ -1332,7 +1383,16 @@
     var EVENT_VARS = {
         UserRegistered: ["id", "email", "firstName", "lastName"],
         SupportTicketCreated: ["id", "ticketId", "subject", "status", "type"],
-        SupportTicketStatusChanged: ["id", "ticketId", "status"]
+        SupportTicketStatusChanged: ["id", "ticketId", "status"],
+        UserLoggedIn: ["id", "email", "firstName", "lastName"],
+        UserLoginFailed: ["id", "email", "firstName", "lastName", "attempts", "lockedOut"],
+        UserLockedOut: ["id", "email", "firstName", "lastName", "lockedUntil"],
+        UserEmailConfirmed: ["id", "email", "firstName", "lastName"],
+        PasswordResetRequested: ["id", "email", "firstName", "lastName"],
+        PasswordChanged: ["id", "email", "firstName", "lastName"],
+        UserDeleted: ["id", "email", "firstName", "lastName"],
+        SupportTicketAssigned: ["id", "ticketId", "subject", "status", "assignedTo", "previousAssignedTo"],
+        SupportTicketDeleted: ["id", "ticketId", "subject", "status"]
     };
 
     var TRIGGER_VARS = {
@@ -1625,6 +1685,7 @@
             }
             var wrap = document.createElement("div");
             wrap.className = "mb-3";
+            wrap.setAttribute("data-field-wrap", field.key);
             var label = document.createElement("label");
             label.className = "form-label";
             label.textContent = field.label || field.key;
@@ -1894,7 +1955,9 @@
         }
         var typeNode = root.querySelector("#node-" + selectedId + " .auto-node-type");
         if (typeNode) {
-            typeNode.textContent = typeLabel(node.data.type, node.data.type);
+            // The service icon stays; only the text part is refreshed.
+            var typeText = typeNode.querySelector("span:not(.auto-node-service)");
+            (typeText || typeNode).textContent = typeLabel(node.data.type, node.data.type);
         }
         syncErrorOutput(selectedId, node.data);
         syncHidden();
@@ -1923,6 +1986,47 @@
         button.disabled = !ready;
         var hint = q("[data-props-done-hint]");
         if (hint) { hint.hidden = ready; }
+        updatePropsWarning(node && node.data, ready);
+    }
+
+    // Warning on top of the properties window: which fields still need a value (and the fields themselves are marked).
+    function updatePropsWarning(data, ready) {
+        var box = q("[data-props-warning]");
+        var host = q("[data-prop-fields]");
+        if (!box) { return; }
+        var keys = [];
+        if (data && !data.disabled && !ready) {
+            try { keys = missingKeysFor(data); } catch (e) { keys = []; }
+        }
+        if (host) {
+            Array.prototype.forEach.call(host.querySelectorAll("[data-field-wrap]"), function (wrap) {
+                wrap.classList.toggle("is-required-missing", keys.indexOf(wrap.getAttribute("data-field-wrap")) !== -1);
+            });
+        }
+        box.textContent = "";
+        if (!keys.length) { box.hidden = true; return; }
+        var icon = document.createElement("i");
+        icon.className = "bx bx-error";
+        icon.setAttribute("aria-hidden", "true");
+        var title = document.createElement("strong");
+        title.textContent = t("nodeFillIn", "Fill in") + ":";
+        box.appendChild(icon);
+        box.appendChild(title);
+        keys.forEach(function (key) {
+            var chip = document.createElement("button");
+            chip.type = "button";
+            chip.className = "automation-props-warning-chip";
+            chip.textContent = fieldLabelFor(data, key);
+            chip.addEventListener("click", function () {
+                var wrap = host ? host.querySelector('[data-field-wrap="' + key.replace(/"/g, "") + '"]') : null;
+                if (!wrap) { return; }
+                wrap.scrollIntoView({ block: "center", behavior: "smooth" });
+                var control = wrap.querySelector("input, select, textarea, [contenteditable]");
+                if (control && control.focus) { control.focus({ preventScroll: true }); }
+            });
+            box.appendChild(chip);
+        });
+        box.hidden = false;
     }
 
     function markSelected(id) {

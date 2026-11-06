@@ -360,6 +360,7 @@ namespace Partnerly.Infrastructure.Services
                 user.IsDeleted = true;
                 _userRepo.Update(user);
                 await _userRepo.SaveChangesAsync();
+                await _eventBus.PublishAsync(AutomationAppEvent.ForUser(AutomationAppEvent.UserDeleted, user));
             }
             catch (Exception ex)
             {
