@@ -29,14 +29,18 @@ namespace Partnerly.Agent.Commands
         private readonly UiBridge _ui;
         private readonly PathGuard _folders;
         private readonly PathGuard _scriptFolders;
+        private readonly GitRunner _git;
 
         public CommandRunner(AgentConfig config, UiBridge ui)
         {
             _config = config;
             _ui = ui;
             _folders = new PathGuard(config.AllowedFolders);
-            _scriptFolders = new PathGuard(config.ScriptFolders);
+            _scriptFolders = _folders;
+            _git = new GitRunner(config, ui.Confirm);
         }
+
+        public GitRunner Git => _git;
 
         public async Task<JsonObject> RunAsync(string op, JsonObject args, CancellationToken cancellationToken)
         {
@@ -86,6 +90,8 @@ namespace Partnerly.Agent.Commands
                 case "network_info": return NetworkInformationResult();
                 case "ping_host": return await PingAsync(args);
                 case "download_url": return await DownloadUrlAsync(args, cancellationToken);
+                case "git": return await _git.RunAsync(args, cancellationToken);
+                case "browse": return FolderBrowser.List(_folders, Text(args, "path"));
                 default: throw new AgentException("This version of Partnerly Agent does not know the command \"" + op + "\". Update the program.");
             }
         }
@@ -95,7 +101,8 @@ namespace Partnerly.Agent.Commands
         private JsonObject PickPath(JsonObject args)
         {
             var kind = Text(args, "kind").ToLowerInvariant();
-            var picked = _ui.PickPath(kind, Text(args, "title"));
+            // A Git folder is chosen in the same folder dialog; only the "is it allowed" hint differs.
+            var picked = _ui.PickPath(kind == "repo" ? "folder" : kind, Text(args, "title"));
             if (picked == null)
             {
                 return new JsonObject { ["cancelled"] = true };
@@ -115,6 +122,9 @@ namespace Partnerly.Agent.Commands
                     break;
                 case "script":
                     allowed = TryAllowed(_scriptFolders, picked);
+                    break;
+                case "repo":
+                    allowed = TryAllowed(_folders, picked);
                     break;
                 default:
                     allowed = TryAllowed(_folders, picked);
@@ -260,9 +270,21 @@ namespace Partnerly.Agent.Commands
             return new JsonObject { ["text"] = File.ReadAllText(path), ["size"] = info.Length, ["fileName"] = info.Name };
         }
 
+        // Scripts may now run from any allowed folder, so the site must not be able to create one there itself.
+        private static readonly string[] NoWriteExtensions = ProgramExtensions.Where(item => item is not ".js").ToArray();
+
+        private static void RefuseProgramFile(string path)
+        {
+            if (NoWriteExtensions.Contains(Path.GetExtension(path), StringComparer.OrdinalIgnoreCase))
+            {
+                throw new AgentException("Partnerly does not write programs or scripts (" + Path.GetExtension(path) + "). Put the script on the PC yourself.");
+            }
+        }
+
         private JsonObject WriteFile(JsonObject args)
         {
             var path = _folders.Resolve(Text(args, "path"));
+            RefuseProgramFile(path);
             var append = string.Equals(Text(args, "mode"), "append", StringComparison.OrdinalIgnoreCase);
             var text = args["text"]?.ToString() ?? string.Empty;
             if (Encoding.UTF8.GetByteCount(text) > MaxFileBytes) { throw new AgentException("The text is bigger than 8 MB."); }
@@ -304,6 +326,7 @@ namespace Partnerly.Agent.Commands
             if (!File.Exists(source)) { throw new AgentException("The source file was not found."); }
             if (Directory.Exists(destination)) { destination = Path.Combine(destination, Path.GetFileName(source)); _folders.Resolve(destination); }
             Directory.CreateDirectory(Path.GetDirectoryName(destination)!);
+            RefuseProgramFile(destination);
             var overwrite = IsTrue(args, "overwrite");
             if (move) { File.Move(source, destination, overwrite); } else { File.Copy(source, destination, overwrite); }
             return new JsonObject { ["path"] = destination };
@@ -332,6 +355,7 @@ namespace Partnerly.Agent.Commands
             catch (FormatException) { throw new AgentException("The file came damaged."); }
             if (bytes.LongLength > MaxFileBytes) { throw new AgentException("The file is bigger than 8 MB."); }
             var path = _folders.Resolve(Path.Combine(folder, fileName));
+            RefuseProgramFile(path);
             if (File.Exists(path) && !IsTrue(args, "overwrite")) { throw new AgentException("The file already exists. Turn on \"Replace if it exists\" to overwrite."); }
             Directory.CreateDirectory(folder);
             File.WriteAllBytes(path, bytes);

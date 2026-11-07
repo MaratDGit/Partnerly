@@ -12,6 +12,8 @@ namespace Partnerly.Computer
             services.AddSingleton<IAutomationModule, ComputerAutomationModule>();
 
             services.AddTransient<ComputerFileCreatedTrigger>();
+            services.AddTransient<ComputerGitNewCommitTrigger>();
+            services.AddTransient<ComputerGitChangedTrigger>();
             services.AddTransient<ComputerStatusTrigger>();
             services.AddTransient<ComputerProgramStartedTrigger>();
             services.AddTransient<ComputerFileChangedTrigger>();
@@ -37,6 +39,21 @@ namespace Partnerly.Computer
             services.AddTransient<ComputerFileInfoAction>();
             services.AddTransient<ComputerUnzipAction>();
             services.AddTransient<ComputerDownloadUrlAction>();
+            services.AddTransient<ComputerGitStatusAction>();
+            services.AddTransient<ComputerGitLogAction>();
+            services.AddTransient<ComputerGitDiffAction>();
+            services.AddTransient<ComputerGitBranchesAction>();
+            services.AddTransient<ComputerGitFetchAction>();
+            services.AddTransient<ComputerGitPullAction>();
+            services.AddTransient<ComputerGitCommitAction>();
+            services.AddTransient<ComputerGitPushAction>();
+            services.AddTransient<ComputerGitSwitchAction>();
+            services.AddTransient<ComputerGitCloneAction>();
+            services.AddTransient<ComputerGitInitAction>();
+            services.AddTransient<ComputerGitMergeAction>();
+            services.AddTransient<ComputerGitTagAction>();
+            services.AddTransient<ComputerGitStashAction>();
+            services.AddTransient<ComputerGitCommandAction>();
 
             services.AddTransient<ComputerNotifyAction>();
             services.AddTransient<ComputerMessageBoxAction>();

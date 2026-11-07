@@ -28,6 +28,7 @@
     <!-- Pure parts of Partnerly.Agent (a Windows program) are compiled here to be tested. -->
     <Compile Include="..\Partnerly.Agent\Security\*.cs" Link="Agent\%(Filename)%(Extension)" />
     <Compile Include="..\Partnerly.Agent\Config\AgentConfig.cs" Link="Agent\AgentConfig.cs" />
+    <Compile Include="..\Partnerly.Agent\Commands\GitRunner.cs" Link="Agent\GitRunner.cs" />
   </ItemGroup>
 
 </Project>

@@ -5309,10 +5309,10 @@ User, խումբ և նամակի կաղապար այստեղ չեն ստեղծվ
     <value>Միայն այս պանակը</value>
   </data>
   <data name="BuilderIntPcWatchFolderHelp" xml:space="preserve">
-    <value>Դատարկը նշանակում է ցանկացած հետևվող պանակ։ Ենթապանակները ներառված են։</value>
+    <value>Դատարկ՝ ցանկացած թույլատրված թղթապանակ։ Ենթաթղթապանակները ներառված են։</value>
   </data>
   <data name="BuilderIntPcFileTriggerHelp" xml:space="preserve">
-    <value>Գործարկվում է, երբ գործակալի կարգավորումների watchFolders-ում նշված պանակում նոր ֆայլ է հայտնվում։ Փոփոխականներ՝ {{trigger.path}}, {{trigger.fileName}}, {{trigger.folder}}, {{trigger.extension}}, {{trigger.size}}։</value>
+    <value>Գործարկվում է, երբ նոր ֆայլ է հայտնվում ծրագրում թույլատրված ցանկացած թղթապանակում (և դրա ներսում)։ Փոփոխականներ՝ {{trigger.path}}, {{trigger.fileName}}, {{trigger.folder}}, {{trigger.extension}}, {{trigger.size}}։</value>
   </data>
   <data name="BuilderIntPcState" xml:space="preserve">
     <value>Երբ ՀՀ-ը</value>
@@ -5330,7 +5330,7 @@ User, խումբ և նամակի կաղապար այստեղ չեն ստեղծվ
     <value>Դատարկը նշանակում է ցանկացած հետևվող ծրագիր։ Օրինակ՝ chrome։</value>
   </data>
   <data name="BuilderIntPcProgramWatchHelp" xml:space="preserve">
-    <value>Հայտնվում են միայն գործակալի կարգավորումների watchPrograms-ում նշված ծրագրերը։ Փոփոխականներ՝ {{trigger.name}}, {{trigger.machine}}։</value>
+    <value>Հայտնվում է միայն ծրագրի կարգավորումների Programs ցանկի ծրագրերի մասին։ Փոփոխականներ՝ {{trigger.name}}, {{trigger.machine}}։</value>
   </data>
   <data name="ComputerTitle" xml:space="preserve">
     <value>Համակարգիչ</value>
@@ -5418,7 +5418,7 @@ User, խումբ և նամակի կաղապար այստեղ չեն ստեղծվ
     <value>Այս համակարգիչը կարող է հարցնել սեփականատիրոջը՝ գործարկելուց առաջ։ Միացվում է ծրագրում՝ սկուտեղի պատկերակ &gt; Settings &gt; Ask me first։</value>
   </data>
   <data name="BuilderIntPcClipboardTriggerNote" xml:space="preserve">
-    <value>Պետք է միացնել «Report text I copy to the clipboard»-ը ծրագրի կարգավորումներում (սկուտեղի պատկերակ &gt; Settings &gt; Watching)։ Լռելյայն անջատված է, քանի որ պատճենվող տեքստը կարող է անձնական լինել։</value>
+    <value>Պետք է միացնել «Tell Partnerly when I copy text»-ը ծրագրի կարգավորումներում (սկուտեղի պատկերակ &gt; Settings &gt; Safety)։ Լռելյայն անջատված է՝ պատճենված տեքստը կարող է անձնական լինել։</value>
   </data>
   <data name="BuilderIntPcDelaySeconds" xml:space="preserve">
     <value>Սպասել նախքան (վայրկյան)</value>
@@ -5427,7 +5427,7 @@ User, խումբ և նամակի կաղապար այստեղ չեն ստեղծվ
     <value>Ֆայլը տեղափոխվում է Աղբարկղ, այն կարելի է վերականգնել։ Թղթապանակները երբեք չեն ջնջվում։ Լռելյայն համակարգիչը նախ հարցնում է սեփականատիրոջը։</value>
   </data>
   <data name="BuilderIntPcDiskLowNote" xml:space="preserve">
-    <value>Ծրագիրը հայտնում է սկավառակի մասին, երբ ազատ տեղը փոքր է կարգավորումներում նշված սահմանից (սկուտեղի պատկերակ &gt; Settings &gt; Watching, լռելյայն 5 ԳԲ)։ Հայտնում է մեկ անգամ՝ մինչև տեղը ազատվի։</value>
+    <value>Ծրագիրը հայտնում է սկավառակի մասին, երբ ազատ տեղը փոքր է կարգավորումներում նշված սահմանից (սկուտեղի պատկերակ &gt; Settings &gt; Safety, լռելյայն 5 ԳԲ)։ Հայտնում է մեկ անգամ՝ մինչև տեղը ազատվի։</value>
   </data>
   <data name="BuilderIntPcDownloadNameHelp" xml:space="preserve">
     <value>Թողեք դատարկ՝ անունը հղումից վերցնելու համար։ Ծրագրերն ու սկրիպտերը (.exe, .bat...) երբեք չեն ներբեռնվում։</value>
@@ -5457,7 +5457,7 @@ User, խումբ և նամակի կաղապար այստեղ չեն ստեղծվ
     <value>Ինչ-որ մեկը վերադարձել է</value>
   </data>
   <data name="BuilderIntPcIdleNote" xml:space="preserve">
-    <value>«Ոչ ոք չկա» նշանակում է, որ ստեղնաշարն ու մկնիկը չեն օգտագործվում։ Ժամանակը սահմանվում է ծրագրի կարգավորումներում (սկուտեղի պատկերակ &gt; Settings &gt; Watching, լռելյայն 10 րոպե)։</value>
+    <value>«Ոչ ոք չկա» նշանակում է՝ ստեղնաշարն ու մկնիկը չեն օգտագործվում։ Ժամանակը սահմանվում է ծրագրի կարգավորումներում (սկուտեղի պատկերակ &gt; Settings &gt; Safety, լռելյայն 10 րոպե)։</value>
   </data>
   <data name="BuilderIntPcIdleStarted" xml:space="preserve">
     <value>Վաղուց ոչ ոք չի դիպել համակարգչին</value>
@@ -5840,4 +5840,561 @@ User, խումբ և նամակի կաղապար այստեղ չեն ստեղծվ
   <data name="ComputerErrRefused" xml:space="preserve">
     <value>Համակարգիչը մերժեց հրամանը։</value>
   </data>
+  <data name="IntegrationGitHubIntro" xml:space="preserve">
+    <value>Ձեր GitHub հաշիվը՝ խնդիրներ, pull request-ներ, ֆայլեր, թողարկումներ և workflow-ներ։</value>
+  </data>
+  <data name="IntegrationGitHubFeature1" xml:space="preserve">
+    <value>Քարտեր խնդիրների, pull request-ների, ճյուղերի, ֆայլերի, թողարկումների և workflow-ների համար</value>
+  </data>
+  <data name="IntegrationGitHubFeature2" xml:space="preserve">
+    <value>Տրիգերներ՝ նոր խնդիր, pull request, commit, թողարկում, ձախողված workflow</value>
+  </data>
+  <data name="IntegrationGitHubNotConfigured" xml:space="preserve">
+    <value>GitHub-ով մուտքը այս սերվերում կարգավորված չէ (Authentication:GitHub)։ Կարող եք միացնել մուտքի թոքենով։</value>
+  </data>
+  <data name="IntegrationConnectGitHub" xml:space="preserve">
+    <value>Միացնել GitHub</value>
+  </data>
+  <data name="IntegrationGitHubChoose" xml:space="preserve">
+    <value>Ընտրեք՝ ինչ թույլատրել Partnerly-ին։ Հաստատելու համար կանցնեք GitHub։</value>
+  </data>
+  <data name="IntegrationGitHubPrivate" xml:space="preserve">
+    <value>Նաև փակ ռեպոզիտորիաները (հակառակ դեպքում՝ միայն բաց)</value>
+  </data>
+  <data name="IntegrationGitHubWorkflows" xml:space="preserve">
+    <value>Փոխել workflow ֆայլերը (.github/workflows)</value>
+  </data>
+  <data name="IntegrationGitHubRedirect" xml:space="preserve">
+    <value>Ձեր GitHub OAuth App-ում նշեք այս Callback URL-ը՝</value>
+  </data>
+  <data name="IntegrationGitHubUseToken" xml:space="preserve">
+    <value>Միացնել թոքենով</value>
+  </data>
+  <data name="IntegrationContinueGitHub" xml:space="preserve">
+    <value>Շարունակել GitHub-ով</value>
+  </data>
+  <data name="IntegrationConnectGitHubToken" xml:space="preserve">
+    <value>Միացնել GitHub թոքենով</value>
+  </data>
+  <data name="IntegrationGitHubTokenStep1" xml:space="preserve">
+    <value>github.com-ում բացեք Settings &gt; Developer settings &gt; Personal access tokens։</value>
+  </data>
+  <data name="IntegrationGitHubTokenStep2" xml:space="preserve">
+    <value>Ստեղծեք թոքեն repo իրավունքով (և workflow, եթե անհրաժեշտ է)։</value>
+  </data>
+  <data name="IntegrationGitHubTokenStep3" xml:space="preserve">
+    <value>Պատճենեք թոքենը և տեղադրեք ներքևում։ GitHub-ը այն ցույց է տալիս միայն մեկ անգամ։</value>
+  </data>
+  <data name="IntegrationGitHubToken" xml:space="preserve">
+    <value>Մուտքի թոքեն</value>
+  </data>
+  <data name="NodeTypeGitHubListRepos" xml:space="preserve">
+    <value>GitHub՝ իմ ռեպոզիտորիաները</value>
+  </data>
+  <data name="NodeTypeGitHubGetRepo" xml:space="preserve">
+    <value>GitHub՝ ստանալ ռեպոզիտորիա</value>
+  </data>
+  <data name="NodeTypeGitHubCreateIssue" xml:space="preserve">
+    <value>GitHub՝ ստեղծել խնդիր</value>
+  </data>
+  <data name="NodeTypeGitHubGetIssue" xml:space="preserve">
+    <value>GitHub՝ ստանալ խնդիր</value>
+  </data>
+  <data name="NodeTypeGitHubListIssues" xml:space="preserve">
+    <value>GitHub՝ գտնել խնդիրներ</value>
+  </data>
+  <data name="NodeTypeGitHubUpdateIssue" xml:space="preserve">
+    <value>GitHub՝ թարմացնել կամ փակել խնդիրը</value>
+  </data>
+  <data name="NodeTypeGitHubCommentIssue" xml:space="preserve">
+    <value>GitHub՝ մեկնաբանություն</value>
+  </data>
+  <data name="NodeTypeGitHubCreatePr" xml:space="preserve">
+    <value>GitHub՝ ստեղծել pull request</value>
+  </data>
+  <data name="NodeTypeGitHubGetPr" xml:space="preserve">
+    <value>GitHub՝ ստանալ pull request</value>
+  </data>
+  <data name="NodeTypeGitHubListPrs" xml:space="preserve">
+    <value>GitHub՝ գտնել pull request-ներ</value>
+  </data>
+  <data name="NodeTypeGitHubMergePr" xml:space="preserve">
+    <value>GitHub՝ միավորել pull request</value>
+  </data>
+  <data name="NodeTypeGitHubListBranches" xml:space="preserve">
+    <value>GitHub՝ ճյուղերի ցանկ</value>
+  </data>
+  <data name="NodeTypeGitHubListCommits" xml:space="preserve">
+    <value>GitHub՝ commit-ների ցանկ</value>
+  </data>
+  <data name="NodeTypeGitHubCreateBranch" xml:space="preserve">
+    <value>GitHub՝ ստեղծել ճյուղ</value>
+  </data>
+  <data name="NodeTypeGitHubGetFile" xml:space="preserve">
+    <value>GitHub՝ կարդալ ֆայլ</value>
+  </data>
+  <data name="NodeTypeGitHubPutFile" xml:space="preserve">
+    <value>GitHub՝ ստեղծել կամ փոխել ֆայլ</value>
+  </data>
+  <data name="NodeTypeGitHubCreateRelease" xml:space="preserve">
+    <value>GitHub՝ ստեղծել թողարկում</value>
+  </data>
+  <data name="NodeTypeGitHubDispatchWorkflow" xml:space="preserve">
+    <value>GitHub՝ գործարկել workflow</value>
+  </data>
+  <data name="NodeTypeGitHubListWorkflowRuns" xml:space="preserve">
+    <value>GitHub՝ workflow-ի գործարկումներ</value>
+  </data>
+  <data name="NodeTypeGitHubApiRequest" xml:space="preserve">
+    <value>GitHub՝ API հարցում</value>
+  </data>
+  <data name="NodeTypeGitHubIssueOpened" xml:space="preserve">
+    <value>GitHub՝ նոր խնդիր</value>
+  </data>
+  <data name="NodeTypeGitHubPrOpened" xml:space="preserve">
+    <value>GitHub՝ նոր pull request</value>
+  </data>
+  <data name="NodeTypeGitHubPush" xml:space="preserve">
+    <value>GitHub՝ նոր commit</value>
+  </data>
+  <data name="NodeTypeGitHubReleasePublished" xml:space="preserve">
+    <value>GitHub՝ նոր թողարկում</value>
+  </data>
+  <data name="NodeTypeGitHubWorkflowFailed" xml:space="preserve">
+    <value>GitHub՝ workflow-ը ձախողվեց</value>
+  </data>
+  <data name="BuilderIntGhRepo" xml:space="preserve">
+    <value>Ռեպոզիտորիա</value>
+  </data>
+  <data name="BuilderIntGhRepoHelp" xml:space="preserve">
+    <value>սեփականատեր/անուն, օրինակ՝ octocat/hello-world, կամ հղում ռեպոզիտորիային։</value>
+  </data>
+  <data name="BuilderIntGhNumber" xml:space="preserve">
+    <value>Համար</value>
+  </data>
+  <data name="BuilderIntGhNumberHelp" xml:space="preserve">
+    <value>Խնդրի կամ pull request-ի համարը, օրինակ՝ 42։</value>
+  </data>
+  <data name="BuilderIntGhTitle" xml:space="preserve">
+    <value>Վերնագիր</value>
+  </data>
+  <data name="BuilderIntGhBody" xml:space="preserve">
+    <value>Տեքստ</value>
+  </data>
+  <data name="BuilderIntGhLabels" xml:space="preserve">
+    <value>Պիտակներ</value>
+  </data>
+  <data name="BuilderIntGhLabelsHelp" xml:space="preserve">
+    <value>Բաժանեք ստորակետով։</value>
+  </data>
+  <data name="BuilderIntGhAssignees" xml:space="preserve">
+    <value>Կատարողներ (GitHub login-ներ)</value>
+  </data>
+  <data name="BuilderIntGhState" xml:space="preserve">
+    <value>Վիճակ</value>
+  </data>
+  <data name="BuilderIntGhOpen" xml:space="preserve">
+    <value>Բաց</value>
+  </data>
+  <data name="BuilderIntGhClosed" xml:space="preserve">
+    <value>Փակ</value>
+  </data>
+  <data name="BuilderIntGhAll" xml:space="preserve">
+    <value>Բոլորը</value>
+  </data>
+  <data name="BuilderIntGhKeep" xml:space="preserve">
+    <value>Չփոխել</value>
+  </data>
+  <data name="BuilderIntGhUpdateHelp" xml:space="preserve">
+    <value>Լրացրեք միայն այն, ինչ պետք է փոխվի։ Դատարկ դաշտերը կմնան անփոփոխ։</value>
+  </data>
+  <data name="BuilderIntGhHead" xml:space="preserve">
+    <value>Ճյուղ փոփոխություններով</value>
+  </data>
+  <data name="BuilderIntGhBase" xml:space="preserve">
+    <value>Միավորել ճյուղի մեջ</value>
+  </data>
+  <data name="BuilderIntGhDraft" xml:space="preserve">
+    <value>Սևագիր</value>
+  </data>
+  <data name="BuilderIntGhMergeMethod" xml:space="preserve">
+    <value>Միավորման եղանակ</value>
+  </data>
+  <data name="BuilderIntGhCommitTitle" xml:space="preserve">
+    <value>Միավորման commit-ի վերնագիր (ըստ ցանկության)</value>
+  </data>
+  <data name="BuilderIntGhBranch" xml:space="preserve">
+    <value>Ճյուղ</value>
+  </data>
+  <data name="BuilderIntGhBranchHelp" xml:space="preserve">
+    <value>Թողեք դատարկ՝ լռելյայն ճյուղի համար։</value>
+  </data>
+  <data name="BuilderIntGhNewBranch" xml:space="preserve">
+    <value>Նոր ճյուղի անուն</value>
+  </data>
+  <data name="BuilderIntGhFrom" xml:space="preserve">
+    <value>Ստեղծել ճյուղից</value>
+  </data>
+  <data name="BuilderIntGhPath" xml:space="preserve">
+    <value>Ֆայլի ուղի</value>
+  </data>
+  <data name="BuilderIntGhPathHelp" xml:space="preserve">
+    <value>Ռեպոզիտորիայի ներսում, օրինակ՝ docs/readme.md։</value>
+  </data>
+  <data name="BuilderIntGhRef" xml:space="preserve">
+    <value>Ճյուղ կամ թեգ</value>
+  </data>
+  <data name="BuilderIntGhFileText" xml:space="preserve">
+    <value>Ֆայլի բովանդակություն</value>
+  </data>
+  <data name="BuilderIntGhCommitMessage" xml:space="preserve">
+    <value>Commit-ի հաղորդագրություն</value>
+  </data>
+  <data name="BuilderIntGhPutHelp" xml:space="preserve">
+    <value>Ստեղծում է ֆայլը կամ փոխարինում այս տեքստով և անում commit։</value>
+  </data>
+  <data name="BuilderIntGhTag" xml:space="preserve">
+    <value>Թեգ</value>
+  </data>
+  <data name="BuilderIntGhReleaseName" xml:space="preserve">
+    <value>Թողարկման անուն</value>
+  </data>
+  <data name="BuilderIntGhPrerelease" xml:space="preserve">
+    <value>Նախնական թողարկում</value>
+  </data>
+  <data name="BuilderIntGhTarget" xml:space="preserve">
+    <value>Ճյուղ կամ commit թեգի համար</value>
+  </data>
+  <data name="BuilderIntGhWorkflow" xml:space="preserve">
+    <value>Workflow ֆայլ</value>
+  </data>
+  <data name="BuilderIntGhWorkflowHelp" xml:space="preserve">
+    <value>Ֆայլի անունը .github/workflows-ում, օրինակ՝ build.yml։</value>
+  </data>
+  <data name="BuilderIntGhInputs" xml:space="preserve">
+    <value>Պարամետրեր (JSON, ըստ ցանկության)</value>
+  </data>
+  <data name="BuilderIntGhRunStatus" xml:space="preserve">
+    <value>Արդյունք</value>
+  </data>
+  <data name="BuilderIntGhAnyStatus" xml:space="preserve">
+    <value>Ցանկացած</value>
+  </data>
+  <data name="BuilderIntGhFailed" xml:space="preserve">
+    <value>Ձախողված</value>
+  </data>
+  <data name="BuilderIntGhSucceeded" xml:space="preserve">
+    <value>Հաջող</value>
+  </data>
+  <data name="BuilderIntGhMethod" xml:space="preserve">
+    <value>Մեթոդ</value>
+  </data>
+  <data name="BuilderIntGhApiPath" xml:space="preserve">
+    <value>API ուղի</value>
+  </data>
+  <data name="BuilderIntGhApiPathHelp" xml:space="preserve">
+    <value>Սկսվում է /-ով, օրինակ՝ /repos/octocat/hello-world/issues։</value>
+  </data>
+  <data name="BuilderIntGhApiBody" xml:space="preserve">
+    <value>Մարմին (JSON, ըստ ցանկության)</value>
+  </data>
+  <data name="BuilderIntGhApiNote" xml:space="preserve">
+    <value>Այն ամենի համար, ինչ մյուս GitHub քարտերը չեն ծածկում։ Դիմումները գնում են միայն api.github.com։</value>
+  </data>
+  <data name="BuilderIntGhNameContains" xml:space="preserve">
+    <value>Անունը պարունակում է</value>
+  </data>
+  <data name="BuilderIntGhTitleContains" xml:space="preserve">
+    <value>Վերնագիրը պարունակում է</value>
+  </data>
+  <data name="BuilderIntGhTriggerHelp" xml:space="preserve">
+    <value>Ստուգվում է րոպեն մեկ։ Առաջին ստուգումը միայն հիշում է արդեն եղածը։</value>
+  </data>
+  <data name="BuilderIntGhPushHelp" xml:space="preserve">
+    <value>Գործարկվում է յուրաքանչյուր նոր commit-ի համար մեկ անգամ։</value>
+  </data>
+  <data name="NodeTypeComputerGitStatus" xml:space="preserve">
+    <value>Համակարգիչ՝ Git՝ կարգավիճակ</value>
+  </data>
+  <data name="NodeTypeComputerGitLog" xml:space="preserve">
+    <value>Համակարգիչ՝ Git՝ commit-ների պատմություն</value>
+  </data>
+  <data name="NodeTypeComputerGitDiff" xml:space="preserve">
+    <value>Համակարգիչ՝ Git՝ ինչ է փոխվել</value>
+  </data>
+  <data name="NodeTypeComputerGitBranches" xml:space="preserve">
+    <value>Համակարգիչ՝ Git՝ ճյուղեր</value>
+  </data>
+  <data name="NodeTypeComputerGitFetch" xml:space="preserve">
+    <value>Համակարգիչ՝ Git՝ ստանալ փոփոխությունները (fetch)</value>
+  </data>
+  <data name="NodeTypeComputerGitPull" xml:space="preserve">
+    <value>Համակարգիչ՝ Git՝ վերցնել փոփոխությունները (pull)</value>
+  </data>
+  <data name="NodeTypeComputerGitCommit" xml:space="preserve">
+    <value>Համակարգիչ՝ Git՝ անել commit</value>
+  </data>
+  <data name="NodeTypeComputerGitPush" xml:space="preserve">
+    <value>Համակարգիչ՝ Git՝ ուղարկել commit-ները (push)</value>
+  </data>
+  <data name="NodeTypeComputerGitSwitch" xml:space="preserve">
+    <value>Համակարգիչ՝ Git՝ անցնել ճյուղին</value>
+  </data>
+  <data name="NodeTypeComputerGitClone" xml:space="preserve">
+    <value>Համակարգիչ՝ Git՝ կլոնավորել ռեպոզիտորիան</value>
+  </data>
+  <data name="NodeTypeComputerGitInit" xml:space="preserve">
+    <value>Համակարգիչ՝ Git՝ ստեղծել ռեպոզիտորիա</value>
+  </data>
+  <data name="NodeTypeComputerGitMerge" xml:space="preserve">
+    <value>Համակարգիչ՝ Git՝ միավորել ճյուղը</value>
+  </data>
+  <data name="NodeTypeComputerGitTag" xml:space="preserve">
+    <value>Համակարգիչ՝ Git՝ թեգ</value>
+  </data>
+  <data name="NodeTypeComputerGitStash" xml:space="preserve">
+    <value>Համակարգիչ՝ Git՝ առանձնացնել փոփոխությունները (stash)</value>
+  </data>
+  <data name="NodeTypeComputerGitCommand" xml:space="preserve">
+    <value>Համակարգիչ՝ Git՝ ցանկացած հրաման</value>
+  </data>
+  <data name="NodeTypeComputerGitNewCommit" xml:space="preserve">
+    <value>Համակարգիչ՝ նոր commit Git թղթապանակում</value>
+  </data>
+  <data name="NodeTypeComputerGitChanged" xml:space="preserve">
+    <value>Համակարգիչ՝ Git թղթապանակում փոփոխություններ կան / մաքուր է</value>
+  </data>
+  <data name="BuilderIntPcGitStatusIntro" xml:space="preserve">
+    <value>Ցույց է տալիս՝ թղթապանակը որ ճյուղում է և ինչ է փոխվել՝ փոփոխված, նոր և պատրաստված ֆայլեր, քանի commit է առաջ կամ հետ։</value>
+  </data>
+  <data name="BuilderIntPcGitLogIntro" xml:space="preserve">
+    <value>Կարդում է ռեպոզիտորիայի վերջին commit-ները՝ ով, երբ և ինչ է արել։</value>
+  </data>
+  <data name="BuilderIntPcGitDiffIntro" xml:space="preserve">
+    <value>Ցույց է տալիս՝ ինչ է փոխվել ֆայլերում՝ ամփոփում, միայն անուններ կամ ամբողջ տեքստ։</value>
+  </data>
+  <data name="BuilderIntPcGitBranchesIntro" xml:space="preserve">
+    <value>Ռեպոզիտորիայի ճյուղերի ցանկը և թե որն է ընթացիկը։</value>
+  </data>
+  <data name="BuilderIntPcGitFetchIntro" xml:space="preserve">
+    <value>Ներբեռնում է նորությունները սերվերից՝ առանց փոխելու ձեր ֆայլերը։</value>
+  </data>
+  <data name="BuilderIntPcGitPullIntro" xml:space="preserve">
+    <value>Սերվերից բերում է նոր commit-ները ձեր թղթապանակ։ Լռելյայն՝ միայն երբ հնարավոր է առանց կոնֆլիկտի։</value>
+  </data>
+  <data name="BuilderIntPcGitCommitIntro" xml:space="preserve">
+    <value>Պահում է թղթապանակի փոփոխությունները որպես commit։ Կարող է նախ ավելացնել ամեն ինչ, միայն հայտնի ֆայլերը կամ ֆայլերի ցանկը։</value>
+  </data>
+  <data name="BuilderIntPcGitPushIntro" xml:space="preserve">
+    <value>Ուղարկում է ձեր commit-ները սերվեր (GitHub, GitLab...)։</value>
+  </data>
+  <data name="BuilderIntPcGitSwitchIntro" xml:space="preserve">
+    <value>Թղթապանակը տեղափոխում է մեկ այլ ճյուղ կամ ստեղծում է նոր ճյուղ։</value>
+  </data>
+  <data name="BuilderIntPcGitCloneIntro" xml:space="preserve">
+    <value>Ինտերնետից ռեպոզիտորիան պատճենում է ՀԿ-ի նոր թղթապանակ։</value>
+  </data>
+  <data name="BuilderIntPcGitInitIntro" xml:space="preserve">
+    <value>Թղթապանակը դարձնում է նոր դատարկ Git ռեպոզիտորիա։</value>
+  </data>
+  <data name="BuilderIntPcGitMergeIntro" xml:space="preserve">
+    <value>Մեկ այլ ճյուղ միավորում է ընթացիկի հետ։</value>
+  </data>
+  <data name="BuilderIntPcGitTagIntro" xml:space="preserve">
+    <value>Commit-ին դնում է պիտակ (օրինակ՝ տարբերակի համար) կամ հանում է այն։</value>
+  </data>
+  <data name="BuilderIntPcGitStashIntro" xml:space="preserve">
+    <value>Կողմ է դնում չավարտված փոփոխությունները և հետո վերադարձնում։</value>
+  </data>
+  <data name="BuilderIntPcGitCommandIntro" xml:space="preserve">
+    <value>Կատարում է Git-ի ցանկացած այլ հրաման՝ գրված ինչպես տերմինալում։ Վտանգավոր տարբերակները ՀԿ-ում մերժվում են։</value>
+  </data>
+  <data name="BuilderIntPcGitNewCommitIntro" xml:space="preserve">
+    <value>Գործարկվում է, երբ ՀԿ-ում հետևվող ռեպոզիտորիայում նոր commit է հայտնվում (ձերը, ծրագրի կամ pull-ով բերված)։</value>
+  </data>
+  <data name="BuilderIntPcGitChangedIntro" xml:space="preserve">
+    <value>Գործարկվում է, երբ հետևվող ռեպոզիտորիայում չպահված փոփոխություններ են հայտնվում կամ այն նորից մաքուր է դառնում։</value>
+  </data>
+  <data name="BuilderIntPcGitRepo" xml:space="preserve">
+    <value>Ռեպոզիտորիայի թղթապանակ</value>
+  </data>
+  <data name="BuilderIntPcGitRepoHelp" xml:space="preserve">
+    <value>Git թղթապանակ այդ ՀԿ-ում՝ ծրագրում թույլատրված թղթապանակի ներսում։ Ցանկում գտնված ռեպոզիտորիաներն են, կարող եք մուտքագրել նաև ցանկացած ուղի։</value>
+  </data>
+  <data name="BuilderIntPcGitCloneFolder" xml:space="preserve">
+    <value>Թղթապանակ պատճենի համար</value>
+  </data>
+  <data name="BuilderIntPcGitCloneFolderHelp" xml:space="preserve">
+    <value>Նոր թղթապանակ ծրագրում թույլատրված թղթապանակի ներսում, օրինակ՝ C:/Dev/my-project։</value>
+  </data>
+  <data name="BuilderIntPcGitPath" xml:space="preserve">
+    <value>Միայն այս ֆայլը կամ թղթապանակը</value>
+  </data>
+  <data name="BuilderIntPcGitMode" xml:space="preserve">
+    <value>Ինչ ցույց տալ</value>
+  </data>
+  <data name="BuilderIntPcGitStat" xml:space="preserve">
+    <value>Փոփոխությունների ամփոփում</value>
+  </data>
+  <data name="BuilderIntPcGitNames" xml:space="preserve">
+    <value>Փոփոխված ֆայլերի անուններ</value>
+  </data>
+  <data name="BuilderIntPcGitFull" xml:space="preserve">
+    <value>Փոփոխությունների ամբողջ տեքստ</value>
+  </data>
+  <data name="BuilderIntPcGitStaged" xml:space="preserve">
+    <value>Միայն պատրաստված փոփոխություններ</value>
+  </data>
+  <data name="BuilderIntPcGitTarget" xml:space="preserve">
+    <value>Համեմատել (ճյուղ կամ commit)</value>
+  </data>
+  <data name="BuilderIntPcGitRemote" xml:space="preserve">
+    <value>Հեռավոր ռեպոզիտորիա</value>
+  </data>
+  <data name="BuilderIntPcGitRemoteHelp" xml:space="preserve">
+    <value>Սովորաբար origin։ Դատարկ թողեք՝ հիմնականի համար։</value>
+  </data>
+  <data name="BuilderIntPcGitIncludeRemote" xml:space="preserve">
+    <value>Ցույց տալ նաև սերվերի ճյուղերը</value>
+  </data>
+  <data name="BuilderIntPcGitPrune" xml:space="preserve">
+    <value>Մոռանալ սերվերում ջնջված ճյուղերը</value>
+  </data>
+  <data name="BuilderIntPcGitPullMode" xml:space="preserve">
+    <value>Ինչպես միավորել</value>
+  </data>
+  <data name="BuilderIntPcGitFfOnly" xml:space="preserve">
+    <value>Միայն առաջ տանել (ամենաապահովը)</value>
+  </data>
+  <data name="BuilderIntPcGitMergeMode" xml:space="preserve">
+    <value>Միավորում (merge)</value>
+  </data>
+  <data name="BuilderIntPcGitRebaseMode" xml:space="preserve">
+    <value>Rebase (կհարցնի ձեզ ՀԿ-ում)</value>
+  </data>
+  <data name="BuilderIntPcGitMessage" xml:space="preserve">
+    <value>Հաղորդագրություն</value>
+  </data>
+  <data name="BuilderIntPcGitAdd" xml:space="preserve">
+    <value>Ինչ ներառել commit-ում</value>
+  </data>
+  <data name="BuilderIntPcGitAddAll" xml:space="preserve">
+    <value>Ամեն ինչ՝ նոր, փոփոխված և ջնջված ֆայլեր</value>
+  </data>
+  <data name="BuilderIntPcGitAddTracked" xml:space="preserve">
+    <value>Միայն git-ին արդեն հայտնի ֆայլերը</value>
+  </data>
+  <data name="BuilderIntPcGitAddPaths" xml:space="preserve">
+    <value>Միայն ներքևի ցանկի ֆայլերը</value>
+  </data>
+  <data name="BuilderIntPcGitAddNone" xml:space="preserve">
+    <value>Միայն արդեն պատրաստվածը</value>
+  </data>
+  <data name="BuilderIntPcGitPaths" xml:space="preserve">
+    <value>Ֆայլեր (մեկը տողում)</value>
+  </data>
+  <data name="BuilderIntPcGitPathsHelp" xml:space="preserve">
+    <value>Ուղիներ ռեպոզիտորիայի ներսում, օրինակ՝ docs/readme.md։</value>
+  </data>
+  <data name="BuilderIntPcGitSetUpstream" xml:space="preserve">
+    <value>Հիշել այս ճյուղը սերվերում (-u)</value>
+  </data>
+  <data name="BuilderIntPcGitTags" xml:space="preserve">
+    <value>Ուղարկել նաև թեգերը</value>
+  </data>
+  <data name="BuilderIntPcGitForce" xml:space="preserve">
+    <value>Վերագրել ճյուղը սերվերում</value>
+  </data>
+  <data name="BuilderIntPcGitForceNone" xml:space="preserve">
+    <value>Ոչ</value>
+  </data>
+  <data name="BuilderIntPcGitForceLease" xml:space="preserve">
+    <value>Այո, բայց միայն եթե ուրիշը չի ուղարկել (ավելի ապահով)</value>
+  </data>
+  <data name="BuilderIntPcGitForceYes" xml:space="preserve">
+    <value>Այո, ստիպողաբար</value>
+  </data>
+  <data name="BuilderIntPcGitCreate" xml:space="preserve">
+    <value>Ստեղծել ճյուղը</value>
+  </data>
+  <data name="BuilderIntPcGitFrom" xml:space="preserve">
+    <value>Սկսել (ճյուղ կամ commit)</value>
+  </data>
+  <data name="BuilderIntPcGitUrl" xml:space="preserve">
+    <value>Ռեպոզիտորիայի հասցե</value>
+  </data>
+  <data name="BuilderIntPcGitUrlHelp" xml:space="preserve">
+    <value>Օրինակ՝ https://github.com/owner/name.git (https, ssh կամ git հասցեներ)։</value>
+  </data>
+  <data name="BuilderIntPcGitDepth" xml:space="preserve">
+    <value>Միայն վերջին N commit-ները (0 = բոլորը)</value>
+  </data>
+  <data name="BuilderIntPcGitNoFf" xml:space="preserve">
+    <value>Միշտ ստեղծել միավորման commit</value>
+  </data>
+  <data name="BuilderIntPcGitTagName" xml:space="preserve">
+    <value>Թեգի անուն</value>
+  </data>
+  <data name="BuilderIntPcGitTagMessage" xml:space="preserve">
+    <value>Նշում թեգի համար (ըստ ցանկության)</value>
+  </data>
+  <data name="BuilderIntPcGitDelete" xml:space="preserve">
+    <value>Ջնջել այս թեգը</value>
+  </data>
+  <data name="BuilderIntPcGitStashAction" xml:space="preserve">
+    <value>Ինչ անել</value>
+  </data>
+  <data name="BuilderIntPcGitStashPush" xml:space="preserve">
+    <value>Կողմ դնել փոփոխությունները</value>
+  </data>
+  <data name="BuilderIntPcGitStashPop" xml:space="preserve">
+    <value>Վերադարձնել և հանել դարակից</value>
+  </data>
+  <data name="BuilderIntPcGitStashApply" xml:space="preserve">
+    <value>Վերադարձնել և թողնել դարակում</value>
+  </data>
+  <data name="BuilderIntPcGitStashList" xml:space="preserve">
+    <value>Ցույց տալ՝ ինչ է կողմ դրված</value>
+  </data>
+  <data name="BuilderIntPcGitStashDrop" xml:space="preserve">
+    <value>Դեն նետել վերջինը (կհարցնի ձեզ ՀԿ-ում)</value>
+  </data>
+  <data name="BuilderIntPcGitCommand" xml:space="preserve">
+    <value>Git հրաման</value>
+  </data>
+  <data name="BuilderIntPcGitCommandHelp" xml:space="preserve">
+    <value>Ինչպես տերմինալում, առանց git բառի։ Օրինակ՝ log --oneline -5</value>
+  </data>
+  <data name="BuilderIntPcGitCommandNote" xml:space="preserve">
+    <value>Այն հրամանները, որոնք կարող են կորցնել աշխատանքը (reset --hard, rebase, clean, push --force...), նախ հարցնում են ձեզ ՀԿ-ում (Settings &gt; Safety)։ Ծրագրեր գործարկող կամ git-ի կարգավորումները փոխող հրամանները մերժվում են։</value>
+  </data>
+  <data name="BuilderIntPcGitPushNote" xml:space="preserve">
+    <value>Ուղարկելը նախ հարցնում է ձեզ ՀԿ-ում, եթե դա չեք անջատել ծրագրում (Settings &gt; Safety)։</value>
+  </data>
+  <data name="BuilderIntPcGitTriggerRepoHelp" xml:space="preserve">
+    <value>Դատարկ թողեք թույլատրված թղթապանակների բոլոր ռեպոզիտորիաների համար։</value>
+  </data>
+  <data name="BuilderIntPcGitState" xml:space="preserve">
+    <value>Երբ</value>
+  </data>
+  <data name="BuilderIntPcGitStateAny" xml:space="preserve">
+    <value>Փոփոխություններ են հայտնվել կամ մաքուր է դարձել</value>
+  </data>
+  <data name="BuilderIntPcGitStateDirty" xml:space="preserve">
+    <value>Հայտնվել են չպահված փոփոխություններ</value>
+  </data>
+  <data name="BuilderIntPcGitStateClean" xml:space="preserve">
+    <value>Նորից մաքուր է դարձել</value>
+  </data>
+  <data name="BuilderPcAllowedRepos" xml:space="preserve"><value>Այս ՀԿ-ում թույլատրված Git թղթապանակներ</value></data>
+  <data name="BuilderPcBrowse" xml:space="preserve"><value>Դիտել…</value></data>
+  <data name="BuilderPcBrowseLoading" xml:space="preserve"><value>Բեռնվում է…</value></data>
+  <data name="BuilderPcBrowseUp" xml:space="preserve"><value>Վերև</value></data>
+  <data name="BuilderPcBrowseClose" xml:space="preserve"><value>Փակել</value></data>
+  <data name="BuilderPcBrowseUse" xml:space="preserve"><value>Ընտրել այս թղթապանակը</value></data>
+  <data name="BuilderPcBrowseEmpty" xml:space="preserve"><value>Թղթապանակը դատարկ է։</value></data>
+  <data name="BuilderPcBrowseNoFolders" xml:space="preserve"><value>Այս ՀԿ-ում դեռ ոչ մի թղթապանակ թույլատրված չէ։ Ավելացրեք Partnerly Agent-ի կարգավորումներում։</value></data>
+  <data name="BuilderPcBrowseMore" xml:space="preserve"><value>Ցուցադրված են միայն առաջին գրառումները։ Բացեք ենթաթղթապանակ՝ ավելին տեսնելու համար։</value></data>
+  <data name="BuilderSearch" xml:space="preserve"><value>Որոնել տրիգերներ և գործողություններ…</value></data>
+  <data name="BuilderNoResults" xml:space="preserve"><value>Ոչինչ չի գտնվել։ Փորձեք այլ բառ։</value></data>
 </root>

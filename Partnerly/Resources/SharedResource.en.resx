@@ -5309,10 +5309,10 @@ Delete is allowed for Support ticket.</value>
     <value>Only this folder</value>
   </data>
   <data name="BuilderIntPcWatchFolderHelp" xml:space="preserve">
-    <value>Empty means any watched folder. Subfolders are included.</value>
+    <value>Empty means any allowed folder. Subfolders are included.</value>
   </data>
   <data name="BuilderIntPcFileTriggerHelp" xml:space="preserve">
-    <value>Starts when a new file appears in a folder listed in watchFolders of the agent settings. Variables: {{trigger.path}}, {{trigger.fileName}}, {{trigger.folder}}, {{trigger.extension}}, {{trigger.size}}.</value>
+    <value>Starts when a new file appears in any folder you allowed in the program (and inside them). Variables: {{trigger.path}}, {{trigger.fileName}}, {{trigger.folder}}, {{trigger.extension}}, {{trigger.size}}.</value>
   </data>
   <data name="BuilderIntPcState" xml:space="preserve">
     <value>When the PC</value>
@@ -5330,7 +5330,7 @@ Delete is allowed for Support ticket.</value>
     <value>Leave empty for any watched program. Example: chrome.</value>
   </data>
   <data name="BuilderIntPcProgramWatchHelp" xml:space="preserve">
-    <value>Only programs listed in watchPrograms of the agent settings are reported. Variables: {{trigger.name}}, {{trigger.machine}}.</value>
+    <value>Only programs from the Programs list of the agent settings are reported. Variables: {{trigger.name}}, {{trigger.machine}}.</value>
   </data>
   <data name="ComputerTitle" xml:space="preserve">
     <value>Computer</value>
@@ -5418,7 +5418,7 @@ Left out on purpose: free commands, keystrokes and mouse, the registry, deleting
     <value>This PC can ask its owner for a click before running this. Turn it on in the program on the PC: tray icon &gt; Settings &gt; Ask me first.</value>
   </data>
   <data name="BuilderIntPcClipboardTriggerNote" xml:space="preserve">
-    <value>Needs &quot;Report text I copy to the clipboard&quot; turned on in the program&apos;s Settings (tray icon &gt; Settings &gt; Watching). It is off by default because copied text can be private.</value>
+    <value>Needs "Tell Partnerly when I copy text" turned on in the program's Settings (tray icon &gt; Settings &gt; Safety). It is off by default because copied text can be private.</value>
   </data>
   <data name="BuilderIntPcDelaySeconds" xml:space="preserve">
     <value>Wait before (seconds)</value>
@@ -5427,7 +5427,7 @@ Left out on purpose: free commands, keystrokes and mouse, the registry, deleting
     <value>The file goes to the Recycle Bin, so it can be restored. Folders are never deleted. By default the PC asks its owner first.</value>
   </data>
   <data name="BuilderIntPcDiskLowNote" xml:space="preserve">
-    <value>The program reports a drive when its free space falls below the limit set in its Settings (tray icon &gt; Settings &gt; Watching, default 5 GB). It reports once, until the space is freed.</value>
+    <value>The program reports a drive when its free space falls below the limit set in its Settings (tray icon &gt; Settings &gt; Safety, default 5 GB). It reports once, until the space is freed.</value>
   </data>
   <data name="BuilderIntPcDownloadNameHelp" xml:space="preserve">
     <value>Leave empty to take the name from the link. Programs and scripts (.exe, .bat...) are never downloaded.</value>
@@ -5457,7 +5457,7 @@ Left out on purpose: free commands, keystrokes and mouse, the registry, deleting
     <value>Somebody is back</value>
   </data>
   <data name="BuilderIntPcIdleNote" xml:space="preserve">
-    <value>&quot;Nobody at the PC&quot; means no keyboard or mouse use. The time is set in the program&apos;s Settings (tray icon &gt; Settings &gt; Watching, default 10 minutes).</value>
+    <value>"Nobody at the PC" means no keyboard or mouse use. The time is set in the program's Settings (tray icon &gt; Settings &gt; Safety, default 10 minutes).</value>
   </data>
   <data name="BuilderIntPcIdleStarted" xml:space="preserve">
     <value>Nobody has touched the PC for a while</value>
@@ -5840,4 +5840,561 @@ Left out on purpose: free commands, keystrokes and mouse, the registry, deleting
   <data name="ComputerErrRefused" xml:space="preserve">
     <value>The computer refused the command.</value>
   </data>
+  <data name="IntegrationGitHubIntro" xml:space="preserve">
+    <value>Your GitHub account: issues, pull requests, files, releases and workflows.</value>
+  </data>
+  <data name="IntegrationGitHubFeature1" xml:space="preserve">
+    <value>Cards for issues, pull requests, branches, files, releases and workflows</value>
+  </data>
+  <data name="IntegrationGitHubFeature2" xml:space="preserve">
+    <value>Triggers: new issue, pull request, commit, release, failed workflow</value>
+  </data>
+  <data name="IntegrationGitHubNotConfigured" xml:space="preserve">
+    <value>GitHub sign-in is not set up on this server (Authentication:GitHub). You can still connect with an access token.</value>
+  </data>
+  <data name="IntegrationConnectGitHub" xml:space="preserve">
+    <value>Connect GitHub</value>
+  </data>
+  <data name="IntegrationGitHubChoose" xml:space="preserve">
+    <value>Choose what Partnerly may do. You will be taken to GitHub to allow it.</value>
+  </data>
+  <data name="IntegrationGitHubPrivate" xml:space="preserve">
+    <value>Private repositories too (otherwise public only)</value>
+  </data>
+  <data name="IntegrationGitHubWorkflows" xml:space="preserve">
+    <value>Change workflow files (.github/workflows)</value>
+  </data>
+  <data name="IntegrationGitHubRedirect" xml:space="preserve">
+    <value>In your GitHub OAuth App set this callback URL:</value>
+  </data>
+  <data name="IntegrationGitHubUseToken" xml:space="preserve">
+    <value>Use a token instead</value>
+  </data>
+  <data name="IntegrationContinueGitHub" xml:space="preserve">
+    <value>Continue with GitHub</value>
+  </data>
+  <data name="IntegrationConnectGitHubToken" xml:space="preserve">
+    <value>Connect GitHub with a token</value>
+  </data>
+  <data name="IntegrationGitHubTokenStep1" xml:space="preserve">
+    <value>On github.com open Settings &gt; Developer settings &gt; Personal access tokens.</value>
+  </data>
+  <data name="IntegrationGitHubTokenStep2" xml:space="preserve">
+    <value>Create a token with the repo permission (and workflow if you need it).</value>
+  </data>
+  <data name="IntegrationGitHubTokenStep3" xml:space="preserve">
+    <value>Copy the token and paste it below. GitHub shows it only once.</value>
+  </data>
+  <data name="IntegrationGitHubToken" xml:space="preserve">
+    <value>Access token</value>
+  </data>
+  <data name="NodeTypeGitHubListRepos" xml:space="preserve">
+    <value>GitHub: my repositories</value>
+  </data>
+  <data name="NodeTypeGitHubGetRepo" xml:space="preserve">
+    <value>GitHub: get repository</value>
+  </data>
+  <data name="NodeTypeGitHubCreateIssue" xml:space="preserve">
+    <value>GitHub: create issue</value>
+  </data>
+  <data name="NodeTypeGitHubGetIssue" xml:space="preserve">
+    <value>GitHub: get issue</value>
+  </data>
+  <data name="NodeTypeGitHubListIssues" xml:space="preserve">
+    <value>GitHub: find issues</value>
+  </data>
+  <data name="NodeTypeGitHubUpdateIssue" xml:space="preserve">
+    <value>GitHub: update or close issue</value>
+  </data>
+  <data name="NodeTypeGitHubCommentIssue" xml:space="preserve">
+    <value>GitHub: comment</value>
+  </data>
+  <data name="NodeTypeGitHubCreatePr" xml:space="preserve">
+    <value>GitHub: create pull request</value>
+  </data>
+  <data name="NodeTypeGitHubGetPr" xml:space="preserve">
+    <value>GitHub: get pull request</value>
+  </data>
+  <data name="NodeTypeGitHubListPrs" xml:space="preserve">
+    <value>GitHub: find pull requests</value>
+  </data>
+  <data name="NodeTypeGitHubMergePr" xml:space="preserve">
+    <value>GitHub: merge pull request</value>
+  </data>
+  <data name="NodeTypeGitHubListBranches" xml:space="preserve">
+    <value>GitHub: list branches</value>
+  </data>
+  <data name="NodeTypeGitHubListCommits" xml:space="preserve">
+    <value>GitHub: list commits</value>
+  </data>
+  <data name="NodeTypeGitHubCreateBranch" xml:space="preserve">
+    <value>GitHub: create branch</value>
+  </data>
+  <data name="NodeTypeGitHubGetFile" xml:space="preserve">
+    <value>GitHub: read file</value>
+  </data>
+  <data name="NodeTypeGitHubPutFile" xml:space="preserve">
+    <value>GitHub: create or change file</value>
+  </data>
+  <data name="NodeTypeGitHubCreateRelease" xml:space="preserve">
+    <value>GitHub: create release</value>
+  </data>
+  <data name="NodeTypeGitHubDispatchWorkflow" xml:space="preserve">
+    <value>GitHub: run workflow</value>
+  </data>
+  <data name="NodeTypeGitHubListWorkflowRuns" xml:space="preserve">
+    <value>GitHub: workflow runs</value>
+  </data>
+  <data name="NodeTypeGitHubApiRequest" xml:space="preserve">
+    <value>GitHub: API request</value>
+  </data>
+  <data name="NodeTypeGitHubIssueOpened" xml:space="preserve">
+    <value>GitHub: new issue</value>
+  </data>
+  <data name="NodeTypeGitHubPrOpened" xml:space="preserve">
+    <value>GitHub: new pull request</value>
+  </data>
+  <data name="NodeTypeGitHubPush" xml:space="preserve">
+    <value>GitHub: new commit</value>
+  </data>
+  <data name="NodeTypeGitHubReleasePublished" xml:space="preserve">
+    <value>GitHub: new release</value>
+  </data>
+  <data name="NodeTypeGitHubWorkflowFailed" xml:space="preserve">
+    <value>GitHub: workflow failed</value>
+  </data>
+  <data name="BuilderIntGhRepo" xml:space="preserve">
+    <value>Repository</value>
+  </data>
+  <data name="BuilderIntGhRepoHelp" xml:space="preserve">
+    <value>owner/name, for example octocat/hello-world, or a link to the repository.</value>
+  </data>
+  <data name="BuilderIntGhNumber" xml:space="preserve">
+    <value>Number</value>
+  </data>
+  <data name="BuilderIntGhNumberHelp" xml:space="preserve">
+    <value>The number of the issue or pull request, for example 42.</value>
+  </data>
+  <data name="BuilderIntGhTitle" xml:space="preserve">
+    <value>Title</value>
+  </data>
+  <data name="BuilderIntGhBody" xml:space="preserve">
+    <value>Text</value>
+  </data>
+  <data name="BuilderIntGhLabels" xml:space="preserve">
+    <value>Labels</value>
+  </data>
+  <data name="BuilderIntGhLabelsHelp" xml:space="preserve">
+    <value>Separate with commas.</value>
+  </data>
+  <data name="BuilderIntGhAssignees" xml:space="preserve">
+    <value>Assignees (GitHub logins)</value>
+  </data>
+  <data name="BuilderIntGhState" xml:space="preserve">
+    <value>State</value>
+  </data>
+  <data name="BuilderIntGhOpen" xml:space="preserve">
+    <value>Open</value>
+  </data>
+  <data name="BuilderIntGhClosed" xml:space="preserve">
+    <value>Closed</value>
+  </data>
+  <data name="BuilderIntGhAll" xml:space="preserve">
+    <value>All</value>
+  </data>
+  <data name="BuilderIntGhKeep" xml:space="preserve">
+    <value>Do not change</value>
+  </data>
+  <data name="BuilderIntGhUpdateHelp" xml:space="preserve">
+    <value>Fill in only what should change. Empty fields stay as they are.</value>
+  </data>
+  <data name="BuilderIntGhHead" xml:space="preserve">
+    <value>Branch with the changes</value>
+  </data>
+  <data name="BuilderIntGhBase" xml:space="preserve">
+    <value>Merge into branch</value>
+  </data>
+  <data name="BuilderIntGhDraft" xml:space="preserve">
+    <value>Draft</value>
+  </data>
+  <data name="BuilderIntGhMergeMethod" xml:space="preserve">
+    <value>How to merge</value>
+  </data>
+  <data name="BuilderIntGhCommitTitle" xml:space="preserve">
+    <value>Merge commit title (optional)</value>
+  </data>
+  <data name="BuilderIntGhBranch" xml:space="preserve">
+    <value>Branch</value>
+  </data>
+  <data name="BuilderIntGhBranchHelp" xml:space="preserve">
+    <value>Leave empty for the default branch.</value>
+  </data>
+  <data name="BuilderIntGhNewBranch" xml:space="preserve">
+    <value>New branch name</value>
+  </data>
+  <data name="BuilderIntGhFrom" xml:space="preserve">
+    <value>Create from branch</value>
+  </data>
+  <data name="BuilderIntGhPath" xml:space="preserve">
+    <value>File path</value>
+  </data>
+  <data name="BuilderIntGhPathHelp" xml:space="preserve">
+    <value>Inside the repository, for example docs/readme.md.</value>
+  </data>
+  <data name="BuilderIntGhRef" xml:space="preserve">
+    <value>Branch or tag</value>
+  </data>
+  <data name="BuilderIntGhFileText" xml:space="preserve">
+    <value>File content</value>
+  </data>
+  <data name="BuilderIntGhCommitMessage" xml:space="preserve">
+    <value>Commit message</value>
+  </data>
+  <data name="BuilderIntGhPutHelp" xml:space="preserve">
+    <value>Creates the file or replaces it with this text and makes a commit.</value>
+  </data>
+  <data name="BuilderIntGhTag" xml:space="preserve">
+    <value>Tag</value>
+  </data>
+  <data name="BuilderIntGhReleaseName" xml:space="preserve">
+    <value>Release name</value>
+  </data>
+  <data name="BuilderIntGhPrerelease" xml:space="preserve">
+    <value>Pre-release</value>
+  </data>
+  <data name="BuilderIntGhTarget" xml:space="preserve">
+    <value>Branch or commit for the tag</value>
+  </data>
+  <data name="BuilderIntGhWorkflow" xml:space="preserve">
+    <value>Workflow file</value>
+  </data>
+  <data name="BuilderIntGhWorkflowHelp" xml:space="preserve">
+    <value>The file name in .github/workflows, for example build.yml.</value>
+  </data>
+  <data name="BuilderIntGhInputs" xml:space="preserve">
+    <value>Inputs (JSON, optional)</value>
+  </data>
+  <data name="BuilderIntGhRunStatus" xml:space="preserve">
+    <value>Result</value>
+  </data>
+  <data name="BuilderIntGhAnyStatus" xml:space="preserve">
+    <value>Any</value>
+  </data>
+  <data name="BuilderIntGhFailed" xml:space="preserve">
+    <value>Failed</value>
+  </data>
+  <data name="BuilderIntGhSucceeded" xml:space="preserve">
+    <value>Succeeded</value>
+  </data>
+  <data name="BuilderIntGhMethod" xml:space="preserve">
+    <value>Method</value>
+  </data>
+  <data name="BuilderIntGhApiPath" xml:space="preserve">
+    <value>API path</value>
+  </data>
+  <data name="BuilderIntGhApiPathHelp" xml:space="preserve">
+    <value>Starts with /, for example /repos/octocat/hello-world/issues.</value>
+  </data>
+  <data name="BuilderIntGhApiBody" xml:space="preserve">
+    <value>Body (JSON, optional)</value>
+  </data>
+  <data name="BuilderIntGhApiNote" xml:space="preserve">
+    <value>For anything the other GitHub cards do not cover. Only api.github.com is reached.</value>
+  </data>
+  <data name="BuilderIntGhNameContains" xml:space="preserve">
+    <value>Name contains</value>
+  </data>
+  <data name="BuilderIntGhTitleContains" xml:space="preserve">
+    <value>Title contains</value>
+  </data>
+  <data name="BuilderIntGhTriggerHelp" xml:space="preserve">
+    <value>Checked once a minute. The first check only remembers what is already there.</value>
+  </data>
+  <data name="BuilderIntGhPushHelp" xml:space="preserve">
+    <value>Runs once for each new commit on the branch.</value>
+  </data>
+  <data name="NodeTypeComputerGitStatus" xml:space="preserve">
+    <value>Computer: Git status</value>
+  </data>
+  <data name="NodeTypeComputerGitLog" xml:space="preserve">
+    <value>Computer: Git log</value>
+  </data>
+  <data name="NodeTypeComputerGitDiff" xml:space="preserve">
+    <value>Computer: Git diff</value>
+  </data>
+  <data name="NodeTypeComputerGitBranches" xml:space="preserve">
+    <value>Computer: Git branches</value>
+  </data>
+  <data name="NodeTypeComputerGitFetch" xml:space="preserve">
+    <value>Computer: Git fetch</value>
+  </data>
+  <data name="NodeTypeComputerGitPull" xml:space="preserve">
+    <value>Computer: Git pull</value>
+  </data>
+  <data name="NodeTypeComputerGitCommit" xml:space="preserve">
+    <value>Computer: Git commit</value>
+  </data>
+  <data name="NodeTypeComputerGitPush" xml:space="preserve">
+    <value>Computer: Git push</value>
+  </data>
+  <data name="NodeTypeComputerGitSwitch" xml:space="preserve">
+    <value>Computer: Git switch branch</value>
+  </data>
+  <data name="NodeTypeComputerGitClone" xml:space="preserve">
+    <value>Computer: Git clone</value>
+  </data>
+  <data name="NodeTypeComputerGitInit" xml:space="preserve">
+    <value>Computer: Git init</value>
+  </data>
+  <data name="NodeTypeComputerGitMerge" xml:space="preserve">
+    <value>Computer: Git merge</value>
+  </data>
+  <data name="NodeTypeComputerGitTag" xml:space="preserve">
+    <value>Computer: Git tag</value>
+  </data>
+  <data name="NodeTypeComputerGitStash" xml:space="preserve">
+    <value>Computer: Git stash</value>
+  </data>
+  <data name="NodeTypeComputerGitCommand" xml:space="preserve">
+    <value>Computer: Git command</value>
+  </data>
+  <data name="NodeTypeComputerGitNewCommit" xml:space="preserve">
+    <value>Computer: new commit in a Git folder</value>
+  </data>
+  <data name="NodeTypeComputerGitChanged" xml:space="preserve">
+    <value>Computer: Git folder has changes / is clean</value>
+  </data>
+  <data name="BuilderIntPcGitStatusIntro" xml:space="preserve">
+    <value>Shows which branch the folder is on and what has changed: changed, new and staged files, and how many commits are ahead or behind.</value>
+  </data>
+  <data name="BuilderIntPcGitLogIntro" xml:space="preserve">
+    <value>Reads the latest commits of the repository: who, when and what.</value>
+  </data>
+  <data name="BuilderIntPcGitDiffIntro" xml:space="preserve">
+    <value>Shows what has changed in the files: a summary, only the names, or the full text.</value>
+  </data>
+  <data name="BuilderIntPcGitBranchesIntro" xml:space="preserve">
+    <value>Lists the branches of the repository and tells which one is current.</value>
+  </data>
+  <data name="BuilderIntPcGitFetchIntro" xml:space="preserve">
+    <value>Downloads news from the server without changing your files.</value>
+  </data>
+  <data name="BuilderIntPcGitPullIntro" xml:space="preserve">
+    <value>Brings the new commits from the server into your folder. By default only when it can be done without a conflict.</value>
+  </data>
+  <data name="BuilderIntPcGitCommitIntro" xml:space="preserve">
+    <value>Saves the changes of the folder as a commit. Can add everything, only known files, or a list of files first.</value>
+  </data>
+  <data name="BuilderIntPcGitPushIntro" xml:space="preserve">
+    <value>Sends your commits to the server (GitHub, GitLab...).</value>
+  </data>
+  <data name="BuilderIntPcGitSwitchIntro" xml:space="preserve">
+    <value>Moves the folder to another branch, or creates a new branch.</value>
+  </data>
+  <data name="BuilderIntPcGitCloneIntro" xml:space="preserve">
+    <value>Copies a repository from the internet into a new folder on the PC.</value>
+  </data>
+  <data name="BuilderIntPcGitInitIntro" xml:space="preserve">
+    <value>Turns a folder into a new, empty Git repository.</value>
+  </data>
+  <data name="BuilderIntPcGitMergeIntro" xml:space="preserve">
+    <value>Brings another branch into the current one.</value>
+  </data>
+  <data name="BuilderIntPcGitTagIntro" xml:space="preserve">
+    <value>Puts a label (for example a version number) on a commit, or removes it.</value>
+  </data>
+  <data name="BuilderIntPcGitStashIntro" xml:space="preserve">
+    <value>Puts your unfinished changes aside and brings them back later.</value>
+  </data>
+  <data name="BuilderIntPcGitCommandIntro" xml:space="preserve">
+    <value>Runs any other Git command, typed as in a terminal. Dangerous options are refused on the PC.</value>
+  </data>
+  <data name="BuilderIntPcGitNewCommitIntro" xml:space="preserve">
+    <value>Starts when a new commit appears in a watched repository on the PC (made by you, by a program, or brought by pull).</value>
+  </data>
+  <data name="BuilderIntPcGitChangedIntro" xml:space="preserve">
+    <value>Starts when a watched repository gets uncommitted changes, or becomes clean again.</value>
+  </data>
+  <data name="BuilderIntPcGitRepo" xml:space="preserve">
+    <value>Repository folder</value>
+  </data>
+  <data name="BuilderIntPcGitRepoHelp" xml:space="preserve">
+    <value>A Git folder on that PC, inside a folder you allowed in the program. The list shows the repositories found there; you can also type any path.</value>
+  </data>
+  <data name="BuilderIntPcGitCloneFolder" xml:space="preserve">
+    <value>Folder for the copy</value>
+  </data>
+  <data name="BuilderIntPcGitCloneFolderHelp" xml:space="preserve">
+    <value>A new folder inside a folder you allowed in the program, for example C:/Dev/my-project.</value>
+  </data>
+  <data name="BuilderIntPcGitPath" xml:space="preserve">
+    <value>Only this file or folder</value>
+  </data>
+  <data name="BuilderIntPcGitMode" xml:space="preserve">
+    <value>What to show</value>
+  </data>
+  <data name="BuilderIntPcGitStat" xml:space="preserve">
+    <value>Summary of changes</value>
+  </data>
+  <data name="BuilderIntPcGitNames" xml:space="preserve">
+    <value>Names of changed files</value>
+  </data>
+  <data name="BuilderIntPcGitFull" xml:space="preserve">
+    <value>Full text of changes</value>
+  </data>
+  <data name="BuilderIntPcGitStaged" xml:space="preserve">
+    <value>Only staged changes</value>
+  </data>
+  <data name="BuilderIntPcGitTarget" xml:space="preserve">
+    <value>Compare with (branch or commit)</value>
+  </data>
+  <data name="BuilderIntPcGitRemote" xml:space="preserve">
+    <value>Remote</value>
+  </data>
+  <data name="BuilderIntPcGitRemoteHelp" xml:space="preserve">
+    <value>Usually origin. Leave empty for the default one.</value>
+  </data>
+  <data name="BuilderIntPcGitIncludeRemote" xml:space="preserve">
+    <value>Include branches from the server</value>
+  </data>
+  <data name="BuilderIntPcGitPrune" xml:space="preserve">
+    <value>Forget branches deleted on the server</value>
+  </data>
+  <data name="BuilderIntPcGitPullMode" xml:space="preserve">
+    <value>How to join</value>
+  </data>
+  <data name="BuilderIntPcGitFfOnly" xml:space="preserve">
+    <value>Only fast-forward (safest)</value>
+  </data>
+  <data name="BuilderIntPcGitMergeMode" xml:space="preserve">
+    <value>Merge</value>
+  </data>
+  <data name="BuilderIntPcGitRebaseMode" xml:space="preserve">
+    <value>Rebase (asks you on the PC)</value>
+  </data>
+  <data name="BuilderIntPcGitMessage" xml:space="preserve">
+    <value>Message</value>
+  </data>
+  <data name="BuilderIntPcGitAdd" xml:space="preserve">
+    <value>What to commit</value>
+  </data>
+  <data name="BuilderIntPcGitAddAll" xml:space="preserve">
+    <value>Everything: new, changed and deleted files</value>
+  </data>
+  <data name="BuilderIntPcGitAddTracked" xml:space="preserve">
+    <value>Only files git already knows</value>
+  </data>
+  <data name="BuilderIntPcGitAddPaths" xml:space="preserve">
+    <value>Only the files listed below</value>
+  </data>
+  <data name="BuilderIntPcGitAddNone" xml:space="preserve">
+    <value>Only what is already staged</value>
+  </data>
+  <data name="BuilderIntPcGitPaths" xml:space="preserve">
+    <value>Files (one per line)</value>
+  </data>
+  <data name="BuilderIntPcGitPathsHelp" xml:space="preserve">
+    <value>Paths inside the repository, for example docs/readme.md.</value>
+  </data>
+  <data name="BuilderIntPcGitSetUpstream" xml:space="preserve">
+    <value>Remember this branch on the server (-u)</value>
+  </data>
+  <data name="BuilderIntPcGitTags" xml:space="preserve">
+    <value>Send tags too</value>
+  </data>
+  <data name="BuilderIntPcGitForce" xml:space="preserve">
+    <value>Overwrite the branch on the server</value>
+  </data>
+  <data name="BuilderIntPcGitForceNone" xml:space="preserve">
+    <value>No</value>
+  </data>
+  <data name="BuilderIntPcGitForceLease" xml:space="preserve">
+    <value>Yes, but only if nobody else pushed (safer)</value>
+  </data>
+  <data name="BuilderIntPcGitForceYes" xml:space="preserve">
+    <value>Yes, force it</value>
+  </data>
+  <data name="BuilderIntPcGitCreate" xml:space="preserve">
+    <value>Create the branch if it does not exist</value>
+  </data>
+  <data name="BuilderIntPcGitFrom" xml:space="preserve">
+    <value>Start from (branch or commit)</value>
+  </data>
+  <data name="BuilderIntPcGitUrl" xml:space="preserve">
+    <value>Repository address</value>
+  </data>
+  <data name="BuilderIntPcGitUrlHelp" xml:space="preserve">
+    <value>For example https://github.com/owner/name.git (https, ssh or git addresses).</value>
+  </data>
+  <data name="BuilderIntPcGitDepth" xml:space="preserve">
+    <value>Only the last N commits (0 = all)</value>
+  </data>
+  <data name="BuilderIntPcGitNoFf" xml:space="preserve">
+    <value>Always make a merge commit</value>
+  </data>
+  <data name="BuilderIntPcGitTagName" xml:space="preserve">
+    <value>Tag name</value>
+  </data>
+  <data name="BuilderIntPcGitTagMessage" xml:space="preserve">
+    <value>Note for the tag (optional)</value>
+  </data>
+  <data name="BuilderIntPcGitDelete" xml:space="preserve">
+    <value>Delete this tag</value>
+  </data>
+  <data name="BuilderIntPcGitStashAction" xml:space="preserve">
+    <value>What to do</value>
+  </data>
+  <data name="BuilderIntPcGitStashPush" xml:space="preserve">
+    <value>Put the changes aside</value>
+  </data>
+  <data name="BuilderIntPcGitStashPop" xml:space="preserve">
+    <value>Bring them back and remove from the shelf</value>
+  </data>
+  <data name="BuilderIntPcGitStashApply" xml:space="preserve">
+    <value>Bring them back and keep on the shelf</value>
+  </data>
+  <data name="BuilderIntPcGitStashList" xml:space="preserve">
+    <value>Show what is on the shelf</value>
+  </data>
+  <data name="BuilderIntPcGitStashDrop" xml:space="preserve">
+    <value>Throw the last one away (asks you on the PC)</value>
+  </data>
+  <data name="BuilderIntPcGitCommand" xml:space="preserve">
+    <value>Git command</value>
+  </data>
+  <data name="BuilderIntPcGitCommandHelp" xml:space="preserve">
+    <value>As in a terminal, without the word git. For example: log --oneline -5</value>
+  </data>
+  <data name="BuilderIntPcGitCommandNote" xml:space="preserve">
+    <value>Commands that can lose work (reset --hard, rebase, clean, push --force...) ask you on the PC first (Settings &gt; Safety). Commands that start programs or change git settings are refused.</value>
+  </data>
+  <data name="BuilderIntPcGitPushNote" xml:space="preserve">
+    <value>Pushing asks you on the PC first, unless you switched that off in the program (Settings &gt; Safety).</value>
+  </data>
+  <data name="BuilderIntPcGitTriggerRepoHelp" xml:space="preserve">
+    <value>Leave empty for every repository inside the allowed folders.</value>
+  </data>
+  <data name="BuilderIntPcGitState" xml:space="preserve">
+    <value>When</value>
+  </data>
+  <data name="BuilderIntPcGitStateAny" xml:space="preserve">
+    <value>Gets changes or becomes clean</value>
+  </data>
+  <data name="BuilderIntPcGitStateDirty" xml:space="preserve">
+    <value>Gets uncommitted changes</value>
+  </data>
+  <data name="BuilderIntPcGitStateClean" xml:space="preserve">
+    <value>Becomes clean again</value>
+  </data>
+  <data name="BuilderPcAllowedRepos" xml:space="preserve"><value>Git folders this PC allows</value></data>
+  <data name="BuilderPcBrowse" xml:space="preserve"><value>Browse…</value></data>
+  <data name="BuilderPcBrowseLoading" xml:space="preserve"><value>Loading…</value></data>
+  <data name="BuilderPcBrowseUp" xml:space="preserve"><value>Up</value></data>
+  <data name="BuilderPcBrowseClose" xml:space="preserve"><value>Close</value></data>
+  <data name="BuilderPcBrowseUse" xml:space="preserve"><value>Use this folder</value></data>
+  <data name="BuilderPcBrowseEmpty" xml:space="preserve"><value>This folder is empty.</value></data>
+  <data name="BuilderPcBrowseNoFolders" xml:space="preserve"><value>No folder is allowed on this PC yet. Add one in the Partnerly Agent settings.</value></data>
+  <data name="BuilderPcBrowseMore" xml:space="preserve"><value>Only the first entries are shown. Open a sub-folder to see more.</value></data>
+  <data name="BuilderSearch" xml:space="preserve"><value>Search triggers and actions…</value></data>
+  <data name="BuilderNoResults" xml:space="preserve"><value>Nothing found. Try another word.</value></data>
 </root>

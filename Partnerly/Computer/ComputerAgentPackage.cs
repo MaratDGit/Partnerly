@@ -47,7 +47,7 @@ namespace Partnerly.Computer
                     (string.IsNullOrEmpty(token)
                         ? "3. Enter the site address and the token shown on the Integrations page.\r\n"
                         : "3. The site address and token are already in config.json next to the program. Keep that file private.\r\n") +
-                    "\r\nWhat Partnerly may do on this computer (folders, programs, watching) is chosen in the program: tray icon > Settings.\r\nTo remove it: Windows Settings > Apps, or tray icon > Remove program.\r\n");
+                    "\r\nWhat Partnerly may do on this computer (folders, programs, what must ask first) is chosen in the program: tray icon > Settings.\r\nTo remove it: Windows Settings > Apps, or tray icon > Remove program.\r\n");
             }
 
             return output.ToArray();

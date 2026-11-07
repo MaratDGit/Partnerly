@@ -661,13 +661,7 @@ namespace Partnerly.Automation.Web
         [Authorize(Policy = "Permission:automation.view")]
         public async Task<IActionResult> Catalog()
         {
-            // Connections feed the "connection" select in node properties
-            // (integration nodes); only the owner's own, no secrets.
-            var connections = _store.QueryConnections()
-                .Where(item => !item.IsDeleted && item.OwnerUserId == _access.CurrentUserId && item.Kind != "http")
-                .OrderBy(item => item.Name)
-                .Select(item => new { id = item.Id, name = item.Name, kind = item.Kind })
-                .ToList();
+            var (connections, lookups, stamp) = await BuildLiveDataAsync();
             // Favorites live in the database per user. If the table is not there yet
             // (migration not applied) the editor falls back to browser storage.
             List<string>? favorites = null;
@@ -688,8 +682,41 @@ namespace Partnerly.Automation.Web
                 connections,
                 integrationsUrl = Url.Action("Index", "Integrations"),
                 telegramChatsUrl = Url.Action("TelegramChats", "Integrations"),
-                lookups = await _lookups.BuildAsync(HttpContext.RequestAborted)
+                lookups,
+                stamp
             });
+        }
+
+        // Connections feed the "connection" select in node properties (integration nodes); only the owner's
+        // own, no secrets. The stamp is a short fingerprint of everything that can change while the editor
+        // is open (connections, users, templates, other agents), so the page can ask "anything new?" cheaply.
+        private async Task<(object Connections, object Lookups, string Stamp)> BuildLiveDataAsync()
+        {
+            var connections = _store.QueryConnections()
+                .Where(item => !item.IsDeleted && item.OwnerUserId == _access.CurrentUserId && item.Kind != "http")
+                .OrderBy(item => item.Name)
+                .Select(item => new { id = item.Id, name = item.Name, kind = item.Kind })
+                .ToList();
+            var lookups = await _lookups.BuildAsync(HttpContext.RequestAborted);
+            var json = System.Text.Json.JsonSerializer.Serialize(new { connections, lookups });
+            var stamp = Convert.ToHexString(System.Security.Cryptography.SHA256.HashData(System.Text.Encoding.UTF8.GetBytes(json)))[..16];
+            return (connections, lookups, stamp);
+        }
+
+        // The editor asks this every half minute while it is visible. If nothing changed the answer is a few bytes;
+        // only a changed stamp brings the lists again, so an open editor costs almost nothing.
+        [HttpGet]
+        [Authorize(Policy = "Permission:automation.view")]
+        public async Task<IActionResult> CatalogRefresh(string? stamp)
+        {
+            Response.Headers["Cache-Control"] = "no-store";
+            var (connections, lookups, current) = await BuildLiveDataAsync();
+            if (string.Equals(stamp, current, StringComparison.Ordinal))
+            {
+                return Json(new { changed = false, stamp = current });
+            }
+
+            return Json(new { changed = true, stamp = current, connections, lookups, integrationsUrl = Url.Action("Index", "Integrations") });
         }
 
         [HttpPost]

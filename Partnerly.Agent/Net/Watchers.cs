@@ -4,6 +4,7 @@ using System.Text.Json.Nodes;
 using Microsoft.Win32;
 using Partnerly.Agent.Commands;
 using Partnerly.Agent.Config;
+using Partnerly.Agent.Security;
 using Partnerly.Agent.UI;
 
 namespace Partnerly.Agent.Net
@@ -29,12 +30,15 @@ namespace Partnerly.Agent.Net
         private string _clipboard = string.Empty;
         private bool _clipboardKnown;
         private bool _subscribed;
+        private readonly GitRunner _git;
+        private readonly Dictionary<string, (string Sha, string Branch, bool Dirty)> _repoState = new(StringComparer.OrdinalIgnoreCase);
 
         public Watchers(AgentConfig config, AgentConnection connection, UiBridge ui)
         {
             _config = config;
             _connection = connection;
             _ui = ui;
+            _git = new GitRunner(config, ui.Confirm);
         }
 
         public void Start()
@@ -85,11 +89,12 @@ namespace Partnerly.Agent.Net
                 {
                     await Task.Delay(TimeSpan.FromSeconds(3), token);
                     tick++;
-                    if (_config.WatchPrograms.Count > 0) { await CheckProgramsAsync(); }
+                    if (_config.AllowedPrograms.Count > 0) { await CheckProgramsAsync(); }
                     if (_config.WatchClipboard && tick % 1 == 0) { await CheckClipboardAsync(); }
                     if (tick % 2 == 0) { await CheckDrivesAsync(); }
                     if (tick % 5 == 0 && _config.IdleMinutes > 0) { await CheckIdleAsync(); }
                     if (tick % 10 == 0) { RefreshFolders(); await CheckBatteryAsync(); }
+                    if (tick % 5 == 0 && _config.AllowedFolders.Count > 0) { await CheckReposAsync(token); }
                     if (tick % 100 == 0 && _config.DiskLowGb > 0) { await CheckDisksAsync(); }
                 }
                 catch (OperationCanceledException) { return; }
@@ -100,7 +105,7 @@ namespace Partnerly.Agent.Net
         // ---------- folders ----------
         private void RefreshFolders()
         {
-            var wanted = _config.WatchFolders
+            var wanted = _config.AllowedFolders
                 .Select(Environment.ExpandEnvironmentVariables)
                 .Where(path => path.Length > 0)
                 .ToHashSet(StringComparer.OrdinalIgnoreCase);
@@ -118,7 +123,7 @@ namespace Partnerly.Agent.Net
                 {
                     var watcher = new FileSystemWatcher(folder)
                     {
-                        IncludeSubdirectories = _config.WatchSubfolders,
+                        IncludeSubdirectories = true,
                         NotifyFilter = NotifyFilters.FileName | NotifyFilters.LastWrite | NotifyFilters.Size,
                         InternalBufferSize = 64 * 1024,
                         EnableRaisingEvents = true
@@ -143,9 +148,31 @@ namespace Partnerly.Agent.Net
             }
         }
 
+        // Build output, caches, Git's own files and temporary files would drown the real events when a whole
+        // drive or a project folder is watched.
+        private static readonly HashSet<string> NoiseFolders = new(StringComparer.OrdinalIgnoreCase)
+        {
+            ".git", ".svn", ".hg", ".vs", ".idea", "node_modules", "bin", "obj", "__pycache__", "$RECYCLE.BIN", "System Volume Information", "AppData"
+        };
+
+        public static bool IsNoise(string path)
+        {
+            var name = Path.GetFileName(path);
+            if (name.StartsWith("~$", StringComparison.Ordinal) || name.EndsWith(".tmp", StringComparison.OrdinalIgnoreCase)
+                || name.EndsWith(".crdownload", StringComparison.OrdinalIgnoreCase) || name.EndsWith(".part", StringComparison.OrdinalIgnoreCase)
+                || name.EndsWith(".swp", StringComparison.OrdinalIgnoreCase) || name.Equals("desktop.ini", StringComparison.OrdinalIgnoreCase)
+                || name.Equals("Thumbs.db", StringComparison.OrdinalIgnoreCase))
+            {
+                return true;
+            }
+
+            return path.Split(Path.DirectorySeparatorChar, Path.AltDirectorySeparatorChar).Any(part => NoiseFolders.Contains(part));
+        }
+
         // The file may still be written when the event arrives: wait until it can be opened.
         private async Task ReportFileAsync(string path, string type)
         {
+            if (IsNoise(path)) { return; }
             var token = _stop?.Token ?? CancellationToken.None;
             try
             {
@@ -177,6 +204,7 @@ namespace Partnerly.Agent.Net
         // A save fires Changed many times: report once, after things were quiet for a moment.
         private async Task ReportChangedAsync(string path)
         {
+            if (IsNoise(path)) { return; }
             if (_recent.TryGetValue(path, out var created) && DateTime.UtcNow - created < TimeSpan.FromSeconds(6))
             {
                 return;
@@ -218,6 +246,7 @@ namespace Partnerly.Agent.Net
 
         private async Task ReportDeletedAsync(string path)
         {
+            if (IsNoise(path)) { return; }
             _recent.TryRemove(path, out _);
             await _connection.SendEventAsync("file_deleted", new JsonObject
             {
@@ -244,7 +273,7 @@ namespace Partnerly.Agent.Net
         // ---------- programs ----------
         private async Task CheckProgramsAsync()
         {
-            var wanted = new HashSet<string>(_config.WatchPrograms.Select(StripExe), StringComparer.OrdinalIgnoreCase);
+            var wanted = new HashSet<string>(_config.AllowedPrograms.Select(AgentConfig.ProgramName), StringComparer.OrdinalIgnoreCase);
             var now = CurrentProgramNames();
             foreach (var name in now.Where(name => wanted.Contains(name) && !_seen.Contains(name)))
             {
@@ -362,6 +391,80 @@ namespace Partnerly.Agent.Net
                     ["text"] = text.Length > 2000 ? text[..2000] : text,
                     ["length"] = text.Length
                 });
+            }
+        }
+
+        // ---------- git repositories ----------
+        // Once in a while: did HEAD move on the same branch (a new commit), did the folder get changes or become clean?
+        // Switching the branch is not a "new commit". The first look only remembers the state.
+        private List<string> _repoList = new();
+        private DateTime _repoScan = DateTime.MinValue;
+        private int _repoCursor;
+
+        private async Task CheckReposAsync(CancellationToken token)
+        {
+            // Repositories are found inside the allowed folders; the search is repeated now and then, and only a few
+            // repositories are looked at in one round, so a drive full of projects does not keep git busy.
+            if (DateTime.UtcNow - _repoScan > TimeSpan.FromSeconds(90))
+            {
+                _repoScan = DateTime.UtcNow;
+                var folders = _config.AllowedFolders.ToList();
+                _repoList = await Task.Run(() => RepoFinder.Find(folders, 3, 30), token);
+            }
+
+            if (_repoList.Count == 0) { return; }
+            var batch = new List<string>();
+            for (var i = 0; i < Math.Min(6, _repoList.Count); i++)
+            {
+                batch.Add(_repoList[(_repoCursor + i) % _repoList.Count]);
+            }
+
+            _repoCursor = (_repoCursor + batch.Count) % _repoList.Count;
+            foreach (var repo in batch)
+            {
+                var sha = (await _git.QuickAsync(repo, new[] { "rev-parse", "HEAD" }, token))?.Trim();
+                if (string.IsNullOrEmpty(sha)) { continue; }
+                var branch = (await _git.QuickAsync(repo, new[] { "branch", "--show-current" }, token))?.Trim() ?? string.Empty;
+                var status = await _git.QuickAsync(repo, new[] { "status", "--porcelain" }, token) ?? string.Empty;
+                var changes = status.Split('\n', StringSplitOptions.RemoveEmptyEntries).Length;
+                var dirty = changes > 0;
+                var key = repo;
+
+                if (!_repoState.TryGetValue(key, out var before))
+                {
+                    _repoState[key] = (sha, branch, dirty);
+                    continue;
+                }
+
+                _repoState[key] = (sha, branch, dirty);
+                var folder = repo.Replace('/', (char)92);
+                if (sha != before.Sha && branch == before.Branch)
+                {
+                    var info = await _git.QuickAsync(repo, new[] { "log", "-1", "--pretty=format:%an%x1f%s" }, token) ?? string.Empty;
+                    var parts = info.Split('\u001f');
+                    var count = (await _git.QuickAsync(repo, new[] { "rev-list", "--count", before.Sha + ".." + sha }, token))?.Trim();
+                    await _connection.SendEventAsync("git_new_commit", new JsonObject
+                    {
+                        ["repo"] = folder,
+                        ["branch"] = branch,
+                        ["sha"] = sha,
+                        ["shortSha"] = sha.Length > 7 ? sha[..7] : sha,
+                        ["author"] = parts.Length > 0 ? parts[0] : string.Empty,
+                        ["subject"] = parts.Length > 1 ? parts[1] : string.Empty,
+                        ["count"] = int.TryParse(count, out var number) ? number : 1
+                    });
+                }
+
+                if (dirty != before.Dirty)
+                {
+                    await _connection.SendEventAsync("git_changed", new JsonObject
+                    {
+                        ["repo"] = folder,
+                        ["branch"] = branch,
+                        ["state"] = dirty ? "dirty" : "clean",
+                        ["changes"] = changes
+                    });
+                }
             }
         }
 

@@ -42,6 +42,24 @@ namespace Partnerly.Computer
         public const string PingHost = "computer.ping_host";
         public const string DownloadUrl = "computer.download_url";
 
+        public const string GitStatus = "computer.git_status";
+        public const string GitLog = "computer.git_log";
+        public const string GitDiff = "computer.git_diff";
+        public const string GitBranches = "computer.git_branches";
+        public const string GitFetch = "computer.git_fetch";
+        public const string GitPull = "computer.git_pull";
+        public const string GitCommit = "computer.git_commit";
+        public const string GitPush = "computer.git_push";
+        public const string GitSwitch = "computer.git_switch";
+        public const string GitClone = "computer.git_clone";
+        public const string GitInit = "computer.git_init";
+        public const string GitMerge = "computer.git_merge";
+        public const string GitTag = "computer.git_tag";
+        public const string GitStash = "computer.git_stash";
+        public const string GitCommand = "computer.git_command";
+        public const string GitNewCommit = "computer.git_new_commit";
+        public const string GitChanged = "computer.git_changed";
+
         public const string FileChanged = "computer.file_changed";
         public const string FileDeleted = "computer.file_deleted";
         public const string ProgramStopped = "computer.program_stopped";

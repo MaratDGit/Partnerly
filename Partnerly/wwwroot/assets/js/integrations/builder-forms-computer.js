@@ -27,10 +27,105 @@
             };
         }
 
+        // Git cards: the repository folder is one of the folders the PC allows for Git.
+        function repo() { return pcText("repo", "intPcGitRepo", "Repository folder", "intPcGitRepoHelp", "computerRepos", "repo"); }
+        function gitPath() { return text("path", "intPcGitPath", "Only this file or folder", null, true); }
+        function branch() { return text("branch", "intGhBranch", "Branch", "intGhBranchHelp", true); }
+
         var pc = connection("computer");
         var ask = function () { return note("intPcAskNote"); };
 
         return {
+            // ---------- Git ----------
+            "computer.git_status": [pc, intro("GitStatus"), repo()],
+            "computer.git_log": [
+                pc, intro("GitLog"), repo(),
+                number("max", "intMaxResults", "Max results"),
+                branch(), gitPath()
+            ],
+            "computer.git_diff": [
+                pc, intro("GitDiff"), repo(),
+                choice("mode", "intPcGitMode", "What to show", [["stat", "intPcGitStat", "Summary of changes"], ["names", "intPcGitNames", "Names of changed files"], ["full", "intPcGitFull", "Full text of changes"]]),
+                yesNo("staged", "intPcGitStaged", "Only staged changes"),
+                text("target", "intPcGitTarget", "Compare with (branch or commit)", null, true),
+                gitPath()
+            ],
+            "computer.git_branches": [pc, intro("GitBranches"), repo(), yesNo("remote", "intPcGitIncludeRemote", "Include branches from the server")],
+            "computer.git_fetch": [
+                pc, intro("GitFetch"), repo(),
+                text("remote", "intPcGitRemote", "Remote", "intPcGitRemoteHelp", true),
+                yesNo("prune", "intPcGitPrune", "Forget branches deleted on the server")
+            ],
+            "computer.git_pull": [
+                pc, intro("GitPull"), repo(),
+                text("remote", "intPcGitRemote", "Remote", "intPcGitRemoteHelp", true),
+                branch(),
+                choice("mode", "intPcGitPullMode", "How to join", [["ff", "intPcGitFfOnly", "Only fast-forward (safest)"], ["merge", "intPcGitMergeMode", "Merge"], ["rebase", "intPcGitRebaseMode", "Rebase (asks you on the PC)"]])
+            ],
+            "computer.git_commit": [
+                pc, intro("GitCommit"), repo(),
+                area("message", "intPcGitMessage", "Message", "intVariablesHelp"),
+                choice("add", "intPcGitAdd", "What to commit", [["all", "intPcGitAddAll", "Everything: new, changed and deleted files"], ["tracked", "intPcGitAddTracked", "Only files git already knows"], ["paths", "intPcGitAddPaths", "Only the files listed below"], ["none", "intPcGitAddNone", "Only what is already staged"]]),
+                area("paths", "intPcGitPaths", "Files (one per line)", "intPcGitPathsHelp")
+            ],
+            "computer.git_push": [
+                pc, intro("GitPush"), repo(),
+                text("remote", "intPcGitRemote", "Remote", "intPcGitRemoteHelp", true),
+                branch(),
+                yesNo("setUpstream", "intPcGitSetUpstream", "Remember this branch on the server (-u)"),
+                yesNo("tags", "intPcGitTags", "Send tags too"),
+                choice("force", "intPcGitForce", "Overwrite the branch on the server", [["none", "intPcGitForceNone", "No"], ["lease", "intPcGitForceLease", "Yes, but only if nobody else pushed (safer)"], ["force", "intPcGitForceYes", "Yes, force it"]]),
+                note("intPcGitPushNote")
+            ],
+            "computer.git_switch": [
+                pc, intro("GitSwitch"), repo(),
+                branch(),
+                yesNo("create", "intPcGitCreate", "Create the branch if it does not exist"),
+                text("from", "intPcGitFrom", "Start from (branch or commit)", null, true)
+            ],
+            "computer.git_clone": [
+                pc, intro("GitClone"),
+                text("url", "intPcGitUrl", "Repository address", "intPcGitUrlHelp", true),
+                pcText("repo", "intPcGitCloneFolder", "Folder for the copy", "intPcGitCloneFolderHelp", "computerFolders", "folder"),
+                branch(),
+                number("depth", "intPcGitDepth", "Only the last N commits (0 = all)")
+            ],
+            "computer.git_init": [pc, intro("GitInit"), pcText("repo", "intPcGitRepo", "Repository folder", "intPcGitCloneFolderHelp", "computerFolders", "folder"), branch()],
+            "computer.git_merge": [
+                pc, intro("GitMerge"), repo(),
+                text("branch", "intGhBranch", "Branch", null, true),
+                yesNo("noFastForward", "intPcGitNoFf", "Always make a merge commit"),
+                text("message", "intPcGitMessage", "Message")
+            ],
+            "computer.git_tag": [
+                pc, intro("GitTag"), repo(),
+                text("name", "intPcGitTagName", "Tag name", null, true),
+                text("message", "intPcGitTagMessage", "Note for the tag (optional)"),
+                text("target", "intPcGitTarget", "Compare with (branch or commit)", null, true),
+                yesNo("delete", "intPcGitDelete", "Delete this tag")
+            ],
+            "computer.git_stash": [
+                pc, intro("GitStash"), repo(),
+                choice("action", "intPcGitStashAction", "What to do", [["push", "intPcGitStashPush", "Put the changes aside"], ["pop", "intPcGitStashPop", "Bring them back and remove from the shelf"], ["apply", "intPcGitStashApply", "Bring them back and keep on the shelf"], ["list", "intPcGitStashList", "Show what is on the shelf"], ["drop", "intPcGitStashDrop", "Throw the last one away (asks you on the PC)"]]),
+                text("message", "intPcGitMessage", "Message")
+            ],
+            "computer.git_command": [
+                pc, intro("GitCommand"), repo(),
+                text("command", "intPcGitCommand", "Git command", "intPcGitCommandHelp", true),
+                note("intPcGitCommandNote")
+            ],
+            "computer.git_new_commit": [
+                pc, intro("GitNewCommit"),
+                pcText("repo", "intPcGitRepo", "Repository folder", "intPcGitTriggerRepoHelp", "computerRepos", "repo"),
+                branch()
+            ],
+            "computer.git_changed": [
+                pc, intro("GitChanged"),
+                pcText("repo", "intPcGitRepo", "Repository folder", "intPcGitTriggerRepoHelp", "computerRepos", "repo"),
+                branch(),
+                choice("state", "intPcGitState", "When", [["any", "intPcGitStateAny", "Gets changes or becomes clean"], ["dirty", "intPcGitStateDirty", "Gets uncommitted changes"], ["clean", "intPcGitStateClean", "Becomes clean again"]])
+            ],
+
             // ---------- Show something on the PC ----------
             "computer.notify": [
                 pc, intro("Notify"),

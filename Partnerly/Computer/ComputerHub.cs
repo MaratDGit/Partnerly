@@ -112,7 +112,7 @@ namespace Partnerly.Computer
             }
 
             var clean = new JsonObject();
-            foreach (var key in new[] { "folders", "programs", "scripts", "confirm" })
+            foreach (var key in new[] { "folders", "programs", "scripts", "repos", "confirm" })
             {
                 var list = new JsonArray();
                 if (source[key] is JsonArray items)
@@ -198,6 +198,12 @@ namespace Partnerly.Computer
                     break;
                 case "idle_changed":
                     await RaiseAsync(connection, ComputerTypeCodes.IdleChanged, payload, config => ComputerEvents.MatchesStatus(config, payload["state"]?.ToString() ?? string.Empty));
+                    break;
+                case "git_new_commit":
+                    await RaiseAsync(connection, ComputerTypeCodes.GitNewCommit, payload, config => ComputerEvents.MatchesRepo(config, payload, checkState: false));
+                    break;
+                case "git_changed":
+                    await RaiseAsync(connection, ComputerTypeCodes.GitChanged, payload, config => ComputerEvents.MatchesRepo(config, payload, checkState: true));
                     break;
                 case "disk_low":
                     await RaiseAsync(connection, ComputerTypeCodes.DiskLow, payload, config => ComputerEvents.MatchesDrive(config, payload, checkState: false));

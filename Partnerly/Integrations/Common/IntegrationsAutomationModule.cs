@@ -1,5 +1,6 @@
 using Partnerly.Automation.Abstractions;
 using Partnerly.Automation.Registry;
+using Partnerly.Integrations.GitHub;
 using Partnerly.Integrations.Google.Drive;
 using Partnerly.Integrations.Google.Gmail;
 using Partnerly.Integrations.Google.Sheets;
@@ -22,6 +23,11 @@ namespace Partnerly.Integrations.Common
             registry.Register<WhatsAppMessageTrigger>(IntegrationTypeCodes.WhatsAppMessageReceived, IntegrationKinds.WhatsApp);
             registry.Register<OutlookMessageTrigger>(IntegrationTypeCodes.OutlookMessageReceived, IntegrationKinds.Microsoft);
             registry.Register<OutlookEventTrigger>(IntegrationTypeCodes.OutlookEventAdded, IntegrationKinds.Microsoft);
+            registry.Register<GitHubIssueOpenedTrigger>(IntegrationTypeCodes.GitHubIssueOpened, IntegrationKinds.GitHub);
+            registry.Register<GitHubPullRequestOpenedTrigger>(IntegrationTypeCodes.GitHubPullRequestOpened, IntegrationKinds.GitHub);
+            registry.Register<GitHubPushTrigger>(IntegrationTypeCodes.GitHubPush, IntegrationKinds.GitHub);
+            registry.Register<GitHubReleasePublishedTrigger>(IntegrationTypeCodes.GitHubReleasePublished, IntegrationKinds.GitHub);
+            registry.Register<GitHubWorkflowFailedTrigger>(IntegrationTypeCodes.GitHubWorkflowFailed, IntegrationKinds.GitHub);
         }
 
         public void RegisterActions(ActionRegistry registry)
@@ -63,6 +69,26 @@ namespace Partnerly.Integrations.Common
             registry.Register<OutlookFindMessagesAction>(IntegrationTypeCodes.OutlookFindMessages, IntegrationKinds.Microsoft);
             registry.Register<OutlookCreateEventAction>(IntegrationTypeCodes.OutlookCreateEvent, IntegrationKinds.Microsoft);
             registry.Register<OutlookFindEventsAction>(IntegrationTypeCodes.OutlookFindEvents, IntegrationKinds.Microsoft);
+            registry.Register<GitHubListReposAction>(IntegrationTypeCodes.GitHubListRepos, IntegrationKinds.GitHub);
+            registry.Register<GitHubGetRepoAction>(IntegrationTypeCodes.GitHubGetRepo, IntegrationKinds.GitHub);
+            registry.Register<GitHubCreateIssueAction>(IntegrationTypeCodes.GitHubCreateIssue, IntegrationKinds.GitHub);
+            registry.Register<GitHubGetIssueAction>(IntegrationTypeCodes.GitHubGetIssue, IntegrationKinds.GitHub);
+            registry.Register<GitHubListIssuesAction>(IntegrationTypeCodes.GitHubListIssues, IntegrationKinds.GitHub);
+            registry.Register<GitHubUpdateIssueAction>(IntegrationTypeCodes.GitHubUpdateIssue, IntegrationKinds.GitHub);
+            registry.Register<GitHubCommentIssueAction>(IntegrationTypeCodes.GitHubCommentIssue, IntegrationKinds.GitHub);
+            registry.Register<GitHubCreatePullRequestAction>(IntegrationTypeCodes.GitHubCreatePullRequest, IntegrationKinds.GitHub);
+            registry.Register<GitHubGetPullRequestAction>(IntegrationTypeCodes.GitHubGetPullRequest, IntegrationKinds.GitHub);
+            registry.Register<GitHubListPullRequestsAction>(IntegrationTypeCodes.GitHubListPullRequests, IntegrationKinds.GitHub);
+            registry.Register<GitHubMergePullRequestAction>(IntegrationTypeCodes.GitHubMergePullRequest, IntegrationKinds.GitHub);
+            registry.Register<GitHubListBranchesAction>(IntegrationTypeCodes.GitHubListBranches, IntegrationKinds.GitHub);
+            registry.Register<GitHubListCommitsAction>(IntegrationTypeCodes.GitHubListCommits, IntegrationKinds.GitHub);
+            registry.Register<GitHubCreateBranchAction>(IntegrationTypeCodes.GitHubCreateBranch, IntegrationKinds.GitHub);
+            registry.Register<GitHubGetFileAction>(IntegrationTypeCodes.GitHubGetFile, IntegrationKinds.GitHub);
+            registry.Register<GitHubPutFileAction>(IntegrationTypeCodes.GitHubPutFile, IntegrationKinds.GitHub);
+            registry.Register<GitHubCreateReleaseAction>(IntegrationTypeCodes.GitHubCreateRelease, IntegrationKinds.GitHub);
+            registry.Register<GitHubDispatchWorkflowAction>(IntegrationTypeCodes.GitHubDispatchWorkflow, IntegrationKinds.GitHub);
+            registry.Register<GitHubListWorkflowRunsAction>(IntegrationTypeCodes.GitHubListWorkflowRuns, IntegrationKinds.GitHub);
+            registry.Register<GitHubApiRequestAction>(IntegrationTypeCodes.GitHubApiRequest, IntegrationKinds.GitHub);
         }
     }
 }

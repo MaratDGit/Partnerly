@@ -7,13 +7,14 @@
     var canEdit = Can("automation.edit") ? "true" : "false";
     var canDelete = Can("automation.delete") ? "true" : "false";
     var activeCount = Model.Definitions.Count(item => item.IsActive);
-    var categories = new[] { "partnerly", "telegram", "google", "microsoft", "whatsapp", "computer" };
+    var categories = new[] { "partnerly", "telegram", "google", "microsoft", "github", "whatsapp", "computer" };
     string CategoryIcon(string category) => category switch
     {
         "computer" => "bx-desktop",
         "telegram" => "bxl-telegram",
         "google" => "bxl-google",
         "microsoft" => "bxl-microsoft",
+        "github" => "bxl-github",
         "whatsapp" => "bxl-whatsapp",
         _ => "bx-bot"
     };
@@ -25,6 +26,7 @@
         "Gmail" => ("bxl-gmail", "is-google"),
         "Google Drive" => ("bxl-google-cloud", "is-google"),
         "Outlook" => ("bxl-microsoft", "is-microsoft"),
+        "GitHub" => ("bxl-github", "is-github"),
         "Computer" => ("bx-desktop", "is-computer"),
         _ => ("bx-plug", "")
     };
@@ -33,6 +35,7 @@
         "telegram" => "Telegram",
         "google" => "Google",
         "microsoft" => "Outlook",
+        "github" => "GitHub",
         "whatsapp" => "WhatsApp",
         "computer" => "Computer",
         _ => "Partnerly"

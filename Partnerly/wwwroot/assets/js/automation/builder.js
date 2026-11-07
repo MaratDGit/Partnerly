@@ -138,6 +138,7 @@
         "Gmail": "bxl-gmail",
         "Outlook": "bxl-microsoft",
         "Outlook Calendar": "bx-calendar",
+        "GitHub": "bxl-github",
         "Google Sheets": "bx-spreadsheet",
         "Google Drive": "bxl-google-cloud",
         "WhatsApp": "bxl-whatsapp",
@@ -206,6 +207,23 @@
         "computer.drive_changed": "bx-usb",
         "computer.idle_changed": "bx-time-five",
         "computer.disk_low": "bx-hdd",
+        "computer.git_status": "bx-git-branch",
+        "computer.git_log": "bx-history",
+        "computer.git_diff": "bx-git-compare",
+        "computer.git_branches": "bx-git-branch",
+        "computer.git_fetch": "bx-cloud-download",
+        "computer.git_pull": "bx-download",
+        "computer.git_commit": "bx-git-commit",
+        "computer.git_push": "bx-upload",
+        "computer.git_switch": "bx-git-branch",
+        "computer.git_clone": "bx-copy-alt",
+        "computer.git_init": "bx-folder-plus",
+        "computer.git_merge": "bx-git-merge",
+        "computer.git_tag": "bx-purchase-tag",
+        "computer.git_stash": "bx-archive",
+        "computer.git_command": "bx-terminal",
+        "computer.git_new_commit": "bx-git-commit",
+        "computer.git_changed": "bx-git-pull-request",
         "computer.create_folder": "bx-folder-plus",
         "computer.delete_file": "bx-trash",
         "computer.file_info": "bx-search-alt",
@@ -464,6 +482,8 @@
         ? (window.partnerlyIntegrationNodeForms(t) || {})
         : {};
     var catalogConnections = [];
+    var liveLoaded = false;
+    var liveStamp = "";
     var integrationsUrl = "";
 
     function onErrorField() {
@@ -540,12 +560,13 @@
         drive: { cls: "drive", icon: "bxl-google-cloud", label: "Google Drive" },
         whatsapp: { cls: "whatsapp", icon: "bxl-whatsapp", label: "WhatsApp" },
         outlook: { cls: "outlook", icon: "bxl-microsoft", label: "Outlook" },
+        github: { cls: "github", icon: "bxl-github", label: "GitHub" },
         outlookCalendar: { cls: "outlook", icon: "bx-calendar", label: "Outlook Calendar" },
         computer: { cls: "computer", icon: "bx-desktop", label: "Computer" }
     };
 
     function serviceOf(type) {
-        var match = /^(telegram|sheets|gmail|drive|whatsapp|outlook|computer)\./.exec(String(type || ""));
+        var match = /^(telegram|sheets|gmail|drive|whatsapp|outlook|github|computer)\./.exec(String(type || ""));
         if (!match) { return null; }
         if (match[1] === "outlook" && /\.(create_event|find_events|event_added)$/.test(type)) {
             return SERVICE_CHIPS.outlookCalendar;
@@ -615,7 +636,7 @@
         delete_record: function (c) { return filled(c.entity) && filled(c.key); }
     };
 
-    var INTEGRATION_PREFIX = /^(telegram|sheets|gmail|outlook|drive|whatsapp|computer)\./;
+    var INTEGRATION_PREFIX = /^(telegram|sheets|gmail|outlook|github|drive|whatsapp|computer)\./;
     // Settings (besides the connection) a card needs before it can work.
     var INTEGRATION_REQUIRED = {
         "telegram.send_message": ["chatId", "text"],
@@ -627,6 +648,30 @@
         "gmail.send": ["to", "subject", "body"],
         "outlook.send": ["to", "subject", "body"],
         "outlook.create_event": ["subject", "start"],
+        "github.create_issue": ["repo", "title"],
+        "github.get_repo": ["repo"],
+        "github.get_issue": ["repo", "number"],
+        "github.list_issues": ["repo"],
+        "github.update_issue": ["repo", "number"],
+        "github.comment_issue": ["repo", "number", "body"],
+        "github.create_pr": ["repo", "title", "head", "base"],
+        "github.get_pr": ["repo", "number"],
+        "github.list_prs": ["repo"],
+        "github.merge_pr": ["repo", "number"],
+        "github.list_branches": ["repo"],
+        "github.list_commits": ["repo"],
+        "github.create_branch": ["repo", "name"],
+        "github.get_file": ["repo", "path"],
+        "github.put_file": ["repo", "path"],
+        "github.create_release": ["repo", "tag"],
+        "github.dispatch_workflow": ["repo", "workflow"],
+        "github.list_workflow_runs": ["repo"],
+        "github.api_request": ["path"],
+        "github.issue_opened": ["repo"],
+        "github.pr_opened": ["repo"],
+        "github.push": ["repo"],
+        "github.release_published": ["repo"],
+        "github.workflow_failed": ["repo"],
         "gmail.reply": ["messageId", "body"],
         "gmail.get_message": ["messageId"],
         "gmail.create_draft": ["to", "subject", "body"],
@@ -667,6 +712,21 @@
         "computer.save_attachment": ["attachmentId", "folder"],
         "computer.get_file": ["path"],
         "computer.run_program": ["path"],
+        "computer.git_status": ["repo"],
+        "computer.git_log": ["repo"],
+        "computer.git_diff": ["repo"],
+        "computer.git_branches": ["repo"],
+        "computer.git_fetch": ["repo"],
+        "computer.git_pull": ["repo"],
+        "computer.git_commit": ["repo", "message"],
+        "computer.git_push": ["repo"],
+        "computer.git_switch": ["repo", "branch"],
+        "computer.git_clone": ["repo", "url"],
+        "computer.git_init": ["repo"],
+        "computer.git_merge": ["repo", "branch"],
+        "computer.git_tag": ["repo", "name"],
+        "computer.git_stash": ["repo"],
+        "computer.git_command": ["repo", "command"],
         "computer.run_script": ["path"],
         "computer.close_program": ["name"],
         "computer.create_folder": ["path"],
@@ -677,12 +737,18 @@
         "computer.download_url": ["url", "folder"]
     };
 
+    // True when the editor knows the user's connections and this one is no longer among them (it was removed
+    // on the Integrations page while the editor stayed open).
+    function connectionGone(id) {
+        return liveLoaded && !catalogConnections.some(function (c) { return String(c.id) === String(id); });
+    }
+
     function settingsReady(data) {
         if (data.disabled) { return true; }
         var config = normalizeDelay(JSON.parse(JSON.stringify(data.config || {})));
         var type = data.type;
         if (INTEGRATION_PREFIX.test(type)) {
-            if (!filled(config.connectionId)) { return false; }
+            if (!filled(config.connectionId) || connectionGone(config.connectionId)) { return false; }
             return (INTEGRATION_REQUIRED[type] || []).every(function (key) { return filled(config[key]); });
         }
         var rule = CONFIG_RULES[type];
@@ -1199,6 +1265,7 @@
         }
         return keys.filter(function (key) {
             var value = getByPath(config, key);
+            if (key === "connectionId" && filled(value) && connectionGone(value)) { return true; }
             if (key === "amount" || key === "minutes") { return !(Number(value) > 0); }
             if (key === "chatId" && /^telegram\./.test(data.type) && !filled(value)) {
                 // An empty chat is fine when the connection has a default chat (the server uses it).
@@ -1479,6 +1546,11 @@
         "gmail.message_received": ["id", "threadId", "from", "to", "subject", "date", "snippet"],
         "outlook.message_received": ["id", "conversationId", "from", "fromName", "to", "subject", "date", "snippet", "webLink"],
         "outlook.event_added": ["id", "subject", "start", "end", "location", "organizer", "webLink", "created"],
+        "github.issue_opened": ["repo", "number", "title", "body", "author", "labels", "url"],
+        "github.pr_opened": ["repo", "number", "title", "body", "author", "head", "base", "draft", "url"],
+        "github.push": ["repo", "branch", "sha", "subject", "message", "author", "login", "date", "url"],
+        "github.release_published": ["repo", "tag", "name", "body", "author", "prerelease", "url"],
+        "github.workflow_failed": ["repo", "id", "name", "branch", "sha", "commit", "conclusion", "url"],
         "sheets.row_added": ["rowNumber", "sheet", "spreadsheetId"],
         "drive.file_added": ["id", "name", "mimeType", "webViewLink", "createdTime", "modifiedTime", "size"],
         "whatsapp.message_received": ["messageId", "from", "name", "text"],
@@ -1493,7 +1565,9 @@
         "computer.power_changed": ["state", "percent", "machine"],
         "computer.drive_changed": ["state", "drive", "label", "kind", "machine"],
         "computer.idle_changed": ["state", "idleMinutes", "machine"],
-        "computer.disk_low": ["drive", "freeGb", "freePercent", "machine"]
+        "computer.disk_low": ["drive", "freeGb", "freePercent", "machine"],
+        "computer.git_new_commit": ["repo", "branch", "sha", "shortSha", "subject", "author", "count", "machine"],
+        "computer.git_changed": ["repo", "branch", "state", "changes", "machine"]
     };
 
     var STEP_VARS = {
@@ -1508,6 +1582,26 @@
         "sheets.find_rows": ["result.count", "result.first.rowNumber"],
         "gmail.send": ["result.messageId", "result.threadId", "result.to"],
         "gmail.find_messages": ["result.count", "result.first.id", "result.first.from", "result.first.subject", "result.first.snippet"],
+        "github.list_repos": ["result.count", "result.first.fullName", "result.first.url", "result.first.defaultBranch"],
+        "github.get_repo": ["result.fullName", "result.private", "result.description", "result.defaultBranch", "result.url", "result.cloneUrl", "result.stars", "result.openIssues"],
+        "github.create_issue": ["result.number", "result.title", "result.state", "result.body", "result.author", "result.labels", "result.url"],
+        "github.get_issue": ["result.number", "result.title", "result.state", "result.body", "result.author", "result.labels", "result.url", "result.isPullRequest"],
+        "github.list_issues": ["result.count", "result.first.number", "result.first.title", "result.first.url"],
+        "github.update_issue": ["result.number", "result.title", "result.state", "result.body", "result.author", "result.labels", "result.url"],
+        "github.comment_issue": ["result.id", "result.url", "result.number"],
+        "github.create_pr": ["result.number", "result.title", "result.url", "result.head", "result.base"],
+        "github.get_pr": ["result.number", "result.title", "result.state", "result.merged", "result.mergeable", "result.head", "result.base", "result.author", "result.url"],
+        "github.list_prs": ["result.count", "result.first.number", "result.first.title", "result.first.url"],
+        "github.merge_pr": ["result.merged", "result.sha", "result.message"],
+        "github.list_branches": ["result.count", "result.names", "result.first.name"],
+        "github.list_commits": ["result.count", "result.first.sha", "result.first.subject", "result.first.author", "result.first.url"],
+        "github.create_branch": ["result.branch", "result.from", "result.sha"],
+        "github.get_file": ["result.text", "result.sha", "result.size", "result.path", "result.url"],
+        "github.put_file": ["result.path", "result.commitSha", "result.url", "result.created"],
+        "github.create_release": ["result.id", "result.tag", "result.name", "result.url"],
+        "github.dispatch_workflow": ["result.started", "result.workflow", "result.ref"],
+        "github.list_workflow_runs": ["result.count", "result.first.id", "result.first.name", "result.first.conclusion", "result.first.url"],
+        "github.api_request": ["result.count"],
         "outlook.send": ["result.sent", "result.to"],
         "outlook.find_messages": ["result.count", "result.first.id", "result.first.from", "result.first.subject", "result.first.snippet"],
         "outlook.create_event": ["result.id", "result.subject", "result.webLink"],
@@ -1544,6 +1638,21 @@
         "computer.get_file": ["result.attachmentId", "result.fileName", "result.size"],
         "computer.process_running": ["result.running", "result.count"],
         "computer.read_file": ["result.text", "result.size", "result.fileName"],
+        "computer.git_status": ["result.branch", "result.upstream", "result.ahead", "result.behind", "result.changes", "result.staged", "result.unstaged", "result.untracked", "result.clean", "result.summary", "result.files"],
+        "computer.git_log": ["result.count", "result.first.sha", "result.first.shortSha", "result.first.author", "result.first.date", "result.first.subject", "result.commits"],
+        "computer.git_diff": ["result.changed", "result.output", "result.lines"],
+        "computer.git_branches": ["result.count", "result.current", "result.names"],
+        "computer.git_fetch": ["result.command", "result.repo", "result.ok", "result.output", "result.text", "result.exitCode"],
+        "computer.git_pull": ["result.upToDate", "result.command", "result.repo", "result.ok", "result.output", "result.text", "result.exitCode"],
+        "computer.git_commit": ["result.committed", "result.sha", "result.subject", "result.text"],
+        "computer.git_push": ["result.ok", "result.text", "result.errorOutput"],
+        "computer.git_switch": ["result.command", "result.repo", "result.ok", "result.output", "result.text", "result.exitCode"],
+        "computer.git_clone": ["result.repo", "result.text"],
+        "computer.git_init": ["result.repo", "result.text"],
+        "computer.git_merge": ["result.command", "result.repo", "result.ok", "result.output", "result.text", "result.exitCode"],
+        "computer.git_tag": ["result.command", "result.repo", "result.ok", "result.output", "result.text", "result.exitCode"],
+        "computer.git_stash": ["result.command", "result.repo", "result.ok", "result.output", "result.text", "result.exitCode"],
+        "computer.git_command": ["result.command", "result.repo", "result.ok", "result.output", "result.text", "result.exitCode"],
         "computer.write_file": ["result.path", "result.size"],
         "computer.list_folder": ["result.count", "result.items"],
         "computer.copy_file": ["result.path"],
@@ -1763,7 +1872,9 @@
         if (!entry || !entry[kind]) { return []; }
         var group = kind === "programs"
             ? t("builderPcAllowedPrograms", "Programs this PC allows")
-            : t("builderPcAllowedFolders", "Folders this PC allows");
+            : kind === "repos"
+                ? t("builderPcAllowedRepos", "Git folders this PC allows")
+                : t("builderPcAllowedFolders", "Folders this PC allows");
         return entry[kind].map(function (path) { return { value: String(path), label: String(path), group: group }; });
     }
 
@@ -1775,6 +1886,7 @@
         zip: ["builderPcChooseFile", "Choose file…"],
         zipsave: ["builderPcChooseFile", "Choose file…"],
         folder: ["builderPcChooseFolder", "Choose folder…"],
+        repo: ["builderPcChooseFolder", "Choose folder…"],
         program: ["builderPcChooseProgram", "Choose program…"],
         programname: ["builderPcChooseProgram", "Choose program…"],
         script: ["builderPcChooseFile", "Choose file…"]
@@ -1860,12 +1972,144 @@
         });
         row.appendChild(status);
         built.el.appendChild(row);
+
+        // "Browse...": opens a list of what lies inside the folders the PC allows. Folders open on a click;
+        // a file (or "Use this folder") fills the field. Everything is listed by the program on the PC.
+        var browsable = kinds.filter(function (kind) { return ["file", "script", "zip", "folder", "repo"].indexOf(kind) !== -1; });
+        if (browsable.length && config.computerBrowseUrl) {
+            var wantsFolder = browsable.some(function (kind) { return kind === "folder" || kind === "repo"; });
+            var wantsFile = browsable.some(function (kind) { return kind === "file" || kind === "script" || kind === "zip"; });
+            var panel = document.createElement("div");
+            panel.className = "automation-pc-browse";
+            panel.hidden = true;
+
+            var browseButton = document.createElement("button");
+            browseButton.type = "button";
+            browseButton.className = "btn btn-sm btn-outline-secondary automation-pc-pick-button";
+            browseButton.innerHTML = '<i class="bx bx-folder-open" aria-hidden="true"></i> ';
+            browseButton.appendChild(document.createTextNode(t("builderPcBrowse", "Browse…")));
+            browseButton.disabled = !canEditNow();
+            buttons.push(browseButton);
+
+            var browseLoad = function (path) {
+                var id = data && data.config ? data.config.connectionId : "";
+                if (!id) {
+                    setStatus(t("builderPcPickNoConnection", "Choose the computer above first."), "warn");
+                    return;
+                }
+                panel.hidden = false;
+                panel.textContent = t("builderPcBrowseLoading", "Loading…");
+                postForm(config.computerBrowseUrl, { id: id, path: path || "" }).then(function (json) {
+                    if (!json || json.success === false || !json.data) {
+                        panel.hidden = true;
+                        setStatus((json && json.message) || t("builderPcPickFailed", "The PC did not answer."), "error");
+                        return;
+                    }
+                    setStatus("", "");
+                    browseRender(json.data);
+                }).catch(function () {
+                    panel.hidden = true;
+                    setStatus(t("builderPcPickFailed", "The PC did not answer."), "error");
+                });
+            };
+
+            var browseRender = function (listing) {
+                panel.textContent = "";
+                var head = document.createElement("div");
+                head.className = "automation-pc-browse-head";
+                if (!listing.isRoot) {
+                    var up = document.createElement("button");
+                    up.type = "button";
+                    up.className = "automation-pc-browse-up";
+                    up.title = t("builderPcBrowseUp", "Up");
+                    up.innerHTML = '<i class="bx bx-up-arrow-alt" aria-hidden="true"></i>';
+                    up.addEventListener("click", function () { browseLoad(listing.parent || ""); });
+                    head.appendChild(up);
+                }
+                var where = document.createElement("span");
+                where.className = "automation-pc-browse-path";
+                where.textContent = listing.isRoot ? t("builderPcAllowedFolders", "Folders this PC allows") : listing.path;
+                head.appendChild(where);
+                if (wantsFolder && !listing.isRoot) {
+                    var use = document.createElement("button");
+                    use.type = "button";
+                    use.className = "btn btn-sm btn-primary automation-pc-browse-use";
+                    use.textContent = t("builderPcBrowseUse", "Use this folder");
+                    use.addEventListener("click", function () {
+                        fill(listing.path);
+                        panel.hidden = true;
+                        setStatus(t("builderPcPickOk", "Chosen on the PC."), "ok");
+                    });
+                    head.appendChild(use);
+                }
+                var close = document.createElement("button");
+                close.type = "button";
+                close.className = "automation-pc-browse-up";
+                close.title = t("builderPcBrowseClose", "Close");
+                close.innerHTML = '<i class="bx bx-x" aria-hidden="true"></i>';
+                close.addEventListener("click", function () { panel.hidden = true; });
+                head.appendChild(close);
+                panel.appendChild(head);
+
+                var list = document.createElement("div");
+                list.className = "automation-pc-browse-list";
+                var items = listing.items || [];
+                if (!items.length) {
+                    var empty = document.createElement("div");
+                    empty.className = "automation-pc-browse-empty";
+                    empty.textContent = listing.isRoot
+                        ? t("builderPcBrowseNoFolders", "No folder is allowed on this PC yet. Add one in the Partnerly Agent settings.")
+                        : t("builderPcBrowseEmpty", "This folder is empty.");
+                    list.appendChild(empty);
+                }
+                items.forEach(function (item) {
+                    var row = document.createElement("button");
+                    row.type = "button";
+                    row.className = "automation-pc-browse-item" + (item.isFolder ? " is-folder" : (wantsFile ? "" : " is-muted"));
+                    var icon = item.isRepo ? "bx-git-branch" : item.isFolder ? "bx-folder" : "bx-file";
+                    row.innerHTML = '<i class="bx ' + icon + '" aria-hidden="true"></i> ';
+                    var label = document.createElement("span");
+                    label.textContent = item.name;
+                    row.appendChild(label);
+                    if (!item.isFolder && item.size != null) {
+                        var size = document.createElement("small");
+                        size.textContent = item.size >= 1048576 ? (Math.round(item.size / 104857.6) / 10) + " MB" : Math.max(1, Math.round(item.size / 1024)) + " KB";
+                        row.appendChild(size);
+                    }
+                    row.addEventListener("click", function () {
+                        if (item.isFolder) {
+                            browseLoad(item.path);
+                        } else if (wantsFile) {
+                            fill(item.path);
+                            panel.hidden = true;
+                            setStatus(t("builderPcPickOk", "Chosen on the PC."), "ok");
+                        }
+                    });
+                    list.appendChild(row);
+                });
+                if (listing.truncated) {
+                    var more = document.createElement("div");
+                    more.className = "automation-pc-browse-empty";
+                    more.textContent = t("builderPcBrowseMore", "Only the first entries are shown. Open a sub-folder to see more.");
+                    list.appendChild(more);
+                }
+                panel.appendChild(list);
+            };
+
+            browseButton.addEventListener("click", function () {
+                if (!panel.hidden) { panel.hidden = true; return; }
+                browseLoad("");
+            });
+            row.insertBefore(browseButton, status);
+            built.el.appendChild(panel);
+        }
     }
 
     function sourceOptions(source, vars, data) {
         switch (source) {
             case "computerFolders": return computerOptions(data, "folders").concat(vars);
             case "computerPrograms": return computerOptions(data, "programs").concat(vars);
+            case "computerRepos": return computerOptions(data, "repos").concat(vars);
             case "computerScripts": return computerOptions(data, "scripts").concat(vars);
             case "telegramChats": return telegramChatOptions(data).concat(vars);
             case "events": return EVENT_OPTIONS;
@@ -2835,6 +3079,11 @@
         var panel = menu.querySelector(".automation-add-panel");
         if (panel) {
             panel.hidden = false;
+            // The cursor is already in the search box: type the name and press Enter.
+            var searchBox = panel.querySelector(".automation-pal-search input");
+            if (searchBox) {
+                window.setTimeout(function () { searchBox.focus(); searchBox.select(); }, 30);
+            }
         }
         toggle.setAttribute("aria-expanded", "true");
     }
@@ -3018,6 +3267,9 @@
             catalogConnections = catalog.connections || [];
             integrationsUrl = catalog.integrationsUrl || "";
             lookups = catalog.lookups || {};
+            liveStamp = catalog.stamp || "";
+            liveLoaded = true;
+            lastCatalog = catalog;
             adoptServerFavorites(catalog.favorites);
             if (selectedId && nodeOrNull(selectedId)) {
                 renderFields(nodeOrNull(selectedId).data);
@@ -3070,6 +3322,27 @@
                 var listEl = mk("div", "automation-pal-list");
                 var empty = mk("p", "automation-pal-empty", t("builderNoFavorites", "No favorites yet. Click the star next to any item to pin it here."));
                 empty.hidden = true;
+                var noResults = mk("p", "automation-pal-empty", t("builderNoResults", "Nothing found. Try another word."));
+                noResults.hidden = true;
+
+                // Search: finds a card by its name in English, Russian or Armenian (all three come with the page),
+                // by its code (github.create_issue) or by the name of its service.
+                var searchWrap = mk("div", "automation-pal-search");
+                searchWrap.appendChild(icon("bx-search"));
+                var searchInput = mk("input", "form-control");
+                searchInput.type = "search";
+                searchInput.setAttribute("autocomplete", "off");
+                searchInput.setAttribute("spellcheck", "false");
+                searchInput.placeholder = t("builderSearch", "Search triggers and actions…");
+                searchInput.setAttribute("aria-label", searchInput.placeholder);
+                searchWrap.appendChild(searchInput);
+                function normalizeSearch(text) {
+                    return String(text == null ? "" : text).toLowerCase().replace(/\u0451/g, "\u0435").replace(/[._\-\/]+/g, " ").replace(/\s+/g, " ").trim();
+                }
+                function haystackFor(item, groupName) {
+                    var names = (i18n.typeNames && i18n.typeNames[item.type]) || [];
+                    return normalizeSearch(names.concat([typeLabel(item.type, item.displayName || item.type), item.displayName || "", item.type, groupName || ""]).join(" "));
+                }
                 pal.appendChild(nav);
                 pal.appendChild(listEl);
                 container.appendChild(pal);
@@ -3084,22 +3357,56 @@
 
                 function applyFilter() {
                     var favCount = 0;
+                    var tokens = normalizeSearch(searchInput.value).split(" ").filter(function (token) { return token; });
+                    var searching = tokens.length > 0;
+                    var found = 0;
+                    var groupsWithHits = {};
                     Array.prototype.forEach.call(listEl.children, function (node) {
-                        if (node === empty) { return; }
+                        if (node === empty || node === noResults || node === searchWrap) { return; }
                         var group = node.getAttribute("data-group");
                         if (node.classList.contains("automation-add-group")) {
-                            node.hidden = active !== "";
+                            node.hidden = searching ? true : active !== "";
+                            return;
+                        }
+                        if (searching) {
+                            // While searching, every group is searched at once (the tabs and favorites are set aside).
+                            var hay = node._hay || "";
+                            var hit = tokens.every(function (token) { return hay.indexOf(token) !== -1; });
+                            node.hidden = !hit;
+                            if (hit) { found += 1; groupsWithHits[group] = true; }
                             return;
                         }
                         var visible = active === "__fav" ? isFav(node.getAttribute("data-key")) : (active === "" || group === active);
                         node.hidden = !visible;
                         if (visible) { favCount += 1; }
                     });
-                    empty.hidden = !(active === "__fav" && favCount === 0);
+                    if (searching) {
+                        Array.prototype.forEach.call(listEl.querySelectorAll(".automation-add-group"), function (heading) {
+                            heading.hidden = !groupsWithHits[heading.getAttribute("data-group")];
+                        });
+                    }
+                    empty.hidden = searching || !(active === "__fav" && favCount === 0);
+                    noResults.hidden = !(searching && found === 0);
                     Array.prototype.forEach.call(nav.children, function (tab) {
-                        tab.classList.toggle("is-active", tab.getAttribute("data-tab") === active);
+                        tab.classList.toggle("is-active", !searching && tab.getAttribute("data-tab") === active);
                     });
                 }
+
+                searchInput.addEventListener("input", applyFilter);
+                searchInput.addEventListener("keydown", function (event) {
+                    if (event.key === "Escape" && searchInput.value) {
+                        event.preventDefault();
+                        event.stopPropagation();
+                        searchInput.value = "";
+                        applyFilter();
+                    } else if (event.key === "Enter") {
+                        // Enter picks the first card found.
+                        event.preventDefault();
+                        var first = Array.prototype.filter.call(listEl.querySelectorAll(".automation-pal-row"), function (row) { return !row.hidden; })[0];
+                        var button = first ? first.querySelector(".automation-add-item") : null;
+                        if (button && !button.disabled) { button.click(); }
+                    }
+                });
 
                 tabs.forEach(function (tab) {
                     var button = mk("button", "automation-pal-tab");
@@ -3116,7 +3423,9 @@
                     nav.appendChild(button);
                 });
 
+                listEl.appendChild(searchWrap);
                 listEl.appendChild(empty);
+                listEl.appendChild(noResults);
                 var lastGroup = null;
                 items.forEach(function (item) {
                     var name = item.group || general;
@@ -3130,6 +3439,7 @@
                     var row = mk("div", "automation-pal-row");
                     row.setAttribute("data-group", name);
                     row.setAttribute("data-key", key);
+                    row._hay = haystackFor(item, name);
                     var button = mk("button", "automation-add-item");
                     button.type = "button";
                     button.appendChild(icon(TYPE_ICONS[item.type] || GROUP_ICONS[item.group] || "bx-cube-alt"));
@@ -3176,6 +3486,7 @@
                     listEl.appendChild(heading);
                     var notice = mk("div", "automation-pal-notice");
                     notice.setAttribute("data-group", g.name);
+                    notice._hay = normalizeSearch(g.name);
                     notice.appendChild(icon(GROUP_ICONS[g.name] || "bx-plug"));
                     notice.appendChild(mk("p", null, t("builderServiceOff", "{0} is not turned on yet. Turn it on in Integrations to use these blocks.").replace("{0}", g.name)));
                     var enable = mk("a", "btn btn-primary btn-sm", t("builderServiceEnable", "Turn on"));
@@ -3194,7 +3505,105 @@
             bind(catalog.actions, actionsHost);
             buildPortPicker(catalog);
             fillTemplateConnections((catalog.triggers || []).concat(catalog.actions || []));
+            startLiveRefresh();
+            refreshChecks();
         });
+
+    // ---- the editor keeps its lists fresh without reloading the page ---------------------------------
+    // Connections, users, templates and other agents can change while the editor stays open (another tab,
+    // the Integrations page, another person). Every 30 seconds - and when the person comes back to the tab -
+    // the page asks "anything new?" with the fingerprint of what it has. Nothing changed = a few bytes back
+    // and nothing redrawn. The check pauses while the tab is hidden and never runs two at once.
+    var lastCatalog = null;
+    var liveTimer = null;
+    var liveBusy = false;
+    var liveLastAsk = 0;
+    var liveLastCaches = Date.now();
+
+    function connectionKinds(list) {
+        return (list || []).map(function (c) { return c.kind; }).filter(function (kind, i, all) { return all.indexOf(kind) === i; }).sort().join(",");
+    }
+
+    function typingInProperties() {
+        var active = document.activeElement;
+        var host = q("[data-prop-fields]");
+        return !!(active && host && host.contains(active) && /^(INPUT|TEXTAREA|SELECT)$/.test(active.tagName));
+    }
+
+    function applyLiveData(fresh) {
+        var kindsBefore = connectionKinds(catalogConnections);
+        catalogConnections = fresh.connections || [];
+        lookups = fresh.lookups || lookups;
+        if (fresh.integrationsUrl) { integrationsUrl = fresh.integrationsUrl; }
+        liveStamp = fresh.stamp || liveStamp;
+        // The PC and Telegram answers (allowed folders, chats) may be old now: ask again when a field needs them.
+        computerInfo = {};
+        telegramChats = {};
+        liveLastCaches = Date.now();
+        // A service appeared or vanished: its blocks in the palette change from a notice to real blocks.
+        if (lastCatalog && kindsBefore !== connectionKinds(catalogConnections) && bindPalette) {
+            var triggersPane = q("[data-palette-triggers]");
+            var actionsPane = q("[data-palette-actions]");
+            if (triggersPane && actionsPane && triggersPane.querySelector(".automation-pal") && !triggersPane.matches(":hover") && !actionsPane.matches(":hover")) {
+                triggersPane.innerHTML = "";
+                actionsPane.innerHTML = "";
+                bindPalette(lastCatalog.triggers, triggersPane);
+                bindPalette(lastCatalog.actions, actionsPane);
+            }
+        }
+        refreshChecks();
+        renderOpenCardAgain();
+    }
+
+    // The open card's fields are drawn again (a removed connection disappears from its list) - but never while
+    // the person is typing in them; then it is tried again at the next check.
+    var liveRenderPending = false;
+    function renderOpenCardAgain() {
+        if (!selectedId || !nodeOrNull(selectedId)) { liveRenderPending = false; return; }
+        if (typingInProperties()) { liveRenderPending = true; return; }
+        liveRenderPending = false;
+        renderFields(nodeOrNull(selectedId).data);
+    }
+
+    function refreshLive(force) {
+        if (!config.catalogRefreshUrl || liveBusy || myBoot !== bootId) { return; }
+        if (document.hidden) { return; }
+        var now = Date.now();
+        if (!force && now - liveLastAsk < 10000) { return; }
+        liveLastAsk = now;
+        liveBusy = true;
+        fetch(config.catalogRefreshUrl + "?stamp=" + encodeURIComponent(liveStamp), {
+            credentials: "same-origin",
+            headers: { Accept: "application/json", "X-Requested-With": "XMLHttpRequest" }
+        }).then(function (response) {
+            return response.ok ? response.json() : null;
+        }).then(function (fresh) {
+            if (myBoot !== bootId || !fresh) { return; }
+            if (fresh.changed) {
+                applyLiveData(fresh);
+            } else {
+                // Nothing new in the lists; the PC / chat answers are still renewed now and then.
+                if (Date.now() - liveLastCaches > 120000) { computerInfo = {}; telegramChats = {}; liveLastCaches = Date.now(); }
+                if (liveRenderPending) { renderOpenCardAgain(); }
+            }
+        }).catch(function () { /* offline or restarting: try again at the next check */ }).then(function () {
+            liveBusy = false;
+        });
+    }
+
+    function startLiveRefresh() {
+        if (liveTimer || !config.catalogRefreshUrl) { return; }
+        liveTimer = window.setInterval(function () { refreshLive(false); }, 30000);
+        var onShow = function () { if (!document.hidden) { refreshLive(false); } };
+        document.addEventListener("visibilitychange", onShow);
+        window.addEventListener("focus", onShow);
+        cleanupFns.push(function () {
+            window.clearInterval(liveTimer);
+            liveTimer = null;
+            document.removeEventListener("visibilitychange", onShow);
+            window.removeEventListener("focus", onShow);
+        });
+    }
 
     function zoomLabel() {
         var label = q("[data-zoom-label]");
@@ -3684,6 +4093,8 @@
             telegramChatsUrl: form.getAttribute("data-telegram-chats-url"),
             computerSettingsUrl: form.getAttribute("data-computer-settings-url"),
             computerPickUrl: form.getAttribute("data-computer-pick-url"),
+            computerBrowseUrl: form.getAttribute("data-computer-browse-url"),
+            catalogRefreshUrl: form.getAttribute("data-catalog-refresh-url"),
             saveUrl: form.getAttribute("data-save-url"),
             favoriteUrl: form.getAttribute("data-favorite-url"),
             favoriteImportUrl: form.getAttribute("data-favorite-import-url"),

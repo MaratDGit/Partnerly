@@ -226,3 +226,15 @@ Partnerly/Integrations/
 | 7 | все | малый |
 
 Рекомендуемый порядок: **0 → 1 → 2 → 3 → 4 → 5 → 6 → 7**. Каждая фаза — отдельный коммит после сборки и тестов.
+
+---
+
+### Фаза 9 — GitHub, добавлена 2026-11-07
+
+- [x] **9.1** `Kind = github`, `GitHubOAuthService` (OAuth App, scopes `repo` / `public_repo`, `workflow`, `read:user`), подключение по токену, экран в `/Integrations`, callback `/Integrations/GitHub/Callback`, проверка `Test`.
+- [x] **9.2** `GitHubApiClient` (REST, заголовки версии API, ошибки и лимиты, `SafePath`, `Repo`), 20 действий `github.*` (репозитории, задачи, pull request, ветки, коммиты, файлы, релизы, workflow и `github.api_request`).
+- [x] **9.3** 5 триггеров опросом раз в минуту: `github.issue_opened`, `github.pr_opened`, `github.push`, `github.release_published`, `github.workflow_failed` (курсоры в payload подключения `githubCursors`).
+- [x] **9.4** Формы билдера, переменные, значки, строки en / ru / hy, тесты (`GitHubIntegrationTests`, 29).
+- [ ] **9.5** Владелец: создать GitHub OAuth App (Callback URL `…/Integrations/GitHub/Callback`), `Authentication:GitHub:ClientId` / `ClientSecret` в `secrets.json`.
+- [ ] **9.6** Проверка с реальным аккаунтом и в браузере; шаблоны агентов для GitHub; раздел GitHub в `/Documentation`.
+- **Позже:** webhook GitHub вместо опроса (нужен публичный адрес), постраничный обход списков, GitHub App вместо OAuth App, передача токена GitHub на ПК для push (`GIT_ASKPASS`, только с отдельным согласием).

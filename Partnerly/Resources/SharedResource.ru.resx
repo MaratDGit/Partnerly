@@ -5309,10 +5309,10 @@ User, группу и шаблон письма здесь создать нел
     <value>Только эта папка</value>
   </data>
   <data name="BuilderIntPcWatchFolderHelp" xml:space="preserve">
-    <value>Пусто - любая отслеживаемая папка. Вложенные папки включены.</value>
+    <value>Пусто — любая разрешённая папка. Вложенные папки входят.</value>
   </data>
   <data name="BuilderIntPcFileTriggerHelp" xml:space="preserve">
-    <value>Запускается, когда в папке из watchFolders в настройках агента появляется новый файл. Переменные: {{trigger.path}}, {{trigger.fileName}}, {{trigger.folder}}, {{trigger.extension}}, {{trigger.size}}.</value>
+    <value>Запускается, когда новый файл появляется в любой папке, разрешённой в программе (и внутри неё). Переменные: {{trigger.path}}, {{trigger.fileName}}, {{trigger.folder}}, {{trigger.extension}}, {{trigger.size}}.</value>
   </data>
   <data name="BuilderIntPcState" xml:space="preserve">
     <value>Когда ПК</value>
@@ -5330,7 +5330,7 @@ User, группу и шаблон письма здесь создать нел
     <value>Пусто - любая отслеживаемая программа. Например: chrome.</value>
   </data>
   <data name="BuilderIntPcProgramWatchHelp" xml:space="preserve">
-    <value>Сообщаются только программы из watchPrograms в настройках агента. Переменные: {{trigger.name}}, {{trigger.machine}}.</value>
+    <value>Сообщается только о программах из списка Programs в настройках программы. Переменные: {{trigger.name}}, {{trigger.machine}}.</value>
   </data>
   <data name="ComputerTitle" xml:space="preserve">
     <value>Компьютер</value>
@@ -5418,7 +5418,7 @@ User, группу и шаблон письма здесь создать нел
     <value>Этот компьютер может спросить владельца (нажать «Да») перед запуском. Включается в программе на ПК: значок в трее &gt; Settings &gt; Ask me first.</value>
   </data>
   <data name="BuilderIntPcClipboardTriggerNote" xml:space="preserve">
-    <value>Нужно включить «Report text I copy to the clipboard» в настройках программы (значок в трее &gt; Settings &gt; Watching). По умолчанию выключено: копируемый текст может быть личным.</value>
+    <value>Нужно включить «Tell Partnerly when I copy text» в настройках программы (значок в трее &gt; Settings &gt; Safety). По умолчанию выключено: скопированный текст может быть личным.</value>
   </data>
   <data name="BuilderIntPcDelaySeconds" xml:space="preserve">
     <value>Подождать перед этим (секунд)</value>
@@ -5427,7 +5427,7 @@ User, группу и шаблон письма здесь создать нел
     <value>Файл попадает в Корзину, его можно восстановить. Папки не удаляются никогда. По умолчанию ПК сначала спрашивает владельца.</value>
   </data>
   <data name="BuilderIntPcDiskLowNote" xml:space="preserve">
-    <value>Программа сообщает о диске, когда свободного места меньше лимита из её настроек (значок в трее &gt; Settings &gt; Watching, по умолчанию 5 ГБ). Сообщает один раз, пока место не освободят.</value>
+    <value>Программа сообщает о диске, когда свободного места меньше лимита из её настроек (значок в трее &gt; Settings &gt; Safety, по умолчанию 5 ГБ). Сообщает один раз, пока место не освободят.</value>
   </data>
   <data name="BuilderIntPcDownloadNameHelp" xml:space="preserve">
     <value>Оставьте пустым, чтобы взять имя из ссылки. Программы и скрипты (.exe, .bat...) не скачиваются никогда.</value>
@@ -5457,7 +5457,7 @@ User, группу и шаблон письма здесь создать нел
     <value>Кто-то вернулся к ПК</value>
   </data>
   <data name="BuilderIntPcIdleNote" xml:space="preserve">
-    <value>«Никого нет» означает, что клавиатурой и мышью не пользуются. Время задаётся в настройках программы (значок в трее &gt; Settings &gt; Watching, по умолчанию 10 минут).</value>
+    <value>«Никого нет» означает, что клавиатурой и мышью не пользуются. Время задаётся в настройках программы (значок в трее &gt; Settings &gt; Safety, по умолчанию 10 минут).</value>
   </data>
   <data name="BuilderIntPcIdleStarted" xml:space="preserve">
     <value>Давно никто не трогал ПК</value>
@@ -5840,4 +5840,561 @@ User, группу и шаблон письма здесь создать нел
   <data name="ComputerErrRefused" xml:space="preserve">
     <value>Компьютер отклонил команду.</value>
   </data>
+  <data name="IntegrationGitHubIntro" xml:space="preserve">
+    <value>Ваш аккаунт GitHub: задачи, pull request, файлы, релизы и workflow.</value>
+  </data>
+  <data name="IntegrationGitHubFeature1" xml:space="preserve">
+    <value>Карточки для задач, pull request, веток, файлов, релизов и workflow</value>
+  </data>
+  <data name="IntegrationGitHubFeature2" xml:space="preserve">
+    <value>Триггеры: новая задача, pull request, коммит, релиз, упавший workflow</value>
+  </data>
+  <data name="IntegrationGitHubNotConfigured" xml:space="preserve">
+    <value>Вход через GitHub не настроен на этом сервере (Authentication:GitHub). Подключить аккаунт можно по токену доступа.</value>
+  </data>
+  <data name="IntegrationConnectGitHub" xml:space="preserve">
+    <value>Подключить GitHub</value>
+  </data>
+  <data name="IntegrationGitHubChoose" xml:space="preserve">
+    <value>Выберите, что разрешить Partnerly. Вы перейдёте на GitHub, чтобы подтвердить.</value>
+  </data>
+  <data name="IntegrationGitHubPrivate" xml:space="preserve">
+    <value>Приватные репозитории тоже (иначе только публичные)</value>
+  </data>
+  <data name="IntegrationGitHubWorkflows" xml:space="preserve">
+    <value>Менять файлы workflow (.github/workflows)</value>
+  </data>
+  <data name="IntegrationGitHubRedirect" xml:space="preserve">
+    <value>В вашем GitHub OAuth App укажите этот Callback URL:</value>
+  </data>
+  <data name="IntegrationGitHubUseToken" xml:space="preserve">
+    <value>Подключить по токену</value>
+  </data>
+  <data name="IntegrationContinueGitHub" xml:space="preserve">
+    <value>Продолжить с GitHub</value>
+  </data>
+  <data name="IntegrationConnectGitHubToken" xml:space="preserve">
+    <value>Подключить GitHub по токену</value>
+  </data>
+  <data name="IntegrationGitHubTokenStep1" xml:space="preserve">
+    <value>На github.com откройте Settings &gt; Developer settings &gt; Personal access tokens.</value>
+  </data>
+  <data name="IntegrationGitHubTokenStep2" xml:space="preserve">
+    <value>Создайте токен с правом repo (и workflow, если нужно).</value>
+  </data>
+  <data name="IntegrationGitHubTokenStep3" xml:space="preserve">
+    <value>Скопируйте токен и вставьте ниже. GitHub показывает его только один раз.</value>
+  </data>
+  <data name="IntegrationGitHubToken" xml:space="preserve">
+    <value>Токен доступа</value>
+  </data>
+  <data name="NodeTypeGitHubListRepos" xml:space="preserve">
+    <value>GitHub: мои репозитории</value>
+  </data>
+  <data name="NodeTypeGitHubGetRepo" xml:space="preserve">
+    <value>GitHub: получить репозиторий</value>
+  </data>
+  <data name="NodeTypeGitHubCreateIssue" xml:space="preserve">
+    <value>GitHub: создать задачу</value>
+  </data>
+  <data name="NodeTypeGitHubGetIssue" xml:space="preserve">
+    <value>GitHub: получить задачу</value>
+  </data>
+  <data name="NodeTypeGitHubListIssues" xml:space="preserve">
+    <value>GitHub: найти задачи</value>
+  </data>
+  <data name="NodeTypeGitHubUpdateIssue" xml:space="preserve">
+    <value>GitHub: изменить или закрыть задачу</value>
+  </data>
+  <data name="NodeTypeGitHubCommentIssue" xml:space="preserve">
+    <value>GitHub: комментарий</value>
+  </data>
+  <data name="NodeTypeGitHubCreatePr" xml:space="preserve">
+    <value>GitHub: создать pull request</value>
+  </data>
+  <data name="NodeTypeGitHubGetPr" xml:space="preserve">
+    <value>GitHub: получить pull request</value>
+  </data>
+  <data name="NodeTypeGitHubListPrs" xml:space="preserve">
+    <value>GitHub: найти pull request</value>
+  </data>
+  <data name="NodeTypeGitHubMergePr" xml:space="preserve">
+    <value>GitHub: слить pull request</value>
+  </data>
+  <data name="NodeTypeGitHubListBranches" xml:space="preserve">
+    <value>GitHub: список веток</value>
+  </data>
+  <data name="NodeTypeGitHubListCommits" xml:space="preserve">
+    <value>GitHub: список коммитов</value>
+  </data>
+  <data name="NodeTypeGitHubCreateBranch" xml:space="preserve">
+    <value>GitHub: создать ветку</value>
+  </data>
+  <data name="NodeTypeGitHubGetFile" xml:space="preserve">
+    <value>GitHub: прочитать файл</value>
+  </data>
+  <data name="NodeTypeGitHubPutFile" xml:space="preserve">
+    <value>GitHub: создать или изменить файл</value>
+  </data>
+  <data name="NodeTypeGitHubCreateRelease" xml:space="preserve">
+    <value>GitHub: создать релиз</value>
+  </data>
+  <data name="NodeTypeGitHubDispatchWorkflow" xml:space="preserve">
+    <value>GitHub: запустить workflow</value>
+  </data>
+  <data name="NodeTypeGitHubListWorkflowRuns" xml:space="preserve">
+    <value>GitHub: запуски workflow</value>
+  </data>
+  <data name="NodeTypeGitHubApiRequest" xml:space="preserve">
+    <value>GitHub: запрос к API</value>
+  </data>
+  <data name="NodeTypeGitHubIssueOpened" xml:space="preserve">
+    <value>GitHub: новая задача</value>
+  </data>
+  <data name="NodeTypeGitHubPrOpened" xml:space="preserve">
+    <value>GitHub: новый pull request</value>
+  </data>
+  <data name="NodeTypeGitHubPush" xml:space="preserve">
+    <value>GitHub: новый коммит</value>
+  </data>
+  <data name="NodeTypeGitHubReleasePublished" xml:space="preserve">
+    <value>GitHub: новый релиз</value>
+  </data>
+  <data name="NodeTypeGitHubWorkflowFailed" xml:space="preserve">
+    <value>GitHub: workflow упал</value>
+  </data>
+  <data name="BuilderIntGhRepo" xml:space="preserve">
+    <value>Репозиторий</value>
+  </data>
+  <data name="BuilderIntGhRepoHelp" xml:space="preserve">
+    <value>владелец/имя, например octocat/hello-world, или ссылка на репозиторий.</value>
+  </data>
+  <data name="BuilderIntGhNumber" xml:space="preserve">
+    <value>Номер</value>
+  </data>
+  <data name="BuilderIntGhNumberHelp" xml:space="preserve">
+    <value>Номер задачи или pull request, например 42.</value>
+  </data>
+  <data name="BuilderIntGhTitle" xml:space="preserve">
+    <value>Заголовок</value>
+  </data>
+  <data name="BuilderIntGhBody" xml:space="preserve">
+    <value>Текст</value>
+  </data>
+  <data name="BuilderIntGhLabels" xml:space="preserve">
+    <value>Метки</value>
+  </data>
+  <data name="BuilderIntGhLabelsHelp" xml:space="preserve">
+    <value>Через запятую.</value>
+  </data>
+  <data name="BuilderIntGhAssignees" xml:space="preserve">
+    <value>Исполнители (логины GitHub)</value>
+  </data>
+  <data name="BuilderIntGhState" xml:space="preserve">
+    <value>Состояние</value>
+  </data>
+  <data name="BuilderIntGhOpen" xml:space="preserve">
+    <value>Открытые</value>
+  </data>
+  <data name="BuilderIntGhClosed" xml:space="preserve">
+    <value>Закрытые</value>
+  </data>
+  <data name="BuilderIntGhAll" xml:space="preserve">
+    <value>Все</value>
+  </data>
+  <data name="BuilderIntGhKeep" xml:space="preserve">
+    <value>Не менять</value>
+  </data>
+  <data name="BuilderIntGhUpdateHelp" xml:space="preserve">
+    <value>Заполните только то, что нужно изменить. Пустые поля останутся как есть.</value>
+  </data>
+  <data name="BuilderIntGhHead" xml:space="preserve">
+    <value>Ветка с изменениями</value>
+  </data>
+  <data name="BuilderIntGhBase" xml:space="preserve">
+    <value>Влить в ветку</value>
+  </data>
+  <data name="BuilderIntGhDraft" xml:space="preserve">
+    <value>Черновик</value>
+  </data>
+  <data name="BuilderIntGhMergeMethod" xml:space="preserve">
+    <value>Способ слияния</value>
+  </data>
+  <data name="BuilderIntGhCommitTitle" xml:space="preserve">
+    <value>Заголовок коммита слияния (необязательно)</value>
+  </data>
+  <data name="BuilderIntGhBranch" xml:space="preserve">
+    <value>Ветка</value>
+  </data>
+  <data name="BuilderIntGhBranchHelp" xml:space="preserve">
+    <value>Оставьте пустым для ветки по умолчанию.</value>
+  </data>
+  <data name="BuilderIntGhNewBranch" xml:space="preserve">
+    <value>Имя новой ветки</value>
+  </data>
+  <data name="BuilderIntGhFrom" xml:space="preserve">
+    <value>Создать от ветки</value>
+  </data>
+  <data name="BuilderIntGhPath" xml:space="preserve">
+    <value>Путь к файлу</value>
+  </data>
+  <data name="BuilderIntGhPathHelp" xml:space="preserve">
+    <value>Внутри репозитория, например docs/readme.md.</value>
+  </data>
+  <data name="BuilderIntGhRef" xml:space="preserve">
+    <value>Ветка или тег</value>
+  </data>
+  <data name="BuilderIntGhFileText" xml:space="preserve">
+    <value>Содержимое файла</value>
+  </data>
+  <data name="BuilderIntGhCommitMessage" xml:space="preserve">
+    <value>Сообщение коммита</value>
+  </data>
+  <data name="BuilderIntGhPutHelp" xml:space="preserve">
+    <value>Создаёт файл или заменяет его этим текстом и делает коммит.</value>
+  </data>
+  <data name="BuilderIntGhTag" xml:space="preserve">
+    <value>Тег</value>
+  </data>
+  <data name="BuilderIntGhReleaseName" xml:space="preserve">
+    <value>Название релиза</value>
+  </data>
+  <data name="BuilderIntGhPrerelease" xml:space="preserve">
+    <value>Предварительный релиз</value>
+  </data>
+  <data name="BuilderIntGhTarget" xml:space="preserve">
+    <value>Ветка или коммит для тега</value>
+  </data>
+  <data name="BuilderIntGhWorkflow" xml:space="preserve">
+    <value>Файл workflow</value>
+  </data>
+  <data name="BuilderIntGhWorkflowHelp" xml:space="preserve">
+    <value>Имя файла в .github/workflows, например build.yml.</value>
+  </data>
+  <data name="BuilderIntGhInputs" xml:space="preserve">
+    <value>Параметры (JSON, необязательно)</value>
+  </data>
+  <data name="BuilderIntGhRunStatus" xml:space="preserve">
+    <value>Результат</value>
+  </data>
+  <data name="BuilderIntGhAnyStatus" xml:space="preserve">
+    <value>Любой</value>
+  </data>
+  <data name="BuilderIntGhFailed" xml:space="preserve">
+    <value>С ошибкой</value>
+  </data>
+  <data name="BuilderIntGhSucceeded" xml:space="preserve">
+    <value>Успешный</value>
+  </data>
+  <data name="BuilderIntGhMethod" xml:space="preserve">
+    <value>Метод</value>
+  </data>
+  <data name="BuilderIntGhApiPath" xml:space="preserve">
+    <value>Путь API</value>
+  </data>
+  <data name="BuilderIntGhApiPathHelp" xml:space="preserve">
+    <value>Начинается с /, например /repos/octocat/hello-world/issues.</value>
+  </data>
+  <data name="BuilderIntGhApiBody" xml:space="preserve">
+    <value>Тело (JSON, необязательно)</value>
+  </data>
+  <data name="BuilderIntGhApiNote" xml:space="preserve">
+    <value>Для всего, что не покрывают другие карточки GitHub. Обращения идут только на api.github.com.</value>
+  </data>
+  <data name="BuilderIntGhNameContains" xml:space="preserve">
+    <value>Имя содержит</value>
+  </data>
+  <data name="BuilderIntGhTitleContains" xml:space="preserve">
+    <value>Заголовок содержит</value>
+  </data>
+  <data name="BuilderIntGhTriggerHelp" xml:space="preserve">
+    <value>Проверяется раз в минуту. Первая проверка только запоминает то, что уже есть.</value>
+  </data>
+  <data name="BuilderIntGhPushHelp" xml:space="preserve">
+    <value>Запускается один раз на каждый новый коммит в ветке.</value>
+  </data>
+  <data name="NodeTypeComputerGitStatus" xml:space="preserve">
+    <value>Компьютер: Git: статус</value>
+  </data>
+  <data name="NodeTypeComputerGitLog" xml:space="preserve">
+    <value>Компьютер: Git: история коммитов</value>
+  </data>
+  <data name="NodeTypeComputerGitDiff" xml:space="preserve">
+    <value>Компьютер: Git: что изменилось</value>
+  </data>
+  <data name="NodeTypeComputerGitBranches" xml:space="preserve">
+    <value>Компьютер: Git: ветки</value>
+  </data>
+  <data name="NodeTypeComputerGitFetch" xml:space="preserve">
+    <value>Компьютер: Git: получить изменения (fetch)</value>
+  </data>
+  <data name="NodeTypeComputerGitPull" xml:space="preserve">
+    <value>Компьютер: Git: забрать изменения (pull)</value>
+  </data>
+  <data name="NodeTypeComputerGitCommit" xml:space="preserve">
+    <value>Компьютер: Git: сделать коммит</value>
+  </data>
+  <data name="NodeTypeComputerGitPush" xml:space="preserve">
+    <value>Компьютер: Git: отправить коммиты (push)</value>
+  </data>
+  <data name="NodeTypeComputerGitSwitch" xml:space="preserve">
+    <value>Компьютер: Git: перейти на ветку</value>
+  </data>
+  <data name="NodeTypeComputerGitClone" xml:space="preserve">
+    <value>Компьютер: Git: клонировать репозиторий</value>
+  </data>
+  <data name="NodeTypeComputerGitInit" xml:space="preserve">
+    <value>Компьютер: Git: создать репозиторий</value>
+  </data>
+  <data name="NodeTypeComputerGitMerge" xml:space="preserve">
+    <value>Компьютер: Git: слить ветку</value>
+  </data>
+  <data name="NodeTypeComputerGitTag" xml:space="preserve">
+    <value>Компьютер: Git: тег</value>
+  </data>
+  <data name="NodeTypeComputerGitStash" xml:space="preserve">
+    <value>Компьютер: Git: отложить изменения (stash)</value>
+  </data>
+  <data name="NodeTypeComputerGitCommand" xml:space="preserve">
+    <value>Компьютер: Git: любая команда</value>
+  </data>
+  <data name="NodeTypeComputerGitNewCommit" xml:space="preserve">
+    <value>Компьютер: новый коммит в папке Git</value>
+  </data>
+  <data name="NodeTypeComputerGitChanged" xml:space="preserve">
+    <value>Компьютер: в папке Git есть изменения / она чистая</value>
+  </data>
+  <data name="BuilderIntPcGitStatusIntro" xml:space="preserve">
+    <value>Показывает, на какой ветке папка и что изменилось: изменённые, новые и подготовленные файлы, сколько коммитов впереди или позади.</value>
+  </data>
+  <data name="BuilderIntPcGitLogIntro" xml:space="preserve">
+    <value>Читает последние коммиты репозитория: кто, когда и что сделал.</value>
+  </data>
+  <data name="BuilderIntPcGitDiffIntro" xml:space="preserve">
+    <value>Показывает, что изменилось в файлах: сводку, только имена или полный текст.</value>
+  </data>
+  <data name="BuilderIntPcGitBranchesIntro" xml:space="preserve">
+    <value>Список веток репозитория и какая из них текущая.</value>
+  </data>
+  <data name="BuilderIntPcGitFetchIntro" xml:space="preserve">
+    <value>Скачивает новости с сервера, не меняя ваши файлы.</value>
+  </data>
+  <data name="BuilderIntPcGitPullIntro" xml:space="preserve">
+    <value>Забирает новые коммиты с сервера в вашу папку. По умолчанию только если это возможно без конфликта.</value>
+  </data>
+  <data name="BuilderIntPcGitCommitIntro" xml:space="preserve">
+    <value>Сохраняет изменения папки как коммит. Может сначала добавить всё, только известные git файлы или список файлов.</value>
+  </data>
+  <data name="BuilderIntPcGitPushIntro" xml:space="preserve">
+    <value>Отправляет ваши коммиты на сервер (GitHub, GitLab...).</value>
+  </data>
+  <data name="BuilderIntPcGitSwitchIntro" xml:space="preserve">
+    <value>Переключает папку на другую ветку или создаёт новую ветку.</value>
+  </data>
+  <data name="BuilderIntPcGitCloneIntro" xml:space="preserve">
+    <value>Копирует репозиторий из интернета в новую папку на ПК.</value>
+  </data>
+  <data name="BuilderIntPcGitInitIntro" xml:space="preserve">
+    <value>Превращает папку в новый пустой репозиторий Git.</value>
+  </data>
+  <data name="BuilderIntPcGitMergeIntro" xml:space="preserve">
+    <value>Вливает другую ветку в текущую.</value>
+  </data>
+  <data name="BuilderIntPcGitTagIntro" xml:space="preserve">
+    <value>Ставит метку (например номер версии) на коммит или убирает её.</value>
+  </data>
+  <data name="BuilderIntPcGitStashIntro" xml:space="preserve">
+    <value>Откладывает незавершённые изменения и возвращает их позже.</value>
+  </data>
+  <data name="BuilderIntPcGitCommandIntro" xml:space="preserve">
+    <value>Выполняет любую другую команду Git, записанную как в терминале. Опасные опции на ПК отклоняются.</value>
+  </data>
+  <data name="BuilderIntPcGitNewCommitIntro" xml:space="preserve">
+    <value>Запускается, когда в отслеживаемом репозитории на ПК появился новый коммит (ваш, от программы или принесённый pull).</value>
+  </data>
+  <data name="BuilderIntPcGitChangedIntro" xml:space="preserve">
+    <value>Запускается, когда в отслеживаемом репозитории появляются несохранённые изменения или он снова становится чистым.</value>
+  </data>
+  <data name="BuilderIntPcGitRepo" xml:space="preserve">
+    <value>Папка репозитория</value>
+  </data>
+  <data name="BuilderIntPcGitRepoHelp" xml:space="preserve">
+    <value>Папка Git на том ПК, внутри папки, разрешённой в программе. В списке репозитории, найденные там; можно ввести и любой путь.</value>
+  </data>
+  <data name="BuilderIntPcGitCloneFolder" xml:space="preserve">
+    <value>Папка для копии</value>
+  </data>
+  <data name="BuilderIntPcGitCloneFolderHelp" xml:space="preserve">
+    <value>Новая папка внутри папки, разрешённой в программе, например C:/Dev/my-project.</value>
+  </data>
+  <data name="BuilderIntPcGitPath" xml:space="preserve">
+    <value>Только этот файл или папка</value>
+  </data>
+  <data name="BuilderIntPcGitMode" xml:space="preserve">
+    <value>Что показать</value>
+  </data>
+  <data name="BuilderIntPcGitStat" xml:space="preserve">
+    <value>Сводка изменений</value>
+  </data>
+  <data name="BuilderIntPcGitNames" xml:space="preserve">
+    <value>Имена изменённых файлов</value>
+  </data>
+  <data name="BuilderIntPcGitFull" xml:space="preserve">
+    <value>Полный текст изменений</value>
+  </data>
+  <data name="BuilderIntPcGitStaged" xml:space="preserve">
+    <value>Только подготовленные изменения</value>
+  </data>
+  <data name="BuilderIntPcGitTarget" xml:space="preserve">
+    <value>Сравнить с (ветка или коммит)</value>
+  </data>
+  <data name="BuilderIntPcGitRemote" xml:space="preserve">
+    <value>Удалённый репозиторий</value>
+  </data>
+  <data name="BuilderIntPcGitRemoteHelp" xml:space="preserve">
+    <value>Обычно origin. Оставьте пустым для основного.</value>
+  </data>
+  <data name="BuilderIntPcGitIncludeRemote" xml:space="preserve">
+    <value>Показать и ветки с сервера</value>
+  </data>
+  <data name="BuilderIntPcGitPrune" xml:space="preserve">
+    <value>Забыть ветки, удалённые на сервере</value>
+  </data>
+  <data name="BuilderIntPcGitPullMode" xml:space="preserve">
+    <value>Как объединить</value>
+  </data>
+  <data name="BuilderIntPcGitFfOnly" xml:space="preserve">
+    <value>Только перемотка вперёд (самое безопасное)</value>
+  </data>
+  <data name="BuilderIntPcGitMergeMode" xml:space="preserve">
+    <value>Слияние (merge)</value>
+  </data>
+  <data name="BuilderIntPcGitRebaseMode" xml:space="preserve">
+    <value>Rebase (спросит вас на ПК)</value>
+  </data>
+  <data name="BuilderIntPcGitMessage" xml:space="preserve">
+    <value>Сообщение</value>
+  </data>
+  <data name="BuilderIntPcGitAdd" xml:space="preserve">
+    <value>Что включить в коммит</value>
+  </data>
+  <data name="BuilderIntPcGitAddAll" xml:space="preserve">
+    <value>Всё: новые, изменённые и удалённые файлы</value>
+  </data>
+  <data name="BuilderIntPcGitAddTracked" xml:space="preserve">
+    <value>Только файлы, которые git уже знает</value>
+  </data>
+  <data name="BuilderIntPcGitAddPaths" xml:space="preserve">
+    <value>Только файлы из списка ниже</value>
+  </data>
+  <data name="BuilderIntPcGitAddNone" xml:space="preserve">
+    <value>Только то, что уже подготовлено</value>
+  </data>
+  <data name="BuilderIntPcGitPaths" xml:space="preserve">
+    <value>Файлы (по одному в строке)</value>
+  </data>
+  <data name="BuilderIntPcGitPathsHelp" xml:space="preserve">
+    <value>Пути внутри репозитория, например docs/readme.md.</value>
+  </data>
+  <data name="BuilderIntPcGitSetUpstream" xml:space="preserve">
+    <value>Запомнить эту ветку на сервере (-u)</value>
+  </data>
+  <data name="BuilderIntPcGitTags" xml:space="preserve">
+    <value>Отправить и теги</value>
+  </data>
+  <data name="BuilderIntPcGitForce" xml:space="preserve">
+    <value>Перезаписать ветку на сервере</value>
+  </data>
+  <data name="BuilderIntPcGitForceNone" xml:space="preserve">
+    <value>Нет</value>
+  </data>
+  <data name="BuilderIntPcGitForceLease" xml:space="preserve">
+    <value>Да, но только если никто другой не отправлял (безопаснее)</value>
+  </data>
+  <data name="BuilderIntPcGitForceYes" xml:space="preserve">
+    <value>Да, принудительно</value>
+  </data>
+  <data name="BuilderIntPcGitCreate" xml:space="preserve">
+    <value>Создать ветку</value>
+  </data>
+  <data name="BuilderIntPcGitFrom" xml:space="preserve">
+    <value>Начать от (ветка или коммит)</value>
+  </data>
+  <data name="BuilderIntPcGitUrl" xml:space="preserve">
+    <value>Адрес репозитория</value>
+  </data>
+  <data name="BuilderIntPcGitUrlHelp" xml:space="preserve">
+    <value>Например https://github.com/owner/name.git (адреса https, ssh или git).</value>
+  </data>
+  <data name="BuilderIntPcGitDepth" xml:space="preserve">
+    <value>Только последние N коммитов (0 = все)</value>
+  </data>
+  <data name="BuilderIntPcGitNoFf" xml:space="preserve">
+    <value>Всегда создавать коммит слияния</value>
+  </data>
+  <data name="BuilderIntPcGitTagName" xml:space="preserve">
+    <value>Имя тега</value>
+  </data>
+  <data name="BuilderIntPcGitTagMessage" xml:space="preserve">
+    <value>Заметка к тегу (необязательно)</value>
+  </data>
+  <data name="BuilderIntPcGitDelete" xml:space="preserve">
+    <value>Удалить этот тег</value>
+  </data>
+  <data name="BuilderIntPcGitStashAction" xml:space="preserve">
+    <value>Что сделать</value>
+  </data>
+  <data name="BuilderIntPcGitStashPush" xml:space="preserve">
+    <value>Отложить изменения</value>
+  </data>
+  <data name="BuilderIntPcGitStashPop" xml:space="preserve">
+    <value>Вернуть и убрать с полки</value>
+  </data>
+  <data name="BuilderIntPcGitStashApply" xml:space="preserve">
+    <value>Вернуть и оставить на полке</value>
+  </data>
+  <data name="BuilderIntPcGitStashList" xml:space="preserve">
+    <value>Показать, что отложено</value>
+  </data>
+  <data name="BuilderIntPcGitStashDrop" xml:space="preserve">
+    <value>Выбросить последнее (спросит вас на ПК)</value>
+  </data>
+  <data name="BuilderIntPcGitCommand" xml:space="preserve">
+    <value>Команда Git</value>
+  </data>
+  <data name="BuilderIntPcGitCommandHelp" xml:space="preserve">
+    <value>Как в терминале, без слова git. Например: log --oneline -5</value>
+  </data>
+  <data name="BuilderIntPcGitCommandNote" xml:space="preserve">
+    <value>Команды, которые могут потерять работу (reset --hard, rebase, clean, push --force...), сначала спрашивают вас на ПК (Settings &gt; Safety). Команды, запускающие программы или меняющие настройки git, отклоняются.</value>
+  </data>
+  <data name="BuilderIntPcGitPushNote" xml:space="preserve">
+    <value>Отправка сначала спрашивает вас на ПК, если вы не отключили это в программе (Settings &gt; Safety).</value>
+  </data>
+  <data name="BuilderIntPcGitTriggerRepoHelp" xml:space="preserve">
+    <value>Оставьте пустым для всех репозиториев внутри разрешённых папок.</value>
+  </data>
+  <data name="BuilderIntPcGitState" xml:space="preserve">
+    <value>Когда</value>
+  </data>
+  <data name="BuilderIntPcGitStateAny" xml:space="preserve">
+    <value>Появились изменения или стало чисто</value>
+  </data>
+  <data name="BuilderIntPcGitStateDirty" xml:space="preserve">
+    <value>Появились несохранённые изменения</value>
+  </data>
+  <data name="BuilderIntPcGitStateClean" xml:space="preserve">
+    <value>Снова стало чисто</value>
+  </data>
+  <data name="BuilderPcAllowedRepos" xml:space="preserve"><value>Папки Git, разрешённые на этом ПК</value></data>
+  <data name="BuilderPcBrowse" xml:space="preserve"><value>Обзор…</value></data>
+  <data name="BuilderPcBrowseLoading" xml:space="preserve"><value>Загрузка…</value></data>
+  <data name="BuilderPcBrowseUp" xml:space="preserve"><value>Вверх</value></data>
+  <data name="BuilderPcBrowseClose" xml:space="preserve"><value>Закрыть</value></data>
+  <data name="BuilderPcBrowseUse" xml:space="preserve"><value>Выбрать эту папку</value></data>
+  <data name="BuilderPcBrowseEmpty" xml:space="preserve"><value>Папка пуста.</value></data>
+  <data name="BuilderPcBrowseNoFolders" xml:space="preserve"><value>На этом ПК пока не разрешена ни одна папка. Добавьте её в настройках Partnerly Agent.</value></data>
+  <data name="BuilderPcBrowseMore" xml:space="preserve"><value>Показаны только первые записи. Откройте вложенную папку, чтобы увидеть больше.</value></data>
+  <data name="BuilderSearch" xml:space="preserve"><value>Поиск триггеров и действий…</value></data>
+  <data name="BuilderNoResults" xml:space="preserve"><value>Ничего не найдено. Попробуйте другое слово.</value></data>
 </root>

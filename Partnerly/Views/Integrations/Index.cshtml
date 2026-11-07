@@ -115,6 +115,29 @@
             @await Html.PartialAsync("~/Views/Integrations/_ConnectionList.cshtml", Model.Microsoft)
         </section>
 
+        @* ---------- GitHub ---------- *@
+        <section class="integrations-card" data-service="github">
+            <button type="button" class="btn btn-primary integrations-connect" data-int-open="@(Model.GitHubConfigured ? "github" : "github-token")">
+                <i class="bx bx-plus" aria-hidden="true"></i> @Localizer["IntegrationConnect"]
+            </button>
+            <div class="integrations-card-head">
+                <span class="integrations-logo is-github"><i class="bx bxl-github" aria-hidden="true"></i></span>
+                <div>
+                    <h2>GitHub</h2>
+                    <p>@Localizer["IntegrationGitHubIntro"]</p>
+                </div>
+            </div>
+            <ul class="integrations-features">
+                <li>@Localizer["IntegrationGitHubFeature1"]</li>
+                <li>@Localizer["IntegrationGitHubFeature2"]</li>
+            </ul>
+            @if (!Model.GitHubConfigured)
+            {
+                <div class="integrations-note is-warn">@Localizer["IntegrationGitHubNotConfigured"]</div>
+            }
+            @await Html.PartialAsync("~/Views/Integrations/_ConnectionList.cshtml", Model.GitHub)
+        </section>
+
         @* ---------- WhatsApp ---------- *@
         <section class="integrations-card" data-service="whatsapp">
             <button type="button" class="btn btn-primary integrations-connect" data-int-open="whatsapp">
@@ -210,6 +233,55 @@
             <footer>
                 <button type="button" class="btn btn-outline-secondary" data-int-close>@Localizer["Cancel"]</button>
                 <button type="submit" class="btn btn-primary"><i class="bx bxl-microsoft"></i> @Localizer["IntegrationContinueMicrosoft"]</button>
+            </footer>
+        </form>
+    </div>
+
+    <div class="integrations-overlay" data-int-dialog="github" hidden aria-hidden="true">
+        <form class="integrations-dialog" method="post" asp-action="ConnectGitHub" data-int-form>
+            <header>
+                <span class="integrations-logo is-github"><i class="bx bxl-github" aria-hidden="true"></i></span>
+                <h3>@Localizer["IntegrationConnectGitHub"]</h3>
+                <button type="button" class="integrations-close" data-int-close aria-label="@Localizer["Close"]"><i class="bx bx-x"></i></button>
+            </header>
+            <p class="integrations-muted">@Localizer["IntegrationGitHubChoose"]</p>
+            <div class="integrations-checks">
+                <label class="integrations-check"><input type="checkbox" name="privateRepos" value="true" checked /> <i class="bx bx-lock-alt"></i> @Localizer["IntegrationGitHubPrivate"]</label>
+                <label class="integrations-check"><input type="checkbox" name="workflows" value="true" /> <i class="bx bx-cog"></i> @Localizer["IntegrationGitHubWorkflows"]</label>
+            </div>
+            <label class="form-label" for="ghName">@Localizer["Name"]</label>
+            <input class="form-control" id="ghName" name="name" placeholder="@Localizer["IntegrationNameOptional"]" />
+            <div class="integrations-note">
+                @Localizer["IntegrationGitHubRedirect"]
+                <code data-int-copy>@Model.GitHubRedirectUri</code>
+            </div>
+            <footer>
+                <button type="button" class="btn btn-link me-auto" data-int-open="github-token">@Localizer["IntegrationGitHubUseToken"]</button>
+                <button type="button" class="btn btn-outline-secondary" data-int-close>@Localizer["Cancel"]</button>
+                <button type="submit" class="btn btn-primary"><i class="bx bxl-github"></i> @Localizer["IntegrationContinueGitHub"]</button>
+            </footer>
+        </form>
+    </div>
+
+    <div class="integrations-overlay" data-int-dialog="github-token" hidden aria-hidden="true">
+        <form class="integrations-dialog" method="post" asp-action="ConnectGitHubToken" data-int-form>
+            <header>
+                <span class="integrations-logo is-github"><i class="bx bxl-github" aria-hidden="true"></i></span>
+                <h3>@Localizer["IntegrationConnectGitHubToken"]</h3>
+                <button type="button" class="integrations-close" data-int-close aria-label="@Localizer["Close"]"><i class="bx bx-x"></i></button>
+            </header>
+            <ol class="integrations-steps">
+                <li>@Localizer["IntegrationGitHubTokenStep1"]</li>
+                <li>@Localizer["IntegrationGitHubTokenStep2"]</li>
+                <li>@Localizer["IntegrationGitHubTokenStep3"]</li>
+            </ol>
+            <label class="form-label" for="ghtName">@Localizer["Name"]</label>
+            <input class="form-control" id="ghtName" name="name" placeholder="@Localizer["IntegrationNameOptional"]" />
+            <label class="form-label" for="ghtToken">@Localizer["IntegrationGitHubToken"]</label>
+            <input class="form-control" id="ghtToken" name="token" type="password" required autocomplete="off" spellcheck="false" placeholder="ghp_... / github_pat_..." />
+            <footer>
+                <button type="button" class="btn btn-outline-secondary" data-int-close>@Localizer["Cancel"]</button>
+                <button type="submit" class="btn btn-primary">@Localizer["IntegrationConnect"]</button>
             </footer>
         </form>
     </div>

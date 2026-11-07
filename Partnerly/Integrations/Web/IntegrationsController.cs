@@ -11,6 +11,7 @@ using Partnerly.Descriptors.Attributes;
 using Partnerly.Events.BaseEvents;
 using Partnerly.Infrastructure.Interfaces;
 using Partnerly.Integrations.Common;
+using Partnerly.Integrations.GitHub;
 using Partnerly.Integrations.Google;
 using Partnerly.Integrations.Microsoft;
 using Partnerly.Integrations.Telegram;
@@ -20,7 +21,7 @@ using Partnerly.Models.DataTable;
 namespace Partnerly.Integrations.Web
 {
     // Same right as Automation connections (plan D6): automation.connections.
-    public class IntegrationsController : _BaseController
+    public partial class IntegrationsController : _BaseController
     {
         private const string GoogleStateCookie = "Partnerly.GoogleState";
         private const string MicrosoftStateCookie = "Partnerly.MicrosoftState";
@@ -90,6 +91,9 @@ namespace Partnerly.Integrations.Web
             {
                 GoogleConfigured = _googleOAuth.IsConfigured,
                 GoogleRedirectUri = GoogleRedirectUri(),
+                GitHubConfigured = GitHubOAuth.IsConfigured,
+                GitHubRedirectUri = GitHubRedirectUri(),
+                GitHub = list.Where(c => c.Kind == IntegrationKinds.GitHub).Select(ToCard).ToList(),
                 MicrosoftConfigured = _microsoftOAuth.IsConfigured,
                 MicrosoftRedirectUri = MicrosoftRedirectUri(),
                 Microsoft = list.Where(c => c.Kind == IntegrationKinds.Microsoft).Select(ToCard).ToList(),
@@ -213,6 +217,7 @@ namespace Partnerly.Integrations.Web
                 folders = settings?["folders"],
                 programs = settings?["programs"],
                 scripts = settings?["scripts"],
+                repos = settings?["repos"],
                 confirm = settings?["confirm"]
             });
         }
@@ -537,7 +542,7 @@ namespace Partnerly.Integrations.Web
         private string AgentFolder() =>
             _configuration["Agent:DownloadFolder"] is { Length: > 0 } folder ? folder : ComputerAgentPackage.DefaultFolder(_environment.ContentRootPath);
 
-        private static readonly string[] PickKinds = { "file", "save", "folder", "program", "programname", "script", "zip", "zipsave" };
+        private static readonly string[] PickKinds = { "file", "save", "folder", "repo", "program", "programname", "script", "zip", "zipsave" };
 
         // The editor's "Choose" button: the program on the PC opens a Windows file / folder dialog, the person picks
         // there, and only the chosen path comes back. Waits while the person decides.
@@ -573,6 +578,42 @@ namespace Partnerly.Integrations.Web
                     path = response.Data["path"]?.ToString(),
                     allowed = response.Data["allowed"]?.GetValue<bool>() == true
                 });
+            }
+            catch (ComputerException ex)
+            {
+                var text = _localizer[ex.Key];
+                return Ok(new { success = false, message = text.ResourceNotFound ? ex.Message : text.Value });
+            }
+        }
+
+        // The editor's "Browse" window: what lies inside the folders the PC allows (folders, files, Git repositories).
+        // The PC lists it, and refuses anything outside its allowed folders.
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        [Authorize(Policy = "Permission:automation.connections")]
+        public async Task<IActionResult> ComputerBrowse(Guid id, string? path)
+        {
+            var connection = await _connections.GetForOwnerAsync(id, _access.CurrentUserId, IntegrationKinds.Computer);
+            if (connection == null)
+            {
+                return NotFound();
+            }
+
+            try
+            {
+                var response = await _computers.SendAsync(
+                    connection.Id,
+                    "browse",
+                    new JsonObject { ["path"] = path ?? string.Empty },
+                    TimeSpan.FromSeconds(25),
+                    HttpContext.RequestAborted);
+                if (!response.Ok)
+                {
+                    var failure = response.ErrorKey != null ? _localizer[response.ErrorKey] : null;
+                    return Ok(new { success = false, message = failure is { ResourceNotFound: false } ? failure.Value : response.Error });
+                }
+
+                return Content("{\"success\":true,\"data\":" + response.Data.ToJsonString() + "}", "application/json");
             }
             catch (ComputerException ex)
             {
@@ -630,6 +671,10 @@ namespace Partnerly.Integrations.Web
                             () => new HttpRequestMessage(HttpMethod.Get, MicrosoftOAuthService.GraphBase + "/me?$select=mail,userPrincipalName"),
                             HttpContext.RequestAborted);
                         detail = profile["mail"]?.ToString() ?? profile["userPrincipalName"]?.ToString() ?? "Outlook";
+                        break;
+                    case IntegrationKinds.GitHub:
+                        var account = await GitHubApi.SendObjectAsync(connection, HttpMethod.Get, "/user", null, HttpContext.RequestAborted);
+                        detail = account["login"]?.ToString() ?? "GitHub";
                         break;
                     case IntegrationKinds.Computer:
                         var pong = await _computers.SendAsync(connection.Id, "ping", new JsonObject(), TimeSpan.FromSeconds(15), HttpContext.RequestAborted);
@@ -695,6 +740,13 @@ namespace Partnerly.Integrations.Web
                     card.Detail = connection.GetString("email");
                     if (MicrosoftApiClient.HasScope(connection, MicrosoftOAuthService.ScopeMailSend)) card.Badges.Add("Mail");
                     if (MicrosoftApiClient.HasScope(connection, MicrosoftOAuthService.ScopeCalendar)) card.Badges.Add("Calendar");
+                    break;
+                case IntegrationKinds.GitHub:
+                    card.Detail = connection.GetString("login");
+                    card.Badges.Add(GitHubApiClient.HasScope(connection, GitHubOAuthService.ScopeRepo) ? "Private + public"
+                        : GitHubApiClient.HasScope(connection, GitHubOAuthService.ScopePublicRepo) ? "Public"
+                        : connection.GetString("scope") == null ? "Token" : "Limited");
+                    if (GitHubApiClient.HasScope(connection, GitHubOAuthService.ScopeWorkflow)) card.Badges.Add("Workflows");
                     break;
                 case IntegrationKinds.Computer:
                     card.Detail = string.Join(" · ", new[] { connection.GetString("machine"), connection.GetString("os") }.Where(x => !string.IsNullOrWhiteSpace(x)));

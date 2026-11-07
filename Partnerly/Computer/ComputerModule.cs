@@ -76,6 +76,18 @@ namespace Partnerly.Computer
             : base(ComputerTypeCodes.DiskLow, "Disk space is running out", "Computer", IntegrationKinds.Computer) { }
     }
 
+    public sealed class ComputerGitNewCommitTrigger : IntegrationTriggerHandler
+    {
+        public ComputerGitNewCommitTrigger()
+            : base(ComputerTypeCodes.GitNewCommit, "New commit in a Git folder on PC", "Computer", IntegrationKinds.Computer) { }
+    }
+
+    public sealed class ComputerGitChangedTrigger : IntegrationTriggerHandler
+    {
+        public ComputerGitChangedTrigger()
+            : base(ComputerTypeCodes.GitChanged, "Git folder on PC has changes / is clean again", "Computer", IntegrationKinds.Computer) { }
+    }
+
     // Registers the Computer cards next to the integration cards.
     public sealed class ComputerAutomationModule : IAutomationModule
     {
@@ -93,6 +105,8 @@ namespace Partnerly.Computer
             registry.Register<ComputerDriveTrigger>(ComputerTypeCodes.DriveChanged, IntegrationKinds.Computer);
             registry.Register<ComputerIdleTrigger>(ComputerTypeCodes.IdleChanged, IntegrationKinds.Computer);
             registry.Register<ComputerDiskLowTrigger>(ComputerTypeCodes.DiskLow, IntegrationKinds.Computer);
+            registry.Register<ComputerGitNewCommitTrigger>(ComputerTypeCodes.GitNewCommit, IntegrationKinds.Computer);
+            registry.Register<ComputerGitChangedTrigger>(ComputerTypeCodes.GitChanged, IntegrationKinds.Computer);
         }
 
         public void RegisterActions(ActionRegistry registry)
@@ -133,6 +147,21 @@ namespace Partnerly.Computer
             registry.Register<ComputerFileInfoAction>(ComputerTypeCodes.FileInfo, IntegrationKinds.Computer);
             registry.Register<ComputerUnzipAction>(ComputerTypeCodes.Unzip, IntegrationKinds.Computer);
             registry.Register<ComputerDownloadUrlAction>(ComputerTypeCodes.DownloadUrl, IntegrationKinds.Computer);
+            registry.Register<ComputerGitStatusAction>(ComputerTypeCodes.GitStatus, IntegrationKinds.Computer);
+            registry.Register<ComputerGitLogAction>(ComputerTypeCodes.GitLog, IntegrationKinds.Computer);
+            registry.Register<ComputerGitDiffAction>(ComputerTypeCodes.GitDiff, IntegrationKinds.Computer);
+            registry.Register<ComputerGitBranchesAction>(ComputerTypeCodes.GitBranches, IntegrationKinds.Computer);
+            registry.Register<ComputerGitFetchAction>(ComputerTypeCodes.GitFetch, IntegrationKinds.Computer);
+            registry.Register<ComputerGitPullAction>(ComputerTypeCodes.GitPull, IntegrationKinds.Computer);
+            registry.Register<ComputerGitCommitAction>(ComputerTypeCodes.GitCommit, IntegrationKinds.Computer);
+            registry.Register<ComputerGitPushAction>(ComputerTypeCodes.GitPush, IntegrationKinds.Computer);
+            registry.Register<ComputerGitSwitchAction>(ComputerTypeCodes.GitSwitch, IntegrationKinds.Computer);
+            registry.Register<ComputerGitCloneAction>(ComputerTypeCodes.GitClone, IntegrationKinds.Computer);
+            registry.Register<ComputerGitInitAction>(ComputerTypeCodes.GitInit, IntegrationKinds.Computer);
+            registry.Register<ComputerGitMergeAction>(ComputerTypeCodes.GitMerge, IntegrationKinds.Computer);
+            registry.Register<ComputerGitTagAction>(ComputerTypeCodes.GitTag, IntegrationKinds.Computer);
+            registry.Register<ComputerGitStashAction>(ComputerTypeCodes.GitStash, IntegrationKinds.Computer);
+            registry.Register<ComputerGitCommandAction>(ComputerTypeCodes.GitCommand, IntegrationKinds.Computer);
         }
     }
 }

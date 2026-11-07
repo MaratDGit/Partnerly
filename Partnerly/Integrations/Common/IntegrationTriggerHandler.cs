@@ -74,4 +74,34 @@ namespace Partnerly.Integrations.Common
         public WhatsAppMessageTrigger()
             : base(IntegrationTypeCodes.WhatsAppMessageReceived, "WhatsApp message received", "WhatsApp", IntegrationKinds.WhatsApp) { }
     }
+
+    public sealed class GitHubIssueOpenedTrigger : IntegrationTriggerHandler
+    {
+        public GitHubIssueOpenedTrigger()
+            : base(IntegrationTypeCodes.GitHubIssueOpened, "New GitHub issue", "GitHub", IntegrationKinds.GitHub) { }
+    }
+
+    public sealed class GitHubPullRequestOpenedTrigger : IntegrationTriggerHandler
+    {
+        public GitHubPullRequestOpenedTrigger()
+            : base(IntegrationTypeCodes.GitHubPullRequestOpened, "New GitHub pull request", "GitHub", IntegrationKinds.GitHub) { }
+    }
+
+    public sealed class GitHubPushTrigger : IntegrationTriggerHandler
+    {
+        public GitHubPushTrigger()
+            : base(IntegrationTypeCodes.GitHubPush, "New commit on GitHub", "GitHub", IntegrationKinds.GitHub) { }
+    }
+
+    public sealed class GitHubReleasePublishedTrigger : IntegrationTriggerHandler
+    {
+        public GitHubReleasePublishedTrigger()
+            : base(IntegrationTypeCodes.GitHubReleasePublished, "New GitHub release", "GitHub", IntegrationKinds.GitHub) { }
+    }
+
+    public sealed class GitHubWorkflowFailedTrigger : IntegrationTriggerHandler
+    {
+        public GitHubWorkflowFailedTrigger()
+            : base(IntegrationTypeCodes.GitHubWorkflowFailed, "GitHub workflow failed", "GitHub", IntegrationKinds.GitHub) { }
+    }
 }

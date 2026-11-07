@@ -1,6 +1,6 @@
 @using System.Collections.Generic
 @{
-    var types = new Dictionary<string, string>
+    Func<Dictionary<string, string>> buildTypes = () => new Dictionary<string, string>
     {
         ["manual"] = Localizer["NodeTypeManual"].Value,
         ["schedule"] = Localizer["NodeTypeSchedule"].Value,
@@ -40,6 +40,31 @@
         ["gmail.send"] = Localizer["NodeTypeGmailSend"].Value,
         ["gmail.find_messages"] = Localizer["NodeTypeGmailFindMessages"].Value,
         ["gmail.message_received"] = Localizer["NodeTypeGmailMessageReceived"].Value,
+        ["github.list_repos"] = Localizer["NodeTypeGitHubListRepos"].Value,
+        ["github.get_repo"] = Localizer["NodeTypeGitHubGetRepo"].Value,
+        ["github.create_issue"] = Localizer["NodeTypeGitHubCreateIssue"].Value,
+        ["github.get_issue"] = Localizer["NodeTypeGitHubGetIssue"].Value,
+        ["github.list_issues"] = Localizer["NodeTypeGitHubListIssues"].Value,
+        ["github.update_issue"] = Localizer["NodeTypeGitHubUpdateIssue"].Value,
+        ["github.comment_issue"] = Localizer["NodeTypeGitHubCommentIssue"].Value,
+        ["github.create_pr"] = Localizer["NodeTypeGitHubCreatePr"].Value,
+        ["github.get_pr"] = Localizer["NodeTypeGitHubGetPr"].Value,
+        ["github.list_prs"] = Localizer["NodeTypeGitHubListPrs"].Value,
+        ["github.merge_pr"] = Localizer["NodeTypeGitHubMergePr"].Value,
+        ["github.list_branches"] = Localizer["NodeTypeGitHubListBranches"].Value,
+        ["github.list_commits"] = Localizer["NodeTypeGitHubListCommits"].Value,
+        ["github.create_branch"] = Localizer["NodeTypeGitHubCreateBranch"].Value,
+        ["github.get_file"] = Localizer["NodeTypeGitHubGetFile"].Value,
+        ["github.put_file"] = Localizer["NodeTypeGitHubPutFile"].Value,
+        ["github.create_release"] = Localizer["NodeTypeGitHubCreateRelease"].Value,
+        ["github.dispatch_workflow"] = Localizer["NodeTypeGitHubDispatchWorkflow"].Value,
+        ["github.list_workflow_runs"] = Localizer["NodeTypeGitHubListWorkflowRuns"].Value,
+        ["github.api_request"] = Localizer["NodeTypeGitHubApiRequest"].Value,
+        ["github.issue_opened"] = Localizer["NodeTypeGitHubIssueOpened"].Value,
+        ["github.pr_opened"] = Localizer["NodeTypeGitHubPrOpened"].Value,
+        ["github.push"] = Localizer["NodeTypeGitHubPush"].Value,
+        ["github.release_published"] = Localizer["NodeTypeGitHubReleasePublished"].Value,
+        ["github.workflow_failed"] = Localizer["NodeTypeGitHubWorkflowFailed"].Value,
         ["outlook.send"] = Localizer["NodeTypeOutlookSend"].Value,
         ["outlook.find_messages"] = Localizer["NodeTypeOutlookFindMessages"].Value,
         ["outlook.message_received"] = Localizer["NodeTypeOutlookMessageReceived"].Value,
@@ -121,8 +146,62 @@
         ["computer.power_changed"] = Localizer["NodeTypeComputerPowerChanged"].Value,
         ["computer.drive_changed"] = Localizer["NodeTypeComputerDriveChanged"].Value,
         ["computer.idle_changed"] = Localizer["NodeTypeComputerIdleChanged"].Value,
-        ["computer.disk_low"] = Localizer["NodeTypeComputerDiskLow"].Value
+        ["computer.disk_low"] = Localizer["NodeTypeComputerDiskLow"].Value,
+        ["computer.git_status"] = Localizer["NodeTypeComputerGitStatus"].Value,
+        ["computer.git_log"] = Localizer["NodeTypeComputerGitLog"].Value,
+        ["computer.git_diff"] = Localizer["NodeTypeComputerGitDiff"].Value,
+        ["computer.git_branches"] = Localizer["NodeTypeComputerGitBranches"].Value,
+        ["computer.git_fetch"] = Localizer["NodeTypeComputerGitFetch"].Value,
+        ["computer.git_pull"] = Localizer["NodeTypeComputerGitPull"].Value,
+        ["computer.git_commit"] = Localizer["NodeTypeComputerGitCommit"].Value,
+        ["computer.git_push"] = Localizer["NodeTypeComputerGitPush"].Value,
+        ["computer.git_switch"] = Localizer["NodeTypeComputerGitSwitch"].Value,
+        ["computer.git_clone"] = Localizer["NodeTypeComputerGitClone"].Value,
+        ["computer.git_init"] = Localizer["NodeTypeComputerGitInit"].Value,
+        ["computer.git_merge"] = Localizer["NodeTypeComputerGitMerge"].Value,
+        ["computer.git_tag"] = Localizer["NodeTypeComputerGitTag"].Value,
+        ["computer.git_stash"] = Localizer["NodeTypeComputerGitStash"].Value,
+        ["computer.git_command"] = Localizer["NodeTypeComputerGitCommand"].Value,
+        ["computer.git_new_commit"] = Localizer["NodeTypeComputerGitNewCommit"].Value,
+        ["computer.git_changed"] = Localizer["NodeTypeComputerGitChanged"].Value
     };
+    var types = buildTypes();
+    // The search of the card list works in every language: each card is sent with its name in English, Russian
+    // and Armenian (taken from the resource files), so "email", "письмо" or the Armenian word all find the same
+    // card whatever language the page is shown in.
+    var typeNames = new Dictionary<string, string[]>();
+    {
+        var savedUi = CultureInfo.CurrentUICulture;
+        var collected = new Dictionary<string, List<string>>();
+        try
+        {
+            foreach (var code in new[] { "en", "ru", "hy" })
+            {
+                CultureInfo.CurrentUICulture = new CultureInfo(code);
+                foreach (var pair in buildTypes())
+                {
+                    if (!collected.TryGetValue(pair.Key, out var list))
+                    {
+                        collected[pair.Key] = list = new List<string>();
+                    }
+
+                    if (!string.IsNullOrWhiteSpace(pair.Value) && !list.Contains(pair.Value))
+                    {
+                        list.Add(pair.Value);
+                    }
+                }
+            }
+        }
+        finally
+        {
+            CultureInfo.CurrentUICulture = savedUi;
+        }
+
+        foreach (var pair in collected)
+        {
+            typeNames[pair.Key] = pair.Value.ToArray();
+        }
+    }
     // Integration field labels: builder-forms.js key -> resx "Builder" + PascalCase key.
     var integrationKeys = new[]
     {
@@ -137,6 +216,8 @@
         "intTemplateParams", "intWhatsAppTriggerHelp",
         "intMessageId", "intMessageIdHelp", "intLabelName", "intLabelMode", "intLabelAdd", "intLabelRemove", "intMarkState", "intStateRead", "intStateUnread", "intCellRange", "intCellRangeHelp", "intCell", "intCellHelp", "intSpreadsheetTitle", "intFirstSheet", "intNewSheetName", "intFileId", "intFileIdHelp", "intNewName", "intCopyName", "intDestFolder", "intShareEmail", "intShareRole", "intRoleReader", "intRoleCommenter", "intRoleWriter", "intNotifyPerson", "intYes", "intNo", "intFileContent", "intCreateAs", "intAsTextFile", "intAsGoogleDoc",
         "intOutlookToHelp", "intOutlookQueryHelp", "intOutlookTriggerHelp", "intEventTitle", "intEventStart", "intEventStartHelp", "intEventEnd", "intEventDuration", "intTimeZone", "intTimeZoneHelp", "intAttendees", "intAttendeesHelp", "intLocation", "intEventDays", "intOutlookEventTriggerHelp",
+        "intGhRepo", "intGhRepoHelp", "intGhNumber", "intGhNumberHelp", "intGhTitle", "intGhBody", "intGhLabels", "intGhLabelsHelp", "intGhAssignees", "intGhState", "intGhOpen", "intGhClosed", "intGhAll", "intGhKeep", "intGhUpdateHelp", "intGhHead", "intGhBase", "intGhDraft", "intGhMergeMethod", "intGhCommitTitle", "intGhBranch", "intGhBranchHelp", "intGhNewBranch", "intGhFrom", "intGhPath", "intGhPathHelp", "intGhRef", "intGhFileText", "intGhCommitMessage", "intGhPutHelp", "intGhTag", "intGhReleaseName", "intGhPrerelease", "intGhTarget", "intGhWorkflow", "intGhWorkflowHelp", "intGhInputs", "intGhRunStatus", "intGhAnyStatus", "intGhFailed", "intGhSucceeded", "intGhMethod", "intGhApiPath", "intGhApiPathHelp", "intGhApiBody", "intGhApiNote", "intGhNameContains", "intGhTitleContains", "intGhTriggerHelp", "intGhPushHelp",
+        "intPcGitRepo", "intPcGitRepoHelp", "intPcGitCloneFolder", "intPcGitCloneFolderHelp", "intPcGitPath", "intPcGitMode", "intPcGitStat", "intPcGitNames", "intPcGitFull", "intPcGitStaged", "intPcGitTarget", "intPcGitRemote", "intPcGitRemoteHelp", "intPcGitIncludeRemote", "intPcGitPrune", "intPcGitPullMode", "intPcGitFfOnly", "intPcGitMergeMode", "intPcGitRebaseMode", "intPcGitMessage", "intPcGitAdd", "intPcGitAddAll", "intPcGitAddTracked", "intPcGitAddPaths", "intPcGitAddNone", "intPcGitPaths", "intPcGitPathsHelp", "intPcGitSetUpstream", "intPcGitTags", "intPcGitForce", "intPcGitForceNone", "intPcGitForceLease", "intPcGitForceYes", "intPcGitCreate", "intPcGitFrom", "intPcGitUrl", "intPcGitUrlHelp", "intPcGitDepth", "intPcGitNoFf", "intPcGitTagName", "intPcGitTagMessage", "intPcGitDelete", "intPcGitStashAction", "intPcGitStashPush", "intPcGitStashPop", "intPcGitStashApply", "intPcGitStashList", "intPcGitStashDrop", "intPcGitCommand", "intPcGitCommandHelp", "intPcGitCommandNote", "intPcGitPushNote", "intPcGitTriggerRepoHelp", "intPcGitState", "intPcGitStateAny", "intPcGitStateDirty", "intPcGitStateClean", "intPcGitStatusIntro", "intPcGitLogIntro", "intPcGitDiffIntro", "intPcGitBranchesIntro", "intPcGitFetchIntro", "intPcGitPullIntro", "intPcGitCommitIntro", "intPcGitPushIntro", "intPcGitSwitchIntro", "intPcGitCloneIntro", "intPcGitInitIntro", "intPcGitMergeIntro", "intPcGitTagIntro", "intPcGitStashIntro", "intPcGitCommandIntro", "intPcGitNewCommitIntro", "intPcGitChangedIntro",
         "intPcTitle", "intPcText", "intPcButtons", "intPcYesNo", "intPcTarget", "intPcTargetHelp", "intPcClipboardHelp", "intPcInfoHelp", "intPcScreen", "intPcScreenMain", "intPcScreenAll", "intPcScreenshotHelp", "intPcProgramName", "intPcProgramNameHelp", "intPcPath", "intPcPathHelp", "intPcMaxKb", "intPcMode", "intPcReplace", "intPcAppend", "intPcFolder", "intPcPattern", "intPcPatternHelp", "intPcRecursive", "intPcSource", "intPcDestination", "intPcOverwrite", "intPcZipFile", "intPcFile", "intPcGetFileHelp", "intPcProgram", "intPcProgramHelp", "intPcArguments", "intPcWait", "intPcTimeout", "intPcScript", "intPcScriptHelp", "intPcCloseHelp", "intPcLockHelp", "intPcSleepHelp", "intPcWatchFolder", "intPcWatchFolderHelp", "intPcFileTriggerHelp", "intPcState", "intPcStateAny", "intPcStateOnline", "intPcStateOffline", "intPcProgramTriggerHelp", "intPcProgramWatchHelp",
         "intPcAny", "intPcArgumentsHelp", "intPcAskNote", "intPcClipboardTriggerNote", "intPcDelaySeconds", "intPcDeleteNote", "intPcDiskLowNote", "intPcDownloadNameHelp", "intPcDrive", "intPcDriveConnected", "intPcDriveHelp", "intPcDriveRemoved", "intPcFileOrFolder", "intPcHost", "intPcHostHelp", "intPcIdleEnded", "intPcIdleNote", "intPcIdleStarted", "intPcMediaAction", "intPcMediaNext", "intPcMediaPlayPause", "intPcMediaPrevious", "intPcMediaStop", "intPcMessageBoxNote", "intPcModeLogoff", "intPcModeRestart", "intPcModeShutdown", "intPcOk", "intPcPowerLow", "intPcPowerPluggedIn", "intPcPowerUnplugged", "intPcSaveNameHelp", "intPcSessionLocked", "intPcSessionSignedIn", "intPcSessionSignedOut", "intPcSessionSleeping", "intPcSessionUnlocked", "intPcSessionWoke", "intPcShutdownMode", "intPcShutdownNote", "intPcUnzipTo", "intPcUrl", "intPcUrlHelp", "intPcVolumeAction", "intPcVolumeDown", "intPcVolumeMute", "intPcVolumeSteps", "intPcVolumeStepsHelp", "intPcVolumeUp", "intPcWhat", "intPcNotifyIntro", "intPcMessageBoxIntro", "intPcSpeakIntro", "intPcOpenIntro", "intPcClipboardSetIntro", "intPcClipboardGetIntro", "intPcSystemInfoIntro", "intPcScreenshotIntro", "intPcActiveWindowIntro", "intPcListProgramsIntro", "intPcNetworkInfoIntro", "intPcPingHostIntro", "intPcProcessRunningIntro", "intPcReadFileIntro", "intPcWriteFileIntro", "intPcFileInfoIntro", "intPcListFolderIntro", "intPcCreateFolderIntro", "intPcCopyFileIntro", "intPcMoveFileIntro", "intPcDeleteFileIntro", "intPcZipFolderIntro", "intPcUnzipIntro", "intPcSaveAttachmentIntro", "intPcGetFileIntro", "intPcDownloadUrlIntro", "intPcRunProgramIntro", "intPcRunScriptIntro", "intPcCloseProgramIntro", "intPcLockIntro", "intPcSleepIntro", "intPcDisplayOffIntro", "intPcShutdownIntro", "intPcCancelShutdownIntro", "intPcVolumeIntro", "intPcMediaIntro", "intPcFileCreatedIntro", "intPcFileChangedIntro", "intPcFileDeletedIntro", "intPcProgramStartedIntro", "intPcProgramStoppedIntro", "intPcStatusChangedIntro", "intPcSessionChangedIntro", "intPcClipboardChangedIntro", "intPcPowerChangedIntro", "intPcDriveChangedIntro", "intPcIdleChangedIntro", "intPcDiskLowIntro",
     };
@@ -164,6 +245,15 @@
         ["builderTelegramChats"] = Localizer["BuilderTelegramChats"].Value,
         ["builderPcAllowedFolders"] = Localizer["BuilderPcAllowedFolders"].Value,
         ["builderPcAllowedPrograms"] = Localizer["BuilderPcAllowedPrograms"].Value,
+        ["builderPcAllowedRepos"] = Localizer["BuilderPcAllowedRepos"].Value,
+        ["builderPcBrowse"] = Localizer["BuilderPcBrowse"].Value,
+        ["builderPcBrowseLoading"] = Localizer["BuilderPcBrowseLoading"].Value,
+        ["builderPcBrowseUp"] = Localizer["BuilderPcBrowseUp"].Value,
+        ["builderPcBrowseClose"] = Localizer["BuilderPcBrowseClose"].Value,
+        ["builderPcBrowseUse"] = Localizer["BuilderPcBrowseUse"].Value,
+        ["builderPcBrowseEmpty"] = Localizer["BuilderPcBrowseEmpty"].Value,
+        ["builderPcBrowseNoFolders"] = Localizer["BuilderPcBrowseNoFolders"].Value,
+        ["builderPcBrowseMore"] = Localizer["BuilderPcBrowseMore"].Value,
         ["builderPcChooseFile"] = Localizer["BuilderPcChooseFile"].Value,
         ["builderPcChooseFolder"] = Localizer["BuilderPcChooseFolder"].Value,
         ["builderPcChooseProgram"] = Localizer["BuilderPcChooseProgram"].Value,
@@ -351,7 +441,10 @@
         ["toolsVars"] = Localizer["ToolsVarsTitle"].Value,
         ["builderVarsLoop"] = Localizer["BuilderPortEach"].Value,
         ["builderVarsAgent"] = Localizer["ToolsVarsTitle"].Value,
-        ["types"] = types
+        ["types"] = types,
+        ["typeNames"] = typeNames,
+        ["builderSearch"] = Localizer["BuilderSearch"].Value,
+        ["builderNoResults"] = Localizer["BuilderNoResults"].Value
     };
     foreach (var key in integrationKeys)
     {

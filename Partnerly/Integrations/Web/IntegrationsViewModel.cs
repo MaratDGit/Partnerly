@@ -8,6 +8,9 @@ namespace Partnerly.Integrations.Web
         public List<IntegrationCardItem> Google { get; set; } = new();
         public List<IntegrationCardItem> WhatsApp { get; set; } = new();
         public List<IntegrationCardItem> Microsoft { get; set; } = new();
+        public List<IntegrationCardItem> GitHub { get; set; } = new();
+        public bool GitHubConfigured { get; set; }
+        public string GitHubRedirectUri { get; set; } = string.Empty;
         public List<IntegrationCardItem> Computers { get; set; } = new();
         public bool AgentAvailable { get; set; }
         public bool GoogleConfigured { get; set; }

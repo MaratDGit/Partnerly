@@ -51,29 +51,43 @@
 - **Сознательно не сделано:** произвольная команда оболочки, эмуляция клавиатуры и мыши, реестр, удаление файлов.
 - Текст озвучки передаётся программе через стандартный ввод, а не в командной строке.
 
-## Настройки программы
+## Настройки программы (упрощены в 1.5.0, 2026-11-07)
 
-Файл `%AppData%/PartnerlyAgent/config.json` (создаётся при первом запуске; меню в трее → «Settings...» (окно с папками, программами, скриптами, наблюдением и «спрашивать меня»; править файл вручную не нужно)). Папку можно переопределить переменной окружения `PARTNERLY_AGENT_HOME`. Лог — `agent.log` рядом (токен в лог не пишется).
+Файл `%AppData%/PartnerlyAgent/config.json` (создаётся при первом запуске; меню в трее → «Settings...», править файл вручную не нужно). Папку можно переопределить переменной `PARTNERLY_AGENT_HOME`. Лог — `agent.log` рядом (токен в лог не пишется).
+
+В окне три вкладки:
+
+- **Folders** — папки, которым доверяет владелец ПК. Внутри них (и во всех вложенных) Partnerly может читать, писать, копировать, архивировать, **наблюдать за файлами**, **запускать скрипты** (.ps1 / .bat / .cmd) и **работать с Git** в любых найденных репозиториях. Отдельных списков для скриптов, наблюдения и репозиториев больше нет (старый файл при чтении сливается в этот список один раз, `SettingsVersion = 2`).
+- **Programs** — программы, которые можно запускать, закрывать и за запуском / остановкой которых следить.
+- **Safety** — «спросить меня сначала» (список команд, включая Git push и опасные команды Git), три необязательных оповещения: копирование текста, «никого нет за ПК», мало места на диске.
 
 ```json
 {
   "server": "https://сайт",
   "token": "pc....",
-  "allowedFolders": ["C:/Users/me/Documents/Partnerly"],
+  "allowedFolders": ["C:/Users/me/Documents/Partnerly", "C:/Dev"],
   "allowedPrograms": ["notepad.exe"],
-  "scriptFolders": [],
-  "watchFolders": [],
-  "watchPrograms": [],
-  "confirmOps": ["shutdown", "delete_file"],
+  "confirmOps": ["shutdown", "delete_file", "run_script"],
   "enabled": true,
-  "watchSubfolders": false,
   "watchClipboard": false,
   "idleMinutes": 10,
-  "diskLowGb": 5
+  "diskLowGb": 5,
+  "gitHosts": [],
+  "gitPath": "",
+  "gitRunHooks": false,
+  "gitAskForRisky": true,
+  "gitPushWithoutAsking": false,
+  "settingsVersion": 2
 }
 ```
 
-По умолчанию разрешена только папка `Documents/Partnerly`. Пути можно писать с `/` и переменными окружения (`%USERPROFILE%`). После правки файла программу нужно перезапустить.
+Тонкие настройки Git (`gitHosts` — ограничить хосты адресов, пусто = любой хост по https / ssh / git; `gitPath`; `gitRunHooks`) есть только в файле. Пути можно писать с `/` и переменными окружения. После сохранения программа перезапускается сама.
+
+**Сайт видит всё внутри разрешённых папок.** В редакторе у поля с путём кнопка «Browse…» открывает список: сначала разрешённые папки, затем содержимое (папки, файлы, значок у репозиториев Git); файл или «Use this folder» подставляется в поле. Это команда агента `browse` (`Security/FolderBrowser.cs`), всё через `PathGuard`; ссылки, скрытые и системные файлы не показываются, до 300 записей на папку. Кнопка «Choose…» (окно Windows на ПК) осталась.
+
+**Наблюдение** (триггеры файлов, программ, репозиториев) теперь работает по всем разрешённым папкам и программам. Шум отбрасывается на ПК: `.git`, `node_modules`, `bin`, `obj`, кэши, `~$*`, `*.tmp`, `*.crdownload`, `desktop.ini`. Репозитории для триггеров Git находятся сами (до 3 уровней вглубь, не больше 30; по 6 за круг раз в 15 с).
+
+**Скрипты и защита.** Раз скрипт можно запускать из любой разрешённой папки, программа не пишет туда программы и скрипты (`write_file`, `save_file`, `copy_file`, `move_file` отклоняют .exe, .bat, .cmd, .ps1, .vbs и т.п.); новый файл настроек по умолчанию спрашивает перед `run_script`, а старый без отдельных папок скриптов получает этот вопрос при слиянии.
 
 ## Скачивание и установка (с 2026-11-06)
 
@@ -113,3 +127,16 @@
 - **Какие папки доступны, видно в редакторе.** После подключения программа присылает сайту списки разрешённых папок, программ и скриптов (метод хаба `Settings`, без токена; хранится в payload подключения как `settings`); поля путей в карточках — выпадающий список с возможностью вписать своё. Это подсказка: решение на запуске всё равно принимает ПК.
 - **Наблюдатели** (`Net/Watchers.cs`): один цикл раз в 3 с (программы, буфер, диски, простой, батарея), `FileSystemWatcher` для папок (раз в 30 с подхватываются появившиеся позже папки и пересоздаются упавшие), `SystemEvents` для блокировки и сна. Лимит событий 120 в минуту на компьютер сохраняется.
 - **Правило для новых команд ПК** (уточнение TR-2026-11-06-04): `case` в `CommandRunner` + класс в `ComputerActions.cs` + регистрация в `ComputerModule` и `ComputerServiceCollectionExtensions` + форма в `builder-forms-computer.js` + иконка и переменные в `builder.js` + ключи `NodeTypeComputer…` и `BuilderIntPc…Intro` в трёх resx и в `_BuilderI18n.cshtml`.
+
+## Git на ПК (версия 1.4.0, 2026-11-07)
+
+Одна команда агента `git` (`Commands/GitRunner.cs`, `Security/GitGuard.cs`), на сайте 15 карточек (`ComputerGitActions.cs`: status, log, diff, branches, fetch, pull, commit, push, switch, clone, init, merge, tag, stash и универсальная **Git command**) и 2 триггера (`computer.git_new_commit`, `computer.git_changed`). Решение и причины: TR-2026-11-07-01.
+
+- **Настройки:** отдельной вкладки нет. Git работает в репозиториях внутри разрешённых папок (Folders). Вопросы перед push и опасными командами — вкладка Safety. Файл: `gitHosts` (пусто = любой хост), `gitPath`, `gitRunHooks` (выкл.), `gitAskForRisky` (вкл.), `gitPushWithoutAsking` (выкл.).
+- **Разрешено:** status, log, diff, show, rev-parse, describe, shortlog, blame, ls-files, ls-tree, ls-remote, rev-list, merge-base, name-rev, grep, count-objects, var; add, commit, fetch, pull, push, switch, checkout, merge, stash, tag, branch, restore, reset, rebase, clean, cherry-pick, revert, rm, mv, remote, init, clone.
+- **Не разрешено:** config, submodule, gc, credential, apply, am, difftool, mergetool, bisect, archive, filter-branch и всё, чего нет в списке выше. Опции, запускающие программы или читающие файлы вне репозитория (`-c` у clone, `--upload-pack`, `--exec`, `-x`, `--ext-diff`, `--no-index`, `--output`, `-F`, `--contents`, `--recurse-submodules` и их сокращения), отклоняются. Адреса — только https / ssh / git на разрешённых хостах; локальные пути, `file://`, `ext::` не принимаются.
+- **Спрашивает клик на ПК:** любой `push`, `remote add / set-url`, рискованные команды (`push --force`, `reset --hard`, `clean`, `rebase`, `restore` без `--staged`, `branch -D`, `stash drop`, `commit --amend`, `rm` без `--cached`…), команды из «Ask me first» (`git`, `git_<команда>`).
+- **Вход:** используются учётные данные самого ПК (Git Credential Manager, SSH). Интерактивный вход отключён (`GIT_TERMINAL_PROMPT=0`, `GCM_INTERACTIVE=never`).
+- **Результат:** `command`, `repo`, `exitCode`, `output`, `errorOutput`, `text`; ненулевой код — ошибка карточки. `commit` с «что добавить» делает `git add` и `git commit`, возвращает `committed`, `sha`, `subject` («нечего коммитить» — не ошибка).
+- **Триггеры:** раз в 15 с по найденным репозиториям (по 6 за круг) (`rev-parse HEAD`, `branch --show-current`, `status --porcelain`): новый коммит на той же ветке (смена ветки — не новый коммит) и переход «есть изменения» ↔ «чисто». Первый просмотр только запоминает состояние.
+- **Тесты:** `AgentGitTests.cs` (GitGuard и настоящий git во временной папке), `ComputerGitCardTests.cs`.

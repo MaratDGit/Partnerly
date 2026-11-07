@@ -40,6 +40,25 @@ namespace Partnerly.Computer
                 || (payload["text"]?.ToString() ?? string.Empty).Contains(needle, StringComparison.OrdinalIgnoreCase);
         }
 
+        // Git triggers: the repository folder (same folder written with / or \ is the same) and, optionally, the branch.
+        public static bool MatchesRepo(JsonElement config, JsonObject payload, bool checkState)
+        {
+            var wanted = Slashes(Read(config, "repo"));
+            var actual = Slashes(payload["repo"]?.ToString() ?? string.Empty);
+            if (wanted.Length > 0 && !string.Equals(wanted, actual, StringComparison.OrdinalIgnoreCase))
+            {
+                return false;
+            }
+
+            var branch = Read(config, "branch");
+            if (branch.Length > 0 && !string.Equals(branch, payload["branch"]?.ToString() ?? string.Empty, StringComparison.Ordinal))
+            {
+                return false;
+            }
+
+            return !checkState || MatchesStatus(config, payload["state"]?.ToString() ?? string.Empty);
+        }
+
         // "E", "E:" and "E:/" all mean drive E.
         public static bool MatchesDrive(JsonElement config, JsonObject payload, bool checkState)
         {

@@ -758,10 +758,10 @@
             if (cards.length) {
                 var servicesUsed = [];
                 cards.forEach(function (c) {
-                    var m = /^(telegram|sheets|gmail|outlook|drive|whatsapp)\./.exec(c.type || "");
+                    var m = /^(telegram|sheets|gmail|outlook|github|drive|whatsapp)\./.exec(c.type || "");
                     if (m && servicesUsed.indexOf(m[1]) === -1) { servicesUsed.push(m[1]); }
                 });
-                var serviceNames = { telegram: "Telegram", sheets: "Google Sheets", gmail: "Gmail", outlook: "Outlook", drive: "Google Drive", whatsapp: "WhatsApp" };
+                var serviceNames = { telegram: "Telegram", sheets: "Google Sheets", gmail: "Gmail", outlook: "Outlook", github: "GitHub", drive: "Google Drive", whatsapp: "WhatsApp" };
                 var overview = [
                     ["bx-bolt-circle", t("factTriggers", cards.filter(function (c) { return c.kind === "trigger"; }).length)],
                     ["bx-cube-alt", t("factActions", cards.filter(function (c) { return c.kind !== "trigger"; }).length)],

@@ -1,4 +1,5 @@
 using Partnerly.Automation.Abstractions;
+using Partnerly.Integrations.GitHub;
 using Partnerly.Integrations.Google;
 using Partnerly.Integrations.Google.Drive;
 using Partnerly.Integrations.Google.Gmail;
@@ -41,6 +42,8 @@ namespace Partnerly.Integrations.Common
             services.AddScoped<MicrosoftOAuthService>();
             services.AddScoped<MicrosoftApiClient>();
             services.AddScoped<OutlookApi>();
+            services.AddScoped<GitHubOAuthService>();
+            services.AddScoped<GitHubApiClient>();
             services.AddScoped<WhatsAppClient>();
             services.AddScoped<WhatsAppWebhookService>();
 
@@ -51,6 +54,11 @@ namespace Partnerly.Integrations.Common
             services.AddTransient<WhatsAppMessageTrigger>();
             services.AddTransient<OutlookMessageTrigger>();
             services.AddTransient<OutlookEventTrigger>();
+            services.AddTransient<GitHubIssueOpenedTrigger>();
+            services.AddTransient<GitHubPullRequestOpenedTrigger>();
+            services.AddTransient<GitHubPushTrigger>();
+            services.AddTransient<GitHubReleasePublishedTrigger>();
+            services.AddTransient<GitHubWorkflowFailedTrigger>();
 
             services.AddTransient<TelegramSendMessageAction>();
             services.AddTransient<TelegramSendDocumentAction>();
@@ -89,6 +97,26 @@ namespace Partnerly.Integrations.Common
             services.AddTransient<OutlookFindMessagesAction>();
             services.AddTransient<OutlookCreateEventAction>();
             services.AddTransient<OutlookFindEventsAction>();
+            services.AddTransient<GitHubListReposAction>();
+            services.AddTransient<GitHubGetRepoAction>();
+            services.AddTransient<GitHubCreateIssueAction>();
+            services.AddTransient<GitHubGetIssueAction>();
+            services.AddTransient<GitHubListIssuesAction>();
+            services.AddTransient<GitHubUpdateIssueAction>();
+            services.AddTransient<GitHubCommentIssueAction>();
+            services.AddTransient<GitHubCreatePullRequestAction>();
+            services.AddTransient<GitHubGetPullRequestAction>();
+            services.AddTransient<GitHubListPullRequestsAction>();
+            services.AddTransient<GitHubMergePullRequestAction>();
+            services.AddTransient<GitHubListBranchesAction>();
+            services.AddTransient<GitHubListCommitsAction>();
+            services.AddTransient<GitHubCreateBranchAction>();
+            services.AddTransient<GitHubGetFileAction>();
+            services.AddTransient<GitHubPutFileAction>();
+            services.AddTransient<GitHubCreateReleaseAction>();
+            services.AddTransient<GitHubDispatchWorkflowAction>();
+            services.AddTransient<GitHubListWorkflowRunsAction>();
+            services.AddTransient<GitHubApiRequestAction>();
 
             services.AddScoped<IIntegrationPoller, TelegramPoller>();
             services.AddScoped<IIntegrationPoller, SheetsPoller>();
@@ -96,6 +124,11 @@ namespace Partnerly.Integrations.Common
             services.AddScoped<IIntegrationPoller, DrivePoller>();
             services.AddScoped<IIntegrationPoller, OutlookPoller>();
             services.AddScoped<IIntegrationPoller, OutlookEventPoller>();
+            services.AddScoped<IIntegrationPoller, GitHubIssueOpenedPoller>();
+            services.AddScoped<IIntegrationPoller, GitHubPullRequestOpenedPoller>();
+            services.AddScoped<IIntegrationPoller, GitHubPushPoller>();
+            services.AddScoped<IIntegrationPoller, GitHubReleasePublishedPoller>();
+            services.AddScoped<IIntegrationPoller, GitHubWorkflowFailedPoller>();
 
             if (hostPolling)
             {

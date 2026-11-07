@@ -212,8 +212,8 @@ namespace Partnerly.Automation.Tests.Integrations
             var actions = provider.GetRequiredService<Partnerly.Automation.Registry.ActionRegistry>().DescribeAll(provider).Where(item => item.Type.StartsWith("computer.")).ToList();
             var triggers = provider.GetRequiredService<Partnerly.Automation.Registry.TriggerRegistry>().DescribeAll(provider).Where(item => item.Type.StartsWith("computer.")).ToList();
 
-            Assert.Equal(36, actions.Count);
-            Assert.Equal(12, triggers.Count);
+            Assert.Equal(51, actions.Count);
+            Assert.Equal(14, triggers.Count);
             Assert.All(actions.Concat(triggers), item => Assert.Equal(IntegrationKinds.Computer, item.ConnectionKind));
         }
 

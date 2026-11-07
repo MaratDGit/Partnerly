@@ -42,6 +42,25 @@
             return { type: "note", help: t(helpKey, "") };
         }
 
+        // A dropdown whose options are [value, labelKey, fallback]; a null key shows the fallback as it is.
+        function choice(key, labelKey, fallback, options) {
+            return {
+                key: key,
+                type: "select",
+                label: t(labelKey, fallback),
+                options: options.map(function (item) { return { value: item[0], label: item[1] ? t(item[1], item[2]) : item[2] }; })
+            };
+        }
+
+        // GitHub cards: the repository ("owner/name" or a link) and the number of an issue / pull request.
+        function repo() {
+            return text("repo", "intGhRepo", "Repository", "intGhRepoHelp", true);
+        }
+
+        function numberField() {
+            return text("number", "intGhNumber", "Number", "intGhNumberHelp", true);
+        }
+
         var sheetFields = [
             text("spreadsheetId", "intSpreadsheet", "Spreadsheet", "intSpreadsheetHelp"),
             text("sheet", "intSheet", "Sheet (tab)", "intSheetHelp", true)
@@ -255,6 +274,144 @@
                 connection("microsoft"),
                 number("days", "intEventDays", "Days ahead"),
                 number("max", "intMaxResults", "Max results")
+            ],
+
+            // ---------- GitHub ----------
+            "github.list_repos": [
+                connection("github"),
+                text("nameContains", "intGhNameContains", "Name contains"),
+                number("max", "intMaxResults", "Max results")
+            ],
+            "github.get_repo": [connection("github"), repo()],
+            "github.create_issue": [
+                connection("github"), repo(),
+                text("title", "intGhTitle", "Title"),
+                area("body", "intGhBody", "Text", "intVariablesHelp"),
+                text("labels", "intGhLabels", "Labels", "intGhLabelsHelp"),
+                text("assignees", "intGhAssignees", "Assignees (GitHub logins)", "intGhLabelsHelp")
+            ],
+            "github.get_issue": [connection("github"), repo(), numberField()],
+            "github.list_issues": [
+                connection("github"), repo(),
+                choice("state", "intGhState", "State", [["open", "intGhOpen", "Open"], ["closed", "intGhClosed", "Closed"], ["all", "intGhAll", "All"]]),
+                text("labels", "intGhLabels", "Labels", "intGhLabelsHelp"),
+                number("max", "intMaxResults", "Max results")
+            ],
+            "github.update_issue": [
+                connection("github"), repo(), numberField(),
+                note("intGhUpdateHelp"),
+                text("title", "intGhTitle", "Title"),
+                area("body", "intGhBody", "Text", "intVariablesHelp"),
+                choice("state", "intGhState", "State", [["", "intGhKeep", "Do not change"], ["open", "intGhOpen", "Open"], ["closed", "intGhClosed", "Closed"]]),
+                text("labels", "intGhLabels", "Labels", "intGhLabelsHelp"),
+                text("assignees", "intGhAssignees", "Assignees (GitHub logins)", "intGhLabelsHelp")
+            ],
+            "github.comment_issue": [
+                connection("github"), repo(), numberField(),
+                area("body", "intGhBody", "Text", "intVariablesHelp")
+            ],
+            "github.create_pr": [
+                connection("github"), repo(),
+                text("title", "intGhTitle", "Title"),
+                text("head", "intGhHead", "Branch with the changes"),
+                text("base", "intGhBase", "Merge into branch"),
+                area("body", "intGhBody", "Text", "intVariablesHelp"),
+                yesNo("draft", "intGhDraft", "Draft")
+            ],
+            "github.get_pr": [connection("github"), repo(), numberField()],
+            "github.list_prs": [
+                connection("github"), repo(),
+                choice("state", "intGhState", "State", [["open", "intGhOpen", "Open"], ["closed", "intGhClosed", "Closed"], ["all", "intGhAll", "All"]]),
+                text("base", "intGhBase", "Merge into branch"),
+                number("max", "intMaxResults", "Max results")
+            ],
+            "github.merge_pr": [
+                connection("github"), repo(), numberField(),
+                {
+                    key: "method",
+                    type: "select",
+                    label: t("intGhMergeMethod", "How to merge"),
+                    options: [
+                        { value: "merge", label: "Merge" },
+                        { value: "squash", label: "Squash" },
+                        { value: "rebase", label: "Rebase" }
+                    ]
+                },
+                text("commitTitle", "intGhCommitTitle", "Merge commit title (optional)")
+            ],
+            "github.list_branches": [connection("github"), repo(), number("max", "intMaxResults", "Max results")],
+            "github.list_commits": [
+                connection("github"), repo(),
+                text("branch", "intGhBranch", "Branch", "intGhBranchHelp"),
+                number("max", "intMaxResults", "Max results")
+            ],
+            "github.create_branch": [
+                connection("github"), repo(),
+                text("name", "intGhNewBranch", "New branch name"),
+                text("from", "intGhFrom", "Create from branch", "intGhBranchHelp")
+            ],
+            "github.get_file": [
+                connection("github"), repo(),
+                text("path", "intGhPath", "File path", "intGhPathHelp"),
+                text("ref", "intGhRef", "Branch or tag", "intGhBranchHelp")
+            ],
+            "github.put_file": [
+                connection("github"), repo(),
+                note("intGhPutHelp"),
+                text("path", "intGhPath", "File path", "intGhPathHelp"),
+                area("text", "intGhFileText", "File content", "intVariablesHelp"),
+                text("message", "intGhCommitMessage", "Commit message"),
+                text("branch", "intGhBranch", "Branch", "intGhBranchHelp")
+            ],
+            "github.create_release": [
+                connection("github"), repo(),
+                text("tag", "intGhTag", "Tag"),
+                text("name", "intGhReleaseName", "Release name"),
+                area("body", "intGhBody", "Text", "intVariablesHelp"),
+                text("target", "intGhTarget", "Branch or commit for the tag", "intGhBranchHelp"),
+                yesNo("draft", "intGhDraft", "Draft"),
+                yesNo("prerelease", "intGhPrerelease", "Pre-release")
+            ],
+            "github.dispatch_workflow": [
+                connection("github"), repo(),
+                text("workflow", "intGhWorkflow", "Workflow file", "intGhWorkflowHelp"),
+                text("ref", "intGhRef", "Branch or tag", "intGhBranchHelp"),
+                area("inputs", "intGhInputs", "Inputs (JSON, optional)", "intVariablesHelp")
+            ],
+            "github.list_workflow_runs": [
+                connection("github"), repo(),
+                choice("status", "intGhRunStatus", "Result", [["", "intGhAnyStatus", "Any"], ["failure", "intGhFailed", "Failed"], ["success", "intGhSucceeded", "Succeeded"]]),
+                text("branch", "intGhBranch", "Branch", "intGhBranchHelp"),
+                number("max", "intMaxResults", "Max results")
+            ],
+            "github.api_request": [
+                connection("github"),
+                note("intGhApiNote"),
+                choice("method", "intGhMethod", "Method", [["GET", null, "GET"], ["POST", null, "POST"], ["PUT", null, "PUT"], ["PATCH", null, "PATCH"], ["DELETE", null, "DELETE"]]),
+                text("path", "intGhApiPath", "API path", "intGhApiPathHelp", true),
+                area("body", "intGhApiBody", "Body (JSON, optional)", "intVariablesHelp")
+            ],
+            "github.issue_opened": [
+                connection("github"), repo(),
+                text("titleContains", "intGhTitleContains", "Title contains"),
+                note("intGhTriggerHelp")
+            ],
+            "github.pr_opened": [
+                connection("github"), repo(),
+                text("titleContains", "intGhTitleContains", "Title contains"),
+                note("intGhTriggerHelp")
+            ],
+            "github.push": [
+                connection("github"), repo(),
+                text("branch", "intGhBranch", "Branch", "intGhBranchHelp"),
+                note("intGhPushHelp"),
+                note("intGhTriggerHelp")
+            ],
+            "github.release_published": [connection("github"), repo(), note("intGhTriggerHelp")],
+            "github.workflow_failed": [
+                connection("github"), repo(),
+                text("branch", "intGhBranch", "Branch", "intGhBranchHelp"),
+                note("intGhTriggerHelp")
             ],
 
             // ---------- Google Drive ----------

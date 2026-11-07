@@ -1,4 +1,5 @@
 using System.Text.Json;
+using Partnerly.Agent.Security;
 
 namespace Partnerly.Agent.Config
 {
@@ -18,14 +19,39 @@ namespace Partnerly.Agent.Config
         // Programs the site may start or close: a full path, or a bare name such as notepad.exe.
         public List<string> AllowedPrograms { get; set; } = new();
 
-        // Folders that may hold .ps1 / .bat / .cmd scripts the site can run.
+        // Old settings, kept only so an old file still loads: folders for scripts, Git and watching now
+        // all mean "the allowed folders" and are merged into AllowedFolders when the file is read.
         public List<string> ScriptFolders { get; set; } = new();
 
-        // Folders where new / changed / deleted files are reported to Partnerly.
+        // Old setting (see ScriptFolders). Git works in every repository inside the allowed folders.
+        public List<string> AllowedRepos { get; set; } = new();
+
+        // 2 = folders, scripts, Git and watching are one list.
+        public int SettingsVersion { get; set; }
+
+        // Hosts a repository address may point to (clone, remote, push by address). Empty = any host (https, ssh, git only).
+        public List<string> GitHosts { get; set; } = new();
+
+        // Full path of git.exe when it is not found by itself.
+        public string GitPath { get; set; } = string.Empty;
+
+        // Off by default: hooks are programs stored in a repository and would run with the site's commands.
+        public bool GitRunHooks { get; set; }
+
+        // Commands that can lose work or rewrite history (reset --hard, push --force, rebase, clean...) ask first.
+        public bool GitAskForRisky { get; set; } = true;
+
+        // Pushing sends your commits away, so it asks first unless you switch this on.
+        public bool GitPushWithoutAsking { get; set; }
+
+        // Old setting: repositories are found by themselves inside the allowed folders.
+        public List<string> WatchRepos { get; set; } = new();
+
+        // Old setting: every allowed folder is watched.
         public List<string> WatchFolders { get; set; } = new();
         public bool WatchSubfolders { get; set; }
 
-        // Program names reported when they start or stop.
+        // Old setting: every allowed program is watched.
         public List<string> WatchPrograms { get; set; } = new();
 
         // Off by default: the text you copy can be private.
@@ -62,6 +88,7 @@ namespace Partnerly.Agent.Config
             var main = TryRead(FilePath, out var problem);
             if (main != null)
             {
+                main.Normalize();
                 return main;
             }
 
@@ -73,6 +100,7 @@ namespace Partnerly.Agent.Config
                 {
                     try { File.Copy(FilePath, FilePath + ".damaged", true); } catch (IOException) { /* keep going */ }
                     LoadProblem = "restored";
+                    backup.Normalize();
                     return backup;
                 }
 
@@ -107,6 +135,58 @@ namespace Partnerly.Agent.Config
             }
         }
 
+        // One list of folders is enough: Partnerly may read, write, watch and use Git in them and below them.
+        // An old settings file is merged once (SettingsVersion), so nothing that was allowed before is lost.
+        public void Normalize()
+        {
+            if (SettingsVersion >= 2)
+            {
+                return;
+            }
+
+            static IEnumerable<string> Clean(IEnumerable<string>? items) =>
+                (items ?? Enumerable.Empty<string>()).Where(item => !string.IsNullOrWhiteSpace(item)).Select(item => item.Trim());
+
+            var hadScriptFolders = ScriptFolders.Count > 0;
+            var folders = new List<string>(Clean(AllowedFolders));
+            foreach (var item in Clean(AllowedRepos).Concat(Clean(ScriptFolders)).Concat(Clean(WatchFolders)))
+            {
+                if (!folders.Contains(item, StringComparer.OrdinalIgnoreCase)) { folders.Add(item); }
+            }
+
+            var programs = new List<string>(Clean(AllowedPrograms));
+            foreach (var item in Clean(WatchPrograms))
+            {
+                if (!programs.Any(existing => string.Equals(ProgramName(existing), ProgramName(item), StringComparison.OrdinalIgnoreCase))) { programs.Add(item); }
+            }
+
+            AllowedFolders = folders;
+            AllowedPrograms = programs;
+            ScriptFolders = new List<string>();
+            AllowedRepos = new List<string>();
+            WatchFolders = new List<string>();
+            WatchPrograms = new List<string>();
+            WatchRepos = new List<string>();
+
+            // Scripts used to need their own folder; now they can run from any allowed folder, so they ask first
+            // unless the person had set scripts up on purpose.
+            if (!hadScriptFolders && !ConfirmOps.Contains("run_script", StringComparer.OrdinalIgnoreCase))
+            {
+                ConfirmOps = new List<string>(ConfirmOps) { "run_script" };
+            }
+
+            SettingsVersion = 2;
+        }
+
+        // "C:\Tools\App.exe", "App.exe" and "app" are the same program name.
+        public static string ProgramName(string value)
+        {
+            var name = value.Trim().Trim('"');
+            var slash = Math.Max(name.LastIndexOf('\\'), name.LastIndexOf('/'));
+            if (slash >= 0) { name = name[(slash + 1)..]; }
+            return name.EndsWith(".exe", StringComparison.OrdinalIgnoreCase) ? name[..^4] : name;
+        }
+
         // Written to a temporary file first, so a power cut can never leave half a file behind.
         public void Save()
         {
@@ -132,7 +212,9 @@ namespace Partnerly.Agent.Config
             {
                 Server = server.Trim().TrimEnd('/'),
                 Token = token.Trim(),
-                AllowedFolders = new List<string> { documents }
+                AllowedFolders = new List<string> { documents },
+                ConfirmOps = new List<string> { "shutdown", "delete_file", "run_script" },
+                SettingsVersion = 2
             };
         }
 
@@ -141,7 +223,8 @@ namespace Partnerly.Agent.Config
         {
             folders = AllowedFolders,
             programs = AllowedPrograms,
-            scripts = ScriptFolders,
+            scripts = AllowedFolders,
+            repos = RepoFinder.Find(AllowedFolders).Take(60).ToList(),
             confirm = ConfirmOps
         }, Options);
 

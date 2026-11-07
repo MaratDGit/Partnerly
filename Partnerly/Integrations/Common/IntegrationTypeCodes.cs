@@ -51,5 +51,31 @@ namespace Partnerly.Integrations.Common
         public const string OutlookCreateEvent = "outlook.create_event";
         public const string OutlookFindEvents = "outlook.find_events";
         public const string OutlookEventAdded = "outlook.event_added";
+
+        public const string GitHubListRepos = "github.list_repos";
+        public const string GitHubGetRepo = "github.get_repo";
+        public const string GitHubCreateIssue = "github.create_issue";
+        public const string GitHubGetIssue = "github.get_issue";
+        public const string GitHubListIssues = "github.list_issues";
+        public const string GitHubUpdateIssue = "github.update_issue";
+        public const string GitHubCommentIssue = "github.comment_issue";
+        public const string GitHubCreatePullRequest = "github.create_pr";
+        public const string GitHubGetPullRequest = "github.get_pr";
+        public const string GitHubListPullRequests = "github.list_prs";
+        public const string GitHubMergePullRequest = "github.merge_pr";
+        public const string GitHubListBranches = "github.list_branches";
+        public const string GitHubListCommits = "github.list_commits";
+        public const string GitHubCreateBranch = "github.create_branch";
+        public const string GitHubGetFile = "github.get_file";
+        public const string GitHubPutFile = "github.put_file";
+        public const string GitHubCreateRelease = "github.create_release";
+        public const string GitHubDispatchWorkflow = "github.dispatch_workflow";
+        public const string GitHubListWorkflowRuns = "github.list_workflow_runs";
+        public const string GitHubApiRequest = "github.api_request";
+        public const string GitHubIssueOpened = "github.issue_opened";
+        public const string GitHubPullRequestOpened = "github.pr_opened";
+        public const string GitHubPush = "github.push";
+        public const string GitHubReleasePublished = "github.release_published";
+        public const string GitHubWorkflowFailed = "github.workflow_failed";
     }
 }
